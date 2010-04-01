@@ -21,15 +21,21 @@
  */
 
 /**
- * @uses       Zend_Cache
- * @uses       Zend_Cache_Backend
- * @uses       Zend_Cache_Backend_Interface
+ * @namespace
+ */
+namespace Zend\Cache\Backend;
+use Zend\Cache;
+
+/**
+ * @uses       \Zend\Cache\Cache
+ * @uses       \Zend\Cache\Backend\AbstractBackend
+ * @uses       \Zend\Cache\Backend\ExtendedBackend
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Backend
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Cache_Backend_Test extends Zend_Cache_Backend implements Zend_Cache_Backend_ExtendedInterface
+class TestBackend extends AbstractBackend implements ExtendedBackend
 {
     /**
      * Available options
@@ -98,7 +104,12 @@ class Zend_Cache_Backend_Test extends Zend_Cache_Backend implements Zend_Cache_B
         if ( $id == 'false'
           || $id == 'd8523b3ee441006261eeffa5c3d3a0a7'
           || $id == 'e83249ea22178277d5befc2c5e2e9ace'
-          || $id == '40f649b94977c0a6e76902e2a0b43587')
+          || $id == '40f649b94977c0a6e76902e2a0b43587'
+          || $id == 'ace7797c586c72fecc4d0d3413de4d57'
+          || $id == '574aea2816b51d1c8aa6d5fd0c1144ac'
+          || $id == 'c687b54c872594de4a635a94935ee4b5'
+          || $id == '90ed42644de581cc298d2a74e61de288'
+          )
         {
             return false;
         }
@@ -112,6 +123,9 @@ class Zend_Cache_Backend_Test extends Zend_Cache_Backend implements Zend_Cache_B
             return serialize(array('foo', 'bar'));
         }
         if (($id=='8a02d218a5165c467e7a5747cc6bd4b6') or ($id=='648aca1366211d17cbf48e65dc570bee')) {
+            return serialize(array('foo', 'bar'));
+        }
+        if ($id=='f93593d664b080ec712db169cc41f50e' || $id == '263b963032376e23204188ea488bee2a') {
             return serialize(array('foo', 'bar'));
         }
         return 'foo';
@@ -195,7 +209,7 @@ class Zend_Cache_Backend_Test extends Zend_Cache_Backend implements Zend_Cache_B
      * @param  array  $tags Array of tags
      * @return boolean True if no problem
      */
-    public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, $tags = array())
+    public function clean($mode = Cache\CacheCache\Cache::CLEANING_MODE_ALL, $tags = array())
     {
         $this->_addLog('clean', array($mode, $tags));
         if ($mode=='false') {

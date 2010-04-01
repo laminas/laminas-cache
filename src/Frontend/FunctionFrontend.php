@@ -21,13 +21,20 @@
  */
 
 /**
- * @uses       Zend_Cache_Core
+ * @namespace
+ */
+namespace Zend\Cache\Frontend;
+use Zend\Cache\Cache;
+
+/**
+ * @uses       \Zend\Cache\Cache
+ * @uses       \Zend\Cache\Frontend\Core
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Frontend
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Cache_Frontend_Function extends Zend_Cache_Core
+class FunctionFrontend extends Core
 {
     /**
      * This frontend specific options
@@ -109,16 +116,16 @@ class Zend_Cache_Frontend_Function extends Zend_Cache_Core
      *
      * @param  string $name       Function name
      * @param  array  $parameters Function parameters
-     * @throws Zend_Cache_Exception
+     * @throws \Zend\Cache\Exception
      * @return string Cache id
      */
     private function _makeId($name, $parameters)
     {
         if (!is_string($name)) {
-            Zend_Cache::throwException('Incorrect function name');
+            Cache::throwException('Incorrect function name');
         }
         if (!is_array($parameters)) {
-            Zend_Cache::throwException('parameters argument must be an array');
+            Cache::throwException('parameters argument must be an array');
         }
         return md5($name . serialize($parameters));
     }
