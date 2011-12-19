@@ -14,18 +14,33 @@
  *
  * @category   Zend
  * @package    Zend_Cache
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @subpackage UnitTests
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id$
  */
 
-namespace Zend\Cache;
+namespace ZendTest\Cache\Storage\Adapter;
+use Zend\Cache;
 
 /**
  * @category   Zend
  * @package    Zend_Cache
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @subpackage UnitTests
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @group      Zend_Cache
  */
-interface Exception
+class MemoryTest extends CommonAdapterTest
 {
+
+    public function setUp()
+    {
+        // instantiate memory adapter
+        $this->_options = new Cache\Storage\Adapter\AdapterOptions();
+        $this->_storage = new Cache\Storage\Adapter\Memory();
+        $this->_storage->setOptions($this->_options);
+
+        parent::setUp();
+    }
 }

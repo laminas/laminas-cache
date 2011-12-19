@@ -14,18 +14,52 @@
  *
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Pattern
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace Zend\Cache;
+namespace Zend\Cache\Pattern;
+
+use Zend\Cache\Exception,
+    Zend\Cache\Pattern;
 
 /**
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Pattern
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-interface Exception
+abstract class AbstractPattern implements Pattern
 {
+    /**
+     * @var PatternOptions
+     */
+    protected $options;
+
+    /**
+     * Set pattern options
+     *
+     * @param  PatternOptions $options
+     * @return AbstractPattern
+     * @throws Exception\InvalidArgumentException
+     */
+    public function setOptions(PatternOptions $options)
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * Get all pattern options
+     *
+     * @return PatternOptions
+     */
+    public function getOptions()
+    {
+        if (null === $this->options) {
+            $this->setOptions(new PatternOptions());
+        }
+        return $this->options;
+    }
 }
