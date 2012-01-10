@@ -34,7 +34,7 @@ use Zend\Cache,
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Cache
  */
-class SerializerTest extends CommonPluginTest
+class IgnoreUserAbortTest extends CommonPluginTest
 {
 
     /**
@@ -48,7 +48,7 @@ class SerializerTest extends CommonPluginTest
     {
         $this->_adapter = $this->getMockForAbstractClass('Zend\Cache\Storage\Adapter\AbstractAdapter');
         $this->_options = new Cache\Storage\Plugin\PluginOptions();
-        $this->_plugin  = new Cache\Storage\Plugin\Serializer();
+        $this->_plugin  = new Cache\Storage\Plugin\IgnoreUserAbort();
         $this->_plugin->setOptions($this->_options);
     }
 
@@ -58,26 +58,49 @@ class SerializerTest extends CommonPluginTest
 
         // check attached callbacks
         $expectedListeners = array(
-            'getItem.post'        => 'onReadItemPost',
-            'getItems.post'       => 'onReadItemsPost',
+            'setItem.pre'       => 'onBefore',
+            'setItem.post'      => 'onAfter',
+            'setItem.exception' => 'onAfter',
 
-            'fetch.post'          => 'onFetchPost',
-            'fetchAll.post'       => 'onFetchAllPost',
+            'setItems.pre'       => 'onBefore',
+            'setItems.post'      => 'onAfter',
+            'setItems.exception' => 'onAfter',
 
-            'setItem.pre'         => 'onWriteItemPre',
-            'setItems.pre'        => 'onWriteItemsPre',
-            'addItem.pre'         => 'onWriteItemPre',
-            'addItems.pre'        => 'onWriteItemsPre',
-            'replaceItem.pre'     => 'onWriteItemPre',
-            'replaceItems.pre'    => 'onWriteItemsPre',
-            'checkAndSetItem.pre' => 'onWriteItemPre',
+            'addItem.pre'       => 'onBefore',
+            'addItem.post'      => 'onAfter',
+            'addItem.exception' => 'onAfter',
 
-            'incrementItem.pre'   => 'onIncrementItemPre',
-            'incrementItems.pre'  => 'onIncrementItemsPre',
-            'decrementItem.pre'   => 'onDecrementItemPre',
-            'decrementItems.pre'  => 'onDecrementItemsPre',
+            'addItems.pre'       => 'onBefore',
+            'addItems.post'      => 'onAfter',
+            'addItems.exception' => 'onAfter',
 
-            'getCapabilities.post' => 'onGetCapabilitiesPost',
+            'replaceItem.pre'       => 'onBefore',
+            'replaceItem.post'      => 'onAfter',
+            'replaceItem.exception' => 'onAfter',
+
+            'replaceItems.pre'       => 'onBefore',
+            'replaceItems.post'      => 'onAfter',
+            'replaceItems.exception' => 'onAfter',
+
+            'checkAndSetItem.pre'       => 'onBefore',
+            'checkAndSetItem.post'      => 'onAfter',
+            'checkAndSetItem.exception' => 'onAfter',
+
+            'incrementItem.pre'       => 'onBefore',
+            'incrementItem.post'      => 'onAfter',
+            'incrementItem.exception' => 'onAfter',
+
+            'incrementItems.pre'       => 'onBefore',
+            'incrementItems.post'      => 'onAfter',
+            'incrementItems.exception' => 'onAfter',
+
+            'decrementItem.pre'       => 'onBefore',
+            'decrementItem.post'      => 'onAfter',
+            'decrementItem.exception' => 'onAfter',
+
+            'decrementItems.pre'       => 'onBefore',
+            'decrementItems.post'      => 'onAfter',
+            'decrementItems.exception' => 'onAfter',
         );
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
             $listeners = $this->_adapter->events()->getListeners($eventName);
@@ -101,30 +124,6 @@ class SerializerTest extends CommonPluginTest
 
         // no events should be attached
         $this->assertEquals(0, count($this->_adapter->events()->getEvents()));
-    }
-
-    public function testUnserializeOnReadItem()
-    {
-        $value = serialize(123);
-        $event = new PostEvent('getItem.post', $this->_adapter, new ArrayObject(), $value);
-        $this->_plugin->onReadItemPost($event);
-
-        $this->assertFalse($event->propagationIsStopped());
-        $this->assertSame(123, $event->getResult());
-    }
-
-    public function testUnserializeOnReadItems()
-    {
-        $values = array('key1' => serialize(123), 'key2' => serialize(456));
-        $event = new PostEvent('getItems.post', $this->_adapter, new ArrayObject(), $values);
-
-        $this->_plugin->onReadItemsPost($event);
-
-        $this->assertFalse($event->propagationIsStopped());
-
-        $values = $event->getResult();
-        $this->assertSame(123, $values['key1']);
-        $this->assertSame(456, $values['key2']);
     }
 
 }

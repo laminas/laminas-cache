@@ -21,6 +21,9 @@
 
 namespace Zend\Cache\Storage\Adapter;
 
+use Zend\Cache\Utils,
+    Zend\Cache\Exception;
+
 /**
  * These are options specific to the APC adapter
  *
@@ -30,34 +33,50 @@ namespace Zend\Cache\Storage\Adapter;
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class ApcOptions extends AdapterOptions
+class MemoryOptions extends AdapterOptions
 {
     /**
-     * Namespace separator
+     * memory limit
      *
-     * @var string
+     * @var null|int
      */
-    protected $namespaceSeparator = ':';
+    protected $memoryLimit = null;
 
     /**
-     * Set namespace separator
+     * Set memory limit
      *
-     * @param  string $separator
-     * @return ApcOptions
+     * If the used memory of PHP exceeds this limit an OutOfCapacityException
+     * will be thrown.
+     *
+     * @param  int $bytes
+     * @return MemoryOptions
      */
-    public function setNamespaceSeparator($separator)
+    public function setMemoryLimit($bytes)
     {
-        $this->namespaceSeparator = (string) $separator;
+        $this->memoryLimit = (int) $bytes;
         return $this;
     }
 
     /**
-     * Get namespace separator
+     * Get memory limit
      *
-     * @return string
+     * If the used memory of PHP exceeds this limit an OutOfCapacityException
+     * will be thrown.
+     *
+     * @return int
      */
-    public function getNamespaceSeparator()
+    public function getMemoryLimit()
     {
-        return $this->namespaceSeparator;
+        if ($this->memoryLimit === null) {
+            $memoryLimit = Utils::bytesFromString(ini_get('memory_limit'));
+            if ($memoryLimit >= 0) {
+                $this->memoryLimit = floor($memoryLimit / 2);
+            } else {
+                // use a hard memory limit of 32M if php memory limit is disabled
+                $this->memoryLimit = 33554432;
+            }
+        }
+
+        return $this->memoryLimit;
     }
 }
