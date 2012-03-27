@@ -14,18 +14,52 @@
  *
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace Zend\Cache;
+namespace Zend\Cache\Storage\Adapter;
+
+use Zend\Cache\Exception;
 
 /**
+ * These are options specific to the APC adapter
+ *
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-interface Exception
+class WinCacheOptions extends AdapterOptions
 {
+    /**
+     * Namespace separator
+     *
+     * @var string
+     */
+    protected $namespaceSeparator = ':';
+
+    /**
+     * Set namespace separator
+     *
+     * @param  string $separator
+     * @return WinCacheOptions
+     */
+    public function setNamespaceSeparator($separator)
+    {
+        $this->namespaceSeparator = (string) $separator;
+        return $this;
+    }
+
+    /**
+     * Get namespace separator
+     *
+     * @return string
+     */
+    public function getNamespaceSeparator()
+    {
+        return $this->namespaceSeparator;
+    }
 }

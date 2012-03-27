@@ -14,18 +14,40 @@
  *
  * @category   Zend
  * @package    Zend_Cache
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @subpackage UnitTests
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace Zend\Cache;
+namespace ZendTest\Cache\Pattern;
+use Zend\Cache;
 
 /**
  * @category   Zend
  * @package    Zend_Cache
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @subpackage UnitTests
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @group      Zend_Cache
  */
-interface Exception
+class CaptureCacheTest extends CommonPatternTest
 {
+
+    public function setUp()
+    {
+        $this->_options = new Cache\Pattern\PatternOptions(array(
+            // TODO
+        ));
+        $this->_pattern = new Cache\Pattern\CaptureCache();
+        $this->_pattern->setOptions($this->_options);
+
+        parent::setUp();
+    }
+
+    public function tearDown()
+    {
+        // TODO
+        parent::tearDown();
+    }
+
 }

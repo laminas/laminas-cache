@@ -26,6 +26,20 @@ namespace Zend\Cache;
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-interface Exception
+interface Pattern
 {
+    /**
+     * Set pattern options
+     *
+     * @param  Pattern\PatternOptions $options
+     * @return Pattern
+     */
+    public function setOptions(Pattern\PatternOptions $options);
+
+    /**
+     * Get all pattern options
+     *
+     * @return array
+     */
+    public function getOptions();
 }
