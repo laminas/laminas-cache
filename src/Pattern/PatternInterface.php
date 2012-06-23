@@ -14,20 +14,34 @@
  *
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Pattern
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace Zend\Cache\Exception;
-
-use Zend\Cache\Exception;
+namespace Zend\Cache\Pattern;
 
 /**
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Pattern
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class OutOfCapacityException extends \OverflowException implements Exception
+interface PatternInterface
 {
+    /**
+     * Set pattern options
+     *
+     * @param  PatternOptions $options
+     * @return Pattern
+     */
+    public function setOptions(PatternOptions $options);
+
+    /**
+     * Get all pattern options
+     *
+     * @return array
+     */
+    public function getOptions();
 }
