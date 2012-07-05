@@ -14,33 +14,27 @@
  *
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace Zend\Cache;
-
-use Zend\Loader\PluginClassLoader;
+namespace Zend\Cache\Storage;
 
 /**
- * Plugin Class Loader implementation for cache patterns.
- *
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class PatternLoader extends PluginClassLoader
+interface ClearByNamespaceInterface
 {
     /**
-     * @var array Pre-aliased adapters
+     * Remove items of given namespace
+     *
+     * @param string $namespace
+     * @return boolean
      */
-    protected $plugins = array(
-        'callback' => 'Zend\Cache\Pattern\CallbackCache',
-        'capture'  => 'Zend\Cache\Pattern\CaptureCache',
-        'class'    => 'Zend\Cache\Pattern\ClassCache',
-        'object'   => 'Zend\Cache\Pattern\ObjectCache',
-        'output'   => 'Zend\Cache\Pattern\OutputCache',
-        'page'     => 'Zend\Cache\Pattern\PageCache',
-    );
+    public function clearByNamespace($namespace);
 }

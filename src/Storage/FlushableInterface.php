@@ -14,18 +14,26 @@
  *
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace Zend\Cache\Exception;
+namespace Zend\Cache\Storage;
 
 /**
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class ItemNotFoundException extends RuntimeException
+interface FlushableInterface
 {
+    /**
+     * Flush the whole storage
+     *
+     * @return boolean
+     */
+    public function flush();
 }

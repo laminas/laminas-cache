@@ -14,32 +14,26 @@
  *
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace Zend\Cache;
+namespace Zend\Cache\Storage;
 
 /**
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-interface Pattern
+interface AvailableSpaceCapableInterface
 {
     /**
-     * Set pattern options
+     * Get available space in bytes
      *
-     * @param  Pattern\PatternOptions $options
-     * @return Pattern
+     * @return int|float
      */
-    public function setOptions(Pattern\PatternOptions $options);
-
-    /**
-     * Get all pattern options
-     *
-     * @return array
-     */
-    public function getOptions();
+    public function getAvailableSpace();
 }

@@ -14,45 +14,27 @@
  *
  * @category   Zend
  * @package    Zend_Cache
- * @subpackage UnitTests
+ * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Plugin;
-
-/**
- * PHPUnit test case
- */
+namespace Zend\Cache\Storage;
 
 /**
  * @category   Zend
  * @package    Zend_Cache
- * @subpackage UnitTests
+ * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @group      Zend_Cache
  */
-abstract class CommonPluginTest extends \PHPUnit_Framework_TestCase
+interface ClearByPrefixInterface
 {
-
     /**
-     * The storage plugin
+     * Remove items matching given prefix
      *
-     * @var \Zend\Cache\Storage\Plugin\PluginInterface
+     * @param string $prefix
+     * @return boolean
      */
-    protected $_plugin;
-
-    public function testOptionObjectAvailable()
-    {
-        $options = $this->_plugin->getOptions();
-        $this->assertInstanceOf('Zend\Cache\Storage\Plugin\PluginOptions', $options);
-    }
-
-    public function testOptionsGetAndSetDefault()
-    {
-        $options = $this->_plugin->getOptions();
-        $this->_plugin->setOptions($options);
-        $this->assertSame($options, $this->_plugin->getOptions());
-    }
+    public function clearByPrefix($prefix);
 }
