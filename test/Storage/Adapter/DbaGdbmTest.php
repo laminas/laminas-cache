@@ -14,33 +14,23 @@
  *
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace Zend\Cache;
-
-use Zend\Loader\PluginClassLoader;
+namespace ZendTest\Cache\Storage\Adapter;
+use Zend\Cache;
 
 /**
- * Plugin Class Loader implementation for cache patterns.
- *
  * @category   Zend
  * @package    Zend_Cache
+ * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @group      Zend_Cache
  */
-class PatternLoader extends PluginClassLoader
+class DbaGdbmTest extends AbstractDbaTest
 {
-    /**
-     * @var array Pre-aliased adapters
-     */
-    protected $plugins = array(
-        'callback' => 'Zend\Cache\Pattern\CallbackCache',
-        'capture'  => 'Zend\Cache\Pattern\CaptureCache',
-        'class'    => 'Zend\Cache\Pattern\ClassCache',
-        'object'   => 'Zend\Cache\Pattern\ObjectCache',
-        'output'   => 'Zend\Cache\Pattern\OutputCache',
-        'page'     => 'Zend\Cache\Pattern\PageCache',
-    );
+    protected $handler = 'gdbm';
 }

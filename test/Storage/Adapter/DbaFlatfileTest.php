@@ -14,46 +14,23 @@
  *
  * @category   Zend
  * @package    Zend_Cache
- * @subpackage Storage
+ * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace Zend\Cache\Storage;
-
-use Zend\Cache\Exception,
-    Zend\Loader\PluginBroker;
+namespace ZendTest\Cache\Storage\Adapter;
+use Zend\Cache;
 
 /**
- * Broker for cache storage adapter instances
- *
  * @category   Zend
  * @package    Zend_Cache
- * @subpackage Storage
+ * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @group      Zend_Cache
  */
-class AdapterBroker extends PluginBroker
+class DbaFlatfileTest extends AbstractDbaTest
 {
-    /**
-     * @var string Default plugin loading strategy
-     */
-    protected $defaultClassLoader = 'Zend\Cache\Storage\AdapterLoader';
-
-    /**
-     * Determine if we have a valid adapter
-     *
-     * @param  mixed $plugin
-     * @return bool
-     * @throws Exception\RuntimeException
-     */
-    protected function validatePlugin($plugin)
-    {
-        if (!$plugin instanceof StorageInterface) {
-            throw new Exception\RuntimeException(
-                'Cache storage adapters must implement Zend\Cache\Storage\StorageInterface'
-            );
-        }
-        return true;
-    }
+    protected $handler = 'flatfile';
 }

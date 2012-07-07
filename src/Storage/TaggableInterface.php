@@ -21,33 +21,42 @@
 
 namespace Zend\Cache\Storage;
 
-use Zend\Loader\PluginClassLoader;
-
 /**
- * Plugin Class Loader implementation for cache storage plugins.
- *
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage Storage
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class PluginLoader extends PluginClassLoader
+interface TaggableInterface
 {
     /**
-     * Pre-aliased adapters
+     * Set tags to an item by given key.
+     * An empty array will remove all tags.
      *
-     * @var array
+     * @param string   $key
+     * @param string[] $tags
+     * @return boolean
      */
-    protected $plugins = array(
-        'clear_expired_by_factor' => 'Zend\Cache\Storage\Plugin\ClearExpiredByFactor',
-        'clearexpiredbyfactor'    => 'Zend\Cache\Storage\Plugin\ClearExpiredByFactor',
-        'exception_handler'  => 'Zend\Cache\Storage\Plugin\ExceptionHandler',
-        'exceptionhandler'   => 'Zend\Cache\Storage\Plugin\ExceptionHandler',
-        'ignore_user_abort'  => 'Zend\Cache\Storage\Plugin\IgnoreUserAbort',
-        'ignoreuserabort'    => 'Zend\Cache\Storage\Plugin\IgnoreUserAbort',
-        'optimize_by_factor' => 'Zend\Cache\Storage\Plugin\OptimizeByFactor',
-        'optimizebyfactor'   => 'Zend\Cache\Storage\Plugin\OptimizeByFactor',
-        'serializer'         => 'Zend\Cache\Storage\Plugin\Serializer',
-    );
+    public function setTags($key, array $tags);
+
+    /**
+     * Get tags of an item by given key
+     *
+     * @param string $key
+     * @return string[]|FALSE
+     */
+    public function getTags($key);
+
+    /**
+     * Remove items matching given tags.
+     *
+     * If $disjunction only one of the given tags must match
+     * else all given tags must match.
+     *
+     * @param string[] $tags
+     * @param boolean  $disjunction
+     * @return boolean
+     */
+    public function clearByTags(array $tags, $disjunction = false);
 }
