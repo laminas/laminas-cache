@@ -9,7 +9,7 @@
     "homepage": "https://github.com/zendframework/zend-cache",
     "autoload": {
         "psr-4": {
-            "Zend\\Cache": "src/"
+            "Zend\\Cache\\": "src/"
         }
     },
     "require": {
