@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "zendframework/zend-session": "self.version",
+        "zendframework/zend-serializer": "self-version",
         "fabpot/php-cs-fixer": "1.7.*",
         "satooshi/php-coveralls": "dev-master",
         "phpunit/PHPUnit": "~4.0"
@@ -33,8 +34,7 @@
         "ext-memcached": "Memcached >= 1.0.0 to use the Memcached storage adapter",
         "ext-mongo": "Mongo, to use MongoDb storage adapter",
         "ext-wincache": "WinCache, to use the WinCache storage adapter",
-        "mongofill/mongofill": "Alternative to ext-mongo - a pure PHP implementation designed as a drop in replacement",
-        "zendframework/zend-log": "Zend\\Log component"
+        "mongofill/mongofill": "Alternative to ext-mongo - a pure PHP implementation designed as a drop in replacement"
     },
     "extra": {
         "branch-alias": {
