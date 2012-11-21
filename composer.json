@@ -21,7 +21,7 @@
     },
     "require-dev": {
         "zendframework/zend-session": "self.version",
-        "zendframework/zend-serializer": "self-version",
+        "zendframework/zend-serializer": "self.version",
         "fabpot/php-cs-fixer": "1.7.*",
         "satooshi/php-coveralls": "dev-master",
         "phpunit/PHPUnit": "~4.0"
