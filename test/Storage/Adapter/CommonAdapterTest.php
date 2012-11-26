@@ -1,39 +1,28 @@
 <?php
 /**
- * Zend Framework
+ * Zend Framework (http://framework.zend.com/)
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   Zend
- * @package    Zend_Cache
- * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Cache
  */
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use Zend\Cache\Storage\AvailableSpaceCapableInterface;
+use Zend\Cache\Storage\IterableInterface;
+use Zend\Cache\Storage\IteratorInterface;
+use Zend\Cache\Storage\StorageInterface;
+use Zend\Cache\Storage\ClearExpiredInterface;
+use Zend\Cache\Storage\ClearByNamespaceInterface;
+use Zend\Cache\Storage\ClearByPrefixInterface;
+use Zend\Cache\Storage\FlushableInterface;
+use Zend\Cache\Storage\OptimizableInterface;
+use Zend\Cache\Storage\TaggableInterface;
+use Zend\Cache\Storage\TotalSpaceCapableInterface;
 use Zend\Http\Header\Expires;
-
-use Zend\Cache\Storage\IterableInterface,
-    Zend\Cache\Storage\IteratorInterface,
-    Zend\Cache\Storage\StorageInterface,
-    Zend\Cache\Storage\ClearExpiredInterface,
-    Zend\Cache\Storage\ClearByNamespaceInterface,
-    Zend\Cache\Storage\ClearByPrefixInterface,
-    Zend\Cache\Storage\FlushableInterface,
-    Zend\Cache\Storage\OptimizableInterface,
-    Zend\Cache\Storage\TagableInterface,
-    Zend\Cache,
-    Zend\Stdlib\ErrorHandler;
+use Zend\Stdlib\ErrorHandler;
 
 /**
  * PHPUnit test case
@@ -43,8 +32,6 @@ use Zend\Cache\Storage\IterableInterface,
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Cache
  */
 abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
@@ -249,7 +236,11 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $wait = $ttl + $capabilities->getTtlPrecision();
         usleep($wait * 2000000);
 
-        $this->assertFalse($this->_storage->hasItem('key'));
+        if (!$capabilities->getUseRequestTime()) {
+            $this->assertFalse($this->_storage->hasItem('key'));
+        } else {
+            $this->assertTrue($this->_storage->hasItem('key'));
+        }
     }
 
     public function testHasItemNonReadable()
@@ -559,11 +550,13 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $wait = $ttl + $capabilities->getTtlPrecision();
         usleep($wait * 2000000);
 
-        if (!$capabilities->getUseRequestTime()) {
-            $this->assertNull($this->_storage->getItem('key'));
-        } else {
+        if ($capabilities->getUseRequestTime()) {
+            // Can't test much more if the request time will be used
             $this->assertEquals('value', $this->_storage->getItem('key'));
+            return;
         }
+
+        $this->assertNull($this->_storage->getItem('key'));
 
         $this->_options->setTtl(0);
         if ($capabilities->getExpiredRead()) {
@@ -871,7 +864,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testOptimize()
     {
-        if ( !($this->_storage instanceof OptimizableInterface) ) {
+        if (!($this->_storage instanceof OptimizableInterface)) {
             $this->markTestSkipped("Storage doesn't implement OptimizableInterface");
         }
 
@@ -912,7 +905,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testFlush()
     {
-        if ( !($this->_storage instanceof FlushableInterface) ) {
+        if (!($this->_storage instanceof FlushableInterface)) {
             $this->markTestSkipped("Storage doesn't implement OptimizableInterface");
         }
 
@@ -928,7 +921,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testClearByPrefix()
     {
-        if ( !($this->_storage instanceof ClearByPrefixInterface) ) {
+        if (!($this->_storage instanceof ClearByPrefixInterface)) {
             $this->markTestSkipped("Storage doesn't implement ClearByPrefixInterface");
         }
 
@@ -946,7 +939,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testClearByNamespace()
     {
-        if ( !($this->_storage instanceof ClearByNamespaceInterface) ) {
+        if (!($this->_storage instanceof ClearByNamespaceInterface)) {
             $this->markTestSkipped("Storage doesn't implement ClearByNamespaceInterface");
         }
 
@@ -980,7 +973,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testClearExpired()
     {
-        if ( !($this->_storage instanceof ClearExpiredInterface) ) {
+        if (!($this->_storage instanceof ClearExpiredInterface)) {
             $this->markTestSkipped("Storage doesn't implement ClearExpiredInterface");
         }
 
@@ -1009,8 +1002,8 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testTagable()
     {
-        if ( !($this->_storage instanceof TagableInterface) ) {
-            $this->markTestSkipped("Storage doesn't implement TagableInterface");
+        if (!($this->_storage instanceof TaggableInterface)) {
+            $this->markTestSkipped("Storage doesn't implement TaggableInterface");
         }
 
         $this->assertSame(array(), $this->_storage->setItems(array(
@@ -1047,5 +1040,35 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_storage->hasItem('key1'));
         $this->assertFalse($this->_storage->hasItem('key2'));
         $this->assertFalse($this->_storage->hasItem('key3'));
+    }
+
+    public function testGetTotalSpace()
+    {
+        if (!($this->_storage instanceof TotalSpaceCapableInterface)) {
+            $this->markTestSkipped("Storage doesn't implement TotalSpaceCapableInterface");
+        }
+
+        $totalSpace = $this->_storage->getTotalSpace();
+        $this->assertGreaterThan(0, $totalSpace);
+
+        if ($this->_storage instanceof AvailableSpaceCapableInterface) {
+            $availableSpace = $this->_storage->getAvailableSpace();
+            $this->assertGreaterThanOrEqual($availableSpace, $totalSpace);
+        }
+    }
+
+    public function testGetAvailableSpace()
+    {
+        if (!($this->_storage instanceof AvailableSpaceCapableInterface)) {
+            $this->markTestSkipped("Storage doesn't implement AvailableSpaceCapableInterface");
+        }
+
+        $availableSpace = $this->_storage->getAvailableSpace();
+        $this->assertGreaterThanOrEqual(0, $availableSpace);
+
+        if ($this->_storage instanceof TotalSpaceCapableInterface) {
+            $totalSpace = $this->_storage->getTotalSpace();
+            $this->assertLessThanOrEqual($totalSpace, $availableSpace);
+        }
     }
 }
