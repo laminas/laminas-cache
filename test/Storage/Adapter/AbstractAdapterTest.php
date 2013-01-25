@@ -1,35 +1,22 @@
 <?php
 /**
- * Zend Framework
+ * Zend Framework (http://framework.zend.com/)
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   Zend
- * @package    Zend_Cache
- * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Cache
  */
 
 namespace ZendTest\Cache\Storage\Adapter;
 
-use Zend\Cache,
-    Zend\Cache\Exception;
+use Zend\Cache;
+use Zend\Cache\Exception;
 
 /**
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Cache
  */
 class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
@@ -345,20 +332,16 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storage = $this->getMockForAbstractAdapter(array('internalHasItem'));
 
-        $items  = array('key1' => true, 'key2' => false);
-        $result = array('key1');
+        $items  = array('key1' => true);
 
-        $i = 0; // method call counter
-        foreach ($items as $k => $v) {
-            $this->_storage
-                ->expects($this->at($i++))
-                ->method('internalHasItem')
-                ->with($this->equalTo($k))
-                ->will($this->returnValue($v));
-        }
+        $this->_storage
+            ->expects($this->atLeastOnce())
+            ->method('internalHasItem')
+            ->with($this->equalTo('key1'))
+            ->will($this->returnValue(true));
 
         $rs = $this->_storage->hasItems(array_keys($items));
-        $this->assertEquals($result, $rs);
+        $this->assertEquals(array('key1'), $rs);
     }
 
     public function testGetMetadataCallsInternalGetMetadata()
@@ -390,13 +373,13 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
         $i = 0;
         foreach ($items as $k => $v) {
-            $this->_storage->expects($this->at($i++))
+            $this->storage->expects($this->at($i++))
                 ->method('getMetadata')
                 ->with($this->equalTo($k), $this->equalTo($options))
                 ->will($this->returnValue($v));
         }
 
-        $rs = $this->_storage->getMetadatas(array_keys($items), $options);
+        $rs = $this->storage->getMetadatas(array_keys($items), $options);
 
         // remove missing items from array to test
         $expected = $items;
@@ -417,12 +400,12 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
             'key2' => 'value2'
         );
 
-        $this->_storage->expects($this->exactly(count($items)))
+        $this->storage->expects($this->exactly(count($items)))
             ->method('setItem')
             ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->_storage->setItems($items, $options));
+        $this->assertTrue($this->storage->setItems($items, $options));
     }
 
     public function testSetItemsFail()
@@ -434,12 +417,12 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
             'key3' => 'value3',
         );
 
-        $this->_storage->expects($this->exactly(count($items)))
+        $this->storage->expects($this->exactly(count($items)))
             ->method('setItem')
             ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
             ->will($this->returnValue(false));
 
-        $this->assertFalse($this->_storage->setItems($items, $options));
+        $this->assertFalse($this->storage->setItems($items, $options));
     }
 
     public function testAddItems()
@@ -451,16 +434,16 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         );
 
         // add -> has -> get -> set
-        $this->_storage->expects($this->exactly(count($items)))
+        $this->storage->expects($this->exactly(count($items)))
             ->method('getItem')
             ->with($this->stringContains('key'), $this->equalTo($options))
             ->will($this->returnValue(false));
-        $this->_storage->expects($this->exactly(count($items)))
+        $this->storage->expects($this->exactly(count($items)))
             ->method('setItem')
             ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->_storage->addItems($items, $options));
+        $this->assertTrue($this->storage->addItems($items, $options));
     }
 
     public function testAddItemsFail()
@@ -473,16 +456,16 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         );
 
         // add -> has -> get -> set
-        $this->_storage->expects($this->exactly(count($items)))
+        $this->storage->expects($this->exactly(count($items)))
             ->method('getItem')
             ->with($this->stringContains('key'), $this->equalTo($options))
             ->will($this->returnValue(false));
-        $this->_storage->expects($this->exactly(count($items)))
+        $this->storage->expects($this->exactly(count($items)))
             ->method('setItem')
             ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
             ->will($this->returnValue(false));
 
-        $this->assertFalse($this->_storage->addItems($items, $options));
+        $this->assertFalse($this->storage->addItems($items, $options));
     }
 
     public function testReplaceItems()
@@ -494,16 +477,16 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         );
 
         // replace -> has -> get -> set
-        $this->_storage->expects($this->exactly(count($items)))
+        $this->storage->expects($this->exactly(count($items)))
             ->method('getItem')
             ->with($this->stringContains('key'), $this->equalTo($options))
             ->will($this->returnValue(true));
-        $this->_storage->expects($this->exactly(count($items)))
+        $this->storage->expects($this->exactly(count($items)))
             ->method('setItem')
             ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->_storage->replaceItems($items, $options));
+        $this->assertTrue($this->storage->replaceItems($items, $options));
     }
 
     public function testReplaceItemsFail()
@@ -516,16 +499,16 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         );
 
         // replace -> has -> get -> set
-        $this->_storage->expects($this->exactly(count($items)))
+        $this->storage->expects($this->exactly(count($items)))
             ->method('getItem')
             ->with($this->stringContains('key'), $this->equalTo($options))
             ->will($this->returnValue(true));
-        $this->_storage->expects($this->exactly(count($items)))
+        $this->storage->expects($this->exactly(count($items)))
             ->method('setItem')
             ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
             ->will($this->returnValue(false));
 
-        $this->assertFalse($this->_storage->replaceItems($items, $options));
+        $this->assertFalse($this->storage->replaceItems($items, $options));
     }
 
     public function testRemoveItems()
@@ -534,13 +517,13 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $keys    = array('key1', 'key2');
 
         foreach ($keys as $i => $key) {
-            $this->_storage->expects($this->at($i))
+            $this->storage->expects($this->at($i))
                            ->method('removeItem')
                            ->with($this->equalTo($key), $this->equalTo($options))
                            ->will($this->returnValue(true));
         }
 
-        $this->assertTrue($this->_storage->removeItems($keys, $options));
+        $this->assertTrue($this->storage->removeItems($keys, $options));
     }
 
     public function testRemoveItemsFail()
@@ -548,20 +531,20 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $options = array('ttl' => 123);
         $items   = array('key1', 'key2', 'key3');
 
-        $this->_storage->expects($this->at(0))
+        $this->storage->expects($this->at(0))
                        ->method('removeItem')
                        ->with($this->equalTo('key1'), $this->equalTo($options))
                        ->will($this->returnValue(true));
-        $this->_storage->expects($this->at(1))
+        $this->storage->expects($this->at(1))
                        ->method('removeItem')
                        ->with($this->equalTo('key2'), $this->equalTo($options))
                        ->will($this->returnValue(false)); // -> fail
-        $this->_storage->expects($this->at(2))
+        $this->storage->expects($this->at(2))
                        ->method('removeItem')
                        ->with($this->equalTo('key3'), $this->equalTo($options))
                        ->will($this->returnValue(true));
 
-        $this->assertFalse($this->_storage->removeItems($items, $options));
+        $this->assertFalse($this->storage->removeItems($items, $options));
     }
 */
     // TODO: incrementItem[s] + decrementItem[s]
@@ -728,7 +711,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
         // init mock
         $this->_storage = $this->getMockForAbstractAdapter(array($internalMethod));
-        $this->_storage->events()->attach($eventName, function ($event) use ($expectedArgs) {
+        $this->_storage->getEventManager()->attach($eventName, function ($event) use ($expectedArgs) {
             $params = $event->getParams();
             foreach ($expectedArgs as $k => $v) {
                 $params[$k] = $v;

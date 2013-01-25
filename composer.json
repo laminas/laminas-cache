@@ -1,6 +1,6 @@
 {
     "name": "zendframework/zend-cache",
-    "description": "Zend\\Cache component",
+    "description": "provides a generic way to cache any data",
     "license": "BSD-3-Clause",
     "keywords": [
         "zf2",
@@ -13,7 +13,7 @@
         }
     },
     "require": {
-        "php": ">=5.3.23",
+        "php": ">=5.3.3",
         "zendframework/zend-stdlib": "self.version",
         "zendframework/zend-servicemanager": "self.version",
         "zendframework/zend-serializer": "self.version",
@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "zendframework/zend-session": "self.version",
+        "zendframework/zend-serializer": "self.version",
         "fabpot/php-cs-fixer": "1.7.*",
         "satooshi/php-coveralls": "dev-master",
         "phpunit/PHPUnit": "~4.0"
