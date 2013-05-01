@@ -9,16 +9,17 @@
 
 namespace Zend\Cache\Storage\Adapter;
 
-use Memcached as MemcachedResource;
+use Redis as RedisResource;
+use RedisException as RedisResourceException;
 use ReflectionClass;
 use Traversable;
 use Zend\Cache\Exception;
 use Zend\Stdlib\ArrayUtils;
 
 /**
- * This is a resource manager for memcached
+ * This is a resource manager for redis
  */
-class MemcachedResourceManager
+class RedisResourceManager
 {
 
     /**
@@ -40,10 +41,10 @@ class MemcachedResourceManager
     }
 
     /**
-     * Gets a memcached resource
+     * Gets a redis resource
      *
      * @param string $id
-     * @return MemcachedResource
+     * @return RedisResource
      * @throws Exception\RuntimeException
      */
     public function getResource($id)
@@ -52,68 +53,114 @@ class MemcachedResourceManager
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
-        $resource = $this->resources[$id];
-        if ($resource instanceof MemcachedResource) {
-            return $resource;
-        }
-
-        if ($resource['persistent_id'] !== '') {
-            $memc = new MemcachedResource($resource['persistent_id']);
-        } else {
-            $memc = new MemcachedResource();
-        }
-
-        if (method_exists($memc, 'setOptions')) {
-            $memc->setOptions($resource['lib_options']);
-        } else {
-            foreach ($resource['lib_options'] as $k => $v) {
-                $memc->setOption($k, $v);
+        $resource = & $this->resources[$id];
+        if ($resource['resource'] instanceof RedisResource) {
+            //in case new server was set then connect
+            if (!$resource['initialized']) {
+                $this->connect($resource);
             }
+            $info = $resource['resource']->info();
+            $resource['version'] = $info['redis_version'];
+            return $resource['resource'];
         }
 
-        // merge and add servers (with persistence id servers could be added already)
-        $servers = array_udiff($resource['servers'], $memc->getServerList(), array($this, 'compareServers'));
-        if ($servers) {
-            $memc->addServers($servers);
+        $redis = new RedisResource();
+
+        foreach ($resource['lib_options'] as $k => $v) {
+            $redis->setOption($k, $v);
         }
 
-        // buffer and return
-        $this->resources[$id] = $memc;
-        return $memc;
+        $resource['resource'] = $redis;
+        $this->connect($resource);
+
+        $info = $redis->info();
+        $resource['version'] = $info['redis_version'];
+        $this->resources[$id]['resource'] = $redis;
+        return $redis;
+    }
+
+    /**
+     * Connects to redis server
+     *
+     *
+     * @param array & $resource
+     *
+     * @return null
+     * @throws Exception\RuntimeException
+     */
+    protected function connect(array & $resource)
+    {
+        $server = $resource['server'];
+        $redis  = $resource['resource'];
+        if ($resource['persistent_id'] !== '') {
+            //connect or reuse persistent connection
+            $success = $redis->pconnect($server['host'], $server['port'], $server['timeout'], $server['persistend_id']);
+        } elseif ($server['port']) {
+            $success = $redis->connect($server['host'], $server['port'], $server['timeout']);
+        } elseif ($server['timeout']) {
+            //connect through unix domain socket
+            $success = $redis->connect($server['host'], $server['timeout']);
+        } else {
+            $success = $redis->connect($server['host']);
+        }
+
+        if (!$success) {
+            throw new Exception\RuntimeException('Could not estabilish connection with Redis instance');
+        }
+        $resource['initialized'] = true;
+        if ($resource['password']) {
+            $redis->auth($resource['password']);
+        }
+        $redis->select($resource['database']);
     }
 
     /**
      * Set a resource
      *
      * @param string $id
-     * @param array|Traversable|MemcachedResource $resource
-     * @return MemcachedResourceManager Fluent interface
+     * @param array|Traversable|RedisResource $resource
+     * @return RedisResourceManager Fluent interface
      */
     public function setResource($id, $resource)
     {
         $id = (string) $id;
-
-        if (!($resource instanceof MemcachedResource)) {
+        //TODO: how to get back redis connection info from resource?
+        $defaults = array(
+            'persistent_id' => '',
+            'lib_options'   => array(),
+            'server'        => array(),
+            'password'      => '',
+            'database'      => 0,
+            'resource'      => null,
+            'initialized'   => false,
+            'version'       => 0,
+        );
+        if (!$resource instanceof RedisResource) {
             if ($resource instanceof Traversable) {
                 $resource = ArrayUtils::iteratorToArray($resource);
             } elseif (!is_array($resource)) {
                 throw new Exception\InvalidArgumentException(
-                    'Resource must be an instance of Memcached or an array or Traversable'
+                    'Resource must be an instance of an array or Traversable'
                 );
             }
 
-            $resource = array_merge(array(
-                'persistent_id' => '',
-                'lib_options'   => array(),
-                'servers'       => array(),
-            ), $resource);
-
+            $resource = array_merge($defaults, $resource);
             // normalize and validate params
             $this->normalizePersistentId($resource['persistent_id']);
             $this->normalizeLibOptions($resource['lib_options']);
-            $this->normalizeServers($resource['servers']);
+            $this->normalizeServer($resource['server']);
+        } else {
+            //there are two ways of determining if redis is already initialized
+            //with connect function:
+            //1) pinging server
+            //2) checking undocummented property socket which is available only
+            //after succesfull connect
+            $resource = array_merge($defaults, array(
+                    'resource' => $resource,
+                    'initialized' => isset($resource->socket),
+                )
+            );
         }
-
         $this->resources[$id] = $resource;
         return $this;
     }
@@ -122,7 +169,7 @@ class MemcachedResourceManager
      * Remove a resource
      *
      * @param string $id
-     * @return MemcachedResourceManager Fluent interface
+     * @return RedisResourceManager Fluent interface
      */
     public function removeResource($id)
     {
@@ -135,7 +182,7 @@ class MemcachedResourceManager
      *
      * @param string $id
      * @param string $persistentId
-     * @return MemcachedResourceManager Fluent interface
+     * @return RedisResourceManager Fluent interface
      * @throws Exception\RuntimeException
      */
     public function setPersistentId($id, $persistentId)
@@ -147,7 +194,7 @@ class MemcachedResourceManager
         }
 
         $resource = & $this->resources[$id];
-        if ($resource instanceof MemcachedResource) {
+        if ($resource instanceof RedisResource) {
             throw new Exception\RuntimeException(
                 "Can't change persistent id of resource {$id} after instanziation"
             );
@@ -174,9 +221,9 @@ class MemcachedResourceManager
 
         $resource = & $this->resources[$id];
 
-        if ($resource instanceof MemcachedResource) {
+        if ($resource instanceof RedisResource) {
             throw new Exception\RuntimeException(
-                "Can't get persistent id of an instantiated memcached resource"
+                "Can't get persistent id of an instantiated redis resource"
             );
         }
 
@@ -194,11 +241,11 @@ class MemcachedResourceManager
     }
 
     /**
-     * Set Libmemcached options
+     * Set Redis options
      *
      * @param string $id
      * @param array  $libOptions
-     * @return MemcachedResourceManager Fluent interface
+     * @return RedisResourceManager Fluent interface
      */
     public function setLibOptions($id, array $libOptions)
     {
@@ -211,7 +258,7 @@ class MemcachedResourceManager
         $this->normalizeLibOptions($libOptions);
 
         $resource = & $this->resources[$id];
-        if ($resource instanceof MemcachedResource) {
+        if ($resource instanceof RedisResource) {
             if (method_exists($resource, 'setOptions')) {
                 $resource->setOptions($libOptions);
             } else {
@@ -227,7 +274,7 @@ class MemcachedResourceManager
     }
 
     /**
-     * Get Libmemcached options
+     * Get Redis options
      *
      * @param string $id
      * @return array
@@ -241,9 +288,9 @@ class MemcachedResourceManager
 
         $resource = & $this->resources[$id];
 
-        if ($resource instanceof MemcachedResource) {
+        if ($resource instanceof RedisResource) {
             $libOptions = array();
-            $reflection = new ReflectionClass('Memcached');
+            $reflection = new ReflectionClass('Redis');
             $constants  = $reflection->getConstants();
             foreach ($constants as $constName => $constValue) {
                 if (substr($constName, 0, 4) == 'OPT_') {
@@ -256,12 +303,12 @@ class MemcachedResourceManager
     }
 
     /**
-     * Set one Libmemcached option
+     * Set one Redis option
      *
      * @param string     $id
      * @param string|int $key
      * @param mixed      $value
-     * @return MemcachedResourceManager Fluent interface
+     * @return RedisResourceManager Fluent interface
      */
     public function setLibOption($id, $key, $value)
     {
@@ -269,7 +316,7 @@ class MemcachedResourceManager
     }
 
     /**
-     * Get one Libmemcached option
+     * Get one Redis option
      *
      * @param string     $id
      * @param string|int $key
@@ -285,7 +332,7 @@ class MemcachedResourceManager
         $constValue = $this->normalizeLibOptionKey($key);
         $resource   = & $this->resources[$id];
 
-        if ($resource instanceof MemcachedResource) {
+        if ($resource instanceof RedisResource) {
             return $resource->getOption($constValue);
         }
 
@@ -293,7 +340,7 @@ class MemcachedResourceManager
     }
 
     /**
-     * Normalize libmemcached options
+     * Normalize Redis options
      *
      * @param array|Traversable $libOptions
      * @throws Exception\InvalidArgumentException
@@ -325,9 +372,9 @@ class MemcachedResourceManager
     {
         // convert option name into it's constant value
         if (is_string($key)) {
-            $const = 'Memcached::OPT_' . str_replace(array(' ', '-'), '_', strtoupper($key));
+            $const = 'Redis::OPT_' . str_replace(array(' ', '-'), '_', strtoupper($key));
             if (!defined($const)) {
-                throw new Exception\InvalidArgumentException("Unknown libmemcached option '{$key}' ({$const})");
+                throw new Exception\InvalidArgumentException("Unknown redis option '{$key}' ({$const})");
             }
             $key = constant($const);
         } else {
@@ -336,186 +383,191 @@ class MemcachedResourceManager
     }
 
     /**
-     * Set servers
+     * Set server
      *
-     * $servers can be an array list or a comma separated list of servers.
-     * One server in the list can be descripted as follows:
-     * - URI:   [tcp://]<host>[:<port>][?weight=<weight>]
-     * - Assoc: array('host' => <host>[, 'port' => <port>][, 'weight' => <weight>])
-     * - List:  array(<host>[, <port>][, <weight>])
+     * Server can be described as follows:
+     * - URI:   /path/to/sock.sock
+     * - Assoc: array('host' => <host>[, 'port' => <port>[, 'timeout' => <timeout>]])
+     * - List:  array(<host>[, <port>, [, <timeout>]])
      *
      * @param string       $id
-     * @param string|array $servers
-     * @return MemcachedResourceManager
+     * @param string|array $server
+     * @return RedisResourceManager
      */
-    public function setServers($id, $servers)
+    public function setServer($id, $server)
     {
         if (!$this->hasResource($id)) {
             return $this->setResource($id, array(
-                'servers' => $servers
+                'server' => $server
             ));
         }
 
-        $this->normalizeServers($servers);
+        $this->normalizeServer($server);
 
         $resource = & $this->resources[$id];
-        if ($resource instanceof MemcachedResource) {
-            // don't add servers twice
-            $servers = array_udiff($servers, $resource->getServerList(), array($this, 'compareServers'));
-            if ($servers) {
-                $resource->addServers($servers);
-            }
+        if ($resource['resource'] instanceof RedisResource) {
+            $this->setResource($id, array('server' => $server));
         } else {
-            $resource['servers'] = $servers;
+            $resource['server'] = $server;
         }
-
         return $this;
     }
 
     /**
-     * Get servers
+     * Get server
      * @param string $id
      * @throws Exception\RuntimeException
-     * @return array array('host' => <host>, 'port' => <port>, 'weight' => <weight>)
+     * @return array array('host' => <host>[, 'port' => <port>[, 'timeout' => <timeout>]])
      */
-    public function getServers($id)
+    public function getServer($id)
     {
         if (!$this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
         $resource = & $this->resources[$id];
-
-        if ($resource instanceof MemcachedResource) {
-            return $resource->getServerList();
-        }
-        return $resource['servers'];
+        return $resource['server'];
     }
 
     /**
-     * Add servers
+     * Set redis password
      *
-     * @param string       $id
-     * @param string|array $servers
-     * @return MemcachedResourceManager
+     * @param string $id
+     * @param string $password
+     * @return RedisResource
      */
-    public function addServers($id, $servers)
+    public function setPassword($id, $password)
     {
         if (!$this->hasResource($id)) {
             return $this->setResource($id, array(
-                'servers' => $servers
+                'password' => $password,
             ));
         }
 
-        $this->normalizeServers($servers);
-
         $resource = & $this->resources[$id];
-        if ($resource instanceof MemcachedResource) {
-            // don't add servers twice
-            $servers = array_udiff($servers, $resource->getServerList(), array($this, 'compareServers'));
-            if ($servers) {
-                $resource->addServers($servers);
-            }
-        } else {
-            // don't add servers twice
-            $resource['servers'] = array_merge(
-                $resource['servers'],
-                array_udiff($servers, $resource['servers'], array($this, 'compareServers'))
-            );
-        }
-
+        $resource['password']    = $password;
+        $resource['initialized'] = false;
         return $this;
     }
 
     /**
-     * Add one server
+     * Get redis resource password
      *
-     * @param string       $id
-     * @param string|array $server
-     * @return MemcachedResourceManager
+     * @param string $id
+     * @return string
      */
-    public function addServer($id, $server)
+    public function getPassword($id)
     {
-        return $this->addServers($id, array($server));
+        if (!$this->hasResource($id)) {
+            throw new Exception\RuntimeException("No resource with id '{$id}'");
+        }
+
+        $resource = & $this->resources[$id];
+        return $resource['password'];
     }
 
     /**
-     * Normalize a list of servers into the following format:
-     * array(array('host' => <host>, 'port' => <port>, 'weight' => <weight>)[, ...])
+     * Set redis database number
      *
-     * @param string|array $servers
+     * @param string $id
+     * @param int $database
+     * @return RedisResource
      */
-    protected function normalizeServers(& $servers)
+    public function setDatabase($id, $database)
     {
-        if (!is_array($servers) && !$servers instanceof Traversable) {
-            // Convert string into a list of servers
-            $servers = explode(',', $servers);
+        if (!$this->hasResource($id)) {
+            return $this->setResource($id, array(
+                'database' => (int)$database,
+            ));
         }
 
-        $result = array();
-        foreach ($servers as $server) {
-            $this->normalizeServer($server);
-            $result[$server['host'] . ':' . $server['port']] = $server;
+        $resource = & $this->resources[$id];
+        $resource['database']    = $database;
+        $resource['initialized'] = false;
+        return $this;
+    }
+
+    /**
+     * Get redis resource database
+     *
+     * @param string $id
+     * @return string
+     */
+    public function getDatabase($id)
+    {
+        if (!$this->hasResource($id)) {
+            throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
-        $servers = array_values($result);
+        $resource = & $this->resources[$id];
+        return $resource['database'];
+    }
+
+    /**
+     * Get redis server version
+     *
+     * @param string $id
+     * @return int
+     * @throws Exception\RuntimeException
+     */
+    public function getMayorVersion($id)
+    {
+        if (!$this->hasResource($id)) {
+            throw new Exception\RuntimeException("No resource with id '{$id}'");
+        }
+
+        $resource = & $this->resources[$id];
+        return (int)$resource['version'];
     }
 
     /**
      * Normalize one server into the following format:
-     * array('host' => <host>, 'port' => <port>, 'weight' => <weight>)
+     * array('host' => <host>[, 'port' => <port>[, 'timeout' => <timeout>]])
      *
      * @param string|array $server
      * @throws Exception\InvalidArgumentException
      */
     protected function normalizeServer(& $server)
     {
-        $host   = null;
-        $port   = 11211;
-        $weight = 0;
-
+        $host    = null;
+        $port    = null;
+        $timeout = 0;
         // convert a single server into an array
         if ($server instanceof Traversable) {
             $server = ArrayUtils::iteratorToArray($server);
         }
 
         if (is_array($server)) {
-            // array(<host>[, <port>[, <weight>]])
+            // array(<host>[, <port>[, <timeout>]])
             if (isset($server[0])) {
-                $host   = (string) $server[0];
-                $port   = isset($server[1]) ? (int) $server[1] : $port;
-                $weight = isset($server[2]) ? (int) $server[2] : $weight;
+                $host    = (string) $server[0];
+                $port    = isset($server[1]) ? (int) $server[1] : $port;
+                $timeout = isset($server[2]) ? (int) $server[2] : $timeout;
             }
 
-            // array('host' => <host>[, 'port' => <port>[, 'weight' => <weight>]])
+            // array('host' => <host>[, 'port' => <port>, ['timeout' => <timeout>]])
             if (!isset($server[0]) && isset($server['host'])) {
-                $host   = (string)$server['host'];
-                $port   = isset($server['port'])   ? (int) $server['port']   : $port;
-                $weight = isset($server['weight']) ? (int) $server['weight'] : $weight;
+                $host    = (string) $server['host'];
+                $port    = isset($server['port'])    ? (int) $server['port']    : $port;
+                $timeout = isset($server['timeout']) ? (int) $server['timeout'] : $timeout;
             }
 
         } else {
-            // parse server from URI host{:?port}{?weight}
+            // parse server from URI host{:?port}
             $server = trim($server);
-            if (strpos($server, '://') === false) {
-                $server = 'tcp://' . $server;
+            if (!strpos($server, '/') === 0) {
+                //non unix domain socket connection
+                $server = parse_url($server);
+            } else {
+                $server = array('host' => $server);
             }
-
-            $server = parse_url($server);
             if (!$server) {
                 throw new Exception\InvalidArgumentException("Invalid server given");
             }
 
-            $host = $server['host'];
-            $port = isset($server['port']) ? (int) $server['port'] : $port;
-
-            if (isset($server['query'])) {
-                $query = null;
-                parse_str($server['query'], $query);
-                if (isset($query['weight'])) {
-                    $weight = (int)$query['weight'];
-                }
-            }
+            $host    = $server['host'];
+            $port    = isset($server['port'])    ? (int) $server['port']    : $port;
+            $timeout = isset($server['timeout']) ? (int) $server['timeout'] : $timeout;
         }
 
         if (!$host) {
@@ -523,27 +575,9 @@ class MemcachedResourceManager
         }
 
         $server = array(
-            'host'   => $host,
-            'port'   => $port,
-            'weight' => $weight,
+            'host'    => $host,
+            'port'    => $port,
+            'timeout' => $timeout,
         );
-    }
-
-    /**
-     * Compare 2 normalized server arrays
-     * (Compares only the host and the port)
-     *
-     * @param array $serverA
-     * @param array $serverB
-     * @return int
-     */
-    protected function compareServers(array $serverA, array $serverB)
-    {
-        $keyA = $serverA['host'] . ':' . $serverA['port'];
-        $keyB = $serverB['host'] . ':' . $serverB['port'];
-        if ($keyA === $keyB) {
-            return 0;
-        }
-        return $keyA > $keyB ? 1 : -1;
     }
 }
