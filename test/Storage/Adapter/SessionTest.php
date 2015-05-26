@@ -11,8 +11,6 @@ namespace ZendTest\Cache\Storage\Adapter;
 
 use Zend\Cache;
 use Zend\Session\Container as SessionContainer;
-use Zend\Session\Config\StandardConfig as SessionConfig;
-use ZendTest\Session\TestAsset\TestManager as TestSessionManager;
 
 /**
  * @group      Zend_Cache
@@ -23,9 +21,7 @@ class SessionTest extends CommonAdapterTest
     {
         $_SESSION = array();
         SessionContainer::setDefaultManager(null);
-        $sessionConfig    = new SessionConfig(array('storage' => 'Zend\Session\Storage\ArrayStorage'));
-        $sessionManager   = $manager = new TestSessionManager($sessionConfig);
-        $sessionContainer = new SessionContainer('Default', $manager);
+        $sessionContainer = new SessionContainer('Default');
 
         $this->_options = new Cache\Storage\Adapter\SessionOptions(array(
             'session_container' => $sessionContainer
