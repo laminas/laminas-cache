@@ -19,6 +19,10 @@ class DbaInifileTest extends TestCase
 {
     public function testSpecifyingInifileHandlerRaisesException()
     {
+        if (!extension_loaded('dba')) {
+            $this->markTestSkipped("Missing ext/dba");
+        }
+
         $this->setExpectedException('Zend\Cache\Exception\ExtensionNotLoadedException', 'inifile');
         $cache = new Dba(array(
             'pathname' => sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('zfcache_dba_') . '.inifile',
