@@ -6,10 +6,6 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-cache:
-  directories:
-    - $HOME/.composer/cache
-
 env:
   global:
     - TESTS_ZEND_CACHE_APC_ENABLED=true
