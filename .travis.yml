@@ -18,6 +18,7 @@ services:
 
 env:
   global:
+    - TESTS_ZEND_CACHE_APC_ENABLED=true
     - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=true
     - TESTS_ZEND_CACHE_MEMCACHED_HOST='127.0.0.1'
     - TESTS_ZEND_CACHE_MEMCACHED_PORT=11211
@@ -57,6 +58,7 @@ before_install:
 
 install:
   - travis_retry composer install --no-interaction --ignore-platform-reqs
+  - echo "yes\nno\n" | pecl -d preferred_state=beta install apcu
 
 before_script:
   - phpenv config-add .ci/php.ini || return 0
