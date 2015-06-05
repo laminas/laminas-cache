@@ -58,7 +58,7 @@ before_install:
 
 install:
   - travis_retry composer install --no-interaction --ignore-platform-reqs
-  - echo "yes\nno\n" | pecl -d preferred_state=beta install apcu
+  - echo "yes\nno\n" | pecl -d preferred_state=beta install apcu || return 0
 
 before_script:
   - phpenv config-add .ci/php.ini || return 0
