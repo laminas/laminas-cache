@@ -25,7 +25,6 @@
         "phpunit/PHPUnit": "~4.0"
     },
     "suggest": {
-        "zendframework/zend-serializer": "Zend\\Serializer component",
         "zendframework/zend-session": "Zend\\Session component",
         "ext-apcu": "APCU, to use the APC storage adapter",
         "ext-dba": "DBA, to use the DBA storage adapter",
