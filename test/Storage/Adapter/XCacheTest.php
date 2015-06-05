@@ -51,11 +51,11 @@ class XCacheTest extends CommonAdapterTest
             }
         }
 
-        $this->_options = new Cache\Storage\Adapter\XCacheOptions(array(
+        $this->_options = new Cache\Storage\Adapter\XCacheOptions([
             'admin_auth' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH') ? : false,
             'admin_user' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_USER') ? : '',
             'admin_pass' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS') ? : '',
-        ));
+        ]);
         $this->_storage = new Cache\Storage\Adapter\XCache();
         $this->_storage->setOptions($this->_options);
 
