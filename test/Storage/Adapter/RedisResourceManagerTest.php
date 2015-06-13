@@ -33,6 +33,14 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get the Redis resource
+     */
+    public function testGetResource()
+    {
+
+    }
+
+    /**
      * @group 6495
      */
     public function testSetServerWithPasswordInUri()
@@ -111,6 +119,7 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
         $expectedPersistentId = '1234';
         $this->resourceManager->setResource($resourceId, $resource);
         $this->assertSame($expectedPersistentId, $this->resourceManager->getPersistentId($resourceId));
+        $this->assertInstanceOf('Redis', $this->resourceManager->getResource($resourceId));
     }
 
     /**
@@ -130,5 +139,6 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotSame($expectedPersistentId, $this->resourceManager->getPersistentId($resourceId));
         $this->assertEmpty($this->resourceManager->getPersistentId($resourceId));
+        $this->assertInstanceOf('Redis', $this->resourceManager->getResource($resourceId));
     }
 }
