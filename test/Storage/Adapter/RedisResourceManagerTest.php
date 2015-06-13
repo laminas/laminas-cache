@@ -33,14 +33,6 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get the Redis resource
-     */
-    public function testGetResource()
-    {
-
-    }
-
-    /**
      * @group 6495
      */
     public function testSetServerWithPasswordInUri()
