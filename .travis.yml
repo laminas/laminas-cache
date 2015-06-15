@@ -11,19 +11,21 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+services:
+  - memcached
+  - mongodb
+  - redis-server
+
 env:
   global:
     - TESTS_ZEND_CACHE_APC_ENABLED=true
-    - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
-    - TESTS_ZEND_CACHE_PLATFORM_ENABLED=true
-    - TESTS_ZEND_CACHE_WINCACHE_ENABLED=true
-    - TESTS_ZEND_CACHE_ZEND_SERVER_ENABLED=true
     - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=true
     - TESTS_ZEND_CACHE_MEMCACHED_HOST='127.0.0.1'
     - TESTS_ZEND_CACHE_MEMCACHED_PORT=11211
     - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
-    - TESTS_ZEND_CACHE_MEMCACHE_HOST=TESTS_ZEND_CACHE_MEMCACHED_HOST
-    - TESTS_ZEND_CACHE_MEMCACHE_PORT=TESTS_ZEND_CACHE_MEMCACHED_PORT
+    - TESTS_ZEND_CACHE_MEMCACHE_HOST=$TESTS_ZEND_CACHE_MEMCACHED_HOST
+    - TESTS_ZEND_CACHE_MEMCACHE_PORT=$TESTS_ZEND_CACHE_MEMCACHED_PORT
+    - TESTS_ZEND_CACHE_MONGODB_ENABLED=true
     - TESTS_ZEND_CACHE_REDIS_ENABLED=true
     - TESTS_ZEND_CACHE_REDIS_HOST='127.0.0.1'
     - TESTS_ZEND_CACHE_REDIS_PORT=6379
@@ -56,6 +58,10 @@ before_install:
 
 install:
   - travis_retry composer install --no-interaction --ignore-platform-reqs
+  - echo "yes\nno\n" | pecl -d preferred_state=beta install apcu || return 0
+
+before_script:
+  - phpenv config-add .ci/php.ini || return 0
 
 script:
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then ./vendor/bin/phpunit --coverage-clover clover.xml ; fi

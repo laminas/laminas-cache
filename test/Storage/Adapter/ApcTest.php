@@ -29,27 +29,10 @@ class ApcTest extends CommonAdapterTest
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_APC_ENABLED to run this test');
         }
 
-        if (version_compare('3.1.6', phpversion('apc')) > 0) {
-            try {
-                new Cache\Storage\Adapter\Apc();
-                $this->fail("Expected exception Zend\Cache\Exception\ExtensionNotLoadedException");
-            } catch (Cache\Exception\ExtensionNotLoadedException $e) {
-                $this->markTestSkipped("Missing ext/apc >= 3.1.6");
-            }
-        }
-
-        $enabled = (bool) ini_get('apc.enabled');
-        if (PHP_SAPI == 'cli') {
-            $enabled = $enabled && (bool) ini_get('apc.enable_cli');
-        }
-
-        if (!$enabled) {
-            try {
-                new Cache\Storage\Adapter\Apc();
-                $this->fail("Expected exception Zend\Cache\Exception\ExtensionNotLoadedException");
-            } catch (Cache\Exception\ExtensionNotLoadedException $e) {
-                $this->markTestSkipped("ext/apc is disabled - see 'apc.enabled' and 'apc.enable_cli'");
-            }
+        try {
+            new Cache\Storage\Adapter\Apc();
+        } catch (Cache\Exception\ExtensionNotLoadedException $e) {
+            $this->markTestSkipped($e->getMessage());
         }
 
         // needed on test expirations
