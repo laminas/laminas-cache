@@ -101,6 +101,14 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidPersistentId()
     {
+        if (!getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
+            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
+        }
+
+        if (!extension_loaded('redis')) {
+            $this->markTestSkipped("Redis extension is not loaded");
+        }
+
         $resourceId = 'testValidPersistentId';
         $resource   = [
             'persistent_id' => 1234,
@@ -111,6 +119,7 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
         $expectedPersistentId = '1234';
         $this->resourceManager->setResource($resourceId, $resource);
         $this->assertSame($expectedPersistentId, $this->resourceManager->getPersistentId($resourceId));
+        $this->assertInstanceOf('Redis', $this->resourceManager->getResource($resourceId));
     }
 
     /**
@@ -118,6 +127,14 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotValidPersistentId()
     {
+        if (!getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
+            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
+        }
+
+        if (!extension_loaded('redis')) {
+            $this->markTestSkipped("Redis extension is not loaded");
+        }
+
         $resourceId = 'testNotValidPersistentId';
         $resource   = [
             'persistend_id' => 1234,
@@ -130,5 +147,6 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotSame($expectedPersistentId, $this->resourceManager->getPersistentId($resourceId));
         $this->assertEmpty($this->resourceManager->getPersistentId($resourceId));
+        $this->assertInstanceOf('Redis', $this->resourceManager->getResource($resourceId));
     }
 }
