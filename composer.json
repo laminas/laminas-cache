@@ -29,9 +29,12 @@
         "zendframework/zend-session": "Zend\\Session component",
         "ext-apcu": "APCU, to use the APC storage adapter",
         "ext-dba": "DBA, to use the DBA storage adapter",
+        "ext-memcache": "Memcache >= 2.0.0 to use the Memcache storage adapter",
         "ext-memcached": "Memcached >= 1.0.0 to use the Memcached storage adapter",
         "ext-mongo": "Mongo, to use MongoDb storage adapter",
+        "ext-redis": "Redis, to use Redis storage adapter",
         "ext-wincache": "WinCache, to use the WinCache storage adapter",
+        "ext-xcache": "XCache, to use the XCache storage adapter",
         "mongofill/mongofill": "Alternative to ext-mongo - a pure PHP implementation designed as a drop in replacement"
     },
     "minimum-stability": "dev",

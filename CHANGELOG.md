@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#10](https://github.com/zendframework/zend-cache/pull/10) adds TTL support
   for the Redis adapter.
+- [#6](https://github.com/zendframework/zend-cache/pull/6) adds more suggestions
+  to the `composer.json` for PHP extensions supported by storage adapters.
 
 ### Deprecated
 
