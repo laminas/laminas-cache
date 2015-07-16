@@ -312,4 +312,20 @@ class RedisTest extends CommonAdapterTest
         $this->_options->setPassword($password);
         $this->assertEquals($password, $this->_options->getPassword(), 'Password was set incorrectly using RedisOptions');
     }
+
+    public function testTouchItem()
+    {
+        $key = 'key';
+
+        // no TTL
+        $this->_storage->getOptions()->setTtl(0);
+        $this->_storage->setItem($key, 'val');
+        $this->assertEquals(0, $this->_storage->getMetadata($key)['ttl']);
+
+        // touch with a specific TTL will add this TTL
+        $ttl = 1000;
+        $this->_storage->getOptions()->setTtl($ttl);
+        $this->assertTrue($this->_storage->touchItem($key));
+        $this->assertEquals($ttl, ceil($this->_storage->getMetadata($key)['ttl']));
+    }
 }

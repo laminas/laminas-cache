@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#10](https://github.com/zendframework/zend-cache/pull/10) adds TTL support
+  for the Redis adapter.
 
 ### Deprecated
 
