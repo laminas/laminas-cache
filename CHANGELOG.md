@@ -36,7 +36,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#15](https://github.com/zendframework/zend-cache/pull/15) fixes an issue
+  observed on HHVM when merging a list of memcached servers to add to the
+  storage resource.
 
 ## 2.5.2 - 2015-07-16
 
