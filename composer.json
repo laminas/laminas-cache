@@ -16,7 +16,6 @@
         "php": ">=5.5",
         "zendframework/zend-stdlib": "~2.5",
         "zendframework/zend-servicemanager": "~2.5",
-        "zendframework/zend-serializer": "~2.5",
         "zendframework/zend-eventmanager": "~2.5"
     },
     "require-dev": {
