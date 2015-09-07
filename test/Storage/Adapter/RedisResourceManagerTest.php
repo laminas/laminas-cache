@@ -57,7 +57,7 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
         $server      = 'redis://dummyuser:dummypass@testhost:1234';
         $dummyResId2 = '12345678901';
         $resource    = [
-            'persistent_id' => 1234,
+            'persistent_id' => 'my_connection_name',
             'server'        => $server,
             'password'      => 'abcd1234'
         ];
@@ -80,7 +80,7 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
         $server2     = 'redis://dummyuser:dummypass@testhost2:1234';
         $dummyResId2 = '12345678901';
         $resource    = [
-            'persistent_id' => 1234,
+            'persistent_id' => 'my_connection_name',
             'server'        => $server,
             'password'      => 'abcd1234'
         ];
@@ -111,21 +111,21 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
 
         $resourceId = 'testValidPersistentId';
         $resource   = [
-            'persistent_id' => 1234,
+            'persistent_id' => 'my_connection_name',
             'server' => [
                 'host' => 'localhost'
             ],
         ];
-        $expectedPersistentId = '1234';
+        $expectedPersistentId = 'my_connection_name';
         $this->resourceManager->setResource($resourceId, $resource);
         $this->assertSame($expectedPersistentId, $this->resourceManager->getPersistentId($resourceId));
         $this->assertInstanceOf('Redis', $this->resourceManager->getResource($resourceId));
     }
 
     /**
-     * Test with 'persistend_id'
+     * Test with 'persistend_id' instead of 'persistent_id'
      */
-    public function testNotValidPersistentId()
+    public function testNotValidPersistentIdOptionName()
     {
         if (!getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
@@ -137,12 +137,12 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
 
         $resourceId = 'testNotValidPersistentId';
         $resource   = [
-            'persistend_id' => 1234,
+            'persistend_id' => 'my_connection_name',
             'server' => [
                 'host' => 'localhost'
             ],
         ];
-        $expectedPersistentId = '1234';
+        $expectedPersistentId = 'my_connection_name';
         $this->resourceManager->setResource($resourceId, $resource);
 
         $this->assertNotSame($expectedPersistentId, $this->resourceManager->getPersistentId($resourceId));
