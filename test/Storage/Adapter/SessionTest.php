@@ -12,7 +12,7 @@ namespace ZendTest\Cache\Storage\Adapter;
 use Zend\Cache;
 use Zend\Session\Container as SessionContainer;
 use Zend\Session\Config\StandardConfig as SessionConfig;
-use ZendTest\Session\TestAsset\TestManager as TestSessionManager;
+use ZendTest\Cache\TestAsset\SessionManager as TestSessionManager;
 
 /**
  * @group      Zend_Cache
