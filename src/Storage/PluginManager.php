@@ -11,6 +11,7 @@ namespace Zend\Cache\Storage;
 
 use Zend\Cache\Exception;
 use Zend\ServiceManager\AbstractPluginManager;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Plugin manager implementation for cache plugins
@@ -21,17 +22,20 @@ use Zend\ServiceManager\AbstractPluginManager;
  */
 class PluginManager extends AbstractPluginManager
 {
-    /**
-     * Default set of plugins
-     *
-     * @var array
-     */
-    protected $invokableClasses = [
-        'clearexpiredbyfactor' => 'Zend\Cache\Storage\Plugin\ClearExpiredByFactor',
-        'exceptionhandler'     => 'Zend\Cache\Storage\Plugin\ExceptionHandler',
-        'ignoreuserabort'      => 'Zend\Cache\Storage\Plugin\IgnoreUserAbort',
-        'optimizebyfactor'     => 'Zend\Cache\Storage\Plugin\OptimizeByFactor',
-        'serializer'           => 'Zend\Cache\Storage\Plugin\Serializer',
+    protected $aliases = [
+        'clearexpiredbyfactor' => Storage\Plugin\ClearExpiredByFactor::class,
+        'exceptionhandler'     => Storage\Plugin\ExceptionHandler::class,
+        'ignoreuserabort'      => Storage\Plugin\IgnoreUserAbort::class,
+        'optimizebyfactor'     => Storage\Plugin\OptimizeByFactor::class,
+        'serializer'           => Storage\Plugin\Serializer::class,
+    ];
+
+    protected $factories = [
+        Storage\Plugin\ClearExpiredByFactor::class => InvokableFactory::class,
+        Storage\Plugin\ExceptionHandler::class     => InvokableFactory::class,
+        Storage\Plugin\IgnoreUserAbort::class      => InvokableFactory::class,
+        Storage\Plugin\OptimizeByFactor::class     => InvokableFactory::class,
+        Storage\Plugin\Serializer::class           => InvokableFactory::class
     ];
 
     /**

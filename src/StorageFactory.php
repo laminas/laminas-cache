@@ -12,6 +12,7 @@ namespace Zend\Cache;
 use Traversable;
 use Zend\EventManager\EventsCapableInterface;
 use Zend\Stdlib\ArrayUtils;
+use Zend\ServiceManager\ServiceManager;
 
 abstract class StorageFactory
 {
@@ -157,7 +158,7 @@ abstract class StorageFactory
     public static function getAdapterPluginManager()
     {
         if (static::$adapters === null) {
-            static::$adapters = new Storage\AdapterPluginManager();
+            static::$adapters = new Storage\AdapterPluginManager(new ServiceManager);
         }
         return static::$adapters;
     }

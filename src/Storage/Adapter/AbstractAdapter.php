@@ -23,6 +23,7 @@ use Zend\Cache\Storage\StorageInterface;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventsCapableInterface;
+use Zend\EventManager\SharedEventManager;
 
 abstract class AbstractAdapter implements StorageInterface, EventsCapableInterface
 {
@@ -125,7 +126,8 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
             $this->options = $options;
 
             $event = new Event('option', $this, new ArrayObject($options->toArray()));
-            $this->getEventManager()->trigger($event);
+
+            $this->getEventManager()->triggerEvent($event);
         }
         return $this;
     }
@@ -188,7 +190,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
     public function getEventManager()
     {
         if ($this->events === null) {
-            $this->events = new EventManager([__CLASS__, get_class($this)]);
+            $this->events = new EventManager(new SharedEventManager(), [__CLASS__, get_class($this)]);
         }
         return $this->events;
     }
@@ -216,7 +218,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
     protected function triggerPost($eventName, ArrayObject $args, & $result)
     {
         $postEvent = new PostEvent($eventName . '.post', $this, $args, $result);
-        $eventRs   = $this->getEventManager()->trigger($postEvent);
+        $eventRs   = $this->getEventManager()->triggerEvent($postEvent);
 
         return $eventRs->stopped()
             ? $eventRs->last()
