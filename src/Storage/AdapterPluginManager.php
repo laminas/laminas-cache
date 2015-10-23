@@ -24,19 +24,33 @@ class AdapterPluginManager extends AbstractPluginManager
 {
     protected $aliases = [
         'apc'            => Adapter\Apc::class,
+        'Apc'            => Adapter\Apc::class,
         'blackhole'      => Adapter\BlackHole::class,
+        'BlackHole'      => Adapter\BlackHole::class,
         'dba'            => Adapter\Dba::class,
+        'Dba'            => Adapter\Dba::class,
         'filesystem'     => Adapter\Filesystem::class,
+        'Filesystem'     => Adapter\Filesystem::class,
         'memcache'       => Adapter\Memcache::class,
+        'Memcache'       => Adapter\Memcache::class,
         'memcached'      => Adapter\Memcached::class,
+        'Memcached'      => Adapter\Memcached::class,
         'memory'         => Adapter\Memory::class,
+        'Memory'         => Adapter\Memory::class,
         'mongodb'        => Adapter\MongoDb::class,
+        'MongoDb'        => Adapter\MongoDb::class,
         'redis'          => Adapter\Redis::class,
+        'Redis'          => Adapter\Redis::class,
         'session'        => Adapter\Session::class,
+        'Session'        => Adapter\Session::class,
         'xcache'         => Adapter\XCache::class,
+        'XCache'         => Adapter\XCache::class,
         'wincache'       => Adapter\WinCache::class,
+        'WinCache'       => Adapter\WinCache::class,
         'zendserverdisk' => Adapter\ZendServerDisk::class,
-        'zendservershm'  => Adapter\ZendServerShm::class
+        'ZendServerDisk' => Adapter\ZendServerDisk::class,
+        'zendservershm'  => Adapter\ZendServerShm::class,
+        'ZendServerShm'  => Adapter\ZendServerShm::class
     ];
 
     protected $factories = [
@@ -64,25 +78,7 @@ class AdapterPluginManager extends AbstractPluginManager
     protected $shareByDefault = false;
 
     /**
-     * Validate the plugin
-     *
-     * Checks that the adapter loaded is an instance of StorageInterface.
-     *
-     * @param  mixed $plugin
-     * @return void
-     * @throws Exception\RuntimeException if invalid
+     * @var string
      */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof StorageInterface) {
-            // we're okay
-            return;
-        }
-
-        throw new Exception\RuntimeException(sprintf(
-            'Plugin of type %s is invalid; must implement %s\StorageInterface',
-            (is_object($plugin) ? get_class($plugin) : gettype($plugin)),
-            __NAMESPACE__
-        ));
-    }
+    protected $instanceOf = StorageInterface::class;
 }

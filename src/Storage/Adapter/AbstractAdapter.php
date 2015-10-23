@@ -204,7 +204,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
      */
     protected function triggerPre($eventName, ArrayObject $args)
     {
-        return $this->getEventManager()->trigger(new Event($eventName . '.pre', $this, $args));
+        return $this->getEventManager()->triggerEvent(new Event($eventName . '.pre', $this, $args));
     }
 
     /**
@@ -241,7 +241,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
     protected function triggerException($eventName, ArrayObject $args, & $result, \Exception $exception)
     {
         $exceptionEvent = new ExceptionEvent($eventName . '.exception', $this, $args, $result, $exception);
-        $eventRs        = $this->getEventManager()->trigger($exceptionEvent);
+        $eventRs        = $this->getEventManager()->triggerEvent($exceptionEvent);
 
         if ($exceptionEvent->getThrowException()) {
             throw $exceptionEvent->getException();

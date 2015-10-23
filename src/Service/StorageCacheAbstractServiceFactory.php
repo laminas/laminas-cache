@@ -41,15 +41,21 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
         if (empty($config)) {
             return false;
         }
-
         return (isset($config[$requestedName]) && is_array($config[$requestedName]));
     }
 
+    /**
+     * Create an object
+     *
+     * @param  ContainerInterface $container
+     * @param  string             $requestedName
+     * @param  null|array         $options
+     * @return object
+     */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $this->getConfig($container);
-        $config = $config[$requestedName];
-        return StorageFactory::factory($config);
+        return StorageFactory::factory($config[$requestedName]);
     }
 
     /**

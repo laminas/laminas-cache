@@ -220,7 +220,7 @@ abstract class StorageFactory
     public static function getPluginManager()
     {
         if (static::$plugins === null) {
-            static::$plugins = new Storage\PluginManager();
+            static::$plugins = new Storage\PluginManager(new ServiceManager);
         }
         return static::$plugins;
     }

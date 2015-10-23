@@ -11,6 +11,7 @@ namespace Zend\Cache;
 
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
+use Zend\ServiceManager\ServiceManager;
 
 abstract class PatternFactory
 {
@@ -63,7 +64,7 @@ abstract class PatternFactory
     public static function getPluginManager()
     {
         if (static::$plugins === null) {
-            static::$plugins = new PatternPluginManager();
+            static::$plugins = new PatternPluginManager(new ServiceManager);
         }
 
         return static::$plugins;

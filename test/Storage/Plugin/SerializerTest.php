@@ -13,12 +13,15 @@ use Zend\Cache;
 use Zend\Cache\Storage\Event;
 use Zend\Cache\Storage\PostEvent;
 use ArrayObject;
+use ZendTest\Cache\EventManagerIntrospectionTrait;
 
 /**
  * @group      Zend_Cache
  */
 class SerializerTest extends CommonPluginTest
 {
+    use EventManagerIntrospectionTrait;
+
     /**
      * The storage adapter
      *
@@ -59,21 +62,20 @@ class SerializerTest extends CommonPluginTest
             'getCapabilities.post' => 'onGetCapabilitiesPost',
         ];
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
-            // @todo refactor without getListeners()
-            //$listeners = $this->_adapter->getEventManager()->getListeners($eventName);
+            $listeners = $this->getArrayOfListenersForEvent($eventName, $this->_adapter->getEventManager());
 
             // event should attached only once
-            $this->assertSame(1, $listeners->count());
+            $this->assertSame(1, count($listeners));
 
             // check expected callback method
-            $cb = $listeners->top()->getCallback();
+            $cb = array_shift($listeners);
             $this->assertArrayHasKey(0, $cb);
             $this->assertSame($this->_plugin, $cb[0]);
             $this->assertArrayHasKey(1, $cb);
             $this->assertSame($expectedCallbackMethod, $cb[1]);
 
             // check expected priority
-            $meta = $listeners->top()->getMetadata();
+            $meta = $cb;
             $this->assertArrayHasKey('priority', $meta);
             if (substr($eventName, -4) == '.pre') {
                 $this->assertSame(100, $meta['priority']);
@@ -89,8 +91,7 @@ class SerializerTest extends CommonPluginTest
         $this->_adapter->removePlugin($this->_plugin);
 
         // no events should be attached
-        // @todo refactor without getEvents()
-        //$this->assertEquals(0, count($this->_adapter->getEventManager()->getEvents()));
+        $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
     }
 
     public function testUnserializeOnReadItem()

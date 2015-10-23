@@ -47,25 +47,7 @@ class PatternPluginManager extends AbstractPluginManager
     protected $shareByDefault = false;
 
     /**
-     * Validate the plugin
-     *
-     * Checks that the pattern adapter loaded is an instance of Pattern\PatternInterface.
-     *
-     * @param  mixed $plugin
-     * @return void
-     * @throws Exception\RuntimeException if invalid
+     * @var string
      */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof Pattern\PatternInterface) {
-            // we're okay
-            return;
-        }
-
-        throw new Exception\RuntimeException(sprintf(
-            'Plugin of type %s is invalid; must implement %s\Pattern\PatternInterface',
-            (is_object($plugin) ? get_class($plugin) : gettype($plugin)),
-            __NAMESPACE__
-        ));
-    }
+    protected $instanceOf = Pattern\PatternInterface::class;
 }

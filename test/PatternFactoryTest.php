@@ -34,7 +34,9 @@ class PatternFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testChangePluginManager()
     {
-        $plugins = new Cache\PatternPluginManager();
+        $plugins = new Cache\PatternPluginManager(
+            $this->getMockBuilder('Interop\Container\ContainerInterface')->getMock()
+        );
         Cache\PatternFactory::setPluginManager($plugins);
         $this->assertSame($plugins, Cache\PatternFactory::getPluginManager());
     }

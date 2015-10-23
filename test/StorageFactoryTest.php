@@ -10,6 +10,7 @@
 namespace ZendTest\Cache;
 
 use Zend\Cache;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * @group      Zend_Cache
@@ -36,7 +37,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testChangeAdapterPluginManager()
     {
-        $adapters = new Cache\Storage\AdapterPluginManager();
+        $adapters = new Cache\Storage\AdapterPluginManager(new ServiceManager);
         Cache\StorageFactory::setAdapterPluginManager($adapters);
         $this->assertSame($adapters, Cache\StorageFactory::getAdapterPluginManager());
     }
@@ -60,7 +61,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testChangePluginManager()
     {
-        $manager = new Cache\Storage\PluginManager();
+        $manager = new Cache\Storage\PluginManager(new ServiceManager);
         Cache\StorageFactory::setPluginManager($manager);
         $this->assertSame($manager, Cache\StorageFactory::getPluginManager());
     }
