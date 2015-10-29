@@ -9,8 +9,8 @@
 
 namespace Zend\Cache\Storage;
 
-use Zend\Cache\Exception;
 use Zend\ServiceManager\AbstractPluginManager;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Plugin manager implementation for cache plugins
@@ -21,17 +21,25 @@ use Zend\ServiceManager\AbstractPluginManager;
  */
 class PluginManager extends AbstractPluginManager
 {
-    /**
-     * Default set of plugins
-     *
-     * @var array
-     */
-    protected $invokableClasses = [
-        'clearexpiredbyfactor' => 'Zend\Cache\Storage\Plugin\ClearExpiredByFactor',
-        'exceptionhandler'     => 'Zend\Cache\Storage\Plugin\ExceptionHandler',
-        'ignoreuserabort'      => 'Zend\Cache\Storage\Plugin\IgnoreUserAbort',
-        'optimizebyfactor'     => 'Zend\Cache\Storage\Plugin\OptimizeByFactor',
-        'serializer'           => 'Zend\Cache\Storage\Plugin\Serializer',
+    protected $aliases = [
+        'clearexpiredbyfactor' => Plugin\ClearExpiredByFactor::class,
+        'ClearExpiredByFactor' => Plugin\ClearExpiredByFactor::class,
+        'exceptionhandler'     => Plugin\ExceptionHandler::class,
+        'ExceptionHandler'     => Plugin\ExceptionHandler::class,
+        'ignoreuserabort'      => Plugin\IgnoreUserAbort::class,
+        'IgnoreUserAbort'      => Plugin\IgnoreUserAbort::class,
+        'optimizebyfactor'     => Plugin\OptimizeByFactor::class,
+        'OptimizeByFactor'     => Plugin\OptimizeByFactor::class,
+        'serializer'           => Plugin\Serializer::class,
+        'Serializer'           => Plugin\Serializer::class
+    ];
+
+    protected $factories = [
+        Plugin\ClearExpiredByFactor::class => InvokableFactory::class,
+        Plugin\ExceptionHandler::class     => InvokableFactory::class,
+        Plugin\IgnoreUserAbort::class      => InvokableFactory::class,
+        Plugin\OptimizeByFactor::class     => InvokableFactory::class,
+        Plugin\Serializer::class           => InvokableFactory::class
     ];
 
     /**
@@ -39,28 +47,10 @@ class PluginManager extends AbstractPluginManager
      *
      * @var array
      */
-    protected $shareByDefault = false;
+    protected $sharedByDefault = false;
 
     /**
-     * Validate the plugin
-     *
-     * Checks that the plugin loaded is an instance of Plugin\PluginInterface.
-     *
-     * @param  mixed $plugin
-     * @return void
-     * @throws Exception\RuntimeException if invalid
+     * @var string
      */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof Plugin\PluginInterface) {
-            // we're okay
-            return;
-        }
-
-        throw new Exception\RuntimeException(sprintf(
-            'Plugin of type %s is invalid; must implement %s\Plugin\PluginInterface',
-            (is_object($plugin) ? get_class($plugin) : gettype($plugin)),
-            __NAMESPACE__
-        ));
-    }
+    protected $instanceOf = Plugin\PluginInterface::class;
 }
