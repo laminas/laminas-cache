@@ -235,7 +235,7 @@ class AdapterOptions extends AbstractOptions
     {
         if ($this->adapter instanceof EventsCapableInterface) {
             $event = new Event('option', $this->adapter, new ArrayObject([$optionName => $optionValue]));
-            $this->adapter->getEventManager()->trigger($event);
+            $this->adapter->getEventManager()->triggerEvent($event);
         }
     }
 
