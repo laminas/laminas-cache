@@ -20,7 +20,7 @@ class StorageCacheFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config = $container->get('Config');
+        $config = $container->get('config');
         $cacheConfig = isset($config['cache']) ? $config['cache'] : [];
         return StorageFactory::factory($cacheConfig);
     }

@@ -25,7 +25,7 @@ class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
         Cache\StorageFactory::resetPluginManager();
         $this->sm = new ServiceManager([
             'services' => [
-                'Config' => [
+                'config' => [
                     'caches' => [
                         'Memory' => [
                             'adapter' => 'Memory',
@@ -52,8 +52,16 @@ class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCanLookupCacheByName()
     {
-        $this->assertTrue($this->sm->has('Memory'));
-        $this->assertTrue($this->sm->has('Foo'));
+        // Since these are delivered by abstract factory, by default, `has()`
+        // should return false, as it doesn't consult abstract factories by
+        // default.
+        $this->assertFalse($this->sm->has('Memory'));
+        $this->assertFalse($this->sm->has('Foo'));
+
+        // Passing the boolean true to the second argument forces a lookup
+        // via abstract factory.
+        $this->assertTrue($this->sm->has('Memory', true));
+        $this->assertTrue($this->sm->has('Foo', true));
     }
 
     public function testCanRetrieveCacheByName()

@@ -61,8 +61,10 @@ class SerializerTest extends CommonPluginTest
 
             'getCapabilities.post' => 'onGetCapabilitiesPost',
         ];
+
+        $events = $this->_adapter->getEventManager();
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
-            $listeners = $this->getArrayOfListenersForEvent($eventName, $this->_adapter->getEventManager());
+            $listeners = $this->getArrayOfListenersForEvent($eventName, $events);
 
             // event should attached only once
             $this->assertSame(1, count($listeners));
@@ -75,12 +77,10 @@ class SerializerTest extends CommonPluginTest
             $this->assertSame($expectedCallbackMethod, $cb[1]);
 
             // check expected priority
-            $meta = $cb;
-            $this->assertArrayHasKey('priority', $meta);
             if (substr($eventName, -4) == '.pre') {
-                $this->assertSame(100, $meta['priority']);
+                $this->assertListenerAtPriority($cb, 100, $eventName, $events);
             } else {
-                $this->assertSame(-100, $meta['priority']);
+                $this->assertListenerAtPriority($cb, -100, $eventName, $events);
             }
         }
     }

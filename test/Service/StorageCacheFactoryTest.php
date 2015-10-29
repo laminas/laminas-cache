@@ -25,7 +25,7 @@ class StorageCacheFactoryTest extends \PHPUnit_Framework_TestCase
         Cache\StorageFactory::resetPluginManager();
         $this->sm = new ServiceManager([
             'services' => [
-                'Config' => [
+                'config' => [
                     'cache' => [
                         'adapter' => 'Memory',
                         'plugins' => ['Serializer', 'ClearExpiredByFactor'],

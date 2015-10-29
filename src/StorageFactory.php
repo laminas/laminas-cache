@@ -119,7 +119,9 @@ abstract class StorageFactory
                 }
 
                 $plugin = static::pluginFactory($pluginName, $pluginOptions);
-                $adapter->addPlugin($plugin, $pluginPrio);
+                if (! $adapter->hasPlugin($plugin)) {
+                    $adapter->addPlugin($plugin, $pluginPrio);
+                }
             }
         }
 

@@ -18,7 +18,7 @@ use ZendTest\Cache\EventManagerIntrospectionTrait;
 class ExceptionHandlerTest extends CommonPluginTest
 {
     use EventManagerIntrospectionTrait;
-    
+
     /**
      * The storage adapter
      *

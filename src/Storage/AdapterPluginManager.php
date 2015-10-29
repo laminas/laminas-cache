@@ -9,7 +9,6 @@
 
 namespace Zend\Cache\Storage;
 
-use Zend\Cache\Exception;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
@@ -75,7 +74,7 @@ class AdapterPluginManager extends AbstractPluginManager
      *
      * @var array
      */
-    protected $shareByDefault = false;
+    protected $sharedByDefault = false;
 
     /**
      * @var string

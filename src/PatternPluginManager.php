@@ -44,7 +44,7 @@ class PatternPluginManager extends AbstractPluginManager
      *
      * @var array
      */
-    protected $shareByDefault = false;
+    protected $sharedByDefault = false;
 
     /**
      * @var string
