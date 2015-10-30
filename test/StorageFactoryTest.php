@@ -14,6 +14,7 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\StorageFactory
  */
 class StorageFactoryTest extends \PHPUnit_Framework_TestCase
 {

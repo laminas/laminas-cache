@@ -13,6 +13,7 @@ use Zend\Cache;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\PatternFactory
  */
 class PatternFactoryTest extends \PHPUnit_Framework_TestCase
 {

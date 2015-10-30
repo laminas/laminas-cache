@@ -15,6 +15,9 @@ use ZendTest\Cache\Storage\TestAsset\OptimizableMockAdapter;
 use ArrayObject;
 use ZendTest\Cache\EventManagerIntrospectionTrait;
 
+/**
+ * @covers Zend\Cache\Storage\Plugin\OptimizeByFactor<extended>
+ */
 class OptimizeByFactorTest extends CommonPluginTest
 {
     use EventManagerIntrospectionTrait;

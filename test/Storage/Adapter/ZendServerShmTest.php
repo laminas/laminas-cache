@@ -14,6 +14,7 @@ use Zend\Cache\Exception;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\ZendServerShm<extended>
  */
 class ZendServerShmTest extends CommonAdapterTest
 {

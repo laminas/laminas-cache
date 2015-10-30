@@ -15,6 +15,9 @@ use ZendTest\Cache\Storage\TestAsset\ClearExpiredMockAdapter;
 use ZendTest\Cache\EventManagerIntrospectionTrait;
 use ArrayObject;
 
+/**
+ * @covers Zend\Cache\Storage\Plugin\ClearExpiredByFactor
+ */
 class ClearExpiredByFactorTest extends CommonPluginTest
 {
     use EventManagerIntrospectionTrait;

@@ -15,6 +15,7 @@ use ZendTest\Cache\EventManagerIntrospectionTrait;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Plugin\IgnoreUserAbort<extended>
  */
 class IgnoreUserAbortTest extends CommonPluginTest
 {
