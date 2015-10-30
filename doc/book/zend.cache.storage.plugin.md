@@ -1,8 +1,6 @@
-Zend\\Cache\\Storage\\Plugin
-============================
+# Zend\\Cache\\Storage\\Plugin
 
-Overview
---------
+## Overview
 
 Cache storage plugins are objects to add missing functionality or to influence behavior of a storage
 adapter.
@@ -12,8 +10,7 @@ events), skipping and directly return a result (using `stopPropagation`), changi
 `setResult` of `Zend\Cache\Storage\PostEvent`) and catching exceptions (with
 `Zend\Cache\Storage\ExceptionEvent`).
 
-Quick Start
------------
+## Quick Start
 
 Storage plugins can either be created from `Zend\Cache\StorageFactory` with the `pluginFactory`, or
 by simply instantiating one of the `Zend\Cache\Storage\Plugin\*`classes.
@@ -41,8 +38,7 @@ $plugin = new Zend\Cache\Storage\Plugin\Serializer();
 $cache->addPlugin($plugin);
 ```
 
-The ClearExpiredByFactor Plugin
--------------------------------
+## The ClearExpiredByFactor Plugin
 
 > The `Zend\Cache\Storage\Plugin\ClearExpiredByFactor` plugin calls the storage method
 `clearExpired()` randomly (by factor) after every call of `setItem()`, `setItems()`, `addItem()` and
@@ -53,21 +49,18 @@ The ClearExpiredByFactor Plugin
 The storage have to implement the `Zend\Cache\Storage\ClearExpiredInterface` to work with this
 plugin.
 
-The ExceptionHandler Plugin
----------------------------
+## The ExceptionHandler Plugin
 
 > The `Zend\Cache\Storage\Plugin\ExceptionHandler` plugin catches all exceptions thrown on reading
 or writing to cache and sends the exception to a defined callback function.
 It's configurable if the plugin should re-throw the catched exception.
 
-The IgnoreUserAbort Plugin
---------------------------
+## The IgnoreUserAbort Plugin
 
 > The `Zend\Cache\Storage\Plugin\IgnoreUserAbort` plugin ignores script terminations by users until
 write operations to cache finished.
 
-The OptimizeByFactor Plugin
----------------------------
+## The OptimizeByFactor Plugin
 
 > The `Zend\Cache\Storage\Plugin\OptimizeByFactor` plugin calls the storage method `optimize()`
 randomly (by factor) after removing items from cache.
@@ -77,18 +70,15 @@ randomly (by factor) after removing items from cache.
 The storage have to implement the `Zend\Cache\Storage\OptimizableInterface` to work with this
 plugin.
 
-The Serializer Plugin
----------------------
+## The Serializer Plugin
 
 > The `Zend\Cache\Storage\Plugin\Serializer` plugin will serialize data on writing to cache and
 unserialize on reading. So it's possible to store different datatypes into cache storages only
 support strings.
 
-Available Methods
------------------
+## Available Methods
 
-Examples
---------
+## Examples
 
 **Basics of writing an own storage plugin**
 

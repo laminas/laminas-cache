@@ -1,8 +1,6 @@
-Zend\\Cache\\Storage\\Capabilities
-==================================
+# Zend\\Cache\\Storage\\Capabilities
 
-Overview
---------
+## Overview
 
 Storage capabilities describes how a storage adapter works and which features it supports.
 
@@ -16,11 +14,9 @@ If you are writing your own plugin or adapter, you can also change capabilities 
 access to the marker object and can create your own marker to instantiate a new object of
 `Zend\Cache\Storage\Capabilities`.
 
-Available Methods
------------------
+## Available Methods
 
-Examples
---------
+## Examples
 
 **Get storage capabilities and do specific stuff in base of it**
 

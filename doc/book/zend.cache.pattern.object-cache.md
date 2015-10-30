@@ -1,15 +1,12 @@
-Zend\\Cache\\Pattern\\ObjectCache
-=================================
+# Zend\\Cache\\Pattern\\ObjectCache
 
-Overview
---------
+## Overview
 
 The `ObjectCache` pattern is an extension to the `CallbackCache` pattern. It has the same methods
 but instead it generates the internally used callback in base of the configured object and the given
 method name.
 
-Quick Start
------------
+## Quick Start
 
 Instantiating the object cache pattern
 
@@ -23,8 +20,7 @@ $objectCache = PatternFactory::factory('object', array(
 ));
 ```
 
-Configuration Options
----------------------
+## Configuration Options
 
 <table>
 <colgroup>
@@ -94,8 +90,7 @@ Configuration Options
 </tbody>
 </table>
 
-Available Methods
------------------
+## Available Methods
 
 > rtype  
 mixed
@@ -109,8 +104,7 @@ rtype
 boolean
 rtype  
 void
-Examples
---------
+## Examples
 
 **Caching a filter**
 

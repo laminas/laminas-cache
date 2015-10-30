@@ -1,13 +1,10 @@
-Zend\\Cache\\Pattern\\CallbackCache
-===================================
+# Zend\\Cache\\Pattern\\CallbackCache
 
-Overview
---------
+## Overview
 
 The callback cache pattern caches calls of non specific functions and methods given as a callback.
 
-Quick Start
------------
+## Quick Start
 
 For instantiation you can use the `PatternFactory` or do it manual:
 
@@ -29,8 +26,7 @@ $callbackCache->setOptions(new PatternOptions(array(
 )));
 ```
 
-Configuration Options
----------------------
+## Configuration Options
 
 <table>
 <colgroup>
@@ -64,11 +60,9 @@ Configuration Options
 </tbody>
 </table>
 
-Available Methods
------------------
+## Available Methods
 
-Examples
---------
+## Examples
 
 **Instantiating the callback cache pattern**
 

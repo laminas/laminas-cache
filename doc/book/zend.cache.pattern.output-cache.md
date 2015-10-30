@@ -1,13 +1,10 @@
-Zend\\Cache\\Pattern\\OutputCache
-=================================
+# Zend\\Cache\\Pattern\\OutputCache
 
-Overview
---------
+## Overview
 
 The `OutputCache` pattern caches output between calls to `start()` and `end()`.
 
-Quick Start
------------
+## Quick Start
 
 Instantiating the output cache pattern
 
@@ -19,8 +16,7 @@ $outputCache = PatternFactory::factory('output', array(
 ));
 ```
 
-Configuration Options
----------------------
+## Configuration Options
 
 <table>
 <colgroup>
@@ -48,11 +44,9 @@ Configuration Options
 </tbody>
 </table>
 
-Available Methods
------------------
+## Available Methods
 
-Examples
---------
+## Examples
 
 **Caching simple view scripts**
 

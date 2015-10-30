@@ -1,8 +1,6 @@
-Zend\\Cache\\Storage\\Adapter
-=============================
+# Zend\\Cache\\Storage\\Adapter
 
-Overview
---------
+## Overview
 
 > Storage adapters are wrappers for real storage resources such as memory and the filesystem, using
 the well known adapter pattern.
@@ -23,8 +21,7 @@ Because many caching operations throw an exception on error, you need to catch t
 can use the plug-in `Zend\Cache\Storage\Plugin\ExceptionHandler` with `throw_exceptions` set to
 `false` to automatically catch them. You can also define an `exception_callback` to log exceptions.
 
-Quick Start
------------
+## Quick Start
 
 > Caching adapters can either be created from the provided `Zend\Cache\StorageFactory` factory, or
 by simply instantiating one of the `Zend\Cache\Storage\Adapter\*` classes.
@@ -61,8 +58,7 @@ $plugin->getOptions()->setThrowExceptions(false);
 $cache->addPlugin($plugin);
 ```
 
-Basic Configuration Options
----------------------------
+## Basic Configuration Options
 
 > The following configuration options are defined by `Zend\Cache\Storage\Adapter\AdapterOptions` and
 are available for every supported adapter. Adapter-specific configuration options are described on
@@ -115,68 +111,57 @@ adapter level below.
 </tr
 </tbody
 </table
-The StorageInterface
---------------------
+## The StorageInterface
 
 The `Zend\Cache\Storage\StorageInterface` is the basic interface implemented by all storage
 adapters.
 
-The AvailableSpaceCapableInterface
-----------------------------------
+## The AvailableSpaceCapableInterface
 
 The `Zend\Cache\Storage\AvailableSpaceCapableInterface` implements a method to make it possible
 getting the current available space of the storage.
 
-The TotalSpaceCapableInterface
-------------------------------
+## The TotalSpaceCapableInterface
 
 The `Zend\Cache\Storage\TotalSpaceCapableInterface` implements a method to make it possible getting
 the total space of the storage.
 
-The ClearByNamespaceInterface
------------------------------
+## The ClearByNamespaceInterface
 
 The `Zend\Cache\Storage\ClearByNamespaceInterface` implements a method to clear all items of a given
 namespace.
 
-The ClearByPrefixInterface
---------------------------
+## The ClearByPrefixInterface
 
 The `Zend\Cache\Storage\ClearByPrefixInterface` implements a method to clear all items of a given
 prefix (within the current configured namespace).
 
-The ClearExpiredInterface
--------------------------
+## The ClearExpiredInterface
 
 The `Zend\Cache\Storage\ClearExpiredInterface` implements a method to clear all expired items
 (within the current configured namespace).
 
-The FlushableInterface
-----------------------
+## The FlushableInterface
 
 The `Zend\Cache\Storage\FlushableInterface` implements a method to flush the complete storage.
 
-The IterableInterface
----------------------
+## The IterableInterface
 
 The `Zend\Cache\Storage\IterableInterface` implements a method to get an iterator to iterate over
 items of the storage. It extends `IteratorAggregate` so it's possible to directly iterate over the
 storage using `foreach`.
 
-The OptimizableInterface
-------------------------
+## The OptimizableInterface
 
 The `Zend\Cache\Storage\OptimizableInterface` implements a method to run optimization processes on
 the storage.
 
-The TaggableInterface
----------------------
+## The TaggableInterface
 
 The `Zend\Cache\Storage\TaggableInterface` implements methods to mark items with one or more tags
 and to clean items matching tags.
 
-The Apc Adapter
----------------
+## The Apc Adapter
 
 > The `Zend\Cache\Storage\Adapter\Apc` adapter stores cache items in shared memory through the
 required PHP extension [APC](http://pecl.php.net/package/APC) (Alternative PHP Cache).
@@ -188,11 +173,9 @@ This adapter implements the following interfaces:
 - `Zend\Cache\Storage\FlushableInterface`
 - `Zend\Cache\Storage\IterableInterface`
 - `Zend\Cache\Storage\TotalSpaceCapableInterface`
+## 
 
-------------------------------------------------------------------------
-
-The Dba Adapter
----------------
+## The Dba Adapter
 
 > The `Zend\Cache\Storage\Adapter\Dba` adapter stores cache items into
 [dbm](http://en.wikipedia.org/wiki/Dbm) like databases using the required PHP extension
@@ -206,16 +189,14 @@ This adapter implements the following interfaces:
 - `Zend\Cache\Storage\IterableInterface`
 - `Zend\Cache\Storage\OptimizableInterface`
 - `Zend\Cache\Storage\TotalSpaceCapableInterface`
-
-------------------------------------------------------------------------
+## 
 
 > ## Note
 #### This adapter doesn't support automatically expire items
 Because of this adapter doesn't support automatically expire items it's very important to clean
 outdated items by self.
 
-The Filesystem Adapter
-----------------------
+## The Filesystem Adapter
 
 > The `Zend\Cache\Storage\Adapter\Filesystem` adapter stores cache items into the filesystem.
 This adapter implements the following interfaces:
@@ -229,11 +210,9 @@ This adapter implements the following interfaces:
 - `Zend\Cache\Storage\OptimizableInterface`
 - `Zend\Cache\Storage\TaggableInterface`
 - `Zend\Cache\Storage\TotalSpaceCapableInterface`
+## 
 
-------------------------------------------------------------------------
-
-The Memcached Adapter
----------------------
+## The Memcached Adapter
 
 > The `Zend\Cache\Storage\Adapter\Memcached` adapter stores cache items over the memcached protocol.
 It's using the required PHP extension [memcached](http://pecl.php.net/package/memcached) which is
@@ -243,11 +222,9 @@ This adapter implements the following interfaces:
 - `Zend\Cache\Storage\AvailableSpaceCapableInterface`
 - `Zend\Cache\Storage\FlushableInterface`
 - `Zend\Cache\Storage\TotalSpaceCapableInterface`
+## 
 
-------------------------------------------------------------------------
-
-The Redis Adapter
------------------
+## The Redis Adapter
 
 > The `Zend\Cache\Storage\Adapter\Redis` adapter stores cache items over the redis protocol. It's
 using the required PHP extension [redis](https://github.com/nicolasff/phpredis).
@@ -255,8 +232,7 @@ This adapter implements the following interfaces:
 - `Zend\Cache\Storage\FlushableInterface`
 - `Zend\Cache\Storage\TotalSpaceCapableInterface`
 
-The Memory Adapter
-------------------
+## The Memory Adapter
 
 > The `Zend\Cache\Storage\Adapter\Memory` adapter stores cache items into the PHP process using an
 array.
@@ -269,25 +245,21 @@ This adapter implements the following interfaces:
 - `Zend\Cache\Storage\IterableInterface`
 - `Zend\Cache\Storage\TaggableInterface`
 - `Zend\Cache\Storage\TotalSpaceCapableInterface`
-
-------------------------------------------------------------------------
+## 
 
 > ## Note
 All stored items will be lost after terminating the script.
 
-The MongoDB Adapter
--------------------
+## The MongoDB Adapter
 
 > The `Zend\Cache\Storage\Adapter\MongoDB` adapter stores cache items into MongoDB, using either the
 PHP extension [mongo](http://php.net/mongo) OR a MongoDB polyfill library, such as
 [Mongofill](https://github.com/mongofill/mongofill).
 This adapter implements the following interfaces:
 - `Zend\Cache\Storage\FlushableInterface`
+## 
 
-------------------------------------------------------------------------
-
-The WinCache Adapter
---------------------
+## The WinCache Adapter
 
 > The `Zend\Cache\Storage\Adapter\WinCache` adapter stores cache items into shared memory through
 the required PHP extension [WinCache](http://pecl.php.net/package/WinCache).
@@ -296,11 +268,9 @@ This adapter implements the following interfaces:
 - `Zend\Cache\Storage\AvailableSpaceCapableInterface`
 - `Zend\Cache\Storage\FlushableInterface`
 - `Zend\Cache\Storage\TotalSpaceCapableInterface`
+## 
 
-------------------------------------------------------------------------
-
-The XCache Adapter
-------------------
+## The XCache Adapter
 
 > The `Zend\Cache\Storage\Adapter\XCache` adapter stores cache items into shared memory through the
 required PHP extension [XCache](http://xcache.lighttpd.net/).
@@ -312,11 +282,9 @@ This adapter implements the following interfaces:
 - `Zend\Cache\Storage\FlushableInterface`
 - `Zend\Cache\Storage\IterableInterface`
 - `Zend\Cache\Storage\TotalSpaceCapableInterface`
+## 
 
-------------------------------------------------------------------------
-
-The ZendServerDisk Adapter
---------------------------
+## The ZendServerDisk Adapter
 
 > This `Zend\Cache\Storage\Adapter\ZendServerDisk` adapter stores cache items on filesystem through
 the [Zend Server Data Caching API](http://www.zend.com/en/products/server/).
@@ -327,8 +295,7 @@ This adapter implements the following interfaces:
 - `Zend\Cache\Storage\FlushableInterface`
 - `Zend\Cache\Storage\TotalSpaceCapableInterface`
 
-The ZendServerShm Adapter
--------------------------
+## The ZendServerShm Adapter
 
 > The `Zend\Cache\Storage\Adapter\ZendServerShm` adapter stores cache items in shared memory through
 the [Zend Server Data Caching API](http://www.zend.com/en/products/server/).
@@ -338,8 +305,7 @@ This adapter implements the following interfaces:
 - `Zend\Cache\Storage\FlushableInterface`
 - `Zend\Cache\Storage\TotalSpaceCapableInterface`
 
-Examples
---------
+## Examples
 
 **Basic usage**
 

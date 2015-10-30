@@ -1,15 +1,12 @@
-Zend\\Cache\\Pattern\\ClassCache
-================================
+# Zend\\Cache\\Pattern\\ClassCache
 
-Overview
---------
+## Overview
 
 The `ClassCache` pattern is an extension to the `CallbackCache` pattern. It has the same methods but
 instead it generates the internally used callback in base of the configured class name and the given
 method name.
 
-Quick Start
------------
+## Quick Start
 
 Instantiating the class cache pattern
 
@@ -22,8 +19,7 @@ $classCache = PatternFactory::factory('class', array(
 ));
 ```
 
-Configuration Options
----------------------
+## Configuration Options
 
 <table>
 <colgroup>
@@ -81,8 +77,7 @@ Configuration Options
 </tbody>
 </table>
 
-Available Methods
------------------
+## Available Methods
 
 > rtype  
 mixed
@@ -96,8 +91,7 @@ rtype
 boolean
 rtype  
 void
-Examples
---------
+## Examples
 
 **Caching of import feeds**
 

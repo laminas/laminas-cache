@@ -1,8 +1,6 @@
-Zend\\Cache\\Pattern\\CaptureCache
-==================================
+# Zend\\Cache\\Pattern\\CaptureCache
 
-Overview
---------
+## Overview
 
 The `CaptureCache` pattern is useful to auto-generate static resources in base of a HTTP request.
 The Webserver needs to be configured to run a PHP script generating the requested resource so
@@ -10,8 +8,7 @@ further requests for the same resource can be shipped without calling PHP again.
 
 It comes with basic logic to manage generated resources.
 
-Quick Start
------------
+## Quick Start
 
 Simplest usage as Apache-404 handler
 
@@ -36,8 +33,7 @@ header('Status: 200', true, 200);
 // do stuff to dynamically generate output
 ```
 
-Configuration Options
----------------------
+## Configuration Options
 
 <table>
 <colgroup>
@@ -94,11 +90,9 @@ Configuration Options
 </tbody>
 </table>
 
-Available Methods
------------------
+## Available Methods
 
-Examples
---------
+## Examples
 
 **Scaling images in base of request**
 

@@ -1,8 +1,6 @@
-Zend\\Cache\\Pattern
-====================
+# Zend\\Cache\\Pattern
 
-Overview
---------
+## Overview
 
 Cache patterns are configurable objects to solve known performance bottlenecks. Each should be used
 only in the specific situations they are designed to address. For example you can use one of the
@@ -21,8 +19,7 @@ the factory.
 It's also possible to use a single instance of `Zend\Cache\Pattern\PatternOptions` and pass it to
 multiple pattern objects.
 
-Quick Start
------------
+## Quick Start
 
 Pattern objects can either be created from the provided `Zend\Cache\PatternFactory` factory, or, by
 simply instantiating one of the `Zend\Cache\Pattern\*Cache` classes.
@@ -42,8 +39,7 @@ $callbackCache->setOptions(new Zend\Cache\Pattern\PatternOptions(array(
 )));
 ```
 
-Available Methods
------------------
+## Available Methods
 
 The following methods are implemented by `Zend\Cache\Pattern\AbstractPattern`. Please read
 documentation of specific patterns to get more information.
