@@ -17,6 +17,7 @@ use ZendTest\Cache\EventManagerIntrospectionTrait;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Plugin\Serializer<extended>
  */
 class SerializerTest extends CommonPluginTest
 {

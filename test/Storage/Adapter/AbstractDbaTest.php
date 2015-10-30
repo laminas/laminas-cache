@@ -13,6 +13,7 @@ use Zend\Cache;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\Dba<extended>
  */
 abstract class AbstractDbaTest extends CommonAdapterTest
 {

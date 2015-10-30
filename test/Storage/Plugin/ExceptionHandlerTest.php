@@ -15,6 +15,9 @@ use ZendTest\Cache\Storage\TestAsset\MockAdapter;
 use ArrayObject;
 use ZendTest\Cache\EventManagerIntrospectionTrait;
 
+/**
+ * @covers Zend\Cache\Storage\Plugin\ExceptionHandler<extended>
+ */
 class ExceptionHandlerTest extends CommonPluginTest
 {
     use EventManagerIntrospectionTrait;

@@ -13,6 +13,7 @@ use Zend\Cache;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Pattern\OutputCache<extended>
  */
 class OutputCacheTest extends CommonPatternTest
 {

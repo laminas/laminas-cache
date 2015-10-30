@@ -14,6 +14,7 @@ use Zend\Session\Container as SessionContainer;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\Session<extended>
  */
 class SessionTest extends CommonAdapterTest
 {

@@ -14,6 +14,7 @@ use Zend\Cache\Storage\Adapter\MongoDbOptions;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\MongoDb<extended>
  */
 class MongoDbTest extends CommonAdapterTest
 {

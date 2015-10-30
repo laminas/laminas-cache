@@ -13,6 +13,7 @@ use Zend\Cache;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\Apc<extended>
  */
 class ApcTest extends CommonAdapterTest
 {
