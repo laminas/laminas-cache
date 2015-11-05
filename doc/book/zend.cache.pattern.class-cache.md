@@ -10,7 +10,7 @@ method name.
 
 Instantiating the class cache pattern
 
-``` sourceCode
+```php
 use Zend\Cache\PatternFactory;
 
 $classCache = PatternFactory::factory('class', array(
@@ -95,7 +95,7 @@ void
 
 **Caching of import feeds**
 
-``` sourceCode
+```php
 $cachedFeedReader = Zend\Cache\PatternFactory::factory('class', array(
     'class'   => 'Zend\Feed\Reader\Reader',
     'storage' => 'apc',

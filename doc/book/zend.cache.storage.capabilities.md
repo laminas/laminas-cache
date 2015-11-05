@@ -20,7 +20,7 @@ access to the marker object and can create your own marker to instantiate a new 
 
 **Get storage capabilities and do specific stuff in base of it**
 
-``` sourceCode
+```php
 use Zend\Cache\StorageFactory;
 
 $cache = StorageFactory::adapterFactory('filesystem');
@@ -36,7 +36,7 @@ if ($supportedDatatypes['object']) {
 
 **Listen to change event**
 
-``` sourceCode
+```php
 use Zend\Cache\StorageFactory;
 
 $cache = StorageFactory::adapterFactory('filesystem', array(
