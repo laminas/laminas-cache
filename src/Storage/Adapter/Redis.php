@@ -293,8 +293,27 @@ class Redis extends AbstractAdapter implements
     protected function internalAddItem(& $normalizedKey, & $value)
     {
         $redis = $this->getRedisResource();
+        $ttl   = $this->getOptions()->getTtl();
+
         try {
-            return $redis->setnx($this->namespacePrefix . $normalizedKey, $value);
+            if ($ttl) {
+                if ($this->resourceManager->getMajorVersion($this->resourceId) < 2) {
+                    throw new Exception\UnsupportedMethodCallException("To use ttl you need version >= 2.0.0");
+                }
+
+                /**
+                 * To ensure expected behaviour, we stick with the "setnx" method.
+                 * This means we only set the ttl after the key/value has been successfully set.
+                 */
+                $success = $redis->setnx($this->namespacePrefix . $normalizedKey, $value);
+                if ($success) {
+                    $redis->expire($this->namespacePrefix . $normalizedKey, $ttl);
+                }
+            } else {
+                $success = $redis->setnx($this->namespacePrefix . $normalizedKey, $value);
+            }
+
+            return $success;
         } catch (RedisResourceException $e) {
             throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
         }
