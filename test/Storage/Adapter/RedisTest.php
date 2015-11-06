@@ -39,35 +39,25 @@ class RedisTest extends CommonAdapterTest
             $this->markTestSkipped("Redis extension is not loaded");
         }
 
-        $this->_options  = new Cache\Storage\Adapter\RedisOptions([
-            'resource_id' => __CLASS__,
-        ]);
+        $options = ['resource_id' => __CLASS__];
 
         if (getenv('TESTS_ZEND_CACHE_REDIS_HOST') && getenv('TESTS_ZEND_CACHE_REDIS_PORT')) {
-            $this->_options->getResourceManager()->setServer(__CLASS__, [
-                getenv('TESTS_ZEND_CACHE_REDIS_HOST'), getenv('TESTS_ZEND_CACHE_REDIS_PORT'), 1
-            ]);
+            $options['server'] = [getenv('TESTS_ZEND_CACHE_REDIS_HOST'), getenv('TESTS_ZEND_CACHE_REDIS_PORT')];
         } elseif (getenv('TESTS_ZEND_CACHE_REDIS_HOST')) {
-            $this->_options->getResourceManager()->setServer(__CLASS__, [
-                getenv('TESTS_ZEND_CACHE_REDIS_HOST')
-            ]);
+            $options['server'] = [getenv('TESTS_ZEND_CACHE_REDIS_HOST')];
         }
 
         if (getenv('TESTS_ZEND_CACHE_REDIS_DATABASE')) {
-            $this->_options->getResourceManager()->setDatabase(__CLASS__,
-                getenv('TESTS_ZEND_CACHE_REDIS_DATABASE')
-            );
+            $options['database'] = getenv('TESTS_ZEND_CACHE_REDIS_DATABASE');
         }
 
         if (getenv('TESTS_ZEND_CACHE_REDIS_PASSWORD')) {
-            $this->_options->getResourceManager()->setPassword(__CLASS__,
-                getenv('TESTS_ZEND_CACHE_REDIS_PASSWORD')
-            );
+            $options['password'] = getenv('TESTS_ZEND_CACHE_REDIS_PASSWORD');
         }
-        $this->_storage = new Cache\Storage\Adapter\Redis();
 
-        $this->_storage->setOptions($this->_options);
-        $this->_storage->flush();
+        $this->_options = new Cache\Storage\Adapter\RedisOptions($options);
+        $this->_storage = new Cache\Storage\Adapter\Redis($this->_options);
+
         parent::setUp();
     }
 
