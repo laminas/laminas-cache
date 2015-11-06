@@ -78,6 +78,27 @@ support strings.
 
 ## Available Methods
 
+\#\#\# setOptions(Zend\\Cache\\Storage\\Plugin\\PluginOptions $options) :noindex:
+
+> Set options.
+rtype  
+Zend\\Cache\\Storage\\Plugin\\PluginInterface
+\#\#\# getOptions() :noindex:
+
+> Get options.
+rtype  
+Zend\\Cache\\Storage\\Plugin\\PluginOptions
+\#\#\# attach(Zend\\EventManager\\EventManagerInterface $events) :noindex:
+
+> Defined by `Zend\EventManager\ListenerAggregateInterface`, attach one or more listeners.
+rtype  
+void
+\#\#\# detach(Zend\\EventManager\\EventManagerInterface $events) :noindex:
+
+> Defined by `Zend\EventManager\ListenerAggregateInterface`, detach all previously attached
+listeners.
+rtype  
+void
 ## Examples
 
 **Basics of writing an own storage plugin**

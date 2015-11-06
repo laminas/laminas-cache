@@ -114,53 +114,204 @@ adapter level below.
 ## The StorageInterface
 
 The `Zend\Cache\Storage\StorageInterface` is the basic interface implemented by all storage
-adapters.
+adapters. \#\#\# getItem(string $key, boolean & $success = null, mixed & $casToken = null) :noindex:
 
+> Load an item with the given $key.
+If item exists set parameter $success to `true`, set parameter $casToken and returns `mixed` value
+of item.
+If item can't load set parameter $success to `false` and returns `null`.
+rtype  
+mixed
+\#\#\# getItems(array $keys) :noindex:
+
+> Load all items given by $keys returning key-value pairs.
+rtype  
+array
+\#\#\# hasItem(string $key) :noindex:
+
+> Test if an item exists.
+rtype  
+boolean
+\#\#\# hasItems(array $keys) :noindex:
+
+> Test multiple items.
+rtype  
+string\[\]
+\#\#\# getMetadata(string $key) :noindex:
+
+> Get metadata of an item.
+rtype  
+array|boolean
+\#\#\# getMetadatas(array $keys) :noindex:
+
+> Get multiple metadata.
+rtype  
+array
+\#\#\# setItem(string $key, mixed $value) :noindex:
+
+> Store an item.
+rtype  
+boolean
+\#\#\# setItems(array $keyValuePairs) :noindex:
+
+> Store multiple items.
+rtype  
+boolean
+\#\#\# addItem(string $key, mixed $value) :noindex:
+
+> Add an item.
+rtype  
+boolean
+\#\#\# addItems(array $keyValuePairs) :noindex:
+
+> Add multiple items.
+rtype  
+boolean
+\#\#\# replaceItem(string $key, mixed $value) :noindex:
+
+> Replace an item.
+rtype  
+boolean
+\#\#\# replaceItems(array $keyValuePairs) :noindex:
+
+> Replace multiple items.
+rtype  
+boolean
+\#\#\# checkAndSetItem(mixed $token, string $key, mixed $value) :noindex:
+
+> Set item only if token matches. It uses the token received from `getItem()` to check if the item
+has changed before overwriting it.
+rtype  
+boolean
+\#\#\# touchItem(string $key) :noindex:
+
+> Reset lifetime of an item.
+rtype  
+boolean
+\#\#\# touchItems(array $keys) :noindex:
+
+> Reset lifetime of multiple items.
+rtype  
+boolean
+\#\#\# removeItem(string $key) :noindex:
+
+> Remove an item.
+rtype  
+boolean
+\#\#\# removeItems(array $keys) :noindex:
+
+> Remove multiple items.
+rtype  
+boolean
+\#\#\# incrementItem(string $key, int $value) :noindex:
+
+> Increment an item.
+rtype  
+integer|boolean
+\#\#\# incrementItems(array $keyValuePairs) :noindex:
+
+> Increment multiple items.
+rtype  
+boolean
+\#\#\# decrementItem(string $key, int $value) :noindex:
+
+> Decrement an item.
+rtype  
+integer|boolean
+\#\#\# decrementItems(array $keyValuePairs) :noindex:
+
+> Decrement multiple items.
+rtype  
+boolean
+\#\#\# getCapabilities() :noindex:
+
+> Capabilities of this storage.
+rtype  
+Zend\\Cache\\Storage\\Capabilities
 ## The AvailableSpaceCapableInterface
 
 The `Zend\Cache\Storage\AvailableSpaceCapableInterface` implements a method to make it possible
-getting the current available space of the storage.
+getting the current available space of the storage. \#\#\# getAvailableSpace() :noindex:
 
+> Get available space in bytes.
+rtype  
+integer|float
 ## The TotalSpaceCapableInterface
 
 The `Zend\Cache\Storage\TotalSpaceCapableInterface` implements a method to make it possible getting
-the total space of the storage.
+the total space of the storage. \#\#\# getTotalSpace() :noindex:
 
+> Get total space in bytes.
+rtype  
+integer|float
 ## The ClearByNamespaceInterface
 
 The `Zend\Cache\Storage\ClearByNamespaceInterface` implements a method to clear all items of a given
-namespace.
+namespace. \#\#\# clearByNamespace(string $namespace) :noindex:
 
+> Remove items of given namespace.
+rtype  
+boolean
 ## The ClearByPrefixInterface
 
 The `Zend\Cache\Storage\ClearByPrefixInterface` implements a method to clear all items of a given
-prefix (within the current configured namespace).
+prefix (within the current configured namespace). \#\#\# clearByPrefix(string $prefix) :noindex:
 
+> Remove items matching given prefix.
+rtype  
+boolean
 ## The ClearExpiredInterface
 
 The `Zend\Cache\Storage\ClearExpiredInterface` implements a method to clear all expired items
-(within the current configured namespace).
+(within the current configured namespace). \#\#\# clearExpired() :noindex:
 
+> Remove expired items.
+rtype  
+boolean
 ## The FlushableInterface
 
 The `Zend\Cache\Storage\FlushableInterface` implements a method to flush the complete storage.
+\#\#\# flush() :noindex:
 
+> Flush the whole storage.
+rtype  
+boolean
 ## The IterableInterface
 
 The `Zend\Cache\Storage\IterableInterface` implements a method to get an iterator to iterate over
 items of the storage. It extends `IteratorAggregate` so it's possible to directly iterate over the
-storage using `foreach`.
+storage using `foreach`. \#\#\# getIterator() :noindex:
 
+> Get an Iterator.
+rtype  
+Zend\\Cache\\Storage\\IteratorInterface
 ## The OptimizableInterface
 
 The `Zend\Cache\Storage\OptimizableInterface` implements a method to run optimization processes on
-the storage.
+the storage. \#\#\# optimize() :noindex:
 
+> Optimize the storage.
+rtype  
+boolean
 ## The TaggableInterface
 
 The `Zend\Cache\Storage\TaggableInterface` implements methods to mark items with one or more tags
-and to clean items matching tags.
+and to clean items matching tags. \#\#\# setTags(string $key, string\[\] $tags) :noindex:
 
+> Set tags to an item by given key. (An empty array will remove all tags)
+rtype  
+boolean
+\#\#\# getTags(string $key) :noindex:
+
+> Get tags of an item by given key.
+rtype  
+string\[\]|false
+\#\#\# clearByTags(string\[\] $tags, boolean $disjunction = false) :noindex:
+
+> Remove items matching given tags.
+If $disjunction is `true` only one of the given tags must match else all given tags must match.
+rtype  
+boolean
 ## The Apc Adapter
 
 > The `Zend\Cache\Storage\Adapter\Apc` adapter stores cache items in shared memory through the
