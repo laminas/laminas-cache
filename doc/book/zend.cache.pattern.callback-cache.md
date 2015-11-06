@@ -62,7 +62,7 @@ $callbackCache->setOptions(new PatternOptions(array(
 
 ## Available Methods
 
-call(callable $callback, array $args = array()) :noindex:
+call(callable $callback, array $args = array())
 
 > Call the specified callback or get the result from cache.
 rtype  
@@ -70,18 +70,18 @@ mixed
 Function call handler.
 rtype  
 mixed
-generateKey(callable $callback, array $args = array()) :noindex:
+generateKey(callable $callback, array $args = array())
 
 > Generate a unique key in base of a key representing the callback part and a key representing the
 arguments part.
 rtype  
 string
-setOptions(Zend\\Cache\\Pattern\\PatternOptions $options) :noindex:
+setOptions(Zend\\Cache\\Pattern\\PatternOptions $options)
 
 > Set pattern options.
 rtype  
 Zend\\Cache\\Pattern\\CallbackCache
-getOptions() :noindex:
+getOptions()
 
 > Get all pattern options.
 rtype  

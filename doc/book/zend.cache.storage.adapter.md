@@ -116,7 +116,7 @@ adapter level below.
 The `Zend\Cache\Storage\StorageInterface` is the basic interface implemented by all storage
 adapters.
 
-getItem(string $key, boolean & $success = null, mixed & $casToken = null) :noindex:
+getItem(string $key, boolean & $success = null, mixed & $casToken = null)
 
 > Load an item with the given $key.
 If item exists set parameter $success to `true`, set parameter $casToken and returns `mixed` value
@@ -124,108 +124,108 @@ of item.
 If item can't load set parameter $success to `false` and returns `null`.
 rtype  
 mixed
-getItems(array $keys) :noindex:
+getItems(array $keys)
 
 > Load all items given by $keys returning key-value pairs.
 rtype  
 array
-hasItem(string $key) :noindex:
+hasItem(string $key)
 
 > Test if an item exists.
 rtype  
 boolean
-hasItems(array $keys) :noindex:
+hasItems(array $keys)
 
 > Test multiple items.
 rtype  
 string\[\]
-getMetadata(string $key) :noindex:
+getMetadata(string $key)
 
 > Get metadata of an item.
 rtype  
 array|boolean
-getMetadatas(array $keys) :noindex:
+getMetadatas(array $keys)
 
 > Get multiple metadata.
 rtype  
 array
-setItem(string $key, mixed $value) :noindex:
+setItem(string $key, mixed $value)
 
 > Store an item.
 rtype  
 boolean
-setItems(array $keyValuePairs) :noindex:
+setItems(array $keyValuePairs)
 
 > Store multiple items.
 rtype  
 boolean
-addItem(string $key, mixed $value) :noindex:
+addItem(string $key, mixed $value)
 
 > Add an item.
 rtype  
 boolean
-addItems(array $keyValuePairs) :noindex:
+addItems(array $keyValuePairs)
 
 > Add multiple items.
 rtype  
 boolean
-replaceItem(string $key, mixed $value) :noindex:
+replaceItem(string $key, mixed $value)
 
 > Replace an item.
 rtype  
 boolean
-replaceItems(array $keyValuePairs) :noindex:
+replaceItems(array $keyValuePairs)
 
 > Replace multiple items.
 rtype  
 boolean
-checkAndSetItem(mixed $token, string $key, mixed $value) :noindex:
+checkAndSetItem(mixed $token, string $key, mixed $value)
 
 > Set item only if token matches. It uses the token received from `getItem()` to check if the item
 has changed before overwriting it.
 rtype  
 boolean
-touchItem(string $key) :noindex:
+touchItem(string $key)
 
 > Reset lifetime of an item.
 rtype  
 boolean
-touchItems(array $keys) :noindex:
+touchItems(array $keys)
 
 > Reset lifetime of multiple items.
 rtype  
 boolean
-removeItem(string $key) :noindex:
+removeItem(string $key)
 
 > Remove an item.
 rtype  
 boolean
-removeItems(array $keys) :noindex:
+removeItems(array $keys)
 
 > Remove multiple items.
 rtype  
 boolean
-incrementItem(string $key, int $value) :noindex:
+incrementItem(string $key, int $value)
 
 > Increment an item.
 rtype  
 integer|boolean
-incrementItems(array $keyValuePairs) :noindex:
+incrementItems(array $keyValuePairs)
 
 > Increment multiple items.
 rtype  
 boolean
-decrementItem(string $key, int $value) :noindex:
+decrementItem(string $key, int $value)
 
 > Decrement an item.
 rtype  
 integer|boolean
-decrementItems(array $keyValuePairs) :noindex:
+decrementItems(array $keyValuePairs)
 
 > Decrement multiple items.
 rtype  
 boolean
-getCapabilities() :noindex:
+getCapabilities()
 
 > Capabilities of this storage.
 rtype  
@@ -235,7 +235,7 @@ Zend\\Cache\\Storage\\Capabilities
 The `Zend\Cache\Storage\AvailableSpaceCapableInterface` implements a method to make it possible
 getting the current available space of the storage.
 
-getAvailableSpace() :noindex:
+getAvailableSpace()
 
 > Get available space in bytes.
 rtype  
@@ -245,7 +245,7 @@ integer|float
 The `Zend\Cache\Storage\TotalSpaceCapableInterface` implements a method to make it possible getting
 the total space of the storage.
 
-getTotalSpace() :noindex:
+getTotalSpace()
 
 > Get total space in bytes.
 rtype  
@@ -255,7 +255,7 @@ integer|float
 The `Zend\Cache\Storage\ClearByNamespaceInterface` implements a method to clear all items of a given
 namespace.
 
-clearByNamespace(string $namespace) :noindex:
+clearByNamespace(string $namespace)
 
 > Remove items of given namespace.
 rtype  
@@ -265,7 +265,7 @@ boolean
 The `Zend\Cache\Storage\ClearByPrefixInterface` implements a method to clear all items of a given
 prefix (within the current configured namespace).
 
-clearByPrefix(string $prefix) :noindex:
+clearByPrefix(string $prefix)
 
 > Remove items matching given prefix.
 rtype  
@@ -275,7 +275,7 @@ boolean
 The `Zend\Cache\Storage\ClearExpiredInterface` implements a method to clear all expired items
 (within the current configured namespace).
 
-clearExpired() :noindex:
+clearExpired()
 
 > Remove expired items.
 rtype  
@@ -284,7 +284,7 @@ boolean
 
 The `Zend\Cache\Storage\FlushableInterface` implements a method to flush the complete storage.
 
-flush() :noindex:
+flush()
 
 > Flush the whole storage.
 rtype  
@@ -295,7 +295,7 @@ The `Zend\Cache\Storage\IterableInterface` implements a method to get an iterato
 items of the storage. It extends `IteratorAggregate` so it's possible to directly iterate over the
 storage using `foreach`.
 
-getIterator() :noindex:
+getIterator()
 
 > Get an Iterator.
 rtype  
@@ -305,7 +305,7 @@ Zend\\Cache\\Storage\\IteratorInterface
 The `Zend\Cache\Storage\OptimizableInterface` implements a method to run optimization processes on
 the storage.
 
-optimize() :noindex:
+optimize()
 
 > Optimize the storage.
 rtype  
@@ -315,17 +315,17 @@ boolean
 The `Zend\Cache\Storage\TaggableInterface` implements methods to mark items with one or more tags
 and to clean items matching tags.
 
-setTags(string $key, string\[\] $tags) :noindex:
+setTags(string $key, string\[\] $tags)
 
 > Set tags to an item by given key. (An empty array will remove all tags)
 rtype  
 boolean
-getTags(string $key) :noindex:
+getTags(string $key)
 
 > Get tags of an item by given key.
 rtype  
 string\[\]|false
-clearByTags(string\[\] $tags, boolean $disjunction = false) :noindex:
+clearByTags(string\[\] $tags, boolean $disjunction = false)
 
 > Remove items matching given tags.
 If $disjunction is `true` only one of the given tags must match else all given tags must match.
