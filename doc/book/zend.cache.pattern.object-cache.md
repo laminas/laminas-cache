@@ -10,7 +10,7 @@ method name.
 
 Instantiating the object cache pattern
 
-``` sourceCode
+```php
 use Zend\Cache\PatternFactory;
 
 $object      = new stdClass();
@@ -108,7 +108,7 @@ void
 
 **Caching a filter**
 
-``` sourceCode
+```php
 $filter       = new Zend\Filter\RealPath();
 $cachedFilter = Zend\Cache\PatternFactory::factory('object', array(
     'object'     => $filter,

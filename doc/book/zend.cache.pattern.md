@@ -24,14 +24,14 @@ multiple pattern objects.
 Pattern objects can either be created from the provided `Zend\Cache\PatternFactory` factory, or, by
 simply instantiating one of the `Zend\Cache\Pattern\*Cache` classes.
 
-``` sourceCode
+```php
 // Via the factory:
 $callbackCache = Zend\Cache\PatternFactory::factory('callback', array(
     'storage' => 'apc',
 ));
 ```
 
-``` sourceCode
+```php
 // OR, the equivalent manual instantiation:
 $callbackCache = new Zend\Cache\Pattern\CallbackCache();
 $callbackCache->setOptions(new Zend\Cache\Pattern\PatternOptions(array(
