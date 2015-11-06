@@ -47,12 +47,10 @@ class RedisResourceManager
      */
     public function getMajorVersion($id)
     {
-        if (!$this->hasResource($id)) {
-            throw new Exception\RuntimeException("No resource with id '{$id}'");
-        }
+        // check resource id and initialize the resource
+        $this->getResource($id);
 
-        $resource = & $this->resources[$id];
-        return (int) $resource['version'];
+        return (int) $this->resources[$id]['version'];
     }
 
     /**
