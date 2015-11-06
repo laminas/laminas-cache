@@ -720,6 +720,32 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_storage->hasItem('key2'));
     }
 
+    public function testAddItemSetsTTL()
+    {
+        $capabilities = $this->_storage->getCapabilities();
+
+        if ($capabilities->getMinTtl() === 0) {
+            $this->markTestSkipped("Adapter doesn't support item expiration");
+        }
+
+        $ttl = $capabilities->getTtlPrecision();
+        $this->_options->setTtl($ttl);
+
+        $this->waitForFullSecond();
+
+        $this->assertTrue($this->_storage->addItem('key', 'value'));
+
+        // wait until the item expired
+        $wait = $ttl + $capabilities->getTtlPrecision();
+        usleep($wait * 2000000);
+
+        if (!$capabilities->getUseRequestTime()) {
+            $this->assertFalse($this->_storage->hasItem('key'));
+        } else {
+            $this->assertTrue($this->_storage->hasItem('key'));
+        }
+    }
+
     public function testReplaceExistingItem()
     {
         $this->assertTrue($this->_storage->setItem('key', 'value'));
