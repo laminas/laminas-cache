@@ -20,6 +20,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#40](https://github.com/zendframework/zend-cache/pull/40)
   Fixed TTL support of `Redis::addItem`
+- [#18](https://github.com/zendframework/zend-cache/issues/18)
+  Fixed `Redis::getCapabilities` and `RedisResourceManager::getMajorVersion`
+  if resource wasn't initialized before
 
 ## 2.5.3 - 2015-09-15
 
