@@ -92,42 +92,42 @@ header('Status: 200', true, 200);
 
 ## Available Methods
 
-start(string|null $pageId = null) --- :noindex:
+start(string|null $pageId = null) :noindex:
 
 > Start capturing output.
 rtype  
 void
-set(string $content, string|null $pageId = null) --- :noindex:
+set(string $content, string|null $pageId = null) :noindex:
 
 > Write content to page identity.
 rtype  
 void
-get(string|null $pageId = null) --- :noindex:
+get(string|null $pageId = null) :noindex:
 
 > Get content of an already cached page.
 rtype  
 string|false
-has(string|null $pageId = null) --- :noindex:
+has(string|null $pageId = null) :noindex:
 
 > Check if a page has been created.
 rtype  
 boolean
-remove(string|null $pageId = null) --- :noindex:
+remove(string|null $pageId = null) :noindex:
 
 > Remove a page.
 rtype  
 boolean
-clearByGlob(string $pattern = '\*\*') --- :noindex:
+clearByGlob(string $pattern = '\*\*') :noindex:
 
 > Clear pages matching glob pattern.
 rtype  
 void
-setOptions(Zend\\Cache\\Pattern\\PatternOptions $options) --- :noindex:
+setOptions(Zend\\Cache\\Pattern\\PatternOptions $options) :noindex:
 
 > Set pattern options.
 rtype  
 Zend\\Cache\\Pattern\\CaptureCache
-getOptions() --- :noindex:
+getOptions() :noindex:
 
 > Get all pattern options.
 rtype  

@@ -92,54 +92,39 @@ $objectCache = PatternFactory::factory('object', array(
 
 ## Available Methods
 
-call(string $method, array $args = array()) --- :noindex:
+call(string $method, array $args = array()) :noindex:
 
 > Call the specified method of the configured object.
 
 > rtype  
 mixed
---- :noindex:
-
-> Call the specified method of the configured object.
-
-> rtype  
+Call the specified method of the configured object.
+rtype  
 mixed
---- :noindex:
-
-> Set a property of the configured object.
-
-> rtype  
+Set a property of the configured object.
+rtype  
 void
---- :noindex:
-
-> Get a property of the configured object.
-
-> rtype  
+Get a property of the configured object.
+rtype  
 mixed
---- :noindex:
-
-> Checks if static property of the configured object exists.
-
-> rtype  
+Checks if static property of the configured object exists.
+rtype  
 boolean
---- :noindex:
-
-> Unset a property of the configured object.
-
-> rtype  
+Unset a property of the configured object.
+rtype  
 void
-generateKey(string $method, array $args = array()) --- :noindex:
+generateKey(string $method, array $args = array()) :noindex:
 
 > Generate a unique key in base of a key representing the callback part and a key representing the
 arguments part.
 rtype  
 string
-setOptions(Zend\\Cache\\Pattern\\PatternOptions $options) --- :noindex:
+setOptions(Zend\\Cache\\Pattern\\PatternOptions $options) :noindex:
 
 > Set pattern options.
 rtype  
 Zend\\Cache\\Pattern\\ObjectCache
-getOptions() --- :noindex:
+getOptions() :noindex:
 
 > Get all pattern options.
 rtype  
