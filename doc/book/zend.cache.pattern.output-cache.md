@@ -46,24 +46,24 @@ $outputCache = PatternFactory::factory('output', array(
 
 ## Available Methods
 
-\#\#\# start(string $key) :noindex:
+start(string $key) --- :noindex:
 
 > If there is a cached item with the given key display it's data and return `true` else start
 buffering output until `end()` is called or the script ends and return `false`.
 rtype  
 boolean
-\#\#\# end() :noindex:
+end() --- :noindex:
 
 > Stops buffering output, write buffered data to cache using the given key on `start()` and displays
 the buffer.
 rtype  
 boolean
-\#\#\# setOptions(Zend\\Cache\\Pattern\\PatternOptions $options) :noindex:
+setOptions(Zend\\Cache\\Pattern\\PatternOptions $options) --- :noindex:
 
 > Set pattern options.
 rtype  
 Zend\\Cache\\Pattern\\OutputCache
-\#\#\# getOptions() :noindex:
+getOptions() --- :noindex:
 
 > Get all pattern options.
 rtype  
