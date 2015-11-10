@@ -1275,36 +1275,6 @@ class Filesystem extends AbstractAdapter implements
     }
 
     /**
-     * Read info file
-     *
-     * @param  string  $file
-     * @param  bool $nonBlocking Don't block script if file is locked
-     * @param  bool $wouldblock  The optional argument is set to TRUE if the lock would block
-     * @return array|bool The info array or false if file wasn't found
-     * @throws Exception\RuntimeException
-     */
-    protected function readInfoFile($file, $nonBlocking = false, & $wouldblock = null)
-    {
-        if (!file_exists($file)) {
-            return false;
-        }
-
-        $content = $this->getFileContent($file, $nonBlocking, $wouldblock);
-        if ($nonBlocking && $wouldblock) {
-            return false;
-        }
-
-        ErrorHandler::start();
-        $ifo = unserialize($content);
-        $err = ErrorHandler::stop();
-        if (!is_array($ifo)) {
-            throw new Exception\RuntimeException("Corrupted info file '{$file}'", 0, $err);
-        }
-
-        return $ifo;
-    }
-
-    /**
      * Read a complete file
      *
      * @param  string  $file        File complete path
