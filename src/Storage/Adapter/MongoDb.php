@@ -136,7 +136,6 @@ class MongoDb extends AbstractAdapter implements FlushableInterface
 
             if ($result['expires']->sec < time()) {
                 $this->internalRemoveItem($normalizedKey);
-
                 return;
             }
         }
@@ -241,12 +240,8 @@ class MongoDb extends AbstractAdapter implements FlushableInterface
                 'supportedMetadata'  => [
                     '_id',
                 ],
-                'minTtl'             => 0,
-                'maxTtl'             => 0,
+                'minTtl'             => 1,
                 'staticTtl'          => true,
-                'ttlPrecision'       => 1,
-                'useRequestTime'     => false,
-                'expiredRead'        => false,
                 'maxKeyLength'       => 255,
                 'namespaceIsPrefix'  => true,
             ]
