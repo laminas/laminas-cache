@@ -39,6 +39,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#25](https://github.com/zendframework/zend-cache/pull/25)
+  MongoDd: fixed expiration support and removed duplicated tests
 - [#40](https://github.com/zendframework/zend-cache/pull/40)
   Fixed TTL support of `Redis::addItem`
 - [#18](https://github.com/zendframework/zend-cache/issues/18)
