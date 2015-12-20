@@ -10,6 +10,9 @@
 namespace ZendTest\Cache\Storage\Adapter;
 
 use Zend\Cache;
+use Zend\Cache\Storage\Adapter\AdapterOptions;
+use Zend\Cache\Storage\Plugin\PluginOptions;
+use Zend\Cache\Storage\Capabilities;
 use Zend\Cache\Exception;
 
 /**
@@ -25,9 +28,16 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected $_storage;
 
+    /**
+     * Adapter options
+     *
+     * @var null|AdapterOptions
+     */
+    protected $_options;
+
     public function setUp()
     {
-        $this->_options = new Cache\Storage\Adapter\AdapterOptions();
+        $this->_options = new AdapterOptions();
     }
 
     public function testGetOptions()
@@ -255,14 +265,9 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testInternalGetItemsCallsInternalGetItemForEachKey()
     {
-        $this->markTestSkipped(
-            "This test doesn't work because of an issue with PHPUnit: "
-            . 'https://github.com/sebastianbergmann/phpunit-mock-objects/issues/81'
-        );
-
         $this->_storage = $this->getMockForAbstractAdapter(['internalGetItem']);
 
-        $items  = ['key1' => 'value1', 'notFound' => false, 'key2' => 'value2'];
+        $items  = ['key1' => 'value1', 'keyNotFound' => false, 'key2' => 'value2'];
         $result = ['key1' => 'value1', 'key2' => 'value2'];
 
         $i = 0; // method call counter
@@ -270,11 +275,10 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
             $this->_storage->expects($this->at($i++))
                 ->method('internalGetItem')
                 ->with(
-                    $this->equalTo($k),
-                    $this->equalTo(null),
-                    $this->equalTo(null)
+                    $this->stringContains('key'),
+                    $this->anything()
                 )
-                ->will($this->returnCallback(function ($k, & $success, & $casToken) use ($items) {
+                ->will($this->returnCallback(function ($k, & $success) use ($items) {
                     if ($items[$k]) {
                         $success = true;
                         return $items[$k];
@@ -285,7 +289,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
                 }));
         }
 
-        $rs = $this->_storage->getItems(array_keys($items), $options);
+        $rs = $this->_storage->getItems(array_keys($items));
         $this->assertEquals($result, $rs);
     }
 
@@ -339,23 +343,6 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['key1'], $rs);
     }
 
-    public function testGetMetadataCallsInternalGetMetadata()
-    {
-        $this->_storage = $this->getMockForAbstractAdapter(['internalGetMetadata']);
-
-        $key    = 'key1';
-        $result = [];
-
-        $this->_storage
-            ->expects($this->once())
-            ->method('internalGetMetadata')
-            ->with($this->equalTo($key))
-            ->will($this->returnValue($result));
-
-        $rs = $this->_storage->getMetadata($key);
-        $this->assertSame($result, $rs);
-    }
-
     public function testGetItemReturnsNullIfFailed()
     {
         $this->_storage = $this->getMockForAbstractAdapter(['internalGetItem']);
@@ -363,7 +350,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $key    = 'key1';
 
         // Do not throw exceptions outside the adapter
-        $pluginOptions = new Cache\Storage\Plugin\PluginOptions(
+        $pluginOptions = new PluginOptions(
             ['throw_exceptions' => false]
         );
         $plugin = new Cache\Storage\Plugin\ExceptionHandler();
@@ -375,7 +362,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('internalGetItem')
             ->with($this->equalTo($key))
-            ->will($this->throwException(new \Exception('internalGet failed')));
+            ->will($this->throwException(new \Exception('internalGetItem failed')));
 
         $result = $this->_storage->getItem($key, $success);
         $this->assertNull($result, 'GetItem should return null the item cannot be retrieved');
@@ -384,8 +371,10 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function simpleEventHandlingMethodDefinitions()
     {
+        $capabilities = new Capabilities($this->getMockForAbstractAdapter(), new \stdClass);
+
         return [
-            //    name, internalName, args, internalName, returnValue
+            //    name, internalName, args, returnValue
             ['hasItem', 'internalGetItem', ['k'], 'v'],
             ['hasItems', 'internalHasItems', [['k1', 'k2']], ['v1', 'v2']],
 
@@ -417,6 +406,8 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
             ['decrementItem', 'internalDecrementItem', ['k', 1], true],
             ['decrementItems', 'internalDecrementItems', [['k1' => 1, 'k2' => 2]], []],
+
+            ['getCapabilities', 'internalGetCapabilities', [], $capabilities],
         ];
     }
 
@@ -446,6 +437,39 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $expectedEventList = [
             $methodName . '.pre',
             $methodName . '.post'
+        ];
+        $this->assertSame($expectedEventList, $eventList);
+    }
+
+    /**
+     * @dataProvider simpleEventHandlingMethodDefinitions
+     */
+    public function testEventHandlingCatchException($methodName, $internalMethodName, $methodArgs, $retVal)
+    {
+        $this->_storage = $this->getMockForAbstractAdapter([$internalMethodName]);
+
+        $eventList    = [];
+        $eventHandler = function ($event) use (&$eventList) {
+            $eventList[] = $event->getName();
+            if ($event instanceof Cache\Storage\ExceptionEvent) {
+                $event->setThrowException(false);
+            }
+        };
+        $this->_storage->getEventManager()->attach($methodName . '.pre', $eventHandler);
+        $this->_storage->getEventManager()->attach($methodName . '.post', $eventHandler);
+        $this->_storage->getEventManager()->attach($methodName . '.exception', $eventHandler);
+
+        $mock = $this->_storage
+            ->expects($this->once())
+            ->method($internalMethodName);
+        $mock = call_user_func_array([$mock, 'with'], array_map([$this, 'equalTo'], $methodArgs));
+        $mock->will($this->throwException(new \Exception('test')));
+
+        call_user_func_array([$this->_storage, $methodName], $methodArgs);
+
+        $expectedEventList = [
+            $methodName . '.pre',
+            $methodName . '.exception',
         ];
         $this->assertSame($expectedEventList, $eventList);
     }
@@ -485,194 +509,387 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedEventList, $eventList);
     }
 
-/*
     public function testGetMetadatas()
     {
-        $options    = array('ttl' => 123);
-        $items      = array(
-            'key1'  => array('meta1' => 1),
-            'dKey1' => false,
-            'key2'  => array('meta2' => 2),
-        );
+        $this->_storage = $this->getMockForAbstractAdapter(['getMetadata', 'internalGetMetadata']);
 
-        $i = 0;
-        foreach ($items as $k => $v) {
-            $this->storage->expects($this->at($i++))
-                ->method('getMetadata')
-                ->with($this->equalTo($k), $this->equalTo($options))
-                ->will($this->returnValue($v));
-        }
+        $meta  = ['meta' => 'data'];
+        $items = [
+            'key1' => $meta,
+            'key2' => $meta,
+        ];
 
-        $rs = $this->storage->getMetadatas(array_keys($items), $options);
+        // foreach item call 'internalGetMetadata' instead of 'getMetadata'
+        $this->_storage->expects($this->never())->method('getMetadata');
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalGetMetadata')
+            ->with($this->stringContains('key'))
+            ->will($this->returnValue($meta));
 
-        // remove missing items from array to test
-        $expected = $items;
-        foreach ($expected as $key => $value) {
-            if (false === $value) {
-                unset($expected[$key]);
-            }
-        }
+        $this->assertSame($items, $this->_storage->getMetadatas(array_keys($items)));
+    }
 
-        $this->assertEquals($expected, $rs);
+    public function testGetMetadatasFail()
+    {
+        $this->_storage = $this->getMockForAbstractAdapter(['internalGetMetadata']);
+
+        $items = ['key1', 'key2'];
+
+        // return false to indicate that the operation failed
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalGetMetadata')
+            ->with($this->stringContains('key'))
+            ->will($this->returnValue(false));
+
+        $this->assertSame([], $this->_storage->getMetadatas($items));
     }
 
     public function testSetItems()
     {
-        $options = array('ttl' => 123);
-        $items   = array(
-            'key1' => 'value1',
-            'key2' => 'value2'
-        );
+        $this->_storage = $this->getMockForAbstractAdapter(['setItem', 'internalSetItem']);
 
-        $this->storage->expects($this->exactly(count($items)))
-            ->method('setItem')
-            ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
+        $items = [
+            'key1' => 'value1',
+            'key2' => 'value2',
+        ];
+
+        // foreach item call 'internalSetItem' instead of 'setItem'
+        $this->_storage->expects($this->never())->method('setItem');
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalSetItem')
+            ->with($this->stringContains('key'), $this->stringContains('value'))
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->storage->setItems($items, $options));
+        $this->assertSame([], $this->_storage->setItems($items));
     }
 
     public function testSetItemsFail()
     {
-        $options = array('ttl' => 123);
-        $items   = array(
+        $this->_storage = $this->getMockForAbstractAdapter(['internalSetItem']);
+
+        $items = [
             'key1' => 'value1',
             'key2' => 'value2',
-            'key3' => 'value3',
-        );
+        ];
 
-        $this->storage->expects($this->exactly(count($items)))
-            ->method('setItem')
-            ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
+        // return false to indicate that the operation failed
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalSetItem')
+            ->with($this->stringContains('key'), $this->stringContains('value'))
             ->will($this->returnValue(false));
 
-        $this->assertFalse($this->storage->setItems($items, $options));
+        $this->assertSame(array_keys($items), $this->_storage->setItems($items));
     }
 
     public function testAddItems()
     {
-        $options = array('ttl' => 123);
-        $items   = array(
+        $this->_storage = $this->getMockForAbstractAdapter([
+            'getItem', 'internalGetItem',
+            'hasItem', 'internalHasItem',
+            'setItem', 'internalSetItem'
+        ]);
+
+        $items = [
             'key1' => 'value1',
             'key2' => 'value2'
-        );
+        ];
 
-        // add -> has -> get -> set
-        $this->storage->expects($this->exactly(count($items)))
-            ->method('getItem')
-            ->with($this->stringContains('key'), $this->equalTo($options))
+        // first check if the items already exists using has
+        // call 'internalHasItem' instead of 'hasItem' or '[internal]GetItem'
+        $this->_storage->expects($this->never())->method('hasItem');
+        $this->_storage->expects($this->never())->method('getItem');
+        $this->_storage->expects($this->never())->method('internalGetItem');
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalHasItem')
+            ->with($this->stringContains('key'))
             ->will($this->returnValue(false));
-        $this->storage->expects($this->exactly(count($items)))
-            ->method('setItem')
-            ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
+
+        // If not create the items using set
+        // call 'internalSetItem' instead of 'setItem'
+        $this->_storage->expects($this->never())->method('setItem');
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalSetItem')
+            ->with($this->stringContains('key'), $this->stringContains('value'))
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->storage->addItems($items, $options));
+        $this->assertSame([], $this->_storage->addItems($items));
+    }
+
+    public function testAddItemsExists()
+    {
+        $this->_storage = $this->getMockForAbstractAdapter(['internalHasItem', 'internalSetItem']);
+
+        $items = [
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'key3' => 'value3',
+        ];
+
+        // first check if items already exists
+        // -> return true to indicate that the item already exist
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalHasItem')
+            ->with($this->stringContains('key'))
+            ->will($this->returnValue(true));
+
+        // set item should never be called
+        $this->_storage->expects($this->never())->method('internalSetItem');
+
+        $this->assertSame(array_keys($items), $this->_storage->addItems($items));
     }
 
     public function testAddItemsFail()
     {
-        $options = array('ttl' => 123);
-        $items   = array(
+        $this->_storage = $this->getMockForAbstractAdapter(['internalHasItem', 'internalSetItem']);
+
+        $items   = [
             'key1' => 'value1',
             'key2' => 'value2',
             'key3' => 'value3',
-        );
+        ];
 
-        // add -> has -> get -> set
-        $this->storage->expects($this->exactly(count($items)))
-            ->method('getItem')
-            ->with($this->stringContains('key'), $this->equalTo($options))
-            ->will($this->returnValue(false));
-        $this->storage->expects($this->exactly(count($items)))
-            ->method('setItem')
-            ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
+        // first check if items already exists
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalHasItem')
+            ->with($this->stringContains('key'))
             ->will($this->returnValue(false));
 
-        $this->assertFalse($this->storage->addItems($items, $options));
+        // if not create the items
+        // -> return false to indicate creation failed
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalSetItem')
+            ->with($this->stringContains('key'), $this->stringContains('value'))
+            ->will($this->returnValue(false));
+
+        $this->assertSame(array_keys($items), $this->_storage->addItems($items));
     }
 
     public function testReplaceItems()
     {
-        $options = array('ttl' => 123);
-        $items   = array(
+        $this->_storage = $this->getMockForAbstractAdapter([
+            'hasItem', 'internalHasItem',
+            'getItem', 'internalGetItem',
+            'setItem', 'internalSetItem',
+        ]);
+
+        $items = [
             'key1' => 'value1',
             'key2' => 'value2'
-        );
+        ];
 
-        // replace -> has -> get -> set
-        $this->storage->expects($this->exactly(count($items)))
-            ->method('getItem')
-            ->with($this->stringContains('key'), $this->equalTo($options))
-            ->will($this->returnValue(true));
-        $this->storage->expects($this->exactly(count($items)))
-            ->method('setItem')
-            ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
+        // First check if the item already exists using has
+        // call 'internalHasItem' instead of 'hasItem' or '[internal]GetItem'
+        $this->_storage->expects($this->never())->method('hasItem');
+        $this->_storage->expects($this->never())->method('getItemItem');
+        $this->_storage->expects($this->never())->method('internalGetItem');
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalHasItem')
+            ->with($this->stringContains('key'))
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->storage->replaceItems($items, $options));
+        // if yes overwrite the items
+        // call 'internalSetItem' instead of 'setItem'
+        $this->_storage->expects($this->never())->method('setItem');
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalSetItem')
+            ->with($this->stringContains('key'), $this->stringContains('value'))
+            ->will($this->returnValue(true));
+
+        $this->assertSame([], $this->_storage->replaceItems($items));
+    }
+
+    public function testReplaceItemsMissing()
+    {
+        $this->_storage = $this->getMockForAbstractAdapter(['internalHasItem', 'internalSetItem']);
+
+        $items = [
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'key3' => 'value3',
+        ];
+
+        // First check if the items already exists
+        // -> return false to indicate the items doesn't exists
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalHasItem')
+            ->with($this->stringContains('key'))
+            ->will($this->returnValue(false));
+
+        // writing items should never be called
+        $this->_storage->expects($this->never())->method('internalSetItem');
+
+        $this->assertSame(array_keys($items), $this->_storage->replaceItems($items));
     }
 
     public function testReplaceItemsFail()
     {
-        $options = array('ttl' => 123);
-        $items   = array(
+        $this->_storage = $this->getMockForAbstractAdapter(['internalHasItem', 'internalSetItem']);
+
+        $items = [
             'key1' => 'value1',
             'key2' => 'value2',
             'key3' => 'value3',
-        );
+        ];
 
-        // replace -> has -> get -> set
-        $this->storage->expects($this->exactly(count($items)))
-            ->method('getItem')
-            ->with($this->stringContains('key'), $this->equalTo($options))
+        // First check if the items already exists
+        // -> return true to indicate the items exists
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalHasItem')
+            ->with($this->stringContains('key'))
             ->will($this->returnValue(true));
-        $this->storage->expects($this->exactly(count($items)))
-            ->method('setItem')
-            ->with($this->stringContains('key'), $this->stringContains('value'), $this->equalTo($options))
+
+        // if yes overwrite the items
+        // -> return false to indicate that overwriting failed
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalSetItem')
+            ->with($this->stringContains('key'), $this->stringContains('value'))
             ->will($this->returnValue(false));
 
-        $this->assertFalse($this->storage->replaceItems($items, $options));
+        $this->assertSame(array_keys($items), $this->_storage->replaceItems($items));
     }
 
     public function testRemoveItems()
     {
-        $options = array('ttl' => 123);
-        $keys    = array('key1', 'key2');
+        $this->_storage = $this->getMockForAbstractAdapter(['removeItem', 'internalRemoveItem']);
 
-        foreach ($keys as $i => $key) {
-            $this->storage->expects($this->at($i))
-                           ->method('removeItem')
-                           ->with($this->equalTo($key), $this->equalTo($options))
-                           ->will($this->returnValue(true));
-        }
+        $keys = ['key1', 'key2'];
 
-        $this->assertTrue($this->storage->removeItems($keys, $options));
+        // call 'internalRemoveItem' instaed of 'removeItem'
+        $this->_storage->expects($this->never())->method('removeItem');
+        $this->_storage->expects($this->exactly(count($keys)))
+            ->method('internalRemoveItem')
+            ->with($this->stringContains('key'))
+            ->will($this->returnValue(true));
+
+        $this->assertSame([], $this->_storage->removeItems($keys));
     }
 
     public function testRemoveItemsFail()
     {
-        $options = array('ttl' => 123);
-        $items   = array('key1', 'key2', 'key3');
+        $this->_storage = $this->getMockForAbstractAdapter(['internalRemoveItem']);
 
-        $this->storage->expects($this->at(0))
-                       ->method('removeItem')
-                       ->with($this->equalTo('key1'), $this->equalTo($options))
-                       ->will($this->returnValue(true));
-        $this->storage->expects($this->at(1))
-                       ->method('removeItem')
-                       ->with($this->equalTo('key2'), $this->equalTo($options))
-                       ->will($this->returnValue(false)); // -> fail
-        $this->storage->expects($this->at(2))
-                       ->method('removeItem')
-                       ->with($this->equalTo('key3'), $this->equalTo($options))
-                       ->will($this->returnValue(true));
+        $keys = ['key1', 'key2', 'key3'];
 
-        $this->assertFalse($this->storage->removeItems($items, $options));
+        // call 'internalRemoveItem'
+        // -> return false to indicate that no item was removed
+        $this->_storage->expects($this->exactly(count($keys)))
+                       ->method('internalRemoveItem')
+                       ->with($this->stringContains('key'))
+                       ->will($this->returnValue(false));
+
+        $this->assertSame($keys, $this->_storage->removeItems($keys));
     }
-*/
-    // TODO: incrementItem[s] + decrementItem[s]
-    // TODO: touchItem[s]
+
+    public function testIncrementItems()
+    {
+        $this->_storage = $this->getMockForAbstractAdapter(['incrementItem', 'internalIncrementItem']);
+
+        $items = [
+            'key1' => 2,
+            'key2' => 2,
+        ];
+
+        // foreach item call 'internalIncrementItem' instead of 'incrementItem'
+        $this->_storage->expects($this->never())->method('incrementItem');
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalIncrementItem')
+            ->with($this->stringContains('key'), $this->equalTo(2))
+            ->will($this->returnValue(4));
+
+        $this->assertSame([
+            'key1' => 4,
+            'key2' => 4,
+        ], $this->_storage->incrementItems($items));
+    }
+
+    public function testIncrementItemsFail()
+    {
+        $this->_storage = $this->getMockForAbstractAdapter(['internalIncrementItem']);
+
+        $items = [
+            'key1' => 2,
+            'key2' => 2,
+        ];
+
+        // return false to indicate that the operation failed
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalIncrementItem')
+            ->with($this->stringContains('key'), $this->equalTo(2))
+            ->will($this->returnValue(false));
+
+        $this->assertSame([], $this->_storage->incrementItems($items));
+    }
+
+    public function testDecrementItems()
+    {
+        $this->_storage = $this->getMockForAbstractAdapter(['decrementItem', 'internalDecrementItem']);
+
+        $items = [
+            'key1' => 2,
+            'key2' => 2,
+        ];
+
+        // foreach item call 'internalDecrementItem' instead of 'decrementItem'
+        $this->_storage->expects($this->never())->method('decrementItem');
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalDecrementItem')
+            ->with($this->stringContains('key'), $this->equalTo(2))
+            ->will($this->returnValue(4));
+
+        $this->assertSame([
+            'key1' => 4,
+            'key2' => 4,
+        ], $this->_storage->decrementItems($items));
+    }
+
+    public function testDecrementItemsFail()
+    {
+        $this->_storage = $this->getMockForAbstractAdapter(['internalDecrementItem']);
+
+        $items = [
+            'key1' => 2,
+            'key2' => 2,
+        ];
+
+        // return false to indicate that the operation failed
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalDecrementItem')
+            ->with($this->stringContains('key'), $this->equalTo(2))
+            ->will($this->returnValue(false));
+
+        $this->assertSame([], $this->_storage->decrementItems($items));
+    }
+
+    public function testTouchItems()
+    {
+        $this->_storage = $this->getMockForAbstractAdapter(['touchItem', 'internalTouchItem']);
+
+        $items = ['key1', 'key2'];
+
+        // foreach item call 'internalTouchItem' instead of 'touchItem'
+        $this->_storage->expects($this->never())->method('touchItem');
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalTouchItem')
+            ->with($this->stringContains('key'))
+            ->will($this->returnValue(true));
+
+        $this->assertSame([], $this->_storage->touchItems($items));
+    }
+
+    public function testTouchItemsFail()
+    {
+        $this->_storage = $this->getMockForAbstractAdapter(['internalTouchItem']);
+
+        $items = ['key1', 'key2'];
+
+        // return false to indicate that the operation failed
+        $this->_storage->expects($this->exactly(count($items)))
+            ->method('internalTouchItem')
+            ->with($this->stringContains('key'))
+            ->will($this->returnValue(false));
+
+        $this->assertSame($items, $this->_storage->touchItems($items));
+    }
 
     public function testPreEventsCanChangeArguments()
     {
@@ -874,9 +1091,13 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
                     $methods[] = $method->getName();
                 }
             }
-            $adapter = $this->getMockBuilder($class)->setMethods(array_unique($methods))->getMock();
+            $adapter = $this->getMockBuilder($class)
+                ->setMethods(array_unique($methods))
+                ->disableArgumentCloning()
+                ->getMock();
         }
 
+        $this->_options = $this->_options ?: new AdapterOptions();
         $adapter->setOptions($this->_options);
         return $adapter;
     }
