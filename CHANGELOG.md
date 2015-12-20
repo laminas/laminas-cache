@@ -39,6 +39,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#36](https://github.com/zendframework/zend-cache/pull/36)
+  fixed AbstractAdapter::internalDecrementItems
 - [#38](https://github.com/zendframework/zend-cache/pull/38)
   better test coverage of AbstractAdapter
 - [#45](https://github.com/zendframework/zend-cache/pull/45)

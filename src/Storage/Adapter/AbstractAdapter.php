@@ -1468,7 +1468,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
     {
         $result = [];
         foreach ($normalizedKeyValuePairs as $normalizedKey => $value) {
-            $newValue = $this->decrementItem($normalizedKey, $value);
+            $newValue = $this->internalDecrementItem($normalizedKey, $value);
             if ($newValue !== false) {
                 $result[$normalizedKey] = $newValue;
             }
