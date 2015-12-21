@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#50](https://github.com/zendframework/zend-cache/issues/50)
+  fixed APC tests not running on travis-ci since apcu-5 was released
 - [#36](https://github.com/zendframework/zend-cache/pull/36)
   fixed AbstractAdapter::internalDecrementItems
 - [#38](https://github.com/zendframework/zend-cache/pull/38)
