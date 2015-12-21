@@ -44,6 +44,10 @@ class Apc extends AbstractAdapter implements
      */
     public function __construct($options = null)
     {
+        if (!extension_loaded('apc')) {
+            throw new Exception\ExtensionNotLoadedException('Missing ext/apc');
+        }
+
         $enabled = ini_get('apc.enabled');
         if (PHP_SAPI == 'cli') {
             $enabled = $enabled && (bool) ini_get('apc.enable_cli');
