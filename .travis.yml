@@ -38,11 +38,16 @@ matrix:
     - php: 5.5
       env:
         - EXECUTE_CS_CHECK=true
+        - PECL_INSTALL_APCU='apcu-4.0.8'
     - php: 5.6
       env:
         - EXECUTE_TEST_COVERALLS=true
+        - PECL_INSTALL_APCU='apcu-4.0.8'
     - php: 7
-    - php: hhvm 
+      env:
+        - PECL_INSTALL_APCU='apcu'
+        - PECL_INSTALL_APCU_BC='apcu_bc-beta'
+    - php: hhvm
   allow_failures:
     - php: 7
     - php: hhvm
@@ -58,7 +63,13 @@ before_install:
 
 install:
   - travis_retry composer install --no-interaction --ignore-platform-reqs
-  - echo "yes\nno\n" | pecl -d preferred_state=beta install apcu || return 0
+  - if [[ $PECL_INSTALL_APCU != '' ]]; then echo "yes\nno\n" | pecl install $PECL_INSTALL_APCU || return 0 ; fi
+  
+  # see https://pear.php.net/bugs/bug.php?id=21007
+  # pecl install adds the "extension=*.so" directive on top of php.ini which results in wrong extension order
+  # -> Attach another ini file loading the extension kind of solves the issue.
+  #    The first extension loading still results in a warning but it doesn't break the test
+  - if [[ $PECL_INSTALL_APCU_BC != '' ]]; then pecl install $PECL_INSTALL_APCU_BC && phpenv config-add .ci/apcu_bc.ini || return 0 ; fi
 
 before_script:
   - phpenv config-add .ci/php.ini || return 0
