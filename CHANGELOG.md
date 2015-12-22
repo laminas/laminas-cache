@@ -39,6 +39,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#53](https://github.com/zendframework/zend-cache/pull/53)
+  fixed seg fault in redis adapter on PHP 7
 - [#50](https://github.com/zendframework/zend-cache/issues/50)
   fixed APC tests not running on travis-ci since apcu-5 was released
 - [#36](https://github.com/zendframework/zend-cache/pull/36)
