@@ -332,7 +332,7 @@ class RedisResourceManager
             $resource = array_merge(
                 $defaults,
                 [
-                    'resource' => $resource,
+                    'resource'    => $resource,
                     'initialized' => isset($resource->socket),
                 ]
             );
@@ -629,15 +629,21 @@ class RedisResourceManager
      */
     public function setDatabase($id, $database)
     {
+        $database = (int) $database;
+
         if (!$this->hasResource($id)) {
             return $this->setResource($id, [
-                'database' => (int) $database,
+                'database' => $database,
             ]);
         }
 
         $resource = & $this->resources[$id];
-        $resource['database']    = $database;
-        $resource['initialized'] = false;
+        if ($resource['resource'] instanceof RedisResource && $resource['initialized']) {
+            $resource['resource']->select($database);
+        }
+
+        $resource['database'] = $database;
+
         return $this;
     }
 }
