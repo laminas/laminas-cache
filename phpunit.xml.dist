@@ -35,6 +35,7 @@
              constants appropriate to the component you are migrating. -->
 
         <env name="TESTS_ZEND_CACHE_APC_ENABLED" value="false" />
+        <env name="TESTS_ZEND_CACHE_APCU_ENABLED" value="false" />
         <env name="TESTS_ZEND_CACHE_XCACHE_ENABLED" value="false" />
         <env name="TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH" value="false" />
         <env name="TESTS_ZEND_CACHE_XCACHE_ADMIN_USER" value="" />

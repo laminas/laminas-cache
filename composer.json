@@ -27,7 +27,8 @@
     "suggest": {
         "zendframework/zend-serializer": "Zend\\Serializer component",
         "zendframework/zend-session": "Zend\\Session component",
-        "ext-apcu": "APCU, to use the APC storage adapter",
+        "ext-apc": "APC or compatible extension, to use the APC storage adapter",
+        "ext-apcu": "APCU >= 5.1.0, to use the APCu storage adapter",
         "ext-dba": "DBA, to use the DBA storage adapter",
         "ext-memcache": "Memcache >= 2.0.0 to use the Memcache storage adapter",
         "ext-memcached": "Memcached >= 1.0.0 to use the Memcached storage adapter",
