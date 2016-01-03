@@ -53,16 +53,8 @@ class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCanLookupCacheByName()
     {
-        // Since these are delivered by abstract factory, by default, `has()`
-        // should return false, as it doesn't consult abstract factories by
-        // default.
-        $this->assertFalse($this->sm->has('Memory'));
-        $this->assertFalse($this->sm->has('Foo'));
-
-        // Passing the boolean true to the second argument forces a lookup
-        // via abstract factory.
-        $this->assertTrue($this->sm->has('Memory', true));
-        $this->assertTrue($this->sm->has('Foo', true));
+        $this->assertTrue($this->sm->has('Memory'));
+        $this->assertTrue($this->sm->has('Foo'));
     }
 
     public function testCanRetrieveCacheByName()
