@@ -8,7 +8,7 @@ The callback cache pattern caches calls of non specific functions and methods gi
 
 For instantiation you can use the `PatternFactory` or do it manual:
 
-``` sourceCode
+```php
 use Zend\Cache\PatternFactory;
 use Zend\Cache\Pattern\PatternOptions;
 
@@ -66,7 +66,7 @@ $callbackCache->setOptions(new PatternOptions(array(
 
 **Instantiating the callback cache pattern**
 
-``` sourceCode
+```php
 use Zend\Cache\PatternFactory;
 
 $callbackCache = PatternFactory::factory('callback', array(

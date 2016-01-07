@@ -13,7 +13,6 @@ use Zend\Cache;
 
 /**
  * @group      Zend_Cache
- * @covers Zend\Cache\PatternFactory
  */
 class PatternFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,9 +34,7 @@ class PatternFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testChangePluginManager()
     {
-        $plugins = new Cache\PatternPluginManager(
-            $this->getMockBuilder('Interop\Container\ContainerInterface')->getMock()
-        );
+        $plugins = new Cache\PatternPluginManager();
         Cache\PatternFactory::setPluginManager($plugins);
         $this->assertSame($plugins, Cache\PatternFactory::getPluginManager());
     }

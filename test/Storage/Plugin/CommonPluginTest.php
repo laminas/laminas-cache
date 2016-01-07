@@ -15,7 +15,6 @@ namespace ZendTest\Cache\Storage\Plugin;
 
 /**
  * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Plugin\PluginOptions<extended>
  */
 abstract class CommonPluginTest extends \PHPUnit_Framework_TestCase
 {

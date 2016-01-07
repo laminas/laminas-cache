@@ -46,10 +46,10 @@ class MockPlugin extends AbstractPlugin
         return $this->options;
     }
 
-    public function attach(EventManagerInterface $eventCollection, $priority = 1)
+    public function attach(EventManagerInterface $eventCollection)
     {
         foreach ($this->eventCallbacks as $eventName => $method) {
-            $this->listeners[] = $eventCollection->attach($eventName, array($this, $method), $priority);
+            $this->listeners[] = $eventCollection->attach($eventName, array($this, $method));
         }
     }
 

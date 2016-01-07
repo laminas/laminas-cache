@@ -8,7 +8,7 @@ The `OutputCache` pattern caches output between calls to `start()` and `end()`.
 
 Instantiating the output cache pattern
 
-``` sourceCode
+```php
 use Zend\Cache\PatternFactory;
 
 $outputCache = PatternFactory::factory('output', array(
@@ -50,7 +50,7 @@ $outputCache = PatternFactory::factory('output', array(
 
 **Caching simple view scripts**
 
-``` sourceCode
+```php
 $outputCache = Zend\Cache\PatternFactory::factory('output', array(
     'storage' => 'apc',
 ));

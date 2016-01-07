@@ -10,8 +10,8 @@
 namespace Zend\Cache\Service;
 
 use Zend\Cache\StorageFactory;
-use Zend\ServiceManager\Factory\AbstractFactoryInterface;
-use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\AbstractFactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Storage cache factory for multiple caches.
@@ -31,51 +31,52 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
     protected $configKey = 'caches';
 
     /**
-     * @param ContainerInterface $container
-     * @param string $requestedName
-     * @return boolean
+     * @param  ServiceLocatorInterface $services
+     * @param  string                  $name
+     * @param  string                  $requestedName
+     * @return bool
      */
-    public function canCreateServiceWithName(ContainerInterface $container, $requestedName)
+    public function canCreateServiceWithName(ServiceLocatorInterface $services, $name, $requestedName)
     {
-        $config = $this->getConfig($container);
+        $config = $this->getConfig($services);
         if (empty($config)) {
             return false;
         }
+
         return (isset($config[$requestedName]) && is_array($config[$requestedName]));
     }
 
     /**
-     * Create an object
-     *
-     * @param  ContainerInterface $container
-     * @param  string             $requestedName
-     * @param  null|array         $options
-     * @return object
+     * @param  ServiceLocatorInterface              $services
+     * @param  string                               $name
+     * @param  string                               $requestedName
+     * @return \Zend\Cache\Storage\StorageInterface
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function createServiceWithName(ServiceLocatorInterface $services, $name, $requestedName)
     {
-        $config = $this->getConfig($container);
-        return StorageFactory::factory($config[$requestedName]);
+        $config = $this->getConfig($services);
+        $config = $config[$requestedName];
+        return StorageFactory::factory($config);
     }
 
     /**
      * Retrieve cache configuration, if any
      *
-     * @param  ContainerInterface $container
+     * @param  ServiceLocatorInterface $services
      * @return array
      */
-    protected function getConfig(ContainerInterface $container)
+    protected function getConfig(ServiceLocatorInterface $services)
     {
         if ($this->config !== null) {
             return $this->config;
         }
 
-        if (!$container->has('config')) {
+        if (!$services->has('Config')) {
             $this->config = [];
             return $this->config;
         }
 
-        $config = $container->get('config');
+        $config = $services->get('Config');
         if (!isset($config[$this->configKey])) {
             $this->config = [];
             return $this->config;

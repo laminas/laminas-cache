@@ -14,7 +14,6 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * @group      Zend_Cache
- * @covers Zend\Cache\Service\StorageCacheFactory
  */
 class StorageCacheFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,19 +23,12 @@ class StorageCacheFactoryTest extends \PHPUnit_Framework_TestCase
     {
         Cache\StorageFactory::resetAdapterPluginManager();
         Cache\StorageFactory::resetPluginManager();
-        $this->sm = new ServiceManager([
-            'services' => [
-                'config' => [
-                    'cache' => [
-                        'adapter' => 'Memory',
-                        'plugins' => ['Serializer', 'ClearExpiredByFactor'],
-                    ]
-                ]
-            ],
-            'factories' => [
-                'CacheFactory' => \Zend\Cache\Service\StorageCacheFactory::class
-            ]
-        ]);
+        $this->sm = new ServiceManager();
+        $this->sm->setService('Config', ['cache' => [
+            'adapter' => 'Memory',
+            'plugins' => ['Serializer', 'ClearExpiredByFactor'],
+        ]]);
+        $this->sm->setFactory('CacheFactory', 'Zend\Cache\Service\StorageCacheFactory');
     }
 
     public function tearDown()

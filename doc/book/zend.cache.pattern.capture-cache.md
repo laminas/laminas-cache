@@ -12,12 +12,12 @@ It comes with basic logic to manage generated resources.
 
 Simplest usage as Apache-404 handler
 
-``` sourceCode
+```apacheconf
 # .htdocs
 ErrorDocument 404 /index.php
 ```
 
-``` sourceCode
+```php
 // index.php
 use Zend\Cache\PatternFactory;
 $capture = Zend\Cache\PatternFactory::factory('capture', array(
@@ -96,12 +96,12 @@ header('Status: 200', true, 200);
 
 **Scaling images in base of request**
 
-``` sourceCode
+```apacheconf
 # .htdocs
 ErrorDocument 404 /index.php
 ```
 
-``` sourceCode
+```php
 // index.php
 $captureCache = Zend\Cache\PatternFactory::factory('capture', array(
     'public_dir' => __DIR__,

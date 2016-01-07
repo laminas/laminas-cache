@@ -13,7 +13,6 @@ use Zend\Cache;
 
 /**
  * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Adapter\Memory<extended>
  */
 class MemoryTest extends CommonAdapterTest
 {

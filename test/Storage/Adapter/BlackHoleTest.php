@@ -22,7 +22,6 @@ use Zend\Cache\StorageFactory;
  * @package    Zend_Cache
  * @subpackage UnitTests
  * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Adapter\Blackhole<extended>
  */
 class BlackHoleTest extends \PHPUnit_Framework_TestCase
 {

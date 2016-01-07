@@ -13,15 +13,9 @@ use Zend\Cache;
 use Zend\Cache\Storage\ExceptionEvent;
 use ZendTest\Cache\Storage\TestAsset\MockAdapter;
 use ArrayObject;
-use ZendTest\Cache\EventManagerIntrospectionTrait;
 
-/**
- * @covers Zend\Cache\Storage\Plugin\ExceptionHandler<extended>
- */
 class ExceptionHandlerTest extends CommonPluginTest
 {
-    use EventManagerIntrospectionTrait;
-
     /**
      * The storage adapter
      *
@@ -80,13 +74,13 @@ class ExceptionHandlerTest extends CommonPluginTest
             'clearExpired.exception' => 'onException',
         ];
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
-            $listeners = $this->getArrayOfListenersForEvent($eventName, $this->_adapter->getEventManager());
+            $listeners = $this->_adapter->getEventManager()->getListeners($eventName);
 
             // event should attached only once
-            $this->assertSame(1, count($listeners));
+            $this->assertSame(1, $listeners->count());
 
             // check expected callback method
-            $cb = array_shift($listeners);
+            $cb = $listeners->top()->getCallback();
             $this->assertArrayHasKey(0, $cb);
             $this->assertSame($this->_plugin, $cb[0]);
             $this->assertArrayHasKey(1, $cb);
@@ -100,7 +94,7 @@ class ExceptionHandlerTest extends CommonPluginTest
         $this->_adapter->removePlugin($this->_plugin);
 
         // no events should be attached
-        $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
+        $this->assertEquals(0, count($this->_adapter->getEventManager()->getEvents()));
     }
 
     public function testOnExceptionCallCallback()

@@ -17,7 +17,6 @@ use Zend\Cache\Storage\Adapter\MemcacheResourceManager;
 
 /**
  * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Adapter\MemcacheResourceManager
  */
 class MemcacheResourceManagerTest extends \PHPUnit_Framework_TestCase
 {

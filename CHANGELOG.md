@@ -2,27 +2,6 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 3.0.0 - TBD
-
-### Added
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- [#22](https://github.com/zendframework/zend-cache/pull/22) updates the
-  component to the v3 version of zend-servicemanager.
-- [#22](https://github.com/zendframework/zend-cache/pull/22) updates the
-  component to the v3 version of zend-eventmanager.
-
 ## 2.5.4 - TBD
 
 ### Added
@@ -39,6 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#31](https://github.com/zendframework/zend-cache/issues/31)
+  Check Documentation Code Blocks
 - [#53](https://github.com/zendframework/zend-cache/pull/53)
   fixed seg fault in redis adapter on PHP 7
 - [#50](https://github.com/zendframework/zend-cache/issues/50)

@@ -28,7 +28,7 @@ by simply instantiating one of the `Zend\Cache\Storage\Adapter\*` classes.
 To make life easier, the `Zend\Cache\StorageFactory` comes with a `factory` method to create an
 adapter and create/add all requested plugins at once.
 
-``` sourceCode
+```php
 use Zend\Cache\StorageFactory;
 
 // Via factory:
@@ -309,7 +309,7 @@ This adapter implements the following interfaces:
 
 **Basic usage**
 
-``` sourceCode
+```php
 $cache   = \Zend\Cache\StorageFactory::factory(array(
     'adapter' => array(
         'name' => 'filesystem'
@@ -331,7 +331,7 @@ if (!$success) {
 
 **Get multiple rows from db**
 
-``` sourceCode
+```php
 // Instantiate the cache instance using a namespace for the same type of items
 $cache   = \Zend\Cache\StorageFactory::factory(array(
     'adapter' => array(

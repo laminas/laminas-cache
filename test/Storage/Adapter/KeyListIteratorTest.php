@@ -13,7 +13,6 @@ use Zend\Cache\Storage\Adapter\KeyListIterator;
 
 /**
  * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Adapter\KeyListIterator
  */
 class KeyListIteratorTest extends \PHPUnit_Framework_TestCase
 {

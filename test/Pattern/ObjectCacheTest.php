@@ -13,7 +13,6 @@ use Zend\Cache;
 
 /**
  * Test class
- * @covers Zend\Cache\Pattern\ObjectCache<extended>
  */
 class TestObjectCache
 {
