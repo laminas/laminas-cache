@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -13,12 +13,16 @@ use Zend\Cache;
 use Zend\Cache\Storage\Event;
 use Zend\Cache\Storage\PostEvent;
 use ArrayObject;
+use ZendTest\Cache\EventManagerIntrospectionTrait;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Plugin\Serializer<extended>
  */
 class SerializerTest extends CommonPluginTest
 {
+    use EventManagerIntrospectionTrait;
+
     /**
      * The storage adapter
      *
@@ -58,26 +62,26 @@ class SerializerTest extends CommonPluginTest
 
             'getCapabilities.post' => 'onGetCapabilitiesPost',
         ];
+
+        $events = $this->_adapter->getEventManager();
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
-            $listeners = $this->_adapter->getEventManager()->getListeners($eventName);
+            $listeners = $this->getArrayOfListenersForEvent($eventName, $events);
 
             // event should attached only once
-            $this->assertSame(1, $listeners->count());
+            $this->assertSame(1, count($listeners));
 
             // check expected callback method
-            $cb = $listeners->top()->getCallback();
+            $cb = array_shift($listeners);
             $this->assertArrayHasKey(0, $cb);
             $this->assertSame($this->_plugin, $cb[0]);
             $this->assertArrayHasKey(1, $cb);
             $this->assertSame($expectedCallbackMethod, $cb[1]);
 
             // check expected priority
-            $meta = $listeners->top()->getMetadata();
-            $this->assertArrayHasKey('priority', $meta);
             if (substr($eventName, -4) == '.pre') {
-                $this->assertSame(100, $meta['priority']);
+                $this->assertListenerAtPriority($cb, 100, $eventName, $events);
             } else {
-                $this->assertSame(-100, $meta['priority']);
+                $this->assertListenerAtPriority($cb, -100, $eventName, $events);
             }
         }
     }
@@ -88,7 +92,7 @@ class SerializerTest extends CommonPluginTest
         $this->_adapter->removePlugin($this->_plugin);
 
         // no events should be attached
-        $this->assertEquals(0, count($this->_adapter->getEventManager()->getEvents()));
+        $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
     }
 
     public function testUnserializeOnReadItem()

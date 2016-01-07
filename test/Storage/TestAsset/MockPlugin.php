@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -46,10 +46,10 @@ class MockPlugin extends AbstractPlugin
         return $this->options;
     }
 
-    public function attach(EventManagerInterface $eventCollection)
+    public function attach(EventManagerInterface $eventCollection, $priority = 1)
     {
         foreach ($this->eventCallbacks as $eventName => $method) {
-            $this->listeners[] = $eventCollection->attach($eventName, array($this, $method));
+            $this->listeners[] = $eventCollection->attach($eventName, array($this, $method), $priority);
         }
     }
 

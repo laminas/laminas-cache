@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -11,12 +11,16 @@ namespace ZendTest\Cache\Storage\Plugin;
 
 use Zend\Cache;
 use Zend\Cache\Storage\Event;
+use ZendTest\Cache\EventManagerIntrospectionTrait;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Plugin\IgnoreUserAbort<extended>
  */
 class IgnoreUserAbortTest extends CommonPluginTest
 {
+    use EventManagerIntrospectionTrait;
+
     /**
      * The storage adapter
      *
@@ -83,13 +87,13 @@ class IgnoreUserAbortTest extends CommonPluginTest
             'decrementItems.exception' => 'onAfter',
         ];
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
-            $listeners = $this->_adapter->getEventManager()->getListeners($eventName);
+            $listeners = $this->getArrayOfListenersForEvent($eventName, $this->_adapter->getEventManager());
 
             // event should attached only once
-            $this->assertSame(1, $listeners->count());
+            $this->assertSame(1, count($listeners));
 
             // check expected callback method
-            $cb = $listeners->top()->getCallback();
+            $cb = array_shift($listeners);
             $this->assertArrayHasKey(0, $cb);
             $this->assertSame($this->_plugin, $cb[0]);
             $this->assertArrayHasKey(1, $cb);
@@ -103,6 +107,6 @@ class IgnoreUserAbortTest extends CommonPluginTest
         $this->_adapter->removePlugin($this->_plugin);
 
         // no events should be attached
-        $this->assertEquals(0, count($this->_adapter->getEventManager()->getEvents()));
+        $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
     }
 }

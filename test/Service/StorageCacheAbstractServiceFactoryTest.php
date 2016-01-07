@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -14,6 +14,7 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\StorageFactory<extended>
  */
 class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,18 +24,25 @@ class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         Cache\StorageFactory::resetAdapterPluginManager();
         Cache\StorageFactory::resetPluginManager();
-        $this->sm = new ServiceManager();
-        $this->sm->setService('Config', ['caches' => [
-            'Memory' => [
-                'adapter' => 'Memory',
-                'plugins' => ['Serializer', 'ClearExpiredByFactor'],
+        $this->sm = new ServiceManager([
+            'services' => [
+                'config' => [
+                    'caches' => [
+                        'Memory' => [
+                            'adapter' => 'Memory',
+                            'plugins' => ['Serializer', 'ClearExpiredByFactor'],
+                        ],
+                        'Foo' => [
+                            'adapter' => 'Memory',
+                            'plugins' => ['Serializer', 'ClearExpiredByFactor'],
+                        ],
+                    ]
+                ],
             ],
-            'Foo' => [
-                'adapter' => 'Memory',
-                'plugins' => ['Serializer', 'ClearExpiredByFactor'],
-            ],
-        ]]);
-        $this->sm->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');
+            'abstract_factories' => [
+                'Zend\Cache\Service\StorageCacheAbstractServiceFactory'
+            ]
+        ]);
     }
 
     public function tearDown()
