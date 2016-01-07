@@ -18,7 +18,7 @@ by simply instantiating one of the `Zend\Cache\Storage\Plugin\*`classes.
 To make life easier, the `Zend\Cache\StorageFactory` comes with the method `factory` to create an
 adapter and all given plugins at once.
 
-``` sourceCode
+```php
 use Zend\Cache\StorageFactory;
 
 // Via factory:
@@ -82,7 +82,7 @@ support strings.
 
 **Basics of writing an own storage plugin**
 
-``` sourceCode
+```php
 use Zend\Cache\Storage\Event;
 use Zend\Cache\Storage\Plugin\AbstractPlugin;
 use Zend\EventManager\EventManagerInterface;
