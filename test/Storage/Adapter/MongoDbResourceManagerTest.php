@@ -13,6 +13,7 @@ use Zend\Cache\Storage\Adapter\MongoDbResourceManager;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\MongoDbResourceManager
  */
 class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
 {

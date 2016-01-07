@@ -10,6 +10,7 @@
 namespace Zend\Cache;
 
 use Zend\ServiceManager\AbstractPluginManager;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Plugin manager implementation for cache pattern adapters
@@ -20,18 +21,22 @@ use Zend\ServiceManager\AbstractPluginManager;
  */
 class PatternPluginManager extends AbstractPluginManager
 {
-    /**
-     * Default set of adapters
-     *
-     * @var array
-     */
-    protected $invokableClasses = [
-        'callback' => 'Zend\Cache\Pattern\CallbackCache',
-        'capture'  => 'Zend\Cache\Pattern\CaptureCache',
-        'class'    => 'Zend\Cache\Pattern\ClassCache',
-        'object'   => 'Zend\Cache\Pattern\ObjectCache',
-        'output'   => 'Zend\Cache\Pattern\OutputCache',
-        'page'     => 'Zend\Cache\Pattern\PageCache',
+    protected $aliases = [
+        'callback' => Pattern\CallbackCache::class,
+        'capture'  => Pattern\CaptureCache::class,
+        'class'    => Pattern\ClassCache::class,
+        'object'   => Pattern\ObjectCache::class,
+        'output'   => Pattern\OutputCache::class,
+        'page'     => Pattern\PageCache::class,
+    ];
+
+    protected $factories = [
+        Pattern\CallbackCache::class => InvokableFactory::class,
+        Pattern\CaptureCache::class  => InvokableFactory::class,
+        Pattern\ClassCache::class    => InvokableFactory::class,
+        Pattern\ObjectCache::class   => InvokableFactory::class,
+        Pattern\OutputCache::class   => InvokableFactory::class,
+        Pattern\PageCache::class     => InvokableFactory::class,
     ];
 
     /**
@@ -39,28 +44,10 @@ class PatternPluginManager extends AbstractPluginManager
      *
      * @var array
      */
-    protected $shareByDefault = false;
+    protected $sharedByDefault = false;
 
     /**
-     * Validate the plugin
-     *
-     * Checks that the pattern adapter loaded is an instance of Pattern\PatternInterface.
-     *
-     * @param  mixed $plugin
-     * @return void
-     * @throws Exception\RuntimeException if invalid
+     * @var string
      */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof Pattern\PatternInterface) {
-            // we're okay
-            return;
-        }
-
-        throw new Exception\RuntimeException(sprintf(
-            'Plugin of type %s is invalid; must implement %s\Pattern\PatternInterface',
-            (is_object($plugin) ? get_class($plugin) : gettype($plugin)),
-            __NAMESPACE__
-        ));
-    }
+    protected $instanceOf = Pattern\PatternInterface::class;
 }

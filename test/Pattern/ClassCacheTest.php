@@ -37,6 +37,7 @@ class TestClassCache
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Pattern\ClassCache<extended>
  */
 class ClassCacheTest extends CommonPatternTest
 {

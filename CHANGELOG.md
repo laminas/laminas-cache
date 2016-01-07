@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 3.0.0 - TBD
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#22](https://github.com/zendframework/zend-cache/pull/22) updates the
+  component to the v3 version of zend-servicemanager.
+- [#22](https://github.com/zendframework/zend-cache/pull/22) updates the
+  component to the v3 version of zend-eventmanager.
+
 ## 2.5.4 - TBD
 
 ### Added

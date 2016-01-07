@@ -14,6 +14,7 @@ use Zend\Cache\Storage\Adapter\Dba;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\Dba<extended>
  */
 class DbaInifileTest extends TestCase
 {

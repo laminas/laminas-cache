@@ -17,6 +17,7 @@ use Zend\Cache\Exception;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\AdapterOptions<extended>
  */
 class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 {
