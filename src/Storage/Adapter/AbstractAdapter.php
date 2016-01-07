@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -23,7 +23,6 @@ use Zend\Cache\Storage\StorageInterface;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventsCapableInterface;
-use Zend\EventManager\SharedEventManager;
 
 abstract class AbstractAdapter implements StorageInterface, EventsCapableInterface
 {
@@ -126,8 +125,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
             $this->options = $options;
 
             $event = new Event('option', $this, new ArrayObject($options->toArray()));
-
-            $this->getEventManager()->triggerEvent($event);
+            $this->getEventManager()->trigger($event);
         }
         return $this;
     }
@@ -190,7 +188,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
     public function getEventManager()
     {
         if ($this->events === null) {
-            $this->events = new EventManager(new SharedEventManager(), [__CLASS__, get_class($this)]);
+            $this->events = new EventManager([__CLASS__, get_class($this)]);
         }
         return $this->events;
     }
@@ -204,7 +202,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
      */
     protected function triggerPre($eventName, ArrayObject $args)
     {
-        return $this->getEventManager()->triggerEvent(new Event($eventName . '.pre', $this, $args));
+        return $this->getEventManager()->trigger(new Event($eventName . '.pre', $this, $args));
     }
 
     /**
@@ -218,7 +216,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
     protected function triggerPost($eventName, ArrayObject $args, & $result)
     {
         $postEvent = new PostEvent($eventName . '.post', $this, $args, $result);
-        $eventRs   = $this->getEventManager()->triggerEvent($postEvent);
+        $eventRs   = $this->getEventManager()->trigger($postEvent);
 
         return $eventRs->stopped()
             ? $eventRs->last()
@@ -241,7 +239,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
     protected function triggerException($eventName, ArrayObject $args, & $result, \Exception $exception)
     {
         $exceptionEvent = new ExceptionEvent($eventName . '.exception', $this, $args, $result, $exception);
-        $eventRs        = $this->getEventManager()->triggerEvent($exceptionEvent);
+        $eventRs        = $this->getEventManager()->trigger($exceptionEvent);
 
         if ($exceptionEvent->getThrowException()) {
             throw $exceptionEvent->getException();

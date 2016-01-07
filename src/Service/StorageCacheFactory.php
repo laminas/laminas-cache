@@ -3,25 +3,28 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
 namespace Zend\Cache\Service;
 
 use Zend\Cache\StorageFactory;
-use Zend\ServiceManager\Factory\FactoryInterface;
-use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Storage cache factory.
  */
 class StorageCacheFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $container->get('config');
+        // Configure the cache
+        $config = $serviceLocator->get('Config');
         $cacheConfig = isset($config['cache']) ? $config['cache'] : [];
-        return StorageFactory::factory($cacheConfig);
+        $cache = StorageFactory::factory($cacheConfig);
+
+        return $cache;
     }
 }
