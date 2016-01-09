@@ -345,7 +345,7 @@ class XCache extends AbstractAdapter implements
         $internalKey = $prefix . $normalizedKey;
         $ttl         = $options->getTtl();
 
-        if (is_object($value) || is_resource($value) || is_callable($value)) {
+        if (is_object($value) || is_resource($value)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 "Cannot store data of type %s",
                 gettype($value)
