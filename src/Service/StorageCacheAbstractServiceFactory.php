@@ -54,7 +54,7 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
     {
         return $this->canCreate($serviceLocator, $requestedName);
     }
-    
+
     /**
      * Create an object
      *
