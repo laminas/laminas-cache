@@ -38,16 +38,23 @@ matrix:
     - php: 5.5
       env:
         - EXECUTE_CS_CHECK=true
-        - PECL_INSTALL_APCU='apcu-4.0.8'
+    - php: 5.5
+      env:
+        - SERVICE_MANAGER_V2=true
     - php: 5.6
       env:
         - EXECUTE_TEST_COVERALLS=true
-        - PECL_INSTALL_APCU='apcu-4.0.8'
+    - php: 5.6
+      env:
+        - SERVICE_MANAGER_V2=true
+    - php: 7
     - php: 7
       env:
-        - PECL_INSTALL_APCU='apcu'
-        - PECL_INSTALL_APCU_BC='apcu_bc-beta'
+        - SERVICE_MANAGER_V2=true
     - php: hhvm
+    - php: hhvm
+      env:
+        - SERVICE_MANAGER_V2=true
   allow_failures:
     - php: 7
     - php: hhvm
@@ -60,11 +67,13 @@ before_install:
   - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
   - composer self-update
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then composer require --dev --no-update satooshi/php-coveralls ; fi
+  - if [[ $SERVICE_MANAGER_V2 == 'true' ]]; then composer require --dev --no-update "zendframework/zend-servicemanager:^2.7.2" ; fi
+  - if [[ $SERVICE_MANAGER_V2 != 'true' ]]; then composer require --dev --no-update "zendframework/zend-servicemanager:^3.0" ; fi
 
 install:
   - travis_retry composer install --no-interaction --ignore-platform-reqs
   - if [[ $PECL_INSTALL_APCU != '' ]]; then echo "yes\nno\n" | pecl install $PECL_INSTALL_APCU || return 0 ; fi
-  
+
   # see https://pear.php.net/bugs/bug.php?id=21007
   # pecl install adds the "extension=*.so" directive on top of php.ini which results in wrong extension order
   # -> Attach another ini file loading the extension kind of solves the issue.
