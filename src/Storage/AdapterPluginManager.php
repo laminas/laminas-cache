@@ -77,7 +77,47 @@ class AdapterPluginManager extends AbstractPluginManager
     protected $sharedByDefault = false;
 
     /**
+     * Don't share by default
+     *
+     * @var boolean
+     */
+    protected $shareByDefault = false;
+
+    /**
      * @var string
      */
     protected $instanceOf = StorageInterface::class;
+
+    /**
+     * Validate the plugin is of the expected type (v3).
+     *
+     * Validates against `$instanceOf`.
+     *
+     * @param mixed $instance
+     * @throws InvalidServiceException
+     */
+    public function validate($instance)
+    {
+        if (! $instance instanceof $this->instanceOf) {
+            throw new InvalidServiceException(sprintf(
+                '%s can only create instances of %s; %s is invalid',
+                get_class($this),
+                $this->instanceOf,
+                (is_object($instance) ? get_class($instance) : gettype($instance))
+            ));
+        }
+    }
+
+    /**
+     * Validate the plugin is of the expected type (v2).
+     *
+     * Proxies to `validate()`.
+     *
+     * @param mixed $instance
+     * @throws InvalidServiceException
+     */
+    public function validatePlugin($instance)
+    {
+        $this->validate($instance);
+    }
 }
