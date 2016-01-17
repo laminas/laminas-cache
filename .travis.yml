@@ -31,6 +31,10 @@ env:
     - TESTS_ZEND_CACHE_REDIS_PORT=6379
     - TESTS_ZEND_CACHE_REDIS_PASSWORD=''
     - TESTS_ZEND_CACHE_REDIS_DATABASE=0
+    - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
+    - TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH=true
+    - TESTS_ZEND_CACHE_XCACHE_ADMIN_USER=travis
+    - TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS=test
 
 matrix:
   fast_finish: true
@@ -39,10 +43,12 @@ matrix:
       env:
         - EXECUTE_CS_CHECK=true
         - PECL_INSTALL_APCU='apcu-4.0.8'
+        - INSTALL_XCACHE=true
     - php: 5.6
       env:
         - EXECUTE_TEST_COVERALLS=true
         - PECL_INSTALL_APCU='apcu-4.0.8'
+        - INSTALL_XCACHE=true
     - php: 7
       env:
         - PECL_INSTALL_APCU='apcu'
@@ -57,14 +63,22 @@ notifications:
   email: false
 
 before_install:
-  - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
+  - pwd=$(pwd) ;
   - composer self-update
+  - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then composer require --dev --no-update satooshi/php-coveralls ; fi
 
 install:
   - travis_retry composer install --no-interaction --ignore-platform-reqs
+  - if [[ $INSTALL_XCACHE == 'true' ]]; then
+        git clone https://github.com/lighttpd/xcache.git && cd xcache
+        && git checkout $(git rev-list --tags --max-count=1)
+        && phpize && ./configure --enable-xcache && make install
+        && phpenv config-add $pwd/.ci/xcache.ini
+        || return 0 ;
+        cd $pwd ;
+    fi
   - if [[ $PECL_INSTALL_APCU != '' ]]; then echo "yes\nno\n" | pecl install $PECL_INSTALL_APCU || return 0 ; fi
-  
   # see https://pear.php.net/bugs/bug.php?id=21007
   # pecl install adds the "extension=*.so" directive on top of php.ini which results in wrong extension order
   # -> Attach another ini file loading the extension kind of solves the issue.
