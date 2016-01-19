@@ -92,18 +92,43 @@ $objectCache = PatternFactory::factory('object', array(
 
 ## Available Methods
 
+call(string $method, array $args = array())
+
+> Call the specified method of the configured object.
+
 > rtype  
 mixed
+Call the specified method of the configured object.
 rtype  
 mixed
+Set a property of the configured object.
 rtype  
 void
+Get a property of the configured object.
 rtype  
 mixed
+Checks if static property of the configured object exists.
 rtype  
 boolean
+Unset a property of the configured object.
 rtype  
 void
+generateKey(string $method, array $args = array())
+
+> Generate a unique key in base of a key representing the callback part and a key representing the
+arguments part.
+rtype  
+string
+setOptions(Zend\\Cache\\Pattern\\PatternOptions $options)
+
+> Set pattern options.
+rtype  
+Zend\\Cache\\Pattern\\ObjectCache
+getOptions()
+
+> Get all pattern options.
+rtype  
+Zend\\Cache\\Pattern\\PatternOptions
 ## Examples
 
 **Caching a filter**
