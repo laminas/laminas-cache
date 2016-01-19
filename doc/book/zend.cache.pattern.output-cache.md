@@ -46,6 +46,28 @@ $outputCache = PatternFactory::factory('output', array(
 
 ## Available Methods
 
+start(string $key)
+
+> If there is a cached item with the given key display it's data and return `true` else start
+buffering output until `end()` is called or the script ends and return `false`.
+rtype  
+boolean
+end()
+
+> Stops buffering output, write buffered data to cache using the given key on `start()` and displays
+the buffer.
+rtype  
+boolean
+setOptions(Zend\\Cache\\Pattern\\PatternOptions $options)
+
+> Set pattern options.
+rtype  
+Zend\\Cache\\Pattern\\OutputCache
+getOptions()
+
+> Get all pattern options.
+rtype  
+Zend\\Cache\\Pattern\\PatternOptions
 ## Examples
 
 **Caching simple view scripts**

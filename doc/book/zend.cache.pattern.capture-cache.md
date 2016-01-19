@@ -92,6 +92,46 @@ header('Status: 200', true, 200);
 
 ## Available Methods
 
+start(string|null $pageId = null)
+
+> Start capturing output.
+rtype  
+void
+set(string $content, string|null $pageId = null)
+
+> Write content to page identity.
+rtype  
+void
+get(string|null $pageId = null)
+
+> Get content of an already cached page.
+rtype  
+string|false
+has(string|null $pageId = null)
+
+> Check if a page has been created.
+rtype  
+boolean
+remove(string|null $pageId = null)
+
+> Remove a page.
+rtype  
+boolean
+clearByGlob(string $pattern = '\*\*')
+
+> Clear pages matching glob pattern.
+rtype  
+void
+setOptions(Zend\\Cache\\Pattern\\PatternOptions $options)
+
+> Set pattern options.
+rtype  
+Zend\\Cache\\Pattern\\CaptureCache
+getOptions()
+
+> Get all pattern options.
+rtype  
+Zend\\Cache\\Pattern\\PatternOptions
 ## Examples
 
 **Scaling images in base of request**
