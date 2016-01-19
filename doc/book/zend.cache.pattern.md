@@ -43,3 +43,15 @@ $callbackCache->setOptions(new Zend\Cache\Pattern\PatternOptions(array(
 
 The following methods are implemented by `Zend\Cache\Pattern\AbstractPattern`. Please read
 documentation of specific patterns to get more information.
+
+setOptions(Zend\\Cache\\Pattern\\PatternOptions $options)
+
+> Set pattern options.
+rtype  
+Zend\\Cache\\Pattern\\PatternInterface
+getOptions()
+
+> Get all pattern options.
+rtype  
+Zend\\Cache\\Pattern\\PatternOptions
+
