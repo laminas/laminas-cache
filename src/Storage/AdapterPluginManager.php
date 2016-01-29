@@ -9,7 +9,9 @@
 
 namespace Zend\Cache\Storage;
 
+use Zend\Cache\Exception\RuntimeException;
 use Zend\ServiceManager\AbstractPluginManager;
+use Zend\ServiceManager\Exception\InvalidServiceException;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 /**
@@ -25,6 +27,7 @@ class AdapterPluginManager extends AbstractPluginManager
         'apc'            => Adapter\Apc::class,
         'Apc'            => Adapter\Apc::class,
         'blackhole'      => Adapter\BlackHole::class,
+        'blackHole'      => Adapter\BlackHole::class,
         'BlackHole'      => Adapter\BlackHole::class,
         'dba'            => Adapter\Dba::class,
         'Dba'            => Adapter\Dba::class,
@@ -37,47 +40,68 @@ class AdapterPluginManager extends AbstractPluginManager
         'memory'         => Adapter\Memory::class,
         'Memory'         => Adapter\Memory::class,
         'mongodb'        => Adapter\MongoDb::class,
+        'mongoDb'        => Adapter\MongoDb::class,
         'MongoDb'        => Adapter\MongoDb::class,
         'redis'          => Adapter\Redis::class,
         'Redis'          => Adapter\Redis::class,
         'session'        => Adapter\Session::class,
         'Session'        => Adapter\Session::class,
         'xcache'         => Adapter\XCache::class,
+        'xCache'         => Adapter\XCache::class,
         'XCache'         => Adapter\XCache::class,
         'wincache'       => Adapter\WinCache::class,
+        'winCache'       => Adapter\WinCache::class,
         'WinCache'       => Adapter\WinCache::class,
         'zendserverdisk' => Adapter\ZendServerDisk::class,
+        'zendServerDisk' => Adapter\ZendServerDisk::class,
         'ZendServerDisk' => Adapter\ZendServerDisk::class,
         'zendservershm'  => Adapter\ZendServerShm::class,
-        'ZendServerShm'  => Adapter\ZendServerShm::class
+        'zendServerShm'  => Adapter\ZendServerShm::class,
+        'ZendServerShm'  => Adapter\ZendServerShm::class,
     ];
 
     protected $factories = [
-        Adapter\Apc::class            => InvokableFactory::class,
-        Adapter\BlackHole::class      => InvokableFactory::class,
-        Adapter\Dba::class            => InvokableFactory::class,
-        Adapter\Filesystem::class     => InvokableFactory::class,
-        Adapter\Memcache::class       => InvokableFactory::class,
-        Adapter\Memcached::class      => InvokableFactory::class,
-        Adapter\Memory::class         => InvokableFactory::class,
-        Adapter\MongoDb::class        => InvokableFactory::class,
-        Adapter\Redis::class          => InvokableFactory::class,
-        Adapter\Session::class        => InvokableFactory::class,
-        Adapter\XCache::class         => InvokableFactory::class,
-        Adapter\WinCache::class       => InvokableFactory::class,
-        Adapter\ZendServerDisk::class => InvokableFactory::class,
-        Adapter\ZendServerShm::class  => InvokableFactory::class
+        Adapter\Apc::class                      => InvokableFactory::class,
+        Adapter\BlackHole::class                => InvokableFactory::class,
+        Adapter\Dba::class                      => InvokableFactory::class,
+        Adapter\Filesystem::class               => InvokableFactory::class,
+        Adapter\Memcache::class                 => InvokableFactory::class,
+        Adapter\Memcached::class                => InvokableFactory::class,
+        Adapter\Memory::class                   => InvokableFactory::class,
+        Adapter\MongoDb::class                  => InvokableFactory::class,
+        Adapter\Redis::class                    => InvokableFactory::class,
+        Adapter\Session::class                  => InvokableFactory::class,
+        Adapter\WinCache::class                 => InvokableFactory::class,
+        Adapter\XCache::class                   => InvokableFactory::class,
+        Adapter\ZendServerDisk::class           => InvokableFactory::class,
+        Adapter\ZendServerShm::class            => InvokableFactory::class,
+
+        // v2 normalized FQCNs
+        'zendcachestorageadapterapc'            => InvokableFactory::class,
+        'zendcachestorageadapterblackhole'      => InvokableFactory::class,
+        'zendcachestorageadapterdba'            => InvokableFactory::class,
+        'zendcachestorageadapterfilesystem'     => InvokableFactory::class,
+        'zendcachestorageadaptermemcache'       => InvokableFactory::class,
+        'zendcachestorageadaptermemcached'      => InvokableFactory::class,
+        'zendcachestorageadaptermemory'         => InvokableFactory::class,
+        'zendcachestorageadaptermongodb'        => InvokableFactory::class,
+        'zendcachestorageadapterredis'          => InvokableFactory::class,
+        'zendcachestorageadaptersession'        => InvokableFactory::class,
+        'zendcachestorageadapterwincache'       => InvokableFactory::class,
+        'zendcachestorageadapterxcache'         => InvokableFactory::class,
+        'zendcachestorageadapterzendserverdisk' => InvokableFactory::class,
+        'zendcachestorageadapterzendservershm'  => InvokableFactory::class,
     ];
 
     /**
-     * Do not share by default
+     * Do not share by default (v3)
      *
      * @var array
      */
     protected $sharedByDefault = false;
 
     /**
-     * Don't share by default
+     * Don't share by default (v2)
      *
      * @var boolean
      */
@@ -118,6 +142,10 @@ class AdapterPluginManager extends AbstractPluginManager
      */
     public function validatePlugin($instance)
     {
-        $this->validate($instance);
+        try {
+            $this->validate($instance);
+        } catch (InvalidServiceException $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }

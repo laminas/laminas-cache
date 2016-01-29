@@ -24,20 +24,30 @@ class PatternPluginManager extends AbstractPluginManager
 {
     protected $aliases = [
         'callback' => Pattern\CallbackCache::class,
+        'Callback' => Pattern\CallbackCache::class,
         'capture'  => Pattern\CaptureCache::class,
+        'Capture'  => Pattern\CaptureCache::class,
         'class'    => Pattern\ClassCache::class,
+        'Class'    => Pattern\ClassCache::class,
         'object'   => Pattern\ObjectCache::class,
+        'Object'   => Pattern\ObjectCache::class,
         'output'   => Pattern\OutputCache::class,
-        'page'     => Pattern\PageCache::class,
+        'Output'   => Pattern\OutputCache::class,
     ];
 
     protected $factories = [
-        Pattern\CallbackCache::class => InvokableFactory::class,
-        Pattern\CaptureCache::class  => InvokableFactory::class,
-        Pattern\ClassCache::class    => InvokableFactory::class,
-        Pattern\ObjectCache::class   => InvokableFactory::class,
-        Pattern\OutputCache::class   => InvokableFactory::class,
-        Pattern\PageCache::class     => InvokableFactory::class,
+        Pattern\CallbackCache::class    => InvokableFactory::class,
+        Pattern\CaptureCache::class     => InvokableFactory::class,
+        Pattern\ClassCache::class       => InvokableFactory::class,
+        Pattern\ObjectCache::class      => InvokableFactory::class,
+        Pattern\OutputCache::class      => InvokableFactory::class,
+
+        // v2 normalized FQCNs
+        'zendcachepatterncallbackcache' => InvokableFactory::class,
+        'zendcachepatterncapturecache'  => InvokableFactory::class,
+        'zendcachepatternclasscache'    => InvokableFactory::class,
+        'zendcachepatternobjectcache'   => InvokableFactory::class,
+        'zendcachepatternoutputcache'   => InvokableFactory::class,
     ];
 
     /**
@@ -84,11 +94,15 @@ class PatternPluginManager extends AbstractPluginManager
      *
      * Proxies to `validate()`.
      *
-     * @param mixed $instance
-     * @throws InvalidServiceException
+     * @param mixed $plugin
+     * @throws Exception\RuntimeException if invalid
      */
-    public function validatePlugin($instance)
+    public function validatePlugin($plugin)
     {
-        $this->validate($instance);
+        try {
+            $this->validate($plugin);
+        } catch (InvalidServiceException $e) {
+            throw new Exception\RuntimeException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }
