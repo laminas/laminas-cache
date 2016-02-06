@@ -36,16 +36,30 @@ matrix:
   fast_finish: true
   include:
     - php: 5.5
-        - SERVICE_MANAGER_VERSION="^2.7.5"
+      env:
         - EXECUTE_CS_CHECK=true
+        - PECL_INSTALL_APCU='apcu-4.0.8'
+    - php: 5.5
+      env:
+        - SERVICE_MANAGER_VERSION="^2.7.5"
+        - PECL_INSTALL_APCU='apcu-4.0.8'
+    - php: 5.6
+      env:
+        - EXECUTE_TEST_COVERALLS=true
+        - PECL_INSTALL_APCU='apcu-4.0.8'
     - php: 5.6
       env:
         - SERVICE_MANAGER_VERSION="^2.7.5"
-        - EXECUTE_TEST_COVERALLS=true
+        - PECL_INSTALL_APCU='apcu-4.0.8'
     - php: 7
+      env:
+        - PECL_INSTALL_APCU='apcu'
+        - PECL_INSTALL_APCU_BC='apcu_bc-beta'
     - php: 7
       env:
         - SERVICE_MANAGER_VERSION="^2.7.5"
+        - PECL_INSTALL_APCU='apcu'
+        - PECL_INSTALL_APCU_BC='apcu_bc-beta'
     - php: hhvm
     - php: hhvm
       env:
