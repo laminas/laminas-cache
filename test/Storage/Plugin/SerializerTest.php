@@ -9,11 +9,11 @@
 
 namespace ZendTest\Cache\Storage\Plugin;
 
+use ArrayObject;
 use Zend\Cache;
 use Zend\Cache\Storage\Event;
 use Zend\Cache\Storage\PostEvent;
-use ArrayObject;
-use ZendTest\Cache\EventManagerIntrospectionTrait;
+use Zend\EventManager\Test\EventListenerIntrospectionTrait;
 
 /**
  * @group      Zend_Cache
@@ -21,7 +21,7 @@ use ZendTest\Cache\EventManagerIntrospectionTrait;
  */
 class SerializerTest extends CommonPluginTest
 {
-    use EventManagerIntrospectionTrait;
+    use EventListenerIntrospectionTrait;
 
     /**
      * The storage adapter

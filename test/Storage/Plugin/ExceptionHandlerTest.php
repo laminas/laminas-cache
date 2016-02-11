@@ -9,18 +9,18 @@
 
 namespace ZendTest\Cache\Storage\Plugin;
 
+use ArrayObject;
 use Zend\Cache;
 use Zend\Cache\Storage\ExceptionEvent;
+use Zend\EventManager\Test\EventListenerIntrospectionTrait;
 use ZendTest\Cache\Storage\TestAsset\MockAdapter;
-use ArrayObject;
-use ZendTest\Cache\EventManagerIntrospectionTrait;
 
 /**
  * @covers Zend\Cache\Storage\Plugin\ExceptionHandler<extended>
  */
 class ExceptionHandlerTest extends CommonPluginTest
 {
-    use EventManagerIntrospectionTrait;
+    use EventListenerIntrospectionTrait;
 
     /**
      * The storage adapter
