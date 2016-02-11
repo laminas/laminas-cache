@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#70](https://github.com/zendframework/zend-cache/pull/70) adds, revises, and
+  publishes the documentation to https://zendframework.github.io/zend-cache/
 
 ### Deprecated
 
