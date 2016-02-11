@@ -20,6 +20,14 @@ class SessionTest extends CommonAdapterTest
 {
     public function setUp()
     {
+        if (! class_exists(SessionContainer::class)) {
+            $this->markTestSkipped(
+                'Skipping zend-session-related tests until that component is '
+                . 'forwards-compatible with zend-stdlib, zend-servicemanager, '
+                . 'and zend-eventmanager v3'
+            );
+        }
+
         $_SESSION = [];
         SessionContainer::setDefaultManager(null);
         $sessionContainer = new SessionContainer('Default');
@@ -35,6 +43,10 @@ class SessionTest extends CommonAdapterTest
 
     public function tearDown()
     {
+        if (! class_exists(SessionContainer::class)) {
+            return;
+        }
+
         $_SESSION = [];
         SessionContainer::setDefaultManager(null);
     }

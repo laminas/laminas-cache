@@ -11,7 +11,7 @@ namespace ZendTest\Cache\Storage\Plugin;
 
 use Zend\Cache;
 use Zend\Cache\Storage\Event;
-use ZendTest\Cache\EventManagerIntrospectionTrait;
+use Zend\EventManager\Test\EventListenerIntrospectionTrait;
 
 /**
  * @group      Zend_Cache
@@ -19,7 +19,7 @@ use ZendTest\Cache\EventManagerIntrospectionTrait;
  */
 class IgnoreUserAbortTest extends CommonPluginTest
 {
-    use EventManagerIntrospectionTrait;
+    use EventListenerIntrospectionTrait;
 
     /**
      * The storage adapter

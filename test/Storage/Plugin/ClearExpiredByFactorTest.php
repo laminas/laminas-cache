@@ -9,18 +9,18 @@
 
 namespace ZendTest\Cache\Storage\Plugin;
 
+use ArrayObject;
 use Zend\Cache;
 use Zend\Cache\Storage\PostEvent;
+use Zend\EventManager\Test\EventListenerIntrospectionTrait;
 use ZendTest\Cache\Storage\TestAsset\ClearExpiredMockAdapter;
-use ZendTest\Cache\EventManagerIntrospectionTrait;
-use ArrayObject;
 
 /**
  * @covers Zend\Cache\Storage\Plugin\ClearExpiredByFactor
  */
 class ClearExpiredByFactorTest extends CommonPluginTest
 {
-    use EventManagerIntrospectionTrait;
+    use EventListenerIntrospectionTrait;
 
     /**
      * The storage adapter

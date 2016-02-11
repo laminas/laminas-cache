@@ -10,6 +10,7 @@
 namespace ZendTest\Cache\Service;
 
 use Zend\Cache;
+use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -24,7 +25,7 @@ class StorageCacheFactoryTest extends \PHPUnit_Framework_TestCase
     {
         Cache\StorageFactory::resetAdapterPluginManager();
         Cache\StorageFactory::resetPluginManager();
-        $this->sm = new ServiceManager([
+        $config = [
             'services' => [
                 'config' => [
                     'cache' => [
@@ -36,7 +37,16 @@ class StorageCacheFactoryTest extends \PHPUnit_Framework_TestCase
             'factories' => [
                 'CacheFactory' => \Zend\Cache\Service\StorageCacheFactory::class
             ]
-        ]);
+        ];
+        $this->sm = new ServiceManager();
+        if (method_exists($this->sm, 'configure')) {
+            // v3
+            $this->sm->configure($config);
+        } else {
+            // v2
+            $config = new Config($config);
+            $config->configureServiceManager($this->sm);
+        }
     }
 
     public function tearDown()

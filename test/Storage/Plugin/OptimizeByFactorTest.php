@@ -9,18 +9,18 @@
 
 namespace ZendTest\Cache\Storage\Plugin;
 
+use ArrayObject;
 use Zend\Cache;
 use Zend\Cache\Storage\PostEvent;
+use Zend\EventManager\Test\EventListenerIntrospectionTrait;
 use ZendTest\Cache\Storage\TestAsset\OptimizableMockAdapter;
-use ArrayObject;
-use ZendTest\Cache\EventManagerIntrospectionTrait;
 
 /**
  * @covers Zend\Cache\Storage\Plugin\OptimizeByFactor<extended>
  */
 class OptimizeByFactorTest extends CommonPluginTest
 {
-    use EventManagerIntrospectionTrait;
+    use EventListenerIntrospectionTrait;
 
     /**
      * The storage adapter
