@@ -11,6 +11,7 @@ namespace ZendTest\Cache\Pattern;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Pattern\PatternOptions<extended>
  */
 abstract class CommonPatternTest extends \PHPUnit_Framework_TestCase
 {

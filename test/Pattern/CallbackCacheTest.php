@@ -13,6 +13,7 @@ use Zend\Cache;
 
 /**
  * Test class
+ * @covers Zend\Cache\Pattern\CallbackCache<extended>
  */
 class TestCallbackCache
 {

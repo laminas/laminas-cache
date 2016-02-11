@@ -9,13 +9,19 @@
 
 namespace ZendTest\Cache\Storage\Plugin;
 
+use ArrayObject;
 use Zend\Cache;
 use Zend\Cache\Storage\PostEvent;
+use Zend\EventManager\Test\EventListenerIntrospectionTrait;
 use ZendTest\Cache\Storage\TestAsset\OptimizableMockAdapter;
-use ArrayObject;
 
+/**
+ * @covers Zend\Cache\Storage\Plugin\OptimizeByFactor<extended>
+ */
 class OptimizeByFactorTest extends CommonPluginTest
 {
+    use EventListenerIntrospectionTrait;
+
     /**
      * The storage adapter
      *
@@ -43,13 +49,13 @@ class OptimizeByFactorTest extends CommonPluginTest
             'removeItems.post' => 'optimizeByFactor',
         ];
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
-            $listeners = $this->_adapter->getEventManager()->getListeners($eventName);
+            $listeners = $this->getArrayOfListenersForEvent($eventName, $this->_adapter->getEventManager());
 
             // event should attached only once
-            $this->assertSame(1, $listeners->count());
+            $this->assertSame(1, count($listeners));
 
             // check expected callback method
-            $cb = $listeners->top()->getCallback();
+            $cb = array_shift($listeners);
             $this->assertArrayHasKey(0, $cb);
             $this->assertSame($this->_plugin, $cb[0]);
             $this->assertArrayHasKey(1, $cb);
@@ -63,7 +69,7 @@ class OptimizeByFactorTest extends CommonPluginTest
         $this->_adapter->removePlugin($this->_plugin);
 
         // no events should be attached
-        $this->assertEquals(0, count($this->_adapter->getEventManager()->getEvents()));
+        $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
     }
 
     public function testOptimizeByFactor()

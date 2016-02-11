@@ -14,6 +14,7 @@ use Zend\Cache\Storage\Adapter\MongoDbResourceManager;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\MongoDbOptions<extended>
  */
 class MongoDbOptionsTest extends \PHPUnit_Framework_TestCase
 {

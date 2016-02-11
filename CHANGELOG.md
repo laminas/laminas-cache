@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.6.0 - TBD
+
+### Added
+
+- [#70](https://github.com/zendframework/zend-cache/pull/70) adds, revises, and
+  publishes the documentation to https://zendframework.github.io/zend-cache/
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#22](https://github.com/zendframework/zend-cache/pull/22),
+  [#64](https://github.com/zendframework/zend-cache/pull/64),
+  [#68](https://github.com/zendframework/zend-cache/pull/68), and
+  [#69](https://github.com/zendframework/zend-cache/pull/69) update the
+  component to be forwards-compatible with zend-eventmanager,
+  zend-servicemanager, and zend-stdlib v3.
+
 ## 2.5.4 - TBD
 
 ### Added

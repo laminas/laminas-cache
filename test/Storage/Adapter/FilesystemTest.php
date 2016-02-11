@@ -15,6 +15,7 @@ use Zend\Cache\Storage\Plugin\PluginOptions;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\Filesystem
  */
 class FilesystemTest extends CommonAdapterTest
 {

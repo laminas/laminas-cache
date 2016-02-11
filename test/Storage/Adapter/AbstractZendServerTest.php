@@ -14,6 +14,7 @@ use Zend\Cache\Storage\Adapter\AbstractZendServer;
 
 /**
  * @group      Zend_Cache
+ * @covers Zend\Cache\Storage\Adapter\AdapterOptions<extended>
  */
 class AbstractZendServerTest extends \PHPUnit_Framework_TestCase
 {
