@@ -25,7 +25,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#59](https://github.com/zendframework/zend-cache/pull/59)
+  XCache >= 3.1.0 works in CLI mode
 
 ### Deprecated
 
@@ -37,7 +38,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#59](https://github.com/zendframework/zend-cache/pull/59)
+  XCache: fixed broken internalSetItem() with empty namespace
+- [#58](https://github.com/zendframework/zend-cache/issues/58)
+  XCache: Fatal error storing objects
 
 ## 2.6.1 - 2016-02-12
 
