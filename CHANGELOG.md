@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#63](https://github.com/zendframework/zend-cache/pull/63)
+  Implemented ClearByNamespaceInterface in Stoage\Adapter\Redis
 
 ### Deprecated
 
