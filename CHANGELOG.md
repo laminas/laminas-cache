@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
-## 2.6.1 - TBD
+## 2.6.1 - 2016-02-12
 
 ### Added
 
@@ -36,7 +36,11 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#73](https://github.com/zendframework/zend-cache/pull/73) fixes how the
+  `EventManager` instance is lazy-instantiated in
+  `Zend\Cache\Storage\Adapter\AbstractAdapter::getEventManager()`. In 2.6.0, it
+  was using the v3-specific syntax; it now uses syntax compatible with both v2
+  and v3.
 
 ## 2.6.0 - 2016-02-11
 
