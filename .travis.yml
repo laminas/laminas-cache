@@ -69,11 +69,11 @@ matrix:
         - SERVICE_MANAGER_VERSION="^2.7.5"
         - EVENT_MANAGER_VERSION="^2.6.2"
         - PECL_INSTALL_APCU='apcu-4.0.8'
+        - INSTALL_XCACHE=true
     - php: 7
       env:
         - PECL_INSTALL_APCU='apcu'
         - PECL_INSTALL_APCU_BC='apcu_bc-beta'
-        - INSTALL_XCACHE=true
     - php: 7
       env:
         - SERVICE_MANAGER_VERSION="^2.7.5"
