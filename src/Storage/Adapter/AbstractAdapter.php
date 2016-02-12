@@ -23,7 +23,6 @@ use Zend\Cache\Storage\StorageInterface;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventsCapableInterface;
-use Zend\EventManager\SharedEventManager;
 
 abstract class AbstractAdapter implements StorageInterface, EventsCapableInterface
 {
@@ -190,7 +189,8 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
     public function getEventManager()
     {
         if ($this->events === null) {
-            $this->events = new EventManager(new SharedEventManager(), [__CLASS__, get_class($this)]);
+            $this->events = new EventManager();
+            $this->events->setIdentifiers([__CLASS__, get_class($this)]);
         }
         return $this->events;
     }
