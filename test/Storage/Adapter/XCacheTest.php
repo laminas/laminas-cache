@@ -34,7 +34,7 @@ class XCacheTest extends CommonAdapterTest
             }
         }
 
-        if (PHP_SAPI == 'cli') {
+        if (PHP_SAPI == 'cli' && version_compare(phpversion('xcache'), '3.1.0') < 0) {
             try {
                 new Cache\Storage\Adapter\XCache();
                 $this->fail("Expected exception Zend\Cache\Exception\ExtensionNotLoadedException");
