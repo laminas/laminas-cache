@@ -6,77 +6,31 @@
  * @copyright Copyright (c) 2016 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
+
 namespace ZendTest\Cache\Psr;
 
-use Cache\IntegrationTests\CachePoolTest;
-use Zend\Cache\Exception\ExtensionNotLoadedException;
+use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
-use Zend\Cache\Storage\Adapter\XCache;
 use Zend\Cache\StorageFactory;
 
 /**
  * @requires extension xcache
  */
-class XCacheIntegrationTest extends CachePoolTest
+class XCacheIntegrationTest extends TestCase
 {
-    private $tz;
-
     /**
-     * @var XCache
+     * XCache has useRequestTime = true
+     * @expectedException \Zend\Cache\Psr\CacheException
      */
-    private $storage;
-
-    protected function setUp()
+    public function testAdapterNotSupported()
     {
-        if (!getenv('TESTS_ZEND_CACHE_XCACHE_ENABLED')) {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_XCACHE_ENABLED to run this test');
-        }
-
-        if ((int)ini_get('xcache.var_size') <= 0) {
-            $this->markTestSkipped("ext/xcache is disabled - see 'xcache.var_size'");
-        }
-
-        if (PHP_SAPI == 'cli') {
-            // this will throw exception for xcache < 3.1.0
-            try {
-                new XCache();
-            } catch (ExtensionNotLoadedException $e) {
-                $this->markTestSkipped($e->getMessage());
-            }
-        }
-
-        // set non-UTC timezone
-        $this->tz = date_default_timezone_get();
-        date_default_timezone_set('America/Vancouver');
-
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        date_default_timezone_set($this->tz);
-
-        if ($this->storage) {
-            $this->storage->flush();
-        }
-
-        parent::tearDown();
-    }
-
-    public function createCachePool()
-    {
-        $options = [
-            'admin_auth' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH') ? : false,
-            'admin_user' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_USER') ? : '',
-            'admin_pass' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS') ? : '',
-        ];
-
-        $this->storage = StorageFactory::factory([
+        $storage = StorageFactory::factory([
             'adapter' => [
                 'name'    => 'xcache',
-                'options' => $options,
+                'options' => [],
             ],
         ]);
-        return new CacheItemPoolAdapter($this->storage);
+
+        new CacheItemPoolAdapter($storage);
     }
 }

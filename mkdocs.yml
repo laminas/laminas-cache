@@ -13,6 +13,7 @@ pages:
         - ObjectCache: pattern/object-cache.md
         - OutputCache: pattern/output-cache.md
         - CaptureCache: pattern/capture-cache.md
+    - PSR-6: psr6.md
 site_name: zend-cache
 site_description: Zend\Cache
 repo_url: 'https://github.com/zendframework/zend-cache'

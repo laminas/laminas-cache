@@ -11,7 +11,6 @@ namespace Zend\Cache\Psr;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Zend\Cache\Exception;
-use Zend\Cache\Storage\Adapter\Apc;
 use Zend\Cache\Storage\ClearByNamespaceInterface;
 use Zend\Cache\Storage\FlushableInterface;
 use Zend\Cache\Storage\StorageInterface;
@@ -321,18 +320,18 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
             ));
         }
 
-        if ($storage instanceof Apc && ini_get('apc.use_request_time')) {
-            throw new CacheException(sprintf(
-                'Cannot use %s with apc.use_request_time = 1',
-                get_class($storage)
-            ));
-        }
-
         // we've got to be able to set per-item TTL on write
         $capabilities = $storage->getCapabilities();
         if (!($capabilities->getStaticTtl() && $capabilities->getMinTtl())) {
             throw new CacheException(sprintf(
                 'Storage %s does not support static TTL',
+                get_class($storage)
+            ));
+        }
+
+        if ($capabilities->getUseRequestTime()) {
+            throw new CacheException(sprintf(
+                'Cannot use %s with useRequestTime = true',
                 get_class($storage)
             ));
         }
