@@ -21,7 +21,7 @@ class XCacheTest extends CommonAdapterTest
 
     public function setUp()
     {
-        if (!getenv('TESTS_ZEND_CACHE_XCACHE_ENABLED')) {
+        if (getenv('TESTS_ZEND_CACHE_XCACHE_ENABLED') != 'true') {
             $this->markTestSkipped('EnableTESTS_ZEND_CACHE_XCACHE_ENABLED  to run this test');
         }
 
