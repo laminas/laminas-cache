@@ -449,10 +449,10 @@ class Capabilities
 
     /**
      * Set "lock-on-expire" support in seconds.
-     * 
+     *
      * @param  stdClass $marker
      * @param  int      $timeout
-     * @return Capabilities Fluent interface 
+     * @return Capabilities Fluent interface
      */
     public function setLockOnExpire(stdClass $marker, $timeout)
     {
