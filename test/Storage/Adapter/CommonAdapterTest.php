@@ -193,6 +193,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $capabilities->getTtlPrecision());
 
         $this->assertInternalType('bool', $capabilities->getExpiredRead());
+        $this->assertInternalType('int', $capabilities->getLockOnExpire());
     }
 
     public function testKeyCapabilities()
@@ -577,8 +578,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($this->_storage->getItem('key'));
 
-        $this->_options->setTtl(0);
-        if ($capabilities->getExpiredRead()) {
+        if ($capabilities->getLockOnExpire()) {
             $this->assertEquals('value', $this->_storage->getItem('key'));
         } else {
             $this->assertNull($this->_storage->getItem('key'));
@@ -640,6 +640,18 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($items, $rs);
         } else {
             $this->assertEquals($itemsHigh, $rs);
+
+            // if 'lock-on-expire' is not supported the low items will be still missing
+            // if 'lock-on-expire' is supported the low items could be retrieved
+            $rs = $this->_storage->getItems(array_keys($items));
+            ksort($rs); // make comparable
+            if (!$capabilities->getLockOnExpire()) {
+                $this->assertEquals($itemsHigh, $rs);
+            } else {
+                $itemsExpected = array_merge($itemsLow, $itemsHigh);
+                ksort($itemsExpected); // make comparable
+                $this->assertEquals($itemsExpected, $rs);
+            }
         }
     }
 
