@@ -328,4 +328,88 @@ class FilesystemTest extends CommonAdapterTest
         $prefix = substr(md5('a_key'), 2, 2);
         $this->_storage->clearByPrefix($prefix);
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testClearByTagsWithoutLocking()
+    {
+        if (!function_exists('pcntl_fork') || !function_exists('posix_kill')) {
+            $this->markTestSkipped('Missing pcntl_fork and/or posix_kill');
+        }
+
+        // create cache items
+        $this->_storage->getOptions()->setDirLevel(0);
+        $this->_storage->getOptions()->setFileLocking(false);
+        $this->_storage->setItem('a_key', 'a_value');
+        $this->_storage->setTags('a_key', ['a_tag']);
+        $this->_storage->setItem('b_key', 'b_value');
+        $this->_storage->setTags('b_key', ['a_tag', 'b_tag']);
+        $this->_storage->setItem('c_key', 'c_value');
+        $this->_storage->setTags('c_key', ['a_tag', 'c_tag']);
+
+        $tempFile = tmpfile();
+
+        $pid = pcntl_fork();
+        if ($pid == -1) {
+            $this->fail('pcntl_fork() failed');
+        }
+        if ($pid) {
+            require 'FilesystemDelayedUnlink.php';
+
+            $this->_storage->clearByTags(['a_tag'], true);
+
+            fseek($tempFile, 0);
+            $messageFromChild = fread($tempFile, 1024);
+            $this->assertEquals($messageFromChild, 'deleted');
+            fclose($tempFile);
+        } else {
+            usleep(150000);
+            $this->_storage->removeItem('c_key');
+            fwrite($tempFile, 'deleted');
+            posix_kill(posix_getpid(), SIGTERM);
+        }
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testClearByTagsWithLocking()
+    {
+        if (!function_exists('pcntl_fork') || !function_exists('posix_kill')) {
+            $this->markTestSkipped('Missing pcntl_fork and/or posix_kill');
+        }
+
+        // create cache items
+        $this->_storage->getOptions()->setDirLevel(0);
+        $this->_storage->getOptions()->setFileLocking(true);
+        $this->_storage->setItem('a_key', 'a_value');
+        $this->_storage->setTags('a_key', ['a_tag']);
+        $this->_storage->setItem('b_key', 'b_value');
+        $this->_storage->setTags('b_key', ['a_tag', 'b_tag']);
+        $this->_storage->setItem('c_key', 'c_value');
+        $this->_storage->setTags('c_key', ['a_tag', 'c_tag']);
+
+        $tempFile = tmpfile();
+
+        $pid = pcntl_fork();
+        if ($pid == -1) {
+            $this->fail('pcntl_fork() failed');
+        }
+        if ($pid) {
+            require 'FilesystemDelayedUnlink.php';
+
+            $this->_storage->clearByTags(['a_tag'], true);
+
+            fseek($tempFile, 0);
+            $messageFromChild = fread($tempFile, 1024);
+            $this->assertEquals($messageFromChild, 'deleted');
+            fclose($tempFile);
+        } else {
+            usleep(150000);
+            $this->_storage->removeItem('c_key');
+            fwrite($tempFile, 'deleted');
+            posix_kill(posix_getpid(), SIGTERM);
+        }
+    }
 }
