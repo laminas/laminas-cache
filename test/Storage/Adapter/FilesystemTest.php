@@ -341,32 +341,30 @@ class FilesystemTest extends CommonAdapterTest
         // create cache items
         $this->_storage->getOptions()->setDirLevel(0);
         $this->_storage->getOptions()->setFileLocking(false);
-        $this->_storage->setItem('a_key', 'a_value');
+        $this->_storage->setItems([
+            'a_key' => 'a_value',
+            'b_key' => 'b_value',
+            'other' => 'other',
+        ]);
         $this->_storage->setTags('a_key', ['a_tag']);
-        $this->_storage->setItem('b_key', 'b_value');
-        $this->_storage->setTags('b_key', ['a_tag', 'b_tag']);
-        $this->_storage->setItem('c_key', 'c_value');
-        $this->_storage->setTags('c_key', ['a_tag', 'c_tag']);
+        $this->_storage->setTags('b_key', ['a_tag']);
 
-        $tempFile = tmpfile();
-
-        $pid = pcntl_fork();
-        if ($pid == -1) {
+        $pidChild = pcntl_fork();
+        if ($pidChild == -1) {
             $this->fail('pcntl_fork() failed');
-        }
-        if ($pid) {
-            require 'FilesystemDelayedUnlink.php';
-
+        } elseif ($pidChild) {
+            // The parent process
+            // Slow down unlink function and start removing items.
+            // Finally test if the item not matching the tag was removed by the child process.
+            require __DIR__ . '/TestAsset/FilesystemDelayedUnlink.php';
             $this->_storage->clearByTags(['a_tag'], true);
-
-            fseek($tempFile, 0);
-            $messageFromChild = fread($tempFile, 1024);
-            $this->assertEquals($messageFromChild, 'deleted');
-            fclose($tempFile);
+            $this->assertFalse($this->_storage->hasItem('other'));
         } else {
-            usleep(150000);
-            $this->_storage->removeItem('c_key');
-            fwrite($tempFile, 'deleted');
+            // The child process:
+            // Wait to make sure the parent process has started determining files to unlink.
+            // Than remove one of the items the parent process should remove and another item for testing.
+            usleep(10000);
+            $this->_storage->removeItems(['b_key', 'other']);
             posix_kill(posix_getpid(), SIGTERM);
         }
     }
@@ -383,32 +381,30 @@ class FilesystemTest extends CommonAdapterTest
         // create cache items
         $this->_storage->getOptions()->setDirLevel(0);
         $this->_storage->getOptions()->setFileLocking(true);
-        $this->_storage->setItem('a_key', 'a_value');
+        $this->_storage->setItems([
+            'a_key' => 'a_value',
+            'b_key' => 'b_value',
+            'other' => 'other',
+        ]);
         $this->_storage->setTags('a_key', ['a_tag']);
-        $this->_storage->setItem('b_key', 'b_value');
-        $this->_storage->setTags('b_key', ['a_tag', 'b_tag']);
-        $this->_storage->setItem('c_key', 'c_value');
-        $this->_storage->setTags('c_key', ['a_tag', 'c_tag']);
+        $this->_storage->setTags('b_key', ['a_tag']);
 
-        $tempFile = tmpfile();
-
-        $pid = pcntl_fork();
-        if ($pid == -1) {
+        $pidChild = pcntl_fork();
+        if ($pidChild == -1) {
             $this->fail('pcntl_fork() failed');
-        }
-        if ($pid) {
-            require 'FilesystemDelayedUnlink.php';
-
+        } elseif ($pidChild) {
+            // The parent process
+            // Slow down unlink function and start removing items.
+            // Finally test if the item not matching the tag was removed by the child process.
+            require __DIR__ . '/TestAsset/FilesystemDelayedUnlink.php';
             $this->_storage->clearByTags(['a_tag'], true);
-
-            fseek($tempFile, 0);
-            $messageFromChild = fread($tempFile, 1024);
-            $this->assertEquals($messageFromChild, 'deleted');
-            fclose($tempFile);
+            $this->assertFalse($this->_storage->hasItem('other'));
         } else {
-            usleep(150000);
-            $this->_storage->removeItem('c_key');
-            fwrite($tempFile, 'deleted');
+            // The child process:
+            // Wait to make sure the parent process has started determining files to unlink.
+            // Than remove one of the items the parent process should remove and another item for testing.
+            usleep(10000);
+            $this->_storage->removeItems(['b_key', 'other']);
             posix_kill(posix_getpid(), SIGTERM);
         }
     }
