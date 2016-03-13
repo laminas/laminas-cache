@@ -328,4 +328,84 @@ class FilesystemTest extends CommonAdapterTest
         $prefix = substr(md5('a_key'), 2, 2);
         $this->_storage->clearByPrefix($prefix);
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testClearByTagsWithoutLocking()
+    {
+        if (!function_exists('pcntl_fork') || !function_exists('posix_kill')) {
+            $this->markTestSkipped('Missing pcntl_fork and/or posix_kill');
+        }
+
+        // create cache items
+        $this->_storage->getOptions()->setDirLevel(0);
+        $this->_storage->getOptions()->setFileLocking(false);
+        $this->_storage->setItems([
+            'a_key' => 'a_value',
+            'b_key' => 'b_value',
+            'other' => 'other',
+        ]);
+        $this->_storage->setTags('a_key', ['a_tag']);
+        $this->_storage->setTags('b_key', ['a_tag']);
+
+        $pidChild = pcntl_fork();
+        if ($pidChild == -1) {
+            $this->fail('pcntl_fork() failed');
+        } elseif ($pidChild) {
+            // The parent process
+            // Slow down unlink function and start removing items.
+            // Finally test if the item not matching the tag was removed by the child process.
+            require __DIR__ . '/TestAsset/FilesystemDelayedUnlink.php';
+            $this->_storage->clearByTags(['a_tag'], true);
+            $this->assertFalse($this->_storage->hasItem('other'));
+        } else {
+            // The child process:
+            // Wait to make sure the parent process has started determining files to unlink.
+            // Than remove one of the items the parent process should remove and another item for testing.
+            usleep(10000);
+            $this->_storage->removeItems(['b_key', 'other']);
+            posix_kill(posix_getpid(), SIGTERM);
+        }
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testClearByTagsWithLocking()
+    {
+        if (!function_exists('pcntl_fork') || !function_exists('posix_kill')) {
+            $this->markTestSkipped('Missing pcntl_fork and/or posix_kill');
+        }
+
+        // create cache items
+        $this->_storage->getOptions()->setDirLevel(0);
+        $this->_storage->getOptions()->setFileLocking(true);
+        $this->_storage->setItems([
+            'a_key' => 'a_value',
+            'b_key' => 'b_value',
+            'other' => 'other',
+        ]);
+        $this->_storage->setTags('a_key', ['a_tag']);
+        $this->_storage->setTags('b_key', ['a_tag']);
+
+        $pidChild = pcntl_fork();
+        if ($pidChild == -1) {
+            $this->fail('pcntl_fork() failed');
+        } elseif ($pidChild) {
+            // The parent process
+            // Slow down unlink function and start removing items.
+            // Finally test if the item not matching the tag was removed by the child process.
+            require __DIR__ . '/TestAsset/FilesystemDelayedUnlink.php';
+            $this->_storage->clearByTags(['a_tag'], true);
+            $this->assertFalse($this->_storage->hasItem('other'));
+        } else {
+            // The child process:
+            // Wait to make sure the parent process has started determining files to unlink.
+            // Than remove one of the items the parent process should remove and another item for testing.
+            usleep(10000);
+            $this->_storage->removeItems(['b_key', 'other']);
+            posix_kill(posix_getpid(), SIGTERM);
+        }
+    }
 }
