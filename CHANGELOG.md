@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#44](https://github.com/zendframework/zend-cache/issues/44)
+  Filesystem: fixed race condition in method clearByTags
 - [#59](https://github.com/zendframework/zend-cache/pull/59)
   XCache: fixed broken internalSetItem() with empty namespace
 - [#58](https://github.com/zendframework/zend-cache/issues/58)
