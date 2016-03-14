@@ -26,6 +26,10 @@ class AdapterPluginManager extends AbstractPluginManager
     protected $aliases = [
         'apc'            => Adapter\Apc::class,
         'Apc'            => Adapter\Apc::class,
+        'apcu'           => Adapter\Apcu::class,
+        'ApcU'           => Adapter\Apcu::class,
+        'Apcu'           => Adapter\Apcu::class,
+        'APCu'           => Adapter\Apcu::class,
         'blackhole'      => Adapter\BlackHole::class,
         'blackHole'      => Adapter\BlackHole::class,
         'BlackHole'      => Adapter\BlackHole::class,
@@ -62,6 +66,7 @@ class AdapterPluginManager extends AbstractPluginManager
 
     protected $factories = [
         Adapter\Apc::class                      => InvokableFactory::class,
+        Adapter\Apcu::class                     => InvokableFactory::class,
         Adapter\BlackHole::class                => InvokableFactory::class,
         Adapter\Dba::class                      => InvokableFactory::class,
         Adapter\Filesystem::class               => InvokableFactory::class,
@@ -78,6 +83,7 @@ class AdapterPluginManager extends AbstractPluginManager
 
         // v2 normalized FQCNs
         'zendcachestorageadapterapc'            => InvokableFactory::class,
+        'zendcachestorageadapterapcu'           => InvokableFactory::class,
         'zendcachestorageadapterblackhole'      => InvokableFactory::class,
         'zendcachestorageadapterdba'            => InvokableFactory::class,
         'zendcachestorageadapterfilesystem'     => InvokableFactory::class,
