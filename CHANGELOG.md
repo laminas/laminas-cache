@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#23](https://github.com/zendframework/zend-cache/issues/23)
+  [#47](https://github.com/zendframework/zend-cache/issues/47)
+  Added an Apcu storage adapter as future replacement for Apc
 - [#63](https://github.com/zendframework/zend-cache/pull/63)
   Implemented ClearByNamespaceInterface in Stoage\Adapter\Redis
 
