@@ -230,9 +230,9 @@ class Redis extends AbstractAdapter implements
                 if ($options->getResourceManager()->getMajorVersion($options->getResourceId()) < 2) {
                     throw new Exception\UnsupportedMethodCallException("To use ttl you need version >= 2.0.0");
                 }
-                $success = $redis->setex($this->namespacePrefix . $normalizedKey, $ttl, $value);
+                $success = $redis->setex($this->namespacePrefix . $normalizedKey, $ttl, $this->preSerialize($value));
             } else {
-                $success = $redis->set($this->namespacePrefix . $normalizedKey, $value);
+                $success = $redis->set($this->namespacePrefix . $normalizedKey, $this->preSerialize($value));
             }
         } catch (RedisResourceException $e) {
             throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
@@ -257,8 +257,9 @@ class Redis extends AbstractAdapter implements
 
         $namespacedKeyValuePairs = [];
         foreach ($normalizedKeyValuePairs as $normalizedKey => $value) {
-            $namespacedKeyValuePairs[$this->namespacePrefix . $normalizedKey] = $value;
+            $namespacedKeyValuePairs[$this->namespacePrefix . $normalizedKey] = $this->preSerialize($value);
         }
+
         try {
             if ($ttl > 0) {
                 //check if ttl is supported
@@ -308,12 +309,12 @@ class Redis extends AbstractAdapter implements
                  * To ensure expected behaviour, we stick with the "setnx" method.
                  * This means we only set the ttl after the key/value has been successfully set.
                  */
-                $success = $redis->setnx($this->namespacePrefix . $normalizedKey, $value);
+                $success = $redis->setnx($this->namespacePrefix . $normalizedKey, $this->preSerialize($value));
                 if ($success) {
                     $redis->expire($this->namespacePrefix . $normalizedKey, $ttl);
                 }
             } else {
-                $success = $redis->setnx($this->namespacePrefix . $normalizedKey, $value);
+                $success = $redis->setnx($this->namespacePrefix . $normalizedKey, $this->preSerialize($value));
             }
 
             return $success;
@@ -469,7 +470,9 @@ class Redis extends AbstractAdapter implements
             $this->capabilityMarker = new stdClass();
 
             $options      = $this->getOptions();
-            $redisVersion = $options->getResourceManager()->getMajorVersion($options->getResourceId());
+            $resourceMgr  = $options->getResourceManager();
+            $serializer   = $resourceMgr->getLibOption($options->getResourceId(), RedisResource::OPT_SERIALIZER);
+            $redisVersion = $resourceMgr->getMajorVersion($options->getResourceId());
             $minTtl       = version_compare($redisVersion, '2', '<') ? 0 : 1;
             $supportedMetadata = $redisVersion >= 2 ? ['ttl'] : [];
 
@@ -477,7 +480,16 @@ class Redis extends AbstractAdapter implements
                 $this,
                 $this->capabilityMarker,
                 [
-                    'supportedDatatypes' => [
+                    'supportedDatatypes' => $serializer ? [
+                        'NULL'     => true,
+                        'boolean'  => true,
+                        'integer'  => true,
+                        'double'   => true,
+                        'string'   => true,
+                        'array'    => 'array',
+                        'object'   => 'object',
+                        'resource' => false,
+                    ] : [
                         'NULL'     => 'string',
                         'boolean'  => 'string',
                         'integer'  => 'string',
@@ -566,5 +578,23 @@ class Redis extends AbstractAdapter implements
         }
 
         return $metadata;
+    }
+
+    /**
+     * Pre-Serialize value before putting it to the redis extension
+     * The reason for this is the buggy extension version < 2.5.7
+     * which is producing a segfault on storing NULL as long as no serializer was configured.
+     * @link https://github.com/zendframework/zend-cache/issues/88
+     */
+    protected function preSerialize($value)
+    {
+        $options     = $this->getOptions();
+        $resourceMgr = $options->getResourceManager();
+        $serializer  = $resourceMgr->getLibOption($options->getResourceId(), RedisResource::OPT_SERIALIZER);
+        if ($serializer === null) {
+            return (string) $value;
+        }
+
+        return $value;
     }
 }
