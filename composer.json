@@ -44,6 +44,10 @@
         "branch-alias": {
             "dev-master": "2.6-dev",
             "dev-develop": "2.7-dev"
+        },
+        "zf": {
+            "component": "Zend\\Cache",
+            "config-provider": "Zend\\Cache\\ConfigProvider"
         }
     },
     "autoload-dev": {
