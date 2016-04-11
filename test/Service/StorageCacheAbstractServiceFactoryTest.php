@@ -10,7 +10,6 @@
 namespace ZendTest\Cache\Service;
 
 use Interop\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase as TestCase;
 use Prophecy\Argument;
 use Zend\Cache\Service\StorageCacheAbstractServiceFactory;
 use Zend\Cache\StorageFactory;
