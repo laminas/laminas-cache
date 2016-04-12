@@ -13,6 +13,7 @@ use Redis as RedisResource;
 use RedisException as RedisResourceException;
 use stdClass;
 use Traversable;
+use Zend\Cache\Storage\ClearByNamespaceInterface;
 use Zend\Cache\Storage\ClearByPrefixInterface;
 use Zend\Cache\Exception;
 use Zend\Cache\Storage\Capabilities;
@@ -20,6 +21,7 @@ use Zend\Cache\Storage\FlushableInterface;
 use Zend\Cache\Storage\TotalSpaceCapableInterface;
 
 class Redis extends AbstractAdapter implements
+    ClearByNamespaceInterface,
     ClearByPrefixInterface,
     FlushableInterface,
     TotalSpaceCapableInterface
@@ -409,6 +411,31 @@ class Redis extends AbstractAdapter implements
         } catch (RedisResourceException $e) {
             throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
         }
+    }
+
+    /* ClearByNamespaceInterface */
+
+    /**
+     * Remove items of given namespace
+     *
+     * @param string $namespace
+     * @return bool
+     */
+    public function clearByNamespace($namespace)
+    {
+        $redis = $this->getRedisResource();
+
+        $namespace = (string) $namespace;
+        if ($namespace === '') {
+            throw new Exception\InvalidArgumentException('No namespace given');
+        }
+
+        $options = $this->getOptions();
+        $prefix  = $namespace . $options->getNamespaceSeparator();
+
+        $redis->delete($redis->keys($prefix . '*'));
+
+        return true;
     }
 
     /* ClearByPrefixInterface */
