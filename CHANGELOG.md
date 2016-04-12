@@ -11,6 +11,15 @@ All notable changes to this project will be documented in this file, in reverse 
   Added an Apcu storage adapter as future replacement for Apc
 - [#63](https://github.com/zendframework/zend-cache/pull/63)
   Implemented ClearByNamespaceInterface in Stoage\Adapter\Redis
+- [#94](https://github.com/zendframework/zend-cache/pull/94) adds factories for
+  each of the `PatternPluginManager`, `AdapterPluginManager`, and storage
+  `PluginManager`.
+- [#94](https://github.com/zendframework/zend-cache/pull/94) exposes the package
+  as a standalone config-provider / ZF component, by adding:
+  - `Zend\Cache\ConfigProvider`, which enables the
+    `StorageCacheAbstractServiceFactory`, and maps factories for all plugin
+    managers.
+  - `Zend\Cache\Module`, which does the same, for zend-mvc contexts.
 
 ### Deprecated
 
@@ -22,7 +31,16 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#94](https://github.com/zendframework/zend-cache/pull/94) updates the
+  `PatternPluginManager` to accept `$options` to `get()` and `build()`, cast
+  them to a `PatternOptions` instance, and inject them into the generated plugin
+  instance. This change allows better standalone usage of the plugin manager.
+- [#94](https://github.com/zendframework/zend-cache/pull/94) updates the
+  `StorageCacheFactory` and `StorageCacheAbstractServiceFactory` to seed the
+  `StorageFactory` with the storage plugin manager and/or adapter plugin manager
+  as pulled from the provided container, if present. This change enables re-use
+  of pre-configured plugin managers (e.g., those seeded with custom plugins
+  and/or adapters).
 
 ## 2.6.2 - TBD
 
