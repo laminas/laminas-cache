@@ -97,25 +97,43 @@ class SerializerTest extends CommonPluginTest
 
     public function testUnserializeOnReadItem()
     {
+        $args  = new ArrayObject([
+            'key'      => 'test',
+            'success'  => true,
+            'casToken' => null,
+        ]);
         $value = serialize(123);
-        $event = new PostEvent('getItem.post', $this->_adapter, new ArrayObject(), $value);
+        $event = new PostEvent('getItem.post', $this->_adapter, $args, $value);
         $this->_plugin->onReadItemPost($event);
 
-        $this->assertFalse($event->propagationIsStopped());
-        $this->assertSame(123, $event->getResult());
+        $this->assertFalse($event->propagationIsStopped(), 'Event propagation has been stopped');
+        $this->assertSame(123, $event->getResult(), 'Result was not unserialized');
+    }
+
+    public function testDontUnserializeOnReadMissingItem()
+    {
+        $args  = new ArrayObject(['key' => 'test']);
+        $value = null;
+        $event = new PostEvent('getItem.post', $this->_adapter, $args, $value);
+        $this->_plugin->onReadItemPost($event);
+
+        $this->assertFalse($event->propagationIsStopped(), 'Event propagation has been stopped');
+        $this->assertSame($value, $event->getResult(), 'Missing item was unserialized');
     }
 
     public function testUnserializeOnReadItems()
     {
         $values = ['key1' => serialize(123), 'key2' => serialize(456)];
-        $event = new PostEvent('getItems.post', $this->_adapter, new ArrayObject(), $values);
+        $args   = new ArrayObject(['keys' => array_keys($values) + ['missing']]);
+        $event  = new PostEvent('getItems.post', $this->_adapter, $args, $values);
 
         $this->_plugin->onReadItemsPost($event);
 
-        $this->assertFalse($event->propagationIsStopped());
+        $this->assertFalse($event->propagationIsStopped(), 'Event propagation has been stopped');
 
         $values = $event->getResult();
-        $this->assertSame(123, $values['key1']);
-        $this->assertSame(456, $values['key2']);
+        $this->assertSame(123, $values['key1'], "Item 'key1' was not unserialized");
+        $this->assertSame(456, $values['key2'], "Item 'key2' was not unserialized");
+        $this->assertArrayNotHasKey('missing', $values, 'Missing item should not be present in the result');
     }
 }
