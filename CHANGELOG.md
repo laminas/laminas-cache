@@ -36,6 +36,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#57](https://github.com/zendframework/zend-cache/pull/57)
+  Memcached: HHVM compatibility and reduced duplicated code
 - [#91](https://github.com/zendframework/zend-cache/pull/91)
   fixed that order of adapter options may cause exception
 
