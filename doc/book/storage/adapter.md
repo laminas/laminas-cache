@@ -551,6 +551,7 @@ Capability | Value
 `ttlPrecision` | 1
 `useRequestTime` | value of `apc.use_request_time` from `php.ini`
 `expiredRead` | `false`
+`lockOnExpire` | 0
 `maxKeyLength` | 5182
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
@@ -632,6 +633,7 @@ Capability | Value
 `ttlPrecision` | 1
 `useRequestTime` | `false`
 `expiredRead` | `true`
+`lockOnExpire` | 0
 `maxKeyLength` | 251
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
@@ -677,6 +679,7 @@ Capability | Value
 `ttlPrecision` | 1
 `useRequestTime` | `false`
 `expiredRead` | `false`
+`lockOnExpire` | 0
 `maxKeyLength` | 255
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
@@ -710,6 +713,7 @@ Capability | Value
 `ttlPrecision` | 1
 `useRequestTime` | `false`
 `expiredRead` | `false`
+`lockOnExpire` | 0
 `maxKeyLength` | 255
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
@@ -760,6 +764,7 @@ Capability | Value
 `ttlPrecision` | 0.05
 `useRequestTime` | `false`
 `expiredRead` | `true`
+`lockOnExpire` | 0
 `maxKeyLength` | 0
 `namespaceIsPrefix` | `false`
 
@@ -797,17 +802,18 @@ This adapter implements the following interfaces:
 ### Capabilities
 
 Capability  Value
-supportedDatatypes  null, boolean, integer, double, string, array
-supportedMetadata   _id
-minTtl  0
-maxTtl  0
-staticTtl   true
-ttlPrecision    1
-useRequestTime  false
-expiredRead false
-maxKeyLength    255
-namespaceIsPrefix   true
-namespaceSeparator  <Option value of namespace_separator>
+`supportedDatatypes` | `null`, `boolean`, `integer`, `double`, `string`, `array`
+`supportedMetadata` | _id
+`minTtl` | 0
+`maxTtl` | 0
+`staticTtl` | `true`
+`ttlPrecision` | 1
+`useRequestTime` | `false`
+`expiredRead` | `false`
+`lockOnExpire` | 0
+`maxKeyLength` | 255
+`namespaceIsPrefix` | `true`
+`namespaceSeparator` | <Option value of namespace_separator>
 
 ### Adapter specific options
 
@@ -850,6 +856,7 @@ Capability | Value
 `ttlPrecision` | 1
 `useRequestTime` | `apc.use_request_time` `php.ini` value.
 `expiredRead` | `false`
+`lockOnExpire` | 0
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
@@ -886,6 +893,7 @@ Capability | Value
 `ttlPrecision` | 1
 `useRequestTime` | `true`
 `expiredRead` | `false`
+`lockOnExpire` | 0
 `maxKeyLength` | 5182
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
@@ -925,6 +933,7 @@ Capability | Value
 `ttlPrecision` | 1
 `useRequestTime` | `false`
 `expiredRead` | `false`
+`lockOnExpire` | if 'zend_datacache.lock_on_expire' is enabled 120 else 0
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | `::`
 
@@ -953,6 +962,7 @@ Capability | Value
 `ttlPrecision` | 1
 `useRequestTime` | `false`
 `expiredRead` | `false`
+`lockOnExpire` | if 'zend_datacache.lock_on_expire' is enabled 120 else 0
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | `::`
 
