@@ -26,7 +26,13 @@ class FilesystemTest extends CommonAdapterTest
     {
         $this->_umask = umask();
 
-        $this->_tmpCacheDir = @tempnam(sys_get_temp_dir(), 'zend_cache_test_');
+        if (getenv('TESTS_ZEND_CACHE_FILESYSTEM_DIR')) {
+            $cacheDir = getenv('TESTS_ZEND_CACHE_FILESYSTEM_DIR');
+        } else {
+            $cacheDir = sys_get_temp_dir();
+        }
+
+        $this->_tmpCacheDir = @tempnam($cacheDir, 'zend_cache_test_');
         if (!$this->_tmpCacheDir) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory-file: {$err['message']}");
