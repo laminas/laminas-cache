@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#79](https://github.com/zendframework/zend-cache/issues/79)
+  Add capability for the "lock-on-expire" feature (úsed by Zend Data Cache)
 
 ### Deprecated
 
