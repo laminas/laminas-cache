@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#95](https://github.com/zendframework/zend-cache/issues/95)
+  don't try to unserialize missing items
 - [#66](https://github.com/zendframework/zend-cache/issues/66)
   fixed Memcached::internalSetItems in PHP-7 by reducing variables by reference
 - [#57](https://github.com/zendframework/zend-cache/pull/57)
