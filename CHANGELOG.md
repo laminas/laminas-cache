@@ -36,6 +36,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#88](https://github.com/zendframework/zend-cache/issues/88)
+  Redis: fixed segfault on storing NULL and fixed supported datatypes capabilities
 - [#95](https://github.com/zendframework/zend-cache/issues/95)
   don't try to unserialize missing items
 - [#66](https://github.com/zendframework/zend-cache/issues/66)
