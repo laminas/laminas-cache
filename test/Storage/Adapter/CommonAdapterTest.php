@@ -828,6 +828,28 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $this->_storage->getItem('key'));
     }
 
+    /**
+     * @link https://github.com/zendframework/zend-cache/issues/66
+     */
+    public function testSetAndIncrementItems()
+    {
+        $this->_storage->setItems([
+            'key1' => 10,
+            'key2' => 11,
+        ]);
+
+        $result = $this->_storage->incrementItems([
+            'key1' => 10,
+            'key2' => 20,
+        ]);
+        ksort($result);
+
+        $this->assertSame([
+            'key1' => 20,
+            'key2' => 31,
+        ], $result);
+    }
+
     public function testIncrementItemsResturnsKeyValuePairsOfWrittenItems()
     {
         $this->assertTrue($this->_storage->setItem('key1', 10));
@@ -873,6 +895,28 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->_storage->decrementItem('key', 5));
         $this->assertEquals(10, $this->_storage->getItem('key'));
+    }
+
+    /**
+     * @link https://github.com/zendframework/zend-cache/issues/66
+     */
+    public function testSetAndDecrementItems()
+    {
+        $this->_storage->setItems([
+            'key1' => 10,
+            'key2' => 11,
+        ]);
+
+        $result = $this->_storage->decrementItems([
+            'key1' => 10,
+            'key2' => 5,
+        ]);
+        ksort($result);
+
+        $this->assertSame([
+            'key1' => 0,
+            'key2' => 6,
+        ], $result);
     }
 
     public function testDecrementItemsReturnsEmptyArrayIfNonWritable()

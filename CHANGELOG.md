@@ -36,6 +36,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#66](https://github.com/zendframework/zend-cache/issues/66)
+  fixed Memcached::internalSetItems in PHP-7 by reducing variables by reference
 - [#57](https://github.com/zendframework/zend-cache/pull/57)
   Memcached: HHVM compatibility and reduced duplicated code
 - [#91](https://github.com/zendframework/zend-cache/pull/91)
