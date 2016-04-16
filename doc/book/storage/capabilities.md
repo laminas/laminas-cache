@@ -183,6 +183,30 @@ class Capabilities
     public function setExpiredRead(stdClass $marker, $flag);
 
     /**
+     * Get "lock-on-expire" support in seconds.
+     *
+     * @return int  0 = Expired items will never be retrieved
+     *             >0 = Time in seconds an expired item could be retrieved
+     *             -1 = Expired items could be retrieved forever
+     */
+    public function getLockOnExpire()
+    {
+        return $this->getCapability('lockOnExpire', 0);
+    }
+
+    /**
+     * Set "lock-on-expire" support in seconds.
+     *
+     * @param  stdClass $marker
+     * @param  int      $timeout
+     * @return Capabilities Fluent interface
+     */
+    public function setLockOnExpire(stdClass $marker, $timeout)
+    {
+        return $this->setCapability($marker, 'lockOnExpire', (int) $timeout);
+    }
+
+    /**
      * Get maximum key lenth
      *
      * @return int -1 means unknown, 0 means infinite
