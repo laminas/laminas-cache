@@ -132,4 +132,37 @@ class AdapterOptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Event::class, $calledArgs[0]);
         $this->assertEquals(['writable' => false],  $calledArgs[0]->getParams()->getArrayCopy());
     }
+
+    public function testSetFromArrayWithoutPrioritizedOptions()
+    {
+        $this->assertSame($this->options, $this->options->setFromArray([
+            'kEy_pattERN' => '/./',
+            'nameSPACE'   => 'foobar',
+        ]));
+        $this->assertSame('/./', $this->options->getKeyPattern());
+        $this->assertSame('foobar', $this->options->getNamespace());
+    }
+
+    public function testSetFromArrayWithPrioritizedOptions()
+    {
+        $options = $this->getMock(AdapterOptions::class, ['setKeyPattern', 'setNamespace', 'setWritable']);
+
+        // set key_pattern and namespace to be a prioritized options
+        $optionsRef = new \ReflectionObject($options);
+        $propRef    = $optionsRef->getProperty('__prioritizedProperties__');
+        $propRef->setAccessible(true);
+        $propRef->setValue($options, ['key_pattern', 'namespace']);
+
+        // expected order of setter be called
+        $options->expects($this->at(0))->method('setKeyPattern')->with($this->equalTo('/./'));
+        $options->expects($this->at(1))->method('setNamespace')->with($this->equalTo('foobar'));
+        $options->expects($this->at(2))->method('setWritable')->with($this->equalTo(false));
+
+        // send unordered options array
+        $this->assertSame($options, $options->setFromArray([
+            'nAmeSpace'   => 'foobar',
+            'WriTAble'    => false,
+            'KEY_paTTern' => '/./',
+        ]));
+    }
 }
