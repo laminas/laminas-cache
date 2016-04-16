@@ -72,31 +72,6 @@ class RedisTest extends CommonAdapterTest
 
     /* Redis */
 
-    public function testRedisCacheStore()
-    {
-        $key = 'singleKey';
-        //assure that there's nothing under key
-        $this->_storage->removeItem($key);
-        $this->assertNull($this->_storage->getItem($key));
-        $this->_storage->setItem($key, serialize(['test', ['one', 'two']]));
-
-        $this->assertCount(2, unserialize($this->_storage->getItem($key)), 'Get item should return array of two elements');
-
-        $expectedVals = [
-            'key1' => 'val1',
-            'key2' => 'val2',
-            'key3' => ['val3', 'val4'],
-        ];
-
-        $this->_storage->setItems($expectedVals);
-
-        $this->assertCount(
-            3,
-            $this->_storage->getItems(array_keys($expectedVals)),
-                'Multiple set/get items didnt save correct amount of rows'
-        );
-    }
-
     public function testRedisSerializer()
     {
         $this->_storage->addPlugin(new \Zend\Cache\Storage\Plugin\Serializer());
