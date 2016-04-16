@@ -59,7 +59,7 @@ class AbstractZendServerTest extends \PHPUnit_Framework_TestCase
         $this->_storage->expects($this->once())
                        ->method('zdcFetch')
                        ->with($this->equalTo('ns' . AbstractZendServer::NAMESPACE_SEPARATOR . 'key'))
-                       ->will($this->returnValue(null));
+                       ->will($this->returnValue(false));
 
         $this->assertNull($this->_storage->getItem('key', $success));
         $this->assertFalse($success);
