@@ -134,4 +134,4 @@ after_success:
   - if [[ $DEPLOY_DOCS == "true" ]]; then echo "Preparing to build and deploy documentation" ; ./zf-mkdoc-theme/deploy.sh ; echo "Completed deploying documentation" ; fi
 
 after_script:
-  - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then ./vendor/bin/coveralls ; fi
+  - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then travis_retry ./vendor/bin/coveralls ; fi
