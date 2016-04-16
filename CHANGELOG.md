@@ -18,7 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#91](https://github.com/zendframework/zend-cache/pull/91)
+  fixed that order of adapter options may cause exception
 
 ## 2.7.0 - 2016-04-12
 
