@@ -38,6 +38,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#76](https://github.com/zendframework/zend-cache/pull/76)
+  ZendServer: fixed return null on missing item
 - [#88](https://github.com/zendframework/zend-cache/issues/88)
   Redis: fixed segfault on storing NULL and fixed supported datatypes capabilities
 - [#95](https://github.com/zendframework/zend-cache/issues/95)
