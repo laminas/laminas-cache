@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#35](https://github.com/zendframework/zend-cache/pull/35)
+  Added benchmarks using PHPBench
 
 ### Deprecated
 
