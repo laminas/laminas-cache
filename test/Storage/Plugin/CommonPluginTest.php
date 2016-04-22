@@ -9,6 +9,9 @@
 
 namespace ZendTest\Cache\Storage\Plugin;
 
+use Zend\ServiceManager\ServiceManager;
+use Zend\Cache\Storage\PluginManager;
+
 /**
  * PHPUnit test case
  */
@@ -25,6 +28,23 @@ abstract class CommonPluginTest extends \PHPUnit_Framework_TestCase
      * @var \Zend\Cache\Storage\Plugin\PluginInterface
      */
     protected $_plugin;
+
+    /**
+     * A data provider for common storage plugin names
+     */
+    abstract public function getCommonPluginNamesProvider();
+
+    /**
+     * @dataProvider getCommonPluginNamesProvider
+     */
+    public function testPluginManagerWithCommonNames($commonPluginName)
+    {
+        $pluginManager = new PluginManager(new ServiceManager);
+        $this->assertTrue(
+            $pluginManager->has($commonPluginName),
+            "Storage plugin name '{$commonPluginName}' not found in storage plugin manager"
+        );
+    }
 
     public function testOptionObjectAvailable()
     {

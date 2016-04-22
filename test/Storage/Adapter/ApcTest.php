@@ -58,4 +58,12 @@ class ApcTest extends CommonAdapterTest
 
         parent::tearDown();
     }
+
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['apc'],
+            ['Apc'],
+        ];
+    }
 }

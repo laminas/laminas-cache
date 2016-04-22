@@ -39,6 +39,16 @@ class OptimizeByFactorTest extends CommonPluginTest
         $this->_plugin->setOptions($this->_options);
     }
 
+    public function getCommonPluginNamesProvider()
+    {
+        return [
+            ['optimize_by_factor'],
+            ['optimizebyfactor'],
+            ['OptimizeByFactor'],
+            ['optimizeByFactor'],
+        ];
+    }
+
     public function testAddPlugin()
     {
         $this->_adapter->addPlugin($this->_plugin);

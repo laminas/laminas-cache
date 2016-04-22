@@ -42,4 +42,12 @@ class SessionTest extends CommonAdapterTest
         $_SESSION = [];
         SessionContainer::setDefaultManager(null);
     }
+
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['session'],
+            ['Session'],
+        ];
+    }
 }

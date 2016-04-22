@@ -66,6 +66,14 @@ class ClassCacheTest extends CommonPatternTest
         parent::tearDown();
     }
 
+    public function getCommonPatternNamesProvider()
+    {
+        return [
+            ['class'],
+            ['Class'],
+        ];
+    }
+
     public function testCallEnabledCacheOutputByDefault()
     {
         $this->_testCall(

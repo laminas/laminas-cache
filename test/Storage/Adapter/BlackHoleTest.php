@@ -10,8 +10,10 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use Zend\Cache\Storage\AdapterPluginManager;
 use Zend\Cache\Storage\Adapter\BlackHole;
 use Zend\Cache\StorageFactory;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * PHPUnit test case
@@ -36,6 +38,31 @@ class BlackHoleTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->storage = StorageFactory::adapterFactory('BlackHole');
+    }
+
+    /**
+     * A data provider for common storage adapter names
+     */
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['black_hole'],
+            ['blackhole'],
+            ['blackHole'],
+            ['BlackHole'],
+        ];
+    }
+
+    /**
+     * @dataProvider getCommonAdapterNamesProvider
+     */
+    public function testAdapterPluginManagerWithCommonNames($commonAdapterName)
+    {
+        $pluginManager = new AdapterPluginManager(new ServiceManager);
+        $this->assertTrue(
+            $pluginManager->has($commonAdapterName),
+            "Storage adapter name '{$commonAdapterName}' not found in storage adapter plugin manager"
+        );
     }
 
     public function testGetOptions()
