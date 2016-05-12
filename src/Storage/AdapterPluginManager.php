@@ -58,6 +58,7 @@ class AdapterPluginManager extends AbstractPluginManager
         'Session'          => Adapter\Session::class,
         'xcache'           => Adapter\XCache::class,
         'xCache'           => Adapter\XCache::class,
+        'Xcache'           => Adapter\XCache::class,
         'XCache'           => Adapter\XCache::class,
         'win_cache'        => Adapter\WinCache::class,
         'wincache'         => Adapter\WinCache::class,
