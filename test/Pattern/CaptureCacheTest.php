@@ -82,6 +82,14 @@ class CaptureCacheTest extends CommonPatternTest
         }
     }
 
+    public function getCommonPatternNamesProvider()
+    {
+        return [
+            ['capture'],
+            ['Capture'],
+        ];
+    }
+
     public function testSetThrowsLogicExceptionOnMissingPublicDir()
     {
         $captureCache = new Cache\Pattern\CaptureCache();

@@ -9,6 +9,9 @@
 
 namespace ZendTest\Cache\Pattern;
 
+use Zend\ServiceManager\ServiceManager;
+use Zend\Cache\PatternPluginManager;
+
 /**
  * @group      Zend_Cache
  * @covers Zend\Cache\Pattern\PatternOptions<extended>
@@ -32,6 +35,23 @@ abstract class CommonPatternTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         unset($this->_pattern);
+    }
+
+    /**
+     * A data provider for common pattern names
+     */
+    abstract public function getCommonPatternNamesProvider();
+
+    /**
+     * @dataProvider getCommonPatternNamesProvider
+     */
+    public function testPatternPluginManagerWithCommonNames($commonPatternName)
+    {
+        $pluginManager = new PatternPluginManager(new ServiceManager);
+        $this->assertTrue(
+            $pluginManager->has($commonPatternName),
+            "Pattern name '{$commonPatternName}' not found in PatternPluginManager"
+        );
     }
 
     public function testOptionNamesValid()

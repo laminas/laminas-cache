@@ -74,6 +74,14 @@ class ObjectCacheTest extends CommonPatternTest
         parent::tearDown();
     }
 
+    public function getCommonPatternNamesProvider()
+    {
+        return [
+            ['object'],
+            ['Object'],
+        ];
+    }
+
     public function testCallEnabledCacheOutputByDefault()
     {
         $this->_testCall(

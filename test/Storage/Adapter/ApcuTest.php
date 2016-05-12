@@ -68,4 +68,14 @@ class ApcuTest extends CommonAdapterTest
 
         parent::tearDown();
     }
+
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['apcu'],
+            ['Apcu'],
+            ['ApcU'],
+            ['APCu'],
+        ];
+    }
 }

@@ -54,4 +54,14 @@ class WinCacheTest extends CommonAdapterTest
 
         parent::tearDown();
     }
+
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['win_cache'],
+            ['wincache'],
+            ['WinCache'],
+            ['winCache'],
+        ];
+    }
 }

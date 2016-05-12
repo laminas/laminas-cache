@@ -74,4 +74,14 @@ class XCacheTest extends CommonAdapterTest
 
         parent::tearDown();
     }
+
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['xcache'],
+            ['XCache'],
+            ['Xcache'],
+            ['xCache'],
+        ];
+    }
 }

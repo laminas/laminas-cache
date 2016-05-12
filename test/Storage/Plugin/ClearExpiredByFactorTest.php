@@ -41,6 +41,16 @@ class ClearExpiredByFactorTest extends CommonPluginTest
         parent::setUp();
     }
 
+    public function getCommonPluginNamesProvider()
+    {
+        return [
+            ['clear_expired_by_factor'],
+            ['clearexpiredbyfactor'],
+            ['ClearExpiredByFactor'],
+            ['clearExpiredByFactor'],
+        ];
+    }
+
     public function testAddPlugin()
     {
         $this->_adapter->addPlugin($this->_plugin);

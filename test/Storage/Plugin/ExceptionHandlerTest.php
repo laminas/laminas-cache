@@ -39,6 +39,16 @@ class ExceptionHandlerTest extends CommonPluginTest
         parent::setUp();
     }
 
+    public function getCommonPluginNamesProvider()
+    {
+        return [
+            ['exception_handler'],
+            ['exceptionhandler'],
+            ['ExceptionHandler'],
+            ['exceptionHandler'],
+        ];
+    }
+
     public function testAddPlugin()
     {
         $this->_adapter->addPlugin($this->_plugin);

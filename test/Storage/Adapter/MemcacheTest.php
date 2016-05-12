@@ -53,6 +53,14 @@ class MemcacheTest extends CommonAdapterTest
         parent::setUp();
     }
 
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['memcache'],
+            ['Memcache'],
+        ];
+    }
+
     /**
      * Data provider to test valid server info
      *

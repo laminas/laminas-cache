@@ -70,7 +70,13 @@ class RedisTest extends CommonAdapterTest
         parent::tearDown();
     }
 
-    /* Redis */
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['redis'],
+            ['Redis'],
+        ];
+    }
 
     public function testRedisSerializer()
     {

@@ -82,6 +82,14 @@ class CallbackCacheTest extends CommonPatternTest
         parent::tearDown();
     }
 
+    public function getCommonPatternNamesProvider()
+    {
+        return [
+            ['callback'],
+            ['Callback'],
+        ];
+    }
+
     public function testCallEnabledCacheOutputByDefault()
     {
         $this->_testCall(

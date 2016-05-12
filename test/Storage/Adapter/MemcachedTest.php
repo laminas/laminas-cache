@@ -48,6 +48,14 @@ class MemcachedTest extends CommonAdapterTest
         parent::setUp();
     }
 
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['memcached'],
+            ['Memcached'],
+        ];
+    }
+
     /**
      * @deprecated
      */
