@@ -86,6 +86,14 @@ class FilesystemTest extends CommonAdapterTest
         }
     }
 
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['filesystem'],
+            ['Filesystem'],
+        ];
+    }
+
     public function testNormalizeCacheDir()
     {
         $cacheDir = $cacheDirExpected = realpath(sys_get_temp_dir());

@@ -51,6 +51,16 @@ class MongoDbTest extends CommonAdapterTest
         parent::tearDown();
     }
 
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['mongo_db'],
+            ['mongodb'],
+            ['MongoDb'],
+            ['MongoDB'],
+        ];
+    }
+
     public function testSetOptionsNotMongoDbOptions()
     {
         $this->_storage->setOptions([

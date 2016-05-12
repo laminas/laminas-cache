@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use Zend\Cache\Storage\AdapterPluginManager;
 use Zend\Cache\Storage\AvailableSpaceCapableInterface;
 use Zend\Cache\Storage\IterableInterface;
 use Zend\Cache\Storage\IteratorInterface;
@@ -20,6 +21,7 @@ use Zend\Cache\Storage\FlushableInterface;
 use Zend\Cache\Storage\OptimizableInterface;
 use Zend\Cache\Storage\TaggableInterface;
 use Zend\Cache\Storage\TotalSpaceCapableInterface;
+use Zend\ServiceManager\ServiceManager;
 use Zend\Stdlib\ErrorHandler;
 
 /**
@@ -74,6 +76,23 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
             ErrorHandler::stop();
             $this->fail('ErrorHandler not stopped');
         }
+    }
+
+    /**
+     * A data provider for common storage adapter names
+     */
+    abstract public function getCommonAdapterNamesProvider();
+
+    /**
+     * @dataProvider getCommonAdapterNamesProvider
+     */
+    public function testAdapterPluginManagerWithCommonNames($commonAdapterName)
+    {
+        $pluginManager = new AdapterPluginManager(new ServiceManager);
+        $this->assertTrue(
+            $pluginManager->has($commonAdapterName),
+            "Storage adapter name '{$commonAdapterName}' not found in storage adapter plugin manager"
+        );
     }
 
     public function testOptionNamesValid()

@@ -38,6 +38,14 @@ class SerializerTest extends CommonPluginTest
         $this->_plugin->setOptions($this->_options);
     }
 
+    public function getCommonPluginNamesProvider()
+    {
+        return [
+            ['serializer'],
+            ['Serializer'],
+        ];
+    }
+
     public function testAddPlugin()
     {
         $this->_adapter->addPlugin($this->_plugin, 100);

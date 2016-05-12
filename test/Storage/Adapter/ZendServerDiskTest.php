@@ -46,4 +46,14 @@ class ZendServerDiskTest extends CommonAdapterTest
 
         parent::tearDown();
     }
+
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['zend_server_disk'],
+            ['zendserverdisk'],
+            ['ZendServerDisk'],
+            ['zendServerDisk'],
+        ];
+    }
 }

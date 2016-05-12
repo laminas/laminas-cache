@@ -62,4 +62,13 @@ abstract class AbstractDbaTest extends CommonAdapterTest
 
         parent::tearDown();
     }
+
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['dba'],
+            ['Dba'],
+            ['DBA'],
+        ];
+    }
 }
