@@ -22,7 +22,7 @@ class MongoDbOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!getenv('TESTS_ZEND_CACHE_MONGODB_ENABLED')) {
+        if (getenv('TESTS_ZEND_CACHE_MONGODB_ENABLED') != 'true') {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MONGODB_ENABLED to run this test');
         }
 
