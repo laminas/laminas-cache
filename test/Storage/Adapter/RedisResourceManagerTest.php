@@ -102,7 +102,7 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidPersistentId()
     {
-        if (!getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
+        if (getenv('TESTS_ZEND_CACHE_REDIS_ENABLED') != 'true') {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
         }
 
@@ -128,7 +128,7 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotValidPersistentIdOptionName()
     {
-        if (!getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
+        if (getenv('TESTS_ZEND_CACHE_REDIS_ENABLED') != 'true') {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
         }
 
@@ -156,7 +156,7 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMajorVersion()
     {
-        if (!getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
+        if (getenv('TESTS_ZEND_CACHE_REDIS_ENABLED') != 'true') {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
         }
 
