@@ -77,19 +77,28 @@ matrix:
         - EXECUTE_TEST_COVERALLS=true
         - PECL_INSTALL_APCU='apcu'
         - PECL_INSTALL_APCU_BC='apcu_bc-beta'
+
+        # FIXME:
+        # there is no memcached extension available for PHP-7
+        # the version provided by travis is not yet ready and buggy
+        - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
     - php: 7
       env:
         - SERVICE_MANAGER_VERSION="^2.7.5"
         - EVENT_MANAGER_VERSION="^2.6.2"
         - PECL_INSTALL_APCU='apcu'
         - PECL_INSTALL_APCU_BC='apcu_bc-beta'
+
+        # FIXME:
+        # there is no memcached extension available for PHP-7
+        # the version provided by travis is not yet ready and buggy
+        - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
     - php: hhvm
     - php: hhvm
       env:
         - SERVICE_MANAGER_VERSION="^2.7.5"
         - EVENT_MANAGER_VERSION="^2.6.2"
   allow_failures:
-    - php: 7
     - php: hhvm
 
 notifications:
