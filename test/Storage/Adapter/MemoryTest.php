@@ -27,6 +27,14 @@ class MemoryTest extends CommonAdapterTest
         parent::setUp();
     }
 
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['memory'],
+            ['Memory'],
+        ];
+    }
+
     public function testThrowOutOfSpaceException()
     {
         $this->_options->setMemoryLimit(memory_get_usage(true) - 8);

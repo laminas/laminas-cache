@@ -36,6 +36,16 @@ class IgnoreUserAbortTest extends CommonPluginTest
         $this->_plugin->setOptions($this->_options);
     }
 
+    public function getCommonPluginNamesProvider()
+    {
+        return [
+            ['ignore_user_abort'],
+            ['ignoreuserabort'],
+            ['IgnoreUserAbort'],
+            ['ignoreUserAbort'],
+        ];
+    }
+
     public function testAddPlugin()
     {
         $this->_adapter->addPlugin($this->_plugin);

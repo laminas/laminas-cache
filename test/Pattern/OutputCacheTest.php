@@ -63,6 +63,14 @@ class OutputCacheTest extends CommonPatternTest
         parent::tearDown();
     }
 
+    public function getCommonPatternNamesProvider()
+    {
+        return [
+            ['output'],
+            ['Output'],
+        ];
+    }
+
     public function testStartEndCacheMiss()
     {
         $output = 'foobar';

@@ -51,4 +51,16 @@ class ZendServerShmTest extends CommonAdapterTest
 
         parent::tearDown();
     }
+
+    public function getCommonAdapterNamesProvider()
+    {
+        return [
+            ['zend_server_shm'],
+            ['zendservershm'],
+            ['ZendServerShm'],
+            ['ZendServerSHM'],
+            ['zendServerShm'],
+            ['zendServerSHM'],
+        ];
+    }
 }
