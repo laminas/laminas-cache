@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.7.1 - TBD
+## 2.7.1 - 2016-05-12
 
 ### Added
 
@@ -31,6 +31,9 @@ All notable changes to this project will be documented in this file, in reverse 
   Memcached: HHVM compatibility and reduced duplicated code
 - [#91](https://github.com/zendframework/zend-cache/pull/91)
   fixed that order of adapter options may cause exception
+- [#98](https://github.com/zendframework/zend-cache/pull/98) updates the plugin
+  manager alias list to ensure all adapter name permutations commonly used are
+  accepted.
 
 ## 2.7.0 - 2016-04-12
 
