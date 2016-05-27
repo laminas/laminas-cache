@@ -39,11 +39,12 @@ env:
     - TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH=true
     - TESTS_ZEND_CACHE_XCACHE_ADMIN_USER=travis
     - TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS=test
+    - APCU_PECL_VERSION="apcu"
     - SITE_URL="https://zendframework.github.io/zend-cache"
     - GH_USER_NAME="Matthew Weier O'Phinney"
     - GH_USER_EMAIL="matthew@weierophinney.net"
     - GH_REF="github.com/zendframework/zend-cache.git"
-    - secure="ZYYlfFWTde5MCn6twsm/+s+mx4bLEaVFFG+tuaeiz7nCx+z495D6FxruzBbY1zheX9rNo9qReDo0Tyfn2wrUH8SJYbR9iKDqB95GPDDPW+I23Mw3Uuddr8XqbtabTJVqEQg6iAu7IIQG4TvFFmdq/g26jWim8Cngg/5zZh4Q2GuLSjIKRJBpLe7mSTjQVqaApS/a8wmvPJiSoqxWmY8Botc88ZXMmkRDPQoqEdZOeS4i029cGMXUnzGj7Vl7qwfol6Yj/R441Hd84Vt8P8BOdRyW0tjmllXLXJUYFKCcP5fEqIujbU68FwJMidCPzBcXv2N0klW43ViVwdJD6gBgZStwOyENGeEw1VcbZ6JReMa68F1mtqLhBhZtF8WRUI8+TYMYmLPGMVTcets4P3nIB18uX1CittwGDD2y2OL8MDvuIuaSQFoj/PdUb+BC/DvvmtPGnF6MLTAUjqNlxYbmzopufDEtivWHsqeyxHZj0L0HD5KkMslD9wnngfi+lcQ5e3iFQe/H5vQKE0BfooukxErIXk00cwwMoMjFY4v95CS0BKFhA4HMclKpGEA94CH4STxwyD2Nz/z6iGPqkZuzqDLOKhLr2FsY7bFbvEdNu57G3PGahtYJtc31lcnwKf2t1ALGcG9LS0/ezJSzqx659hWL0B5qgHjCNDnAyKJcNxM="
+    - secure: "ZYYlfFWTde5MCn6twsm/+s+mx4bLEaVFFG+tuaeiz7nCx+z495D6FxruzBbY1zheX9rNo9qReDo0Tyfn2wrUH8SJYbR9iKDqB95GPDDPW+I23Mw3Uuddr8XqbtabTJVqEQg6iAu7IIQG4TvFFmdq/g26jWim8Cngg/5zZh4Q2GuLSjIKRJBpLe7mSTjQVqaApS/a8wmvPJiSoqxWmY8Botc88ZXMmkRDPQoqEdZOeS4i029cGMXUnzGj7Vl7qwfol6Yj/R441Hd84Vt8P8BOdRyW0tjmllXLXJUYFKCcP5fEqIujbU68FwJMidCPzBcXv2N0klW43ViVwdJD6gBgZStwOyENGeEw1VcbZ6JReMa68F1mtqLhBhZtF8WRUI8+TYMYmLPGMVTcets4P3nIB18uX1CittwGDD2y2OL8MDvuIuaSQFoj/PdUb+BC/DvvmtPGnF6MLTAUjqNlxYbmzopufDEtivWHsqeyxHZj0L0HD5KkMslD9wnngfi+lcQ5e3iFQe/H5vQKE0BfooukxErIXk00cwwMoMjFY4v95CS0BKFhA4HMclKpGEA94CH4STxwyD2Nz/z6iGPqkZuzqDLOKhLr2FsY7bFbvEdNu57G3PGahtYJtc31lcnwKf2t1ALGcG9LS0/ezJSzqx659hWL0B5qgHjCNDnAyKJcNxM="
 
 matrix:
   fast_finish: true
@@ -51,59 +52,67 @@ matrix:
     - php: 5.6
       env:
         - DEPS=lowest
+        - APCU_PECL_VERSION="apcu-4.0.11"
     - php: 5.6
       env:
         - DEPS=locked
         - TEST_COVERAGE=true
-        - PECL_INSTALL_APCU='apcu-4.0.8'
-        - INSTALL_XCACHE=true
+        - APCU_PECL_VERSION="apcu-4.0.11"
         - DEPLOY_DOCS="$(if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then echo -n 'true' ; else echo -n 'false' ; fi)"
         - PATH="$HOME/.local/bin:$PATH"
     - php: 5.6
       env:
         - DEPS=latest
-        - PECL_INSTALL_APCU='apcu-4.0.8'
-        - INSTALL_XCACHE=true
+        - APCU_PECL_VERSION="apcu-4.0.11"
     - php: 7
       env:
         - DEPS=lowest
-        - PECL_INSTALL_APCU='apcu'
-        - PECL_INSTALL_APCU_BC='apcu_bc-beta'
+        - INSTALL_APCU_BC=true
 
-        # FIXME:
-        # there is no memcached extension available for PHP-7
-        # the version provided by travis is not yet ready and buggy
+        # TODO:
+        # re-enable these extentions as soon as they are available and stable on php 7
+        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
+        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
+        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
     - php: 7
       env:
         - DEPS=locked
         - CHECK_CS=true
-        - PECL_INSTALL_APCU='apcu'
         - INSTALL_APCU_BC=true
 
-        # FIXME:
-        # there is no memcached extension available for PHP-7
-        # the version provided by travis is not yet ready and buggy
+        # TODO:
+        # re-enable these extentions as soon as they are available and stable on php 7
+        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
+        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
+        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
     - php: 7
       env:
         - DEPS=latest
-        - PECL_INSTALL_APCU='apcu'
-        - PECL_INSTALL_APCU_BC='apcu_bc-beta'
+        - INSTALL_APCU_BC=true
 
-        # FIXME:
-        # there is no memcached extension available for PHP-7
-        # the version provided by travis is not yet ready and buggy
+        # TODO:
+        # re-enable these extentions as soon as they are available and stable on php 7
+        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
+        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
+        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
     - php: hhvm
       env:
         - DEPS=lowest
+        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
+        - TESTS_ZEND_CACHE_APCU_ENABLED=false
     - php: hhvm
       env:
         - DEPS=locked
+        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
+        - TESTS_ZEND_CACHE_APCU_ENABLED=false
     - php: hhvm
       env:
         - DEPS=latest
+        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
+        - TESTS_ZEND_CACHE_APCU_ENABLED=false
   allow_failures:
     - php: hhvm
 
@@ -112,34 +121,32 @@ notifications:
   email: false
 
 before_install:
-  - pwd=$(pwd) ;
   - travis_retry composer self-update
   - if [[ $TRAVIS_PHP_VERSION != "hhvm" && $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini ; fi
 
 install:
-  - if [[ $INSTALL_XCACHE == 'true' ]]; then
-        git clone https://github.com/lighttpd/xcache.git && cd xcache
-        && git checkout $(git rev-list --tags --max-count=1)
-        && phpize && ./configure --enable-xcache && make install
-        && phpenv config-add $pwd/.ci/xcache.ini
-        || return 0 ;
-        cd $pwd ;
+  # prevent PECL from enabling the extension by default, see https://pear.php.net/bugs/bug.php?id=21007
+  - if [[ $TESTS_ZEND_CACHE_APCU_ENABLED == 'true' ]]; then
+        echo "yes\nno\n" | pecl install $APCU_PECL_VERSION
+        && sed -i 's/extension="apcu.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
     fi
-  - if [[ $PECL_INSTALL_APCU != '' ]]; then echo "yes\nno\n" | pecl install $PECL_INSTALL_APCU || return 0 ; fi
-
-  # see https://pear.php.net/bugs/bug.php?id=21007
-  # pecl install adds the "extension=*.so" directive on top of php.ini which results in wrong extension order
-  # -> Attach another ini file loading the extension kind of solves the issue.
-  #    The first extension loading still results in a warning but it doesn't break the test
-  - if [[ $PECL_INSTALL_APCU_BC != '' ]]; then pecl install $PECL_INSTALL_APCU_BC && phpenv config-add .ci/apcu_bc.ini || return 0 ; fi
 
   - if [[ $INSTALL_APCU_BC == 'true' ]]; then
-        git clone https://github.com/krakjoe/apcu-bc.git && cd apci-bc
-        && git checkout $(git rev-list --tags --max-count=1)
-        && phpize && ./configure && make && make install
-        && phpenv config-add $pwd/.ci/apcu_bc.ini
-        || return 0 ;
-        cd $pwd ;
+        git clone https://github.com/krakjoe/apcu-bc.git
+        && (
+            cd apcu-bc
+            && git checkout $(git rev-list --tags --max-count=1)
+            && phpize && ./configure && make && make install
+        );
+    fi
+
+  - if [[ $TESTS_ZEND_CACHE_XCACHE_ENABLED == 'true' ]]; then
+        git clone https://github.com/lighttpd/xcache.git
+        && (
+            cd xcache
+            && git checkout $(git rev-list --tags --max-count=1)
+            && phpize && ./configure --enable-xcache && make install
+        );
     fi
 
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
@@ -149,10 +156,32 @@ install:
   - composer show
 
 before_script:
-  - phpenv config-add .ci/php.ini || return 0
+  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' ]]; then
+        if [[ $TESTS_ZEND_CACHE_APCU_ENABLED == 'true' && ! $INSTALL_APCU_BC ]]; then
+            phpenv config-add .ci/apcu.ini ;
+        fi ;
+        if [[ $INSTALL_APCU_BC == 'true' ]]; then
+            phpenv config-add .ci/apcu_bc.ini ;
+        fi ;
+        if [[ $TESTS_ZEND_CACHE_REDIS_ENABLED == 'true' ]]; then
+            phpenv config-add .ci/redis.ini ;
+        fi ;
+        if [[ $TESTS_ZEND_CACHE_MEMCACHE_ENABLED == 'true' ]]; then
+            phpenv config-add .ci/memcache.ini ;
+        fi ;
+        if [[ $TESTS_ZEND_CACHE_MEMCACHED_ENABLED == 'true' ]]; then
+            phpenv config-add .ci/memcached.ini ;
+        fi ;
+        if [[ $TESTS_ZEND_CACHE_MONGODB_ENABLED == 'true' ]]; then
+            phpenv config-add .ci/mongo.ini ;
+        fi ;
+        if [[ $TESTS_ZEND_CACHE_XCACHE_ENABLED == 'true' ]]; then
+            phpenv config-add .ci/xcache.ini ;
+        fi ;
+    fi
 
 script:
-  - if [[ $TEST_COVERAGE == 'true' ]]; then composer test-coverage ; else composer test ; fi
+  - if [[ $TEST_COVERAGE == 'true' ]]; then composer test-coverage -- --verbose ; else composer test -- --verbose ; fi
   - if [[ $CHECK_CS == 'true' ]]; then composer cs-check ; fi
   - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then travis_retry curl -sSL https://raw.githubusercontent.com/zendframework/zf-mkdoc-theme/master/theme-installer.sh | bash ; fi
 
