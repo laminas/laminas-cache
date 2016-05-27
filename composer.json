@@ -22,7 +22,7 @@
         "zendframework/zend-serializer": "^2.6",
         "zendframework/zend-session": "^2.6.2",
         "fabpot/php-cs-fixer": "1.7.*",
-        "phpunit/phpunit": "^4.5",
+        "phpunit/phpunit": "^4.8",
         "phpbench/phpbench": "^0.10.0"
     },
     "suggest": {
@@ -65,7 +65,7 @@
         "upload-coverage": "coveralls -v",
         "cs-check": "php-cs-fixer --version && php-cs-fixer fix -v --diff --dry-run",
         "cs-fix": "php-cs-fixer fix -v",
-        "test": "phpunit",
-        "test-coverage": "phpunit --coverage-clover clover.xml"
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     }
 }
