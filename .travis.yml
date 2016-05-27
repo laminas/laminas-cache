@@ -79,7 +79,7 @@ matrix:
         - DEPS=locked
         - CHECK_CS=true
         - PECL_INSTALL_APCU='apcu'
-        - PECL_INSTALL_APCU_BC='apcu_bc-beta'
+        - INSTALL_APCU_BC=true
 
         # FIXME:
         # there is no memcached extension available for PHP-7
@@ -132,6 +132,15 @@ install:
   # -> Attach another ini file loading the extension kind of solves the issue.
   #    The first extension loading still results in a warning but it doesn't break the test
   - if [[ $PECL_INSTALL_APCU_BC != '' ]]; then pecl install $PECL_INSTALL_APCU_BC && phpenv config-add .ci/apcu_bc.ini || return 0 ; fi
+
+  - if [[ $INSTALL_APCU_BC == 'true' ]]; then
+        git clone https://github.com/krakjoe/apcu-bc.git && cd apci-bc
+        && git checkout $(git rev-list --tags --max-count=1)
+        && phpize && ./configure && make && make install
+        && phpenv config-add $pwd/.ci/apcu_bc.ini
+        || return 0 ;
+        cd $pwd ;
+    fi
 
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
