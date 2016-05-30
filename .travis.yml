@@ -68,10 +68,8 @@ matrix:
         - DEPS=lowest
         - APCU_PECL_VERSION="apcu-5.1.2"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
-        - INSTALL_APCU_BC=true
 
-        # TODO:
-        # re-enable these extentions as soon as they are available and stable on php 7
+        # TODO: re-enable these extentions as soon as they are available and stable on php 7
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
         - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
@@ -82,10 +80,8 @@ matrix:
         - CHECK_CS=true
         - APCU_PECL_VERSION="apcu-5.1.3"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
-        - INSTALL_APCU_BC=true
 
-        # TODO:
-        # re-enable these extentions as soon as they are available and stable on php 7
+        # TODO: re-enable these extentions as soon as they are available and stable on php 7
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
         - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
@@ -95,10 +91,8 @@ matrix:
         - DEPS=latest
         - APCU_PECL_VERSION="apcu"            # PECL will download the latest stable version available
         - APCU_BC_PECL_VERSION="apcu_bc-beta" # TODO: change this as soon there is a stable version available
-        - INSTALL_APCU_BC=true
 
-        # TODO:
-        # re-enable these extentions as soon as they are available and stable on php 7
+        # TODO: re-enable these extentions as soon as they are available and stable on php 7
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
         - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
@@ -131,12 +125,12 @@ before_install:
 
 install:
   # prevent PECL from enabling the extension by default, see https://pear.php.net/bugs/bug.php?id=21007
-  - if [[ $TESTS_ZEND_CACHE_APCU_ENABLED == 'true' ]]; then
+  - if [[ $APCU_PECL_VERSION != '' ]]; then
         echo "yes\nno\n" | pecl install $APCU_PECL_VERSION
         && sed -i 's/extension="apcu.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
     fi
 
-  - if [[ $INSTALL_APCU_BC == 'true' ]]; then
+  - if [[ $APCU_BC_PECL_VERSION != '' ]]; then
         pecl install $APCU_BC_PECL_VERSION
         && sed -i 's/extension="apc.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
     fi
@@ -158,10 +152,9 @@ install:
 
 before_script:
   - if [[ $TRAVIS_PHP_VERSION != 'hhvm' ]]; then
-        if [[ $TESTS_ZEND_CACHE_APCU_ENABLED == 'true' && ! $INSTALL_APCU_BC ]]; then
+        if [[ $APCU_PECL_VERSION != '' && $APCU_BC_PECL_VERSION == '' ]]; then
             phpenv config-add .ci/apcu.ini ;
-        fi ;
-        if [[ $INSTALL_APCU_BC == 'true' ]]; then
+        elif [[ $APCU_BC_PECL_VERSION != '' ]]; then
             phpenv config-add .ci/apcu_bc.ini ;
         fi ;
         if [[ $TESTS_ZEND_CACHE_REDIS_ENABLED == 'true' ]]; then
@@ -182,7 +175,7 @@ before_script:
     fi
 
 script:
-  - if [[ $TEST_COVERAGE == 'true' ]]; then composer test-coverage -- --verbose ; else composer test -- --verbose ; fi
+  - if [[ $TEST_COVERAGE == 'true' ]]; then composer run-script test-coverage --timeout=400 -- --verbose ; else composer run-script test --timeout=300 -- --verbose ; fi
   - if [[ $CHECK_CS == 'true' ]]; then composer cs-check ; fi
   - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then travis_retry curl -sSL https://raw.githubusercontent.com/zendframework/zf-mkdoc-theme/master/theme-installer.sh | bash ; fi
 
