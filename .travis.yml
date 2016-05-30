@@ -121,7 +121,6 @@ notifications:
 
 before_install:
   - if [[ $TRAVIS_PHP_VERSION != "hhvm" && $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini ; fi
-  - travis_retry composer self-update
 
 install:
   # prevent PECL from enabling the extension by default, see https://pear.php.net/bugs/bug.php?id=21007
