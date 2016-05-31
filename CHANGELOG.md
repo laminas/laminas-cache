@@ -11,7 +11,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Deprecated
 
-- Nothing.
+- [#101](https://github.com/zendframework/zend-cache/pull/101)
+  bump minimum php version to 5.6, as 5.5 goes EOL
 
 ### Removed
 
