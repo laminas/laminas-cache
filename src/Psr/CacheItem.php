@@ -10,7 +10,7 @@
 namespace Zend\Cache\Psr;
 
 use DateInterval;
-use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Psr\Cache\CacheItemInterface;
@@ -61,10 +61,10 @@ final class CacheItem implements CacheItemInterface
      */
     public function __construct($key, $value, $isHit)
     {
-        $this->key = $key;
+        $this->key   = $key;
         $this->value = $isHit ? $value : null;
         $this->isHit = $isHit;
-        $this->tz = new DateTimeZone('UTC');
+        $this->utc   = new DateTimeZone('UTC');
     }
 
     /**
@@ -142,9 +142,9 @@ final class CacheItem implements CacheItemInterface
     public function expiresAfter($time)
     {
         if ($time instanceof DateInterval) {
-            $end = new DateTime('now', $this->tz);
-            $end->add($time);
-            $this->ttl = $end->getTimestamp() - time();
+            $now = new DateTimeImmutable('now', $this->utc);
+            $end = $now->add($time);
+            $this->ttl = $end->getTimestamp() - $now->getTimestamp();
         } elseif (is_int($time) || $time === null) {
             $this->ttl = $time;
         } else {
