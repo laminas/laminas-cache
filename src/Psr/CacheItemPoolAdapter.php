@@ -337,7 +337,14 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
 
         if ($capabilities->getUseRequestTime()) {
             throw new CacheException(sprintf(
-                'Cannot use %s with useRequestTime = true',
+                'The capability "use-request-time" of storage %s violates PSR-6',
+                get_class($storage)
+            ));
+        }
+
+        if ($capabilities->getLockOnExpire()) {
+            throw new CacheException(sprintf(
+                'The capability "lock-on-expire" of storage %s violates PSR-6',
                 get_class($storage)
             ));
         }
