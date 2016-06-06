@@ -12,6 +12,7 @@ namespace ZendTest\Cache\Psr;
 use Cache\IntegrationTests\CachePoolTest;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\StorageFactory;
+use Zend\Cache\Exception;
 
 class ZendServerDiskIntegrationTest extends CachePoolTest
 {
@@ -47,12 +48,11 @@ class ZendServerDiskIntegrationTest extends CachePoolTest
 
     public function createCachePool()
     {
-        $storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'xcache',
-                'options' => [],
-            ],
-        ]);
-        return new CacheItemPoolAdapter($storage);
+        try {
+            $storage = StorageFactory::adapterFactory('zendserverdisk');
+            return new CacheItemPoolAdapter($storage);
+        } catch (Exception\ExtensionNotLoadedException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
     }
 }

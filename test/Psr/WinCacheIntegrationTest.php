@@ -13,6 +13,7 @@ use Cache\IntegrationTests\CachePoolTest;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\WinCache;
 use Zend\Cache\StorageFactory;
+use Zend\Cache\Exception;
 
 /**
  * @requires extension wincache
@@ -61,12 +62,11 @@ class WinCacheIntegrationTest extends CachePoolTest
 
     public function createCachePool()
     {
-        $this->storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'xcache',
-                'options' => [],
-            ],
-        ]);
-        return new CacheItemPoolAdapter($this->storage);
+        try {
+            $storage = StorageFactory::adapterFactory('wincache');
+            return new CacheItemPoolAdapter($storage);
+        } catch (Exception\ExtensionNotLoadedException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
     }
 }

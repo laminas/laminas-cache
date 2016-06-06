@@ -12,6 +12,7 @@ namespace ZendTest\Cache\Psr;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\StorageFactory;
+use Zend\Cache\Exception;
 
 class DbaIntegrationTest extends TestCase
 {
@@ -20,13 +21,11 @@ class DbaIntegrationTest extends TestCase
      */
     public function testAdapterNotSupported()
     {
-        $storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'dba',
-                'options' => [],
-            ],
-        ]);
-
-        new CacheItemPoolAdapter($storage);
+        try {
+            $storage = StorageFactory::adapterFactory('dba');
+            return new CacheItemPoolAdapter($storage);
+        } catch (Exception\ExtensionNotLoadedException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
     }
 }

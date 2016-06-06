@@ -20,13 +20,7 @@ class MemoryIntegrationTest extends TestCase
      */
     public function testAdapterNotSupported()
     {
-        $storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'memory',
-                'options' => [],
-            ],
-        ]);
-
+        $storage = StorageFactory::adapterFactory('memory');
         new CacheItemPoolAdapter($storage);
     }
 }

@@ -12,6 +12,7 @@ namespace ZendTest\Cache\Psr;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\StorageFactory;
+use Zend\Cache\Exception;
 
 /**
  * @requires extension xcache
@@ -24,13 +25,11 @@ class XCacheIntegrationTest extends TestCase
      */
     public function testAdapterNotSupported()
     {
-        $storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'xcache',
-                'options' => [],
-            ],
-        ]);
-
-        new CacheItemPoolAdapter($storage);
+        try {
+            $storage = StorageFactory::adapterFactory('xcache');
+            return new CacheItemPoolAdapter($storage);
+        } catch (Exception\ExtensionNotLoadedException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
     }
 }

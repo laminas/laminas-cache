@@ -20,13 +20,7 @@ class BlackHoleIntegrationTest extends TestCase
      */
     public function testAdapterNotSupported()
     {
-        $storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'blackhole',
-                'options' => [],
-            ],
-        ]);
-
+        $storage = StorageFactory::adapterFactory('blackhole');
         new CacheItemPoolAdapter($storage);
     }
 }

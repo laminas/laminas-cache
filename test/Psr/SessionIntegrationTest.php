@@ -20,13 +20,7 @@ class SessionIntegrationTest extends TestCase
      */
     public function testAdapterNotSupported()
     {
-        $storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'session',
-                'options' => [],
-            ],
-        ]);
-
+        $storage = StorageFactory::adapterfactory('session');
         new CacheItemPoolAdapter($storage);
     }
 }

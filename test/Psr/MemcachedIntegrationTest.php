@@ -13,6 +13,7 @@ use Cache\IntegrationTests\CachePoolTest;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\Memcached;
 use Zend\Cache\StorageFactory;
+use Zend\Cache\Exception;
 
 /**
  * @require extension memcached
@@ -64,16 +65,11 @@ class MemcachedIntegrationTest extends CachePoolTest
             $options['servers'] = [[$host]];
         }
 
-        $this->storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'memcached',
-                'options' => $options
-            ],
-        ]);
-
-        $options = $this->storage->getOptions();
-        $servers = $options->getServers();
-
-        return new CacheItemPoolAdapter($this->storage);
+        try {
+            $storage = StorageFactory::adapterFactory('memcached', $options);
+            return new CacheItemPoolAdapter($storage);
+        } catch (Exception\ExtensionNotLoadedException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
     }
 }

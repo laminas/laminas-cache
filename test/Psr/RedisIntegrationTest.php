@@ -13,6 +13,7 @@ use Cache\IntegrationTests\CachePoolTest;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\Redis;
 use Zend\Cache\StorageFactory;
+use Zend\Cache\Exception;
 
 class RedisIntegrationTest extends CachePoolTest
 {
@@ -69,12 +70,11 @@ class RedisIntegrationTest extends CachePoolTest
             $options['password'] = getenv('TESTS_ZEND_CACHE_REDIS_PASSWORD');
         }
 
-        $this->storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'redis',
-                'options' => $options,
-            ],
-        ]);
-        return new CacheItemPoolAdapter($this->storage);
+        try {
+            $storage = StorageFactory::adapterFactory('redis', $options);
+            return new CacheItemPoolAdapter($storage);
+        } catch (Exception\ExtensionNotLoadedException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
     }
 }

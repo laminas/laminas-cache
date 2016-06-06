@@ -20,13 +20,7 @@ class FilesystemIntegrationTest extends TestCase
      */
     public function testAdapterNotSupported()
     {
-        $storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'filesystem',
-                'options' => [],
-            ],
-        ]);
-
+        $storage = StorageFactory::adapterFactory('filesystem');
         new CacheItemPoolAdapter($storage);
     }
 }

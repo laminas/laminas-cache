@@ -13,6 +13,7 @@ use Cache\IntegrationTests\CachePoolTest;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\MongoDb;
 use Zend\Cache\StorageFactory;
+use Zend\Cache\Exception;
 
 class MongoDbIntegrationTest extends CachePoolTest
 {
@@ -54,18 +55,15 @@ class MongoDbIntegrationTest extends CachePoolTest
 
     public function createCachePool()
     {
-        $options = [
-            'server'     => getenv('TESTS_ZEND_CACHE_MONGODB_CONNECTSTRING'),
-            'database'   => getenv('TESTS_ZEND_CACHE_MONGODB_DATABASE'),
-            'collection' => getenv('TESTS_ZEND_CACHE_MONGODB_COLLECTION'),
-        ];
-        $this->storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'mongodb',
-                'options' => $options,
-            ],
-        ]);
-
-        return new CacheItemPoolAdapter($this->storage);
+        try {
+            $storage = StorageFactory::adapterFactory('mongodb', [
+                'server'     => getenv('TESTS_ZEND_CACHE_MONGODB_CONNECTSTRING'),
+                'database'   => getenv('TESTS_ZEND_CACHE_MONGODB_DATABASE'),
+                'collection' => getenv('TESTS_ZEND_CACHE_MONGODB_COLLECTION'),
+            ]);
+            return new CacheItemPoolAdapter($storage);
+        } catch (Exception\ExtensionNotLoadedException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
     }
 }

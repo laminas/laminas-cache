@@ -12,6 +12,7 @@ namespace ZendTest\Cache\Psr;
 use Cache\IntegrationTests\CachePoolTest;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\StorageFactory;
+use Zend\Cache\Exception;
 
 /**
  * @requires extension apcu
@@ -68,13 +69,11 @@ class ApcIntegrationTest extends CachePoolTest
 
     public function createCachePool()
     {
-        $storage = StorageFactory::factory([
-            'adapter' => [
-                'name'    => 'apc',
-                'options' => [],
-            ],
-        ]);
-
-        return new CacheItemPoolAdapter($storage);
+        try {
+            $storage = StorageFactory::adapterFactory('apc');
+            return new CacheItemPoolAdapter($storage);
+        } catch (Exception\ExtensionNotLoadedException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
     }
 }
