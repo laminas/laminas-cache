@@ -13,23 +13,35 @@ use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 /**
  * @requires extension xcache
  */
 class XCacheIntegrationTest extends TestCase
 {
+
     /**
-     * XCache has useRequestTime = true
+     * XCache is using request time based TTL handling which violates PSR-6
+     *
      * @expectedException \Zend\Cache\Psr\CacheException
      */
     public function testAdapterNotSupported()
     {
         try {
-            $storage = StorageFactory::adapterFactory('xcache');
+            $storage = StorageFactory::adapterFactory('xcache', [
+                'admin_auth' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH') ?: false,
+                'admin_user' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_USER') ?: '',
+                'admin_pass' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS') ?: '',
+            ]);
             return new CacheItemPoolAdapter($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
+        } catch (ServiceNotCreatedException $e) {
+            if ($e->getPrevious() instanceof Exception\ExtensionNotLoadedException) {
+                $this->markTestSkipped($e->getMessage());
+            }
+            throw $e;
         }
     }
 }

@@ -14,6 +14,7 @@ use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\Memcache;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 /**
  * @require extension memcache
@@ -31,10 +32,6 @@ class MemcacheIntegrationTest extends CachePoolTest
     {
         if (!getenv('TESTS_ZEND_CACHE_MEMCACHE_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MEMCACHE_ENABLED to run this test');
-        }
-
-        if (version_compare('2.0.0', phpversion('memcache')) > 0) {
-            $this->markTestSkipped("Missing ext/memcache version >= 2.0.0");
         }
 
         // set non-UTC timezone
@@ -74,6 +71,11 @@ class MemcacheIntegrationTest extends CachePoolTest
             return new CacheItemPoolAdapter($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
+        } catch (ServiceNotCreatedException $e) {
+            if ($e->getPrevious() instanceof Exception\ExtensionNotLoadedException) {
+                $this->markTestSkipped($e->getMessage());
+            }
+            throw $e;
         }
     }
 }

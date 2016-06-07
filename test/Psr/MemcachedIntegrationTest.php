@@ -14,6 +14,7 @@ use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\Memcached;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 /**
  * @require extension memcached
@@ -70,6 +71,11 @@ class MemcachedIntegrationTest extends CachePoolTest
             return new CacheItemPoolAdapter($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
+        } catch (ServiceNotCreatedException $e) {
+            if ($e->getPrevious() instanceof Exception\ExtensionNotLoadedException) {
+                $this->markTestSkipped($e->getMessage());
+            }
+            throw $e;
         }
     }
 }

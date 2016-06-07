@@ -13,6 +13,7 @@ use Cache\IntegrationTests\CachePoolTest;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 class ZendServerDiskIntegrationTest extends CachePoolTest
 {
@@ -22,10 +23,6 @@ class ZendServerDiskIntegrationTest extends CachePoolTest
     {
         if (!getenv('TESTS_ZEND_CACHE_ZEND_SERVER_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_ZEND_SERVER_ENABLED to run this test');
-        }
-
-        if (!function_exists('zend_disk_cache_store') || PHP_SAPI == 'cli') {
-            $this->markTestSkipped("Missing 'zend_disk_cache_*' functions or running from SAPI 'cli'");
         }
 
         // set non-UTC timezone
@@ -53,6 +50,11 @@ class ZendServerDiskIntegrationTest extends CachePoolTest
             return new CacheItemPoolAdapter($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
+        } catch (ServiceNotCreatedException $e) {
+            if ($e->getPrevious() instanceof Exception\ExtensionNotLoadedException) {
+                $this->markTestSkipped($e->getMessage());
+            }
+            throw $e;
         }
     }
 }

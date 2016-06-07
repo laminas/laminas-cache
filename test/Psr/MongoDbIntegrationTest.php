@@ -14,6 +14,7 @@ use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\MongoDb;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 class MongoDbIntegrationTest extends CachePoolTest
 {
@@ -28,11 +29,6 @@ class MongoDbIntegrationTest extends CachePoolTest
     {
         if (!getenv('TESTS_ZEND_CACHE_MONGODB_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MONGODB_ENABLED to run this test');
-        }
-
-        if (!extension_loaded('mongo') || !class_exists('\Mongo') || !class_exists('\MongoClient')) {
-            // Allow tests to run if Mongo extension is loaded, or we have a polyfill in place
-            $this->markTestSkipped("Mongo extension is not loaded");
         }
 
         // set non-UTC timezone
@@ -64,6 +60,11 @@ class MongoDbIntegrationTest extends CachePoolTest
             return new CacheItemPoolAdapter($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
+        } catch (ServiceNotCreatedException $e) {
+            if ($e->getPrevious() instanceof Exception\ExtensionNotLoadedException) {
+                $this->markTestSkipped($e->getMessage());
+            }
+            throw $e;
         }
     }
 }

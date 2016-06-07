@@ -16,6 +16,8 @@ use Zend\Cache\StorageFactory;
 class SessionIntegrationTest extends TestCase
 {
     /**
+     * The session adapter doesn't support TTL
+     *
      * @expectedException \Zend\Cache\Psr\CacheException
      */
     public function testAdapterNotSupported()

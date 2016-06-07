@@ -14,6 +14,7 @@ use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\Redis;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 class RedisIntegrationTest extends CachePoolTest
 {
@@ -28,10 +29,6 @@ class RedisIntegrationTest extends CachePoolTest
     {
         if (!getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
-        }
-
-        if (!extension_loaded('redis')) {
-            $this->markTestSkipped("Redis extension is not loaded");
         }
 
         // set non-UTC timezone
@@ -75,6 +72,11 @@ class RedisIntegrationTest extends CachePoolTest
             return new CacheItemPoolAdapter($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
+        } catch (ServiceNotCreatedException $e) {
+            if ($e->getPrevious() instanceof Exception\ExtensionNotLoadedException) {
+                $this->markTestSkipped($e->getMessage());
+            }
+            throw $e;
         }
     }
 }

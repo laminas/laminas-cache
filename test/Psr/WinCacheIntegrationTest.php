@@ -14,6 +14,7 @@ use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\WinCache;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 /**
  * @requires extension wincache
@@ -31,15 +32,6 @@ class WinCacheIntegrationTest extends CachePoolTest
     {
         if (!getenv('TESTS_ZEND_CACHE_WINCACHE_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_WINCACHE_ENABLED to run this test');
-        }
-
-        $enabled = ini_get('wincache.ucenabled');
-        if (PHP_SAPI == 'cli') {
-            $enabled = $enabled && (bool) ini_get('wincache.enablecli');
-        }
-
-        if (!$enabled) {
-            $this->markTestSkipped("WinCache is disabled - see 'wincache.ucenabled' and 'wincache.enablecli'");
         }
 
         // set non-UTC timezone
@@ -67,6 +59,11 @@ class WinCacheIntegrationTest extends CachePoolTest
             return new CacheItemPoolAdapter($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
+        } catch (ServiceNotCreatedException $e) {
+            if ($e->getPrevious() instanceof Exception\ExtensionNotLoadedException) {
+                $this->markTestSkipped($e->getMessage());
+            }
+            throw $e;
         }
     }
 }

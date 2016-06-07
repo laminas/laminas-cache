@@ -16,6 +16,8 @@ use Zend\Cache\StorageFactory;
 class MemoryIntegrationTest extends TestCase
 {
     /**
+     * The memory adapter calculates the TTL on reading which violates PSR-6
+     *
      * @expectedException \Zend\Cache\Psr\CacheException
      */
     public function testAdapterNotSupported()
