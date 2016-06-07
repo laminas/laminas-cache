@@ -18,6 +18,8 @@ use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 class DbaIntegrationTest extends TestCase
 {
     /**
+     * The DBA adapter doesn't support TTL
+     *
      * @expectedException \Zend\Cache\Psr\CacheException
      */
     public function testAdapterNotSupported()
