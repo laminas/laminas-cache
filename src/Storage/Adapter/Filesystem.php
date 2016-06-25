@@ -110,7 +110,14 @@ class Filesystem extends AbstractAdapter implements
                     $clearFolder($pathname);
                     rmdir($pathname);
                 } else {
+                    // remove the file by ignoring errors if the file doesn't exist afterwards
+                    // to fix a possible race condition if onother process removed the faile already.
+                    ErrorHandler::start();
                     unlink($pathname);
+                    $err = ErrorHandler::stop();
+                    if ($err && file_exists($pathname)) {
+                        ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
+                    }
                 }
             }
         };
@@ -140,7 +147,7 @@ class Filesystem extends AbstractAdapter implements
         $namespace = $options->getNamespace();
         $prefix    = ($namespace === '') ? '' : $namespace . $options->getNamespaceSeparator();
 
-        $flags = GlobIterator::SKIP_DOTS | GlobIterator::CURRENT_AS_FILEINFO;
+        $flags = GlobIterator::SKIP_DOTS | GlobIterator::CURRENT_AS_PATHNAME;
         $path  = $options->getCacheDir()
             . str_repeat(DIRECTORY_SEPARATOR . $prefix . '*', $options->getDirLevel())
             . DIRECTORY_SEPARATOR . $prefix . '*.dat';
@@ -149,15 +156,30 @@ class Filesystem extends AbstractAdapter implements
         $ttl  = $options->getTtl();
 
         ErrorHandler::start();
-        foreach ($glob as $entry) {
-            $mtime = $entry->getMTime();
-            if ($time >= $mtime + $ttl) {
-                $pathname = $entry->getPathname();
+        foreach ($glob as $pathname) {
+            // get last modification time of the file but ignore if the file is missing
+            // to fix a possible race condition if onother process removed the faile already.
+            ErrorHandler::start();
+            $mtime = filemtime($pathname);
+            $err = ErrorHandler::stop();
+            if ($err && file_exists($pathname)) {
+                ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
+            } elseif ($time >= $mtime + $ttl) {
+                // remove the file by ignoring errors if the file doesn't exist afterwards
+                // to fix a possible race condition if onother process removed the faile already.
+                ErrorHandler::start();
                 unlink($pathname);
-
-                $tagPathname = substr($pathname, 0, -4) . '.tag';
-                if (file_exists($tagPathname)) {
+                $err = ErrorHandler::stop();
+                if ($err && file_exists($pathname)) {
+                    ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
+                } else {
+                    $tagPathname = substr($pathname, 0, -4) . '.tag';
+                    ErrorHandler::start();
                     unlink($tagPathname);
+                    $err = ErrorHandler::stop();
+                    if ($err && file_exists($pathname)) {
+                        ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
+                    }
                 }
             }
         }
@@ -202,11 +224,24 @@ class Filesystem extends AbstractAdapter implements
 
         ErrorHandler::start();
         foreach ($glob as $pathname) {
+            // remove the file by ignoring errors if the file doesn't exist afterwards
+            // to fix a possible race condition if onother process removed the faile already.
+            ErrorHandler::start();
             unlink($pathname);
+            $err = ErrorHandler::stop();
+            if ($err && file_exists($pathname)) {
+                ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
+            }
         }
-        $error = ErrorHandler::stop();
-        if ($error) {
-            throw new Exception\RuntimeException("Failed to remove files of '{$path}'", 0, $error);
+        $err = ErrorHandler::stop();
+        if ($err) {
+            $result = false;
+            return $this->triggerException(
+                __FUNCTION__,
+                new ArrayObject(),
+                $result,
+                new Exception\RuntimeException("Failed to clear items of namespace '{$namespace}'", 0, $err)
+            );
         }
 
         return true;
@@ -240,11 +275,24 @@ class Filesystem extends AbstractAdapter implements
 
         ErrorHandler::start();
         foreach ($glob as $pathname) {
+            // remove the file by ignoring errors if the file doesn't exist afterwards
+            // to fix a possible race condition if onother process removed the faile already.
+            ErrorHandler::start();
             unlink($pathname);
+            $err = ErrorHandler::stop();
+            if ($err && file_exists($pathname)) {
+                ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
+            }
         }
-        $error = ErrorHandler::stop();
-        if ($error) {
-            throw new Exception\RuntimeException("Failed to remove files of '{$path}'", 0, $error);
+        $err = ErrorHandler::stop();
+        if ($err) {
+            $result = false;
+            return $this->triggerException(
+                __FUNCTION__,
+                new ArrayObject(),
+                $result,
+                new Exception\RuntimeException("Failed to remove files of '{$path}'", 0, $err)
+            );
         }
 
         return true;
