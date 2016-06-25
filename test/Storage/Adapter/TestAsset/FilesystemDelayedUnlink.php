@@ -4,10 +4,10 @@ namespace Zend\Cache\Storage\Adapter;
 
 function unlink($path, $context = null)
 {
-    usleep(50000);
-    if ($context) {
-        return \unlink($path, $context);
+    global $unlinkDelay;
+    if (isset($unlinkDelay) && $unlinkDelay > 0) {
+        usleep($unlinkDelay);
     }
 
-    return \unlink($path);
+    return $context ? \unlink($path, $context) : \unlink($path);
 }

@@ -41,7 +41,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#102](https://github.com/zendframework/zend-cache/pull/102)
+  filesystem: fixes a lot of possible race conditions
 
 ## 2.7.1 - 2016-05-12
 
