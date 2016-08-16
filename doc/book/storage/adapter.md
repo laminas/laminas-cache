@@ -999,9 +999,9 @@ if (! $success) {
 use Zend\Cache\StorageFactory;
 
 // Instantiate the cache instance using a namespace for the same type of items
-$cache = StorageFactory::factory(array(
+$cache = StorageFactory::factory([
     'adapter' => [
-        'name'    => 'filesystem'
+        'name' => 'filesystem',
         // With a namespace, we can indicate the same type of items,
         // so we can simply use the database id as the cache key
         'options' => [
@@ -1011,8 +1011,8 @@ $cache = StorageFactory::factory(array(
     'plugins' => [
         // Don't throw exceptions on cache errors
         'exception_handler' => [
-            'throw_exceptions' => false
-        ),
+            'throw_exceptions' => false,
+        ],
         // We store database rows on filesystem so we need to serialize them
         'Serializer',
     ],
