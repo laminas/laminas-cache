@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#111](https://github.com/zendframework/zend-cache/pull/111)
+  Fixed typo in storage adapter doc
 - [#102](https://github.com/zendframework/zend-cache/pull/102)
   filesystem: fixes a lot of possible race conditions
 
