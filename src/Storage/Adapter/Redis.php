@@ -553,7 +553,7 @@ class Redis extends AbstractAdapter implements
         $metadata = [];
 
         try {
-            $redisVersion = $this->resourceManager->getMajorVersion($this->resourceId);
+            $redisVersion = $this->resourceManager->getVersion($this->resourceId);
 
             // redis >= 2.8
             // The command 'pttl' returns -2 if the item does not exist
@@ -565,8 +565,8 @@ class Redis extends AbstractAdapter implements
                 }
                 $metadata['ttl'] = ($pttl == -1) ? null : $pttl / 1000;
 
-            // redis >= 2.6
-            // The command 'pttl' returns -1 if the item does not exist or the item as no associated expire
+            // redis >= 2.6, < 2.8
+            // The command 'pttl' returns -1 if the item does not exist or the item has no associated expire
             } elseif (version_compare($redisVersion, '2.6', '>=')) {
                 $pttl = $redis->pttl($this->namespacePrefix . $normalizedKey);
                 if ($pttl <= -1) {
@@ -578,7 +578,7 @@ class Redis extends AbstractAdapter implements
                     $metadata['ttl'] = $pttl / 1000;
                 }
 
-            // redis >= 2
+            // redis >= 2, < 2.6
             // The command 'pttl' is not supported but 'ttl'
             // The command 'ttl' returns 0 if the item does not exist same as if the item is going to be expired
             // NOTE: In case of ttl=0 we return false because the item is going to be expired in a very near future

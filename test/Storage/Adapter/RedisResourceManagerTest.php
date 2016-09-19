@@ -151,9 +151,28 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Redis', $this->resourceManager->getResource($resourceId));
     }
 
-    /**
-     * Test with 'persistend_id' instead of 'persistent_id'
-     */
+    public function testGetVersion()
+    {
+        if (getenv('TESTS_ZEND_CACHE_REDIS_ENABLED') != 'true') {
+            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
+        }
+
+        if (!extension_loaded('redis')) {
+            $this->markTestSkipped("Redis extension is not loaded");
+        }
+
+        $resourceId = __FUNCTION__;
+        $resource   = [
+            'server' => [
+                'host' => getenv('TESTS_ZEND_CACHE_REDIS_HOST') ?: 'localhost',
+                'port' => getenv('TESTS_ZEND_CACHE_REDIS_PORT') ?: 6379,
+            ],
+        ];
+        $this->resourceManager->setResource($resourceId, $resource);
+
+        $this->assertRegExp('/^\d+\.\d+\.\d+/', $this->resourceManager->getVersion($resourceId));
+    }
+
     public function testGetMajorVersion()
     {
         if (getenv('TESTS_ZEND_CACHE_REDIS_ENABLED') != 'true') {

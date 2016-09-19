@@ -41,16 +41,31 @@ class RedisResourceManager
     /**
      * Get redis server version
      *
-     * @param string $id
+     * @param string $resourceId
+     * @return string
+     * @throws Exception\RuntimeException
+     */
+    public function getVersion($resourceId)
+    {
+        // check resource id and initialize the resource
+        $this->getResource($resourceId);
+
+        return $this->resources[$resourceId]['version'];
+    }
+
+    /**
+     * Get redis major server version
+     *
+     * @param string $resourceId
      * @return int
      * @throws Exception\RuntimeException
      */
-    public function getMajorVersion($id)
+    public function getMajorVersion($resourceId)
     {
         // check resource id and initialize the resource
-        $this->getResource($id);
+        $this->getResource($resourceId);
 
-        return (int) $this->resources[$id]['version'];
+        return (int) $this->resources[$resourceId]['version'];
     }
 
     /**
