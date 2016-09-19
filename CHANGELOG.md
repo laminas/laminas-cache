@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#107](https://github.com/zendframework/zend-cache/issues/107)
+  fixed redis server version test in Redis::internalGetMetadata()
 - [#111](https://github.com/zendframework/zend-cache/pull/111)
   Fixed typo in storage adapter doc
 - [#102](https://github.com/zendframework/zend-cache/pull/102)
