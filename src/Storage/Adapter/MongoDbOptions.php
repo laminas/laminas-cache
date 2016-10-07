@@ -45,7 +45,7 @@ class MongoDbOptions extends AdapterOptions
      *
      * @param  string $namespaceSeparator
      *
-     * @return self
+     * @return MongoDbOptions Provides a fluent interface
      */
     public function setNamespaceSeparator($namespaceSeparator)
     {
@@ -75,7 +75,7 @@ class MongoDbOptions extends AdapterOptions
      *
      * @param null|MongoDbResourceManager $resourceManager
      *
-     * @return self
+     * @return MongoDbOptions Provides a fluent interface
      */
     public function setResourceManager(MongoDbResourceManager $resourceManager = null)
     {
@@ -113,7 +113,7 @@ class MongoDbOptions extends AdapterOptions
      *
      * @param string $resourceId
      *
-     * @return self
+     * @return MongoDbOptions Provides a fluent interface
      */
     public function setResourceId($resourceId)
     {
@@ -132,7 +132,8 @@ class MongoDbOptions extends AdapterOptions
      * Set the mongo DB server
      *
      * @param string $server
-     * @return self
+     *
+     * @return MongoDbOptions Provides a fluent interface
      */
     public function setServer($server)
     {
@@ -140,24 +141,52 @@ class MongoDbOptions extends AdapterOptions
         return $this;
     }
 
+    /**
+     *
+     *
+     * @param array $connectionOptions
+     *
+     * @return MongoDbOptions Provides a fluent interface
+     */
     public function setConnectionOptions(array $connectionOptions)
     {
         $this->getResourceManager()->setConnectionOptions($this->getResourceId(), $connectionOptions);
         return $this;
     }
 
+    /**
+     *
+     *
+     * @param array $driverOptions
+    MongoDbOptions
+     * @return MongoDbOptions Provides a fluent interface
+     */
     public function setDriverOptions(array $driverOptions)
     {
         $this->getResourceManager()->setDriverOptions($this->getResourceId(), $driverOptions);
         return $this;
     }
 
+    /**
+     *
+     *
+     * @param string $database
+     *
+     * @return MongoDbOptions Provides a fluent interface
+     */
     public function setDatabase($database)
     {
         $this->getResourceManager()->setDatabase($this->getResourceId(), $database);
         return $this;
     }
 
+    /**
+     *
+     *
+     * @param string $collection
+     *
+     * @return MongoDbOptions Provides a fluent interface
+     */
     public function setCollection($collection)
     {
         $this->getResourceManager()->setCollection($this->getResourceId(), $collection);

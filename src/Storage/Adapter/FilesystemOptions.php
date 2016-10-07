@@ -119,7 +119,7 @@ class FilesystemOptions extends AdapterOptions
      * Set cache dir
      *
      * @param  string $cacheDir
-     * @return FilesystemOptions
+     * @return FilesystemOptions Provides a fluent interface
      * @throws Exception\InvalidArgumentException
      */
     public function setCacheDir($cacheDir)
@@ -167,7 +167,7 @@ class FilesystemOptions extends AdapterOptions
      * Set clear stat cache
      *
      * @param  bool $clearStatCache
-     * @return FilesystemOptions
+     * @return FilesystemOptions Provides a fluent interface
      */
     public function setClearStatCache($clearStatCache)
     {
@@ -191,7 +191,7 @@ class FilesystemOptions extends AdapterOptions
      * Set dir level
      *
      * @param  int $dirLevel
-     * @return FilesystemOptions
+     * @return FilesystemOptions Provides a fluent interface
      * @throws Exception\InvalidArgumentException
      */
     public function setDirLevel($dirLevel)
@@ -221,7 +221,7 @@ class FilesystemOptions extends AdapterOptions
      * Set permission to create directories on unix systems
      *
      * @param false|string|int $dirPermission FALSE to disable explicit permission or an octal number
-     * @return FilesystemOptions
+     * @return FilesystemOptions Provides a fluent interface
      * @see setUmask
      * @see setFilePermission
      * @link http://php.net/manual/function.chmod.php
@@ -265,7 +265,7 @@ class FilesystemOptions extends AdapterOptions
      * Set file locking
      *
      * @param  bool $fileLocking
-     * @return FilesystemOptions
+     * @return FilesystemOptions Provides a fluent interface
      */
     public function setFileLocking($fileLocking)
     {
@@ -289,7 +289,7 @@ class FilesystemOptions extends AdapterOptions
      * Set permission to create files on unix systems
      *
      * @param false|string|int $filePermission FALSE to disable explicit permission or an octal number
-     * @return FilesystemOptions
+     * @return FilesystemOptions Provides a fluent interface
      * @see setUmask
      * @see setDirPermission
      * @link http://php.net/manual/function.chmod.php
@@ -337,7 +337,7 @@ class FilesystemOptions extends AdapterOptions
      * Set namespace separator
      *
      * @param  string $namespaceSeparator
-     * @return FilesystemOptions
+     * @return FilesystemOptions Provides a fluent interface
      */
     public function setNamespaceSeparator($namespaceSeparator)
     {
@@ -361,7 +361,7 @@ class FilesystemOptions extends AdapterOptions
      * Set no atime
      *
      * @param  bool $noAtime
-     * @return FilesystemOptions
+     * @return FilesystemOptions Provides a fluent interface
      */
     public function setNoAtime($noAtime)
     {
