@@ -41,6 +41,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#113](https://github.com/zendframework/zend-cache/pull/113)
+  Travis: Moved coverage reporting to latest env
 - [#114](https://github.com/zendframework/zend-cache/pull/114)
   Travis: removed fast_finish flag
 - [#107](https://github.com/zendframework/zend-cache/issues/107)
