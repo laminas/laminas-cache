@@ -118,7 +118,7 @@ class RedisResourceManager
      * Gets a redis resource
      *
      * @param string $id
-     * @return RedisResourceManager
+     * @return RedisResource
      * @throws Exception\RuntimeException
      */
     public function getResource($id)
