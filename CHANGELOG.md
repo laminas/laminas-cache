@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#114](https://github.com/zendframework/zend-cache/pull/114)
+  Travis: removed fast_finish flag
 - [#107](https://github.com/zendframework/zend-cache/issues/107)
   fixed redis server version test in Redis::internalGetMetadata()
 - [#111](https://github.com/zendframework/zend-cache/pull/111)
