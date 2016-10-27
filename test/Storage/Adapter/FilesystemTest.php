@@ -610,5 +610,4 @@ class FilesystemTest extends CommonAdapterTest
         $this->_options->setTagSuffix('.cache');
         $this->assertSame('.cache', $this->_options->getTagSuffix());
     }
-
 }

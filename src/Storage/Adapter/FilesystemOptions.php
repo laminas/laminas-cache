@@ -512,6 +512,4 @@ class FilesystemOptions extends AdapterOptions
 
         return $this;
     }
-
-
 }
