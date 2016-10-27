@@ -155,7 +155,7 @@ class Filesystem extends AbstractAdapter implements
         $flags = GlobIterator::SKIP_DOTS | GlobIterator::CURRENT_AS_PATHNAME;
         $path  = $options->getCacheDir()
             . str_repeat(DIRECTORY_SEPARATOR . $prefix . '*', $options->getDirLevel())
-            . DIRECTORY_SEPARATOR . $prefix . '*.dat';
+            . DIRECTORY_SEPARATOR . $prefix . '*.'.$this->getOptions()->getSuffix();
         $glob = new GlobIterator($path, $flags);
         $time = time();
         $ttl  = $options->getTtl();
@@ -178,7 +178,7 @@ class Filesystem extends AbstractAdapter implements
                 if ($err && file_exists($pathname)) {
                     ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
                 } else {
-                    $tagPathname = substr($pathname, 0, -4) . '.tag';
+                    $tagPathname = substr($pathname, 0, -4) . '.'.$this->getOptions()->getTagSuffix();
                     ErrorHandler::start();
                     unlink($tagPathname);
                     $err = ErrorHandler::stop();
@@ -328,11 +328,11 @@ class Filesystem extends AbstractAdapter implements
         $filespec = $this->getFileSpec($key);
 
         if (! $tags) {
-            $this->unlink($filespec . '.tag');
+            $this->unlink($filespec . '.'.$this->getOptions()->getTagSuffix());
             return true;
         }
 
-        $this->putFileContent($filespec . '.tag', implode("\n", $tags));
+        $this->putFileContent($filespec . '.'.$this->getOptions()->getTagSuffix(), implode("\n", $tags));
         return true;
     }
 
@@ -351,8 +351,8 @@ class Filesystem extends AbstractAdapter implements
 
         $filespec = $this->getFileSpec($key);
         $tags     = [];
-        if (file_exists($filespec . '.tag')) {
-            $tags = explode("\n", $this->getFileContent($filespec . '.tag'));
+        if (file_exists($filespec . '.'.$this->getOptions()->getTagSuffix())) {
+            $tags = explode("\n", $this->getFileContent($filespec . '.'.$this->getOptions()->getTagSuffix()));
         }
 
         return $tags;
@@ -382,7 +382,7 @@ class Filesystem extends AbstractAdapter implements
         $flags = GlobIterator::SKIP_DOTS | GlobIterator::CURRENT_AS_PATHNAME;
         $path  = $options->getCacheDir()
             . str_repeat(DIRECTORY_SEPARATOR . $prefix . '*', $options->getDirLevel())
-            . DIRECTORY_SEPARATOR . $prefix . '*.tag';
+            . DIRECTORY_SEPARATOR . $prefix . '*.'.$this->getOptions()->getTagSuffix();
         $glob = new GlobIterator($path, $flags);
 
         foreach ($glob as $pathname) {
@@ -407,7 +407,7 @@ class Filesystem extends AbstractAdapter implements
             if ($rem) {
                 unlink($pathname);
 
-                $datPathname = substr($pathname, 0, -4) . '.dat';
+                $datPathname = substr($pathname, 0, -4) . '.'.$this->getOptions()->getSuffix();
                 if (file_exists($datPathname)) {
                     unlink($datPathname);
                 }
@@ -431,7 +431,7 @@ class Filesystem extends AbstractAdapter implements
         $prefix    = ($namespace === '') ? '' : $namespace . $options->getNamespaceSeparator();
         $path      = $options->getCacheDir()
             . str_repeat(DIRECTORY_SEPARATOR . $prefix . '*', $options->getDirLevel())
-            . DIRECTORY_SEPARATOR . $prefix . '*.dat';
+            . DIRECTORY_SEPARATOR . $prefix . '*.'.$this->getOptions()->getSuffix();
         return new FilesystemIterator($this, $path, $prefix);
     }
 
@@ -588,11 +588,11 @@ class Filesystem extends AbstractAdapter implements
 
         try {
             $filespec = $this->getFileSpec($normalizedKey);
-            $data     = $this->getFileContent($filespec . '.dat');
+            $data     = $this->getFileContent($filespec . '.'.$this->getOptions()->getSuffix());
 
             // use filemtime + filesize as CAS token
             if (func_num_args() > 2) {
-                $casToken = filemtime($filespec . '.dat') . filesize($filespec . '.dat');
+                $casToken = filemtime($filespec . '.'.$this->getOptions()->getSuffix()) . filesize($filespec . '.'.$this->getOptions()->getSuffix());
             }
             $success  = true;
             return $data;
@@ -626,7 +626,7 @@ class Filesystem extends AbstractAdapter implements
                 }
 
                 $filespec = $this->getFileSpec($key);
-                $data     = $this->getFileContent($filespec . '.dat', $nonBlocking, $wouldblock);
+                $data     = $this->getFileContent($filespec . '.'.$this->getOptions()->getSuffix(), $nonBlocking, $wouldblock);
                 if ($nonBlocking && $wouldblock) {
                     continue;
                 } else {
@@ -694,7 +694,7 @@ class Filesystem extends AbstractAdapter implements
      */
     protected function internalHasItem(& $normalizedKey)
     {
-        $file = $this->getFileSpec($normalizedKey) . '.dat';
+        $file = $this->getFileSpec($normalizedKey) . '.' . $this->getOptions()->getSuffix();
         if (! file_exists($file)) {
             return false;
         }
@@ -763,7 +763,7 @@ class Filesystem extends AbstractAdapter implements
 
         $options  = $this->getOptions();
         $filespec = $this->getFileSpec($normalizedKey);
-        $file     = $filespec . '.dat';
+        $file     = $filespec . '.'.$this->getOptions()->getSuffix();
 
         $metadata = [
             'filespec' => $filespec,
@@ -795,7 +795,7 @@ class Filesystem extends AbstractAdapter implements
 
         foreach ($normalizedKeys as $normalizedKey) {
             $filespec = $this->getFileSpec($normalizedKey);
-            $file     = $filespec . '.dat';
+            $file     = $filespec . '.'.$this->getOptions()->getSuffix();
 
             $metadata = [
                 'filespec' => $filespec,
@@ -961,14 +961,14 @@ class Filesystem extends AbstractAdapter implements
 
         // write data in non-blocking mode
         $wouldblock = null;
-        $this->putFileContent($filespec . '.dat', $value, true, $wouldblock);
+        $this->putFileContent($filespec . '.'.$this->getOptions()->getSuffix(), $value, true, $wouldblock);
 
         // delete related tag file (if present)
-        $this->unlink($filespec . '.tag');
+        $this->unlink($filespec . '.'.$this->getOptions()->getTagSuffix());
 
         // Retry writing data in blocking mode if it was blocked before
         if ($wouldblock) {
-            $this->putFileContent($filespec . '.dat', $value);
+            $this->putFileContent($filespec . '.'.$this->getOptions()->getSuffix(), $value);
         }
 
         return true;
@@ -990,10 +990,10 @@ class Filesystem extends AbstractAdapter implements
             $this->prepareDirectoryStructure($filespec);
 
             // *.dat file
-            $contents[$filespec . '.dat'] = & $value;
+            $contents[$filespec . '.'.$this->getOptions()->getSuffix()] = & $value;
 
             // *.tag file
-            $this->unlink($filespec . '.tag');
+            $this->unlink($filespec . '.'.$this->getOptions()->getTagSuffix());
         }
 
         // write to disk
@@ -1055,7 +1055,7 @@ class Filesystem extends AbstractAdapter implements
         }
 
         // use filemtime + filesize as CAS token
-        $file  = $this->getFileSpec($normalizedKey) . '.dat';
+        $file  = $this->getFileSpec($normalizedKey) . '.'.$this->getOptions()->getSuffix();
         $check = filemtime($file) . filesize($file);
         if ($token !== $check) {
             return false;
@@ -1122,10 +1122,10 @@ class Filesystem extends AbstractAdapter implements
         $filespec = $this->getFileSpec($normalizedKey);
 
         ErrorHandler::start();
-        $touch = touch($filespec . '.dat');
+        $touch = touch($filespec . '.'.$this->getOptions()->getSuffix());
         $error = ErrorHandler::stop();
         if (! $touch) {
-            throw new Exception\RuntimeException("Error touching file '{$filespec}.dat'", 0, $error);
+            throw new Exception\RuntimeException("Error touching file '{$filespec}.{$this->getOptions()->getSuffix()}'", 0, $error);
         }
 
         return true;
@@ -1183,11 +1183,11 @@ class Filesystem extends AbstractAdapter implements
     protected function internalRemoveItem(& $normalizedKey)
     {
         $filespec = $this->getFileSpec($normalizedKey);
-        if (! file_exists($filespec . '.dat')) {
+        if (! file_exists($filespec . '.' . $this->getOptions()->getSuffix())) {
             return false;
         } else {
-            $this->unlink($filespec . '.dat');
-            $this->unlink($filespec . '.tag');
+            $this->unlink($filespec . '.'.$this->getOptions()->getSuffix());
+            $this->unlink($filespec . '.'.$this->getOptions()->getTagSuffix());
         }
         return true;
     }
@@ -1233,7 +1233,8 @@ class Filesystem extends AbstractAdapter implements
                     'maxTtl'             => 0,
                     'staticTtl'          => false,
                     'ttlPrecision'       => 1,
-                    'maxKeyLength'       => 251, // 255 - strlen(.dat | .tag)
+                    'expiredRead'        => true,
+                    'maxKeyLength'       => 254 - max([strlen($this->getOptions()->getSuffix()), strlen($this->getOptions()->getTagSuffix())]), // 255 - strlen(.dat | .tag)
                     'namespaceIsPrefix'  => true,
                     'namespaceSeparator' => $options->getNamespaceSeparator(),
                 ]

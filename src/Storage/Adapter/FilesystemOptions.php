@@ -98,6 +98,20 @@ class FilesystemOptions extends AdapterOptions
     protected $umask = false;
 
     /**
+     * Suffix for cache files
+     *
+     * @var string
+     */
+    protected $suffix = 'dat';
+
+    /**
+     * Suffix for tag files
+     *
+     * @var string
+     */
+    protected $tagSuffix = 'tag';
+
+    /**
      * Constructor
      *
      * @param  array|Traversable|null $options
@@ -454,4 +468,50 @@ class FilesystemOptions extends AdapterOptions
     {
         return $this->umask;
     }
+
+    /**
+     * Get the suffix for cache files
+     *
+     * @return string
+     */
+    public function getSuffix()
+    {
+        return $this->suffix;
+    }
+
+    /**
+     * Set the suffix for cache files
+     *
+     * @param string $suffix
+     */
+    public function setSuffix($suffix)
+    {
+        $this->suffix = $suffix;
+
+        return $this;
+    }
+
+    /**
+     * Get the suffix for tag files
+     *
+     * @return the $tagSuffix
+     */
+    public function getTagSuffix()
+    {
+        return $this->tagSuffix;
+    }
+
+    /**
+     * Set the suffix for cache files
+     *
+     * @param string $tagSuffix
+     */
+    public function setTagSuffix($tagSuffix)
+    {
+        $this->tagSuffix = $tagSuffix;
+
+        return $this;
+    }
+
+
 }

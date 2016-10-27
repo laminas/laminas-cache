@@ -598,4 +598,17 @@ class FilesystemTest extends CommonAdapterTest
             posix_kill(posix_getpid(), SIGTERM);
         }
     }
+
+    public function testSetSuffix()
+    {
+        $this->_options->setSuffix('.cache');
+        $this->assertSame('.cache', $this->_options->getSuffix());
+    }
+
+    public function testSetTagSuffix()
+    {
+        $this->_options->setTagSuffix('.cache');
+        $this->assertSame('.cache', $this->_options->getTagSuffix());
+    }
+
 }
