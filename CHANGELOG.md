@@ -41,6 +41,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#119](https://github.com/zendframework/zend-cache/pull/119)
+  Redis: Don't call method Redis::info() every time
 - [#113](https://github.com/zendframework/zend-cache/pull/113)
   Travis: Moved coverage reporting to latest env
 - [#114](https://github.com/zendframework/zend-cache/pull/114)
