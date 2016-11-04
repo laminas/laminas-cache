@@ -118,7 +118,7 @@ class RedisResourceManager
      * Gets a redis resource
      *
      * @param string $id
-     * @return RedisResourceManager
+     * @return RedisResource
      * @throws Exception\RuntimeException
      */
     public function getResource($id)
@@ -133,8 +133,12 @@ class RedisResourceManager
             if (!$resource['initialized']) {
                 $this->connect($resource);
             }
-            $info = $resource['resource']->info();
-            $resource['version'] = $info['redis_version'];
+
+            if (!$resource['version']) {
+                $info = $resource['resource']->info();
+                $resource['version'] = $info['redis_version'];
+            }
+
             return $resource['resource'];
         }
 
