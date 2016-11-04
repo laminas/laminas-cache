@@ -119,14 +119,12 @@ class RedisTest extends CommonAdapterTest
 
     public function testGetCapabilitiesTtl()
     {
-        $host = getenv('TESTS_ZEND_CACHE_REDIS_HOST') ? : '127.0.0.1';
-        $port = getenv('TESTS_ZEND_CACHE_REDIS_PORT') ? : 6379;
-        $redisResource = new RedisResource();
-        $redisResource->connect($host, $port);
-        $info = $redisResource->info();
-        $majorVersion = (int) $info['redis_version'];
+        $resourceManager = $this->_options->getResourceManager();
+        $resourceId      = $this->_options->getResourceId();
+        $redis = $resourceManager->getResource($resourceId);
+        $majorVersion = (int) $redis->info()['redis_version'];
 
-        $this->assertEquals($majorVersion, $this->_options->getResourceManager()->getMajorVersion($this->_options->getResourceId()));
+        $this->assertEquals($majorVersion, $resourceManager->getMajorVersion($resourceId));
 
         $capabilities = $this->_storage->getCapabilities();
         if ($majorVersion < 2) {
@@ -145,6 +143,7 @@ class RedisTest extends CommonAdapterTest
         $normalized = $this->_options->getResourceManager()->getServer($this->_options->getResourceId());
         $this->assertEquals($socket, $normalized['host'], 'Host should equal to socket {$socket}');
 
+        // Don't try to flush on shutdown
         $this->_storage = null;
     }
 
@@ -271,6 +270,9 @@ class RedisTest extends CommonAdapterTest
         ];
         $this->_options->setServer($server);
         $this->assertEquals($server, $this->_options->getServer(), 'Server was not set correctly through RedisOptions');
+
+        // Don't try to flush on shutdown
+        $this->_storage = null;
     }
 
     public function testOptionsGetSetDatabase()

@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#118](https://github.com/zendframework/zend-cache/pull/118)
+  fixed redis tests in case running with different server
 - [#119](https://github.com/zendframework/zend-cache/pull/119)
   Redis: Don't call method Redis::info() every time
 - [#113](https://github.com/zendframework/zend-cache/pull/113)
