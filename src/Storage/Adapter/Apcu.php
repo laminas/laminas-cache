@@ -692,7 +692,6 @@ class Apcu extends AbstractAdapter implements
                     'staticTtl'          => true,
                     'ttlPrecision'       => 1,
                     'useRequestTime'     => (bool) ini_get('apc.use_request_time'),
-                    'expiredRead'        => false,
                     'maxKeyLength'       => 5182,
                     'namespaceIsPrefix'  => true,
                     'namespaceSeparator' => $this->getOptions()->getNamespaceSeparator(),
