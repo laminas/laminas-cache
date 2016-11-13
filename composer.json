@@ -21,9 +21,9 @@
     "require-dev": {
         "zendframework/zend-serializer": "^2.6",
         "zendframework/zend-session": "^2.6.2",
-        "fabpot/php-cs-fixer": "1.7.*",
         "phpunit/phpunit": "^4.8",
-        "phpbench/phpbench": "^0.10.0"
+        "phpbench/phpbench": "^0.10.0",
+        "zendframework/zend-coding-standard": "~1.0.0"
     },
     "suggest": {
         "zendframework/zend-serializer": "Zend\\Serializer component",
