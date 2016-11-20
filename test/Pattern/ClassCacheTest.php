@@ -12,39 +12,17 @@ namespace ZendTest\Cache\Pattern;
 use Zend\Cache;
 
 /**
- * Test class
- */
-class TestClassCache
-{
-    /**
-     * A counter how oftern the method "bar" was called
-     */
-    public static $fooCounter = 0;
-
-    public static function bar()
-    {
-        ++static::$fooCounter;
-        $args = func_get_args();
-
-        echo 'foobar_output('.implode(', ', $args) . ') : ' . static::$fooCounter;
-        return 'foobar_return('.implode(', ', $args) . ') : ' . static::$fooCounter;
-    }
-
-    public static function emptyMethod()
-    {
-    }
-}
-
-/**
  * @group      Zend_Cache
  * @covers Zend\Cache\Pattern\ClassCache<extended>
  */
 class ClassCacheTest extends CommonPatternTest
 {
+    // @codingStandardsIgnoreStart
     /**
      * @var \Zend\Cache\Storage\StorageInterface
      */
     protected $_storage;
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {
@@ -52,7 +30,7 @@ class ClassCacheTest extends CommonPatternTest
             'memory_limit' => 0
         ]);
         $this->_options = new Cache\Pattern\PatternOptions([
-            'class'   => __NAMESPACE__ . '\TestClassCache',
+            'class'   => __NAMESPACE__ . '\TestAsset\TestClassCache',
             'storage' => $this->_storage,
         ]);
         $this->_pattern = new Cache\Pattern\ClassCache();
@@ -106,8 +84,10 @@ class ClassCacheTest extends CommonPatternTest
         $this->assertEquals($generatedKey, $usedKey);
     }
 
+    // @codingStandardsIgnoreStart
     protected function _testCall($method, array $args)
     {
+        // @codingStandardsIgnoreEnd
         $returnSpec = 'foobar_return(' . implode(', ', $args) . ') : ';
         $outputSpec = 'foobar_output(' . implode(', ', $args) . ') : ';
 

@@ -23,12 +23,14 @@ class SerializerTest extends CommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
+    // @codingStandardsIgnoreStart
     /**
      * The storage adapter
      *
      * @var \Zend\Cache\Storage\Adapter\AbstractAdapter
      */
     protected $_adapter;
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {

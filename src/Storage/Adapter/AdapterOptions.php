@@ -22,6 +22,7 @@ use Zend\Stdlib\ErrorHandler;
  */
 class AdapterOptions extends AbstractOptions
 {
+    // @codingStandardsIgnoreStart
     /**
      * Prioritized properties ordered by prio to be set first
      * in case a bulk of options sets set at once
@@ -29,6 +30,7 @@ class AdapterOptions extends AbstractOptions
      * @var string[]
      */
     protected $__prioritizedProperties__ = [];
+    // @codingStandardsIgnoreEnd
 
     /**
      * The adapter using these options

@@ -18,10 +18,12 @@ use Zend\Cache\PatternPluginManager;
  */
 abstract class CommonPatternTest extends \PHPUnit_Framework_TestCase
 {
+    // @codingStandardsIgnoreStart
     /**
      * @var \Zend\Cache\Pattern\PatternInterface
      */
     protected $_pattern;
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {

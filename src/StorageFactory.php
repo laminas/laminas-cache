@@ -100,7 +100,9 @@ abstract class StorageFactory
                     $pluginOptions = $v;
                 } elseif (is_array($v)) {
                     if (! isset($v['name'])) {
-                        throw new Exception\InvalidArgumentException("Invalid plugins[{$k}] or missing plugins[{$k}].name");
+                        throw new Exception\InvalidArgumentException(
+                            "Invalid plugins[{$k}] or missing plugins[{$k}].name"
+                        );
                     }
                     $pluginName = (string) $v['name'];
 

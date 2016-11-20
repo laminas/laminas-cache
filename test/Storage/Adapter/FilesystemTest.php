@@ -19,8 +19,10 @@ use Zend\Cache\Storage\Plugin\PluginOptions;
  */
 class FilesystemTest extends CommonAdapterTest
 {
+    // @codingStandardsIgnoreStart
     protected $_tmpCacheDir;
     protected $_umask;
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {
@@ -65,8 +67,10 @@ class FilesystemTest extends CommonAdapterTest
         parent::tearDown();
     }
 
+    // @codingStandardsIgnoreStart
     protected function _removeRecursive($dir)
     {
+        // @codingStandardsIgnoreEnd
         if (file_exists($dir)) {
             $dirIt = new \DirectoryIterator($dir);
             foreach ($dirIt as $entry) {

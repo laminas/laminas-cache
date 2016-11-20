@@ -33,6 +33,7 @@ use Zend\Stdlib\ErrorHandler;
  */
 abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 {
+    // @codingStandardsIgnoreStart
     /**
      * @var \Zend\Cache\Storage\Adapter\AdapterOptions
      */
@@ -54,6 +55,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         'NULL', 'boolean', 'integer', 'double',
         'string', 'array', 'object', 'resource'
     ];
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {

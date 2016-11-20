@@ -41,7 +41,10 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
 
         $clientClass = (version_compare(phpversion('mongo'), '1.3.0', '<')) ? '\Mongo' : '\MongoClient';
         $client = new $clientClass(getenv('TESTS_ZEND_CACHE_MONGODB_CONNECTSTRING'));
-        $resource = $client->selectCollection(getenv('TESTS_ZEND_CACHE_MONGODB_DATABASE'), getenv('TESTS_ZEND_CACHE_MONGODB_COLLECTION'));
+        $resource = $client->selectCollection(
+            getenv('TESTS_ZEND_CACHE_MONGODB_DATABASE'),
+            getenv('TESTS_ZEND_CACHE_MONGODB_COLLECTION')
+        );
 
         $this->object->setResource($id, $resource);
 
@@ -101,7 +104,10 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
 
         $clientClass = (version_compare(phpversion('mongo'), '1.3.0', '<')) ? '\Mongo' : '\MongoClient';
         $client = new $clientClass(getenv('TESTS_ZEND_CACHE_MONGODB_CONNECTSTRING'));
-        $resource = $client->selectCollection(getenv('TESTS_ZEND_CACHE_MONGODB_DATABASE'), getenv('TESTS_ZEND_CACHE_MONGODB_COLLECTION'));
+        $resource = $client->selectCollection(
+            getenv('TESTS_ZEND_CACHE_MONGODB_DATABASE'),
+            getenv('TESTS_ZEND_CACHE_MONGODB_COLLECTION')
+        );
 
         $this->object->setResource($id, $resource);
 

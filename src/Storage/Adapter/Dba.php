@@ -502,8 +502,10 @@ class Dba extends AbstractAdapter implements
      * @throws Exception\LogicException
      * @throws Exception\RuntimeException
      */
+    // @codingStandardsIgnoreStart
     protected function _open()
     {
+        // @codingStandardsIgnoreEnd
         if (! $this->handle) {
             $options = $this->getOptions();
             $pathname = $options->getPathname();
@@ -533,8 +535,10 @@ class Dba extends AbstractAdapter implements
      *
      * @return void
      */
+    // @codingStandardsIgnoreStart
     protected function _close()
     {
+        // @codingStandardsIgnoreEnd
         if ($this->handle) {
             ErrorHandler::start(E_NOTICE);
             dba_close($this->handle);

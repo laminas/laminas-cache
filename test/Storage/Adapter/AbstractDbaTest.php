@@ -40,7 +40,8 @@ abstract class AbstractDbaTest extends CommonAdapterTest
             }
         }
 
-        $this->temporaryDbaFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('zfcache_dba_') . '.' . $this->handler;
+        $this->temporaryDbaFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('zfcache_dba_') . '.'
+            . $this->handler;
         $this->_options = new Cache\Storage\Adapter\DbaOptions([
             'pathname' => $this->temporaryDbaFile,
             'handler'  => $this->handler,

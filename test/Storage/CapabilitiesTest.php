@@ -18,6 +18,7 @@ use Zend\Cache\Storage\Adapter\Memory as MemoryAdapter;
  */
 class CapabilitiesTest extends \PHPUnit_Framework_TestCase
 {
+    // @codingStandardsIgnoreStart
     /**
      * Capabilities instance
      *
@@ -45,6 +46,7 @@ class CapabilitiesTest extends \PHPUnit_Framework_TestCase
      * @var MemoryAdapter
      */
     protected $_adapter;
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {

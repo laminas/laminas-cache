@@ -116,7 +116,12 @@ class Filesystem extends AbstractAdapter implements
                     unlink($pathname);
                     $err = ErrorHandler::stop();
                     if ($err && file_exists($pathname)) {
-                        ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
+                        ErrorHandler::addError(
+                            $err->getSeverity(),
+                            $err->getMessage(),
+                            $err->getFile(),
+                            $err->getLine()
+                        );
                     }
                 }
             }
@@ -178,7 +183,12 @@ class Filesystem extends AbstractAdapter implements
                     unlink($tagPathname);
                     $err = ErrorHandler::stop();
                     if ($err && file_exists($pathname)) {
-                        ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
+                        ErrorHandler::addError(
+                            $err->getSeverity(),
+                            $err->getMessage(),
+                            $err->getFile(),
+                            $err->getLine()
+                        );
                     }
                 }
             }
