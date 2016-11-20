@@ -10,6 +10,7 @@
 namespace ZendTest\Cache\Pattern;
 
 use Zend\Cache;
+use ZendTest\Cache\Pattern\TestAsset\TestClassCache;
 
 /**
  * @group      Zend_Cache
