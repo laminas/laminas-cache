@@ -234,7 +234,7 @@ class PatternOptions extends AbstractOptions
      */
     public function setClass($class)
     {
-        if (!is_string($class)) {
+        if (! is_string($class)) {
             throw new Exception\InvalidArgumentException('Invalid classname provided; must be a string');
         }
         $this->class = $class;
@@ -496,7 +496,7 @@ class PatternOptions extends AbstractOptions
      */
     public function setObject($object)
     {
-        if (!is_object($object)) {
+        if (! is_object($object)) {
             throw new Exception\InvalidArgumentException(
                 sprintf('%s expects an object; received "%s"', __METHOD__, gettype($object))
             );
@@ -640,15 +640,15 @@ class PatternOptions extends AbstractOptions
     {
         $publicDir = (string) $publicDir;
 
-        if (!is_dir($publicDir)) {
+        if (! is_dir($publicDir)) {
             throw new Exception\InvalidArgumentException(
                 "Public directory '{$publicDir}' not found or not a directory"
             );
-        } elseif (!is_writable($publicDir)) {
+        } elseif (! is_writable($publicDir)) {
             throw new Exception\InvalidArgumentException(
                 "Public directory '{$publicDir}' not writable"
             );
-        } elseif (!is_readable($publicDir)) {
+        } elseif (! is_readable($publicDir)) {
             throw new Exception\InvalidArgumentException(
                 "Public directory '{$publicDir}' not readable"
             );
@@ -731,7 +731,7 @@ class PatternOptions extends AbstractOptions
     {
         $methods   = $this->recursiveStrtolower($methods);
         $intersect = array_intersect(['__set', '__get', '__unset', '__isset'], $methods);
-        if (!empty($intersect)) {
+        if (! empty($intersect)) {
             throw new Exception\InvalidArgumentException(
                 "Magic properties are handled by option 'cache_magic_properties'"
             );
@@ -752,7 +752,7 @@ class PatternOptions extends AbstractOptions
             $storage = StorageFactory::factory($storage);
         } elseif (is_string($storage)) {
             $storage = StorageFactory::adapterFactory($storage);
-        } elseif (!($storage instanceof Storage)) {
+        } elseif (! ($storage instanceof Storage)) {
             throw new Exception\InvalidArgumentException(
                 'The storage must be an instanceof Zend\Cache\Storage\StorageInterface '
                 . 'or an array passed to Zend\Cache\Storage::factory '

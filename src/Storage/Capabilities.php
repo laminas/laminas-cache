@@ -222,13 +222,13 @@ class Capabilities
 
         // check/normalize datatype values
         foreach ($datatypes as $type => &$toType) {
-            if (!in_array($type, $allTypes)) {
+            if (! in_array($type, $allTypes)) {
                 throw new Exception\InvalidArgumentException("Unknown datatype '{$type}'");
             }
 
             if (is_string($toType)) {
                 $toType = strtolower($toType);
-                if (!in_array($toType, $allTypes)) {
+                if (! in_array($toType, $allTypes)) {
                     throw new Exception\InvalidArgumentException("Unknown datatype '{$toType}'");
                 }
             } else {
@@ -266,7 +266,7 @@ class Capabilities
     public function setSupportedMetadata(stdClass $marker, array $metadata)
     {
         foreach ($metadata as $name) {
-            if (!is_string($name)) {
+            if (! is_string($name)) {
                 throw new Exception\InvalidArgumentException('$metadata must be an array of strings');
             }
         }

@@ -256,7 +256,7 @@ class AdapterOptions extends AbstractOptions
      */
     protected function normalizeTtl(&$ttl)
     {
-        if (!is_int($ttl)) {
+        if (! is_int($ttl)) {
             $ttl = (float) $ttl;
 
             // convert to int if possible
@@ -311,7 +311,7 @@ class AdapterOptions extends AbstractOptions
 
             if ($options instanceof Traversable) {
                 $options = iterator_to_array($options);
-            } elseif (!is_array($options)) {
+            } elseif (! is_array($options)) {
                 throw new Exception\InvalidArgumentException(
                     sprintf(
                         'Parameter provided to %s must be an %s, %s or %s',

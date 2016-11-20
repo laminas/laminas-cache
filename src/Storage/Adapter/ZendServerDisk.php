@@ -37,7 +37,7 @@ class ZendServerDisk extends AbstractZendServer implements
      */
     public function __construct($options = [])
     {
-        if (!function_exists('zend_disk_cache_store')) {
+        if (! function_exists('zend_disk_cache_store')) {
             throw new Exception\ExtensionNotLoadedException("Missing 'zend_disk_cache_*' functions");
         } elseif (PHP_SAPI == 'cli') {
             throw new Exception\ExtensionNotLoadedException("Zend server data cache isn't available on cli");
@@ -136,7 +136,7 @@ class ZendServerDisk extends AbstractZendServer implements
      */
     protected function zdcStore($internalKey, $value, $ttl)
     {
-        if (!zend_disk_cache_store($internalKey, $value, $ttl)) {
+        if (! zend_disk_cache_store($internalKey, $value, $ttl)) {
             $valueType = gettype($value);
             throw new Exception\RuntimeException(
                 "zend_disk_cache_store($internalKey, <{$valueType}>, {$ttl}) failed"

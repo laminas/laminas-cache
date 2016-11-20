@@ -33,13 +33,13 @@ class FilesystemTest extends CommonAdapterTest
         }
 
         $this->_tmpCacheDir = @tempnam($cacheDir, 'zend_cache_test_');
-        if (!$this->_tmpCacheDir) {
+        if (! $this->_tmpCacheDir) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory-file: {$err['message']}");
-        } elseif (!@unlink($this->_tmpCacheDir)) {
+        } elseif (! @unlink($this->_tmpCacheDir)) {
             $err = error_get_last();
             $this->fail("Can't remove temporary cache directory-file: {$err['message']}");
-        } elseif (!@mkdir($this->_tmpCacheDir, 0777)) {
+        } elseif (! @mkdir($this->_tmpCacheDir, 0777)) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory: {$err['message']}");
         }
@@ -348,7 +348,7 @@ class FilesystemTest extends CommonAdapterTest
      */
     public function testRaceConditionInClearByTags()
     {
-        if (!function_exists('pcntl_fork') || !function_exists('posix_kill')) {
+        if (! function_exists('pcntl_fork') || ! function_exists('posix_kill')) {
             $this->markTestSkipped('Missing pcntl_fork and/or posix_kill');
         }
 
@@ -392,7 +392,7 @@ class FilesystemTest extends CommonAdapterTest
      */
     public function testRaceConditionInClearByNamespace()
     {
-        if (!function_exists('pcntl_fork') || !function_exists('posix_kill')) {
+        if (! function_exists('pcntl_fork') || ! function_exists('posix_kill')) {
             $this->markTestSkipped('Missing pcntl_fork and/or posix_kill');
         }
 
@@ -450,7 +450,7 @@ class FilesystemTest extends CommonAdapterTest
      */
     public function testRaceConditionInClearByPrefix()
     {
-        if (!function_exists('pcntl_fork') || !function_exists('posix_kill')) {
+        if (! function_exists('pcntl_fork') || ! function_exists('posix_kill')) {
             $this->markTestSkipped('Missing pcntl_fork and/or posix_kill');
         }
 
@@ -500,7 +500,7 @@ class FilesystemTest extends CommonAdapterTest
      */
     public function testRaceConditionInClearExpired()
     {
-        if (!function_exists('pcntl_fork') || !function_exists('posix_kill')) {
+        if (! function_exists('pcntl_fork') || ! function_exists('posix_kill')) {
             $this->markTestSkipped('Missing pcntl_fork and/or posix_kill');
         }
 
@@ -556,7 +556,7 @@ class FilesystemTest extends CommonAdapterTest
      */
     public function testRaceConditionInFlush()
     {
-        if (!function_exists('pcntl_fork') || !function_exists('posix_kill')) {
+        if (! function_exists('pcntl_fork') || ! function_exists('posix_kill')) {
             $this->markTestSkipped('Missing pcntl_fork and/or posix_kill');
         }
 

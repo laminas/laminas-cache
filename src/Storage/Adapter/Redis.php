@@ -62,7 +62,7 @@ class Redis extends AbstractAdapter implements
      */
     public function __construct($options = null)
     {
-        if (!extension_loaded('redis')) {
+        if (! extension_loaded('redis')) {
             throw new Exception\ExtensionNotLoadedException("Redis extension is not loaded");
         }
 
@@ -82,7 +82,7 @@ class Redis extends AbstractAdapter implements
      */
     protected function getRedisResource()
     {
-        if (!$this->initialized) {
+        if (! $this->initialized) {
             $options = $this->getOptions();
 
             // get resource manager and resource id
@@ -115,7 +115,7 @@ class Redis extends AbstractAdapter implements
      */
     public function setOptions($options)
     {
-        if (!$options instanceof RedisOptions) {
+        if (! $options instanceof RedisOptions) {
             $options = new RedisOptions($options);
         }
         return parent::setOptions($options);
@@ -129,7 +129,7 @@ class Redis extends AbstractAdapter implements
      */
     public function getOptions()
     {
-        if (!$this->options) {
+        if (! $this->options) {
             $this->setOptions(new RedisOptions());
         }
         return $this->options;
@@ -280,7 +280,7 @@ class Redis extends AbstractAdapter implements
         } catch (RedisResourceException $e) {
             throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
         }
-        if (!$success) {
+        if (! $success) {
             throw new Exception\RuntimeException($redis->getLastError());
         }
 
@@ -558,7 +558,7 @@ class Redis extends AbstractAdapter implements
             // redis >= 2.8
             // The command 'pttl' returns -2 if the item does not exist
             // and -1 if the item has no associated expire
-            if (version_compare($redisVersion, '2.8',  '>=')) {
+            if (version_compare($redisVersion, '2.8', '>=')) {
                 $pttl = $redis->pttl($this->namespacePrefix . $normalizedKey);
                 if ($pttl <= -2) {
                     return false;
@@ -570,7 +570,7 @@ class Redis extends AbstractAdapter implements
             } elseif (version_compare($redisVersion, '2.6', '>=')) {
                 $pttl = $redis->pttl($this->namespacePrefix . $normalizedKey);
                 if ($pttl <= -1) {
-                    if (!$this->internalHasItem($normalizedKey)) {
+                    if (! $this->internalHasItem($normalizedKey)) {
                         return false;
                     }
                     $metadata['ttl'] = null;
@@ -586,7 +586,7 @@ class Redis extends AbstractAdapter implements
             } elseif (version_compare($redisVersion, '2', '>=')) {
                 $ttl = $redis->ttl($this->namespacePrefix . $normalizedKey);
                 if ($ttl <= -1) {
-                    if (!$this->internalHasItem($normalizedKey)) {
+                    if (! $this->internalHasItem($normalizedKey)) {
                         return false;
                     }
                     $metadata['ttl'] = null;
@@ -597,7 +597,7 @@ class Redis extends AbstractAdapter implements
             // redis < 2
             // The commands 'pttl' and 'ttl' are not supported
             // but item existence have to be checked
-            } elseif (!$this->internalHasItem($normalizedKey)) {
+            } elseif (! $this->internalHasItem($normalizedKey)) {
                 return false;
             }
         } catch (RedisResourceException $e) {

@@ -27,7 +27,7 @@ abstract class AbstractPattern implements PatternInterface
      */
     public function setOptions(PatternOptions $options)
     {
-        if (!$options instanceof PatternOptions) {
+        if (! $options instanceof PatternOptions) {
             $options = new PatternOptions($options);
         }
 

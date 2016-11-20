@@ -130,7 +130,7 @@ class AdapterOptionsTest extends \PHPUnit_Framework_TestCase
         // assert (hopefully) called listener and arguments
         $this->assertCount(1, $calledArgs, '"option" event was not triggered or got a wrong number of arguments');
         $this->assertInstanceOf(Event::class, $calledArgs[0]);
-        $this->assertEquals(['writable' => false],  $calledArgs[0]->getParams()->getArrayCopy());
+        $this->assertEquals(['writable' => false], $calledArgs[0]->getParams()->getArrayCopy());
     }
 
     public function testSetFromArrayWithoutPrioritizedOptions()

@@ -27,13 +27,13 @@ class CaptureCacheTest extends CommonPatternTest
         $this->_umask = umask();
 
         $this->_tmpCacheDir = @tempnam(sys_get_temp_dir(), 'zend_cache_test_');
-        if (!$this->_tmpCacheDir) {
+        if (! $this->_tmpCacheDir) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory-file: {$err['message']}");
-        } elseif (!@unlink($this->_tmpCacheDir)) {
+        } elseif (! @unlink($this->_tmpCacheDir)) {
             $err = error_get_last();
             $this->fail("Can't remove temporary cache directory-file: {$err['message']}");
-        } elseif (!@mkdir($this->_tmpCacheDir, 0777)) {
+        } elseif (! @mkdir($this->_tmpCacheDir, 0777)) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory: {$err['message']}");
         }

@@ -18,14 +18,14 @@ class MockPlugin extends AbstractPlugin
 {
 
     protected $options;
-    protected $handles = array();
-    protected $calledEvents = array();
-    protected $eventCallbacks  = array(
+    protected $handles = [];
+    protected $calledEvents = [];
+    protected $eventCallbacks  = [
         'setItem.pre'  => 'onSetItemPre',
         'setItem.post' => 'onSetItemPost'
-    );
+    ];
 
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         if (is_array($options)) {
             $options = new Plugin\PluginOptions($options);
@@ -49,7 +49,7 @@ class MockPlugin extends AbstractPlugin
     public function attach(EventManagerInterface $eventCollection, $priority = 1)
     {
         foreach ($this->eventCallbacks as $eventName => $method) {
-            $this->listeners[] = $eventCollection->attach($eventName, array($this, $method), $priority);
+            $this->listeners[] = $eventCollection->attach($eventName, [$this, $method], $priority);
         }
     }
 

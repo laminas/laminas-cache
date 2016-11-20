@@ -29,7 +29,7 @@ class ZendServerShmTest extends CommonAdapterTest
             return;
         }
 
-        if (!function_exists('zend_shm_cache_store')) {
+        if (! function_exists('zend_shm_cache_store')) {
             try {
                 new Cache\Storage\Adapter\ZendServerShm();
                 $this->fail("Missing expected ExtensionNotLoadedException");

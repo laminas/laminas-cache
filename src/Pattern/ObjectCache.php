@@ -24,9 +24,9 @@ class ObjectCache extends CallbackCache
     {
         parent::setOptions($options);
 
-        if (!$options->getObject()) {
+        if (! $options->getObject()) {
             throw new Exception\InvalidArgumentException("Missing option 'object'");
-        } elseif (!$options->getStorage()) {
+        } elseif (! $options->getStorage()) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
     }
@@ -54,7 +54,7 @@ class ObjectCache extends CallbackCache
 
                 $object->{$property} = $value;
 
-                if (!$options->getObjectCacheMagicProperties()
+                if (! $options->getObjectCacheMagicProperties()
                     || property_exists($object, $property)
                 ) {
                     // no caching if property isn't magic
@@ -78,7 +78,7 @@ class ObjectCache extends CallbackCache
             case '__get':
                 $property = array_shift($args);
 
-                if (!$options->getObjectCacheMagicProperties()
+                if (! $options->getObjectCacheMagicProperties()
                     || property_exists($object, $property)
                 ) {
                     // no caching if property isn't magic
@@ -92,7 +92,7 @@ class ObjectCache extends CallbackCache
             case '__isset':
                 $property = array_shift($args);
 
-                if (!$options->getObjectCacheMagicProperties()
+                if (! $options->getObjectCacheMagicProperties()
                     || property_exists($object, $property)
                 ) {
                     // no caching if property isn't magic
@@ -107,7 +107,7 @@ class ObjectCache extends CallbackCache
 
                 unset($object->{$property});
 
-                if (!$options->getObjectCacheMagicProperties()
+                if (! $options->getObjectCacheMagicProperties()
                     || property_exists($object, $property)
                 ) {
                     // no caching if property isn't magic
@@ -131,12 +131,12 @@ class ObjectCache extends CallbackCache
 
         $cache = $options->getCacheByDefault();
         if ($cache) {
-            $cache = !in_array($method, $options->getObjectNonCacheMethods());
+            $cache = ! in_array($method, $options->getObjectNonCacheMethods());
         } else {
             $cache = in_array($method, $options->getObjectCacheMethods());
         }
 
-        if (!$cache) {
+        if (! $cache) {
             if ($args) {
                 return call_user_func_array([$object, $method], $args);
             }

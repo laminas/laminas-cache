@@ -30,7 +30,7 @@ class WinCache extends AbstractAdapter implements
      */
     public function __construct($options = null)
     {
-        if (!extension_loaded('wincache')) {
+        if (! extension_loaded('wincache')) {
             throw new Exception\ExtensionNotLoadedException("WinCache extension is not loaded");
         }
 
@@ -39,7 +39,7 @@ class WinCache extends AbstractAdapter implements
             $enabled = $enabled && (bool) ini_get('wincache.enablecli');
         }
 
-        if (!$enabled) {
+        if (! $enabled) {
             throw new Exception\ExtensionNotLoadedException(
                 "WinCache is disabled - see 'wincache.ucenabled' and 'wincache.enablecli'"
             );
@@ -59,7 +59,7 @@ class WinCache extends AbstractAdapter implements
      */
     public function setOptions($options)
     {
-        if (!$options instanceof WinCacheOptions) {
+        if (! $options instanceof WinCacheOptions) {
             $options = new WinCacheOptions($options);
         }
 
@@ -74,7 +74,7 @@ class WinCache extends AbstractAdapter implements
      */
     public function getOptions()
     {
-        if (!$this->options) {
+        if (! $this->options) {
             $this->setOptions(new WinCacheOptions());
         }
         return $this->options;
@@ -236,7 +236,7 @@ class WinCache extends AbstractAdapter implements
         $internalKey = $prefix . $normalizedKey;
         $ttl         = $options->getTtl();
 
-        if (!wincache_ucache_set($internalKey, $value, $ttl)) {
+        if (! wincache_ucache_set($internalKey, $value, $ttl)) {
             $type = is_object($value) ? get_class($value) : gettype($value);
             throw new Exception\RuntimeException(
                 "wincache_ucache_set('{$internalKey}', <{$type}>, {$ttl}) failed"
@@ -295,7 +295,7 @@ class WinCache extends AbstractAdapter implements
         $internalKey = $prefix . $normalizedKey;
         $ttl         = $options->getTtl();
 
-        if (!wincache_ucache_add($internalKey, $value, $ttl)) {
+        if (! wincache_ucache_add($internalKey, $value, $ttl)) {
             $type = is_object($value) ? get_class($value) : gettype($value);
             throw new Exception\RuntimeException(
                 "wincache_ucache_add('{$internalKey}', <{$type}>, {$ttl}) failed"
@@ -352,12 +352,12 @@ class WinCache extends AbstractAdapter implements
         $namespace   = $options->getNamespace();
         $prefix      = ($namespace === '') ? '' : $namespace . $options->getNamespaceSeparator();
         $internalKey = $prefix . $normalizedKey;
-        if (!wincache_ucache_exists($internalKey)) {
+        if (! wincache_ucache_exists($internalKey)) {
             return false;
         }
 
         $ttl = $options->getTtl();
-        if (!wincache_ucache_set($internalKey, $value, $ttl)) {
+        if (! wincache_ucache_set($internalKey, $value, $ttl)) {
             $type = is_object($value) ? get_class($value) : gettype($value);
             throw new Exception\RuntimeException(
                 "wincache_ucache_set('{$internalKey}', <{$type}>, {$ttl}) failed"

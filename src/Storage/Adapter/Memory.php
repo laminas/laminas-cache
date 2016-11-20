@@ -58,7 +58,7 @@ class Memory extends AbstractAdapter implements
      */
     public function setOptions($options)
     {
-        if (!$options instanceof MemoryOptions) {
+        if (! $options instanceof MemoryOptions) {
             $options = new MemoryOptions($options);
         }
 
@@ -73,7 +73,7 @@ class Memory extends AbstractAdapter implements
      */
     public function getOptions()
     {
-        if (!$this->options) {
+        if (! $this->options) {
             $this->setOptions(new MemoryOptions());
         }
         return $this->options;
@@ -156,7 +156,7 @@ class Memory extends AbstractAdapter implements
         }
 
         $ns = $this->getOptions()->getNamespace();
-        if (!isset($this->data[$ns])) {
+        if (! isset($this->data[$ns])) {
             return true;
         }
 
@@ -199,7 +199,7 @@ class Memory extends AbstractAdapter implements
         }
 
         $ns = $this->getOptions()->getNamespace();
-        if (!isset($this->data[$ns])) {
+        if (! isset($this->data[$ns])) {
             return true;
         }
 
@@ -227,7 +227,7 @@ class Memory extends AbstractAdapter implements
     public function setTags($key, array $tags)
     {
         $ns = $this->getOptions()->getNamespace();
-        if (!isset($this->data[$ns][$key])) {
+        if (! isset($this->data[$ns][$key])) {
             return false;
         }
 
@@ -244,7 +244,7 @@ class Memory extends AbstractAdapter implements
     public function getTags($key)
     {
         $ns = $this->getOptions()->getNamespace();
-        if (!isset($this->data[$ns][$key])) {
+        if (! isset($this->data[$ns][$key])) {
             return false;
         }
 
@@ -264,7 +264,7 @@ class Memory extends AbstractAdapter implements
     public function clearByTags(array $tags, $disjunction = false)
     {
         $ns = $this->getOptions()->getNamespace();
-        if (!isset($this->data[$ns])) {
+        if (! isset($this->data[$ns])) {
             return true;
         }
 
@@ -273,7 +273,7 @@ class Memory extends AbstractAdapter implements
         foreach ($data as $key => & $item) {
             if (isset($item['tags'])) {
                 $diff = array_diff($tags, $item['tags']);
-                if (($disjunction && count($diff) < $tagCount) || (!$disjunction && !$diff)) {
+                if (($disjunction && count($diff) < $tagCount) || (! $disjunction && ! $diff)) {
                     unset($data[$key]);
                 }
             }
@@ -306,7 +306,7 @@ class Memory extends AbstractAdapter implements
             }
         }
 
-        if (!$success) {
+        if (! $success) {
             return;
         }
 
@@ -325,7 +325,7 @@ class Memory extends AbstractAdapter implements
     {
         $options = $this->getOptions();
         $ns      = $options->getNamespace();
-        if (!isset($this->data[$ns])) {
+        if (! isset($this->data[$ns])) {
             return [];
         }
 
@@ -336,7 +336,7 @@ class Memory extends AbstractAdapter implements
         $result = [];
         foreach ($normalizedKeys as $normalizedKey) {
             if (isset($data[$normalizedKey])) {
-                if (!$ttl || $now < ($data[$normalizedKey][1] + $ttl)) {
+                if (! $ttl || $now < ($data[$normalizedKey][1] + $ttl)) {
                     $result[$normalizedKey] = $data[$normalizedKey][0];
                 }
             }
@@ -355,7 +355,7 @@ class Memory extends AbstractAdapter implements
     {
         $options = $this->getOptions();
         $ns      = $options->getNamespace();
-        if (!isset($this->data[$ns][$normalizedKey])) {
+        if (! isset($this->data[$ns][$normalizedKey])) {
             return false;
         }
 
@@ -378,7 +378,7 @@ class Memory extends AbstractAdapter implements
     {
         $options = $this->getOptions();
         $ns      = $options->getNamespace();
-        if (!isset($this->data[$ns])) {
+        if (! isset($this->data[$ns])) {
             return [];
         }
 
@@ -389,7 +389,7 @@ class Memory extends AbstractAdapter implements
         $result = [];
         foreach ($normalizedKeys as $normalizedKey) {
             if (isset($data[$normalizedKey])) {
-                if (!$ttl || $now < ($data[$normalizedKey][1] + $ttl)) {
+                if (! $ttl || $now < ($data[$normalizedKey][1] + $ttl)) {
                     $result[] = $normalizedKey;
                 }
             }
@@ -411,7 +411,7 @@ class Memory extends AbstractAdapter implements
      */
     protected function internalGetMetadata(& $normalizedKey)
     {
-        if (!$this->internalHasItem($normalizedKey)) {
+        if (! $this->internalHasItem($normalizedKey)) {
             return false;
         }
 
@@ -435,7 +435,7 @@ class Memory extends AbstractAdapter implements
     {
         $options = $this->getOptions();
 
-        if (!$this->hasAvailableSpace()) {
+        if (! $this->hasAvailableSpace()) {
             $memoryLimit = $options->getMemoryLimit();
             throw new Exception\OutOfSpaceException(
                 "Memory usage exceeds limit ({$memoryLimit})."
@@ -459,7 +459,7 @@ class Memory extends AbstractAdapter implements
     {
         $options = $this->getOptions();
 
-        if (!$this->hasAvailableSpace()) {
+        if (! $this->hasAvailableSpace()) {
             $memoryLimit = $options->getMemoryLimit();
             throw new Exception\OutOfSpaceException(
                 "Memory usage exceeds limit ({$memoryLimit})."
@@ -467,7 +467,7 @@ class Memory extends AbstractAdapter implements
         }
 
         $ns = $options->getNamespace();
-        if (!isset($this->data[$ns])) {
+        if (! isset($this->data[$ns])) {
             $this->data[$ns] = [];
         }
 
@@ -492,7 +492,7 @@ class Memory extends AbstractAdapter implements
     {
         $options = $this->getOptions();
 
-        if (!$this->hasAvailableSpace()) {
+        if (! $this->hasAvailableSpace()) {
             $memoryLimit = $options->getMemoryLimit();
             throw new Exception\OutOfSpaceException(
                 "Memory usage exceeds limit ({$memoryLimit})."
@@ -519,7 +519,7 @@ class Memory extends AbstractAdapter implements
     {
         $options = $this->getOptions();
 
-        if (!$this->hasAvailableSpace()) {
+        if (! $this->hasAvailableSpace()) {
             $memoryLimit = $options->getMemoryLimit();
             throw new Exception\OutOfSpaceException(
                 "Memory usage exceeds limit ({$memoryLimit})."
@@ -527,7 +527,7 @@ class Memory extends AbstractAdapter implements
         }
 
         $ns = $options->getNamespace();
-        if (!isset($this->data[$ns])) {
+        if (! isset($this->data[$ns])) {
             $this->data[$ns] = [];
         }
 
@@ -556,7 +556,7 @@ class Memory extends AbstractAdapter implements
     protected function internalReplaceItem(& $normalizedKey, & $value)
     {
         $ns = $this->getOptions()->getNamespace();
-        if (!isset($this->data[$ns][$normalizedKey])) {
+        if (! isset($this->data[$ns][$normalizedKey])) {
             return false;
         }
         $this->data[$ns][$normalizedKey] = [$value, microtime(true)];
@@ -574,14 +574,14 @@ class Memory extends AbstractAdapter implements
     protected function internalReplaceItems(array & $normalizedKeyValuePairs)
     {
         $ns = $this->getOptions()->getNamespace();
-        if (!isset($this->data[$ns])) {
+        if (! isset($this->data[$ns])) {
             return array_keys($normalizedKeyValuePairs);
         }
 
         $result = [];
         $data   = & $this->data[$ns];
         foreach ($normalizedKeyValuePairs as $normalizedKey => $value) {
-            if (!isset($data[$normalizedKey])) {
+            if (! isset($data[$normalizedKey])) {
                 $result[] = $normalizedKey;
             } else {
                 $data[$normalizedKey] = [$value, microtime(true)];
@@ -602,7 +602,7 @@ class Memory extends AbstractAdapter implements
     {
         $ns = $this->getOptions()->getNamespace();
 
-        if (!isset($this->data[$ns][$normalizedKey])) {
+        if (! isset($this->data[$ns][$normalizedKey])) {
             return false;
         }
 
@@ -620,14 +620,14 @@ class Memory extends AbstractAdapter implements
     protected function internalRemoveItem(& $normalizedKey)
     {
         $ns = $this->getOptions()->getNamespace();
-        if (!isset($this->data[$ns][$normalizedKey])) {
+        if (! isset($this->data[$ns][$normalizedKey])) {
             return false;
         }
 
         unset($this->data[$ns][$normalizedKey]);
 
         // remove empty namespace
-        if (!$this->data[$ns]) {
+        if (! $this->data[$ns]) {
             unset($this->data[$ns]);
         }
 
@@ -647,7 +647,7 @@ class Memory extends AbstractAdapter implements
         $ns = $this->getOptions()->getNamespace();
         if (isset($this->data[$ns][$normalizedKey])) {
             $data = & $this->data[$ns][$normalizedKey];
-            $data[0]+= $value;
+            $data[0] += $value;
             $data[1] = microtime(true);
             $newValue = $data[0];
         } else {
@@ -672,7 +672,7 @@ class Memory extends AbstractAdapter implements
         $ns = $this->getOptions()->getNamespace();
         if (isset($this->data[$ns][$normalizedKey])) {
             $data = & $this->data[$ns][$normalizedKey];
-            $data[0]-= $value;
+            $data[0] -= $value;
             $data[1] = microtime(true);
             $newValue = $data[0];
         } else {

@@ -1082,7 +1082,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $class = 'Zend\Cache\Storage\Adapter\AbstractAdapter';
 
-        if (!$methods) {
+        if (! $methods) {
             $adapter = $this->getMockForAbstractClass($class);
         } else {
             $reflection = new \ReflectionClass('Zend\Cache\Storage\Adapter\AbstractAdapter');

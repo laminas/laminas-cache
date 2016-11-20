@@ -22,7 +22,7 @@ abstract class AbstractDbaTest extends CommonAdapterTest
 
     public function setUp()
     {
-        if (!extension_loaded('dba')) {
+        if (! extension_loaded('dba')) {
             try {
                 new Cache\Storage\Adapter\Dba();
                 $this->fail("Expected exception Zend\Cache\Exception\ExtensionNotLoadedException");
@@ -31,7 +31,7 @@ abstract class AbstractDbaTest extends CommonAdapterTest
             }
         }
 
-        if (!in_array($this->handler, dba_handlers())) {
+        if (! in_array($this->handler, dba_handlers())) {
             try {
                 new Cache\Storage\Adapter\DbaOptions(['handler' => $this->handler]);
                 $this->fail("Expected exception Zend\Cache\Exception\ExtensionNotLoadedException");

@@ -214,7 +214,7 @@ class MemcachedResourceManagerTest extends \PHPUnit_Framework_TestCase
     {
         // php-memcached is required to set libmemcached options
         if (is_array($resource) && isset($resource['lib_options']) && count($resource['lib_options']) > 0) {
-            if (!class_exists('Memcached', false)) {
+            if (! class_exists('Memcached', false)) {
                 $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException', 'Unknown libmemcached option');
             }
         }
@@ -238,7 +238,7 @@ class MemcachedResourceManagerTest extends \PHPUnit_Framework_TestCase
         $resourceId = 'testResourceId';
         $resourceMock = $this->getMock('Memcached', ['setOptions']);
 
-        if (!$memcachedInstalled) {
+        if (! $memcachedInstalled) {
             $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
         } else {
             $resourceMock

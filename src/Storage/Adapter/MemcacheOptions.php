@@ -121,7 +121,7 @@ class MemcacheOptions extends AdapterOptions
      */
     public function getResourceManager()
     {
-        if (!$this->resourceManager) {
+        if (! $this->resourceManager) {
             $this->resourceManager = new MemcacheResourceManager();
         }
         return $this->resourceManager;
