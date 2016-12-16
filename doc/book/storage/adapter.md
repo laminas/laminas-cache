@@ -715,7 +715,7 @@ Capability | Value
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
 `database` | `integer` | 0 | Set database identifier.
-`lib_option` | `array` | `[]` | Associative array of redis options where the array key is the option name.
+`lib_options` | `array` | `[]` | Associative array of redis options where the array key is the option name.
 `namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
 `password` | `string` | "" | Set password.
 `persistent_id` | `string` | | Set persistent id (name of the connection, leave blank to not use a persistent connection).
