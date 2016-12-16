@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#116](https://github.com/zendframework/zend-cache/pull/116)
+  docblock method chaining consistency
 - [#46](https://github.com/zendframework/zend-cache/issues/46)
   Add wrapper for PSR-6
 - [#79](https://github.com/zendframework/zend-cache/issues/79)
