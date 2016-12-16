@@ -36,7 +36,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Deprecated
 
-- Nothing.
+- [#123](https://github.com/zendframework/zend-cache/pull/123)
+  Deprecate capability "expiredRead".
+  It's basically providing the same information as staticTtl but from a wrong PoV
 
 ### Removed
 

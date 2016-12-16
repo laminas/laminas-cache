@@ -222,7 +222,6 @@ abstract class AbstractZendServer extends AbstractAdapter
                     'staticTtl'          => true,
                     'ttlPrecision'       => 1,
                     'useRequestTime'     => false,
-                    'expiredRead'        => false,
                     'lockOnExpire'       => ini_get('zend_datacache.lock_on_expire') ? 120 : 0,
                     'maxKeyLength'       => 0,
                     'namespaceIsPrefix'  => true,

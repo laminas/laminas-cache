@@ -216,7 +216,6 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('numeric', $capabilities->getTtlPrecision());
         $this->assertGreaterThan(0, $capabilities->getTtlPrecision());
 
-        $this->assertInternalType('bool', $capabilities->getExpiredRead());
         $this->assertInternalType('int', $capabilities->getLockOnExpire());
     }
 
@@ -647,7 +646,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $rs = $this->_storage->getItems(array_keys($items));
         ksort($rs); // make comparable
 
-        if ($capabilities->getExpiredRead()) {
+        if (! $capabilities->getStaticTtl()) {
             // if item expiration will be done on read there is no difference
             // between the previos set items in TTL.
             // -> all items will be expired
