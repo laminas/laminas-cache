@@ -538,7 +538,6 @@ class Memcache extends AbstractAdapter implements
                 'staticTtl'          => true,
                 'ttlPrecision'       => 1,
                 'useRequestTime'     => false,
-                'expiredRead'        => false,
                 'maxKeyLength'       => 255,
                 'namespaceIsPrefix'  => true,
             ]

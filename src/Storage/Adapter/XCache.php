@@ -454,7 +454,6 @@ class XCache extends AbstractAdapter implements
                     'staticTtl'          => true,
                     'ttlPrecision'       => 1,
                     'useRequestTime'     => true,
-                    'expiredRead'        => false,
                     'maxKeyLength'       => 5182,
                     'namespaceIsPrefix'  => true,
                     'namespaceSeparator' => $this->getOptions()->getNamespaceSeparator(),
