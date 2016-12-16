@@ -46,6 +46,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#122](https://github.com/zendframework/zend-cache/pull/122)
+  Fixed redis doc for lib_options (not lib_option)
 - [#118](https://github.com/zendframework/zend-cache/pull/118)
   fixed redis tests in case running with different server
 - [#119](https://github.com/zendframework/zend-cache/pull/119)
