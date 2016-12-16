@@ -22,12 +22,14 @@ class ClearExpiredByFactorTest extends CommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
+    // @codingStandardsIgnoreStart
     /**
      * The storage adapter
      *
      * @var ZendTest\Cache\Storage\TestAsset\MockAdapter
      */
     protected $_adapter;
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {

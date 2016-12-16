@@ -79,7 +79,7 @@ class Memcached extends AbstractAdapter implements
      */
     protected function getMemcachedResource()
     {
-        if (!$this->initialized) {
+        if (! $this->initialized) {
             $options = $this->getOptions();
 
             // get resource manager and resource id
@@ -112,7 +112,7 @@ class Memcached extends AbstractAdapter implements
      */
     public function setOptions($options)
     {
-        if (!$options instanceof MemcachedOptions) {
+        if (! $options instanceof MemcachedOptions) {
             $options = new MemcachedOptions($options);
         }
 
@@ -127,7 +127,7 @@ class Memcached extends AbstractAdapter implements
      */
     public function getOptions()
     {
-        if (!$this->options) {
+        if (! $this->options) {
             $this->setOptions(new MemcachedOptions());
         }
         return $this->options;
@@ -143,7 +143,7 @@ class Memcached extends AbstractAdapter implements
     public function flush()
     {
         $memc = $this->getMemcachedResource();
-        if (!$memc->flush()) {
+        if (! $memc->flush()) {
             throw $this->getExceptionByResultCode($memc->getResultCode());
         }
         return true;
@@ -326,7 +326,7 @@ class Memcached extends AbstractAdapter implements
     {
         $memc       = $this->getMemcachedResource();
         $expiration = $this->expirationTime();
-        if (!$memc->set($this->namespacePrefix . $normalizedKey, $value, $expiration)) {
+        if (! $memc->set($this->namespacePrefix . $normalizedKey, $value, $expiration)) {
             throw $this->getExceptionByResultCode($memc->getResultCode());
         }
 
@@ -350,7 +350,7 @@ class Memcached extends AbstractAdapter implements
             $namespacedKeyValuePairs[$this->namespacePrefix . $normalizedKey] = $value;
         }
 
-        if (!$memc->setMulti($namespacedKeyValuePairs, $expiration)) {
+        if (! $memc->setMulti($namespacedKeyValuePairs, $expiration)) {
             throw $this->getExceptionByResultCode($memc->getResultCode());
         }
 
@@ -369,7 +369,7 @@ class Memcached extends AbstractAdapter implements
     {
         $memc       = $this->getMemcachedResource();
         $expiration = $this->expirationTime();
-        if (!$memc->add($this->namespacePrefix . $normalizedKey, $value, $expiration)) {
+        if (! $memc->add($this->namespacePrefix . $normalizedKey, $value, $expiration)) {
             if ($memc->getResultCode() == MemcachedResource::RES_NOTSTORED) {
                 return false;
             }
@@ -391,7 +391,7 @@ class Memcached extends AbstractAdapter implements
     {
         $memc       = $this->getMemcachedResource();
         $expiration = $this->expirationTime();
-        if (!$memc->replace($this->namespacePrefix . $normalizedKey, $value, $expiration)) {
+        if (! $memc->replace($this->namespacePrefix . $normalizedKey, $value, $expiration)) {
             $rsCode = $memc->getResultCode();
             if ($rsCode == MemcachedResource::RES_NOTSTORED) {
                 return false;
@@ -466,7 +466,7 @@ class Memcached extends AbstractAdapter implements
 
         // support for removing multiple items at once has been added in ext/memcached-2.0.0
         // and HHVM doesn't support this feature yet
-        if (!method_exists($memc, 'deleteMulti')) {
+        if (! method_exists($memc, 'deleteMulti')) {
             return parent::internalRemoveItems($normalizedKeys);
         }
 

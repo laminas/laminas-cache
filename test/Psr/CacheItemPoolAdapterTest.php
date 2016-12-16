@@ -529,7 +529,9 @@ class CacheItemPoolAdapterTest extends TestCase
 
     public function invalidKeyProvider()
     {
-        return array_map(function ($v) { return [$v]; }, $this->getInvalidKeys());
+        return array_map(function ($v) {
+            return [$v];
+        }, $this->getInvalidKeys());
     }
 
     private function getInvalidKeys()
@@ -553,7 +555,7 @@ class CacheItemPoolAdapterTest extends TestCase
      */
     private function getAdapter($storage = null)
     {
-        if (!$storage) {
+        if (! $storage) {
             $storage = $this->getStorageProphesy();
         }
         return new CacheItemPoolAdapter($storage->reveal());

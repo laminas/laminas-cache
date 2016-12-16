@@ -84,7 +84,7 @@ class MemoryOptions extends AdapterOptions
             return (int) $value;
         }
 
-        if (!preg_match('/(\-?\d+)\s*(\w*)/', ini_get('memory_limit'), $matches)) {
+        if (! preg_match('/(\-?\d+)\s*(\w*)/', ini_get('memory_limit'), $matches)) {
             throw new Exception\InvalidArgumentException("Invalid  memory limit '{$value}'");
         }
 
@@ -95,15 +95,15 @@ class MemoryOptions extends AdapterOptions
 
         switch (strtoupper($matches[2])) {
             case 'G':
-                $value*= 1024;
+                $value *= 1024;
                 // no break
 
             case 'M':
-                $value*= 1024;
+                $value *= 1024;
                 // no break
 
             case 'K':
-                $value*= 1024;
+                $value *= 1024;
                 // no break
         }
 

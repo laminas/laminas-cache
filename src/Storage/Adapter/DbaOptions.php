@@ -119,7 +119,7 @@ class DbaOptions extends AdapterOptions
     {
         $handler = (string) $handler;
 
-        if (!function_exists('dba_handlers') || !in_array($handler, dba_handlers())) {
+        if (! function_exists('dba_handlers') || ! in_array($handler, dba_handlers())) {
             throw new Exception\ExtensionNotLoadedException("DBA-Handler '{$handler}' not supported");
         }
 

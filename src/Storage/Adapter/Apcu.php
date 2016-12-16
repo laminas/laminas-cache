@@ -48,7 +48,7 @@ class Apcu extends AbstractAdapter implements
             throw new Exception\ExtensionNotLoadedException('Missing ext/apcu >= 5.1.0');
         }
 
-        if (!ini_get('apc.enabled') || (PHP_SAPI === 'cli' && !ini_get('apc.enable_cli'))) {
+        if (! ini_get('apc.enabled') || (PHP_SAPI === 'cli' && ! ini_get('apc.enable_cli'))) {
             throw new Exception\ExtensionNotLoadedException(
                 "ext/apcu is disabled - see 'apc.enabled' and 'apc.enable_cli'"
             );
@@ -68,7 +68,7 @@ class Apcu extends AbstractAdapter implements
      */
     public function setOptions($options)
     {
-        if (!$options instanceof ApcuOptions) {
+        if (! $options instanceof ApcuOptions) {
             $options = new ApcuOptions($options);
         }
 
@@ -83,7 +83,7 @@ class Apcu extends AbstractAdapter implements
      */
     public function getOptions()
     {
-        if (!$this->options) {
+        if (! $this->options) {
             $this->setOptions(new ApcuOptions());
         }
         return $this->options;
@@ -215,7 +215,7 @@ class Apcu extends AbstractAdapter implements
         $internalKey = $prefix . $normalizedKey;
         $result      = apcu_fetch($internalKey, $success);
 
-        if (!$success) {
+        if (! $success) {
             return;
         }
 
@@ -324,7 +324,7 @@ class Apcu extends AbstractAdapter implements
         $it       = new BaseApcuIterator($regexp, $format, 100, APC_LIST_ACTIVE);
         $metadata = $it->current();
 
-        if (!$metadata) {
+        if (! $metadata) {
             return false;
         }
 
@@ -390,7 +390,7 @@ class Apcu extends AbstractAdapter implements
         $internalKey = $prefix . $normalizedKey;
         $ttl         = $options->getTtl();
 
-        if (!apcu_store($internalKey, $value, $ttl)) {
+        if (! apcu_store($internalKey, $value, $ttl)) {
             $type = is_object($value) ? get_class($value) : gettype($value);
             throw new Exception\RuntimeException(
                 "apcu_store('{$internalKey}', <{$type}>, {$ttl}) failed"
@@ -450,7 +450,7 @@ class Apcu extends AbstractAdapter implements
         $internalKey = $prefix . $normalizedKey;
         $ttl         = $options->getTtl();
 
-        if (!apcu_add($internalKey, $value, $ttl)) {
+        if (! apcu_add($internalKey, $value, $ttl)) {
             if (apcu_exists($internalKey)) {
                 return false;
             }
@@ -515,11 +515,11 @@ class Apcu extends AbstractAdapter implements
         $internalKey = $prefix . $normalizedKey;
 
 
-        if (!apcu_exists($internalKey)) {
+        if (! apcu_exists($internalKey)) {
             return false;
         }
 
-        if (!apcu_store($internalKey, $value, $ttl)) {
+        if (! apcu_store($internalKey, $value, $ttl)) {
             $type = is_object($value) ? get_class($value) : gettype($value);
             throw new Exception\RuntimeException(
                 "apcu_store('{$internalKey}', <{$type}>, {$ttl}) failed"
@@ -616,7 +616,7 @@ class Apcu extends AbstractAdapter implements
         if ($newValue === false) {
             $ttl      = $options->getTtl();
             $newValue = $value;
-            if (!apcu_add($internalKey, $newValue, $ttl)) {
+            if (! apcu_add($internalKey, $newValue, $ttl)) {
                 throw new Exception\RuntimeException(
                     "apcu_add('{$internalKey}', {$newValue}, {$ttl}) failed"
                 );
@@ -647,7 +647,7 @@ class Apcu extends AbstractAdapter implements
         if ($newValue === false) {
             $ttl      = $options->getTtl();
             $newValue = -$value;
-            if (!apcu_add($internalKey, $newValue, $ttl)) {
+            if (! apcu_add($internalKey, $newValue, $ttl)) {
                 throw new Exception\RuntimeException(
                     "apcu_add('{$internalKey}', {$newValue}, {$ttl}) failed"
                 );

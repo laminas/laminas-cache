@@ -20,7 +20,12 @@ use Zend\ServiceManager\Exception\ServiceNotCreatedException;
  */
 class ApcuIntegrationTest extends CachePoolTest
 {
+    /**
+     * Backup default timezone
+     * @var string
+     */
     private $tz;
+
     /**
      * Restore 'apc.use_request_time'
      *
@@ -30,7 +35,7 @@ class ApcuIntegrationTest extends CachePoolTest
 
     protected function setUp()
     {
-        if (!getenv('TESTS_ZEND_CACHE_APCU_ENABLED')) {
+        if (! getenv('TESTS_ZEND_CACHE_APCU_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_APCU_ENABLED to run this test');
         }
 

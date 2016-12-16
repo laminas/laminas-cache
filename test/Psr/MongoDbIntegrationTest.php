@@ -18,6 +18,10 @@ use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 class MongoDbIntegrationTest extends CachePoolTest
 {
+    /**
+     * Backup default timezone
+     * @var string
+     */
     private $tz;
 
     /**
@@ -27,7 +31,7 @@ class MongoDbIntegrationTest extends CachePoolTest
 
     protected function setUp()
     {
-        if (!getenv('TESTS_ZEND_CACHE_MONGODB_ENABLED')) {
+        if (! getenv('TESTS_ZEND_CACHE_MONGODB_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MONGODB_ENABLED to run this test');
         }
 

@@ -161,7 +161,7 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
         // check deferred items first
         $hasItem = $this->hasDeferredItem($key);
 
-        if (!$hasItem) {
+        if (! $hasItem) {
             try {
                 $hasItem = $this->storage->hasItem($key);
             } catch (Exception\InvalidArgumentException $e) {
@@ -234,7 +234,7 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
      */
     public function save(CacheItemInterface $item)
     {
-        if (!$item instanceof CacheItem) {
+        if (! $item instanceof CacheItem) {
             throw new InvalidArgumentException('$item must be an instance of ' . CacheItem::class);
         }
 
@@ -282,7 +282,7 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
      */
     public function saveDeferred(CacheItemInterface $item)
     {
-        if (!$item instanceof CacheItem) {
+        if (! $item instanceof CacheItem) {
             throw new InvalidArgumentException('$item must be an instance of ' . CacheItem::class);
         }
 
@@ -318,7 +318,7 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
     private function validateStorage(StorageInterface $storage)
     {
         // all current adapters implement this
-        if (!$storage instanceof FlushableInterface) {
+        if (! $storage instanceof FlushableInterface) {
             throw new CacheException(sprintf(
                 'Storage %s does not implement %s',
                 get_class($storage),
@@ -328,7 +328,7 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
 
         // we've got to be able to set per-item TTL on write
         $capabilities = $storage->getCapabilities();
-        if (!($capabilities->getStaticTtl() && $capabilities->getMinTtl())) {
+        if (! ($capabilities->getStaticTtl() && $capabilities->getMinTtl())) {
             throw new CacheException(sprintf(
                 'Storage %s does not support static TTL',
                 get_class($storage)
@@ -364,7 +364,7 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
             // 'object' => 'object' is OK
             // 'integer' => 'string' is not (redis)
             // 'integer' => 'integer' is not (memcache)
-            if (!(isset($types[$type]) && in_array($types[$type], [true, 'array', 'object'], true))) {
+            if (! (isset($types[$type]) && in_array($types[$type], [true, 'array', 'object'], true))) {
                 return true;
             }
         }
@@ -410,11 +410,11 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
      */
     private function validateKey($key)
     {
-        if (!is_string($key) || preg_match('#[{}()/\\\\@:]#', $key)) {
+        if (! is_string($key) || preg_match('#[{}()/\\\\@:]#', $key)) {
             throw new InvalidArgumentException(sprintf(
                 "Key must be a string and not contain '{}()/\\@:'; '%s' given",
-                is_string($key) ? $key : gettype($key))
-            );
+                is_string($key) ? $key : gettype($key)
+            ));
         }
     }
 

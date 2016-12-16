@@ -140,10 +140,12 @@ class MemcacheTest extends CommonAdapterTest
         $options->setAutoCompressThreshold($threshold);
         $options->setAutoCompressMinSavings($minSavings);
         $this->assertEquals(
-            $threshold, $options->getResourceManager()->getAutoCompressThreshold($options->getResourceId())
+            $threshold,
+            $options->getResourceManager()->getAutoCompressThreshold($options->getResourceId())
         );
         $this->assertEquals(
-            $minSavings, $options->getResourceManager()->getAutoCompressMinSavings($options->getResourceId())
+            $minSavings,
+            $options->getResourceManager()->getAutoCompressMinSavings($options->getResourceId())
         );
 
         $memcache = new Cache\Storage\Adapter\Memcache($options);

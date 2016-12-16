@@ -33,6 +33,7 @@ use Zend\Stdlib\ErrorHandler;
  */
 abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 {
+    // @codingStandardsIgnoreStart
     /**
      * @var \Zend\Cache\Storage\Adapter\AdapterOptions
      */
@@ -54,6 +55,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         'NULL', 'boolean', 'integer', 'double',
         'string', 'array', 'object', 'resource'
     ];
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {
@@ -171,17 +173,20 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
         foreach ($datatypes as $sourceType => $targetType) {
             $this->assertContains(
-                $sourceType, $this->_phpDatatypes,
+                $sourceType,
+                $this->_phpDatatypes,
                 "Unknown source type '{$sourceType}'"
             );
             if (is_string($targetType)) {
                 $this->assertContains(
-                    $targetType, $this->_phpDatatypes,
+                    $targetType,
+                    $this->_phpDatatypes,
                     "Unknown target type '{$targetType}'"
                 );
             } else {
                 $this->assertInternalType(
-                    'bool', $targetType,
+                    'bool',
+                    $targetType,
                     "Target type must be a string or boolean"
                 );
             }
@@ -257,7 +262,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $wait = $ttl + $capabilities->getTtlPrecision();
         usleep($wait * 2000000);
 
-        if (!$capabilities->getUseRequestTime()) {
+        if (! $capabilities->getUseRequestTime()) {
             $this->assertFalse($this->_storage->hasItem('key'));
         } else {
             $this->assertTrue($this->_storage->hasItem('key'));
@@ -534,7 +539,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([], $this->_storage->setItems($items));
 
         $this->_options->setNamespace('defaultns2');
-        $this->assertSame([],  $this->_storage->hasItems(array_keys($items)));
+        $this->assertSame([], $this->_storage->hasItems(array_keys($items)));
 
         $this->_options->setNamespace('defaultns1');
         $rs = $this->_storage->getItems(array_keys($items));
@@ -664,7 +669,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
             // if 'lock-on-expire' is supported the low items could be retrieved
             $rs = $this->_storage->getItems(array_keys($items));
             ksort($rs); // make comparable
-            if (!$capabilities->getLockOnExpire()) {
+            if (! $capabilities->getLockOnExpire()) {
                 $this->assertEquals($itemsHigh, $rs);
             } else {
                 $itemsExpected = array_merge($itemsLow, $itemsHigh);
@@ -770,7 +775,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $wait = $ttl + $capabilities->getTtlPrecision();
         usleep($wait * 2000000);
 
-        if (!$capabilities->getUseRequestTime()) {
+        if (! $capabilities->getUseRequestTime()) {
             $this->assertFalse($this->_storage->hasItem('key'));
         } else {
             $this->assertTrue($this->_storage->hasItem('key'));
@@ -980,7 +985,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         usleep($capabilities->getTtlPrecision() * 1000000);
         $this->assertTrue($this->_storage->hasItem('key'));
 
-        if (!$capabilities->getUseRequestTime()) {
+        if (! $capabilities->getUseRequestTime()) {
             usleep($capabilities->getTtlPrecision() * 2000000);
             $this->assertFalse($this->_storage->hasItem('key'));
         }
@@ -1006,7 +1011,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testOptimize()
     {
-        if (!($this->_storage instanceof OptimizableInterface)) {
+        if (! ($this->_storage instanceof OptimizableInterface)) {
             $this->markTestSkipped("Storage doesn't implement OptimizableInterface");
         }
 
@@ -1015,7 +1020,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testIterator()
     {
-        if (!$this->_storage instanceof IterableInterface) {
+        if (! $this->_storage instanceof IterableInterface) {
             $this->markTestSkipped("Storage doesn't implement IterableInterface");
         }
 
@@ -1047,7 +1052,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testFlush()
     {
-        if (!($this->_storage instanceof FlushableInterface)) {
+        if (! ($this->_storage instanceof FlushableInterface)) {
             $this->markTestSkipped("Storage doesn't implement OptimizableInterface");
         }
 
@@ -1063,7 +1068,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testClearByPrefix()
     {
-        if (!($this->_storage instanceof ClearByPrefixInterface)) {
+        if (! ($this->_storage instanceof ClearByPrefixInterface)) {
             $this->markTestSkipped("Storage doesn't implement ClearByPrefixInterface");
         }
 
@@ -1081,7 +1086,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testClearByPrefixThrowsInvalidArgumentExceptionOnEmptyPrefix()
     {
-        if (!($this->_storage instanceof ClearByPrefixInterface)) {
+        if (! ($this->_storage instanceof ClearByPrefixInterface)) {
             $this->markTestSkipped("Storage doesn't implement ClearByPrefixInterface");
         }
 
@@ -1091,7 +1096,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testClearByNamespace()
     {
-        if (!($this->_storage instanceof ClearByNamespaceInterface)) {
+        if (! ($this->_storage instanceof ClearByNamespaceInterface)) {
             $this->markTestSkipped("Storage doesn't implement ClearByNamespaceInterface");
         }
 
@@ -1125,7 +1130,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testClearByNamespaceThrowsInvalidArgumentExceptionOnEmptyNamespace()
     {
-        if (!($this->_storage instanceof ClearByNamespaceInterface)) {
+        if (! ($this->_storage instanceof ClearByNamespaceInterface)) {
             $this->markTestSkipped("Storage doesn't implement ClearByNamespaceInterface");
         }
 
@@ -1135,7 +1140,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testClearExpired()
     {
-        if (!($this->_storage instanceof ClearExpiredInterface)) {
+        if (! ($this->_storage instanceof ClearExpiredInterface)) {
             $this->markTestSkipped("Storage doesn't implement ClearExpiredInterface");
         }
 
@@ -1166,7 +1171,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testTaggable()
     {
-        if (!($this->_storage instanceof TaggableInterface)) {
+        if (! ($this->_storage instanceof TaggableInterface)) {
             $this->markTestSkipped("Storage doesn't implement TaggableInterface");
         }
 
@@ -1212,7 +1217,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testTaggableFunctionsOnEmptyStorage()
     {
-        if (!($this->_storage instanceof TaggableInterface)) {
+        if (! ($this->_storage instanceof TaggableInterface)) {
             $this->markTestSkipped("Storage doesn't implement TaggableInterface");
         }
 
@@ -1223,7 +1228,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTotalSpace()
     {
-        if (!($this->_storage instanceof TotalSpaceCapableInterface)) {
+        if (! ($this->_storage instanceof TotalSpaceCapableInterface)) {
             $this->markTestSkipped("Storage doesn't implement TotalSpaceCapableInterface");
         }
 
@@ -1238,7 +1243,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAvailableSpace()
     {
-        if (!($this->_storage instanceof AvailableSpaceCapableInterface)) {
+        if (! ($this->_storage instanceof AvailableSpaceCapableInterface)) {
             $this->markTestSkipped("Storage doesn't implement AvailableSpaceCapableInterface");
         }
 
@@ -1258,7 +1263,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function waitForFullSecond()
     {
-        $interval = (microtime(true)-time()) * 1000000;
+        $interval = (microtime(true) - time()) * 1000000;
         usleep((int) $interval);
     }
 }

@@ -16,13 +16,13 @@ class FilesystemStorageAdapterBench extends CommonStorageAdapterBench
     public function __construct()
     {
         $this->tmpCacheDir = @tempnam(sys_get_temp_dir(), 'zend_cache_test_');
-        if (!$this->tmpCacheDir) {
+        if (! $this->tmpCacheDir) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory-file: {$err['message']}");
-        } elseif (!@unlink($this->tmpCacheDir)) {
+        } elseif (! @unlink($this->tmpCacheDir)) {
             $err = error_get_last();
             $this->fail("Can't remove temporary cache directory-file: {$err['message']}");
-        } elseif (!@mkdir($this->tmpCacheDir, 0777)) {
+        } elseif (! @mkdir($this->tmpCacheDir, 0777)) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory: {$err['message']}");
         }

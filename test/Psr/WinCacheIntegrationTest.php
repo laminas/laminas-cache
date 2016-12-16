@@ -21,6 +21,10 @@ use Zend\ServiceManager\Exception\ServiceNotCreatedException;
  */
 class WinCacheIntegrationTest extends CachePoolTest
 {
+    /**
+     * Backup default timezone
+     * @var string
+     */
     private $tz;
 
     /**
@@ -30,7 +34,7 @@ class WinCacheIntegrationTest extends CachePoolTest
 
     protected function setUp()
     {
-        if (!getenv('TESTS_ZEND_CACHE_WINCACHE_ENABLED')) {
+        if (! getenv('TESTS_ZEND_CACHE_WINCACHE_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_WINCACHE_ENABLED to run this test');
         }
 

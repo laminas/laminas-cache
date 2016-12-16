@@ -125,15 +125,15 @@ class FilesystemOptions extends AdapterOptions
     public function setCacheDir($cacheDir)
     {
         if ($cacheDir !== null) {
-            if (!is_dir($cacheDir)) {
+            if (! is_dir($cacheDir)) {
                 throw new Exception\InvalidArgumentException(
                     "Cache directory '{$cacheDir}' not found or not a directory"
                 );
-            } elseif (!is_writable($cacheDir)) {
+            } elseif (! is_writable($cacheDir)) {
                 throw new Exception\InvalidArgumentException(
                     "Cache directory '{$cacheDir}' not writable"
                 );
-            } elseif (!is_readable($cacheDir)) {
+            } elseif (! is_readable($cacheDir)) {
                 throw new Exception\InvalidArgumentException(
                     "Cache directory '{$cacheDir}' not readable"
                 );

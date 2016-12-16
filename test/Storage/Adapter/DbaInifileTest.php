@@ -20,7 +20,7 @@ class DbaInifileTest extends TestCase
 {
     public function testSpecifyingInifileHandlerRaisesException()
     {
-        if (!extension_loaded('dba')) {
+        if (! extension_loaded('dba')) {
             $this->markTestSkipped("Missing ext/dba");
         }
 

@@ -17,11 +17,15 @@ use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 class ZendServerDiskIntegrationTest extends CachePoolTest
 {
+    /**
+     * Backup default timezone
+     * @var string
+     */
     private $tz;
 
     protected function setUp()
     {
-        if (!getenv('TESTS_ZEND_CACHE_ZEND_SERVER_ENABLED')) {
+        if (! getenv('TESTS_ZEND_CACHE_ZEND_SERVER_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_ZEND_SERVER_ENABLED to run this test');
         }
 

@@ -104,7 +104,7 @@ trait MockStorageTrait
             ->will(function ($args) use (&$items) {
                 $key = $args[0];
                 $ttl = $this->reveal()->getOptions()->getTtl();
-                if (!$ttl) {
+                if (! $ttl) {
                     $ttl = 3600;
                 }
                 $ttd = (new DateTime('now', new DateTimeZone('UTC')))->add(new DateInterval('PT' . $ttl . 'S'));

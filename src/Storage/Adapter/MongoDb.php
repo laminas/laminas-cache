@@ -54,8 +54,10 @@ class MongoDb extends AbstractAdapter implements FlushableInterface
      */
     public function __construct($options = null)
     {
-        if (!class_exists('Mongo') || !class_exists('MongoClient')) {
-            throw new Exception\ExtensionNotLoadedException('MongoDb extension not loaded or Mongo polyfill not included');
+        if (! class_exists('Mongo') || ! class_exists('MongoClient')) {
+            throw new Exception\ExtensionNotLoadedException(
+                'MongoDb extension not loaded or Mongo polyfill not included'
+            );
         }
 
         parent::__construct($options);

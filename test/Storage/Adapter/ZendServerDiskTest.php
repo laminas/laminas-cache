@@ -24,7 +24,7 @@ class ZendServerDiskTest extends CommonAdapterTest
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_ZEND_SERVER_ENABLED to run this test');
         }
 
-        if (!function_exists('zend_disk_cache_store') || PHP_SAPI == 'cli') {
+        if (! function_exists('zend_disk_cache_store') || PHP_SAPI == 'cli') {
             try {
                 new Cache\Storage\Adapter\ZendServerDisk();
                 $this->fail("Missing expected ExtensionNotLoadedException");

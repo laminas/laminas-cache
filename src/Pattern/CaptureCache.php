@@ -148,7 +148,7 @@ class CaptureCache extends AbstractPattern
             ErrorHandler::start();
             $res = unlink($file);
             $err = ErrorHandler::stop();
-            if (!$res) {
+            if (! $res) {
                 throw new Exception\RuntimeException("Failed to remove cached pageId '{$pageId}'", 0, $err);
             }
             return true;
@@ -189,7 +189,7 @@ class CaptureCache extends AbstractPattern
      */
     protected function detectPageId()
     {
-        if (!isset($_SERVER['REQUEST_URI'])) {
+        if (! isset($_SERVER['REQUEST_URI'])) {
             throw new Exception\RuntimeException("Can't auto-detect current page identity");
         }
 
@@ -264,7 +264,7 @@ class CaptureCache extends AbstractPattern
             throw new Exception\RuntimeException("Error writing file '{$file}'", 0, $err);
         }
 
-        if ($perm !== false && !chmod($file, $perm)) {
+        if ($perm !== false && ! chmod($file, $perm)) {
             $oct = decoct($perm);
             $err = ErrorHandler::stop();
             throw new Exception\RuntimeException("chmod('{$file}', 0{$oct}) failed", 0, $err);
@@ -306,13 +306,13 @@ class CaptureCache extends AbstractPattern
                 umask($umask);
             }
 
-            if (!$res) {
+            if (! $res) {
                 $oct = ($perm === false) ? '775' : decoct($perm);
                 $err = ErrorHandler::stop();
                 throw new Exception\RuntimeException("mkdir('{$pathname}', 0{$oct}, true) failed", 0, $err);
             }
 
-            if ($perm !== false && !chmod($pathname, $perm)) {
+            if ($perm !== false && ! chmod($pathname, $perm)) {
                 $oct = decoct($perm);
                 $err = ErrorHandler::stop();
                 throw new Exception\RuntimeException("chmod('{$pathname}', 0{$oct}) failed", 0, $err);
@@ -325,7 +325,7 @@ class CaptureCache extends AbstractPattern
             // find existing path and missing path parts
             $parts = [];
             $path  = $pathname;
-            while (!file_exists($path)) {
+            while (! file_exists($path)) {
                 array_unshift($parts, basename($path));
                 $nextPath = dirname($path);
                 if ($nextPath === $path) {
@@ -336,7 +336,7 @@ class CaptureCache extends AbstractPattern
 
             // make all missing path parts
             foreach ($parts as $part) {
-                $path.= DIRECTORY_SEPARATOR . $part;
+                $path .= DIRECTORY_SEPARATOR . $part;
 
                 // create a single directory, set and reset umask immediately
                 $umask = ($umask !== false) ? umask($umask) : false;
@@ -345,7 +345,7 @@ class CaptureCache extends AbstractPattern
                     umask($umask);
                 }
 
-                if (!$res) {
+                if (! $res) {
                     $oct = ($perm === false) ? '775' : decoct($perm);
                     ErrorHandler::stop();
                     throw new Exception\RuntimeException(
@@ -353,7 +353,7 @@ class CaptureCache extends AbstractPattern
                     );
                 }
 
-                if ($perm !== false && !chmod($path, $perm)) {
+                if ($perm !== false && ! chmod($path, $perm)) {
                     $oct = decoct($perm);
                     ErrorHandler::stop();
                     throw new Exception\RuntimeException(

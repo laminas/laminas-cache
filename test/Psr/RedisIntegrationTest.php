@@ -18,6 +18,10 @@ use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 class RedisIntegrationTest extends CachePoolTest
 {
+    /**
+     * Backup default timezone
+     * @var string
+     */
     private $tz;
 
     /**
@@ -27,7 +31,7 @@ class RedisIntegrationTest extends CachePoolTest
 
     protected function setUp()
     {
-        if (!getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
+        if (! getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
         }
 

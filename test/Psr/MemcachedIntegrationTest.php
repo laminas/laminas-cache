@@ -21,6 +21,10 @@ use Zend\ServiceManager\Exception\ServiceNotCreatedException;
  */
 class MemcachedIntegrationTest extends CachePoolTest
 {
+    /**
+     * Backup default timezone
+     * @var string
+     */
     private $tz;
 
     /**
@@ -30,7 +34,7 @@ class MemcachedIntegrationTest extends CachePoolTest
 
     protected function setUp()
     {
-        if (!getenv('TESTS_ZEND_CACHE_MEMCACHED_ENABLED')) {
+        if (! getenv('TESTS_ZEND_CACHE_MEMCACHED_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MEMCACHED_ENABLED to run this test');
         }
 

@@ -22,12 +22,14 @@ use Zend\Cache\Storage\PluginManager;
  */
 abstract class CommonPluginTest extends \PHPUnit_Framework_TestCase
 {
+    // @codingStandardsIgnoreStart
     /**
      * The storage plugin
      *
      * @var \Zend\Cache\Storage\Plugin\PluginInterface
      */
     protected $_plugin;
+    // @codingStandardsIgnoreEnd
 
     /**
      * A data provider for common storage plugin names

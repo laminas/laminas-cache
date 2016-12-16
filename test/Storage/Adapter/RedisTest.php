@@ -17,6 +17,7 @@ use Redis as RedisResource;
  */
 class RedisTest extends CommonAdapterTest
 {
+    // @codingStandardsIgnoreStart
     /**
      *
      * @var Cache\Storage\Adapter\RedisOptions
@@ -28,6 +29,7 @@ class RedisTest extends CommonAdapterTest
      * @var Cache\Storage\Adapter\Redis
      */
     protected $_storage;
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {
@@ -35,7 +37,7 @@ class RedisTest extends CommonAdapterTest
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
         }
 
-        if (!extension_loaded('redis')) {
+        if (! extension_loaded('redis')) {
             $this->markTestSkipped("Redis extension is not loaded");
         }
 
@@ -155,8 +157,15 @@ class RedisTest extends CommonAdapterTest
         $databaseNumber = 1;
         $resourceManager = $this->_options->getResourceManager();
         $resourceManager->setDatabase($this->_options->getResourceId(), $databaseNumber);
-        $this->assertNull($this->_storage->getItem('key'), 'No value should be found because set was done on different database than get');
-        $this->assertEquals($databaseNumber, $resourceManager->getDatabase($this->_options->getResourceId()), 'Incorrect database was returned');
+        $this->assertNull(
+            $this->_storage->getItem('key'),
+            'No value should be found because set was done on different database than get'
+        );
+        $this->assertEquals(
+            $databaseNumber,
+            $resourceManager->getDatabase($this->_options->getResourceId()),
+            'Incorrect database was returned'
+        );
     }
 
     public function testGetSetPassword()
@@ -179,14 +188,22 @@ class RedisTest extends CommonAdapterTest
         $key    = 'key';
         //test if it's still possible to set/get item and if lib serializer works
         $this->_storage->setItem($key, $value);
-        $this->assertEquals($value, $this->_storage->getItem($key), 'Redis should return an array, lib options were not set correctly');
+        $this->assertEquals(
+            $value,
+            $this->_storage->getItem($key),
+            'Redis should return an array, lib options were not set correctly'
+        );
 
 
         $options = ['serializer', RedisResource::SERIALIZER_NONE];
         $this->_options->setLibOptions($options);
         $this->_storage->setItem($key, $value);
         //should not serialize array correctly
-        $this->assertNotInternalType('array', $this->_storage->getItem($key), 'Redis should not serialize automatically anymore, lib options were not set correctly');
+        $this->assertNotInternalType(
+            'array',
+            $this->_storage->getItem($key),
+            'Redis should not serialize automatically anymore, lib options were not set correctly'
+        );
     }
 
     public function testGetSetLibOptionsWithCleanRedisResourceInstance()
@@ -199,14 +216,22 @@ class RedisTest extends CommonAdapterTest
         $key    = 'key';
         //test if it's still possible to set/get item and if lib serializer works
         $redis->setItem($key, $value);
-        $this->assertEquals($value, $redis->getItem($key), 'Redis should return an array, lib options were not set correctly');
+        $this->assertEquals(
+            $value,
+            $redis->getItem($key),
+            'Redis should return an array, lib options were not set correctly'
+        );
 
 
         $options = ['serializer', RedisResource::SERIALIZER_NONE];
         $this->_options->setLibOptions($options);
         $redis->setItem($key, $value);
         //should not serialize array correctly
-        $this->assertNotInternalType('array', $redis->getItem($key), 'Redis should not serialize automatically anymore, lib options were not set correctly');
+        $this->assertNotInternalType(
+            'array',
+            $redis->getItem($key),
+            'Redis should not serialize automatically anymore, lib options were not set correctly'
+        );
     }
 
     /* RedisOptions */
@@ -258,7 +283,11 @@ class RedisTest extends CommonAdapterTest
     {
         $options = ['serializer', RedisResource::SERIALIZER_PHP];
         $this->_options->setLibOptions($options);
-        $this->assertEquals($options, $this->_options->getLibOptions(), 'Lib Options were not set correctly through RedisOptions');
+        $this->assertEquals(
+            $options,
+            $this->_options->getLibOptions(),
+            'Lib Options were not set correctly through RedisOptions'
+        );
     }
 
     public function testGetSetServer()
@@ -286,7 +315,11 @@ class RedisTest extends CommonAdapterTest
     {
         $password = 'my-secret';
         $this->_options->setPassword($password);
-        $this->assertEquals($password, $this->_options->getPassword(), 'Password was set incorrectly using RedisOptions');
+        $this->assertEquals(
+            $password,
+            $this->_options->getPassword(),
+            'Password was set incorrectly using RedisOptions'
+        );
     }
 
     public function testTouchItem()

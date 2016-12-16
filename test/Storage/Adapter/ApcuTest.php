@@ -26,7 +26,7 @@ class ApcuTest extends CommonAdapterTest
 
     public function setUp()
     {
-        if (!getenv('TESTS_ZEND_CACHE_APCU_ENABLED')) {
+        if (! getenv('TESTS_ZEND_CACHE_APCU_ENABLED')) {
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_APCU_ENABLED to run this test');
         }
 
@@ -35,7 +35,7 @@ class ApcuTest extends CommonAdapterTest
 
         try {
             $apcu = new Cache\Storage\Adapter\Apcu();
-            if (!$enabled) {
+            if (! $enabled) {
                 $this->fail('Missing expected ExtensionNotLoadedException');
             }
 
