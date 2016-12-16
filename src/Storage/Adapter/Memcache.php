@@ -113,7 +113,7 @@ class Memcache extends AbstractAdapter implements
      */
     public function setOptions($options)
     {
-        if (!$options instanceof MemcacheOptions) {
+        if (! $options instanceof MemcacheOptions) {
             $options = new MemcacheOptions($options);
         }
 
@@ -128,7 +128,7 @@ class Memcache extends AbstractAdapter implements
      */
     public function getOptions()
     {
-        if (!$this->options) {
+        if (! $this->options) {
             $this->setOptions(new MemcacheOptions());
         }
         return $this->options;
@@ -140,7 +140,7 @@ class Memcache extends AbstractAdapter implements
      */
     protected function getWriteFlag(& $value)
     {
-        if (!$this->getOptions()->getCompression()) {
+        if (! $this->getOptions()->getCompression()) {
             return 0;
         }
         // Don't compress numeric or boolean types
@@ -157,7 +157,7 @@ class Memcache extends AbstractAdapter implements
     public function flush()
     {
         $memc = $this->getMemcacheResource();
-        if (!$memc->flush()) {
+        if (! $memc->flush()) {
             return new Exception\RuntimeException("Memcache flush failed");
         }
         return true;
@@ -360,7 +360,7 @@ class Memcache extends AbstractAdapter implements
         $expiration = $this->expirationTime();
         $flag       = $this->getWriteFlag($value);
 
-        if (!$memc->set($this->namespacePrefix . $normalizedKey, $value, $flag, $expiration)) {
+        if (! $memc->set($this->namespacePrefix . $normalizedKey, $value, $flag, $expiration)) {
             throw new Exception\RuntimeException('Memcache set value failed');
         }
 
@@ -439,7 +439,7 @@ class Memcache extends AbstractAdapter implements
         // Set initial value. Don't use compression!
         // http://www.php.net/manual/memcache.increment.php
         $newValue = $value;
-        if (!$memc->add($internalKey, $newValue, 0, $this->expirationTime())) {
+        if (! $memc->add($internalKey, $newValue, 0, $this->expirationTime())) {
             throw new Exception\RuntimeException('Memcache unable to add increment value');
         }
 
@@ -468,7 +468,7 @@ class Memcache extends AbstractAdapter implements
         // Set initial value. Don't use compression!
         // http://www.php.net/manual/memcache.decrement.php
         $newValue = -$value;
-        if (!$memc->add($internalKey, $newValue, 0, $this->expirationTime())) {
+        if (! $memc->add($internalKey, $newValue, 0, $this->expirationTime())) {
             throw new Exception\RuntimeException('Memcache unable to add decrement value');
         }
 

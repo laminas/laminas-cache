@@ -10,57 +10,27 @@
 namespace ZendTest\Cache\Pattern;
 
 use Zend\Cache;
-
-/**
- * Test class
- * @covers Zend\Cache\Pattern\ObjectCache<extended>
- */
-class TestObjectCache
-{
-    /**
-     * A counter how oftern the method "bar" was called
-     */
-    public static $fooCounter = 0;
-
-    public $property = 'testProperty';
-
-    public function bar()
-    {
-        ++static::$fooCounter;
-        $args = func_get_args();
-
-        echo 'foobar_output('.implode(', ', $args) . ') : ' . static::$fooCounter;
-        return 'foobar_return('.implode(', ', $args) . ') : ' . static::$fooCounter;
-    }
-
-    public function __invoke()
-    {
-        return call_user_func_array([$this, 'bar'], func_get_args());
-    }
-
-    public function emptyMethod()
-    {
-    }
-}
+use ZendTest\Cache\Pattern\TestAsset\TestObjectCache;
 
 /**
  * @group      Zend_Cache
  */
 class ObjectCacheTest extends CommonPatternTest
 {
+    // @codingStandardsIgnoreStart
     /**
      * @var \Zend\Cache\Storage\StorageInterface
      */
     protected $_storage;
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {
-        $class = __NAMESPACE__ . '\TestObjectCache';
         $this->_storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0
         ]);
         $this->_options = new Cache\Pattern\PatternOptions([
-            'object'  => new $class(),
+            'object'  => new TestObjectCache(),
             'storage' => $this->_storage,
         ]);
         $this->_pattern = new Cache\Pattern\ObjectCache();
@@ -158,8 +128,10 @@ class ObjectCacheTest extends CommonPatternTest
         $this->assertSame(get_class($this->_options->getObject()), $this->_options->getObjectKey());
     }
 
+    // @codingStandardsIgnoreStart
     protected function _testCall($method, array $args)
     {
+        // @codingStandardsIgnoreEnd
         $returnSpec = 'foobar_return(' . implode(', ', $args) . ') : ';
         $outputSpec = 'foobar_output(' . implode(', ', $args) . ') : ';
         $callback   = [$this->_pattern, $method];

@@ -24,7 +24,7 @@ class WinCacheTest extends CommonAdapterTest
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_WINCACHE_ENABLED to run this test');
         }
 
-        if (!extension_loaded('wincache')) {
+        if (! extension_loaded('wincache')) {
             $this->markTestSkipped("WinCache extension is not loaded");
         }
 
@@ -33,7 +33,7 @@ class WinCacheTest extends CommonAdapterTest
             $enabled = $enabled && (bool) ini_get('wincache.enablecli');
         }
 
-        if (!$enabled) {
+        if (! $enabled) {
             throw new Exception\ExtensionNotLoadedException(
                 "WinCache is disabled - see 'wincache.ucenabled' and 'wincache.enablecli'"
             );

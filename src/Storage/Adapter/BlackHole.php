@@ -76,7 +76,7 @@ class BlackHole implements
     public function setOptions($options)
     {
         if ($this->options !== $options) {
-            if (!$options instanceof AdapterOptions) {
+            if (! $options instanceof AdapterOptions) {
                 $options = new AdapterOptions($options);
             }
 
@@ -96,7 +96,7 @@ class BlackHole implements
      */
     public function getOptions()
     {
-        if (!$this->options) {
+        if (! $this->options) {
             $this->setOptions(new AdapterOptions());
         }
         return $this->options;

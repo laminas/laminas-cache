@@ -27,7 +27,7 @@ class ZendServerShm extends AbstractZendServer implements
      */
     public function __construct($options = [])
     {
-        if (!function_exists('zend_shm_cache_store')) {
+        if (! function_exists('zend_shm_cache_store')) {
             throw new Exception\ExtensionNotLoadedException("Missing 'zend_shm_cache_*' functions");
         } elseif (PHP_SAPI == 'cli') {
             throw new Exception\ExtensionNotLoadedException("Zend server data cache isn't available on cli");
@@ -91,7 +91,7 @@ class ZendServerShm extends AbstractZendServer implements
      */
     protected function zdcStore($internalKey, $value, $ttl)
     {
-        if (!zend_shm_cache_store($internalKey, $value, $ttl)) {
+        if (! zend_shm_cache_store($internalKey, $value, $ttl)) {
             $valueType = gettype($value);
             throw new Exception\RuntimeException(
                 "zend_shm_cache_store($internalKey, <{$valueType}>, {$ttl}) failed"

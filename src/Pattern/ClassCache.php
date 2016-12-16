@@ -25,9 +25,9 @@ class ClassCache extends CallbackCache
     {
         parent::setOptions($options);
 
-        if (!$options->getClass()) {
+        if (! $options->getClass()) {
             throw new Exception\InvalidArgumentException("Missing option 'class'");
-        } elseif (!$options->getStorage()) {
+        } elseif (! $options->getStorage()) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
         return $this;
@@ -51,12 +51,12 @@ class ClassCache extends CallbackCache
 
         $cache = $options->getCacheByDefault();
         if ($cache) {
-            $cache = !in_array($method, $options->getClassNonCacheMethods());
+            $cache = ! in_array($method, $options->getClassNonCacheMethods());
         } else {
             $cache = in_array($method, $options->getClassCacheMethods());
         }
 
-        if (!$cache) {
+        if (! $cache) {
             if ($args) {
                 return call_user_func_array($callback, $args);
             } else {

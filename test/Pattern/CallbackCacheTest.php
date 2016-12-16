@@ -10,39 +10,8 @@
 namespace ZendTest\Cache\Pattern;
 
 use Zend\Cache;
-
-/**
- * Test class
- * @covers Zend\Cache\Pattern\CallbackCache<extended>
- */
-class TestCallbackCache
-{
-    /**
-     * A counter how oftern the method "foo" was called
-     */
-    public static $fooCounter = 0;
-
-    public static function bar()
-    {
-        ++static::$fooCounter;
-        $args = func_get_args();
-
-        echo   'foobar_output('.implode(', ', $args) . ') : ' . static::$fooCounter;
-        return 'foobar_return('.implode(', ', $args) . ') : ' . static::$fooCounter;
-    }
-
-    public static function emptyMethod()
-    {
-    }
-}
-
-class FailableCallback
-{
-    public function __invoke()
-    {
-        throw new \Exception('This callback should either fail or never be invoked');
-    }
-}
+use ZendTest\Cache\Pattern\TestAsset\FailableCallback;
+use ZendTest\Cache\Pattern\TestAsset\TestCallbackCache;
 
 /**
  * Test function
@@ -50,7 +19,7 @@ class FailableCallback
  */
 function bar()
 {
-    return call_user_func_array(__NAMESPACE__ . '\TestCallbackCache::bar', func_get_args());
+    return call_user_func_array(__NAMESPACE__ . '\TestAsset\TestCallbackCache::bar', func_get_args());
 }
 
 /**
@@ -58,10 +27,12 @@ function bar()
  */
 class CallbackCacheTest extends CommonPatternTest
 {
+    // @codingStandardsIgnoreStart
     /**
      * @var \Zend\Cache\Storage\StorageInterface
      */
     protected $_storage;
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {
@@ -93,7 +64,7 @@ class CallbackCacheTest extends CommonPatternTest
     public function testCallEnabledCacheOutputByDefault()
     {
         $this->_testCall(
-            __NAMESPACE__ . '\TestCallbackCache::bar',
+            __NAMESPACE__ . '\TestAsset\TestCallbackCache::bar',
             ['testCallEnabledCacheOutputByDefault', 'arg2']
         );
     }
@@ -103,7 +74,7 @@ class CallbackCacheTest extends CommonPatternTest
         $options = $this->_pattern->getOptions();
         $options->setCacheOutput(false);
         $this->_testCall(
-            __NAMESPACE__ . '\TestCallbackCache::bar',
+            __NAMESPACE__ . '\TestAsset\TestCallbackCache::bar',
             ['testCallDisabledCacheOutput', 'arg2']
         );
     }
@@ -118,7 +89,7 @@ class CallbackCacheTest extends CommonPatternTest
 
     public function testGenerateKey()
     {
-        $callback = __NAMESPACE__ . '\TestCallbackCache::emptyMethod';
+        $callback = __NAMESPACE__ . '\TestAsset\TestCallbackCache::emptyMethod';
         $args     = ['arg1', 2, 3.33, null];
 
         $generatedKey = $this->_pattern->generateKey($callback, $args);
@@ -148,8 +119,10 @@ class CallbackCacheTest extends CommonPatternTest
      * Running tests calling ZendTest\Cache\Pattern\TestCallbackCache::bar
      * using different callbacks resulting in this method call
      */
+    // @codingStandardsIgnoreStart
     protected function _testCall($callback, array $args)
     {
+        // @codingStandardsIgnoreEnd
         $returnSpec = 'foobar_return(' . implode(', ', $args) . ') : ';
         $outputSpec = 'foobar_output(' . implode(', ', $args) . ') : ';
 

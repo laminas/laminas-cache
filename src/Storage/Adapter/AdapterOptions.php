@@ -22,6 +22,7 @@ use Zend\Stdlib\ErrorHandler;
  */
 class AdapterOptions extends AbstractOptions
 {
+    // @codingStandardsIgnoreStart
     /**
      * Prioritized properties ordered by prio to be set first
      * in case a bulk of options sets set at once
@@ -29,6 +30,7 @@ class AdapterOptions extends AbstractOptions
      * @var string[]
      */
     protected $__prioritizedProperties__ = [];
+    // @codingStandardsIgnoreEnd
 
     /**
      * The adapter using these options
@@ -256,7 +258,7 @@ class AdapterOptions extends AbstractOptions
      */
     protected function normalizeTtl(&$ttl)
     {
-        if (!is_int($ttl)) {
+        if (! is_int($ttl)) {
             $ttl = (float) $ttl;
 
             // convert to int if possible
@@ -311,7 +313,7 @@ class AdapterOptions extends AbstractOptions
 
             if ($options instanceof Traversable) {
                 $options = iterator_to_array($options);
-            } elseif (!is_array($options)) {
+            } elseif (! is_array($options)) {
                 throw new Exception\InvalidArgumentException(
                     sprintf(
                         'Parameter provided to %s must be an %s, %s or %s',

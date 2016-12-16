@@ -17,6 +17,7 @@ use Zend\Cache;
  */
 class OutputCacheTest extends CommonPatternTest
 {
+    // @codingStandardsIgnoreStart
     /**
      * @var \Zend\Cache\Storage\StorageInterface
      */
@@ -28,6 +29,7 @@ class OutputCacheTest extends CommonPatternTest
      * @var null|int
      */
     protected $_obLevel;
+    // @codingStandardsIgnoreEnd
 
     public function setUp()
     {

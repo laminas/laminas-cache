@@ -50,7 +50,7 @@ class XCache extends AbstractAdapter implements
      */
     public function __construct($options = null)
     {
-        if (!extension_loaded('xcache')) {
+        if (! extension_loaded('xcache')) {
             throw new Exception\ExtensionNotLoadedException('Missing ext/xcache');
         }
 
@@ -80,7 +80,7 @@ class XCache extends AbstractAdapter implements
      */
     public function setOptions($options)
     {
-        if (!$options instanceof XCacheOptions) {
+        if (! $options instanceof XCacheOptions) {
             $options = new XCacheOptions($options);
         }
 
@@ -95,7 +95,7 @@ class XCache extends AbstractAdapter implements
      */
     public function getOptions()
     {
-        if (!$this->options) {
+        if (! $this->options) {
             $this->setOptions(new XCacheOptions());
         }
         return $this->options;
@@ -115,9 +115,9 @@ class XCache extends AbstractAdapter implements
 
             $this->initAdminAuth();
             $cnt = xcache_count(XC_TYPE_VAR);
-            for ($i=0; $i < $cnt; $i++) {
+            for ($i = 0; $i < $cnt; $i++) {
                 $info = xcache_info(XC_TYPE_VAR, $i);
-                $this->totalSpace+= $info['size'];
+                $this->totalSpace += $info['size'];
             }
             $this->resetAdminAuth();
         }
@@ -140,7 +140,7 @@ class XCache extends AbstractAdapter implements
         $cnt = xcache_count(XC_TYPE_VAR);
         for ($i = 0; $i < $cnt; $i++) {
             $info = xcache_info(XC_TYPE_VAR, $i);
-            $availableSpace+= $info['avail'];
+            $availableSpace += $info['avail'];
         }
         $this->resetAdminAuth();
 
@@ -228,7 +228,7 @@ class XCache extends AbstractAdapter implements
 
         if ($namespace === '') {
             $cnt = xcache_count(XC_TYPE_VAR);
-            for ($i=0; $i < $cnt; $i++) {
+            for ($i = 0; $i < $cnt; $i++) {
                 $list = xcache_list(XC_TYPE_VAR, $i);
                 foreach ($list['cache_list'] as & $item) {
                     $keys[] = $item['name'];
@@ -239,7 +239,7 @@ class XCache extends AbstractAdapter implements
             $prefixL = strlen($prefix);
 
             $cnt = xcache_count(XC_TYPE_VAR);
-            for ($i=0; $i < $cnt; $i++) {
+            for ($i = 0; $i < $cnt; $i++) {
                 $list = xcache_list(XC_TYPE_VAR, $i);
                 foreach ($list['cache_list'] as & $item) {
                     $keys[] = substr($item['name'], $prefixL);
@@ -312,7 +312,7 @@ class XCache extends AbstractAdapter implements
         if (xcache_isset($internalKey)) {
             $this->initAdminAuth();
             $cnt = xcache_count(XC_TYPE_VAR);
-            for ($i=0; $i < $cnt; $i++) {
+            for ($i = 0; $i < $cnt; $i++) {
                 $list = xcache_list(XC_TYPE_VAR, $i);
                 foreach ($list['cache_list'] as & $metadata) {
                     if ($metadata['name'] === $internalKey) {
@@ -352,7 +352,7 @@ class XCache extends AbstractAdapter implements
             ));
         }
 
-        if (!xcache_set($internalKey, $value, $ttl)) {
+        if (! xcache_set($internalKey, $value, $ttl)) {
             $type = is_object($value) ? get_class($value) : gettype($value);
             throw new Exception\RuntimeException(
                 "xcache_set('{$internalKey}', <{$type}>, {$ttl}) failed"

@@ -26,7 +26,7 @@ class MongoDbOptionsTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MONGODB_ENABLED to run this test');
         }
 
-        if (!extension_loaded('mongo') || !class_exists('\Mongo') || !class_exists('\MongoClient')) {
+        if (! extension_loaded('mongo') || ! class_exists('\Mongo') || ! class_exists('\MongoClient')) {
             // Allow tests to run if Mongo extension is loaded, or we have a polyfill in place
             $this->markTestSkipped("Mongo extension is not loaded");
         }
@@ -70,7 +70,8 @@ class MongoDbOptionsTest extends \PHPUnit_Framework_TestCase
     public function testGetResourceManager()
     {
         $this->assertInstanceOf(
-            '\Zend\Cache\Storage\Adapter\MongoDbResourceManager', $this->object->getResourceManager()
+            '\Zend\Cache\Storage\Adapter\MongoDbResourceManager',
+            $this->object->getResourceManager()
         );
 
         $resourceManager = new MongoDbResourceManager();
