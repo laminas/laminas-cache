@@ -71,7 +71,7 @@ class RedisOptions extends AdapterOptions
      * Set namespace separator
      *
      * @param  string $namespaceSeparator
-     * @return RedisOptions
+     * @return RedisOptions Provides a fluent interface
      */
     public function setNamespaceSeparator($namespaceSeparator)
     {
@@ -97,7 +97,7 @@ class RedisOptions extends AdapterOptions
      * Set the redis resource manager to use
      *
      * @param null|RedisResourceManager $resourceManager
-     * @return RedisOptions
+     * @return RedisOptions Provides a fluent interface
      */
     public function setResourceManager(RedisResourceManager $resourceManager = null)
     {
@@ -135,7 +135,7 @@ class RedisOptions extends AdapterOptions
      * Set the redis resource id
      *
      * @param string $resourceId
-     * @return RedisOptions
+     * @return RedisOptions Provides a fluent interface
      */
     public function setResourceId($resourceId)
     {
@@ -161,7 +161,7 @@ class RedisOptions extends AdapterOptions
      * Set the persistent id
      *
      * @param string $persistentId
-     * @return RedisOptions
+     * @return RedisOptions Provides a fluent interface
      */
     public function setPersistentId($persistentId)
     {
@@ -174,7 +174,7 @@ class RedisOptions extends AdapterOptions
     * Set redis options
     *
     * @param array $libOptions
-    * @return RedisOptions
+    * @return RedisOptions Provides a fluent interface
     * @link http://github.com/nicolasff/phpredis#setoption
     */
     public function setLibOptions(array $libOptions)
@@ -205,7 +205,7 @@ class RedisOptions extends AdapterOptions
      *
      * @param string|array $server
      *
-     * @return RedisOptions
+     * @return RedisOptions Provides a fluent interface
      */
     public function setServer($server)
     {
@@ -228,7 +228,7 @@ class RedisOptions extends AdapterOptions
      *
      * @param int $database Database number
      *
-     * @return RedisOptions
+     * @return RedisOptions Provides a fluent interface
      */
     public function setDatabase($database)
     {
@@ -251,7 +251,7 @@ class RedisOptions extends AdapterOptions
      *
      * @param string $password Password
      *
-     * @return RedisOptions
+     * @return RedisOptions Provides a fluent interface
      */
     public function setPassword($password)
     {
