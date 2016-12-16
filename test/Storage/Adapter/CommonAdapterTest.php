@@ -215,8 +215,6 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('numeric', $capabilities->getTtlPrecision());
         $this->assertGreaterThan(0, $capabilities->getTtlPrecision());
-
-        $this->assertInternalType('bool', $capabilities->getExpiredRead());
     }
 
     public function testKeyCapabilities()
@@ -602,7 +600,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->_storage->getItem('key'));
 
         $this->_options->setTtl(0);
-        if ($capabilities->getExpiredRead()) {
+        if (! $capabilities->getStaticTtl()) {
             $this->assertEquals('value', $this->_storage->getItem('key'));
         } else {
             $this->assertNull($this->_storage->getItem('key'));
@@ -647,7 +645,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
         $rs = $this->_storage->getItems(array_keys($items));
         ksort($rs); // make comparable
 
-        if ($capabilities->getExpiredRead()) {
+        if (! $capabilities->getStaticTtl()) {
             // if item expiration will be done on read there is no difference
             // between the previos set items in TTL.
             // -> all items will be expired

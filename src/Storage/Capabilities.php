@@ -38,16 +38,6 @@ class Capabilities
     protected $baseCapabilities;
 
     /**
-     * Expire read
-     *
-     * If it's NULL the capability isn't set and the getter
-     * returns the base capability or the default value.
-     *
-     * @var null|bool
-     */
-    protected $expiredRead;
-
-    /**
      * Max. key length
      *
      * If it's NULL the capability isn't set and the getter
@@ -403,10 +393,16 @@ class Capabilities
      * Get if expired items are readable
      *
      * @return bool
+     * @deprecated This capability has been deprecated and will be removed in the future.
+     *             Please use getStaticTtl() instead
      */
     public function getExpiredRead()
     {
-        return $this->getCapability('expiredRead', false);
+        trigger_error(
+            'This capability has been deprecated and will be removed in the future. Please use static_ttl instead',
+            E_USER_DEPRECATED
+        );
+        return ! $this->getCapability('staticTtl', true);
     }
 
     /**
@@ -415,10 +411,16 @@ class Capabilities
      * @param  stdClass $marker
      * @param  bool $flag
      * @return Capabilities Fluent interface
+     * @deprecated This capability has been deprecated and will be removed in the future.
+     *             Please use setStaticTtl() instead
      */
     public function setExpiredRead(stdClass $marker, $flag)
     {
-        return $this->setCapability($marker, 'expiredRead', (bool) $flag);
+        trigger_error(
+            'This capability has been deprecated and will be removed in the future. Please use static_ttl instead',
+            E_USER_DEPRECATED
+        );
+        return $this->setCapability($marker, 'staticTtl', (bool) $flag);
     }
 
     /**
