@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#61](https://github.com/zendframework/zend-cache/pull/61)
   Zend Data Cache: minTtl => 1
 
-## 2.7.2 - TBD
+## 2.7.2 - 2016-12-16
 
 ### Added
 
