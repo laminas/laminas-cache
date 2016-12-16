@@ -77,15 +77,15 @@ class MongoDbResourceManager
      */
     public function getResource($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
         $resource = $this->resources[$id];
-        if (!isset($resource['collection_instance'])) {
+        if (! isset($resource['collection_instance'])) {
             try {
-                if (!isset($resource['db_instance'])) {
-                    if (!isset($resource['client_instance'])) {
+                if (! isset($resource['db_instance'])) {
+                    if (! isset($resource['client_instance'])) {
                         $clientClass = version_compare(phpversion('mongo'), '1.3.0', '<') ? 'Mongo' : 'MongoClient';
                         $resource['client_instance'] = new $clientClass(
                             isset($resource['server']) ? $resource['server'] : null,
@@ -124,7 +124,7 @@ class MongoDbResourceManager
 
     public function getServer($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -142,7 +142,7 @@ class MongoDbResourceManager
 
     public function getConnectionOptions($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -162,7 +162,7 @@ class MongoDbResourceManager
 
     public function getDriverOptions($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -179,7 +179,7 @@ class MongoDbResourceManager
 
     public function getDatabase($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -195,7 +195,7 @@ class MongoDbResourceManager
 
     public function getCollection($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 

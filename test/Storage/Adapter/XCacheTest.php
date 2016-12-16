@@ -25,7 +25,7 @@ class XCacheTest extends CommonAdapterTest
             $this->markTestSkipped('EnableTESTS_ZEND_CACHE_XCACHE_ENABLED  to run this test');
         }
 
-        if (!extension_loaded('xcache')) {
+        if (! extension_loaded('xcache')) {
             try {
                 new Cache\Storage\Adapter\XCache();
                 $this->fail("Expected exception Zend\Cache\Exception\ExtensionNotLoadedException");

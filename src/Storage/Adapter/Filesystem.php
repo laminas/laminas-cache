@@ -69,7 +69,7 @@ class Filesystem extends AbstractAdapter implements
      */
     public function setOptions($options)
     {
-        if (!$options instanceof FilesystemOptions) {
+        if (! $options instanceof FilesystemOptions) {
             $options = new FilesystemOptions($options);
         }
 
@@ -84,7 +84,7 @@ class Filesystem extends AbstractAdapter implements
      */
     public function getOptions()
     {
-        if (!$this->options) {
+        if (! $this->options) {
             $this->setOptions(new FilesystemOptions());
         }
         return $this->options;
@@ -116,7 +116,12 @@ class Filesystem extends AbstractAdapter implements
                     unlink($pathname);
                     $err = ErrorHandler::stop();
                     if ($err && file_exists($pathname)) {
-                        ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
+                        ErrorHandler::addError(
+                            $err->getSeverity(),
+                            $err->getMessage(),
+                            $err->getFile(),
+                            $err->getLine()
+                        );
                     }
                 }
             }
@@ -178,7 +183,12 @@ class Filesystem extends AbstractAdapter implements
                     unlink($tagPathname);
                     $err = ErrorHandler::stop();
                     if ($err && file_exists($pathname)) {
-                        ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
+                        ErrorHandler::addError(
+                            $err->getSeverity(),
+                            $err->getMessage(),
+                            $err->getFile(),
+                            $err->getLine()
+                        );
                     }
                 }
             }
@@ -311,13 +321,13 @@ class Filesystem extends AbstractAdapter implements
     public function setTags($key, array $tags)
     {
         $this->normalizeKey($key);
-        if (!$this->internalHasItem($key)) {
+        if (! $this->internalHasItem($key)) {
             return false;
         }
 
         $filespec = $this->getFileSpec($key);
 
-        if (!$tags) {
+        if (! $tags) {
             $this->unlink($filespec . '.tag');
             return true;
         }
@@ -335,7 +345,7 @@ class Filesystem extends AbstractAdapter implements
     public function getTags($key)
     {
         $this->normalizeKey($key);
-        if (!$this->internalHasItem($key)) {
+        if (! $this->internalHasItem($key)) {
             return false;
         }
 
@@ -360,7 +370,7 @@ class Filesystem extends AbstractAdapter implements
      */
     public function clearByTags(array $tags, $disjunction = false)
     {
-        if (!$tags) {
+        if (! $tags) {
             return true;
         }
 
@@ -381,7 +391,7 @@ class Filesystem extends AbstractAdapter implements
             } catch (Exception\RuntimeException $exception) {
                 // ignore missing files because of possible raise conditions
                 // e.g. another process already deleted that item
-                if (!file_exists($pathname)) {
+                if (! file_exists($pathname)) {
                     continue;
                 }
                 throw $exception;
@@ -390,7 +400,7 @@ class Filesystem extends AbstractAdapter implements
             $rem  = false;
             if ($disjunction && count($diff) < $tagCount) {
                 $rem = true;
-            } elseif (!$disjunction && !$diff) {
+            } elseif (! $disjunction && ! $diff) {
                 $rem = true;
             }
 
@@ -571,7 +581,7 @@ class Filesystem extends AbstractAdapter implements
      */
     protected function internalGetItem(& $normalizedKey, & $success = null, & $casToken = null)
     {
-        if (!$this->internalHasItem($normalizedKey)) {
+        if (! $this->internalHasItem($normalizedKey)) {
             $success = false;
             return;
         }
@@ -610,7 +620,7 @@ class Filesystem extends AbstractAdapter implements
 
             // read items
             foreach ($keys as $i => $key) {
-                if (!$this->internalHasItem($key)) {
+                if (! $this->internalHasItem($key)) {
                     unset($keys[$i]);
                     continue;
                 }
@@ -685,7 +695,7 @@ class Filesystem extends AbstractAdapter implements
     protected function internalHasItem(& $normalizedKey)
     {
         $file = $this->getFileSpec($normalizedKey) . '.dat';
-        if (!file_exists($file)) {
+        if (! file_exists($file)) {
             return false;
         }
 
@@ -694,7 +704,7 @@ class Filesystem extends AbstractAdapter implements
             ErrorHandler::start();
             $mtime = filemtime($file);
             $error = ErrorHandler::stop();
-            if (!$mtime) {
+            if (! $mtime) {
                 throw new Exception\RuntimeException("Error getting mtime of file '{$file}'", 0, $error);
             }
 
@@ -747,7 +757,7 @@ class Filesystem extends AbstractAdapter implements
      */
     protected function internalGetMetadata(& $normalizedKey)
     {
-        if (!$this->internalHasItem($normalizedKey)) {
+        if (! $this->internalHasItem($normalizedKey)) {
             return false;
         }
 
@@ -760,11 +770,11 @@ class Filesystem extends AbstractAdapter implements
             'mtime'    => filemtime($file)
         ];
 
-        if (!$options->getNoCtime()) {
+        if (! $options->getNoCtime()) {
             $metadata['ctime'] = filectime($file);
         }
 
-        if (!$options->getNoAtime()) {
+        if (! $options->getNoAtime()) {
             $metadata['atime'] = fileatime($file);
         }
 
@@ -792,11 +802,11 @@ class Filesystem extends AbstractAdapter implements
                 'mtime'    => filemtime($file),
             ];
 
-            if (!$options->getNoCtime()) {
+            if (! $options->getNoCtime()) {
                 $metadata['ctime'] = filectime($file);
             }
 
-            if (!$options->getNoAtime()) {
+            if (! $options->getNoAtime()) {
                 $metadata['atime'] = fileatime($file);
             }
 
@@ -993,7 +1003,7 @@ class Filesystem extends AbstractAdapter implements
 
             foreach ($contents as $file => & $content) {
                 $this->putFileContent($file, $content, $nonBlocking, $wouldblock);
-                if (!$nonBlocking || !$wouldblock) {
+                if (! $nonBlocking || ! $wouldblock) {
                     unset($contents[$file]);
                 }
             }
@@ -1040,7 +1050,7 @@ class Filesystem extends AbstractAdapter implements
      */
     protected function internalCheckAndSetItem(& $token, & $normalizedKey, & $value)
     {
-        if (!$this->internalHasItem($normalizedKey)) {
+        if (! $this->internalHasItem($normalizedKey)) {
             return false;
         }
 
@@ -1105,7 +1115,7 @@ class Filesystem extends AbstractAdapter implements
      */
     protected function internalTouchItem(& $normalizedKey)
     {
-        if (!$this->internalHasItem($normalizedKey)) {
+        if (! $this->internalHasItem($normalizedKey)) {
             return false;
         }
 
@@ -1114,7 +1124,7 @@ class Filesystem extends AbstractAdapter implements
         ErrorHandler::start();
         $touch = touch($filespec . '.dat');
         $error = ErrorHandler::stop();
-        if (!$touch) {
+        if (! $touch) {
             throw new Exception\RuntimeException("Error touching file '{$filespec}.dat'", 0, $error);
         }
 
@@ -1173,7 +1183,7 @@ class Filesystem extends AbstractAdapter implements
     protected function internalRemoveItem(& $normalizedKey)
     {
         $filespec = $this->getFileSpec($normalizedKey);
-        if (!file_exists($filespec . '.dat')) {
+        if (! file_exists($filespec . '.dat')) {
             return false;
         } else {
             $this->unlink($filespec . '.dat');
@@ -1197,10 +1207,10 @@ class Filesystem extends AbstractAdapter implements
 
             // detect metadata
             $metadata = ['mtime', 'filespec'];
-            if (!$options->getNoAtime()) {
+            if (! $options->getNoAtime()) {
                 $metadata[] = 'atime';
             }
-            if (!$options->getNoCtime()) {
+            if (! $options->getNoCtime()) {
                 $metadata[] = 'ctime';
             }
 
@@ -1241,13 +1251,13 @@ class Filesystem extends AbstractAdapter implements
                 if (isset($params['no_atime']) || isset($params['no_ctime'])) {
                     $metadata = $capabilities->getSupportedMetadata();
 
-                    if (isset($params['no_atime']) && !$params['no_atime']) {
+                    if (isset($params['no_atime']) && ! $params['no_atime']) {
                         $metadata[] = 'atime';
                     } elseif (isset($params['no_atime']) && ($index = array_search('atime', $metadata)) !== false) {
                         unset($metadata[$index]);
                     }
 
-                    if (isset($params['no_ctime']) && !$params['no_ctime']) {
+                    if (isset($params['no_ctime']) && ! $params['no_ctime']) {
                         $metadata[] = 'ctime';
                     } elseif (isset($params['no_ctime']) && ($index = array_search('ctime', $metadata)) !== false) {
                         unset($metadata[$index]);
@@ -1279,7 +1289,7 @@ class Filesystem extends AbstractAdapter implements
             $dir . DIRECTORY_SEPARATOR . $prefix  . '*',
             GLOB_ONLYDIR | GLOB_NOESCAPE | GLOB_NOSORT
         );
-        if (!$glob) {
+        if (! $glob) {
             // On some systems glob returns false even on empty result
             return true;
         }
@@ -1319,8 +1329,8 @@ class Filesystem extends AbstractAdapter implements
             if ($level > 0) {
                 // create up to 256 directories per directory level
                 $hash = md5($normalizedKey);
-                for ($i = 0, $max = ($level * 2); $i < $max; $i+= 2) {
-                    $path .= $prefix . $hash[$i] . $hash[$i+1] . DIRECTORY_SEPARATOR;
+                for ($i = 0, $max = ($level * 2); $i < $max; $i += 2) {
+                    $path .= $prefix . $hash[$i] . $hash[$i + 1] . DIRECTORY_SEPARATOR;
                 }
             }
 
@@ -1366,7 +1376,7 @@ class Filesystem extends AbstractAdapter implements
                 $lock = flock($fp, LOCK_SH);
             }
 
-            if (!$lock) {
+            if (! $lock) {
                 fclose($fp);
                 $err = ErrorHandler::stop();
                 throw new Exception\RuntimeException("Error locking file '{$file}'", 0, $err);
@@ -1410,7 +1420,7 @@ class Filesystem extends AbstractAdapter implements
         $level   = $options->getDirLevel();
 
         // Directory structure is required only if directory level > 0
-        if (!$level) {
+        if (! $level) {
             return;
         }
 
@@ -1438,7 +1448,7 @@ class Filesystem extends AbstractAdapter implements
                 umask($umask);
             }
 
-            if (!$res) {
+            if (! $res) {
                 $err = ErrorHandler::stop();
 
                 // Issue 6435:
@@ -1452,7 +1462,7 @@ class Filesystem extends AbstractAdapter implements
                 throw new Exception\RuntimeException("mkdir('{$pathname}', 0{$oct}, true) failed", 0, $err);
             }
 
-            if ($perm !== false && !chmod($pathname, $perm)) {
+            if ($perm !== false && ! chmod($pathname, $perm)) {
                 $oct = decoct($perm);
                 $err = ErrorHandler::stop();
                 throw new Exception\RuntimeException("chmod('{$pathname}', 0{$oct}) failed", 0, $err);
@@ -1465,7 +1475,7 @@ class Filesystem extends AbstractAdapter implements
             // find existing path and missing path parts
             $parts = [];
             $path  = $pathname;
-            while (!file_exists($path)) {
+            while (! file_exists($path)) {
                 array_unshift($parts, basename($path));
                 $nextPath = dirname($path);
                 if ($nextPath === $path) {
@@ -1476,7 +1486,7 @@ class Filesystem extends AbstractAdapter implements
 
             // make all missing path parts
             foreach ($parts as $part) {
-                $path.= DIRECTORY_SEPARATOR . $part;
+                $path .= DIRECTORY_SEPARATOR . $part;
 
                 // create a single directory, set and reset umask immediately
                 $umask = ($umask !== false) ? umask($umask) : false;
@@ -1485,7 +1495,7 @@ class Filesystem extends AbstractAdapter implements
                     umask($umask);
                 }
 
-                if (!$res) {
+                if (! $res) {
                     // Issue 6435:
                     // mkdir could fail because of a race condition it was already created by another process
                     // after the first file_exists above ... go to the next path part.
@@ -1500,7 +1510,7 @@ class Filesystem extends AbstractAdapter implements
                     );
                 }
 
-                if ($perm !== false && !chmod($path, $perm)) {
+                if ($perm !== false && ! chmod($path, $perm)) {
                     $oct = decoct($perm);
                     ErrorHandler::stop();
                     throw new Exception\RuntimeException(
@@ -1553,19 +1563,19 @@ class Filesystem extends AbstractAdapter implements
                 umask($umask);
             }
 
-            if (!$fp) {
+            if (! $fp) {
                 $err = ErrorHandler::stop();
                 throw new Exception\RuntimeException("Error opening file '{$file}'", 0, $err);
             }
 
-            if ($perm !== false && !chmod($file, $perm)) {
+            if ($perm !== false && ! chmod($file, $perm)) {
                 fclose($fp);
                 $oct = decoct($perm);
                 $err = ErrorHandler::stop();
                 throw new Exception\RuntimeException("chmod('{$file}', 0{$oct}) failed", 0, $err);
             }
 
-            if (!flock($fp, LOCK_EX | LOCK_NB, $wouldblock)) {
+            if (! flock($fp, LOCK_EX | LOCK_NB, $wouldblock)) {
                 fclose($fp);
                 $err = ErrorHandler::stop();
                 if ($wouldblock) {
@@ -1582,7 +1592,7 @@ class Filesystem extends AbstractAdapter implements
                 throw new Exception\RuntimeException("Error writing file '{$file}'", 0, $err);
             }
 
-            if (!ftruncate($fp, strlen($data))) {
+            if (! ftruncate($fp, strlen($data))) {
                 flock($fp, LOCK_UN);
                 fclose($fp);
                 $err = ErrorHandler::stop();
@@ -1612,7 +1622,7 @@ class Filesystem extends AbstractAdapter implements
                 throw new Exception\RuntimeException("Error writing file '{$file}'", 0, $err);
             }
 
-            if ($perm !== false && !chmod($file, $perm)) {
+            if ($perm !== false && ! chmod($file, $perm)) {
                 $oct = decoct($perm);
                 $err = ErrorHandler::stop();
                 throw new Exception\RuntimeException("chmod('{$file}', 0{$oct}) failed", 0, $err);
@@ -1636,7 +1646,7 @@ class Filesystem extends AbstractAdapter implements
         $err = ErrorHandler::stop();
 
         // only throw exception if file still exists after deleting
-        if (!$res && file_exists($file)) {
+        if (! $res && file_exists($file)) {
             throw new Exception\RuntimeException(
                 "Error unlinking file '{$file}'; file still exists",
                 0,

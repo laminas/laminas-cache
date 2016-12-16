@@ -31,7 +31,7 @@ class OutputCache extends AbstractPattern
     {
         parent::setOptions($options);
 
-        if (!$options->getStorage()) {
+        if (! $options->getStorage()) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
 

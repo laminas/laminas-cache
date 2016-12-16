@@ -84,7 +84,7 @@ class IgnoreUserAbort extends AbstractPlugin
      */
     public function onBefore(Event $event)
     {
-        if ($this->activatedTarget === null && !ignore_user_abort(true)) {
+        if ($this->activatedTarget === null && ! ignore_user_abort(true)) {
             $this->activatedTarget = $event->getStorage();
         }
     }

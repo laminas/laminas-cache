@@ -23,7 +23,7 @@ class MemcachedTest extends CommonAdapterTest
             $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MEMCACHED_ENABLED to run this test');
         }
 
-        if (!extension_loaded('memcached')) {
+        if (! extension_loaded('memcached')) {
             $this->markTestSkipped("Memcached extension is not loaded");
         }
 
@@ -152,7 +152,8 @@ class MemcachedTest extends CommonAdapterTest
         ]);
 
         $this->assertEquals($options->getResourceManager()->getLibOption(
-            $options->getResourceId(), \Memcached::OPT_COMPRESSION
+            $options->getResourceId(),
+            \Memcached::OPT_COMPRESSION
         ), false);
 
         $memcached = new Cache\Storage\Adapter\Memcached($options);
@@ -179,7 +180,8 @@ class MemcachedTest extends CommonAdapterTest
         $this->assertTrue($deprecated, 'Missing deprecated error');
 
         $this->assertEquals($options->getResourceManager()->getLibOption(
-            $options->getResourceId(), \Memcached::OPT_COMPRESSION
+            $options->getResourceId(),
+            \Memcached::OPT_COMPRESSION
         ), false);
 
         $memcached = new Cache\Storage\Adapter\Memcached($options);

@@ -61,7 +61,7 @@ class MemcacheResourceManager
      */
     public function getResource($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -105,16 +105,16 @@ class MemcacheResourceManager
 
         if ($serverDefaults instanceof Traversable) {
             $serverDefaults = ArrayUtils::iteratorToArray($serverDefaults);
-        } elseif (!is_array($serverDefaults)) {
+        } elseif (! is_array($serverDefaults)) {
             throw new Exception\InvalidArgumentException(
                 'ServerDefaults must be an instance Traversable or an array'
             );
         }
 
-        if (!($resource instanceof MemcacheResource)) {
+        if (! ($resource instanceof MemcacheResource)) {
             if ($resource instanceof Traversable) {
                 $resource = ArrayUtils::iteratorToArray($resource);
-            } elseif (!is_array($resource)) {
+            } elseif (! is_array($resource)) {
                 throw new Exception\InvalidArgumentException(
                     'Resource must be an instance of Memcache or an array or Traversable'
                 );
@@ -191,7 +191,7 @@ class MemcacheResourceManager
      */
     protected function setResourceAutoCompressThreshold(MemcacheResource $resource, $threshold, $minSavings)
     {
-        if (!isset($threshold)) {
+        if (! isset($threshold)) {
             return;
         }
         if (isset($minSavings)) {
@@ -210,7 +210,7 @@ class MemcacheResourceManager
      */
     public function getAutoCompressThreshold($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -232,7 +232,7 @@ class MemcacheResourceManager
      */
     public function setAutoCompressThreshold($id, $threshold, $minSavings = false)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             return $this->setResource($id, [
                 'auto_compress_threshold' => $threshold,
             ]);
@@ -261,7 +261,7 @@ class MemcacheResourceManager
      */
     public function getAutoCompressMinSavings($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -283,7 +283,7 @@ class MemcacheResourceManager
      */
     public function setAutoCompressMinSavings($id, $minSavings)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             return $this->setResource($id, [
                 'auto_compress_min_savings' => $minSavings,
             ]);
@@ -314,7 +314,7 @@ class MemcacheResourceManager
      */
     public function setServerDefaults($id, array $serverDefaults)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             return $this->setResource($id, [
                 'server_defaults' => $serverDefaults
             ]);
@@ -335,7 +335,7 @@ class MemcacheResourceManager
      */
     public function getServerDefaults($id)
     {
-        if (!isset($this->serverDefaults[$id])) {
+        if (! isset($this->serverDefaults[$id])) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
         return $this->serverDefaults[$id];
@@ -347,7 +347,7 @@ class MemcacheResourceManager
      */
     protected function normalizeServerDefaults(& $serverDefaults)
     {
-        if (!is_array($serverDefaults) && !($serverDefaults instanceof Traversable)) {
+        if (! is_array($serverDefaults) && ! ($serverDefaults instanceof Traversable)) {
             throw new Exception\InvalidArgumentException(
                 "Server defaults must be an array or an instance of Traversable"
             );
@@ -387,7 +387,7 @@ class MemcacheResourceManager
      */
     public function setFailureCallback($id, $failureCallback)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             return $this->setResource($id, [], $failureCallback);
         }
 
@@ -404,7 +404,7 @@ class MemcacheResourceManager
      */
     public function getFailureCallback($id)
     {
-        if (!isset($this->failureCallbacks[$id])) {
+        if (! isset($this->failureCallbacks[$id])) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
         return $this->failureCallbacks[$id];
@@ -419,7 +419,7 @@ class MemcacheResourceManager
      */
     public function getServers($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -439,7 +439,7 @@ class MemcacheResourceManager
      */
     public function addServers($id, $servers)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             return $this->setResource($id, [
                 'servers' => $servers
             ]);
@@ -582,7 +582,7 @@ class MemcacheResourceManager
             }
 
             $urlParts = parse_url($server);
-            if (!$urlParts) {
+            if (! $urlParts) {
                 throw new Exception\InvalidArgumentException("Invalid server given");
             }
 
@@ -594,7 +594,7 @@ class MemcacheResourceManager
             }
         }
 
-        if (!$sTmp['host']) {
+        if (! $sTmp['host']) {
             throw new Exception\InvalidArgumentException('Missing required server host');
         }
 

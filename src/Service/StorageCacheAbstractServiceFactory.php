@@ -91,13 +91,13 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
             return $this->config;
         }
 
-        if (!$container->has('config')) {
+        if (! $container->has('config')) {
             $this->config = [];
             return $this->config;
         }
 
         $config = $container->get('config');
-        if (!isset($config[$this->configKey])) {
+        if (! isset($config[$this->configKey])) {
             $this->config = [];
             return $this->config;
         }

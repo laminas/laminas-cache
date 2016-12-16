@@ -53,7 +53,7 @@ class Dba extends AbstractAdapter implements
      */
     public function __construct($options = null)
     {
-        if (!extension_loaded('dba')) {
+        if (! extension_loaded('dba')) {
             throw new Exception\ExtensionNotLoadedException('Missing ext/dba');
         }
 
@@ -86,7 +86,7 @@ class Dba extends AbstractAdapter implements
      */
     public function setOptions($options)
     {
-        if (!$options instanceof DbaOptions) {
+        if (! $options instanceof DbaOptions) {
             $options = new DbaOptions($options);
         }
 
@@ -101,7 +101,7 @@ class Dba extends AbstractAdapter implements
      */
     public function getOptions()
     {
-        if (!$this->options) {
+        if (! $this->options) {
             $this->setOptions(new DbaOptions());
         }
         return $this->options;
@@ -196,7 +196,7 @@ class Dba extends AbstractAdapter implements
             ErrorHandler::start();
             $result = unlink($pathname);
             $error  = ErrorHandler::stop();
-            if (!$result) {
+            if (! $result) {
                 throw new Exception\RuntimeException("unlink('{$pathname}') failed", 0, $error);
             }
         }
@@ -308,7 +308,7 @@ class Dba extends AbstractAdapter implements
     public function optimize()
     {
         $this->_open();
-        if (!dba_optimize($this->handle)) {
+        if (! dba_optimize($this->handle)) {
             throw new Exception\RuntimeException('dba_optimize failed');
         }
         return true;
@@ -381,7 +381,7 @@ class Dba extends AbstractAdapter implements
         $cacheableValue = (string) $value; // dba_replace requires a string
 
         $this->_open();
-        if (!dba_replace($internalKey, $cacheableValue, $this->handle)) {
+        if (! dba_replace($internalKey, $cacheableValue, $this->handle)) {
             throw new Exception\RuntimeException("dba_replace('{$internalKey}', ...) failed");
         }
 
@@ -415,7 +415,7 @@ class Dba extends AbstractAdapter implements
         ErrorHandler::start();
         $result = dba_insert($internalKey, $value, $this->handle);
         $error  = ErrorHandler::stop();
-        if (!$result || $error) {
+        if (! $result || $error) {
             return false;
         }
 
@@ -439,7 +439,7 @@ class Dba extends AbstractAdapter implements
         $this->_open();
 
         // Workaround for PHP-Bug #62490
-        if (!dba_exists($internalKey, $this->handle)) {
+        if (! dba_exists($internalKey, $this->handle)) {
             return false;
         }
 
@@ -502,9 +502,11 @@ class Dba extends AbstractAdapter implements
      * @throws Exception\LogicException
      * @throws Exception\RuntimeException
      */
+    // @codingStandardsIgnoreStart
     protected function _open()
     {
-        if (!$this->handle) {
+        // @codingStandardsIgnoreEnd
+        if (! $this->handle) {
             $options = $this->getOptions();
             $pathname = $options->getPathname();
             $mode     = $options->getMode();
@@ -515,9 +517,9 @@ class Dba extends AbstractAdapter implements
             }
 
             ErrorHandler::start();
-            $dba =  dba_open($pathname, $mode, $handler);
+            $dba = dba_open($pathname, $mode, $handler);
             $err = ErrorHandler::stop();
-            if (!$dba) {
+            if (! $dba) {
                 throw new Exception\RuntimeException(
                     "dba_open('{$pathname}', '{$mode}', '{$handler}') failed",
                     0,
@@ -533,8 +535,10 @@ class Dba extends AbstractAdapter implements
      *
      * @return void
      */
+    // @codingStandardsIgnoreStart
     protected function _close()
     {
+        // @codingStandardsIgnoreEnd
         if ($this->handle) {
             ErrorHandler::start(E_NOTICE);
             dba_close($this->handle);

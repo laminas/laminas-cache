@@ -35,7 +35,7 @@ class MemcachedResourceManager
      */
     public function getServers($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -74,9 +74,9 @@ class MemcachedResourceManager
             }
 
             // array('host' => <host>[, 'port' => <port>[, 'weight' => <weight>]])
-            if (!isset($server[0]) && isset($server['host'])) {
+            if (! isset($server[0]) && isset($server['host'])) {
                 $host   = (string) $server['host'];
-                $port   = isset($server['port'])   ? (int) $server['port']   : $port;
+                $port   = isset($server['port']) ? (int) $server['port'] : $port;
                 $weight = isset($server['weight']) ? (int) $server['weight'] : $weight;
             }
         } else {
@@ -87,7 +87,7 @@ class MemcachedResourceManager
             }
 
             $server = parse_url($server);
-            if (!$server) {
+            if (! $server) {
                 throw new Exception\InvalidArgumentException("Invalid server given");
             }
 
@@ -103,7 +103,7 @@ class MemcachedResourceManager
             }
         }
 
-        if (!$host) {
+        if (! $host) {
             throw new Exception\InvalidArgumentException('Missing required server host');
         }
 
@@ -134,7 +134,7 @@ class MemcachedResourceManager
      */
     public function getResource($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -179,10 +179,10 @@ class MemcachedResourceManager
     {
         $id = (string) $id;
 
-        if (!($resource instanceof MemcachedResource)) {
+        if (! ($resource instanceof MemcachedResource)) {
             if ($resource instanceof Traversable) {
                 $resource = ArrayUtils::iteratorToArray($resource);
-            } elseif (!is_array($resource)) {
+            } elseif (! is_array($resource)) {
                 throw new Exception\InvalidArgumentException(
                     'Resource must be an instance of Memcached or an array or Traversable'
                 );
@@ -226,7 +226,7 @@ class MemcachedResourceManager
      */
     public function setPersistentId($id, $persistentId)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             return $this->setResource($id, [
                 'persistent_id' => $persistentId
             ]);
@@ -254,7 +254,7 @@ class MemcachedResourceManager
      */
     public function getPersistentId($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -288,7 +288,7 @@ class MemcachedResourceManager
      */
     public function setLibOptions($id, array $libOptions)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             return $this->setResource($id, [
                 'lib_options' => $libOptions
             ]);
@@ -321,7 +321,7 @@ class MemcachedResourceManager
      */
     public function getLibOptions($id)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -364,7 +364,7 @@ class MemcachedResourceManager
      */
     public function getLibOption($id, $key)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             throw new Exception\RuntimeException("No resource with id '{$id}'");
         }
 
@@ -386,7 +386,7 @@ class MemcachedResourceManager
      */
     protected function normalizeLibOptions(& $libOptions)
     {
-        if (!is_array($libOptions) && !($libOptions instanceof Traversable)) {
+        if (! is_array($libOptions) && ! ($libOptions instanceof Traversable)) {
             throw new Exception\InvalidArgumentException(
                 "Lib-Options must be an array or an instance of Traversable"
             );
@@ -412,7 +412,7 @@ class MemcachedResourceManager
         // convert option name into it's constant value
         if (is_string($key)) {
             $const = 'Memcached::OPT_' . str_replace([' ', '-'], '_', strtoupper($key));
-            if (!defined($const)) {
+            if (! defined($const)) {
                 throw new Exception\InvalidArgumentException("Unknown libmemcached option '{$key}' ({$const})");
             }
             $key = constant($const);
@@ -436,7 +436,7 @@ class MemcachedResourceManager
      */
     public function setServers($id, $servers)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             return $this->setResource($id, [
                 'servers' => $servers
             ]);
@@ -467,7 +467,7 @@ class MemcachedResourceManager
      */
     public function addServers($id, $servers)
     {
-        if (!$this->hasResource($id)) {
+        if (! $this->hasResource($id)) {
             return $this->setResource($id, [
                 'servers' => $servers
             ]);
@@ -513,7 +513,7 @@ class MemcachedResourceManager
      */
     protected function normalizeServers(& $servers)
     {
-        if (!is_array($servers) && !$servers instanceof Traversable) {
+        if (! is_array($servers) && ! $servers instanceof Traversable) {
             // Convert string into a list of servers
             $servers = explode(',', $servers);
         }

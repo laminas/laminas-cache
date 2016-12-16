@@ -11,6 +11,7 @@ namespace Zend\Cache\Storage\Adapter;
 
 class MongoDbOptions extends AdapterOptions
 {
+    // @codingStandardsIgnoreStart
     /**
      * Prioritized properties ordered by prio to be set first
      * in case a bulk of options sets set at once
@@ -18,6 +19,7 @@ class MongoDbOptions extends AdapterOptions
      * @var string[]
      */
     protected $__prioritizedProperties__ = ['resource_manager', 'resource_id'];
+    // @codingStandardsIgnoreEnd
 
     /**
      * The namespace separator
