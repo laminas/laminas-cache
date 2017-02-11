@@ -17,6 +17,9 @@ use Zend\Cache\Storage\Adapter\MongoDbResourceManager;
  */
 class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var MongoDbResourceManager
+     */
     protected $object;
 
     public function setUp()
@@ -147,46 +150,48 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
         $this->object->getResource($id);
     }
 
-    public function testSetOptionsClearsCollectionInstance()
+    public function testGetSetCollection()
     {
-        $id                = 'foo';
-        $server            = getenv('TESTS_ZEND_CACHE_MONGODB_CONNECTSTRING');
-        $connectionOptions = ['connectTimeoutMS' => 500];
-        $database          = getenv('TESTS_ZEND_CACHE_MONGODB_DATABASE');
-        $collection        = getenv('TESTS_ZEND_CACHE_MONGODB_COLLECTION');
+        $resourceId     = 'testResource';
+        $collectionName = 'testCollection';
 
-        $collectionClearingCallbacks = [
-            function () use ($id, $collection) {
-                $this->object->setCollection($id, $collection);
-            },
-            function () use ($id, $connectionOptions) {
-                $this->object->setConnectionOptions($id, $connectionOptions);
-            },
-            function () use ($id, $server) {
-                $this->object->setServer($id, $server);
-            },
-            function () use ($id) {
-                $this->object->setDriverOptions($id, []);
-            },
-            function () use ($id, $database) {
-                $this->object->setDatabase($id, $database);
-            },
-        ];
+        $this->object->setCollection($resourceId, $collectionName);
+        $this->assertSame($collectionName, $this->object->getCollection($resourceId));
+    }
 
-        // Initialize the resource manager
-        array_walk($collectionClearingCallbacks, function (callable  $callback) {
-            $callback();
-        });
+    public function testGetSetConnectionOptions()
+    {
+        $resourceId        = 'testResource';
+        $connectionOptions = ['test1' => 'option1', 'test2' => 'option2'];
 
-        $lastCollection = $this->object->getResource($id);
+        $this->object->setConnectionOptions($resourceId, $connectionOptions);
+        $this->assertSame($connectionOptions, $this->object->getConnectionOptions($resourceId));
+    }
 
-        // Update options on the manager and check collection instances
-        foreach ($collectionClearingCallbacks as $callback) {
-            $callback();
-            $currentCollection = $this->object->getResource($id);
+    public function testGetSetServer()
+    {
+        $resourceId = 'testResource';
+        $server     = 'testServer';
 
-            $this->assertNotSame($lastCollection, $currentCollection);
-            $lastCollection = $currentCollection;
-        }
+        $this->object->setServer($resourceId, $server);
+        $this->assertSame($server, $this->object->getServer($resourceId));
+    }
+
+    public function testGetSetDriverOptions()
+    {
+        $resourceId    = 'testResource';
+        $driverOptions = ['test1' => 'option1', 'test2' => 'option2'];
+
+        $this->object->setDriverOptions($resourceId, $driverOptions);
+        $this->assertSame($driverOptions, $this->object->getDriverOptions($resourceId));
+    }
+
+    public function testGetSetDatabase()
+    {
+        $resourceId = 'testResource';
+        $database   = 'testDatabase';
+
+        $this->object->setDatabase($resourceId, $database);
+        $this->assertSame($database, $this->object->getDatabase($resourceId));
     }
 }
