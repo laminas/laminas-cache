@@ -43,7 +43,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#128](https://github.com/zendframework/zend-cache/pull/128)
+  Fixed incorrect variable usage in MongoDbResourceManager
 
 ## 2.7.2 - 2016-12-16
 
