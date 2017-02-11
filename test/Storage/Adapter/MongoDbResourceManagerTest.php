@@ -17,6 +17,9 @@ use Zend\Cache\Storage\Adapter\MongoDbResourceManager;
  */
 class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var MongoDbResourceManager
+     */
     protected $object;
 
     public function setUp()
@@ -145,5 +148,50 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('Zend\Cache\Exception\RuntimeException');
         $this->object->getResource($id);
+    }
+
+    public function testGetSetCollection()
+    {
+        $resourceId     = 'testResource';
+        $collectionName = 'testCollection';
+
+        $this->object->setCollection($resourceId, $collectionName);
+        $this->assertSame($collectionName, $this->object->getCollection($resourceId));
+    }
+
+    public function testGetSetConnectionOptions()
+    {
+        $resourceId        = 'testResource';
+        $connectionOptions = ['test1' => 'option1', 'test2' => 'option2'];
+
+        $this->object->setConnectionOptions($resourceId, $connectionOptions);
+        $this->assertSame($connectionOptions, $this->object->getConnectionOptions($resourceId));
+    }
+
+    public function testGetSetServer()
+    {
+        $resourceId = 'testResource';
+        $server     = 'testServer';
+
+        $this->object->setServer($resourceId, $server);
+        $this->assertSame($server, $this->object->getServer($resourceId));
+    }
+
+    public function testGetSetDriverOptions()
+    {
+        $resourceId    = 'testResource';
+        $driverOptions = ['test1' => 'option1', 'test2' => 'option2'];
+
+        $this->object->setDriverOptions($resourceId, $driverOptions);
+        $this->assertSame($driverOptions, $this->object->getDriverOptions($resourceId));
+    }
+
+    public function testGetSetDatabase()
+    {
+        $resourceId = 'testResource';
+        $database   = 'testDatabase';
+
+        $this->object->setDatabase($resourceId, $database);
+        $this->assertSame($database, $this->object->getDatabase($resourceId));
     }
 }
