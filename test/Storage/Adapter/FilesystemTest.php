@@ -171,7 +171,7 @@ class FilesystemTest extends CommonAdapterTest
             }
         }
 
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Cache\Exception\InvalidArgumentException');
 
         // create a not readable temporaty directory
         $testDir = tempnam(sys_get_temp_dir(), 'ZendTest');

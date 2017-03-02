@@ -72,7 +72,7 @@ class MongoDbResourceManagerTest extends TestCase
         $id = 'foo';
         $resource = new \stdClass();
 
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Cache\Exception\InvalidArgumentException');
         $this->object->setResource($id, $resource);
     }
 
@@ -98,7 +98,7 @@ class MongoDbResourceManagerTest extends TestCase
 
         $this->assertFalse($this->object->hasResource($id));
 
-        $this->setExpectedException('Zend\Cache\Exception\RuntimeException');
+        $this->expectException('Zend\Cache\Exception\RuntimeException');
         $this->object->getResource($id);
     }
 
@@ -147,7 +147,7 @@ class MongoDbResourceManagerTest extends TestCase
         $this->object->setDatabase($id, $database);
         $this->object->setCollection($id, $collection);
 
-        $this->setExpectedException('Zend\Cache\Exception\RuntimeException');
+        $this->expectException('Zend\Cache\Exception\RuntimeException');
         $this->object->getResource($id);
     }
 
