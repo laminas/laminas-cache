@@ -57,7 +57,10 @@
         "psr-4": {
             "ZendTest\\Cache\\": "test/",
             "ZendBench\\Cache\\": "benchmark/"
-        }
+        },
+        "files": [
+            "test/_autoload.php"
+        ]
     },
     "scripts": {
         "check": [
