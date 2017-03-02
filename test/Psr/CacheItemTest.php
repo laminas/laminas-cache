@@ -11,7 +11,7 @@ namespace ZendTest\Cache\Psr;
 
 use DateInterval;
 use DateTime;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Psr\CacheItem;
 
 class CacheItemTest extends TestCase

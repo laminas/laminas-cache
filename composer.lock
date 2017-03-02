@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6c2fa6bb64f426edfa3e92dd632aef9b",
+    "hash": "e51270888af7dbd9ef4847864e0cd56b",
     "content-hash": "c040635e75ee4eaf5606a11fc12f88da",
     "packages": [
         {
@@ -37,6 +37,52 @@
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
             "time": "2017-02-14 19:40:03"
+        },
+        {
+            "name": "psr/cache",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/cache.git",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Cache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for caching libraries",
+            "keywords": [
+                "cache",
+                "psr",
+                "psr-6"
+            ],
+            "time": "2016-08-06 20:24:11"
         },
         {
             "name": "psr/container",
@@ -251,6 +297,58 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "cache/integration-tests",
+            "version": "0.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-cache/integration-tests.git",
+                "reference": "43677ae075f81e38dff3d4645ecc9b0ace74a6fc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-cache/integration-tests/zipball/43677ae075f81e38dff3d4645ecc9b0ace74a6fc",
+                "reference": "43677ae075f81e38dff3d4645ecc9b0ace74a6fc",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4|^7",
+                "psr/cache": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0|^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cache\\IntegrationTests\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Scherer",
+                    "email": "aequasi@gmail.com",
+                    "homepage": "https://github.com/aequasi"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/nyholm"
+                }
+            ],
+            "description": "Integration tests for PSR-6 cache implementations",
+            "homepage": "https://github.com/php-cache/integration-tests",
+            "keywords": [
+                "cache",
+                "psr6",
+                "test"
+            ],
+            "time": "2016-04-23 22:57:32"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.4.0",
@@ -2614,7 +2712,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.0 || ^5.6"
+        "php": "^5.6 || ^7.0"
     },
     "platform-dev": []
 }
