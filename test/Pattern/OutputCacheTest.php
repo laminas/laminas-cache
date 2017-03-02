@@ -105,7 +105,7 @@ class OutputCacheTest extends CommonPatternTest
 
     public function testThrowMissingKeyException()
     {
-        $this->setExpectedException('Zend\Cache\Exception\MissingKeyException');
+        $this->expectException('Zend\Cache\Exception\MissingKeyException');
         $this->_pattern->start(''); // empty key
     }
 }

@@ -98,7 +98,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->setExpectedException('Zend\Cache\Exception\LogicException');
+        $this->expectException('Zend\Cache\Exception\LogicException');
         $captureCache->set('content', '/pageId');
     }
 
@@ -122,7 +122,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->setExpectedException('Zend\Cache\Exception\LogicException');
+        $this->expectException('Zend\Cache\Exception\LogicException');
         $captureCache->get('/pageId');
     }
 
@@ -130,7 +130,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->setExpectedException('Zend\Cache\Exception\LogicException');
+        $this->expectException('Zend\Cache\Exception\LogicException');
         $captureCache->has('/pageId');
     }
 
@@ -138,7 +138,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->setExpectedException('Zend\Cache\Exception\LogicException');
+        $this->expectException('Zend\Cache\Exception\LogicException');
         $captureCache->remove('/pageId');
     }
 

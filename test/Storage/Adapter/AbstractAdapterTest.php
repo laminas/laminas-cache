@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache;
 use Zend\Cache\Storage\Adapter\AdapterOptions;
 use Zend\Cache\Storage\Plugin\PluginOptions;
@@ -19,7 +20,7 @@ use Zend\Cache\Exception;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Adapter\AdapterOptions<extended>
  */
-class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
+class AbstractAdapterTest extends TestCase
 {
     // @codingStandardsIgnoreStart
     /**
@@ -81,7 +82,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetTtlThrowsInvalidArgumentException()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Cache\Exception\InvalidArgumentException');
         $this->_options->setTtl(-1);
     }
 
@@ -117,7 +118,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetKeyPatternThrowsExceptionOnInvalidPattern()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Cache\Exception\InvalidArgumentException');
         $this->_options->setKeyPattern('#');
     }
 
@@ -227,7 +228,8 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod(get_class($this->_storage), 'triggerException');
         $method->setAccessible(true);
 
-        $this->setExpectedException('Zend\Cache\Exception\RuntimeException', 'test');
+        $this->expectException('Zend\Cache\Exception\RuntimeException');
+        $this->expectExceptionMessage('test');
         $method->invokeArgs($this->_storage, ['setItem', $params, & $result, new Exception\RuntimeException('test')]);
     }
 
@@ -682,7 +684,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         // First check if the item already exists using has
         // call 'internalHasItem' instead of 'hasItem' or '[internal]GetItem'
         $this->_storage->expects($this->never())->method('hasItem');
-        $this->_storage->expects($this->never())->method('getItemItem');
+        $this->_storage->expects($this->never())->method('getItem');
         $this->_storage->expects($this->never())->method('internalGetItem');
         $this->_storage->expects($this->exactly(count($items)))
             ->method('internalHasItem')

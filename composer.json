@@ -23,7 +23,7 @@
         "zendframework/zend-serializer": "^2.6",
         "zendframework/zend-session": "^2.6.2",
         "cache/integration-tests": "^0.10.0",
-        "phpunit/phpunit": "^4.8",
+        "phpunit/phpunit": "^6.0.8 || ^5.7.15",
         "phpbench/phpbench": "^0.10.0",
         "zendframework/zend-coding-standard": "~1.0.0"
     },

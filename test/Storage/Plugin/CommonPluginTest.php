@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Plugin;
 
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Cache\Storage\PluginManager;
 
@@ -20,7 +21,7 @@ use Zend\Cache\Storage\PluginManager;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Plugin\PluginOptions<extended>
  */
-abstract class CommonPluginTest extends \PHPUnit_Framework_TestCase
+abstract class CommonPluginTest extends TestCase
 {
     // @codingStandardsIgnoreStart
     /**

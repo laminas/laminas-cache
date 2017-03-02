@@ -9,7 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\Adapter\Dba;
 
 /**

@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\Adapter\RedisResourceManager;
 
 /**
@@ -19,7 +20,7 @@ use Zend\Cache\Storage\Adapter\RedisResourceManager;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Adapter\RedisResourceManager
  */
-class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
+class RedisResourceManagerTest extends TestCase
 {
     /**
      * The resource manager

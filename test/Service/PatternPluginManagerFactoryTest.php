@@ -8,7 +8,7 @@
 namespace ZendTest\Cache\Service;
 
 use Interop\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Pattern\PatternInterface;
 use Zend\Cache\PatternPluginManager;
 use Zend\Cache\Service\PatternPluginManagerFactory;

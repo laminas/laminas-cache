@@ -10,6 +10,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\AdapterPluginManager;
 use Zend\Cache\Storage\Adapter\BlackHole;
 use Zend\Cache\StorageFactory;
@@ -26,7 +27,7 @@ use Zend\ServiceManager\ServiceManager;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Adapter\Blackhole<extended>
  */
-class BlackHoleTest extends \PHPUnit_Framework_TestCase
+class BlackHoleTest extends TestCase
 {
     /**
      * The storage adapter
