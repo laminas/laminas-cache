@@ -80,7 +80,7 @@ matrix:
         - APCU_PECL_VERSION="apcu-5.1.2"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
 
-        # TODO: re-enable these extentions as soon as they are available and stable on php 7
+        # TODO: re-enable these extensions as soon as they are available and stable on php 7
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
         - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
@@ -92,7 +92,7 @@ matrix:
         - APCU_PECL_VERSION="apcu-5.1.3"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
 
-        # TODO: re-enable these extentions as soon as they are available and stable on php 7
+        # TODO: re-enable these extensions as soon as they are available and stable on php 7
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
         - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
@@ -103,7 +103,7 @@ matrix:
         - APCU_PECL_VERSION="apcu"            # PECL will download the latest stable version available
         - APCU_BC_PECL_VERSION="apcu_bc-beta" # TODO: change this as soon there is a stable version available
 
-        # TODO: re-enable these extentions as soon as they are available and stable on php 7
+        # TODO: re-enable these extensions as soon as they are available and stable on php 7
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
         - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
