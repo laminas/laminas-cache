@@ -40,26 +40,26 @@ matrix:
     - php: 5.6
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-4.0.8"
+        - APCU_PECL_VERSION="apcu"
     - php: 5.6
       env:
         - DEPS=locked
         - LEGACY_DEPS="phpunit/phpunit"
-        - APCU_PECL_VERSION="apcu-4.0.10"
+        - APCU_PECL_VERSION="apcu"
     - php: 5.6
       env:
         - DEPS=latest
-        - APCU_PECL_VERSION="apcu-4.0.11"
+        - APCU_PECL_VERSION="apcu"
     - php: 7
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-5.1.2"
+        - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
     - php: 7
       env:
         - DEPS=locked
         - LEGACY_DEPS="phpunit/phpunit"
-        - APCU_PECL_VERSION="apcu-5.1.3"
+        - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
     - php: 7
       env:
@@ -69,14 +69,14 @@ matrix:
     - php: 7.1
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-5.1.2"
+        - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
     - php: 7.1
       env:
         - DEPS=locked
         - CS_CHECK=true
         - TEST_COVERAGE=true
-        - APCU_PECL_VERSION="apcu-5.1.3"
+        - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
     - php: 7.1
       env:
@@ -102,13 +102,13 @@ before_install:
 install:
   # prevent PECL from enabling the extension by default, see https://pear.php.net/bugs/bug.php?id=21007
   - if [[ $APCU_PECL_VERSION != '' ]]; then
-        echo "yes\nno\n" | pecl install $APCU_PECL_VERSION
-        && sed -i 's/extension="apcu.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
+        echo "yes\nno\n" | pecl install $APCU_PECL_VERSION || return 0 ;
+        sed -i 's/extension="apcu.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
     fi
 
   - if [[ $APCU_BC_PECL_VERSION != '' ]]; then
-        pecl install $APCU_BC_PECL_VERSION
-        && sed -i 's/extension="apc.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
+        pecl install $APCU_BC_PECL_VERSION ;
+        sed -i 's/extension="apc.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
     fi
 
   - if [[ $TESTS_ZEND_CACHE_XCACHE_ENABLED == 'true' ]]; then
