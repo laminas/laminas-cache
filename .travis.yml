@@ -75,6 +75,7 @@ matrix:
       env:
         - DEPS=locked
         - CS_CHECK=true
+        - BENCHMARKS=true
         - TEST_COVERAGE=true
         - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
@@ -151,6 +152,7 @@ before_script:
 
 script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer run-script test-coverage --timeout=400 -- --verbose ; else composer run-script test --timeout=300 -- --verbose ; fi
+  - if [[ $BENCHMARKS == 'true' ]]; then vendor/bin/phpbench run --revs=2 --iterations=2 --report=aggregate ; fi
   - if [[ $CS_CHECK == 'true' ]]; then composer cs-check ; fi
 
 after_script:
