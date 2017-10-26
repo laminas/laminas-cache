@@ -21,7 +21,7 @@ env:
     - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=true
     - TESTS_ZEND_CACHE_MEMCACHED_HOST="127.0.0.1"
     - TESTS_ZEND_CACHE_MEMCACHED_PORT=11211
-    - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
+    - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false # Supported only on PHP 5.6
     - TESTS_ZEND_CACHE_MEMCACHE_HOST=$TESTS_ZEND_CACHE_MEMCACHED_HOST
     - TESTS_ZEND_CACHE_MEMCACHE_PORT=$TESTS_ZEND_CACHE_MEMCACHED_PORT
     - TESTS_ZEND_CACHE_MONGODB_ENABLED=true
@@ -41,17 +41,20 @@ matrix:
       env:
         - DEPS=lowest
         - APCU_PECL_VERSION="apcu-5.1.2"
+        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
         - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
     - php: 5.6
       env:
         - DEPS=locked
         - LEGACY_DEPS="phpbench/phpbench phpunit/phpunit"
         - APCU_PECL_VERSION="apcu-.5.1.8"
+        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
         - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
     - php: 5.6
       env:
         - DEPS=latest
         - APCU_PECL_VERSION="apcu"
+        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
         - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
     - php: 7
       env:
