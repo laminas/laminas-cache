@@ -109,12 +109,12 @@ before_install:
 install:
   # prevent PECL from enabling the extension by default, see https://pear.php.net/bugs/bug.php?id=21007
   - if [[ $APCU_PECL_VERSION != '' ]]; then
-        echo "yes\nno\n" | pecl install $APCU_PECL_VERSION || return 0 ;
+        echo "yes\nno\n" | pecl install -f $APCU_PECL_VERSION || return 0 ;
         sed -i 's/extension="apcu.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
     fi
 
   - if [[ $APCU_BC_PECL_VERSION != '' ]]; then
-        pecl install $APCU_BC_PECL_VERSION ;
+        pecl install -f $APCU_BC_PECL_VERSION ;
         sed -i 's/extension="apc.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
     fi
 
