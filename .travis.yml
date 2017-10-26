@@ -40,20 +40,20 @@ matrix:
     - php: 5.6
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-5.1.2"
+        - APCU_PECL_VERSION="apcu-4.0.8"
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
         - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
     - php: 5.6
       env:
         - DEPS=locked
         - LEGACY_DEPS="phpbench/phpbench phpunit/phpunit"
-        - APCU_PECL_VERSION="apcu-.5.1.8"
+        - APCU_PECL_VERSION="apcu-4.0.10"
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
         - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
     - php: 5.6
       env:
         - DEPS=latest
-        - APCU_PECL_VERSION="apcu"
+        - APCU_PECL_VERSION="apcu-4.0.11"
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
         - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
     - php: 7
