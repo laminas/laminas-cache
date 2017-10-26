@@ -114,12 +114,12 @@ install:
   - if [[ $APCU_PECL_VERSION != '' ]]; then
         echo "yes\nno\n" | pecl install -f $APCU_PECL_VERSION || return 0 ;
         sed -i 's/extension="apcu.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
-    fi
+    fi ;
 
   - if [[ $APCU_BC_PECL_VERSION != '' ]]; then
         pecl install -f $APCU_BC_PECL_VERSION ;
         sed -i 's/extension="apc.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
-    fi
+    fi ;
 
   - if [[ $TESTS_ZEND_CACHE_XCACHE_ENABLED == 'true' ]]; then
         git clone https://github.com/lighttpd/xcache.git
@@ -128,36 +128,41 @@ install:
             && git checkout $(git rev-list --tags --max-count=1)
             && phpize && ./configure --enable-xcache && make install
         );
-    fi
+    fi ;
+
+  - if [[ $APCU_PECL_VERSION != '' && $APCU_BC_PECL_VERSION == '' ]]; then
+        phpenv config-add .ci/apcu.ini ;
+    elif [[ $APCU_BC_PECL_VERSION != '' ]]; then
+        phpenv config-add .ci/apcu_bc.ini ;
+    fi ;
+
+  - if [[ $TESTS_ZEND_CACHE_REDIS_ENABLED == 'true' ]]; then
+        phpenv config-add .ci/redis.ini ;
+    fi ;
+
+  - if [[ $TESTS_ZEND_CACHE_MEMCACHE_ENABLED == 'true' ]]; then
+        phpenv config-add .ci/memcache.ini ;
+    fi ;
+
+  - if [[ $TESTS_ZEND_CACHE_MEMCACHED_ENABLED == 'true' ]]; then
+        phpenv config-add .ci/memcached.ini ;
+    fi ;
+
+    if [[ $TESTS_ZEND_CACHE_MONGODB_ENABLED == 'true' ]]; then
+        phpenv config-add .ci/mongo.ini ;
+    fi ;
+
+  - if [[ $TESTS_ZEND_CACHE_XCACHE_ENABLED == 'true' ]]; then
+        phpenv config-add .ci/xcache.ini ;
+    fi ;
 
   - travis_retry composer install $COMPOSER_ARGS --ignore-platform-reqs
   - if [[ $LEGACY_DEPS != '' ]]; then travis_retry composer update $COMPOSER_ARGS --with-dependencies $LEGACY_DEPS ; fi
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
+  - if [[ $TESTS_ZEND_CACHE_MONGODB_ENABLED == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $MONGODB_DEPS ; fi
   - stty cols 120 && composer show
-
-before_script:
-  - if [[ $APCU_PECL_VERSION != '' && $APCU_BC_PECL_VERSION == '' ]]; then
-        phpenv config-add .ci/apcu.ini ;
-    elif [[ $APCU_BC_PECL_VERSION != '' ]]; then
-        phpenv config-add .ci/apcu_bc.ini ;
-    fi ;
-    if [[ $TESTS_ZEND_CACHE_REDIS_ENABLED == 'true' ]]; then
-        phpenv config-add .ci/redis.ini ;
-    fi ;
-    if [[ $TESTS_ZEND_CACHE_MEMCACHE_ENABLED == 'true' ]]; then
-        phpenv config-add .ci/memcache.ini ;
-    fi ;
-    if [[ $TESTS_ZEND_CACHE_MEMCACHED_ENABLED == 'true' ]]; then
-        phpenv config-add .ci/memcached.ini ;
-    fi ;
-    if [[ $TESTS_ZEND_CACHE_MONGODB_ENABLED == 'true' ]]; then
-        phpenv config-add .ci/mongo.ini ;
-    fi ;
-    if [[ $TESTS_ZEND_CACHE_XCACHE_ENABLED == 'true' ]]; then
-        phpenv config-add .ci/xcache.ini ;
-    fi ;
 
 script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer run-script test-coverage --timeout=400 -- --verbose ; else composer run-script test --timeout=300 -- --verbose ; fi
