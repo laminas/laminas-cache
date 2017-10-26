@@ -163,6 +163,8 @@ install:
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
   - if [[ $TESTS_ZEND_CACHE_MONGODB_ENABLED == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $MONGODB_DEPS ; fi
   - stty cols 120 && composer show
+  - pecl list
+  - php -m
 
 script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer run-script test-coverage --timeout=400 -- --verbose ; else composer run-script test --timeout=300 -- --verbose ; fi
