@@ -23,9 +23,9 @@
         "zendframework/zend-stdlib": "^2.7.7 || ^3.1"
     },
     "require-dev": {
-        "cache/integration-tests": "^0.10.0",
-        "phpbench/phpbench": "^0.10.0",
-        "phpunit/phpunit": "^5.7.15 || ^6.0.8",
+        "cache/integration-tests": "^0.16",
+        "phpbench/phpbench": "^0.13",
+        "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
         "zendframework/zend-coding-standard": "~1.0.0",
         "zendframework/zend-serializer": "^2.6",
         "zendframework/zend-session": "^2.6.2"
