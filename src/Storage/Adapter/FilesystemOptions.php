@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-cache for the canonical source repository
+ * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Cache\Storage\Adapter;
@@ -487,7 +485,6 @@ class FilesystemOptions extends AdapterOptions
     public function setSuffix($suffix)
     {
         $this->suffix = $suffix;
-
         return $this;
     }
 
@@ -509,7 +506,6 @@ class FilesystemOptions extends AdapterOptions
     public function setTagSuffix($tagSuffix)
     {
         $this->tagSuffix = $tagSuffix;
-
         return $this;
     }
 }
