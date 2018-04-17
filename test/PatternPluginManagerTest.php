@@ -9,7 +9,7 @@
 
 namespace ZendTest\Cache;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Exception\RuntimeException;
 use Zend\Cache\Pattern\PatternInterface;
 use Zend\Cache\PatternPluginManager;

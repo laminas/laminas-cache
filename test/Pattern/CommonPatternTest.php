@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Pattern;
 
+use PHPUnit\Framework\TestCase;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Cache\PatternPluginManager;
 
@@ -16,7 +17,7 @@ use Zend\Cache\PatternPluginManager;
  * @group      Zend_Cache
  * @covers Zend\Cache\Pattern\PatternOptions<extended>
  */
-abstract class CommonPatternTest extends \PHPUnit_Framework_TestCase
+abstract class CommonPatternTest extends TestCase
 {
     // @codingStandardsIgnoreStart
     /**

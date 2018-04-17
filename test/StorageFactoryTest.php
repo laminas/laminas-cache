@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache;
 use Zend\ServiceManager\ServiceManager;
 
@@ -16,7 +17,7 @@ use Zend\ServiceManager\ServiceManager;
  * @group      Zend_Cache
  * @covers Zend\Cache\StorageFactory
  */
-class StorageFactoryTest extends \PHPUnit_Framework_TestCase
+class StorageFactoryTest extends TestCase
 {
     public function setUp()
     {
@@ -135,7 +136,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     public function testFactoryInstantiateAdapterWithPluginsWithoutEventsCapableInterfaceThrowsException()
     {
         // The BlackHole adapter doesn't implement EventsCapableInterface
-        $this->setExpectedException('Zend\Cache\Exception\RuntimeException');
+        $this->expectException('Zend\Cache\Exception\RuntimeException');
         Cache\StorageFactory::factory([
             'adapter' => 'blackhole',
             'plugins' => ['Serializer'],

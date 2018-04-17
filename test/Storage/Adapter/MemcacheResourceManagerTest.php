@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\Adapter\MemcacheResourceManager;
 
 /**
@@ -19,7 +20,7 @@ use Zend\Cache\Storage\Adapter\MemcacheResourceManager;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Adapter\MemcacheResourceManager
  */
-class MemcacheResourceManagerTest extends \PHPUnit_Framework_TestCase
+class MemcacheResourceManagerTest extends TestCase
 {
     /**
      * The resource manager
@@ -269,7 +270,9 @@ class MemcacheResourceManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         // Test memcache set
-        $resourceMock = $this->getMock('Memcache', ['setCompressThreshold']);
+        $resourceMock = $this->getMockBuilder('Memcache')
+            ->setMethods(['setCompressThreshold'])
+            ->getMock();
         if (isset($thresholdOptions['auto_compress_min_savings'])
             && $thresholdOptions['auto_compress_min_savings'] !== null
         ) {
@@ -302,10 +305,8 @@ class MemcacheResourceManagerTest extends \PHPUnit_Framework_TestCase
         }
 
         // After create test
-        $this->setExpectedException(
-            'Zend\Cache\Exception\RuntimeException',
-            'Cannot get compress threshold once resource is created'
-        );
+        $this->expectException('Zend\Cache\Exception\RuntimeException');
+        $this->expectExceptionMessage('Cannot get compress threshold once resource is created');
         $this->assertEquals(
             $expectedOptions['auto_compress_threshold'],
             $this->resourceManager->getAutoCompressThreshold($resourceId)
@@ -378,7 +379,9 @@ class MemcacheResourceManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddServerOnExistingResource($resourceId, $server, $serverDefaults, $expectedParams)
     {
-        $resourceMock = $this->getMock('Memcache', ['addServer']);
+        $resourceMock = $this->getMockBuilder('Memcache')
+            ->setMethods(['addServer'])
+            ->getMock();
         $resourceMock
             ->expects($this->once())
             ->method('addServer')

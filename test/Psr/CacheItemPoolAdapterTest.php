@@ -9,7 +9,7 @@
 
 namespace ZendTest\Cache;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Cache\CacheItemInterface;
 use Zend\Cache\Exception;

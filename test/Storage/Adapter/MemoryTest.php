@@ -39,7 +39,7 @@ class MemoryTest extends CommonAdapterTest
     {
         $this->_options->setMemoryLimit(memory_get_usage(true) - 8);
 
-        $this->setExpectedException('Zend\Cache\Exception\OutOfSpaceException');
+        $this->expectException('Zend\Cache\Exception\OutOfSpaceException');
         $this->_storage->addItem('test', 'test');
     }
 }

@@ -9,7 +9,7 @@
 
 namespace ZendTest\Cache\Psr;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Psr\CacheItemPoolAdapter;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;

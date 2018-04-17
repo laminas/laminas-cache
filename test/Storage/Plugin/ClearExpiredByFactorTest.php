@@ -90,7 +90,9 @@ class ClearExpiredByFactorTest extends CommonPluginTest
 
     public function testClearExpiredByFactor()
     {
-        $adapter = $this->getMock(get_class($this->_adapter), ['clearExpired']);
+        $adapter = $this->getMockBuilder(get_class($this->_adapter))
+            ->setMethods(['clearExpired'])
+            ->getMock();
         $this->_options->setClearingFactor(1);
 
         // test clearByNamespace will be called

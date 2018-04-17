@@ -9,18 +9,19 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\Adapter\KeyListIterator;
 
 /**
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Adapter\KeyListIterator
  */
-class KeyListIteratorTest extends \PHPUnit_Framework_TestCase
+class KeyListIteratorTest extends TestCase
 {
     public function testCount()
     {
         $keys = ['key1', 'key2', 'key3'];
-        $storage = $this->getMock('Zend\Cache\Storage\StorageInterface');
+        $storage = $this->createMock('Zend\Cache\Storage\StorageInterface');
         $iterator = new KeyListIterator($storage, $keys);
         $this->assertEquals(3, $iterator->count());
     }

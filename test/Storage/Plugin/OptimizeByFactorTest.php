@@ -86,7 +86,9 @@ class OptimizeByFactorTest extends CommonPluginTest
 
     public function testOptimizeByFactor()
     {
-        $adapter = $this->getMock(get_class($this->_adapter), ['optimize']);
+        $adapter = $this->getMockBuilder(get_class($this->_adapter))
+            ->setMethods(['optimize'])
+            ->getMock();
 
         // test optimize will be called
         $adapter

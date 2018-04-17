@@ -10,6 +10,7 @@
 namespace ZendTest\Cache\Service;
 
 use Interop\Container\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Zend\Cache\Service\StorageCacheAbstractServiceFactory;
 use Zend\Cache\StorageFactory;
@@ -25,7 +26,7 @@ use Zend\ServiceManager\ServiceManager;
 /**
  * @covers Zend\Cache\StorageFactory<extended>
  */
-class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
+class StorageCacheAbstractServiceFactoryTest extends TestCase
 {
     protected $sm;
 

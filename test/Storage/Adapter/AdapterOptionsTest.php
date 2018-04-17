@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\Cache\Storage\Event;
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
@@ -19,7 +20,7 @@ use Zend\Cache\Exception;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Adapter\AdapterOptions<extended>
  */
-class AdapterOptionsTest extends \PHPUnit_Framework_TestCase
+class AdapterOptionsTest extends TestCase
 {
     /**
      * Mock of the storage
@@ -60,7 +61,7 @@ class AdapterOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testSetKeyPatternThrowsInvalidArgumentExceptionOnInvalidPattern()
     {
-        $this->setExpectedException(Exception\InvalidArgumentException::class);
+        $this->expectException(Exception\InvalidArgumentException::class);
         $this->options->setKeyPattern('foo bar');
     }
 
@@ -99,7 +100,7 @@ class AdapterOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testSetTtlThrowsInvalidArgumentExceptionOnNegativeValue()
     {
-        $this->setExpectedException(Exception\InvalidArgumentException::class);
+        $this->expectException(Exception\InvalidArgumentException::class);
         $this->options->setTtl(-1);
     }
 
@@ -145,7 +146,9 @@ class AdapterOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testSetFromArrayWithPrioritizedOptions()
     {
-        $options = $this->getMock(AdapterOptions::class, ['setKeyPattern', 'setNamespace', 'setWritable']);
+        $options = $this->getMockBuilder(AdapterOptions::class)
+            ->setMethods(['setKeyPattern', 'setNamespace', 'setWritable'])
+            ->getMock();
 
         // set key_pattern and namespace to be a prioritized options
         $optionsRef = new \ReflectionObject($options);

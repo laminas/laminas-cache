@@ -10,8 +10,6 @@ branches:
 cache:
   directories:
     - $HOME/.composer/cache
-    - $HOME/.local
-    - zf-mkdoc-theme
 
 services:
   - memcached
@@ -20,6 +18,9 @@ services:
 
 env:
   global:
+    - COMPOSER_ARGS="--no-interaction"
+    - COVERAGE_DEPS="php-coveralls/php-coveralls"
+    - LEGACY_DEPS="phpunit/phpunit"
     - TESTS_ZEND_CACHE_APC_ENABLED=true
     - TESTS_ZEND_CACHE_APCU_ENABLED=true
     - TESTS_ZEND_CACHE_FILESYSTEM_DIR=/dev/shm
@@ -39,11 +40,6 @@ env:
     - TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH=true
     - TESTS_ZEND_CACHE_XCACHE_ADMIN_USER=travis
     - TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS=test
-    - SITE_URL="https://zendframework.github.io/zend-cache"
-    - GH_USER_NAME="Matthew Weier O'Phinney"
-    - GH_USER_EMAIL="matthew@weierophinney.net"
-    - GH_REF="github.com/zendframework/zend-cache.git"
-    - secure: "ZYYlfFWTde5MCn6twsm/+s+mx4bLEaVFFG+tuaeiz7nCx+z495D6FxruzBbY1zheX9rNo9qReDo0Tyfn2wrUH8SJYbR9iKDqB95GPDDPW+I23Mw3Uuddr8XqbtabTJVqEQg6iAu7IIQG4TvFFmdq/g26jWim8Cngg/5zZh4Q2GuLSjIKRJBpLe7mSTjQVqaApS/a8wmvPJiSoqxWmY8Botc88ZXMmkRDPQoqEdZOeS4i029cGMXUnzGj7Vl7qwfol6Yj/R441Hd84Vt8P8BOdRyW0tjmllXLXJUYFKCcP5fEqIujbU68FwJMidCPzBcXv2N0klW43ViVwdJD6gBgZStwOyENGeEw1VcbZ6JReMa68F1mtqLhBhZtF8WRUI8+TYMYmLPGMVTcets4P3nIB18uX1CittwGDD2y2OL8MDvuIuaSQFoj/PdUb+BC/DvvmtPGnF6MLTAUjqNlxYbmzopufDEtivWHsqeyxHZj0L0HD5KkMslD9wnngfi+lcQ5e3iFQe/H5vQKE0BfooukxErIXk00cwwMoMjFY4v95CS0BKFhA4HMclKpGEA94CH4STxwyD2Nz/z6iGPqkZuzqDLOKhLr2FsY7bFbvEdNu57G3PGahtYJtc31lcnwKf2t1ALGcG9LS0/ezJSzqx659hWL0B5qgHjCNDnAyKJcNxM="
 
 matrix:
   include:
@@ -55,8 +51,6 @@ matrix:
       env:
         - DEPS=locked
         - APCU_PECL_VERSION="apcu-4.0.10"
-        - DEPLOY_DOCS="$(if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then echo -n 'true' ; else echo -n 'false' ; fi)"
-        - PATH="$HOME/.local/bin:$PATH"
     - php: 5.6
       env:
         - DEPS=latest
@@ -142,10 +136,11 @@ install:
         );
     fi
 
+  - travis_retry composer install $COMPOSER_ARGS
+  - if [[ $TRAVIS_PHP_VERSION =~ ^5.6 ]]; then travis_retry composer update $COMPOSER_ARGS --with-dependencies $LEGACY_DEPS ; fi
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
-  - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS satooshi/php-coveralls:^1.0 ; fi
-  - travis_retry composer install $COMPOSER_ARGS
+  - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
   - composer show
 
 before_script:
@@ -175,10 +170,6 @@ before_script:
 script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer run-script test-coverage --timeout=400 -- --verbose ; else composer run-script test --timeout=300 -- --verbose ; fi
   - if [[ $CHECK_CS == 'true' ]]; then composer cs-check ; fi
-  - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then travis_retry curl -sSL https://raw.githubusercontent.com/zendframework/zf-mkdoc-theme/master/theme-installer.sh | bash ; fi
 
 after_script:
-  - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer upload-coverage ; fi
-
-after_success:
-  - if [[ $DEPLOY_DOCS == "true" ]]; then ./zf-mkdoc-theme/deploy.sh ; fi
+  - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry vendor/bin/php-coveralls -v ; fi

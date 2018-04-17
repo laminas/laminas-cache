@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\Adapter\MongoDbOptions;
 use Zend\Cache\Storage\Adapter\MongoDbResourceManager;
 
@@ -16,7 +17,7 @@ use Zend\Cache\Storage\Adapter\MongoDbResourceManager;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Adapter\MongoDbOptions<extended>
  */
-class MongoDbOptionsTest extends \PHPUnit_Framework_TestCase
+class MongoDbOptionsTest extends TestCase
 {
     protected $object;
 

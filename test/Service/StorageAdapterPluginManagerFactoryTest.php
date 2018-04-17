@@ -8,7 +8,7 @@
 namespace ZendTest\Cache\Service;
 
 use Interop\Container\ContainerInterface;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\Cache\Storage\AdapterPluginManager;
 use Zend\Cache\Service\StorageAdapterPluginManagerFactory;
