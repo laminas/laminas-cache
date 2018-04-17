@@ -77,6 +77,7 @@ matrix:
         - DEPS=lowest
         - APCU_PECL_VERSION="apcu-5.1.2"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
+        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
     - php: 7.1
       env:
         - DEPS=locked
@@ -85,26 +86,31 @@ matrix:
         - TEST_COVERAGE=true
         - APCU_PECL_VERSION="apcu-5.1.8"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
+        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
     - php: 7.1
       env:
         - DEPS=latest
         - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.3"
+        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
     - php: 7.2
       env:
         - DEPS=lowest
         - APCU_PECL_VERSION="apcu-5.1.2"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
+        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
     - php: 7.2
       env:
         - DEPS=locked
         - APCU_PECL_VERSION="apcu-5.1.8"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
+        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
     - php: 7.2
       env:
         - DEPS=latest
         - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.3"
+        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
 
 before_install:
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
