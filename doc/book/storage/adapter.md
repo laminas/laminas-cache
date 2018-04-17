@@ -651,6 +651,11 @@ Name | Data Type | Default Value | Description
 `no_atime` | `boolean` | `true` | Don’t get ‘fileatime’ as ‘atime’ on metadata.
 `no_ctime` | `boolean` | `true` | Don’t get ‘filectime’ as ‘ctime’ on metadata.
 `umask` | `integer|false` | `false` | Use [umask](http://wikipedia.org/wiki/Umask) to set file and directory permissions.
+`suffix` | `string` | `dat` | Suffix for cache files
+`tag_suffix` | `string` | `tag` | Suffix for tag files
+
+Note: the `suffix` and `tag_suffix` options will be escaped in order to be safe
+for glob operations.
 
 ## The Memcached Adapter
 

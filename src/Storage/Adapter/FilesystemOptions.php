@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-cache for the canonical source repository
+ * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Cache\Storage\Adapter;
@@ -96,6 +94,20 @@ class FilesystemOptions extends AdapterOptions
      * @var false|int
      */
     protected $umask = false;
+
+    /**
+     * Suffix for cache files
+     *
+     * @var string
+     */
+    protected $suffix = 'dat';
+
+    /**
+     * Suffix for tag files
+     *
+     * @var string
+     */
+    protected $tagSuffix = 'tag';
 
     /**
      * Constructor
@@ -453,5 +465,47 @@ class FilesystemOptions extends AdapterOptions
     public function getUmask()
     {
         return $this->umask;
+    }
+
+    /**
+     * Get the suffix for cache files
+     *
+     * @return string
+     */
+    public function getSuffix()
+    {
+        return $this->suffix;
+    }
+
+    /**
+     * Set the suffix for cache files
+     *
+     * @param string $suffix
+     */
+    public function setSuffix($suffix)
+    {
+        $this->suffix = $suffix;
+        return $this;
+    }
+
+    /**
+     * Get the suffix for tag files
+     *
+     * @return the $tagSuffix
+     */
+    public function getTagSuffix()
+    {
+        return $this->tagSuffix;
+    }
+
+    /**
+     * Set the suffix for cache files
+     *
+     * @param string $tagSuffix
+     */
+    public function setTagSuffix($tagSuffix)
+    {
+        $this->tagSuffix = $tagSuffix;
+        return $this;
     }
 }

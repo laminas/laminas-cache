@@ -1,10 +1,8 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-cache for the canonical source repository
+ * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Cache\Storage\Adapter;
@@ -597,5 +595,17 @@ class FilesystemTest extends CommonAdapterTest
 
             posix_kill(posix_getpid(), SIGTERM);
         }
+    }
+
+    public function testSuffixIsMutable()
+    {
+        $this->_options->setSuffix('.cache');
+        $this->assertSame('.cache', $this->_options->getSuffix());
+    }
+
+    public function testTagSuffixIsMutable()
+    {
+        $this->_options->setTagSuffix('.cache');
+        $this->assertSame('.cache', $this->_options->getTagSuffix());
     }
 }
