@@ -47,6 +47,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#147](https://github.com/zendframework/zend-cache/pull/147) fixes the Redis extension by ensuring it casts the results of `exists()` to a
+  boolean when testing if the storage contains an item.
+
 - [#146](https://github.com/zendframework/zend-cache/pull/146) fixes several methods to change `@return` annotations to `@throws` where applicable.
 
 - [#134](https://github.com/zendframework/zend-cache/pull/134) adds a missing import statement for `Traversable` within the `AdapterOptions` class.
