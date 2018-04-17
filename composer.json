@@ -55,7 +55,7 @@
             "ZendBench\\Cache\\": "benchmark/"
         },
         "files": [
-            "test/_autoload.php"
+            "test/autoload.php"
         ]
     },
     "config": {
