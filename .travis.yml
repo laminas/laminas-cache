@@ -21,7 +21,7 @@ services:
 env:
   global:
     - COMPOSER_ARGS="--no-interaction"
-    - COVERAGE_DEPS="satooshi/php-coveralls"
+    - COVERAGE_DEPS="php-coveralls/php-coveralls"
     - LEGACY_DEPS="phpunit/phpunit"
     - TESTS_ZEND_CACHE_APC_ENABLED=true
     - TESTS_ZEND_CACHE_APCU_ENABLED=true
@@ -182,7 +182,7 @@ script:
   - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then travis_retry curl -sSL https://raw.githubusercontent.com/zendframework/zf-mkdoc-theme/master/theme-installer.sh | bash ; fi
 
 after_script:
-  - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer upload-coverage ; fi
+  - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry vendor/bin/php-coveralls -v ; fi
 
 after_success:
   - if [[ $DEPLOY_DOCS == "true" ]]; then ./zf-mkdoc-theme/deploy.sh ; fi
