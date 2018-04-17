@@ -364,7 +364,10 @@ class RedisTest extends CommonAdapterTest
         $this->assertTrue($hasItem);
     }
 
-    private function createAdapterFromResource(RedisResource $redis): Redis
+    /**
+     * @return Redis
+     */
+    private function createAdapterFromResource(RedisResource $redis)
     {
         $resourceManager = new RedisResourceManager();
         $resourceId = 'my-resource';
