@@ -211,7 +211,7 @@ class Capabilities
     }
 
     /**
-     * Get maximum key lenth
+     * Get maximum key length
      *
      * @return int -1 means unknown, 0 means infinite
      */
