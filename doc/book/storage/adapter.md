@@ -654,6 +654,9 @@ Name | Data Type | Default Value | Description
 `suffix` | `string` | `dat` | Suffix for cache files
 `tag_suffix` | `string` | `tag` | Suffix for tag files
 
+Note: the `suffix` and `tag_suffix` options will be escaped in order to be safe
+for glob operations.
+
 ## The Memcached Adapter
 
 `Zend\Cache\Storage\Adapter\Memcached` stores cache items over the memcached
