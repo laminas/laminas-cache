@@ -381,7 +381,7 @@ class RedisTest extends CommonAdapterTest
      */
     private function mockInitializedRedisResource()
     {
-        $redis = $this->getMock(RedisResource::class);
+        $redis = $this->getMockBuilder(RedisResource::class)->getMock();
         $redis->socket = true;
         return $redis;
     }
