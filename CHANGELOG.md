@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#146](https://github.com/zendframework/zend-cache/pull/146) fixes several methods to change `@return` annotations to `@throws` where applicable.
+
 - [#134](https://github.com/zendframework/zend-cache/pull/134) adds a missing import statement for `Traversable` within the `AdapterOptions` class.
 
 - [#128](https://github.com/zendframework/zend-cache/pull/128)

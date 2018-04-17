@@ -441,7 +441,7 @@ class Filesystem extends AbstractAdapter implements
      * Optimize the storage
      *
      * @return bool
-     * @return Exception\RuntimeException
+     * @throws Exception\RuntimeException
      */
     public function optimize()
     {
