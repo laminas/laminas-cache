@@ -60,6 +60,9 @@ fulfil this requirement.
 
 Attempting to use an unsupported adapter will throw an exception implementing `Psr\Cache\CacheException`.
 
+The `Zend\Cache\Psr\CacheItemPoolAdapter` adapter doesn't support driver deferred saves, so cache items are saved
+on destruct or on explicit `commit()` call.
+
 ### Quirks
 
 #### APC

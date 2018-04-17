@@ -61,6 +61,13 @@ class MongoDbIntegrationTest extends CachePoolTest
                 'database'   => getenv('TESTS_ZEND_CACHE_MONGODB_DATABASE'),
                 'collection' => getenv('TESTS_ZEND_CACHE_MONGODB_COLLECTION'),
             ]);
+
+            $deferredSkippedMessage = sprintf(
+                '%s storage doesn\'t support driver deferred',
+                \get_class($storage)
+            );
+            $this->skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired'] = $deferredSkippedMessage;
+
             return new CacheItemPoolAdapter($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());

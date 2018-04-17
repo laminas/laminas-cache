@@ -60,6 +60,13 @@ class WinCacheIntegrationTest extends CachePoolTest
     {
         try {
             $storage = StorageFactory::adapterFactory('wincache');
+
+            $deferredSkippedMessage = sprintf(
+                '%s storage doesn\'t support driver deferred',
+                \get_class($storage)
+            );
+            $this->skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired'] = $deferredSkippedMessage;
+
             return new CacheItemPoolAdapter($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
