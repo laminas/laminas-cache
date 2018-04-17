@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
+### Changed
+
+- Nothing.
+
 ### Deprecated
 
 - Nothing.
@@ -17,6 +21,8 @@ All notable changes to this project will be documented in this file, in reverse 
 - Nothing.
 
 ### Fixed
+
+- [#134](https://github.com/zendframework/zend-cache/pull/134) adds a missing import statement for `Traversable` within the `AdapterOptions` class.
 
 - [#128](https://github.com/zendframework/zend-cache/pull/128)
   Fixed incorrect variable usage in MongoDbResourceManager
