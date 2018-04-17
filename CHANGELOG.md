@@ -6,12 +6,20 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#120](https://github.com/zendframework/zend-cache/pull/120) adds the ability to configure alternate file suffixes for both
+  cache and tag cache files within the Filesystem adapter. Use the `suffix` and `tag_suffix`
+  options to set them; they will default to `dat` and `tag`, respectively.
+
 - [#116](https://github.com/zendframework/zend-cache/pull/116)
   docblock method chaining consistency
 - [#46](https://github.com/zendframework/zend-cache/issues/46)
   Add wrapper for PSR-6
 - [#79](https://github.com/zendframework/zend-cache/issues/79)
   Add capability for the "lock-on-expire" feature (úsed by Zend Data Cache)
+
+### Changed
+
+- Nothing.
 
 ### Deprecated
 
