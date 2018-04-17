@@ -9,8 +9,12 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit_Framework_MockObject_MockObject;
 use Zend\Cache;
 use Redis as RedisResource;
+use Zend\Cache\Storage\Adapter\Redis;
+use Zend\Cache\Storage\Adapter\RedisOptions;
+use Zend\Cache\Storage\Adapter\RedisResourceManager;
 
 /**
  * @covers Zend\Cache\Storage\Adapter\Redis<extended>
@@ -336,5 +340,49 @@ class RedisTest extends CommonAdapterTest
         $this->_storage->getOptions()->setTtl($ttl);
         $this->assertTrue($this->_storage->touchItem($key));
         $this->assertEquals($ttl, ceil($this->_storage->getMetadata($key)['ttl']));
+    }
+
+    public function testHasItemReturnsFalseIfRedisExistsReturnsZero()
+    {
+        $redis = $this->mockInitializedRedisResource();
+        $redis->method('exists')->willReturn(0);
+        $adapter = $this->createAdapterFromResource($redis);
+
+        $hasItem = $adapter->hasItem('does-not-exist');
+
+        $this->assertFalse($hasItem);
+    }
+
+    public function testHasItemReturnsTrueIfRedisExistsReturnsNonZeroInt()
+    {
+        $redis = $this->mockInitializedRedisResource();
+        $redis->method('exists')->willReturn(23);
+        $adapter = $this->createAdapterFromResource($redis);
+
+        $hasItem = $adapter->hasItem('does-not-exist');
+
+        $this->assertTrue($hasItem);
+    }
+
+    /**
+     * @return Redis
+     */
+    private function createAdapterFromResource(RedisResource $redis)
+    {
+        $resourceManager = new RedisResourceManager();
+        $resourceId = 'my-resource';
+        $resourceManager->setResource($resourceId, $redis);
+        $options = new RedisOptions(['resource_manager' => $resourceManager, 'resource_id' => $resourceId]);
+        return new Redis($options);
+    }
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject|RedisResource
+     */
+    private function mockInitializedRedisResource()
+    {
+        $redis = $this->getMock(RedisResource::class);
+        $redis->socket = true;
+        return $redis;
     }
 }
