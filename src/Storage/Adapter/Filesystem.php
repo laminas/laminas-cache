@@ -698,7 +698,7 @@ class Filesystem extends AbstractAdapter implements
      */
     protected function internalHasItem(& $normalizedKey)
     {
-        $file = $this->formatFilename($this->getFileContent($normalizedKey));
+        $file = $this->formatFilename($this->getFileSpec($normalizedKey));
         if (! file_exists($file)) {
             return false;
         }
