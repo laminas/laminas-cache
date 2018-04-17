@@ -819,7 +819,7 @@ Capability | Value
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
-`lib_option` | `array` | | Associative array of options where the array key is the option name. 
+`lib_option` | `array` | | Associative array of options where the array key is the option name.
 `namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
 
 Available keys for `lib_option` include:
