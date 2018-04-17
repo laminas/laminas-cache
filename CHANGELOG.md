@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#148](https://github.com/zendframework/zend-cache/pull/148) adds support for PHP 7.1 and 7.2.
+
 - [#120](https://github.com/zendframework/zend-cache/pull/120) adds the ability to configure alternate file suffixes for both
   cache and tag cache files within the Filesystem adapter. Use the `suffix` and `tag_suffix`
   options to set them; they will default to `dat` and `tag`, respectively.
@@ -28,7 +30,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#148](https://github.com/zendframework/zend-cache/pull/148) removes support for HHVM.
 
 ### Fixed
 
