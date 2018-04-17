@@ -630,7 +630,7 @@ class Memcached extends AbstractAdapter implements
      * Generate exception based of memcached result code
      *
      * @param int $code
-     * @return Exception\RuntimeException
+     * @throws Exception\RuntimeException
      * @throws Exception\InvalidArgumentException On success code
      */
     protected function getExceptionByResultCode($code)
