@@ -204,7 +204,7 @@ class Memcached extends AbstractAdapter implements
         $internalKey = $this->namespacePrefix . $normalizedKey;
 
         if (func_num_args() > 2) {
-            if(defined('Memcached::GET_EXTENDED')) {
+            if (defined('Memcached::GET_EXTENDED')) {
                 $output = $memc->get($internalKey, null, \Memcached::GET_EXTENDED);
                 $casToken = $output['cas'];
                 $result = $output['value'];
