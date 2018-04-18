@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#154](https://github.com/zendframework/zend-cache/pull/154) adds an ext-mongodb adapter, `Zend\Cache\Storage\Adapter\ExtMongoDb`.
+  You may use the `StorageFactory` to create an instance using either the fully qualified class
+  name as the adapter name, or the strings `ext_mongo_db` or `ExtMongoDB` (or most variations
+  on case of the latter string). The options it accepts are the same as for the existing
+  `Zend\Cache\Storage\Adapter\MongoDb`, and it provides the same capabilities. The adapter
+  requires the mongodb/mongodb package to operate.
+
 - [#148](https://github.com/zendframework/zend-cache/pull/148) adds support for PHP 7.1 and 7.2.
 
 - [#120](https://github.com/zendframework/zend-cache/pull/120) adds the ability to configure alternate file suffixes for both
