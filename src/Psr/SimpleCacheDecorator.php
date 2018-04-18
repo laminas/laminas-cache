@@ -15,10 +15,15 @@ use Zend\Cache\Storage\FlushableInterface;
 use Zend\Cache\Storage\StorageInterface;
 
 /**
- * Decoreate a zend-cache storage adapter for usage as a PSR-16 implementation.
+ * Decorate a zend-cache storage adapter for usage as a PSR-16 implementation.
  */
 class SimpleCacheDecorator implements SimpleCacheInterface
 {
+    /**
+     * Characters reserved by PSR-16 that are not valid in cache keys.
+     */
+    const INVALID_KEY_CHARS = '@{}()/\\';
+
     /**
      * @var StorageInterface
      */
@@ -59,6 +64,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function set($key, $value, $ttl = null)
     {
+        $this->validateKey($key);
         $options = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
         $options->setTtl($ttl);
@@ -127,6 +133,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function setMultiple($values, $ttl = null)
     {
+        foreach (array_keys($values) as $key) {
+            $this->validateKey($key);
+        }
         $options = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
         $options->setTtl($ttl);
@@ -183,5 +192,22 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             : SimpleCacheException::class;
 
         return new $exceptionClass($e->getMessage(), $e->getCode(), $e);
+    }
+
+    /**
+     * @param string $key
+     * @return void
+     * @throws SimpleCacheInvalidArgumentException if key is invalid
+     */
+    private function validateKey($key)
+    {
+        $regex = sprintf('/[%s]/', preg_quote(self::INVALID_KEY_CHARS, '/'));
+        if (preg_match($regex, $key)) {
+            throw new SimpleCacheInvalidArgumentException(sprintf(
+                'Invalid key "%s" provided; cannot contain any of ()',
+                $key,
+                self::INVALID_KEY_CHARS
+            ));
+        }
     }
 }

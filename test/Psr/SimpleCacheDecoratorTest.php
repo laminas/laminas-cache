@@ -45,6 +45,23 @@ class SimpleCacheDecoratorTest extends TestCase
         $r->setValue($cache, $success);
     }
 
+    /**
+     * Set of string key names that should be considered invalid for operations
+     * that create cache entries.
+     */
+    public function invalidKeyProvider()
+    {
+        return [
+            'brace-start'   => ['key{'],
+            'brace-end'     => ['key}'],
+            'paren-start'   => ['key('],
+            'paren-end'     => ['key)'],
+            'forward-slash' => ['ns/key'],
+            'back-slash'    => ['ns\key'],
+            'at'            => ['ns@key'],
+        ];
+    }
+
     public function testItIsASimpleCacheImplementation()
     {
         $this->assertInstanceOf(SimpleCacheInterface::class, $this->cache);
@@ -135,6 +152,17 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->storage->setItem('key', 'value')->willReturn(true);
 
         $this->assertTrue($this->cache->set('key', 'value', $ttl));
+    }
+
+    /**
+     * @dataProvider invalidKeyProvider
+     */
+    public function testSetShouldRaisePsrInvalidArgumentExceptionForInvalidKeys($key)
+    {
+        $this->storage->getOptions()->shouldNotBeCalled();
+        $this->expectException(SimpleCacheInvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid key');
+        $this->cache->set($key, 'value');
     }
 
     public function testSetShouldReRaiseExceptionThrownByStorage()
@@ -283,6 +311,17 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->storage->setItems($values)->willReturn(true);
 
         $this->assertTrue($this->cache->setMultiple($values, $ttl));
+    }
+
+    /**
+     * @dataProvider invalidKeyProvider
+     */
+    public function testSetMultipleShouldRaisePsrInvalidArgumentExceptionForInvalidKeys($key)
+    {
+        $this->storage->getOptions()->shouldNotBeCalled();
+        $this->expectException(SimpleCacheInvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid key');
+        $this->cache->setMultiple([$key => 'value']);
     }
 
     public function testSetMultipleReRaisesExceptionFromStorage()
