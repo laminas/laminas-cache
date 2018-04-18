@@ -20,7 +20,7 @@ class RedisOptions extends AdapterOptions
      *
      * @var string[]
      */
-    protected $__prioritizedProperties__ = ['resource_manager', 'resource_id'];
+    protected $__prioritizedProperties__ = ['resource_manager', 'resource_id', 'server'];
     // @codingStandardsIgnoreEnd
 
     /**
