@@ -23,6 +23,8 @@ use Zend\Cache\Storage\StorageInterface;
  */
 class CacheItemPoolAdapter implements CacheItemPoolInterface
 {
+    use SerializationTrait;
+
     /**
      * @var StorageInterface
      */
@@ -32,16 +34,6 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
      * @var CacheItem[]
      */
     private $deferred = [];
-
-    /**
-     * @var bool
-     */
-    private $serializeValues = false;
-
-    /**
-     * @var string
-     */
-    private static $serializedFalse;
 
     /**
      * Constructor.
@@ -57,12 +49,7 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
     public function __construct(StorageInterface $storage)
     {
         $this->validateStorage($storage);
-
-        $this->serializeValues = $this->shouldSerialize($storage);
-        if ($this->serializeValues) {
-            static::$serializedFalse = serialize(false);
-        }
-
+        $this->memoizeSerializationCapabilities($storage);
         $this->storage = $storage;
     }
 
@@ -348,27 +335,6 @@ class CacheItemPoolAdapter implements CacheItemPoolInterface
                 get_class($storage)
             ));
         }
-    }
-
-    /**
-     * Returns true if capabilities indicate values should be serialized before saving to preserve data types
-     * @param StorageInterface $storage
-     * @return bool
-     */
-    private function shouldSerialize(StorageInterface $storage)
-    {
-        $capabilities = $storage->getCapabilities();
-        $requiredTypes = ['string', 'integer', 'double', 'boolean', 'NULL', 'array', 'object'];
-        $types = $capabilities->getSupportedDatatypes();
-        foreach ($requiredTypes as $type) {
-            // 'object' => 'object' is OK
-            // 'integer' => 'string' is not (redis)
-            // 'integer' => 'integer' is not (memcache)
-            if (! (isset($types[$type]) && in_array($types[$type], [true, 'array', 'object'], true))) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
