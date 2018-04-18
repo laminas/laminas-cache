@@ -34,6 +34,12 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#151](https://github.com/zendframework/zend-cache/pull/151) adds logic to normalize options before creating the underlying Redis
+  resource when using a Redis adapter, fixing issues when using an array with the server and port
+  to use for connecting to the server.
+
+- [#151](https://github.com/zendframework/zend-cache/pull/151) adds logic to prevent changing the underlying resource within Redis adapter instances.
+
 - [#150](https://github.com/zendframework/zend-cache/pull/150) fixes an issue with how CAS tokens are handled when using the memcached adapter.
 
 - [#61](https://github.com/zendframework/zend-cache/pull/61)
