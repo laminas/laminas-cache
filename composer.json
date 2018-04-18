@@ -67,6 +67,10 @@
     "config": {
         "sort-packages": true
     },
+    "provide": {
+        "psr/cache-implementation": "1.0",
+        "psr/simple-cache-implementation": "1.0"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "2.7.x-dev",
