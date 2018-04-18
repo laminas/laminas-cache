@@ -46,6 +46,10 @@
         <env name="TESTS_ZEND_CACHE_MONGODB_COLLECTION" value="cache" />
         <env name="TESTS_ZEND_CACHE_MONGODB_CONNECTSTRING" value="mongodb://localhost/" />
         <env name="TESTS_ZEND_CACHE_MONGODB_DATABASE" value="zend_test" />
+        <env name="TESTS_ZEND_CACHE_EXTMONGODB_ENABLED" value="false" />
+        <env name="TESTS_ZEND_CACHE_EXTMONGODB_COLLECTION" value="cache" />
+        <env name="TESTS_ZEND_CACHE_EXTMONGODB_CONNECTSTRING" value="mongodb://localhost/" />
+        <env name="TESTS_ZEND_CACHE_EXTMONGODB_DATABASE" value="zend_test" />
         <env name="TESTS_ZEND_CACHE_REDIS_ENABLED" value="false" />
         <env name="TESTS_ZEND_CACHE_REDIS_HOST" value="127.0.0.1" />
         <env name="TESTS_ZEND_CACHE_REDIS_PORT" value="6379" />
