@@ -109,6 +109,8 @@ class RedisTest extends CommonAdapterTest
 
         $redisOptions = new Cache\Storage\Adapter\RedisOptions($options);
         $storage = new Cache\Storage\Adapter\Redis($redisOptions);
+
+        $this->assertInstanceOf('Zend\\Cache\\Storage\\Adapter\\Redis', $storage);
     }
 
     public function testRedisSerializer()
