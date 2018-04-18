@@ -19,6 +19,8 @@ use Zend\Cache\Storage\StorageInterface;
  */
 class SimpleCacheDecorator implements SimpleCacheInterface
 {
+    use SerializationTrait;
+
     /**
      * Characters reserved by PSR-16 that are not valid in cache keys.
      */
@@ -39,6 +41,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
     public function __construct(StorageInterface $storage)
     {
+        $this->memoizeSerializationCapabilities($storage);
         $this->storage = $storage;
     }
 
@@ -50,13 +53,19 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         $this->success = null;
         try {
             $result = $this->storage->getItem($key, $this->success);
-            $result = $result === null ? $default : $result;
-            return $this->success ? $result : $default;
         } catch (Throwable $e) {
             throw static::translateException($e);
         } catch (Exception $e) {
             throw static::translateException($e);
         }
+
+        if ($this->serializeValues && $this->success) {
+            $result = $this->unserialize($result);
+            return $result === null ? $default : $result;
+        }
+
+        $result = $result === null ? $default : $result;
+        return $this->success ? $result : $default;
     }
 
     /**
@@ -68,6 +77,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         $options = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
         $options->setTtl($ttl);
+        $value = $this->serializeValues ? serialize($value) : $value;
 
         try {
             $result = $this->storage->setItem($key, $value);
@@ -122,6 +132,13 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         foreach ($keys as $key) {
             if (! isset($results[$key]) && null !== $default) {
                 $results[$key] = $default;
+                continue;
+            }
+
+            if (isset($results[$key]) && $this->serializeValues) {
+                $value = $this->unserialize($results[$key]);
+                $results[$key] = null === $value ? $default : $value;
+                continue;
             }
         }
 
@@ -135,6 +152,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     {
         foreach (array_keys($values) as $key) {
             $this->validateKey($key);
+            $values[$key] = $this->serializeValues ? serialize($values[$key]) : $values[$key];
         }
         $options = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
@@ -216,5 +234,31 @@ class SimpleCacheDecorator implements SimpleCacheInterface
                 $key
             ));
         }
+    }
+
+    /**
+     * Unserializes a value.
+     *
+     * If the $value returned matches a serialized false value, returns
+     * false for the value.
+     *
+     * Otherwise, it unserializes the value. If it is a boolean false at
+     * that point, it returns a null; otherwise it returns the unserialized
+     * value.
+     *
+     * @param string $value
+     * @return mixed
+     */
+    private function unserialize($value)
+    {
+        if ($value == static::$serializedFalse) {
+            return false;
+        }
+
+        if (false === ($value = unserialize($value))) {
+            return null;
+        }
+
+        return $value;
     }
 }
