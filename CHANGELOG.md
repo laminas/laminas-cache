@@ -34,6 +34,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#150](https://github.com/zendframework/zend-cache/pull/150) fixes an issue with how CAS tokens are handled when using the memcached adapter.
+
 - [#61](https://github.com/zendframework/zend-cache/pull/61)
   Zend Data Cache: minTtl => 1
 
