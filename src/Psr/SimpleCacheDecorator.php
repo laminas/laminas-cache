@@ -222,7 +222,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         $regex = sprintf('/[%s]/', preg_quote(self::INVALID_KEY_CHARS, '/'));
         if (preg_match($regex, $key)) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
-                'Invalid key "%s" provided; cannot contain any of ()',
+                'Invalid key "%s" provided; cannot contain any of (%s)',
                 $key,
                 self::INVALID_KEY_CHARS
             ));
