@@ -28,7 +28,7 @@
         "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
         "zendframework/zend-coding-standard": "~1.0.0",
         "zendframework/zend-serializer": "^2.6",
-        "zendframework/zend-session": "^2.6.2"
+        "zendframework/zend-session": "^2.7.4"
     },
     "suggest": {
         "zendframework/zend-serializer": "Zend\\Serializer component",
