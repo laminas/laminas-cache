@@ -34,6 +34,7 @@ env:
     - TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH=true
     - TESTS_ZEND_CACHE_XCACHE_ADMIN_USER=travis
     - TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS=test
+    - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=false
 
 matrix:
   include:
@@ -61,23 +62,26 @@ matrix:
         - DEPS=lowest
         - APCU_PECL_VERSION="apcu-5.1.2"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7
       env:
         - DEPS=locked
         - LEGACY_DEPS="phpbench/phpbench phpunit/phpunit"
         - APCU_PECL_VERSION="apcu-5.1.8"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7
       env:
         - DEPS=latest
         - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.3"
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.1
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-5.1.2"
-        - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
-        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
+        - APCU_PECL_VERSION="apcu-5.1.7"
+        - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.1
       env:
         - DEPS=locked
@@ -86,31 +90,31 @@ matrix:
         - TEST_COVERAGE=true
         - APCU_PECL_VERSION="apcu-5.1.8"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
-        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.1
       env:
         - DEPS=latest
         - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.3"
-        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.2
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-5.1.2"
-        - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
-        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
+        - APCU_PECL_VERSION="apcu-5.1.10"
+        - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.2
       env:
         - DEPS=locked
-        - APCU_PECL_VERSION="apcu-5.1.8"
+        - APCU_PECL_VERSION="apcu-5.1.10"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
-        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.2
       env:
         - DEPS=latest
         - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.3"
-        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
 
 before_install:
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
@@ -154,7 +158,7 @@ install:
         phpenv config-add .ci/memcached.ini ;
     fi ;
 
-    if [[ $TESTS_ZEND_CACHE_MONGODB_ENABLED == 'true' ]]; then
+    if [[ $TESTS_ZEND_CACHE_MONGODB_ENABLED == 'true' && $TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL != 'true' ]]; then
         phpenv config-add .ci/mongo.ini ;
     fi ;
 
@@ -167,6 +171,7 @@ install:
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
+  - if [[ $TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL == 'true' ]]; then travis_retry composer require --dev --no-update mongofill/mongofill:dev-master ; fi
   - stty cols 120 && composer show
   - pecl list
   - php -m
