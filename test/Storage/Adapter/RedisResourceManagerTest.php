@@ -115,7 +115,8 @@ class RedisResourceManagerTest extends TestCase
         $resource   = [
             'persistent_id' => 'my_connection_name',
             'server' => [
-                'host' => 'localhost'
+                'host' => getenv('TESTS_ZEND_CACHE_REDIS_HOST') ?: 'localhost',
+                'port' => getenv('TESTS_ZEND_CACHE_REDIS_PORT') ?: 6379,
             ],
         ];
         $expectedPersistentId = 'my_connection_name';
@@ -141,7 +142,8 @@ class RedisResourceManagerTest extends TestCase
         $resource   = [
             'persistend_id' => 'my_connection_name',
             'server' => [
-                'host' => 'localhost'
+                'host' => getenv('TESTS_ZEND_CACHE_REDIS_HOST') ?: 'localhost',
+                'port' => getenv('TESTS_ZEND_CACHE_REDIS_PORT') ?: 6379,
             ],
         ];
         $expectedPersistentId = 'my_connection_name';
