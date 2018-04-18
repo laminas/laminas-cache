@@ -52,13 +52,14 @@ class SimpleCacheDecoratorTest extends TestCase
     public function invalidKeyProvider()
     {
         return [
-            'brace-start'   => ['key{'],
-            'brace-end'     => ['key}'],
-            'paren-start'   => ['key('],
-            'paren-end'     => ['key)'],
-            'forward-slash' => ['ns/key'],
-            'back-slash'    => ['ns\key'],
-            'at'            => ['ns@key'],
+            'brace-start'   => ['key{', 'cannot contain'],
+            'brace-end'     => ['key}', 'cannot contain'],
+            'paren-start'   => ['key(', 'cannot contain'],
+            'paren-end'     => ['key)', 'cannot contain'],
+            'forward-slash' => ['ns/key', 'cannot contain'],
+            'back-slash'    => ['ns\key', 'cannot contain'],
+            'at'            => ['ns@key', 'cannot contain'],
+            'too-long'      => [str_repeat('abcd', 17), 'too long'],
         ];
     }
 
@@ -156,12 +157,14 @@ class SimpleCacheDecoratorTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
+     * @param string $key
+     * @param string $expectedMessage
      */
-    public function testSetShouldRaisePsrInvalidArgumentExceptionForInvalidKeys($key)
+    public function testSetShouldRaisePsrInvalidArgumentExceptionForInvalidKeys($key, $expectedMessage)
     {
         $this->storage->getOptions()->shouldNotBeCalled();
         $this->expectException(SimpleCacheInvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid key');
+        $this->expectExceptionMessage($expectedMessage);
         $this->cache->set($key, 'value');
     }
 
@@ -315,12 +318,14 @@ class SimpleCacheDecoratorTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
+     * @param string $key
+     * @param string $expectedMessage
      */
-    public function testSetMultipleShouldRaisePsrInvalidArgumentExceptionForInvalidKeys($key)
+    public function testSetMultipleShouldRaisePsrInvalidArgumentExceptionForInvalidKeys($key, $expectedMessage)
     {
         $this->storage->getOptions()->shouldNotBeCalled();
         $this->expectException(SimpleCacheInvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid key');
+        $this->expectExceptionMessage($expectedMessage);
         $this->cache->setMultiple([$key => 'value']);
     }
 

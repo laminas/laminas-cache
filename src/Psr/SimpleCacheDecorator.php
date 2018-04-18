@@ -209,5 +209,12 @@ class SimpleCacheDecorator implements SimpleCacheInterface
                 self::INVALID_KEY_CHARS
             ));
         }
+
+        if (preg_match('/^.{65,}/u', $key)) {
+            throw new SimpleCacheInvalidArgumentException(sprintf(
+                'Invalid key "%s" provided; key is too long. Must be no more than 64 characters',
+                $key
+            ));
+        }
     }
 }
