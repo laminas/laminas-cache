@@ -7,6 +7,7 @@
 
 namespace ZendTest\Cache\Psr;
 
+use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -92,7 +93,25 @@ class SimpleCacheDecoratorTest extends TestCase
             'forward-slash' => ['ns/key', 'cannot contain'],
             'back-slash'    => ['ns\key', 'cannot contain'],
             'at'            => ['ns@key', 'cannot contain'],
+            'colon'         => ['ns:key', 'cannot contain'],
             'too-long'      => [str_repeat('abcd', 17), 'too long'],
+        ];
+    }
+
+    /**
+     * Set of TTL values that should be considered invalid.
+     *
+     * @return array
+     */
+    public function invalidTtls()
+    {
+        return [
+            'false'  => [false],
+            'true'   => [true],
+            'float'  => [2.75],
+            'string' => ['string'],
+            'array'  => [[1, 2, 3]],
+            'object' => [(object) ['ttl' => 1]],
         ];
     }
 
@@ -226,6 +245,19 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->assertTrue($this->cache->set('key', 'value', $ttl));
     }
 
+    /**
+     * @dataProvider invalidTtls
+     * @param mixed $ttl
+     */
+    public function testSetRaisesExceptionWhenTtlValueIsInvalid($ttl)
+    {
+        $this->storage->getOptions()->shouldNotBeCalled();
+        $this->storage->setItem('key', 'value')->shouldNotBeCalled();
+
+        $this->expectException(SimpleCacheInvalidArgumentException::class);
+        $this->cache->set('key', 'value', $ttl);
+    }
+
     public function testSetSerializesValuesPriorToPassingThemToStorageIfAdapterRequiresSerialization()
     {
         $originalTtl = 600;
@@ -265,6 +297,7 @@ class SimpleCacheDecoratorTest extends TestCase
     {
         $this->storage->getOptions()->shouldNotBeCalled();
         $this->storage->setItem('key', 'value')->shouldNotBeCalled();
+        $this->storage->hasItem('key')->willReturn(true);
         $this->storage->removeItem('key')->willReturn(true);
 
         $this->assertTrue($this->cache->set('key', 'value', $ttl));
@@ -292,6 +325,7 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->mockCapabilities($storage, null, false);
         $storage->getOptions()->shouldNotBeCalled();
         $storage->setItem('key', 'value')->shouldNotBeCalled();
+        $storage->hasItem('key')->willReturn(true);
         $storage->removeItem('key')->willReturn(true);
 
         $cache = new SimpleCacheDecorator($storage->reveal());
@@ -345,13 +379,22 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testDeleteShouldProxyToStorage()
     {
+        $this->storage->hasItem('key')->willReturn(true);
         $this->storage->removeItem('key')->willReturn(true);
+        $this->assertTrue($this->cache->delete('key'));
+    }
+
+    public function testDeleteShouldReturnTrueWhenItemDoesNotExist()
+    {
+        $this->storage->hasItem('key')->willReturn(false);
+        $this->storage->removeItem('key')->shouldNotBeCalled();
         $this->assertTrue($this->cache->delete('key'));
     }
 
     public function testDeleteShouldReRaiseExceptionThrownByStorage()
     {
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
+        $this->storage->hasItem('key')->willReturn(true);
         $this->storage->removeItem('key')->willThrow($exception);
 
         try {
@@ -434,6 +477,7 @@ class SimpleCacheDecoratorTest extends TestCase
         $keys = ['one', 'two', 'three'];
         $expected = [
             'one' => 1,
+            'two' => null,
             'three' => 3,
         ];
 
@@ -443,6 +487,22 @@ class SimpleCacheDecoratorTest extends TestCase
                 'one' => 1,
                 'three' => 3,
             ]);
+
+        $this->assertEquals($expected, $this->cache->getMultiple($keys));
+    }
+
+    public function testGetMultipleReturnsValuesFromStorageWhenProvidedWithIterableKeys()
+    {
+        $keys = new ArrayIterator(['one', 'two', 'three']);
+        $expected = [
+            'one' => 1,
+            'two' => 'two',
+            'three' => 3,
+        ];
+
+        $this->storage
+            ->getItems(iterator_to_array($keys))
+            ->willReturn($expected);
 
         $this->assertEquals($expected, $this->cache->getMultiple($keys));
     }
@@ -486,9 +546,51 @@ class SimpleCacheDecoratorTest extends TestCase
 
         $values = ['one' => 1, 'three' => 3];
 
-        $this->storage->setItems($values)->willReturn(true);
+        $this->storage->setItems($values)->willReturn([]);
 
         $this->assertTrue($this->cache->setMultiple($values, $ttl));
+    }
+
+    public function testSetMultipleProxiesToStorageAndModifiesAndResetsOptionsWhenProvidedAnIterable()
+    {
+        $originalTtl = 600;
+        $ttl = 86400;
+
+        $this->options
+            ->getTtl()
+            ->will(function () use ($ttl, $originalTtl) {
+                $this
+                    ->setTtl($ttl)
+                    ->will(function () use ($originalTtl) {
+                        $this->setTtl($originalTtl)->shouldBeCalled();
+                    });
+                return $originalTtl;
+            });
+
+        $this->storage->getOptions()->will([$this->options, 'reveal']);
+
+        $values = new ArrayIterator([
+            'one' => 1,
+            'three' => 3,
+        ]);
+
+        $this->storage->setItems(iterator_to_array($values))->willReturn([]);
+
+        $this->assertTrue($this->cache->setMultiple($values, $ttl));
+    }
+
+    /**
+     * @dataProvider invalidTtls
+     * @param mixed $ttl
+     */
+    public function testSetMultipleRaisesExceptionWhenTtlValueIsInvalid($ttl)
+    {
+        $values = ['one' => 1, 'three' => 3];
+        $this->storage->getOptions()->shouldNotBeCalled();
+        $this->storage->setItems($values)->shouldNotBeCalled();
+
+        $this->expectException(SimpleCacheInvalidArgumentException::class);
+        $this->cache->setMultiple($values, $ttl);
     }
 
     public function testSetMultipleSerializesValuesPriorToProxyingToStorageIfAdapterRequiresSerialization()
@@ -524,7 +626,7 @@ class SimpleCacheDecoratorTest extends TestCase
             'string' => false,
         ]);
         $storage->getOptions()->will([$options, 'reveal']);
-        $storage->setItems($serializedValues)->willReturn(true);
+        $storage->setItems($serializedValues)->willReturn([]);
 
         $cache = new SimpleCacheDecorator($storage->reveal());
 
@@ -644,16 +746,38 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->assertTrue($this->cache->deleteMultiple($keys));
     }
 
+    public function testDeleteMultipleReturnsTrueWhenProvidedWithIterableAndStorageReturnsEmptyArray()
+    {
+        $keys = new ArrayIterator(['one', 'two', 'three']);
+        $this->storage->removeItems(iterator_to_array($keys))->willReturn([]);
+        $this->assertTrue($this->cache->deleteMultiple($keys));
+    }
+
+    public function testDeleteMultipleReturnsTrueWhenProvidedWithAnEmptyArrayOfKeys()
+    {
+        $this->storage->removeItems(Argument::any())->shouldNotBeCalled();
+        $this->assertTrue($this->cache->deleteMultiple([]));
+    }
+
     public function testDeleteMultipleProxiesToStorageAndReturnsFalseIfStorageReturnsNonEmptyArray()
     {
         $keys = ['one', 'two', 'three'];
         $this->storage->removeItems($keys)->willReturn(['two']);
+        $this->storage->hasItem('two')->willReturn(true);
         $this->assertFalse($this->cache->deleteMultiple($keys));
+    }
+
+    public function testDeleteMultipleReturnsTrueIfKeyReturnedByStorageDoesNotExist()
+    {
+        $keys = ['one', 'two', 'three'];
+        $this->storage->removeItems($keys)->willReturn(['two']);
+        $this->storage->hasItem('two')->willReturn(false);
+        $this->assertTrue($this->cache->deleteMultiple($keys));
     }
 
     public function testDeleteMultipleReRaisesExceptionThrownByStorage()
     {
-        $keys = [1, 2, 3];
+        $keys = ['one', 'two', 'three'];
         $exception = new Exception\InvalidArgumentException('bad key', 500);
         $this->storage->removeItems($keys)->willThrow($exception);
 
