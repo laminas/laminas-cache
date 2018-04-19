@@ -117,9 +117,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             throw static::translateException($e);
         } catch (Exception $e) {
             throw static::translateException($e);
+        } finally {
+            $options->setTtl($previousTtl);
         }
-
-        $options->setTtl($previousTtl);
 
         return $result;
     }
@@ -224,9 +224,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             throw static::translateException($e);
         } catch (Exception $e) {
             throw static::translateException($e);
+        } finally {
+            $options->setTtl($previousTtl);
         }
-
-        $options->setTtl($previousTtl);
 
         if (empty($result)) {
             return true;

@@ -357,7 +357,7 @@ class SimpleCacheDecoratorTest extends TestCase
                 $this
                     ->setTtl($ttl)
                     ->will(function () use ($originalTtl) {
-                        $this->setTtl($originalTtl)->shouldNotBeCalled();
+                        $this->setTtl($originalTtl)->shouldBeCalled();
                     });
                 return $originalTtl;
             });
@@ -719,7 +719,7 @@ class SimpleCacheDecoratorTest extends TestCase
                 $this
                     ->setTtl($ttl)
                     ->will(function () use ($originalTtl) {
-                        $this->setTtl($originalTtl)->shouldNotBeCalled();
+                        $this->setTtl($originalTtl)->shouldBeCalled();
                     });
                 return $originalTtl;
             });
