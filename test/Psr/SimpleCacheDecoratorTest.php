@@ -626,7 +626,9 @@ class SimpleCacheDecoratorTest extends TestCase
             'string' => false,
         ]);
         $storage->getOptions()->will([$options, 'reveal']);
-        $storage->setItems($serializedValues)->willReturn([]);
+        $storage->setItem('one', $serializedValues['one'])->willReturn(true);
+        $storage->setItem('two', $serializedValues['two'])->willReturn(true);
+        $storage->setItem('three', $serializedValues['three'])->willReturn(true);
 
         $cache = new SimpleCacheDecorator($storage->reveal());
 

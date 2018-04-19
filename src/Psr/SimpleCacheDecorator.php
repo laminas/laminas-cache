@@ -120,6 +120,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
 
         $options->setTtl($previousTtl);
+
         return $result;
     }
 
@@ -192,26 +193,25 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     public function setMultiple($values, $ttl = null)
     {
         $values = $this->convertIterableToArray($values, true, __FUNCTION__);
+        $keys = array_keys($values);
         $ttl = $this->convertTtlToInteger($ttl);
-
-        foreach (array_keys($values) as $key) {
-            $this->validateKey($key);
-            // Don't serialize values if we'll be invalidating them.
-            if (null !== $ttl && 0 < $ttl) {
-                $values[$key] = $this->serializeValues ? serialize($values[$key]) : $values[$key];
-            }
-        }
 
         // PSR-16 states that 0 or negative TTL values should result in cache
         // invalidation for the items.
         if (null !== $ttl && 1 > $ttl) {
-            return $this->deleteMultiple(array_keys($values));
+            return $this->deleteMultiple($keys);
         }
 
+        array_walk($keys, [$this, 'validateKey']);
+
         // If a positive TTL is set, but the adapter does not support per-item
-        // TTL, we return false immediately.
+        // TTL, we return false -- but not until after we validate keys.
         if (null !== $ttl && ! $this->providesPerItemTtl) {
             return false;
+        }
+
+        if ($this->serializeValues) {
+            return $this->setMultipleForStorageRequiringSerialization($values, $ttl);
         }
 
         $options = $this->storage->getOptions();
@@ -468,5 +468,31 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             $array[$key] = $value;
         }
         return $array;
+    }
+
+    /**
+     * Workaround for adapters requiring serialization of values.
+     *
+     * In performing integration tests, we found that every adapter that
+     * requires serialization would fail the tests for setMultiple(), in
+     * exactly the same way: inability to unserialize the data returned.
+     *
+     * The problem appears to be how each adapter's setItems() method handles
+     * the data provided.
+     *
+     * Storing each one by one works perfectly, however, so this is the
+     * approach taken.
+     *
+     * @param iterable $values
+     * @param null|int $ttl
+     * @return bool
+     */
+    private function setMultipleForStorageRequiringSerialization($values, $ttl)
+    {
+        $result = true;
+        foreach ($values as $key => $value) {
+            $result = $result && $this->set($key, $value, $ttl);
+        }
+        return $result;
     }
 }
