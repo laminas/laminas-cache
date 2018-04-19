@@ -69,6 +69,8 @@ class SimpleCacheDecoratorTest extends TestCase
     /**
      * Set of string key names that should be considered invalid for operations
      * that create cache entries.
+     *
+     * @return array
      */
     public function invalidKeyProvider()
     {
@@ -81,6 +83,20 @@ class SimpleCacheDecoratorTest extends TestCase
             'back-slash'    => ['ns\key', 'cannot contain'],
             'at'            => ['ns@key', 'cannot contain'],
             'too-long'      => [str_repeat('abcd', 17), 'too long'],
+        ];
+    }
+
+    /**
+     * TTL values less than 1 should result in immediate cache removal.
+     *
+     * @return array
+     */
+    public function invalidatingTtls()
+    {
+        return [
+            'zero'         => [0],
+            'negative-1'   => [-1],
+            'negative-100' => [-100],
         ];
     }
 
@@ -229,6 +245,19 @@ class SimpleCacheDecoratorTest extends TestCase
         $cache = new SimpleCacheDecorator($storage->reveal());
 
         $this->assertTrue($cache->set('key', $value, $ttl));
+    }
+
+    /**
+     * @dataProvider invalidatingTtls
+     * @param int $ttl
+     */
+    public function testSetShouldRemoveItemFromCacheIfTtlIsBelow1($ttl)
+    {
+        $this->storage->getOptions()->shouldNotBeCalled();
+        $this->storage->setItem('key', 'value')->shouldNotBeCalled();
+        $this->storage->removeItem('key')->willReturn(true);
+
+        $this->assertTrue($this->cache->set('key', 'value', $ttl));
     }
 
     /**
@@ -461,6 +490,25 @@ class SimpleCacheDecoratorTest extends TestCase
         $cache = new SimpleCacheDecorator($storage->reveal());
 
         $this->assertTrue($cache->setMultiple($values, $ttl));
+    }
+
+    /**
+     * @dataProvider invalidatingTtls
+     * @param int $ttl
+     */
+    public function testSetMultipleShouldRemoveItemsFromCacheIfTtlIsBelow1($ttl)
+    {
+        $values = [
+            'one' => 1,
+            'two' => 'true',
+            'three' => ['tags' => true],
+        ];
+
+        $this->storage->getOptions()->shouldNotBeCalled();
+        $this->storage->setItems(Argument::any())->shouldNotBeCalled();
+        $this->storage->removeItems(array_keys($values))->willReturn([]);
+
+        $this->assertTrue($this->cache->setMultiple($values, $ttl));
     }
 
     /**

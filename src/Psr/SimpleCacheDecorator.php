@@ -74,6 +74,14 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     public function set($key, $value, $ttl = null)
     {
         $this->validateKey($key);
+
+        // PSR-16 states that 0 or negative TTL values should result in cache
+        // invalidation for the item.
+        $ttl = null !== $ttl ? (int) $ttl : null;
+        if (null !== $ttl && 1 > $ttl) {
+            return $this->delete($key);
+        }
+
         $options = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
         $options->setTtl($ttl);
@@ -150,10 +158,22 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function setMultiple($values, $ttl = null)
     {
+        $ttl = null !== $ttl ? (int) $ttl : null;
+
         foreach (array_keys($values) as $key) {
             $this->validateKey($key);
-            $values[$key] = $this->serializeValues ? serialize($values[$key]) : $values[$key];
+            // Don't serialize values if we'll be invalidating them.
+            if (null !== $ttl && 0 < $ttl) {
+                $values[$key] = $this->serializeValues ? serialize($values[$key]) : $values[$key];
+            }
         }
+
+        // PSR-16 states that 0 or negative TTL values should result in cache
+        // invalidation for the items.
+        if (null !== $ttl && 1 > $ttl) {
+            return $this->deleteMultiple(array_keys($values));
+        }
+
         $options = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
         $options->setTtl($ttl);
