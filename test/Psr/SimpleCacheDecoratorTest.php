@@ -51,11 +51,21 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->cache = new SimpleCacheDecorator($this->storage->reveal());
     }
 
-    public function mockCapabilities(ObjectProphecy $storage, array $supportedDataTypes = null)
-    {
+    /**
+     * @param bool $staticTtl
+     * @param int $minTtl
+     */
+    public function mockCapabilities(
+        ObjectProphecy $storage,
+        array $supportedDataTypes = null,
+        $staticTtl = true,
+        $minTtl = 60
+    ) {
         $supportedDataTypes = $supportedDataTypes ?: $this->requiredTypes;
         $capabilities = $this->prophesize(Capabilities::class);
         $capabilities->getSupportedDatatypes()->willReturn($supportedDataTypes);
+        $capabilities->getStaticTtl()->willReturn($staticTtl);
+        $capabilities->getMinTtl()->willReturn($minTtl);
         $storage->getCapabilities()->will([$capabilities, 'reveal']);
     }
 
@@ -258,6 +268,35 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->storage->removeItem('key')->willReturn(true);
 
         $this->assertTrue($this->cache->set('key', 'value', $ttl));
+    }
+
+    public function testSetShouldReturnFalseWhenProvidedWithPositiveTtlAndStorageDoesNotSupportPerItemTtl()
+    {
+        $storage = $this->prophesize(StorageInterface::class);
+        $this->mockCapabilities($storage, null, false);
+        $storage->getOptions()->shouldNotBeCalled();
+        $storage->setItem('key', 'value')->shouldNotBeCalled();
+
+        $cache = new SimpleCacheDecorator($storage->reveal());
+
+        $this->assertFalse($cache->set('key', 'value', 3600));
+    }
+
+    /**
+     * @dataProvider invalidatingTtls
+     * @param int $ttl
+     */
+    public function testSetShouldRemoveItemFromCacheIfTtlIsBelow1AndStorageDoesNotSupportPerItemTtl($ttl)
+    {
+        $storage = $this->prophesize(StorageInterface::class);
+        $this->mockCapabilities($storage, null, false);
+        $storage->getOptions()->shouldNotBeCalled();
+        $storage->setItem('key', 'value')->shouldNotBeCalled();
+        $storage->removeItem('key')->willReturn(true);
+
+        $cache = new SimpleCacheDecorator($storage->reveal());
+
+        $this->assertTrue($cache->set('key', 'value', $ttl));
     }
 
     /**
@@ -509,6 +548,47 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->storage->removeItems(array_keys($values))->willReturn([]);
 
         $this->assertTrue($this->cache->setMultiple($values, $ttl));
+    }
+
+    public function testSetMultipleShouldReturnFalseWhenProvidedWithPositiveTtlAndStorageDoesNotSupportPerItemTtl()
+    {
+        $values = [
+            'one' => 1,
+            'two' => 'true',
+            'three' => ['tags' => true],
+        ];
+
+        $storage = $this->prophesize(StorageInterface::class);
+        $this->mockCapabilities($storage, null, false);
+        $storage->getOptions()->shouldNotBeCalled();
+        $storage->setItems(Argument::any())->shouldNotBeCalled();
+
+        $cache = new SimpleCacheDecorator($storage->reveal());
+
+        $this->assertFalse($cache->setMultiple($values, 60));
+    }
+
+    /**
+     * @dataProvider invalidatingTtls
+     * @param int $ttl
+     */
+    public function testSetMultipleShouldRemoveItemsFromCacheIfTtlIsBelow1AndStorageDoesNotSupportPerItemTtl($ttl)
+    {
+        $values = [
+            'one' => 1,
+            'two' => 'true',
+            'three' => ['tags' => true],
+        ];
+
+        $storage = $this->prophesize(StorageInterface::class);
+        $this->mockCapabilities($storage, null, false);
+        $storage->getOptions()->shouldNotBeCalled();
+        $storage->setItems(Argument::any())->shouldNotBeCalled();
+        $storage->removeItems(array_keys($values))->willReturn([]);
+
+        $cache = new SimpleCacheDecorator($storage->reveal());
+
+        $this->assertTrue($cache->setMultiple($values, $ttl));
     }
 
     /**

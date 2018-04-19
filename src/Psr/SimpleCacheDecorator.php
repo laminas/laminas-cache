@@ -27,6 +27,11 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     const INVALID_KEY_CHARS = '@{}()/\\';
 
     /**
+     * @var bool
+     */
+    private $providesPerItemTtl = true;
+
+    /**
      * @var StorageInterface
      */
     private $storage;
@@ -42,6 +47,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     public function __construct(StorageInterface $storage)
     {
         $this->memoizeSerializationCapabilities($storage);
+        $this->memoizeTtlCapabilities($storage);
         $this->storage = $storage;
     }
 
@@ -80,6 +86,12 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         $ttl = null !== $ttl ? (int) $ttl : null;
         if (null !== $ttl && 1 > $ttl) {
             return $this->delete($key);
+        }
+
+        // If a positive TTL is set, but the adapter does not support per-item
+        // TTL, we return false immediately.
+        if (null !== $ttl && ! $this->providesPerItemTtl) {
+            return false;
         }
 
         $options = $this->storage->getOptions();
@@ -172,6 +184,12 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         // invalidation for the items.
         if (null !== $ttl && 1 > $ttl) {
             return $this->deleteMultiple(array_keys($values));
+        }
+
+        // If a positive TTL is set, but the adapter does not support per-item
+        // TTL, we return false immediately.
+        if (null !== $ttl && ! $this->providesPerItemTtl) {
+            return false;
         }
 
         $options = $this->storage->getOptions();
@@ -280,5 +298,17 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
 
         return $value;
+    }
+
+    /**
+     * Determine if the storage adapter provides per-item TTL capabilities
+     *
+     * @param StorageInterface $storage
+     * @return void
+     */
+    private function memoizeTtlCapabilities(StorageInterface $storage)
+    {
+        $capabilities = $storage->getCapabilities();
+        $this->providesPerItemTtl = $capabilities->getStaticTtl() && (0 < $capabilities->getMinTtl());
     }
 }
