@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `Zend\Cache\Psr\CacheItemPoolAdapter` provides a [PSR-6](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-6-cache.md)
+The `Zend\Cache\Psr\CacheItemPoolAdapter` provides a [PSR-6](https://www.php-fig.org/psr/psr-6/)
 compliant wrapper for supported storage adapters.
 
 PSR-6 specifies a common interface to cache storage, enabling developers to switch between implementations without
