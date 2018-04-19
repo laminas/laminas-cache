@@ -6,6 +6,22 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#148](https://github.com/zendframework/zend-cache/pull/148) adds support for PHP 7.1 and 7.2.
+
+- [#152](https://github.com/zendframework/zend-cache/pull/152) adds an adapter providing [PSR-16](https://www.php-fig.org/psr/psr-16/) (Caching Library Interface) support.
+  The new class, `Zend\Cache\Psr\SimpleCacheDecorator`, accepts a
+  `Zend\Cache\Storage\StorageInterface` instance to its constructor, and proxies
+  the various PSR-16 methods to it.
+
+- [#46](https://github.com/zendframework/zend-cache/issues/46) adds support for [PSR-6](https://www.php-fig.org/psr/psr-6/) (Caching Interface).
+  It provides an implementation of `Psr\Cache\CacheItemPoolInterface` via
+  `Zend\Cache\Psr\CacheItemPoolAdapter`, which accepts a
+  `Zend\Cache\Storage\StorageInterface` instance to its constructor, and proxies
+  the various PSR-6 methods to it. It also provides a
+  `Psr\Cache\CacheItemInterface` implementation via `Zend\Cache\Psr\CacheItem`,
+  which provides a value object for both introspecting cache fetch results, as
+  well as providing values to cache.
+
 - [#154](https://github.com/zendframework/zend-cache/pull/154) adds an ext-mongodb adapter, `Zend\Cache\Storage\Adapter\ExtMongoDb`.
   You may use the `StorageFactory` to create an instance using either the fully qualified class
   name as the adapter name, or the strings `ext_mongo_db` or `ExtMongoDB` (or most variations
@@ -13,29 +29,24 @@ All notable changes to this project will be documented in this file, in reverse 
   `Zend\Cache\Storage\Adapter\MongoDb`, and it provides the same capabilities. The adapter
   requires the mongodb/mongodb package to operate.
 
-- [#148](https://github.com/zendframework/zend-cache/pull/148) adds support for PHP 7.1 and 7.2.
-
 - [#120](https://github.com/zendframework/zend-cache/pull/120) adds the ability to configure alternate file suffixes for both
   cache and tag cache files within the Filesystem adapter. Use the `suffix` and `tag_suffix`
   options to set them; they will default to `dat` and `tag`, respectively.
 
-- [#116](https://github.com/zendframework/zend-cache/pull/116)
-  docblock method chaining consistency
-- [#46](https://github.com/zendframework/zend-cache/issues/46)
-  Add wrapper for PSR-6
 - [#79](https://github.com/zendframework/zend-cache/issues/79)
   Add capability for the "lock-on-expire" feature (úsed by Zend Data Cache)
 
 ### Changed
 
-- Nothing.
+- [#116](https://github.com/zendframework/zend-cache/pull/116) adds docblock method chaining consistency.
 
 ### Deprecated
 
-- [#101](https://github.com/zendframework/zend-cache/pull/101)
-  bump minimum php version to 5.6, as 5.5 goes EOL
+- Nothing.
 
 ### Removed
+
+- [#101](https://github.com/zendframework/zend-cache/pull/101) removes support for PHP 5.5.
 
 - [#148](https://github.com/zendframework/zend-cache/pull/148) removes support for HHVM.
 
@@ -49,8 +60,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#150](https://github.com/zendframework/zend-cache/pull/150) fixes an issue with how CAS tokens are handled when using the memcached adapter.
 
-- [#61](https://github.com/zendframework/zend-cache/pull/61)
-  Zend Data Cache: minTtl => 1
+- [#61](https://github.com/zendframework/zend-cache/pull/61) sets the Zend Data Cache minTtl value to 1.
 
 ## 2.7.3 - TBD
 
