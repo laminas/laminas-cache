@@ -8,19 +8,19 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#148](https://github.com/zendframework/zend-cache/pull/148) adds support for PHP 7.1 and 7.2.
 
-- [#152](https://github.com/zendframework/zend-cache/pull/152) adds an adapter providing [PSR-16](https://www.php-fig.org/psr/psr-16/) (Caching Library Interface) support.
-  The new class, `Zend\Cache\Psr\SimpleCacheDecorator`, accepts a
-  `Zend\Cache\Storage\StorageInterface` instance to its constructor, and proxies
-  the various PSR-16 methods to it.
-
-- [#46](https://github.com/zendframework/zend-cache/issues/46) adds support for [PSR-6](https://www.php-fig.org/psr/psr-6/) (Caching Interface).
-  It provides an implementation of `Psr\Cache\CacheItemPoolInterface` via
-  `Zend\Cache\Psr\CacheItemPoolAdapter`, which accepts a
+- [#46](https://github.com/zendframework/zend-cache/issues/46) and [#155](https://github.com/zendframework/zend-cache/issues/155) add support for [PSR-6](https://www.php-fig.org/psr/psr-6/) (Caching Interface).
+  They provides an implementation of `Psr\Cache\CacheItemPoolInterface` via
+  `Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator`, which accepts a
   `Zend\Cache\Storage\StorageInterface` instance to its constructor, and proxies
   the various PSR-6 methods to it. It also provides a
-  `Psr\Cache\CacheItemInterface` implementation via `Zend\Cache\Psr\CacheItem`,
+  `Psr\Cache\CacheItemInterface` implementation via `Zend\Cache\Psr\CacheItemPool\CacheItem`,
   which provides a value object for both introspecting cache fetch results, as
   well as providing values to cache.
+
+- [#152](https://github.com/zendframework/zend-cache/pull/152) and [#155](https://github.com/zendframework/zend-cache/pull/155) add an adapter providing [PSR-16](https://www.php-fig.org/psr/psr-16/) (Caching Library Interface) support.
+  The new class, `Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator`, accepts a
+  `Zend\Cache\Storage\StorageInterface` instance to its constructor, and proxies
+  the various PSR-16 methods to it.
 
 - [#154](https://github.com/zendframework/zend-cache/pull/154) adds an ext-mongodb adapter, `Zend\Cache\Storage\Adapter\ExtMongoDb`.
   You may use the `StorageFactory` to create an instance using either the fully qualified class
