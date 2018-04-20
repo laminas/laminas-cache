@@ -4,7 +4,7 @@
 
 ## Overview
 
-The `Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter` provides a [PSR-6](https://www.php-fig.org/psr/psr-6/)
+The `Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator` provides a [PSR-6](https://www.php-fig.org/psr/psr-6/)
 compliant wrapper for supported storage adapters.
 
 PSR-6 specifies a common interface to cache storage, enabling developers to switch between implementations without
@@ -13,11 +13,12 @@ having to worry about any behind-the-scenes differences between them.
 
 ## Quick Start
 
-To use the pool, instantiate your storage as normal, then pass it to the `CacheItemPoolAdapter`.
+To use the pool, instantiate your storage as normal, then pass it to the
+`CacheItemPoolDecorator`.
 
 ```php
 use Zend\Cache\StorageFactory;
-use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 
 $storage = StorageFactory::factory([
     'adapter' => [
@@ -26,7 +27,7 @@ $storage = StorageFactory::factory([
     ],
 ]);
 
-$pool = new CacheItemPoolAdapter($storage);
+$pool = new CacheItemPoolDecorator($storage);
 
 // attempt to get an item from cache
 $item = $pool->getItem('foo');
@@ -62,7 +63,7 @@ fulfil this requirement.
 
 Attempting to use an unsupported adapter will throw an exception implementing `Psr\Cache\CacheException`.
 
-The `Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter` adapter doesn't support driver deferred saves, so cache items are saved
+The `Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator` adapter doesn't support driver deferred saves, so cache items are saved
 on destruct or on explicit `commit()` call.
 
 ### Quirks
@@ -118,7 +119,7 @@ $storage = StorageFactory::factory([
     ],
 ]);
 
-$pool = new CacheItemPoolAdapter($storage);
+$pool = new CacheItemPoolDecorator($storage);
 ```
 
 Note that `throw_exceptions` should always be `true` (the default) or you will not get the correct return values from

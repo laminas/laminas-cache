@@ -96,7 +96,7 @@ final class CacheItem implements CacheItemInterface
     /**
      * Sets isHit value
      *
-     * This function is called by CacheItemPoolAdapter::saveDeferred() and is not intended for use by other calling
+     * This function is called by CacheItemPoolDecorator::saveDeferred() and is not intended for use by other calling
      * code.
      *
      * @param boolean $isHit

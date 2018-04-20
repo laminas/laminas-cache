@@ -11,11 +11,11 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Cache\CacheItemInterface;
 use Zend\Cache\Exception;
-use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
 use Zend\Cache\Storage\StorageInterface;
 
-class CacheItemPoolAdapterTest extends TestCase
+class CacheItemPoolDecoratorTest extends TestCase
 {
     use MockStorageTrait;
 
@@ -49,7 +49,7 @@ class CacheItemPoolAdapterTest extends TestCase
     public function testUnserialize()
     {
         // we can't test this without reflection: we can't prophesy args-by-ref (ie $storage->getItem('key', $isHit))
-        $unserialize = new \ReflectionMethod(CacheItemPoolAdapter::class, 'unserialize');
+        $unserialize = new \ReflectionMethod(CacheItemPoolDecorator::class, 'unserialize');
         $unserialize->setAccessible(true);
 
         $capabilities = $this->defaultCapabilities;
@@ -222,7 +222,7 @@ class CacheItemPoolAdapterTest extends TestCase
     public function testSaveItemWithExpiration()
     {
         $storage = $this->getStorageProphesy()->reveal();
-        $adapter = new CacheItemPoolAdapter($storage);
+        $adapter = new CacheItemPoolDecorator($storage);
         $item = $adapter->getItem('foo');
         $item->set('bar');
         $item->expiresAfter(3600);
@@ -238,7 +238,7 @@ class CacheItemPoolAdapterTest extends TestCase
     public function testExpiredItemNotSaved()
     {
         $storage = $this->getStorageProphesy()->reveal();
-        $adapter = new CacheItemPoolAdapter($storage);
+        $adapter = new CacheItemPoolDecorator($storage);
         $item = $adapter->getItem('foo');
         $item->set('bar');
         $item->expiresAfter(0);
@@ -548,13 +548,13 @@ class CacheItemPoolAdapterTest extends TestCase
 
     /**
      * @param Prophesy $storage
-     * @return CacheItemPoolAdapter
+     * @return CacheItemPoolDecorator
      */
     private function getAdapter($storage = null)
     {
         if (! $storage) {
             $storage = $this->getStorageProphesy();
         }
-        return new CacheItemPoolAdapter($storage->reveal());
+        return new CacheItemPoolDecorator($storage->reveal());
     }
 }

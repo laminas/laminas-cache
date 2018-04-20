@@ -8,7 +8,7 @@
 namespace ZendTest\Cache\Psr\CacheItemPool;
 
 use PHPUnit\Framework\TestCase;
-use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 use Zend\Cache\StorageFactory;
 
 class BlackHoleIntegrationTest extends TestCase
@@ -19,6 +19,6 @@ class BlackHoleIntegrationTest extends TestCase
     public function testAdapterNotSupported()
     {
         $storage = StorageFactory::adapterFactory('blackhole');
-        new CacheItemPoolAdapter($storage);
+        new CacheItemPoolDecorator($storage);
     }
 }

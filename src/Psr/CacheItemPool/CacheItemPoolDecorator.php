@@ -16,12 +16,12 @@ use Zend\Cache\Storage\FlushableInterface;
 use Zend\Cache\Storage\StorageInterface;
 
 /**
- * PSR-6 cache adapter
+ * Decorate zend-cache adapters as PSR-6 cache item pools.
  *
  * @link https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-6-cache.md
  * @link https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-6-cache-meta.md
  */
-class CacheItemPoolAdapter implements CacheItemPoolInterface
+class CacheItemPoolDecorator implements CacheItemPoolInterface
 {
     use SerializationTrait;
 

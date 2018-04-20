@@ -8,7 +8,7 @@
 namespace ZendTest\Cache\Psr\CacheItemPool;
 
 use PHPUnit\Framework\TestCase;
-use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 use Zend\Cache\StorageFactory;
 
 class SessionIntegrationTest extends TestCase
@@ -21,6 +21,6 @@ class SessionIntegrationTest extends TestCase
     public function testAdapterNotSupported()
     {
         $storage = StorageFactory::adapterfactory('session');
-        new CacheItemPoolAdapter($storage);
+        new CacheItemPoolDecorator($storage);
     }
 }

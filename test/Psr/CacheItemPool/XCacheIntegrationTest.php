@@ -8,7 +8,7 @@
 namespace ZendTest\Cache\Psr\CacheItemPool;
 
 use PHPUnit\Framework\TestCase;
-use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
@@ -39,7 +39,7 @@ class XCacheIntegrationTest extends TestCase
             );
             $this->skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired'] = $deferredSkippedMessage;
 
-            return new CacheItemPoolAdapter($storage);
+            return new CacheItemPoolDecorator($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
         } catch (ServiceNotCreatedException $e) {
