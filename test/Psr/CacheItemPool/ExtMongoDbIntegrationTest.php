@@ -1,17 +1,15 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/).
- *
- * @link      http://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-cache for the canonical source repository
+ * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr;
+namespace ZendTest\Cache\Psr\CacheItemPool;
 
 use Cache\IntegrationTests\CachePoolTest;
 use MongoDB\Client;
-use Zend\Cache\Psr\CacheItemPoolAdapter;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\ExtMongoDb;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;

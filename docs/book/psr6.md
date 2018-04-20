@@ -1,8 +1,10 @@
-# Zend\\Cache\\Psr\\CacheItemPoolAdapter
+# PSR-6 Support
+
+- Since 2.8.0
 
 ## Overview
 
-The `Zend\Cache\Psr\CacheItemPoolAdapter` provides a [PSR-6](https://www.php-fig.org/psr/psr-6/)
+The `Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter` provides a [PSR-6](https://www.php-fig.org/psr/psr-6/)
 compliant wrapper for supported storage adapters.
 
 PSR-6 specifies a common interface to cache storage, enabling developers to switch between implementations without
@@ -15,7 +17,7 @@ To use the pool, instantiate your storage as normal, then pass it to the `CacheI
 
 ```php
 use Zend\Cache\StorageFactory;
-use Zend\Cache\Psr\CacheItemPoolAdapter;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
 
 $storage = StorageFactory::factory([
     'adapter' => [
@@ -60,7 +62,7 @@ fulfil this requirement.
 
 Attempting to use an unsupported adapter will throw an exception implementing `Psr\Cache\CacheException`.
 
-The `Zend\Cache\Psr\CacheItemPoolAdapter` adapter doesn't support driver deferred saves, so cache items are saved
+The `Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter` adapter doesn't support driver deferred saves, so cache items are saved
 on destruct or on explicit `commit()` call.
 
 ### Quirks

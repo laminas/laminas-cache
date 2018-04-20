@@ -8,7 +8,7 @@
 namespace ZendTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
-use Zend\Cache\Psr\SimpleCacheDecorator;
+use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 use Zend\Cache\StorageFactory;
 use Zend\Session\Container as SessionContainer;
 

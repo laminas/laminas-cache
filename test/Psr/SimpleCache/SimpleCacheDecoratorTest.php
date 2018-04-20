@@ -5,7 +5,7 @@
  * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr;
+namespace ZendTest\Cache\Psr\SimpleCache;
 
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
@@ -14,9 +14,9 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use ReflectionProperty;
 use Zend\Cache\Exception;
-use Zend\Cache\Psr\SimpleCacheDecorator;
-use Zend\Cache\Psr\SimpleCacheInvalidArgumentException;
-use Zend\Cache\Psr\SimpleCacheException;
+use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Zend\Cache\Psr\SimpleCache\SimpleCacheInvalidArgumentException;
+use Zend\Cache\Psr\SimpleCache\SimpleCacheException;
 use Zend\Cache\Storage\Adapter\AdapterOptions;
 use Zend\Cache\Storage\Capabilities;
 use Zend\Cache\Storage\FlushableInterface;

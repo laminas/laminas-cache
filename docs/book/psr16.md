@@ -7,7 +7,7 @@ cache access that does not involve cache pools, tags, deferment, etc.; it
 can be thought of as a key/value storage approach to caching.
 
 zend-cache provides PSR-16 support via the class
-`Zend\Cache\Psr\SimpleCacheDecorator`. This class implements PSR-16's
+`Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator`. This class implements PSR-16's
 `Psr\SimpleCache\CacheInterface`, and composes a
 `Zend\Cache\Storage\StorageInterface` instance to which it proxies all
 operations.
@@ -16,7 +16,7 @@ Instantiation is as follows:
 
 ```php
 use Zend\Cache\StorageFactory;
-use Zend\Cache\Psr\SimpleCacheDecorator;
+use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 
 $storage = StorageFactory::factory([
     'adapter' => [

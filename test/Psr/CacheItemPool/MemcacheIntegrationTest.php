@@ -1,24 +1,23 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/).
- *
- * @link      http://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-cache for the canonical source repository
+ * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr;
+namespace ZendTest\Cache\Psr\CacheItemPool;
 
 use Cache\IntegrationTests\CachePoolTest;
-use Zend\Cache\Psr\CacheItemPoolAdapter;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
+use Zend\Cache\Storage\Adapter\Memcache;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 /**
- * @requires extension apcu
+ * @require extension memcache
  */
-class ApcuIntegrationTest extends CachePoolTest
+class MemcacheIntegrationTest extends CachePoolTest
 {
     /**
      * Backup default timezone
@@ -27,25 +26,19 @@ class ApcuIntegrationTest extends CachePoolTest
     private $tz;
 
     /**
-     * Restore 'apc.use_request_time'
-     *
-     * @var mixed
+     * @var Memcache
      */
-    protected $iniUseRequestTime;
+    private $storage;
 
     protected function setUp()
     {
-        if (! getenv('TESTS_ZEND_CACHE_APCU_ENABLED')) {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_APCU_ENABLED to run this test');
+        if (! getenv('TESTS_ZEND_CACHE_MEMCACHE_ENABLED')) {
+            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MEMCACHE_ENABLED to run this test');
         }
 
         // set non-UTC timezone
         $this->tz = date_default_timezone_get();
         date_default_timezone_set('America/Vancouver');
-
-        // needed on test expirations
-        $this->iniUseRequestTime = ini_get('apc.use_request_time');
-        ini_set('apc.use_request_time', 0);
 
         parent::setUp();
     }
@@ -54,29 +47,29 @@ class ApcuIntegrationTest extends CachePoolTest
     {
         date_default_timezone_set($this->tz);
 
-        if (function_exists('apc_clear_cache')) {
-            apc_clear_cache('user');
+        if ($this->storage) {
+            $this->storage->flush();
         }
-
-        // reset ini configurations
-        ini_set('apc.use_request_time', $this->iniUseRequestTime);
 
         parent::tearDown();
     }
 
-    /**
-     * @expectedException \Zend\Cache\Psr\CacheException
-     */
-    public function testApcUseRequestTimeThrowsException()
-    {
-        ini_set('apc.use_request_time', 1);
-        $this->createCachePool();
-    }
-
     public function createCachePool()
     {
+        $host = getenv('TESTS_ZEND_CACHE_MEMCACHE_HOST');
+        $port = getenv('TESTS_ZEND_CACHE_MEMCACHE_PORT');
+
+        $options = [
+            'resource_id' => __CLASS__
+        ];
+        if ($host && $port) {
+            $options['servers'] = [[$host, $port]];
+        } elseif ($host) {
+            $options['servers'] = [[$host]];
+        }
+
         try {
-            $storage = StorageFactory::adapterFactory('apcu');
+            $storage = StorageFactory::adapterFactory('memcache', $options);
 
             $deferredSkippedMessage = sprintf(
                 '%s storage doesn\'t support driver deferred',

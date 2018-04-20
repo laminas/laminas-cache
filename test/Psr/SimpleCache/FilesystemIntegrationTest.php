@@ -9,7 +9,7 @@ namespace ZendTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
 use DirectoryIterator;
-use Zend\Cache\Psr\SimpleCacheDecorator;
+use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 use Zend\Cache\Storage\Adapter\Filesystem;
 use Zend\Cache\Storage\Adapter\FilesystemOptions;
 

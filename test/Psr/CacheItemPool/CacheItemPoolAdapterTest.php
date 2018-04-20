@@ -1,29 +1,26 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/).
- *
- * @link      http://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-cache for the canonical source repository
+ * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache;
+namespace ZendTest\Cache\Psr\CacheItemPool;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Cache\CacheItemInterface;
 use Zend\Cache\Exception;
-use Zend\Cache\Psr\CacheItemPoolAdapter;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
 use Zend\Cache\Storage\StorageInterface;
-use ZendTest\Cache\Psr\MockStorageTrait;
 
 class CacheItemPoolAdapterTest extends TestCase
 {
     use MockStorageTrait;
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\CacheException
      */
     public function testStorageNotFlushableThrowsException()
     {
@@ -32,7 +29,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\CacheException
      */
     public function testStorageFalseStaticTtlThrowsException()
     {
@@ -41,7 +38,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\CacheException
      */
     public function testStorageZeroMinTtlThrowsException()
     {
@@ -106,7 +103,7 @@ class CacheItemPoolAdapterTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testGetItemInvalidKeyThrowsException($key)
     {
@@ -124,7 +121,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testGetItemInvalidArgumentExceptionRethrown()
     {
@@ -179,7 +176,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testGetItemsInvalidKeyThrowsException()
     {
@@ -201,7 +198,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testGetItemsInvalidArgumentExceptionRethrown()
     {
@@ -251,7 +248,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testSaveForeignItemThrowsException()
     {
@@ -270,7 +267,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testSaveItemInvalidArgumentExceptionRethrown()
     {
@@ -316,7 +313,7 @@ class CacheItemPoolAdapterTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testHasItemInvalidKeyThrowsException($key)
     {
@@ -332,7 +329,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testHasItemInvalidArgumentExceptionRethrown()
     {
@@ -412,7 +409,7 @@ class CacheItemPoolAdapterTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testDeleteItemInvalidKeyThrowsException($key)
     {
@@ -428,7 +425,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testDeleteItemInvalidArgumentExceptionRethrown()
     {
@@ -460,7 +457,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testDeleteItemsInvalidKeyThrowsException()
     {
@@ -477,7 +474,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testDeleteItemsInvalidArgumentExceptionRethrown()
     {
@@ -495,7 +492,7 @@ class CacheItemPoolAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\InvalidArgumentException
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testSaveDeferredForeignItemThrowsException()
     {

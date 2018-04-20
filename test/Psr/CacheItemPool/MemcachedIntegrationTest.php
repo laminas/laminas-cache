@@ -1,22 +1,23 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/).
- *
- * @link      http://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-cache for the canonical source repository
+ * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr;
+namespace ZendTest\Cache\Psr\CacheItemPool;
 
 use Cache\IntegrationTests\CachePoolTest;
-use Zend\Cache\Psr\CacheItemPoolAdapter;
-use Zend\Cache\Storage\Adapter\Redis;
+use Zend\Cache\Psr\CacheItemPool\CacheItemPoolAdapter;
+use Zend\Cache\Storage\Adapter\Memcached;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
-class RedisIntegrationTest extends CachePoolTest
+/**
+ * @require extension memcached
+ */
+class MemcachedIntegrationTest extends CachePoolTest
 {
     /**
      * Backup default timezone
@@ -25,14 +26,14 @@ class RedisIntegrationTest extends CachePoolTest
     private $tz;
 
     /**
-     * @var Redis
+     * @var Memcached
      */
     private $storage;
 
     protected function setUp()
     {
-        if (! getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
+        if (! getenv('TESTS_ZEND_CACHE_MEMCACHED_ENABLED')) {
+            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MEMCACHED_ENABLED to run this test');
         }
 
         // set non-UTC timezone
@@ -55,24 +56,20 @@ class RedisIntegrationTest extends CachePoolTest
 
     public function createCachePool()
     {
-        $options = ['resource_id' => __CLASS__];
+        $host = getenv('TESTS_ZEND_CACHE_MEMCACHED_HOST');
+        $port = getenv('TESTS_ZEND_CACHE_MEMCACHED_PORT');
 
-        if (getenv('TESTS_ZEND_CACHE_REDIS_HOST') && getenv('TESTS_ZEND_CACHE_REDIS_PORT')) {
-            $options['server'] = [getenv('TESTS_ZEND_CACHE_REDIS_HOST'), getenv('TESTS_ZEND_CACHE_REDIS_PORT')];
-        } elseif (getenv('TESTS_ZEND_CACHE_REDIS_HOST')) {
-            $options['server'] = [getenv('TESTS_ZEND_CACHE_REDIS_HOST')];
-        }
-
-        if (getenv('TESTS_ZEND_CACHE_REDIS_DATABASE')) {
-            $options['database'] = getenv('TESTS_ZEND_CACHE_REDIS_DATABASE');
-        }
-
-        if (getenv('TESTS_ZEND_CACHE_REDIS_PASSWORD')) {
-            $options['password'] = getenv('TESTS_ZEND_CACHE_REDIS_PASSWORD');
+        $options = [
+            'resource_id' => __CLASS__
+        ];
+        if ($host && $port) {
+            $options['servers'] = [[$host, $port]];
+        } elseif ($host) {
+            $options['servers'] = [[$host]];
         }
 
         try {
-            $storage = StorageFactory::adapterFactory('redis', $options);
+            $storage = StorageFactory::adapterFactory('memcached', $options);
 
             $deferredSkippedMessage = sprintf(
                 '%s storage doesn\'t support driver deferred',

@@ -5,7 +5,7 @@
  * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Psr;
+namespace Zend\Cache\Psr\SimpleCache;
 
 use DateInterval;
 use DateTimeImmutable;
@@ -15,6 +15,7 @@ use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use Throwable;
 use Traversable;
 use Zend\Cache\Exception\InvalidArgumentException as ZendCacheInvalidArgumentException;
+use Zend\Cache\Psr\SerializationTrait;
 use Zend\Cache\Storage\FlushableInterface;
 use Zend\Cache\Storage\StorageInterface;
 

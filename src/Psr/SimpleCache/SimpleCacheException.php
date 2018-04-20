@@ -5,7 +5,7 @@
  * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Psr;
+namespace Zend\Cache\Psr\SimpleCache;
 
 use Psr\SimpleCache\CacheException as PsrCacheException;
 use RuntimeException;
