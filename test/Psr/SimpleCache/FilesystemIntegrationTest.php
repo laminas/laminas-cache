@@ -12,6 +12,7 @@ use DirectoryIterator;
 use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 use Zend\Cache\Storage\Adapter\Filesystem;
 use Zend\Cache\Storage\Adapter\FilesystemOptions;
+use Zend\Cache\Storage\Plugin\Serializer;
 
 class FilesystemIntegrationTest extends SimpleCacheTest
 {
@@ -93,6 +94,7 @@ class FilesystemIntegrationTest extends SimpleCacheTest
         $storage->setOptions(new FilesystemOptions([
             'cache_dir' => $this->tmpCacheDir,
         ]));
+        $storage->addPlugin(new Serializer());
 
         return new SimpleCacheDecorator($storage);
     }

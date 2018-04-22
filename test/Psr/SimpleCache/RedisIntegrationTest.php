@@ -10,6 +10,7 @@ namespace ZendTest\Cache\Psr\SimpleCache;
 use Cache\IntegrationTests\SimpleCacheTest;
 use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 use Zend\Cache\Storage\Adapter\Redis;
+use Zend\Cache\Storage\Plugin\Serializer;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
@@ -71,6 +72,7 @@ class RedisIntegrationTest extends SimpleCacheTest
 
         try {
             $storage = StorageFactory::adapterFactory('redis', $options);
+            $storage->addPlugin(new Serializer());
             return new SimpleCacheDecorator($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());

@@ -36,13 +36,14 @@ use Zend\Cache\Storage\StorageInterface;
 class SimpleCacheDecoratorTest extends TestCase
 {
     private $requiredTypes = [
-        'string'  => true,
-        'integer' => true,
-        'double'  => true,
-        'boolean' => true,
-        'NULL'    => true,
-        'array'   => true,
-        'object'  => true,
+        'NULL'     => true,
+        'boolean'  => true,
+        'integer'  => true,
+        'double'   => true,
+        'string'   => true,
+        'array'    => true,
+        'object'   => 'object',
+        'resource' => false,
     ];
 
     public function setUp()
@@ -130,6 +131,27 @@ class SimpleCacheDecoratorTest extends TestCase
         ];
     }
 
+    /**
+     * @expectedException \Zend\Cache\Psr\SimpleCache\SimpleCacheException
+     */
+    public function testStorageNeedsSerializerWillThrowException()
+    {
+        $dataTypes = [
+            'staticTtl' => true,
+            'minTtl' => 1,
+            'supportedDatatypes' => [
+                'double'   => false,
+            ],
+        ];
+
+        $storage = $this->prophesize(StorageInterface::class);
+        $this->mockCapabilities($storage, $dataTypes, false);
+        $storage->getOptions()->shouldNotBeCalled();
+        $storage->setItem('key', 'value')->shouldNotBeCalled();
+
+        $cache = new SimpleCacheDecorator($storage->reveal());
+    }
+
     public function testItIsASimpleCacheImplementation()
     {
         $this->assertInstanceOf(SimpleCacheInterface::class, $this->cache);
@@ -183,30 +205,6 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->assertSame($expected, $this->cache->get('key', 'default'));
     }
 
-    public function testGetUnserializesValueBeforeReturningItIfStorageAdapterRequiresSerialization()
-    {
-        $value = ['tags' => true];
-        $serializedValue = serialize($value);
-
-        $storage = $this->prophesize(StorageInterface::class);
-        $this->mockCapabilities($storage, [
-            'string' => false,
-        ]);
-
-        $cache = new SimpleCacheDecorator($storage->reveal());
-
-        $testCase = $this;
-        $storage
-            ->getItem('key', Argument::any())
-            ->will(function () use ($testCase, $cache, $serializedValue) {
-                // Indicating lookup success
-                $testCase->setSuccessReference($cache, true);
-                return $serializedValue;
-            });
-
-        $this->assertSame($value, $cache->get('key', 'default'));
-    }
-
     public function testGetShouldReRaiseExceptionThrownByStorage()
     {
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
@@ -257,37 +255,6 @@ class SimpleCacheDecoratorTest extends TestCase
 
         $this->expectException(SimpleCacheInvalidArgumentException::class);
         $this->cache->set('key', 'value', $ttl);
-    }
-
-    public function testSetSerializesValuesPriorToPassingThemToStorageIfAdapterRequiresSerialization()
-    {
-        $originalTtl = 600;
-        $ttl = 86400;
-        $value = 'value';
-        $serializedValue = serialize($value);
-
-        $options = $this->prophesize(AdapterOptions::class);
-        $options
-            ->getTtl()
-            ->will(function () use ($ttl, $originalTtl) {
-                $this
-                    ->setTtl($ttl)
-                    ->will(function () use ($originalTtl) {
-                        $this->setTtl($originalTtl)->shouldBeCalled();
-                    });
-                return $originalTtl;
-            });
-
-        $storage = $this->prophesize(StorageInterface::class);
-        $this->mockCapabilities($storage, [
-            'string' => false,
-        ]);
-        $storage->getOptions()->will([$options, 'reveal']);
-        $storage->setItem('key', $serializedValue)->willReturn(true);
-
-        $cache = new SimpleCacheDecorator($storage->reveal());
-
-        $this->assertTrue($cache->set('key', $value, $ttl));
     }
 
     /**
@@ -480,36 +447,6 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->assertEquals($expected, $this->cache->getMultiple($keys, 'default'));
     }
 
-    public function getMultipleProxiesToStorageAndUnserializesValuesBeforeReturningValues()
-    {
-        $values = [
-            'one' => 1,
-            'two' => 'string',
-            'three' => ['tags' => true],
-        ];
-        $serializedValues = [
-            'one' => serialize(1),
-            'two' => serialize('string'),
-            'three' => serialize(['tags' => true]),
-        ];
-
-        $storage = $this->prophesize(StorageInterface::class);
-        $this->mockCapabilities($storage, [
-            'string' => false,
-        ]);
-
-        $cache = new SimpleCacheDecorator($storage->reveal());
-
-        $storage
-            ->getItems(array_keys($values))
-            ->willReturn($serializedValues);
-
-        $this->assertEquals(
-            $values,
-            $cache->getMultiple(array_keys($values), 'default')
-        );
-    }
-
     public function testGetMultipleProxiesToStorageAndOmitsValuesForUnfoundKeysWhenNullDefaultPresent()
     {
         $keys = ['one', 'two', 'three'];
@@ -629,48 +566,6 @@ class SimpleCacheDecoratorTest extends TestCase
 
         $this->expectException(SimpleCacheInvalidArgumentException::class);
         $this->cache->setMultiple($values, $ttl);
-    }
-
-    public function testSetMultipleSerializesValuesPriorToProxyingToStorageIfAdapterRequiresSerialization()
-    {
-        $values = [
-            'one' => 1,
-            'two' => 'true',
-            'three' => ['tags' => true],
-        ];
-        $serializedValues = [
-            'one' => serialize(1),
-            'two' => serialize('true'),
-            'three' => serialize(['tags' => true]),
-        ];
-        $originalTtl = 600;
-        $ttl = 86400;
-
-        $options = $this->prophesize(AdapterOptions::class);
-        $options
-            ->getTtl()
-            ->will(function () use ($ttl, $originalTtl) {
-                $this
-                    ->setTtl($ttl)
-                    ->will(function () use ($originalTtl) {
-                        $this->setTtl($originalTtl)->shouldBeCalled();
-                    });
-                return $originalTtl;
-            });
-
-
-        $storage = $this->prophesize(StorageInterface::class);
-        $this->mockCapabilities($storage, [
-            'string' => false,
-        ]);
-        $storage->getOptions()->will([$options, 'reveal']);
-        $storage->setItem('one', $serializedValues['one'])->willReturn(true);
-        $storage->setItem('two', $serializedValues['two'])->willReturn(true);
-        $storage->setItem('three', $serializedValues['three'])->willReturn(true);
-
-        $cache = new SimpleCacheDecorator($storage->reveal());
-
-        $this->assertTrue($cache->setMultiple($values, $ttl));
     }
 
     /**

@@ -9,6 +9,7 @@ namespace ZendTest\Cache\Psr\CacheItemPool;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Zend\Cache\Storage\Plugin\Serializer;
 use Zend\Cache\StorageFactory;
 
 class FilesystemIntegrationTest extends TestCase
@@ -19,6 +20,7 @@ class FilesystemIntegrationTest extends TestCase
     public function testAdapterNotSupported()
     {
         $storage = StorageFactory::adapterFactory('filesystem');
+        $storage->addPlugin(new Serializer());
         new CacheItemPoolDecorator($storage);
     }
 }

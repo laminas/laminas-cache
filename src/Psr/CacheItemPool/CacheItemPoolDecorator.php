@@ -49,7 +49,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     public function __construct(StorageInterface $storage)
     {
         $this->validateStorage($storage);
-        $this->memoizeSerializationCapabilities($storage);
         $this->storage = $storage;
     }
 
@@ -75,11 +74,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             $isHit = false;
             try {
                 $value = $this->storage->getItem($key, $isHit);
-
-                if ($this->serializeValues && $isHit) {
-                    // will set $isHit = false if unserialization fails
-                    extract($this->unserialize($value));
-                }
             } catch (Exception\InvalidArgumentException $e) {
                 throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
             } catch (Exception\ExceptionInterface $e) {
@@ -121,11 +115,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
             foreach ($cacheItems as $key => $value) {
                 $isHit = true;
-                if ($this->serializeValues) {
-                    // will set $isHit = false if unserialization fails
-                    extract($this->unserialize($value));
-                }
-
                 $items[$key] = new CacheItem($key, $value, $isHit);
             }
 
@@ -241,9 +230,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
         try {
             // get item value and serialize, if required
             $value = $item->get();
-            if ($this->serializeValues) {
-                $value = serialize($value);
-            }
 
             // reset TTL on adapter, if required
             if ($itemTtl > 0) {
@@ -304,6 +290,13 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      */
     private function validateStorage(StorageInterface $storage)
     {
+        if ($this->isSerializationRequired($storage)) {
+            throw new CacheException(sprintf(
+                'Storage %s requires a serializer plugin',
+                get_class($storage)
+            ));
+        }
+
         // all current adapters implement this
         if (! $storage instanceof FlushableInterface) {
             throw new CacheException(sprintf(
@@ -335,24 +328,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
                 get_class($storage)
             ));
         }
-    }
-
-    /**
-     * Unserializes value, marking isHit false if it fails
-     * @param $value
-     * @return array
-     */
-    private function unserialize($value)
-    {
-        if ($value == static::$serializedFalse) {
-            return ['value' => false, 'isHit' => true];
-        }
-
-        if (false === ($value = unserialize($value))) {
-            return ['value' => null, 'isHit' => false];
-        }
-
-        return ['value' => $value, 'isHit' => true];
     }
 
     /**

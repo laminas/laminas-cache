@@ -13,6 +13,7 @@ use Psr\Cache\CacheItemInterface;
 use Zend\Cache\Exception;
 use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
+use Zend\Cache\Storage\Capabilities;
 use Zend\Cache\Storage\StorageInterface;
 
 class CacheItemPoolDecoratorTest extends TestCase
@@ -25,6 +26,39 @@ class CacheItemPoolDecoratorTest extends TestCase
     public function testStorageNotFlushableThrowsException()
     {
         $storage = $this->prophesize(StorageInterface::class);
+
+        $capabilities = new Capabilities($storage->reveal(), new \stdClass(), $this->defaultCapabilities);
+
+        $storage->getCapabilities()->willReturn($capabilities);
+
+        $this->getAdapter($storage);
+    }
+
+    /**
+     * @expectedException \Zend\Cache\Psr\CacheItemPool\CacheException
+     */
+    public function testStorageNeedsSerializerWillThrowException()
+    {
+        $storage = $this->prophesize(StorageInterface::class);
+
+        $dataTypes = [
+            'staticTtl' => true,
+            'minTtl' => 1,
+            'supportedDatatypes' => [
+                'NULL'     => true,
+                'boolean'  => true,
+                'integer'  => true,
+                'double'   => false,
+                'string'   => true,
+                'array'    => true,
+                'object'   => 'object',
+                'resource' => false,
+            ],
+        ];
+        $capabilities = new Capabilities($storage->reveal(), new \stdClass(), $dataTypes);
+
+        $storage->getCapabilities()->willReturn($capabilities);
+
         $this->getAdapter($storage);
     }
 
@@ -44,50 +78,6 @@ class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->getStorageProphesy(['staticTtl' => true, 'minTtl' => 0]);
         $this->getAdapter($storage);
-    }
-
-    public function testUnserialize()
-    {
-        // we can't test this without reflection: we can't prophesy args-by-ref (ie $storage->getItem('key', $isHit))
-        $unserialize = new \ReflectionMethod(CacheItemPoolDecorator::class, 'unserialize');
-        $unserialize->setAccessible(true);
-
-        $capabilities = $this->defaultCapabilities;
-        $capabilities['supportedDatatypes']['object'] = false;
-        $storage = $this->getStorageProphesy($capabilities);
-        $adapter = $this->getAdapter($storage);
-
-        $value = false;
-        $result = $unserialize->invoke($adapter, serialize($value));
-        $this->assertTrue($result['isHit'], "False value should be a hit");
-        $this->assertFalse($result['value'], "False value should be unserialized correctly");
-
-        $value = ['a' => 'b'];
-        $result = $unserialize->invoke($adapter, serialize($value));
-        $this->assertTrue($result['isHit'], "Array should be a hit");
-        $this->assertEquals($value, $result['value'], "Array should be unserialized correctly");
-
-        $result = $unserialize->invoke($adapter, null);
-        $this->assertFalse($result['isHit'], "Unserializable value should not be a hit");
-        $this->assertNull($result['value'], "Unserializable value should be null");
-    }
-
-    public function testUnsupportedDatatypeSerializesValues()
-    {
-        $test = ['a' => 'b'];
-        foreach ($this->defaultCapabilities['supportedDatatypes'] as $type => $value) {
-            if ($value) {
-                $capabilities = $this->defaultCapabilities;
-                $capabilities['supportedDatatypes'][$type] = false;
-                $storage = $this->getStorageProphesy($capabilities, false, AbstractAdapter::class);
-                $adapter = $this->getAdapter($storage);
-                $item = $adapter->getItem('foo');
-                $item->set($test);
-                $adapter->save($item);
-                $items = $adapter->getItems(['foo']);
-                $this->assertEquals($test, $items['foo']->get());
-            }
-        }
     }
 
     public function testGetDeferredItem()

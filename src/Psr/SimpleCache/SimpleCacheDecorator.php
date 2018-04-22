@@ -57,7 +57,13 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
     public function __construct(StorageInterface $storage)
     {
-        $this->memoizeSerializationCapabilities($storage);
+        if ($this->isSerializationRequired($storage)) {
+            throw new SimpleCacheException(sprintf(
+                'Storage %s requires a serializer plugin',
+                get_class($storage)
+            ));
+        }
+
         $this->memoizeTtlCapabilities($storage);
         $this->storage = $storage;
         $this->utc = new DateTimeZone('UTC');
@@ -77,11 +83,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             throw static::translateException($e);
         } catch (Exception $e) {
             throw static::translateException($e);
-        }
-
-        if ($this->serializeValues && $this->success) {
-            $result = $this->unserialize($result);
-            return $result === null ? $default : $result;
         }
 
         $result = $result === null ? $default : $result;
@@ -111,7 +112,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         $options = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
         $options->setTtl($ttl);
-        $value = $this->serializeValues ? serialize($value) : $value;
 
         try {
             $result = $this->storage->setItem($key, $value);
@@ -185,12 +185,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
                 $results[$key] = $default;
                 continue;
             }
-
-            if (isset($results[$key]) && $this->serializeValues) {
-                $value = $this->unserialize($results[$key]);
-                $results[$key] = null === $value ? $default : $value;
-                continue;
-            }
         }
 
         return $results;
@@ -217,10 +211,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         // TTL, we return false -- but not until after we validate keys.
         if (null !== $ttl && ! $this->providesPerItemTtl) {
             return false;
-        }
-
-        if ($this->serializeValues) {
-            return $this->setMultipleForStorageRequiringSerialization($values, $ttl);
         }
 
         $options = $this->storage->getOptions();
@@ -361,32 +351,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * Unserializes a value.
-     *
-     * If the $value returned matches a serialized false value, returns
-     * false for the value.
-     *
-     * Otherwise, it unserializes the value. If it is a boolean false at
-     * that point, it returns a null; otherwise it returns the unserialized
-     * value.
-     *
-     * @param string $value
-     * @return mixed
-     */
-    private function unserialize($value)
-    {
-        if ($value == static::$serializedFalse) {
-            return false;
-        }
-
-        if (false === ($value = unserialize($value))) {
-            return null;
-        }
-
-        return $value;
-    }
-
-    /**
      * Determine if the storage adapter provides per-item TTL capabilities
      *
      * @param StorageInterface $storage
@@ -477,31 +441,5 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             $array[$key] = $value;
         }
         return $array;
-    }
-
-    /**
-     * Workaround for adapters requiring serialization of values.
-     *
-     * In performing integration tests, we found that every adapter that
-     * requires serialization would fail the tests for setMultiple(), in
-     * exactly the same way: inability to unserialize the data returned.
-     *
-     * The problem appears to be how each adapter's setItems() method handles
-     * the data provided.
-     *
-     * Storing each one by one works perfectly, however, so this is the
-     * approach taken.
-     *
-     * @param iterable $values
-     * @param null|int $ttl
-     * @return bool
-     */
-    private function setMultipleForStorageRequiringSerialization($values, $ttl)
-    {
-        $result = true;
-        foreach ($values as $key => $value) {
-            $result = $result && $this->set($key, $value, $ttl);
-        }
-        return $result;
     }
 }
