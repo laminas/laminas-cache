@@ -19,6 +19,7 @@ use Zend\Cache\Psr\SimpleCache\SimpleCacheInvalidArgumentException;
 use Zend\Cache\Psr\SimpleCache\SimpleCacheException;
 use Zend\Cache\Storage\Adapter\AdapterOptions;
 use Zend\Cache\Storage\Capabilities;
+use Zend\Cache\Storage\ClearByNamespaceInterface;
 use Zend\Cache\Storage\FlushableInterface;
 use Zend\Cache\Storage\StorageInterface;
 
@@ -409,15 +410,52 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testClearReturnsFalseIfStorageIsNotFlushable()
     {
-        $this->assertFalse($this->cache->clear());
+        $this->options->getNamespace()->willReturn(null);
+        $storage = $this->prophesize(StorageInterface::class);
+        $storage->getOptions()->will([$this->options, 'reveal']);
+        $this->mockCapabilities($storage);
+
+        $cache = new SimpleCacheDecorator($storage->reveal());
+        $this->assertFalse($cache->clear());
     }
 
-    public function testClearProxiesToStorageIfStorageIsFlushable()
+    public function testClearProxiesToStorageIfStorageCanBeClearedByNamespace()
+    {
+        $this->options->getNamespace()->willReturn('foo');
+        $storage = $this->prophesize(StorageInterface::class);
+        $storage->willImplement(FlushableInterface::class);
+        $storage->willImplement(ClearByNamespaceInterface::class);
+        $this->mockCapabilities($storage);
+        $storage->getOptions()->will([$this->options, 'reveal']);
+        $storage->clearByNamespace('foo')->shouldBeCalled()->willReturn(true);
+        $storage->flush()->shouldNotBeCalled();
+
+        $cache = new SimpleCacheDecorator($storage->reveal());
+        $this->assertTrue($cache->clear());
+    }
+
+    public function testClearProxiesToStorageFlushIfStorageCanBeClearedByNamespaceWithNoNamespace()
+    {
+        $this->options->getNamespace()->willReturn(null);
+        $storage = $this->prophesize(StorageInterface::class);
+        $storage->willImplement(FlushableInterface::class);
+        $storage->willImplement(ClearByNamespaceInterface::class);
+        $this->mockCapabilities($storage);
+        $storage->getOptions()->will([$this->options, 'reveal']);
+        $storage->clearByNamespace(Argument::any())->shouldNotBeCalled();
+        $storage->flush()->shouldBeCalled()->willReturn(true);
+
+        $cache = new SimpleCacheDecorator($storage->reveal());
+        $this->assertTrue($cache->clear());
+    }
+
+    public function testClearProxiesToStorageFlushIfStorageIsFlushable()
     {
         $storage = $this->prophesize(StorageInterface::class);
         $storage->willImplement(FlushableInterface::class);
         $this->mockCapabilities($storage);
-        $storage->flush()->willReturn(true);
+        $storage->getOptions()->will([$this->options, 'reveal']);
+        $storage->flush()->shouldBeCalled()->willReturn(true);
 
         $cache = new SimpleCacheDecorator($storage->reveal());
         $this->assertTrue($cache->clear());

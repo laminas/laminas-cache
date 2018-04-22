@@ -16,6 +16,7 @@ use Throwable;
 use Traversable;
 use Zend\Cache\Exception\InvalidArgumentException as ZendCacheInvalidArgumentException;
 use Zend\Cache\Psr\SerializationTrait;
+use Zend\Cache\Storage\ClearByNamespaceInterface;
 use Zend\Cache\Storage\FlushableInterface;
 use Zend\Cache\Storage\StorageInterface;
 
@@ -150,10 +151,17 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function clear()
     {
-        if (! $this->storage instanceof FlushableInterface) {
-            return false;
+        $namespace = $this->storage->getOptions()->getNamespace();
+
+        if ($this->storage instanceof ClearByNamespaceInterface && $namespace) {
+            return $this->storage->clearByNamespace($namespace);
         }
-        return $this->storage->flush();
+
+        if ($this->storage instanceof FlushableInterface) {
+            return $this->storage->flush();
+        }
+
+        return false;
     }
 
     /**
