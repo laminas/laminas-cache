@@ -71,6 +71,7 @@ class MemcacheIntegrationTest extends CachePoolTest
 
         try {
             $storage = StorageFactory::adapterFactory('memcache', $options);
+            $storage->addPlugin(new Serializer());
 
             $deferredSkippedMessage = sprintf(
                 '%s storage doesn\'t support driver deferred',
@@ -79,7 +80,6 @@ class MemcacheIntegrationTest extends CachePoolTest
             $this->skippedTests['testHasItemReturnsFalseWhenDeferredItemIsExpired'] = $deferredSkippedMessage;
 
             return new CacheItemPoolDecorator($storage);
-            $storage->addPlugin(new Serializer());
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());
         } catch (ServiceNotCreatedException $e) {
