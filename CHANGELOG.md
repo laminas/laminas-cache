@@ -17,7 +17,8 @@ All notable changes to this project will be documented in this file, in reverse 
   which provides a value object for both introspecting cache fetch results, as
   well as providing values to cache.
 
-- [#152](https://github.com/zendframework/zend-cache/pull/152) and [#155](https://github.com/zendframework/zend-cache/pull/155) add an adapter providing [PSR-16](https://www.php-fig.org/psr/psr-16/) (Caching Library Interface) support.
+- [#152](https://github.com/zendframework/zend-cache/pull/152) [#155](https://github.com/zendframework/zend-cache/pull/155), and [#159](https://github.com/zendframework/zend-cache/pull/159)
+  add an adapter providing [PSR-16](https://www.php-fig.org/psr/psr-16/) (Caching Library Interface) support.
   The new class, `Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator`, accepts a
   `Zend\Cache\Storage\StorageInterface` instance to its constructor, and proxies
   the various PSR-16 methods to it.
