@@ -5,7 +5,9 @@
     "keywords": [
         "zendframework",
         "zf",
-        "cache"
+        "cache",
+        "psr-6",
+        "psr-16"
     ],
     "support": {
         "docs": "https://docs.zendframework.com/zend-cache/",
