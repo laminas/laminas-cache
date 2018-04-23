@@ -64,3 +64,65 @@ $cache->setMultiple([
 
 For more details on what methods are exposed, consult the [CacheInterface
 specification](https://www.php-fig.org/psr/psr-16/#21-cacheinterface).
+
+## Serialization
+
+PSR-16 has strict requirements around serialization of values. This is done to
+ensure that if you swap one PSR-16 adapter for another, the new one will be able
+to return the same values that the original adapter saved to the cache.
+
+Not all cache backends support the same data types, however. zend-cache provides
+a plugin, `Zend\Cache\Storage\Plugin\Serializer`, that you can attach to
+adapters in order to ensure data is serialized to a string when saving to the
+cache, and deserialized to native PHP types on retrieval. The following adapters
+require this plugin in order to work with the `SimpleCacheDecorator`:
+
+- Dba
+- Filesystem
+- Memcache
+- MongoDB
+- Redis
+- XCache
+
+We provide a number of examples of [attaching plugins to storage adapters in the
+plugins chapter](storage/plugin.md). Generally, it will be one of:
+
+```php
+// Manual attachment after you have an instance:
+$cache->addPlugin(new Serializer());
+
+// Via configuration:
+$cache = StorageFactory::factory([
+    'adapter' => 'filesystem',
+    'plugins' => [
+        'serializer',
+    ],
+]);
+```
+
+## Deleting items and exceptions
+
+PSR-16 states that the `delete()` and `deleteMultiple()` methods should return
+`false` if an _error_ occured when deleting the key(s) provided, but `true`
+otherwise.
+
+Generally, zend-cache storage adapters comply with this. However, it is possible
+to configure your adapter such that you may get a false positive result from
+these methods.
+
+When an exception is raised and caught during key removal by an adapter, the
+adapter triggers an event with a `Zend\Cache\Storage\ExceptionEvent`. Plugins 
+can react to these, and even manipulate the event instance. One such plugin,
+`Zend\Cache\Storage\Plugin\ExceptionHandler`, has a configuration option,
+`throw_exceptions` that, when boolean `false`, will prevent raising the
+exception. In such cases, adapters will typically return a boolean `false`
+anyways, but custom, third-party adapters may not.
+
+Additionally, if you add a custom plugin that listens to removal event
+exceptions and modifies the return value and/or disables throwing the exception,
+a false positive return value could occur.
+
+As such, we recommend that if you wish to use zend-cache to provide a PSR-16
+adapter, you audit the plugins you use with your adapter to ensure that you will
+get consistent, correct behavior for `delete()` and `deleteMultiple()`
+operations.
