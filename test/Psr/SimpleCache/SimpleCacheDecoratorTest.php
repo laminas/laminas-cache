@@ -358,20 +358,13 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->assertTrue($this->cache->delete('key'));
     }
 
-    public function testDeleteShouldReRaiseExceptionThrownByStorage()
+    public function testDeleteShouldReturnFalseWhenExceptionThrownByStorage()
     {
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
         $this->storage->hasItem('key')->willReturn(true);
         $this->storage->removeItem('key')->willThrow($exception);
 
-        try {
-            $this->cache->delete('key');
-            $this->fail('Exception should have been raised');
-        } catch (SimpleCacheException $e) {
-            $this->assertSame($exception->getMessage(), $e->getMessage());
-            $this->assertSame($exception->getCode(), $e->getCode());
-            $this->assertSame($exception, $e->getPrevious());
-        }
+        $this->assertFalse($this->cache->delete('key'));
     }
 
     public function testClearReturnsFalseIfStorageIsNotFlushable()
@@ -709,20 +702,13 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->assertTrue($this->cache->deleteMultiple($keys));
     }
 
-    public function testDeleteMultipleReRaisesExceptionThrownByStorage()
+    public function testDeleteMultipleReturnFalseWhenExceptionThrownByStorage()
     {
         $keys = ['one', 'two', 'three'];
         $exception = new Exception\InvalidArgumentException('bad key', 500);
         $this->storage->removeItems($keys)->willThrow($exception);
 
-        try {
-            $this->cache->deleteMultiple($keys);
-            $this->fail('Exception should have been raised');
-        } catch (SimpleCacheInvalidArgumentException $e) {
-            $this->assertSame($exception->getMessage(), $e->getMessage());
-            $this->assertSame($exception->getCode(), $e->getCode());
-            $this->assertSame($exception, $e->getPrevious());
-        }
+        $this->assertFalse($this->cache->deleteMultiple($keys));
     }
 
     public function hasResultProvider()

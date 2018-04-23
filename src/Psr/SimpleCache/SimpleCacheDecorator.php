@@ -142,9 +142,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             return $this->storage->removeItem($key);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            return false;
         } catch (Exception $e) {
-            throw static::translateException($e);
+            return false;
         }
     }
 
@@ -257,9 +257,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $result = $this->storage->removeItems($keys);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            return false;
         } catch (Exception $e) {
-            throw static::translateException($e);
+            return false;
         }
 
         if (empty($result)) {
