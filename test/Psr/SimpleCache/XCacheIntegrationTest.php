@@ -9,6 +9,7 @@ namespace ZendTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
 use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Zend\Cache\Storage\Plugin\Serializer;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
@@ -65,6 +66,7 @@ class XCacheIntegrationTest extends SimpleCacheTest
                 'admin_user' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_USER') ?: '',
                 'admin_pass' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS') ?: '',
             ]);
+            $storage->addPlugin(new Serializer());
             return new SimpleCacheDecorator($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());

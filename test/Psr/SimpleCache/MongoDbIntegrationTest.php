@@ -10,6 +10,7 @@ namespace ZendTest\Cache\Psr\SimpleCache;
 use Cache\IntegrationTests\SimpleCacheTest;
 use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 use Zend\Cache\Storage\Adapter\MongoDb;
+use Zend\Cache\Storage\Plugin\Serializer;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
@@ -59,6 +60,7 @@ class MongoDbIntegrationTest extends SimpleCacheTest
                 'database'   => getenv('TESTS_ZEND_CACHE_MONGODB_DATABASE'),
                 'collection' => getenv('TESTS_ZEND_CACHE_MONGODB_COLLECTION'),
             ]);
+            $storage->addPlugin(new Serializer());
             return new SimpleCacheDecorator($storage);
         } catch (Exception\ExtensionNotLoadedException $e) {
             $this->markTestSkipped($e->getMessage());

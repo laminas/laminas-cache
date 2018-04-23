@@ -9,6 +9,7 @@ namespace ZendTest\Cache\Psr\CacheItemPool;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Zend\Cache\Storage\Plugin\Serializer;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
@@ -32,6 +33,7 @@ class XCacheIntegrationTest extends TestCase
                 'admin_user' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_USER') ?: '',
                 'admin_pass' => getenv('TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS') ?: '',
             ]);
+            $storage->addPlugin(new Serializer());
 
             $deferredSkippedMessage = sprintf(
                 '%s storage doesn\'t support driver deferred',

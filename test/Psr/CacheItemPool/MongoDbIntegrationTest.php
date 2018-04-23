@@ -10,6 +10,7 @@ namespace ZendTest\Cache\Psr\CacheItemPool;
 use Cache\IntegrationTests\CachePoolTest;
 use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 use Zend\Cache\Storage\Adapter\MongoDb;
+use Zend\Cache\Storage\Plugin\Serializer;
 use Zend\Cache\StorageFactory;
 use Zend\Cache\Exception;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
@@ -59,6 +60,7 @@ class MongoDbIntegrationTest extends CachePoolTest
                 'database'   => getenv('TESTS_ZEND_CACHE_MONGODB_DATABASE'),
                 'collection' => getenv('TESTS_ZEND_CACHE_MONGODB_COLLECTION'),
             ]);
+            $storage->addPlugin(new Serializer());
 
             $deferredSkippedMessage = sprintf(
                 '%s storage doesn\'t support driver deferred',
