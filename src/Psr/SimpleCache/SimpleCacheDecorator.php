@@ -135,12 +135,8 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     {
         $this->validateKey($key);
 
-        if (! $this->storage->hasItem($key)) {
-            return true;
-        }
-
         try {
-            return (bool) $this->storage->removeItem($key);
+            return null !== $this->storage->removeItem($key);
         } catch (Throwable $e) {
             return false;
         } catch (Exception $e) {

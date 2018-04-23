@@ -346,22 +346,19 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testDeleteShouldProxyToStorage()
     {
-        $this->storage->hasItem('key')->willReturn(true);
         $this->storage->removeItem('key')->willReturn(true);
         $this->assertTrue($this->cache->delete('key'));
     }
 
     public function testDeleteShouldReturnTrueWhenItemDoesNotExist()
     {
-        $this->storage->hasItem('key')->willReturn(false);
-        $this->storage->removeItem('key')->shouldNotBeCalled();
+        $this->storage->removeItem('key')->willReturn(false);
         $this->assertTrue($this->cache->delete('key'));
     }
 
     public function testDeleteShouldReturnFalseWhenExceptionThrownByStorage()
     {
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
-        $this->storage->hasItem('key')->willReturn(true);
         $this->storage->removeItem('key')->willThrow($exception);
 
         $this->assertFalse($this->cache->delete('key'));
