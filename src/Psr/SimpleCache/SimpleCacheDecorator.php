@@ -140,7 +140,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
 
         try {
-            return $this->storage->removeItem($key);
+            return (bool) $this->storage->removeItem($key);
         } catch (Throwable $e) {
             return false;
         } catch (Exception $e) {
