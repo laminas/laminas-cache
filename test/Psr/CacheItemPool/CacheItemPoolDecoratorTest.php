@@ -10,6 +10,7 @@ namespace ZendTest\Cache\Psr\CacheItemPool;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Cache\CacheItemInterface;
+use stdClass;
 use Zend\Cache\Exception;
 use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 use Zend\Cache\Storage\Adapter\AbstractAdapter;
@@ -27,7 +28,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->prophesize(StorageInterface::class);
 
-        $capabilities = new Capabilities($storage->reveal(), new \stdClass(), $this->defaultCapabilities);
+        $capabilities = new Capabilities($storage->reveal(), new stdClass(), $this->defaultCapabilities);
 
         $storage->getCapabilities()->willReturn($capabilities);
 
@@ -55,7 +56,7 @@ class CacheItemPoolDecoratorTest extends TestCase
                 'resource' => false,
             ],
         ];
-        $capabilities = new Capabilities($storage->reveal(), new \stdClass(), $dataTypes);
+        $capabilities = new Capabilities($storage->reveal(), new stdClass(), $dataTypes);
 
         $storage->getCapabilities()->willReturn($capabilities);
 
@@ -532,7 +533,7 @@ class CacheItemPoolDecoratorTest extends TestCase
             'key\\',
             'key@',
             'key:',
-            new \stdClass()
+            new stdClass()
         ];
     }
 
