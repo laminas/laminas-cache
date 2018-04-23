@@ -131,9 +131,6 @@ class SimpleCacheDecoratorTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException \Zend\Cache\Psr\SimpleCache\SimpleCacheException
-     */
     public function testStorageNeedsSerializerWillThrowException()
     {
         $dataTypes = [
@@ -149,7 +146,9 @@ class SimpleCacheDecoratorTest extends TestCase
         $storage->getOptions()->shouldNotBeCalled();
         $storage->setItem('key', 'value')->shouldNotBeCalled();
 
-        $cache = new SimpleCacheDecorator($storage->reveal());
+        $this->expectException(SimpleCacheException::class);
+        $this->expectExceptionMessage('serializer plugin');
+        new SimpleCacheDecorator($storage->reveal());
     }
 
     public function testItIsASimpleCacheImplementation()
