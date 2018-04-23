@@ -65,6 +65,7 @@
         ]
     },
     "config": {
+        "process-timeout": 600,
         "sort-packages": true
     },
     "provide": {
