@@ -126,6 +126,8 @@ matrix:
 
 before_install:
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
+  # Prevent phpunit from timing out by letting it run longer
+  - composer global config process-timeout 600
 
 install:
   # prevent PECL from enabling the extension by default, see https://pear.php.net/bugs/bug.php?id=21007
