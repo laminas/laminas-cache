@@ -59,7 +59,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     {
         if ($this->isSerializationRequired($storage)) {
             throw new SimpleCacheException(sprintf(
-                'Storage %s requires a serializer plugin',
+                'The storage adapter "%s" requires a serializer plugin; please see'
+                . ' https://docs.zendframework.com/zend-cache/storage/plugin/#quick-start'
+                . ' for details on how to attach the plugin to your adapter.',
                 get_class($storage)
             ));
         }
