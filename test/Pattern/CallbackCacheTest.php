@@ -105,13 +105,13 @@ class CallbackCacheTest extends CommonPatternTest
 
     public function testCallInvalidCallbackException()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Cache\Exception\InvalidArgumentException');
         $this->_pattern->call(1);
     }
 
     public function testCallUnknownCallbackException()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Cache\Exception\InvalidArgumentException');
         $this->_pattern->call('notExiststingFunction');
     }
 

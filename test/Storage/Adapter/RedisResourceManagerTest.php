@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\Adapter\RedisResourceManager;
 
 /**
@@ -19,7 +20,7 @@ use Zend\Cache\Storage\Adapter\RedisResourceManager;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Adapter\RedisResourceManager
  */
-class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
+class RedisResourceManagerTest extends TestCase
 {
     /**
      * The resource manager
@@ -114,7 +115,8 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
         $resource   = [
             'persistent_id' => 'my_connection_name',
             'server' => [
-                'host' => 'localhost'
+                'host' => getenv('TESTS_ZEND_CACHE_REDIS_HOST') ?: 'localhost',
+                'port' => getenv('TESTS_ZEND_CACHE_REDIS_PORT') ?: 6379,
             ],
         ];
         $expectedPersistentId = 'my_connection_name';
@@ -140,7 +142,8 @@ class RedisResourceManagerTest extends \PHPUnit_Framework_TestCase
         $resource   = [
             'persistend_id' => 'my_connection_name',
             'server' => [
-                'host' => 'localhost'
+                'host' => getenv('TESTS_ZEND_CACHE_REDIS_HOST') ?: 'localhost',
+                'port' => getenv('TESTS_ZEND_CACHE_REDIS_PORT') ?: 6379,
             ],
         ];
         $expectedPersistentId = 'my_connection_name';

@@ -9,7 +9,7 @@
 
 namespace ZendTest\Cache\Storage;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Exception\RuntimeException;
 use Zend\Cache\Storage\Plugin\PluginInterface;
 use Zend\Cache\Storage\PluginManager;

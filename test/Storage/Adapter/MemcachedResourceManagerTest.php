@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\Adapter\MemcachedResourceManager;
 
 /**
@@ -19,7 +20,7 @@ use Zend\Cache\Storage\Adapter\MemcachedResourceManager;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Adapter\MemcachedResourceManager
  */
-class MemcachedResourceManagerTest extends \PHPUnit_Framework_TestCase
+class MemcachedResourceManagerTest extends TestCase
 {
     /**
      * The resource manager
@@ -220,10 +221,8 @@ class MemcachedResourceManagerTest extends \PHPUnit_Framework_TestCase
         // php-memcached is required to set libmemcached options
         if (is_array($resource) && isset($resource['lib_options']) && count($resource['lib_options']) > 0) {
             if (! class_exists('Memcached', false)) {
-                $this->setExpectedException(
-                    'Zend\Cache\Exception\InvalidArgumentException',
-                    'Unknown libmemcached option'
-                );
+                $this->expectException('Zend\Cache\Exception\InvalidArgumentException');
+                $this->expectExceptionMessage('Unknown libmemcached option');
             }
         }
 
@@ -244,10 +243,12 @@ class MemcachedResourceManagerTest extends \PHPUnit_Framework_TestCase
 
         $libOptions = ['compression' => false];
         $resourceId = 'testResourceId';
-        $resourceMock = $this->getMock('Memcached', ['setOptions']);
+        $resourceMock = $this->getMockBuilder('Memcached')
+           ->setMethods(['setOptions'])
+            ->getMock();
 
         if (! $memcachedInstalled) {
-            $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+            $this->expectException('Zend\Cache\Exception\InvalidArgumentException');
         } else {
             $resourceMock
                 ->expects($this->once())

@@ -550,6 +550,7 @@ Capability | Value
 `staticTtl` | `true`
 `ttlPrecision` | 1
 `useRequestTime` | value of `apc.use_request_time` from `php.ini`
+`lockOnExpire` | 0
 `maxKeyLength` | 5182
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
@@ -630,6 +631,7 @@ Capability | Value
 `staticTtl` | `false`
 `ttlPrecision` | 1
 `useRequestTime` | `false`
+`lockOnExpire` | 0
 `maxKeyLength` | 251
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
@@ -649,6 +651,11 @@ Name | Data Type | Default Value | Description
 `no_atime` | `boolean` | `true` | Don’t get ‘fileatime’ as ‘atime’ on metadata.
 `no_ctime` | `boolean` | `true` | Don’t get ‘filectime’ as ‘ctime’ on metadata.
 `umask` | `integer|false` | `false` | Use [umask](http://wikipedia.org/wiki/Umask) to set file and directory permissions.
+`suffix` | `string` | `dat` | Suffix for cache files
+`tag_suffix` | `string` | `tag` | Suffix for tag files
+
+Note: the `suffix` and `tag_suffix` options will be escaped in order to be safe
+for glob operations.
 
 ## The Memcached Adapter
 
@@ -674,6 +681,7 @@ Capability | Value
 `staticTtl` | `true`
 `ttlPrecision` | 1
 `useRequestTime` | `false`
+`lockOnExpire` | 0
 `maxKeyLength` | 255
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
@@ -706,6 +714,7 @@ Capability | Value
 `staticTtl` | `true`
 `ttlPrecision` | 1
 `useRequestTime` | `false`
+`lockOnExpire` | 0
 `maxKeyLength` | 255
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
@@ -755,6 +764,7 @@ Capability | Value
 `staticTtl` | `false`
 `ttlPrecision` | 0.05
 `useRequestTime` | `false`
+`lockOnExpire` | 0
 `maxKeyLength` | 0
 `namespaceIsPrefix` | `false`
 
@@ -785,6 +795,11 @@ Name | Data Type | Default Value | Description
 PHP extension [mongo](http://php.net/mongo), or a MongoDB polyfill library, such as
 [Mongofill](https://github.com/mongofill/mongofill).
 
+> #### ext-mongodb
+>
+> If you are using the mongodb extension (vs the mongo extension), you will need
+> to use the [ExtMongoDb adapter](#the-extmongodb-adapter) instead.
+
 This adapter implements the following interfaces:
 
 - `Zend\Cache\Storage\FlushableInterface`
@@ -800,14 +815,16 @@ Capability | Value
 `staticTtl` | `true`
 `ttlPrecision` | 1
 `useRequestTime` | `false`
+`lockOnExpire` | 0
 `maxKeyLength` | 255
-`namespaceIsPrefix` | <Option value of namespace_separator>
+`namespaceIsPrefix` | `true`
+`namespaceSeparator` | <Option value of namespace_separator>
 
 ### Adapter specific options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
-`lib_option` | `array` | | Associative array of options where the array key is the option name. 
+`lib_option` | `array` | | Associative array of options where the array key is the option name.
 `namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
 
 Available keys for `lib_option` include:
@@ -819,6 +836,60 @@ Key | Default | Description
 `collection` | `cache` | Name of the collection to use; MongoDB will create this collection if it does not exist.
 `connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).
 `driverOptions` | `[]` | Associative array of driver options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).
+
+## The ExtMongoDB Adapter
+
+- Since 2.8.0
+
+`Zend\Cache\Storage\Adapter\ExtMongoDB` stores cache items using the mongodb extension, and
+requires that the MongoDB PHP Client library is also installed. You can install the client
+library using the following:
+
+```bash
+$ composer require mongodb/mongodb
+```
+
+> #### ext-mongo
+>
+> If you are using the mongo extension (vs the mongodb extension), you will need
+> to use the [MongoDb adapter](#the-mongodb-adapter) instead.
+
+This adapter implements the following interfaces:
+
+- `Zend\Cache\Storage\FlushableInterface`
+
+### Capabilities
+
+Capability | Value
+---------- | -----
+`supportedDatatypes` | `string`, `null`, `boolean`, `integer`, `double`, `array`
+`supportedMetadata` | _id
+`minTtl` | 0
+`maxTtl` | 0
+`staticTtl` | `true`
+`ttlPrecision` | 1
+`useRequestTime` | `false`
+`lockOnExpire` | 0
+`maxKeyLength` | 255
+`namespaceIsPrefix` | `true`
+`namespaceSeparator` | <Option value of namespace_separator>
+
+### Adapter specific options
+
+Name | Data Type | Default Value | Description
+---- | --------- | ------------- | -----------
+`lib_option` | `array` | | Associative array of options where the array key is the option name.
+`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
+
+Available keys for `lib_option` include:
+
+Key | Default | Description
+--- | ------- | -----------
+`server` | `mongodb://localhost:27017` | The MongoDB server connection string (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
+`database` | `zend` | Name of the database to use; MongoDB will create this database if it does not exist.
+`collection` | `cache` | Name of the collection to use; MongoDB will create this collection if it does not exist.
+`connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of URI options (such as authentication credentials or query string parameters) to pass to `MongoDB\\Client` (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
+`driverOptions` | `[]` | Associative array of driver options to pass to `MongoDB\\Client` (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
 
 ## The WinCache Adapter
 
@@ -843,6 +914,7 @@ Capability | Value
 `staticTtl` | `true`
 `ttlPrecision` | 1
 `useRequestTime` | `apc.use_request_time` `php.ini` value.
+`lockOnExpire` | 0
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
@@ -878,6 +950,7 @@ Capability | Value
 `staticTtl` | `true`
 `ttlPrecision` | 1
 `useRequestTime` | `true`
+`lockOnExpire` | 0
 `maxKeyLength` | 5182
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
@@ -916,6 +989,7 @@ Capability | Value
 `staticTtl` | `true`
 `ttlPrecision` | 1
 `useRequestTime` | `false`
+`lockOnExpire` | if 'zend_datacache.lock_on_expire' is enabled 120 else 0
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | `::`
 
@@ -943,6 +1017,7 @@ Capability | Value
 `staticTtl` | `true`
 `ttlPrecision` | 1
 `useRequestTime` | `false`
+`lockOnExpire` | if 'zend_datacache.lock_on_expire' is enabled 120 else 0
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | `::`
 

@@ -1,27 +1,27 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-cache for the canonical source repository
+ * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache;
+namespace Zend\Cache\PatternPluginManager;
 
+use Zend\Cache\Pattern;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\Factory\InvokableFactory;
-use Zend\ServiceManager\Exception\InvalidServiceException;
 
 /**
- * Plugin manager implementation for cache pattern adapters
+ * zend-servicemanager v2-compatible plugin manager implementation for cache pattern adapters.
  *
  * Enforces that retrieved adapters are instances of
  * Pattern\PatternInterface. Additionally, it registers a number of default
  * patterns available.
  */
-class PatternPluginManager extends AbstractPluginManager
+class PatternPluginManagerV2Polyfill extends AbstractPluginManager
 {
+    use PatternPluginManagerTrait;
+
     protected $aliases = [
         'callback' => Pattern\CallbackCache::class,
         'Callback' => Pattern\CallbackCache::class,
@@ -53,14 +53,14 @@ class PatternPluginManager extends AbstractPluginManager
     /**
      * Don't share by default
      *
-     * @var boolean
+     * @var bool
      */
     protected $shareByDefault = false;
 
     /**
      * Don't share by default
      *
-     * @var boolean
+     * @var bool
      */
     protected $sharedByDefault = false;
 
@@ -74,7 +74,7 @@ class PatternPluginManager extends AbstractPluginManager
      *
      * {@inheritDoc}
      */
-    public function get($plugin, array $options = [], $usePeeringServiceManagers = true)
+    public function get($plugin, $options = [], $usePeeringServiceManagers = true)
     {
         if (empty($options)) {
             return parent::get($plugin, [], $usePeeringServiceManagers);
@@ -83,58 +83,5 @@ class PatternPluginManager extends AbstractPluginManager
         $plugin = parent::get($plugin, [], $usePeeringServiceManagers);
         $plugin->setOptions(new Pattern\PatternOptions($options));
         return $plugin;
-    }
-
-    /**
-     * Override build to inject options as PatternOptions instance.
-     *
-     * {@inheritDoc}
-     */
-    public function build($plugin, array $options = null)
-    {
-        if (empty($options)) {
-            return parent::build($plugin);
-        }
-
-        $plugin = parent::build($plugin);
-        $plugin->setOptions(new Pattern\PatternOptions($options));
-        return $plugin;
-    }
-
-    /**
-     * Validate the plugin is of the expected type (v3).
-     *
-     * Validates against `$instanceOf`.
-     *
-     * @param mixed $instance
-     * @throws InvalidServiceException
-     */
-    public function validate($instance)
-    {
-        if (! $instance instanceof $this->instanceOf) {
-            throw new InvalidServiceException(sprintf(
-                '%s can only create instances of %s; %s is invalid',
-                get_class($this),
-                $this->instanceOf,
-                (is_object($instance) ? get_class($instance) : gettype($instance))
-            ));
-        }
-    }
-
-    /**
-     * Validate the plugin is of the expected type (v2).
-     *
-     * Proxies to `validate()`.
-     *
-     * @param mixed $plugin
-     * @throws Exception\RuntimeException if invalid
-     */
-    public function validatePlugin($plugin)
-    {
-        try {
-            $this->validate($plugin);
-        } catch (InvalidServiceException $e) {
-            throw new Exception\RuntimeException($e->getMessage(), $e->getCode(), $e);
-        }
     }
 }

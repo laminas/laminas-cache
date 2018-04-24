@@ -9,7 +9,7 @@
 
 namespace ZendTest\Cache\Storage;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Exception\ExtensionNotLoadedException;
 use Zend\Cache\Exception\RuntimeException;
 use Zend\Cache\Storage\AdapterPluginManager;
@@ -37,6 +37,7 @@ class AdapterPluginManagerTest extends TestCase
                 $this->fail($e->getMessage());
             }
         }
+        $this->addToAssertionCount(1);
     }
 
     protected function getPluginManager()

@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\Adapter\AdapterOptions;
 use Zend\Cache\Storage\Adapter\AbstractZendServer;
 
@@ -16,12 +17,20 @@ use Zend\Cache\Storage\Adapter\AbstractZendServer;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Adapter\AdapterOptions<extended>
  */
-class AbstractZendServerTest extends \PHPUnit_Framework_TestCase
+class AbstractZendServerTest extends TestCase
 {
     public function setUp()
     {
         $this->_options = new AdapterOptions();
-        $this->_storage = $this->getMockForAbstractClass('Zend\Cache\Storage\Adapter\AbstractZendServer');
+        $this->_storage = $this->getMockForAbstractClass(
+            'Zend\Cache\Storage\Adapter\AbstractZendServer',
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['getOptions']
+        );
         $this->_storage->setOptions($this->_options);
         $this->_storage->expects($this->any())
                        ->method('getOptions')

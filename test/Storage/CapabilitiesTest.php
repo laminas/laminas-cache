@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Cache\Storage\Capabilities;
 use Zend\Cache\Storage\Adapter\Memory as MemoryAdapter;
 
@@ -16,7 +17,7 @@ use Zend\Cache\Storage\Adapter\Memory as MemoryAdapter;
  * @group      Zend_Cache
  * @covers Zend\Cache\Storage\Capabilities
  */
-class CapabilitiesTest extends \PHPUnit_Framework_TestCase
+class CapabilitiesTest extends TestCase
 {
     // @codingStandardsIgnoreStart
     /**
