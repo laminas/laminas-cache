@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.8.0 - TBD
+## 2.8.0 - 2018-04-24
 
 ### Added
 
@@ -62,26 +62,6 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#150](https://github.com/zendframework/zend-cache/pull/150) fixes an issue with how CAS tokens are handled when using the memcached adapter.
 
 - [#61](https://github.com/zendframework/zend-cache/pull/61) sets the Zend Data Cache minTtl value to 1.
-
-## 2.7.3 - TBD
-
-### Added
-
-- Nothing.
-
-### Changed
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
 
 - [#147](https://github.com/zendframework/zend-cache/pull/147) fixes the Redis extension by ensuring it casts the results of `exists()` to a
   boolean when testing if the storage contains an item.
