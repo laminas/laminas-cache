@@ -386,7 +386,10 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testDeleteItemReturnsTrue()
     {
-        $this->assertTrue($this->getAdapter()->deleteItem('foo'));
+        $storage = $this->getStorageProphesy();
+        $storage->removeItems(['foo'])->shouldBeCalled()->willReturn(['foo']);
+
+        $this->assertTrue($this->getAdapter($storage)->deleteItem('foo'));
     }
 
     public function testDeleteDeferredItem()
@@ -428,7 +431,10 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testDeleteItemsReturnsTrue()
     {
-        $this->assertTrue($this->getAdapter()->deleteItems(['foo', 'bar', 'baz']));
+        $storage = $this->getStorageProphesy();
+        $storage->removeItems(['foo', 'bar', 'baz'])->shouldBeCalled()->willReturn(['foo']);
+
+        $this->assertTrue($this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']));
     }
 
     public function testDeleteDeferredItems()
