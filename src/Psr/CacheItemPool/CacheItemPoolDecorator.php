@@ -197,8 +197,9 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
         } catch (Exception\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         } catch (Exception\ExceptionInterface $e) {
-            return false;
         }
+
+        return false;
     }
 
     /**
