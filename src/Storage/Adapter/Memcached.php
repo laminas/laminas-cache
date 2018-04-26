@@ -206,8 +206,8 @@ class Memcached extends AbstractAdapter implements
         if (func_num_args() > 2) {
             if (defined('Memcached::GET_EXTENDED')) {
                 $output = $memc->get($internalKey, null, \Memcached::GET_EXTENDED);
-                $casToken = $output['cas'];
-                $result = $output['value'];
+                $casToken = $output ? $output['cas'] : $casToken;
+                $result = $output ? $output['value'] : false;
             } else {
                 $result = $memc->get($internalKey, null, $casToken);
             }
