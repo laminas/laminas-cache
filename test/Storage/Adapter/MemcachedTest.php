@@ -9,6 +9,7 @@
 
 namespace ZendTest\Cache\Storage\Adapter;
 
+use Prophecy\Argument;
 use Zend\Cache;
 
 /**
@@ -84,6 +85,39 @@ class MemcachedTest extends CommonAdapterTest
         $this->assertEquals($options->getServers(), $servers);
         $memcached = new Cache\Storage\Adapter\Memcached($options);
         $this->assertEquals($memcached->getOptions()->getServers(), $servers);
+    }
+
+    public function testMemcachedReturnsSuccessFalseOnError()
+    {
+        if (! defined('Memcached::GET_EXTENDED')) {
+            $this->markTestSkipped('Test skipped because Memcached < 3.0 with Memcached::GET_EXTENDED not defined');
+            return;
+        }
+
+        $resource = $this->prophesize(\Memcached::class);
+        $resourceManager = $this->prophesize(Cache\Storage\Adapter\MemcachedResourceManager::class);
+
+        $resourceManager->getResource(Argument::any())->willReturn($resource->reveal());
+        $resource->get(Argument::cetera())->willReturn(null);
+        $resource->getResultCode()->willReturn(\Memcached::RES_PARTIAL_READ);
+        $resource->getResultMessage()->willReturn('foo');
+
+        $storage = new Cache\Storage\Adapter\Memcached([
+            'resource_manager' => $resourceManager->reveal(),
+        ]);
+
+        $storage->getEventManager()->attach(
+            'getItem.exception',
+            function (Cache\Storage\ExceptionEvent $e) {
+                $e->setThrowException(false);
+                $e->stopPropagation(true);
+            },
+            -1
+        );
+
+        $this->assertNull($storage->getItem('unknwon', $success, $casToken));
+        $this->assertFalse($success);
+        $this->assertNull($casToken);
     }
 
     public function getServersDefinitions()
