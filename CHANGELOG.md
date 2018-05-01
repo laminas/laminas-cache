@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.8.2 - TBD
+## 2.8.2 - 2018-05-01
 
 ### Added
 
@@ -22,7 +22,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#168](https://github.com/zendframework/zend-cache/pull/168) fixes a typo in a variable name within the `Filesystem::setTags()` method which
+  prevented clearing of tags when using that adapter.
 
 ## 2.8.1 - 2018-04-26
 

@@ -608,4 +608,15 @@ class FilesystemTest extends CommonAdapterTest
         $this->_options->setTagSuffix('.cache');
         $this->assertSame('.cache', $this->_options->getTagSuffix());
     }
+
+    public function testEmptyTagsArrayClearsTags()
+    {
+        $key = 'key';
+        $tags = ['tag1', 'tag2', 'tag3'];
+        $this->assertTrue($this->_storage->setItem($key, 100));
+        $this->assertTrue($this->_storage->setTags($key, $tags));
+        $this->assertNotEmpty($this->_storage->getTags($key));
+        $this->assertTrue($this->_storage->setTags($key, []));
+        $this->assertEmpty($this->_storage->getTags($key));
+    }
 }
