@@ -327,7 +327,7 @@ class Filesystem extends AbstractAdapter implements
         $filespec = $this->getFileSpec($key);
 
         if (! $tags) {
-            $this->unlink($this->formatTagFilename($filespac));
+            $this->unlink($this->formatTagFilename($filespec));
             return true;
         }
 
