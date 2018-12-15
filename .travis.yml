@@ -1,5 +1,3 @@
-sudo: false
-
 language: php
 
 cache:
@@ -140,6 +138,24 @@ matrix:
         - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.3"
         - REDIS_PECL_VERSION="redis-5.0.2"
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
+    - php: 7.3
+      env:
+        - DEPS=lowest
+        - APCU_PECL_VERSION="apcu-5.1.10"
+        - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
+    - php: 7.3
+      env:
+        - DEPS=locked
+        - APCU_PECL_VERSION="apcu-5.1.10"
+        - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
+        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
+    - php: 7.3
+      env:
+        - DEPS=latest
+        - APCU_PECL_VERSION="apcu"
+        - APCU_BC_PECL_VERSION="apcu_bc-1.0.3"
         - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
 
 before_install:
