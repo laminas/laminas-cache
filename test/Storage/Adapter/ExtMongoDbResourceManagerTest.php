@@ -117,6 +117,20 @@ class ExtMongoDbResourceManagerTest extends TestCase
         $this->assertSame($resource, $this->object->getResource($id));
     }
 
+    public function testCorrectDatabaseResourceName()
+    {
+        $id = 'foo';
+
+        $resource = [
+            'db' => getenv('TESTS_ZEND_CACHE_EXTMONGODB_DATABASE'),
+            'server' => getenv('TESTS_ZEND_CACHE_EXTMONGODB_CONNECTSTRING'),
+        ];
+
+        $this->object->setResource($id, $resource);
+
+        $this->assertSame($resource['db'], $this->object->getResource($id)->getDatabaseName());
+    }
+
     public function testGetResourceNewResource()
     {
         $id                = 'foo';
