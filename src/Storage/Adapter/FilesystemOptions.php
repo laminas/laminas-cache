@@ -322,7 +322,7 @@ class FilesystemOptions extends AdapterOptions
                 );
             } elseif ($filePermission & 0111) {
                 throw new Exception\InvalidArgumentException(
-                    "Invalid file permission: Cache files shoudn't be executable"
+                    "Invalid file permission: Cache files shouldn't be executable"
                 );
             }
         }

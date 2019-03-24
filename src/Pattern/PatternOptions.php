@@ -446,7 +446,7 @@ class PatternOptions extends AbstractOptions
                 );
             } elseif ($filePermission & 0111) {
                 throw new Exception\InvalidArgumentException(
-                    "Invalid file permission: Files shoudn't be executable"
+                    "Invalid file permission: Files shouldn't be executable"
                 );
             }
         }
