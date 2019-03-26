@@ -1451,7 +1451,7 @@ class Filesystem extends AbstractAdapter implements
         ErrorHandler::start();
 
         if ($perm === false || $level == 1) {
-            // build-in mkdir function is enough
+            // built-in mkdir function is enough
 
             $umask = ($umask !== false) ? umask($umask) : false;
             $res   = mkdir($pathname, ($perm !== false) ? $perm : 0775, true);
@@ -1480,7 +1480,7 @@ class Filesystem extends AbstractAdapter implements
                 throw new Exception\RuntimeException("chmod('{$pathname}', 0{$oct}) failed", 0, $err);
             }
         } else {
-            // build-in mkdir function sets permission together with current umask
+            // built-in mkdir function sets permission together with current umask
             // which doesn't work well on multo threaded webservers
             // -> create directories one by one and set permissions
 

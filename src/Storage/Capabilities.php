@@ -122,7 +122,7 @@ class Capabilities
     protected $supportedDatatypes;
 
     /**
-     * Supported metdata
+     * Supported metadata
      *
      * If it's NULL the capability isn't set and the getter
      * returns the base capability or the default value.

@@ -299,7 +299,7 @@ class RedisResourceManager
         }
 
         if (! $success) {
-            throw new Exception\RuntimeException('Could not estabilish connection with Redis instance');
+            throw new Exception\RuntimeException('Could not establish connection with Redis instance');
         }
 
         $resource['initialized'] = true;
