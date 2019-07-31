@@ -356,7 +356,7 @@ class Redis extends AbstractAdapter implements
     {
         $redis = $this->getRedisResource();
         try {
-            return (bool) $redis->delete($this->namespacePrefix . $normalizedKey);
+            return (bool) $redis->del($this->namespacePrefix . $normalizedKey);
         } catch (RedisResourceException $e) {
             throw new Exception\RuntimeException($redis->getLastError(), $e->getCode(), $e);
         }
@@ -434,7 +434,7 @@ class Redis extends AbstractAdapter implements
         $options = $this->getOptions();
         $prefix  = $namespace . $options->getNamespaceSeparator();
 
-        $redis->delete($redis->keys($prefix . '*'));
+        $redis->del($redis->keys($prefix . '*'));
 
         return true;
     }
@@ -460,7 +460,7 @@ class Redis extends AbstractAdapter implements
         $namespace = $options->getNamespace();
         $prefix    = ($namespace === '') ? '' : $namespace . $options->getNamespaceSeparator() . $prefix;
 
-        $redis->delete($redis->keys($prefix.'*'));
+        $redis->del($redis->keys($prefix.'*'));
 
         return true;
     }
