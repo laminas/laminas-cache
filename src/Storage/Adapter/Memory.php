@@ -205,7 +205,7 @@ class Memory extends AbstractAdapter implements
 
         $data    = & $this->data[$ns];
         foreach ($data as $key => & $item) {
-            if (0 === strpos($key, $prefix)) {
+            if (strpos($key, $prefix) === 0) {
                 unset($data[$key]);
             }
         }

@@ -124,7 +124,7 @@ class Session extends AbstractAdapter implements
 
         $data    = $cntr->offsetGet($ns);
         foreach ($data as $key => & $item) {
-            if (0 === strpos($key, $prefix)) {
+            if (strpos($key, $prefix) === 0) {
                 unset($data[$key]);
             }
         }

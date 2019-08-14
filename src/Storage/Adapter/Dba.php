@@ -229,7 +229,7 @@ class Dba extends AbstractAdapter implements
             $recheck     = false;
             $internalKey = dba_firstkey($this->handle);
             while ($internalKey !== false && $internalKey !== null) {
-                if (0 === strpos($internalKey, $prefix)) {
+                if (strpos($internalKey, $prefix) === 0) {
                     $result = dba_delete($internalKey, $this->handle) && $result;
                 }
 
@@ -267,7 +267,7 @@ class Dba extends AbstractAdapter implements
             $recheck     = false;
             $internalKey = dba_firstkey($this->handle);
             while ($internalKey !== false && $internalKey !== null) {
-                if (0 === strpos($internalKey, $prefix)) {
+                if (strpos($internalKey, $prefix) === 0) {
                     $result = dba_delete($internalKey, $this->handle) && $result;
                     $recheck = true;
                 }

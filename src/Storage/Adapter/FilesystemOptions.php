@@ -119,7 +119,7 @@ class FilesystemOptions extends AdapterOptions
     public function __construct($options = null)
     {
         // disable file/directory permissions by default on windows systems
-        if (0 === stripos(PHP_OS, 'WIN')) {
+        if (stripos(PHP_OS, 'WIN') === 0) {
             $this->filePermission = false;
             $this->dirPermission = false;
         }
