@@ -332,7 +332,7 @@ class MemcachedResourceManager
             $reflection = new ReflectionClass('Memcached');
             $constants  = $reflection->getConstants();
             foreach ($constants as $constName => $constValue) {
-                if (substr($constName, 0, 4) == 'OPT_') {
+                if (strpos($constName, 'OPT_') === 0) {
                     $libOptions[$constValue] = $resource->getOption($constValue);
                 }
             }

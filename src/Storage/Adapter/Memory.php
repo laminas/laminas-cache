@@ -203,10 +203,9 @@ class Memory extends AbstractAdapter implements
             return true;
         }
 
-        $prefixL = strlen($prefix);
         $data    = & $this->data[$ns];
         foreach ($data as $key => & $item) {
-            if (substr($key, 0, $prefixL) === $prefix) {
+            if (strpos($key, $prefix) === 0) {
                 unset($data[$key]);
             }
         }

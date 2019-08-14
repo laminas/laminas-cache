@@ -220,7 +220,6 @@ class Dba extends AbstractAdapter implements
         }
 
         $prefix  = $namespace . $this->getOptions()->getNamespaceSeparator();
-        $prefixl = strlen($prefix);
         $result  = true;
 
         $this->_open();
@@ -230,7 +229,7 @@ class Dba extends AbstractAdapter implements
             $recheck     = false;
             $internalKey = dba_firstkey($this->handle);
             while ($internalKey !== false && $internalKey !== null) {
-                if (substr($internalKey, 0, $prefixl) === $prefix) {
+                if (strpos($internalKey, $prefix) === 0) {
                     $result = dba_delete($internalKey, $this->handle) && $result;
                 }
 
@@ -259,7 +258,6 @@ class Dba extends AbstractAdapter implements
         $options   = $this->getOptions();
         $namespace = $options->getNamespace();
         $prefix    = ($namespace === '') ? '' : $namespace . $options->getNamespaceSeparator() . $prefix;
-        $prefixL   = strlen($prefix);
         $result    = true;
 
         $this->_open();
@@ -269,7 +267,7 @@ class Dba extends AbstractAdapter implements
             $recheck     = false;
             $internalKey = dba_firstkey($this->handle);
             while ($internalKey !== false && $internalKey !== null) {
-                if (substr($internalKey, 0, $prefixL) === $prefix) {
+                if (strpos($internalKey, $prefix) === 0) {
                     $result = dba_delete($internalKey, $this->handle) && $result;
                     $recheck = true;
                 }

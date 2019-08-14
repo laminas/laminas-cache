@@ -152,7 +152,7 @@ class PatternOptions extends AbstractOptions
     public function __construct($options = null)
     {
         // disable file/directory permissions by default on windows systems
-        if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
+        if (stripos(PHP_OS, 'WIN') === 0) {
             $this->filePermission = false;
             $this->dirPermission = false;
         }
