@@ -104,7 +104,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
         $keys = array_diff($keys, array_keys($items));
 
-        if (count($keys)) {
+        if ($keys) {
             try {
                 $cacheItems = $this->storage->getItems($keys);
             } catch (Exception\InvalidArgumentException $e) {
