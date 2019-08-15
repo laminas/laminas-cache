@@ -124,7 +124,7 @@ class CaptureCache extends AbstractPattern
 
 ## Examples
 
-### Scaling images in the web root
+### Scaling Images in the Web Root
 
 Using the following Apache 404 configuration:
 

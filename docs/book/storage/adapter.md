@@ -18,7 +18,7 @@ these are then passed to an options class instance). Alternately, you can pass
 either the options instance or associative array to the
 `Zend\Cache\StorageFactory::factory` method.
 
-> ### Many methods throw exceptions
+> ### Many Methods throw Exceptions
 >
 > Because many caching operations throw an exception on error, you need to catch
 > them. You can do so manually, or you can use the plugin
@@ -555,7 +555,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
-### Adapter specific options
+### Adapter specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -589,7 +589,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
-### Adapter specific options
+### Adapter specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -636,7 +636,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
-### Adapter specific options
+### Adapter specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -686,7 +686,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
 
-### Adapter specific options
+### Adapter specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -719,7 +719,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
 
-### Adapter specific options
+### Adapter specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -768,13 +768,13 @@ Capability | Value
 `maxKeyLength` | 0
 `namespaceIsPrefix` | `false`
 
-### Adapter specific options
+### Adapter specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
 `memory_limit` | `string|integer` | 50% of `memory_limit` INI value | Limit of how much memory can PHP allocate to allow store items.
 
-> #### Memory limit
+> #### Memory Limit
 >
 > The adapter has the following behavior with regards to the memory limit:
 >
@@ -820,7 +820,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | <Option value of namespace_separator>
 
-### Adapter specific options
+### Adapter specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -839,7 +839,7 @@ Key | Default | Description
 
 ## The ExtMongoDB Adapter
 
-- Since 2.8.0
+> Available since version 2.8.0
 
 `Zend\Cache\Storage\Adapter\ExtMongoDB` stores cache items using the mongodb extension, and
 requires that the MongoDB PHP Client library is also installed. You can install the client
@@ -874,7 +874,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | <Option value of namespace_separator>
 
-### Adapter specific options
+### Adapter specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -918,7 +918,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
-### Adapter specific options
+### Adapter specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -955,7 +955,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
-### Adapter specific options
+### Adapter specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -1023,7 +1023,7 @@ Capability | Value
 
 ## Examples
 
-### Basic usage
+### Basic Usage
 
 ```php
 use Zend\Cache\StorageFactory;
@@ -1048,7 +1048,7 @@ if (! $success) {
 }
 ```
 
-### Get multiple rows from a database
+### Get multiple Rows from a Database
 
 ```php
 use Zend\Cache\StorageFactory;

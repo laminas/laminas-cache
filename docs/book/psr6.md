@@ -1,6 +1,6 @@
-# PSR-6 Support
+# PSR-6
 
-- Since 2.8.0
+> Available since version 2.8.0
 
 ## Overview
 
@@ -51,7 +51,7 @@ values like an empty string, `null`, or `false` can be stored. Always check `isH
 found.
 
 
-## Supported adapters
+## Supported Adapters
 
 The PSR-6 specification requires that the underlying storage support time-to-live (TTL), which is set when the
 item is saved. For this reason the following adapters cannot be used: `Dba`, `Filesystem`, `Memory` and `Session`. The
@@ -77,7 +77,7 @@ actually saved to storage. If this is set when you instantiate the pool it will 
 behaviour.
 
 
-## Logging errors
+## Logging Errors
 
 The specification [states](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-6-cache.md#error-handling):
 
@@ -126,7 +126,7 @@ Note that `throw_exceptions` should always be `true` (the default) or you will n
 calls on the pool such as `save()`.
 
 
-## Supported data types
+## Supported Data Types
 
 As per [the specification](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-6-cache.md#data), the
 following data types can be stored in cache: `string`, `integer`, `float`, `boolean`, `null`, `array`, `object` and be

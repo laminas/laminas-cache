@@ -150,7 +150,7 @@ class ObjectCache extends CallbackCache
 
 ## Examples
 
-### Caching a filter
+### Caching a Filter
 
 ```php
 $filter       = new Zend\Filter\RealPath();
