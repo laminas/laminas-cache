@@ -81,7 +81,7 @@ class CallbackCache extends AbstractPattern
 
 ## Examples
 
-### Instantiating the callback cache pattern
+### Instantiating the Callback Cache Pattern
 
 ```php
 use Zend\Cache\PatternFactory;

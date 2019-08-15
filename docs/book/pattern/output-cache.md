@@ -53,7 +53,7 @@ class OutputCache extends AbstractPattern
 
 ## Examples
 
-### Caching simple view scripts
+### Caching simple View Scripts
 
 ```php
 $outputCache = Zend\Cache\PatternFactory::factory('output', [

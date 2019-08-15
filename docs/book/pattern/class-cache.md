@@ -131,7 +131,7 @@ class ClassCache extends CallbackCache
 
 ## Examples
 
-**Caching of import feeds**
+### Caching of Import Feeds
 
 ```php
 $cachedFeedReader = Zend\Cache\PatternFactory::factory('class', [

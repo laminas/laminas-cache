@@ -1,4 +1,4 @@
-# PSR-16 Support
+# PSR-16
 
 - Since 2.8.0
 
@@ -100,7 +100,7 @@ $cache = StorageFactory::factory([
 ]);
 ```
 
-## Deleting items and exceptions
+## Deleting Items and Exceptions
 
 PSR-16 states that the `delete()` and `deleteMultiple()` methods should return
 `false` if an _error_ occured when deleting the key(s) provided, but `true`
