@@ -1,4 +1,4 @@
-# Storage Plugins
+# Plugins
 
 Cache storage plugins are objects that provide additional functionality to or
 influence behavior of a storage adapter.
@@ -45,7 +45,7 @@ $cache->addPlugin($plugin);
 `clearExpired()` randomly (by factor) after every call of `setItem()`,
 `setItems()`, `addItem()`, and `addItems()`.
 
-### Plugin specific options
+### Plugin specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -62,7 +62,7 @@ Name | Data Type | Default Value | Description
 reading from or writing to the cache, and sends the exception to a defined callback function.
 You may also configure the plugin to re-throw exceptions.
 
-### Plugin specific options
+### Plugin specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -74,7 +74,7 @@ Name | Data Type | Default Value | Description
 `Zend\Cache\Storage\Plugin\IgnoreUserAbort` ignores user-invoked script
 termination when, allowing cache write operations to complete first.
 
-### Plugin specific options
+### Plugin specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -85,7 +85,7 @@ Name | Data Type | Default Value | Description
 `Zend\Cache\Storage\Plugin\OptimizeByFactor` calls the storage method `optimize()`
 randomly (by factor) after removing items from the cache.
 
-### Plugin specific options
+### Plugin specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -102,7 +102,7 @@ Name | Data Type | Default Value | Description
 cache, and deserialize when reading. This allows storing datatypes not supported
 by the underlying storage adapter.
 
-### Plugin specific options
+### Plugin specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -163,7 +163,7 @@ interface PluginInterface extends ListenerAggregateInterface
 
 ## Examples
 
-### Basic plugin implementation
+### Basic Plugin Implementation
 
 ```php
 use Zend\Cache\Storage\Event;

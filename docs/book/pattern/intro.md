@@ -1,4 +1,4 @@
-# Zend\\Cache\\Pattern
+# Introduction
 
 Cache patterns are configurable objects that solve known performance
 bottlenecks. Each should be used only in the specific situations they are

@@ -263,7 +263,7 @@ class Capabilities
 
 ## Examples
 
-### Get storage capabilities and do specific stuff based on them
+### Get Storage Capabilities and do specific Stuff based on them
 
 ```php
 use Zend\Cache\StorageFactory;
@@ -279,7 +279,7 @@ if ($supportedDatatypes['object']) {
 }
 ```
 
-### Listen to the change event
+### Listen to the change Event
 
 ```php
 use Zend\Cache\StorageFactory;
