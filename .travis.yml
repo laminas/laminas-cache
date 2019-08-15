@@ -44,6 +44,8 @@ matrix:
       env:
         - DEPS=lowest
         - APCU_PECL_VERSION="apcu-4.0.8"
+        - MEMCACHE_PECL_VERSION="memcache-2.2.7"
+        - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - TESTS_ZEND_CACHE_EXTMONGODB_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
         - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
@@ -52,6 +54,8 @@ matrix:
         - DEPS=locked
         - LEGACY_DEPS="phpbench/phpbench phpunit/phpunit"
         - APCU_PECL_VERSION="apcu-4.0.10"
+        - MEMCACHE_PECL_VERSION="memcache-3.0.7"
+        - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - TESTS_ZEND_CACHE_EXTMONGODB_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
         - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
@@ -59,6 +63,8 @@ matrix:
       env:
         - DEPS=latest
         - APCU_PECL_VERSION="apcu-4.0.11"
+        - MEMCACHE_PECL_VERSION="memcache-3.0.8"
+        - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - TESTS_ZEND_CACHE_EXTMONGODB_ENABLED=false
         - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
         - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
@@ -126,6 +132,7 @@ matrix:
 
 before_install:
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
+  - pecl channel-update pecl.php.net
 
 install:
   # prevent PECL from enabling the extension by default, see https://pear.php.net/bugs/bug.php?id=21007
@@ -159,10 +166,12 @@ install:
     fi ;
 
   - if [[ $TESTS_ZEND_CACHE_MEMCACHE_ENABLED == 'true' ]]; then
-        phpenv config-add .ci/memcache.ini ;
+        yes|CFLAGS="-fgnu89-inline" pecl install -f $MEMCACHE_PECL_VERSION ;
     fi ;
 
-  - if [[ $TESTS_ZEND_CACHE_MEMCACHED_ENABLED == 'true' ]]; then
+  - if [[ $TESTS_ZEND_CACHE_MEMCACHED_ENABLED == 'true' && $TRAVIS_PHP_VERSION =~ ^5.6 ]]; then
+        echo "no" | pecl install -f $MEMCACHED_PECL_VERSION ;
+    elif [[ $TESTS_ZEND_CACHE_MEMCACHED_ENABLED == 'true' ]]; then
         phpenv config-add .ci/memcached.ini ;
     fi ;
 
