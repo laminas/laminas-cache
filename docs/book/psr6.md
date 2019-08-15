@@ -1,6 +1,6 @@
 # PSR-6
 
-- Since 2.8.0
+> Available since version 2.8.0
 
 ## Overview
 

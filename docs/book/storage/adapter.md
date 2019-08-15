@@ -839,7 +839,7 @@ Key | Default | Description
 
 ## The ExtMongoDB Adapter
 
-- Since 2.8.0
+> Available since version 2.8.0
 
 `Zend\Cache\Storage\Adapter\ExtMongoDB` stores cache items using the mongodb extension, and
 requires that the MongoDB PHP Client library is also installed. You can install the client

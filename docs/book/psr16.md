@@ -1,6 +1,6 @@
 # PSR-16
 
-- Since 2.8.0
+> Available since version 2.8.0
 
 [PSR-16](https://www.php-fig.org/psr/psr-16/) provides a simplified approach to
 cache access that does not involve cache pools, tags, deferment, etc.; it
