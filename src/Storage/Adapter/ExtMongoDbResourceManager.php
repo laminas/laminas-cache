@@ -98,7 +98,7 @@ class ExtMongoDbResourceManager
                 }
 
                 $collection = $resource['client_instance']->selectCollection(
-                    isset($resouce['db']) ? $resource['db'] : 'zend',
+                    isset($resource['db']) ? $resource['db'] : 'zend',
                     isset($resource['collection']) ? $resource['collection'] : 'cache'
                 );
                 $collection->createIndex(['key' => 1]);
