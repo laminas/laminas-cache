@@ -113,7 +113,10 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
         $options = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
-        $options->setTtl($ttl);
+
+        if ($ttl !== null) {
+            $options->setTtl($ttl);
+        }
 
         try {
             $result = $this->storage->setItem($key, $value);
@@ -213,7 +216,10 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
         $options = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
-        $options->setTtl($ttl);
+
+        if ($ttl !== null) {
+            $options->setTtl($ttl);
+        }
 
         try {
             $result = $this->storage->setItems($values);

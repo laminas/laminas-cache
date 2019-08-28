@@ -57,9 +57,9 @@ class SimpleCacheDecoratorTest extends TestCase
     /**
      * @param bool $staticTtl
      * @param int $minTtl
+     * @return ObjectProphecy
      */
-    public function mockCapabilities(
-        ObjectProphecy $storage,
+    private function getMockCapabilities(
         array $supportedDataTypes = null,
         $staticTtl = true,
         $minTtl = 60
@@ -69,6 +69,22 @@ class SimpleCacheDecoratorTest extends TestCase
         $capabilities->getSupportedDatatypes()->willReturn($supportedDataTypes);
         $capabilities->getStaticTtl()->willReturn($staticTtl);
         $capabilities->getMinTtl()->willReturn($minTtl);
+
+        return $capabilities;
+    }
+
+    /**
+     * @param bool $staticTtl
+     * @param int $minTtl
+     */
+    public function mockCapabilities(
+        ObjectProphecy $storage,
+        array $supportedDataTypes = null,
+        $staticTtl = true,
+        $minTtl = 60
+    ) {
+        $capabilities = $this->getMockCapabilities($supportedDataTypes, $staticTtl, $minTtl);
+
         $storage->getCapabilities()->will([$capabilities, 'reveal']);
     }
 
@@ -738,5 +754,32 @@ class SimpleCacheDecoratorTest extends TestCase
             $this->assertSame($exception->getCode(), $e->getCode());
             $this->assertSame($exception, $e->getPrevious());
         }
+    }
+
+    public function testUseTtlFromOptionsWhenNotProvidedOnSet()
+    {
+        $capabilities = $this->getMockCapabilities();
+
+        $storage = new TestAsset\TtlStorage(['ttl' => 20]);
+        $storage->setCapabilities($capabilities->reveal());
+        $cache = new SimpleCacheDecorator($storage);
+
+        $cache->set('foo', 'bar');
+        self::assertSame(20, $storage->ttl['foo']);
+        self::assertSame(20, $storage->getOptions()->getTtl());
+    }
+
+    public function testUseTtlFromOptionsWhenNotProvidedOnSetMultiple()
+    {
+        $capabilities = $this->getMockCapabilities();
+
+        $storage = new TestAsset\TtlStorage(['ttl' => 20]);
+        $storage->setCapabilities($capabilities->reveal());
+        $cache = new SimpleCacheDecorator($storage);
+
+        $cache->setMultiple(['foo' => 'bar', 'bar' => 'baz']);
+        self::assertSame(20, $storage->ttl['foo']);
+        self::assertSame(20, $storage->ttl['bar']);
+        self::assertSame(20, $storage->getOptions()->getTtl());
     }
 }
