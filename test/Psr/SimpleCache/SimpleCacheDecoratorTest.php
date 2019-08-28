@@ -791,4 +791,30 @@ class SimpleCacheDecoratorTest extends TestCase
         self::assertSame(20, $storage->ttl['bar']);
         self::assertSame(20, $storage->getOptions()->getTtl());
     }
+
+    public function testUseTtlFromOptionsOnSetMocking()
+    {
+        $this->options->getTtl()->willReturn(40);
+        $this->options->setTtl(40)->will([$this->options, 'reveal']);
+
+        $this->options->setTtl(null)->shouldNotBeCalled();
+
+        $this->storage->getOptions()->will([$this->options, 'reveal']);
+        $this->storage->setItem('foo', 'bar')->willReturn(true);
+
+        self::assertTrue($this->cache->set('foo', 'bar'));
+    }
+
+    public function testUseTtlFromOptionsOnSetMultipleMocking()
+    {
+        $this->options->getTtl()->willReturn(40);
+        $this->options->setTtl(40)->will([$this->options, 'reveal']);
+
+        $this->options->setTtl(null)->shouldNotBeCalled();
+
+        $this->storage->getOptions()->will([$this->options, 'reveal']);
+        $this->storage->setItems(['foo' => 'bar', 'boo' => 'baz'])->willReturn([]);
+
+        self::assertTrue($this->cache->setMultiple(['foo' => 'bar', 'boo' => 'baz']));
+    }
 }
