@@ -1,7 +1,7 @@
 <?php
 /**
  * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @copyright Copyright (c) 2018-2019 Zend Technologies USA Inc. (https://www.zend.com)
  * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
@@ -98,7 +98,7 @@ class ExtMongoDbResourceManager
                 }
 
                 $collection = $resource['client_instance']->selectCollection(
-                    isset($resouce['db']) ? $resource['db'] : 'zend',
+                    isset($resource['db']) ? $resource['db'] : 'zend',
                     isset($resource['collection']) ? $resource['collection'] : 'cache'
                 );
                 $collection->createIndex(['key' => 1]);

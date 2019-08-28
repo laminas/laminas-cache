@@ -1,7 +1,7 @@
 <?php
 /**
  * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @copyright Copyright (c) 2018-2019 Zend Technologies USA Inc. (https://www.zend.com)
  * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
@@ -12,7 +12,6 @@ use MongoDB\Collection;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Zend\Cache\Exception;
-use Zend\Cache\Storage\Adapter\ExtMongoDbOptions;
 use Zend\Cache\Storage\Adapter\ExtMongoDbResourceManager;
 
 /**
@@ -115,6 +114,20 @@ class ExtMongoDbResourceManagerTest extends TestCase
         $this->object->setResource($id, $resource);
 
         $this->assertSame($resource, $this->object->getResource($id));
+    }
+
+    public function testCorrectDatabaseResourceName()
+    {
+        $id = 'foo';
+
+        $resource = [
+            'db' => getenv('TESTS_ZEND_CACHE_EXTMONGODB_DATABASE'),
+            'server' => getenv('TESTS_ZEND_CACHE_EXTMONGODB_CONNECTSTRING'),
+        ];
+
+        $this->object->setResource($id, $resource);
+
+        $this->assertSame($resource['db'], $this->object->getResource($id)->getDatabaseName());
     }
 
     public function testGetResourceNewResource()
