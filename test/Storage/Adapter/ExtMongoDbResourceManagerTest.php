@@ -12,7 +12,6 @@ use MongoDB\Collection;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Zend\Cache\Exception;
-use Zend\Cache\Storage\Adapter\ExtMongoDbOptions;
 use Zend\Cache\Storage\Adapter\ExtMongoDbResourceManager;
 
 /**
