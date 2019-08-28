@@ -44,7 +44,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#184](https://github.com/zendframework/zend-cache/pull/184) fixes
+  an issue with SimpleCacheDecorator where elements were deleted
+  after creation. Wrong TTL was set instead of using default value
+  from options.
 
 ## 2.8.2 - 2018-05-01
 

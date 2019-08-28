@@ -1,7 +1,7 @@
 <?php
 /**
  * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
+ * @copyright Copyright (c) 2018-2019 Zend Technologies USA Inc. (https://www.zend.com)
  * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
  */
 
@@ -46,12 +46,40 @@ class SimpleCacheDecoratorTest extends TestCase
         'resource' => false,
     ];
 
+    /** @var AdapterOptions|ObjectProphecy */
+    private $options;
+
+    /** @var StorageInterface|ObjectProphecy */
+    private $storage;
+
+    /** @var SimpleCacheDecorator */
+    private $cache;
+
     public function setUp()
     {
         $this->options = $this->prophesize(AdapterOptions::class);
         $this->storage = $this->prophesize(StorageInterface::class);
         $this->mockCapabilities($this->storage);
         $this->cache = new SimpleCacheDecorator($this->storage->reveal());
+    }
+
+    /**
+     * @param bool $staticTtl
+     * @param int $minTtl
+     * @return ObjectProphecy
+     */
+    private function getMockCapabilities(
+        array $supportedDataTypes = null,
+        $staticTtl = true,
+        $minTtl = 60
+    ) {
+        $supportedDataTypes = $supportedDataTypes ?: $this->requiredTypes;
+        $capabilities = $this->prophesize(Capabilities::class);
+        $capabilities->getSupportedDatatypes()->willReturn($supportedDataTypes);
+        $capabilities->getStaticTtl()->willReturn($staticTtl);
+        $capabilities->getMinTtl()->willReturn($minTtl);
+
+        return $capabilities;
     }
 
     /**
@@ -64,11 +92,8 @@ class SimpleCacheDecoratorTest extends TestCase
         $staticTtl = true,
         $minTtl = 60
     ) {
-        $supportedDataTypes = $supportedDataTypes ?: $this->requiredTypes;
-        $capabilities = $this->prophesize(Capabilities::class);
-        $capabilities->getSupportedDatatypes()->willReturn($supportedDataTypes);
-        $capabilities->getStaticTtl()->willReturn($staticTtl);
-        $capabilities->getMinTtl()->willReturn($minTtl);
+        $capabilities = $this->getMockCapabilities($supportedDataTypes, $staticTtl, $minTtl);
+
         $storage->getCapabilities()->will([$capabilities, 'reveal']);
     }
 
@@ -738,5 +763,58 @@ class SimpleCacheDecoratorTest extends TestCase
             $this->assertSame($exception->getCode(), $e->getCode());
             $this->assertSame($exception, $e->getPrevious());
         }
+    }
+
+    public function testUseTtlFromOptionsWhenNotProvidedOnSet()
+    {
+        $capabilities = $this->getMockCapabilities();
+
+        $storage = new TestAsset\TtlStorage(['ttl' => 20]);
+        $storage->setCapabilities($capabilities->reveal());
+        $cache = new SimpleCacheDecorator($storage);
+
+        $cache->set('foo', 'bar');
+        self::assertSame(20, $storage->ttl['foo']);
+        self::assertSame(20, $storage->getOptions()->getTtl());
+    }
+
+    public function testUseTtlFromOptionsWhenNotProvidedOnSetMultiple()
+    {
+        $capabilities = $this->getMockCapabilities();
+
+        $storage = new TestAsset\TtlStorage(['ttl' => 20]);
+        $storage->setCapabilities($capabilities->reveal());
+        $cache = new SimpleCacheDecorator($storage);
+
+        $cache->setMultiple(['foo' => 'bar', 'bar' => 'baz']);
+        self::assertSame(20, $storage->ttl['foo']);
+        self::assertSame(20, $storage->ttl['bar']);
+        self::assertSame(20, $storage->getOptions()->getTtl());
+    }
+
+    public function testUseTtlFromOptionsOnSetMocking()
+    {
+        $this->options->getTtl()->willReturn(40);
+        $this->options->setTtl(40)->will([$this->options, 'reveal']);
+
+        $this->options->setTtl(null)->shouldNotBeCalled();
+
+        $this->storage->getOptions()->will([$this->options, 'reveal']);
+        $this->storage->setItem('foo', 'bar')->willReturn(true);
+
+        self::assertTrue($this->cache->set('foo', 'bar'));
+    }
+
+    public function testUseTtlFromOptionsOnSetMultipleMocking()
+    {
+        $this->options->getTtl()->willReturn(40);
+        $this->options->setTtl(40)->will([$this->options, 'reveal']);
+
+        $this->options->setTtl(null)->shouldNotBeCalled();
+
+        $this->storage->getOptions()->will([$this->options, 'reveal']);
+        $this->storage->setItems(['foo' => 'bar', 'boo' => 'baz'])->willReturn([]);
+
+        self::assertTrue($this->cache->setMultiple(['foo' => 'bar', 'boo' => 'baz']));
     }
 }
