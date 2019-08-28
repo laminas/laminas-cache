@@ -46,6 +46,15 @@ class SimpleCacheDecoratorTest extends TestCase
         'resource' => false,
     ];
 
+    /** @var AdapterOptions|ObjectProphecy */
+    private $options;
+
+    /** @var StorageInterface|ObjectProphecy */
+    private $storage;
+
+    /** @var SimpleCacheDecorator */
+    private $cache;
+
     public function setUp()
     {
         $this->options = $this->prophesize(AdapterOptions::class);
