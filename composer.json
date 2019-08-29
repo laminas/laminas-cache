@@ -23,7 +23,7 @@
         "psr/simple-cache": "^1.0",
         "zendframework/zend-eventmanager": "^2.6.3 || ^3.2",
         "zendframework/zend-servicemanager": "^2.7.8 || ^3.3",
-        "zendframework/zend-stdlib": "^2.7.7 || ^3.1"
+        "zendframework/zend-stdlib": "^3.2.1"
     },
     "require-dev": {
         "cache/integration-tests": "^0.16",
