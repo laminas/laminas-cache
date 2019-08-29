@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.9.0 - TBD
+## 2.9.0 - 2019-08-29
 
 ### Added
 
@@ -26,28 +26,6 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Fixed
 
 - Nothing. 
-
-## 2.8.4 - TBD
-
-### Added
-
-- Nothing.
-
-### Changed
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- Nothing.
 
 ## 2.8.3 - 2019-08-28
 
