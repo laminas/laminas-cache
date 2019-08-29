@@ -10,7 +10,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#186](https://github.com/zendframework/zend-cache/pull/186) replaces
+  deprecated `delete()` calls with `del()` in Redis adapter. `delete()`
+  function is deprecated since version 5.0.0 and `del()` is available
+  since version 2.1.0.
 
 ### Deprecated
 
@@ -22,7 +25,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- Nothing. 
 
 ## 2.8.4 - TBD
 
