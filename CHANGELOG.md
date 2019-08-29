@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#186](https://github.com/zendframework/zend-cache/pull/186) Replaced deprecated `Redis::delete()` calls with `del()`. 
 
 ## 2.8.4 - TBD
 
