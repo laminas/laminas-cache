@@ -48,7 +48,7 @@ final class CacheItem implements CacheItemInterface
     /**
      * @var DateTimeZone
      */
-    private $tz;
+    private $utc;
 
     /**
      * Constructor.
