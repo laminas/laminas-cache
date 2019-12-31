@@ -22,6 +22,5 @@
              constants appropriate to the component you are migrating. -->
 
         <env name="TESTS_LAMINAS_CACHE_PLATFORM_ENABLED" value="false" />
-        <env name="TESTS_LAMINAS_CACHE_ZEND_SERVER_ENABLED" value="false" />
     </php>
 </phpunit>
