@@ -1,23 +1,21 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage;
+namespace LaminasTest\Cache\Storage;
 
-use Zend\Cache\Storage\Capabilities;
-use Zend\Cache\Storage\Adapter\Memory as MemoryAdapter;
+use Laminas\Cache\Storage\Adapter\Memory as MemoryAdapter;
+use Laminas\Cache\Storage\Capabilities;
 
 /**
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage UnitTests
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class CapabilitiesTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,14 +23,14 @@ class CapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * Capabilities instance
      *
-     * @var Zend\Cache\Storage\Capabilities
+     * @var Laminas\Cache\Storage\Capabilities
      */
     protected $_capabilities;
 
     /**
      * Base capabilities instance
      *
-     * @var Zend\Cache\Storage\Capabilities
+     * @var Laminas\Cache\Storage\Capabilities
      */
     protected $_baseCapabilities;
 
@@ -46,7 +44,7 @@ class CapabilitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * The storage adapter
      *
-     * @var Zend\Cache\Storage\Adapter
+     * @var Laminas\Cache\Storage\Adapter
      */
     protected $_adapter;
 
@@ -87,7 +85,7 @@ class CapabilitiesTest extends \PHPUnit_Framework_TestCase
 
         $this->_capabilities->setMaxTtl($this->_marker, 100);
 
-        $this->assertInstanceOf('Zend\EventManager\Event', $event);
+        $this->assertInstanceOf('Laminas\EventManager\Event', $event);
         $this->assertEquals('capability', $event->getName());
         $this->assertSame($this->_adapter, $event->getTarget());
 
