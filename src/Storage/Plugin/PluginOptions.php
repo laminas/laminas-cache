@@ -1,18 +1,17 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage\Plugin;
+namespace Laminas\Cache\Storage\Plugin;
 
-use Zend\Cache\Exception;
-use Zend\Serializer\Adapter\AdapterInterface as SerializerAdapter;
-use Zend\Serializer\Serializer as SerializerFactory;
-use Zend\Stdlib\AbstractOptions;
+use Laminas\Cache\Exception;
+use Laminas\Serializer\Adapter\AdapterInterface as SerializerAdapter;
+use Laminas\Serializer\Serializer as SerializerFactory;
+use Laminas\Stdlib\AbstractOptions;
 
 class PluginOptions extends AbstractOptions
 {
@@ -189,7 +188,7 @@ class PluginOptions extends AbstractOptions
     {
         if (!is_string($serializer) && !$serializer instanceof SerializerAdapter) {
             throw new Exception\InvalidArgumentException(sprintf(
-                '%s expects either a string serializer name or Zend\Serializer\Adapter\AdapterInterface instance; '
+                '%s expects either a string serializer name or Laminas\Serializer\Adapter\AdapterInterface instance; '
                 . 'received "%s"',
                 __METHOD__,
                 (is_object($serializer) ? get_class($serializer) : gettype($serializer))
