@@ -1,17 +1,15 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
-use Zend\Cache\Exception;
-use Zend\ServiceManager\AbstractPluginManager;
+use Laminas\Cache\Exception;
+use Laminas\ServiceManager\AbstractPluginManager;
 
 /**
  * Plugin manager implementation for cache storage adapters
@@ -20,8 +18,8 @@ use Zend\ServiceManager\AbstractPluginManager;
  * StorageInterface. Additionally, it registers a number of default
  * adapters available.
  *
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage Storage
  */
 class AdapterPluginManager extends AbstractPluginManager
@@ -32,18 +30,18 @@ class AdapterPluginManager extends AbstractPluginManager
      * @var array
      */
     protected $invokableClasses = array(
-        'apc'            => 'Zend\Cache\Storage\Adapter\Apc',
-        'filesystem'     => 'Zend\Cache\Storage\Adapter\Filesystem',
-        'memcached'      => 'Zend\Cache\Storage\Adapter\Memcached',
-        'memory'         => 'Zend\Cache\Storage\Adapter\Memory',
-        'sysvshm'        => 'Zend\Cache\Storage\Adapter\SystemVShm',
-        'systemvshm'     => 'Zend\Cache\Storage\Adapter\SystemVShm',
-        'sqlite'         => 'Zend\Cache\Storage\Adapter\Sqlite',
-        'dba'            => 'Zend\Cache\Storage\Adapter\Dba',
-        'wincache'       => 'Zend\Cache\Storage\Adapter\WinCache',
-        'xcache'         => 'Zend\Cache\Storage\Adapter\XCache',
-        'zendserverdisk' => 'Zend\Cache\Storage\Adapter\ZendServerDisk',
-        'zendservershm'  => 'Zend\Cache\Storage\Adapter\ZendServerShm',
+        'apc'            => 'Laminas\Cache\Storage\Adapter\Apc',
+        'filesystem'     => 'Laminas\Cache\Storage\Adapter\Filesystem',
+        'memcached'      => 'Laminas\Cache\Storage\Adapter\Memcached',
+        'memory'         => 'Laminas\Cache\Storage\Adapter\Memory',
+        'sysvshm'        => 'Laminas\Cache\Storage\Adapter\SystemVShm',
+        'systemvshm'     => 'Laminas\Cache\Storage\Adapter\SystemVShm',
+        'sqlite'         => 'Laminas\Cache\Storage\Adapter\Sqlite',
+        'dba'            => 'Laminas\Cache\Storage\Adapter\Dba',
+        'wincache'       => 'Laminas\Cache\Storage\Adapter\WinCache',
+        'xcache'         => 'Laminas\Cache\Storage\Adapter\XCache',
+        'zendserverdisk' => 'Laminas\Cache\Storage\Adapter\ZendServerDisk',
+        'zendservershm'  => 'Laminas\Cache\Storage\Adapter\ZendServerShm',
     );
 
     /**

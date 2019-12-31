@@ -1,21 +1,19 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 use ArrayObject;
-use Zend\EventManager\Event as BaseEvent;
+use Laminas\EventManager\Event as BaseEvent;
 
 /**
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage Storage
  */
 class Event extends BaseEvent
@@ -39,7 +37,7 @@ class Event extends BaseEvent
      *
      * @param  StorageInterface $target
      * @return Event
-     * @see    Zend\EventManager\Event::setTarget()
+     * @see    Laminas\EventManager\Event::setTarget()
      */
     public function setTarget($target)
     {
@@ -51,7 +49,7 @@ class Event extends BaseEvent
      *
      * @param  StorageInterface $storage
      * @return Event
-     * @see    Zend\EventManager\Event::setTarget()
+     * @see    Laminas\EventManager\Event::setTarget()
      */
     public function setStorage(StorageInterface $storage)
     {

@@ -1,32 +1,30 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage\Adapter;
+namespace Laminas\Cache\Storage\Adapter;
 
 use ArrayObject;
+use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\Capabilities;
+use Laminas\Cache\Storage\Event;
+use Laminas\Cache\Storage\ExceptionEvent;
+use Laminas\Cache\Storage\Plugin;
+use Laminas\Cache\Storage\PostEvent;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\EventManager\EventManager;
+use Laminas\EventManager\EventsCapableInterface;
 use SplObjectStorage;
 use stdClass;
 use Traversable;
-use Zend\Cache\Exception;
-use Zend\Cache\Storage\Capabilities;
-use Zend\Cache\Storage\Event;
-use Zend\Cache\Storage\ExceptionEvent;
-use Zend\Cache\Storage\Plugin;
-use Zend\Cache\Storage\PostEvent;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\EventManager\EventManager;
-use Zend\EventManager\EventsCapableInterface;
 
 /**
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage Storage
  */
 abstract class AbstractAdapter implements StorageInterface, EventsCapableInterface
@@ -203,7 +201,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
      *
      * @param  string $eventName
      * @param  ArrayObject $args
-     * @return \Zend\EventManager\ResponseCollection All handler return values
+     * @return \Laminas\EventManager\ResponseCollection All handler return values
      */
     protected function triggerPre($eventName, ArrayObject $args)
     {
