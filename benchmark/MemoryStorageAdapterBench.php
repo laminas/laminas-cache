@@ -1,8 +1,8 @@
 <?php
 
-namespace ZendBench\Cache;
+namespace LaminasBench\Cache;
 
-use Zend\Cache\StorageFactory;
+use Laminas\Cache\StorageFactory;
 
 /**
  * @Revs(100)

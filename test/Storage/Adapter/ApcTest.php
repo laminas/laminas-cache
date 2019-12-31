@@ -1,19 +1,18 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache;
+use Laminas\Cache;
 
 /**
- * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Adapter\Apc<extended>
+ * @group      Laminas_Cache
+ * @covers Laminas\Cache\Storage\Adapter\Apc<extended>
  */
 class ApcTest extends CommonAdapterTest
 {
@@ -26,8 +25,8 @@ class ApcTest extends CommonAdapterTest
 
     public function setUp()
     {
-        if (getenv('TESTS_ZEND_CACHE_APC_ENABLED') != 'true') {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_APC_ENABLED to run this test');
+        if (getenv('TESTS_LAMINAS_CACHE_APC_ENABLED') != 'true') {
+            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_APC_ENABLED to run this test');
         }
 
         try {

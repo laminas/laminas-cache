@@ -1,22 +1,21 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Plugin;
+namespace LaminasTest\Cache\Storage\Plugin;
 
 use ArrayObject;
-use Zend\Cache;
-use Zend\Cache\Storage\PostEvent;
-use Zend\EventManager\Test\EventListenerIntrospectionTrait;
-use ZendTest\Cache\Storage\TestAsset\OptimizableMockAdapter;
+use Laminas\Cache;
+use Laminas\Cache\Storage\PostEvent;
+use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
+use LaminasTest\Cache\Storage\TestAsset\OptimizableMockAdapter;
 
 /**
- * @covers Zend\Cache\Storage\Plugin\OptimizeByFactor<extended>
+ * @covers Laminas\Cache\Storage\Plugin\OptimizeByFactor<extended>
  */
 class OptimizeByFactorTest extends CommonPluginTest
 {
@@ -25,7 +24,7 @@ class OptimizeByFactorTest extends CommonPluginTest
     /**
      * The storage adapter
      *
-     * @var \Zend\Cache\Storage\Adapter\AbstractAdapter
+     * @var \Laminas\Cache\Storage\Adapter\AbstractAdapter
      */
     protected $_adapter;
 

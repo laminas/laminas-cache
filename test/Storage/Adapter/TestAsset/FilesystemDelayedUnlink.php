@@ -1,6 +1,6 @@
 <?php
 
-namespace Zend\Cache\Storage\Adapter;
+namespace Laminas\Cache\Storage\Adapter;
 
 function unlink($path, $context = null)
 {

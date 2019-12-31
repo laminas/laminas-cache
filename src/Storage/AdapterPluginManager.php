@@ -1,18 +1,17 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
-use Zend\Cache\Exception\RuntimeException;
-use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\Exception\InvalidServiceException;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\Cache\Exception\RuntimeException;
+use Laminas\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\Exception\InvalidServiceException;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Plugin manager implementation for cache storage adapters
@@ -74,6 +73,40 @@ class AdapterPluginManager extends AbstractPluginManager
         'zendServerSHM'    => Adapter\ZendServerShm::class,
         'ZendServerShm'    => Adapter\ZendServerShm::class,
         'ZendServerSHM'    => Adapter\ZendServerShm::class,
+
+        // Legacy Zend Framework aliases
+        \Zend\Cache\Storage\Adapter\Apc::class => Adapter\Apc::class,
+        \Zend\Cache\Storage\Adapter\Apcu::class => Adapter\Apcu::class,
+        \Zend\Cache\Storage\Adapter\BlackHole::class => Adapter\BlackHole::class,
+        \Zend\Cache\Storage\Adapter\Dba::class => Adapter\Dba::class,
+        \Zend\Cache\Storage\Adapter\Filesystem::class => Adapter\Filesystem::class,
+        \Zend\Cache\Storage\Adapter\Memcache::class => Adapter\Memcache::class,
+        \Zend\Cache\Storage\Adapter\Memcached::class => Adapter\Memcached::class,
+        \Zend\Cache\Storage\Adapter\Memory::class => Adapter\Memory::class,
+        \Zend\Cache\Storage\Adapter\MongoDb::class => Adapter\MongoDb::class,
+        \Zend\Cache\Storage\Adapter\Redis::class => Adapter\Redis::class,
+        \Zend\Cache\Storage\Adapter\Session::class => Adapter\Session::class,
+        \Zend\Cache\Storage\Adapter\WinCache::class => Adapter\WinCache::class,
+        \Zend\Cache\Storage\Adapter\XCache::class => Adapter\XCache::class,
+        \Zend\Cache\Storage\Adapter\ZendServerDisk::class => Adapter\ZendServerDisk::class,
+        \Zend\Cache\Storage\Adapter\ZendServerShm::class => Adapter\ZendServerShm::class,
+
+        // v2 normalized FQCNs
+        'zendcachestorageadapterapc' => Adapter\Apc::class,
+        'zendcachestorageadapterapcu' => Adapter\Apcu::class,
+        'zendcachestorageadapterblackhole' => Adapter\BlackHole::class,
+        'zendcachestorageadapterdba' => Adapter\Dba::class,
+        'zendcachestorageadapterfilesystem' => Adapter\Filesystem::class,
+        'zendcachestorageadaptermemcache' => Adapter\Memcache::class,
+        'zendcachestorageadaptermemcached' => Adapter\Memcached::class,
+        'zendcachestorageadaptermemory' => Adapter\Memory::class,
+        'zendcachestorageadaptermongodb' => Adapter\MongoDb::class,
+        'zendcachestorageadapterredis' => Adapter\Redis::class,
+        'zendcachestorageadaptersession' => Adapter\Session::class,
+        'zendcachestorageadapterwincache' => Adapter\WinCache::class,
+        'zendcachestorageadapterxcache' => Adapter\XCache::class,
+        'zendcachestorageadapterzendserverdisk' => Adapter\ZendServerDisk::class,
+        'zendcachestorageadapterzendservershm' => Adapter\ZendServerShm::class,
     ];
 
     protected $factories = [
@@ -94,21 +127,21 @@ class AdapterPluginManager extends AbstractPluginManager
         Adapter\ZendServerShm::class            => InvokableFactory::class,
 
         // v2 normalized FQCNs
-        'zendcachestorageadapterapc'            => InvokableFactory::class,
-        'zendcachestorageadapterapcu'           => InvokableFactory::class,
-        'zendcachestorageadapterblackhole'      => InvokableFactory::class,
-        'zendcachestorageadapterdba'            => InvokableFactory::class,
-        'zendcachestorageadapterfilesystem'     => InvokableFactory::class,
-        'zendcachestorageadaptermemcache'       => InvokableFactory::class,
-        'zendcachestorageadaptermemcached'      => InvokableFactory::class,
-        'zendcachestorageadaptermemory'         => InvokableFactory::class,
-        'zendcachestorageadaptermongodb'        => InvokableFactory::class,
-        'zendcachestorageadapterredis'          => InvokableFactory::class,
-        'zendcachestorageadaptersession'        => InvokableFactory::class,
-        'zendcachestorageadapterwincache'       => InvokableFactory::class,
-        'zendcachestorageadapterxcache'         => InvokableFactory::class,
-        'zendcachestorageadapterzendserverdisk' => InvokableFactory::class,
-        'zendcachestorageadapterzendservershm'  => InvokableFactory::class,
+        'laminascachestorageadapterapc'            => InvokableFactory::class,
+        'laminascachestorageadapterapcu'           => InvokableFactory::class,
+        'laminascachestorageadapterblackhole'      => InvokableFactory::class,
+        'laminascachestorageadapterdba'            => InvokableFactory::class,
+        'laminascachestorageadapterfilesystem'     => InvokableFactory::class,
+        'laminascachestorageadaptermemcache'       => InvokableFactory::class,
+        'laminascachestorageadaptermemcached'      => InvokableFactory::class,
+        'laminascachestorageadaptermemory'         => InvokableFactory::class,
+        'laminascachestorageadaptermongodb'        => InvokableFactory::class,
+        'laminascachestorageadapterredis'          => InvokableFactory::class,
+        'laminascachestorageadaptersession'        => InvokableFactory::class,
+        'laminascachestorageadapterwincache'       => InvokableFactory::class,
+        'laminascachestorageadapterxcache'         => InvokableFactory::class,
+        'laminascachestorageadapterzendserverdisk' => InvokableFactory::class,
+        'laminascachestorageadapterzendservershm'  => InvokableFactory::class,
     ];
 
     /**
