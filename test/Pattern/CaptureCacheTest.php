@@ -1,18 +1,17 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Pattern;
+namespace LaminasTest\Cache\Pattern;
 
-use Zend\Cache;
+use Laminas\Cache;
 
 /**
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class CaptureCacheTest extends CommonPatternTest
 {
@@ -25,7 +24,7 @@ class CaptureCacheTest extends CommonPatternTest
         $this->_bufferedServerSuperGlobal = $_SERVER;
         $this->_umask = umask();
 
-        $this->_tmpCacheDir = @tempnam(sys_get_temp_dir(), 'zend_cache_test_');
+        $this->_tmpCacheDir = @tempnam(sys_get_temp_dir(), 'laminas_cache_test_');
         if (!$this->_tmpCacheDir) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory-file: {$err['message']}");
@@ -85,7 +84,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->setExpectedException('Zend\Cache\Exception\LogicException');
+        $this->setExpectedException('Laminas\Cache\Exception\LogicException');
         $captureCache->set('content', '/pageId');
     }
 
@@ -109,7 +108,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->setExpectedException('Zend\Cache\Exception\LogicException');
+        $this->setExpectedException('Laminas\Cache\Exception\LogicException');
         $captureCache->get('/pageId');
     }
 
@@ -117,7 +116,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->setExpectedException('Zend\Cache\Exception\LogicException');
+        $this->setExpectedException('Laminas\Cache\Exception\LogicException');
         $captureCache->has('/pageId');
     }
 
@@ -125,7 +124,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->setExpectedException('Zend\Cache\Exception\LogicException');
+        $this->setExpectedException('Laminas\Cache\Exception\LogicException');
         $captureCache->remove('/pageId');
     }
 

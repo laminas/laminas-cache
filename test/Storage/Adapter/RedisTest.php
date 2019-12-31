@@ -1,15 +1,14 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache;
+use Laminas\Cache;
 use Redis as RedisResource;
 
 class RedisTest extends CommonAdapterTest
@@ -28,8 +27,8 @@ class RedisTest extends CommonAdapterTest
 
     public function setUp()
     {
-        if (!getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
+        if (!getenv('TESTS_LAMINAS_CACHE_REDIS_ENABLED')) {
+            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_REDIS_ENABLED to run this test');
         }
 
         if (!extension_loaded('redis')) {
@@ -40,25 +39,25 @@ class RedisTest extends CommonAdapterTest
             'resource_id' => __CLASS__,
         ]);
 
-        if (getenv('TESTS_ZEND_CACHE_REDIS_HOST') && getenv('TESTS_ZEND_CACHE_REDIS_PORT')) {
+        if (getenv('TESTS_LAMINAS_CACHE_REDIS_HOST') && getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')) {
             $this->_options->getResourceManager()->setServer(__CLASS__, [
-                getenv('TESTS_ZEND_CACHE_REDIS_HOST'), getenv('TESTS_ZEND_CACHE_REDIS_PORT'), 1
+                getenv('TESTS_LAMINAS_CACHE_REDIS_HOST'), getenv('TESTS_LAMINAS_CACHE_REDIS_PORT'), 1
             ]);
-        } elseif (getenv('TESTS_ZEND_CACHE_REDIS_HOST')) {
+        } elseif (getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')) {
             $this->_options->getResourceManager()->setServer(__CLASS__, [
-                getenv('TESTS_ZEND_CACHE_REDIS_HOST')
+                getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')
             ]);
         }
 
-        if (getenv('TESTS_ZEND_CACHE_REDIS_DATABASE')) {
+        if (getenv('TESTS_LAMINAS_CACHE_REDIS_DATABASE')) {
             $this->_options->getResourceManager()->setDatabase(__CLASS__,
-                getenv('TESTS_ZEND_CACHE_REDIS_DATABASE')
+                getenv('TESTS_LAMINAS_CACHE_REDIS_DATABASE')
             );
         }
 
-        if (getenv('TESTS_ZEND_CACHE_REDIS_PASSWORD')) {
+        if (getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD')) {
             $this->_options->getResourceManager()->setPassword(__CLASS__,
-                getenv('TESTS_ZEND_CACHE_REDIS_PASSWORD')
+                getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD')
             );
         }
         $this->_storage = new Cache\Storage\Adapter\Redis();
@@ -106,7 +105,7 @@ class RedisTest extends CommonAdapterTest
 
     public function testRedisSerializer()
     {
-        $this->_storage->addPlugin(new \Zend\Cache\Storage\Plugin\Serializer());
+        $this->_storage->addPlugin(new \Laminas\Cache\Storage\Plugin\Serializer());
         $value = ['test', 'of', 'array'];
         $this->_storage->setItem('key', $value);
 
@@ -145,8 +144,8 @@ class RedisTest extends CommonAdapterTest
 
     public function testGetCapabilitiesTtl()
     {
-        $host = getenv('TESTS_ZEND_CACHE_REDIS_HOST') ? : '127.0.0.1';
-        $port = getenv('TESTS_ZEND_CACHE_REDIS_PORT') ? : 6379;
+        $host = getenv('TESTS_LAMINAS_CACHE_REDIS_HOST') ? : '127.0.0.1';
+        $port = getenv('TESTS_LAMINAS_CACHE_REDIS_PORT') ? : 6379;
         $redisResource = new RedisResource();
         $redisResource->connect($host, $port);
         $info = $redisResource->info();
@@ -254,11 +253,11 @@ class RedisTest extends CommonAdapterTest
 
     public function testGetSetResourceManager()
     {
-        $resourceManager = new \Zend\Cache\Storage\Adapter\RedisResourceManager();
-        $options = new \Zend\Cache\Storage\Adapter\RedisOptions();
+        $resourceManager = new \Laminas\Cache\Storage\Adapter\RedisResourceManager();
+        $options = new \Laminas\Cache\Storage\Adapter\RedisOptions();
         $options->setResourceManager($resourceManager);
         $this->assertInstanceOf(
-            'Zend\\Cache\\Storage\\Adapter\\RedisResourceManager',
+            'Laminas\\Cache\\Storage\\Adapter\\RedisResourceManager',
             $options->getResourceManager(),
             'Wrong resource manager retuned, it should of type RedisResourceManager'
         );
@@ -269,7 +268,7 @@ class RedisTest extends CommonAdapterTest
     public function testGetSetResourceId()
     {
         $resourceId = '1';
-        $options = new \Zend\Cache\Storage\Adapter\RedisOptions();
+        $options = new \Laminas\Cache\Storage\Adapter\RedisOptions();
         $options->setResourceId($resourceId);
         $this->assertEquals($resourceId, $options->getResourceId(), 'Resource id was not set correctly');
     }

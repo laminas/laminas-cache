@@ -1,19 +1,18 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Service;
+namespace LaminasTest\Cache\Service;
 
-use Zend\Cache;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Cache;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +33,7 @@ class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
                 'plugins' => ['Serializer', 'ClearExpiredByFactor'],
             ],
         ]]);
-        $this->sm->addAbstractFactory('Zend\Cache\Service\StorageCacheAbstractServiceFactory');
+        $this->sm->addAbstractFactory('Laminas\Cache\Service\StorageCacheAbstractServiceFactory');
     }
 
     public function tearDown()
@@ -52,10 +51,10 @@ class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCanRetrieveCacheByName()
     {
         $cacheA = $this->sm->get('Memory');
-        $this->assertInstanceOf('Zend\Cache\Storage\Adapter\Memory', $cacheA);
+        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\Memory', $cacheA);
 
         $cacheB = $this->sm->get('Foo');
-        $this->assertInstanceOf('Zend\Cache\Storage\Adapter\Memory', $cacheB);
+        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\Memory', $cacheB);
 
         $this->assertNotSame($cacheA, $cacheB);
     }
