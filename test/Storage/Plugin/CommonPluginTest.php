@@ -1,35 +1,34 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Plugin;
+namespace LaminasTest\Cache\Storage\Plugin;
 
 /**
  * PHPUnit test case
  */
 
 /**
- * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Plugin\PluginOptions<extended>
+ * @group      Laminas_Cache
+ * @covers Laminas\Cache\Storage\Plugin\PluginOptions<extended>
  */
 abstract class CommonPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * The storage plugin
      *
-     * @var \Zend\Cache\Storage\Plugin\PluginInterface
+     * @var \Laminas\Cache\Storage\Plugin\PluginInterface
      */
     protected $_plugin;
 
     public function testOptionObjectAvailable()
     {
         $options = $this->_plugin->getOptions();
-        $this->assertInstanceOf('Zend\Cache\Storage\Plugin\PluginOptions', $options);
+        $this->assertInstanceOf('Laminas\Cache\Storage\Plugin\PluginOptions', $options);
     }
 
     public function testOptionsGetAndSetDefault()

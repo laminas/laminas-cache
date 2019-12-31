@@ -19,8 +19,8 @@ ErrorDocument 404 /index.php
 
 ```php
 // index.php
-use Zend\Cache\PatternFactory;
-$capture = Zend\Cache\PatternFactory::factory('capture', [
+use Laminas\Cache\PatternFactory;
+$capture = Laminas\Cache\PatternFactory::factory('capture', [
     'public_dir' => __DIR__,
 ]);
 
@@ -51,10 +51,10 @@ In addition to the methods exposed in `PatternInterface`, this implementation
 exposes the following methods.
 
 ```php
-namespace Zend\Cache\Pattern;
+namespace Laminas\Cache\Pattern;
 
-use Zend\Cache\Exception;
-use Zend\Stdlib\ErrorHandler;
+use Laminas\Cache\Exception;
+use Laminas\Stdlib\ErrorHandler;
 
 class CaptureCache extends AbstractPattern
 {
@@ -137,7 +137,7 @@ Use the following script:
 
 ```php
 // index.php
-$captureCache = Zend\Cache\PatternFactory::factory('capture', [
+$captureCache = Laminas\Cache\PatternFactory::factory('capture', [
     'public_dir' => __DIR__,
 ]);
 

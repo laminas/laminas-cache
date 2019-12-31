@@ -1,21 +1,22 @@
 <?php
+
 /**
- * @link      http://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Service;
+namespace Laminas\Cache\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\Cache\PatternPluginManager;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Cache\PatternPluginManager;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class PatternPluginManagerFactory implements FactoryInterface
 {
     /**
-     * zend-servicemanager v2 support for invocation options.
+     * laminas-servicemanager v2 support for invocation options.
      *
      * @param array
      */
@@ -42,7 +43,7 @@ class PatternPluginManagerFactory implements FactoryInterface
     }
 
     /**
-     * zend-servicemanager v2 support for invocation options.
+     * laminas-servicemanager v2 support for invocation options.
      *
      * @param array $options
      * @return void

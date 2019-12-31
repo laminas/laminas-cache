@@ -6,8 +6,8 @@ The callback cache pattern caches the results of arbitrary PHP callables.
 ## Quick Start
 
 ```php
-use Zend\Cache\PatternFactory;
-use Zend\Cache\Pattern\PatternOptions;
+use Laminas\Cache\PatternFactory;
+use Laminas\Cache\Pattern\PatternOptions;
 
 // Via the factory:
 $callbackCache = PatternFactory::factory('callback', [
@@ -16,7 +16,7 @@ $callbackCache = PatternFactory::factory('callback', [
 ]);
 
 // Or the equivalent manual instantiation:
-$callbackCache = new \Zend\Cache\Pattern\CallbackCache();
+$callbackCache = new \Laminas\Cache\Pattern\CallbackCache();
 $callbackCache->setOptions(new PatternOptions([
     'storage'      => 'apc',
     'cache_output' => true,
@@ -27,7 +27,7 @@ $callbackCache->setOptions(new PatternOptions([
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Zend\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
+`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
 `cache_output` | `boolean` | `true` | Whether or not to cache callback output.
 
 ## Available Methods
@@ -36,10 +36,10 @@ In addition to the methods defined in the `PatternInterface`, this
 implementation provides the following methods.
 
 ```php
-namespace Zend\Cache\Pattern;
+namespace Laminas\Cache\Pattern;
 
-use Zend\Cache\Exception;
-use Zend\Stdlib\ErrorHandler;
+use Laminas\Cache\Exception;
+use Laminas\Stdlib\ErrorHandler;
 
 class CallbackCache extends AbstractPattern
 {
@@ -84,7 +84,7 @@ class CallbackCache extends AbstractPattern
 ### Instantiating the callback cache pattern
 
 ```php
-use Zend\Cache\PatternFactory;
+use Laminas\Cache\PatternFactory;
 
 $callbackCache = PatternFactory::factory('callback', [
     'storage' => 'apc'

@@ -1,5 +1,3 @@
-sudo: false
-
 language: php
 
 branches:
@@ -11,7 +9,7 @@ cache:
   directories:
     - $HOME/.composer/cache
     - $HOME/.local
-    - zf-mkdoc-theme
+    - laminas-mkdoc-theme
 
 services:
   - memcached
@@ -20,28 +18,28 @@ services:
 
 env:
   global:
-    - TESTS_ZEND_CACHE_APC_ENABLED: true
-    - TESTS_ZEND_CACHE_APCU_ENABLED=true
-    - TESTS_ZEND_CACHE_MEMCACHED_ENABLED: true
-    - TESTS_ZEND_CACHE_MEMCACHED_HOST: "127.0.0.1"
-    - TESTS_ZEND_CACHE_MEMCACHED_PORT: 11211
-    - TESTS_ZEND_CACHE_MEMCACHE_ENABLED: true
-    - TESTS_ZEND_CACHE_MEMCACHE_HOST: $TESTS_ZEND_CACHE_MEMCACHED_HOST
-    - TESTS_ZEND_CACHE_MEMCACHE_PORT: $TESTS_ZEND_CACHE_MEMCACHED_PORT
-    - TESTS_ZEND_CACHE_MONGODB_ENABLED: true
-    - TESTS_ZEND_CACHE_REDIS_ENABLED: true
-    - TESTS_ZEND_CACHE_REDIS_HOST: "127.0.0.1"
-    - TESTS_ZEND_CACHE_REDIS_PORT: 6379
-    - TESTS_ZEND_CACHE_REDIS_PASSWORD: ""
-    - TESTS_ZEND_CACHE_REDIS_DATABASE: 0
-    - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
-    - TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH=true
-    - TESTS_ZEND_CACHE_XCACHE_ADMIN_USER=travis
-    - TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS=test
-    - SITE_URL: https://zendframework.github.io/zend-cache
+    - TESTS_LAMINAS_CACHE_APC_ENABLED: true
+    - TESTS_LAMINAS_CACHE_APCU_ENABLED=true
+    - TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED: true
+    - TESTS_LAMINAS_CACHE_MEMCACHED_HOST: "127.0.0.1"
+    - TESTS_LAMINAS_CACHE_MEMCACHED_PORT: 11211
+    - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED: true
+    - TESTS_LAMINAS_CACHE_MEMCACHE_HOST: $TESTS_LAMINAS_CACHE_MEMCACHED_HOST
+    - TESTS_LAMINAS_CACHE_MEMCACHE_PORT: $TESTS_LAMINAS_CACHE_MEMCACHED_PORT
+    - TESTS_LAMINAS_CACHE_MONGODB_ENABLED: true
+    - TESTS_LAMINAS_CACHE_REDIS_ENABLED: true
+    - TESTS_LAMINAS_CACHE_REDIS_HOST: "127.0.0.1"
+    - TESTS_LAMINAS_CACHE_REDIS_PORT: 6379
+    - TESTS_LAMINAS_CACHE_REDIS_PASSWORD: ""
+    - TESTS_LAMINAS_CACHE_REDIS_DATABASE: 0
+    - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=true
+    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_AUTH=true
+    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_USER=travis
+    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_PASS=test
+    - SITE_URL: https://docs.laminas.dev/laminas-cache
     - GH_USER_NAME: "Matthew Weier O'Phinney"
     - GH_USER_EMAIL: matthew@weierophinney.net
-    - GH_REF: github.com/zendframework/zend-cache.git
+    - GH_REF: github.com/laminas/laminas-cache.git
     - secure: "ZYYlfFWTde5MCn6twsm/+s+mx4bLEaVFFG+tuaeiz7nCx+z495D6FxruzBbY1zheX9rNo9qReDo0Tyfn2wrUH8SJYbR9iKDqB95GPDDPW+I23Mw3Uuddr8XqbtabTJVqEQg6iAu7IIQG4TvFFmdq/g26jWim8Cngg/5zZh4Q2GuLSjIKRJBpLe7mSTjQVqaApS/a8wmvPJiSoqxWmY8Botc88ZXMmkRDPQoqEdZOeS4i029cGMXUnzGj7Vl7qwfol6Yj/R441Hd84Vt8P8BOdRyW0tjmllXLXJUYFKCcP5fEqIujbU68FwJMidCPzBcXv2N0klW43ViVwdJD6gBgZStwOyENGeEw1VcbZ6JReMa68F1mtqLhBhZtF8WRUI8+TYMYmLPGMVTcets4P3nIB18uX1CittwGDD2y2OL8MDvuIuaSQFoj/PdUb+BC/DvvmtPGnF6MLTAUjqNlxYbmzopufDEtivWHsqeyxHZj0L0HD5KkMslD9wnngfi+lcQ5e3iFQe/H5vQKE0BfooukxErIXk00cwwMoMjFY4v95CS0BKFhA4HMclKpGEA94CH4STxwyD2Nz/z6iGPqkZuzqDLOKhLr2FsY7bFbvEdNu57G3PGahtYJtc31lcnwKf2t1ALGcG9LS0/ezJSzqx659hWL0B5qgHjCNDnAyKJcNxM="
 
 matrix:
@@ -92,7 +90,6 @@ matrix:
     - php: hhvm
 
 notifications:
-  irc: "irc.freenode.org#zftalk.dev"
   email: false
 
 before_install:
@@ -100,10 +97,10 @@ before_install:
   - composer self-update
   - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then composer require --dev --no-update satooshi/php-coveralls ; fi
-  - if [[ $SERVICE_MANAGER_VERSION != '' ]]; then composer require --no-update "zendframework/zend-servicemanager:$SERVICE_MANAGER_VERSION" ; fi
-  - if [[ $SERVICE_MANAGER_VERSION == '' ]]; then composer require --no-update "zendframework/zend-servicemanager:^3.0.3" ; fi
-  - if [[ $EVENT_MANAGER_VERSION != '' ]]; then composer require --no-update "zendframework/zend-eventmanager:$EVENT_MANAGER_VERSION" ; fi
-  - if [[ $EVENT_MANAGER_VERSION == '' ]]; then composer require --no-update "zendframework/zend-eventmanager:^3.0" ; fi
+  - if [[ $SERVICE_MANAGER_VERSION != '' ]]; then composer require --no-update "laminas/laminas-servicemanager:$SERVICE_MANAGER_VERSION" ; fi
+  - if [[ $SERVICE_MANAGER_VERSION == '' ]]; then composer require --no-update "laminas/laminas-servicemanager:^3.0.3" ; fi
+  - if [[ $EVENT_MANAGER_VERSION != '' ]]; then composer require --no-update "laminas/laminas-eventmanager:$EVENT_MANAGER_VERSION" ; fi
+  - if [[ $EVENT_MANAGER_VERSION == '' ]]; then composer require --no-update "laminas/laminas-eventmanager:^3.0" ; fi
 
 install:
   - travis_retry composer install --no-interaction --ignore-platform-reqs
@@ -130,10 +127,10 @@ script:
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then ./vendor/bin/phpunit --coverage-clover clover.xml ; fi
   - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then ./vendor/bin/phpunit ; fi
   - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then ./vendor/bin/php-cs-fixer fix -v --diff --dry-run ; fi
-  - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then wget -O theme-installer.sh "https://raw.githubusercontent.com/zendframework/zf-mkdoc-theme/master/theme-installer.sh" ; chmod 755 theme-installer.sh ; ./theme-installer.sh ; fi
+  - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then wget -O theme-installer.sh "https://raw.githubusercontent.com/laminas/laminas-mkdoc-theme/master/theme-installer.sh" ; chmod 755 theme-installer.sh ; ./theme-installer.sh ; fi
 
 after_success:
-  - if [[ $DEPLOY_DOCS == "true" ]]; then echo "Preparing to build and deploy documentation" ; ./zf-mkdoc-theme/deploy.sh ; echo "Completed deploying documentation" ; fi
+  - if [[ $DEPLOY_DOCS == "true" ]]; then echo "Preparing to build and deploy documentation" ; ./laminas-mkdoc-theme/deploy.sh ; echo "Completed deploying documentation" ; fi
 
 after_script:
   - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then ./vendor/bin/coveralls ; fi
