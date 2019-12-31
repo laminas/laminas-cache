@@ -1,19 +1,17 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\TestAsset;
+namespace LaminasTest\Cache\Storage\TestAsset;
 
-use Zend\Cache\Storage\Plugin;
-use Zend\Cache\Storage\Plugin\AbstractPlugin;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\Event;
+use Laminas\Cache\Storage\Plugin;
+use Laminas\Cache\Storage\Plugin\AbstractPlugin;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\Event;
 
 class MockPlugin extends AbstractPlugin
 {
