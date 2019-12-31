@@ -1,6 +1,6 @@
 <?php
 
-namespace ZendTest\Cache\Pattern\TestAsset;
+namespace LaminasTest\Cache\Pattern\TestAsset;
 
 class FailableCallback
 {

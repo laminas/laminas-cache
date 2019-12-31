@@ -1,16 +1,17 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018-2019 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage\Adapter;
+namespace Laminas\Cache\Storage\Adapter;
 
+use Laminas\Cache\Exception;
 use MongoDB\Client;
 use MongoDB\Collection;
 use MongoDB\Driver\Exception\Exception as MongoDriverException;
-use Zend\Cache\Exception;
 
 /**
  * Resource manager for the ext-mongodb adapter.
@@ -98,7 +99,7 @@ class ExtMongoDbResourceManager
                 }
 
                 $collection = $resource['client_instance']->selectCollection(
-                    isset($resource['db']) ? $resource['db'] : 'zend',
+                    isset($resource['db']) ? $resource['db'] : 'laminas',
                     isset($resource['collection']) ? $resource['collection'] : 'cache'
                 );
                 $collection->createIndex(['key' => 1]);

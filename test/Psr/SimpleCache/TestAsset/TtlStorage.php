@@ -1,14 +1,15 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2019 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\SimpleCache\TestAsset;
+namespace LaminasTest\Cache\Psr\SimpleCache\TestAsset;
 
-use Zend\Cache\Storage\Adapter;
-use Zend\Cache\Storage\Capabilities;
+use Laminas\Cache\Storage\Adapter;
+use Laminas\Cache\Storage\Capabilities;
 
 class TtlStorage extends Adapter\AbstractAdapter
 {

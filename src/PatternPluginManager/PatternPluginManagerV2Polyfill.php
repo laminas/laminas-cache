@@ -1,18 +1,19 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\PatternPluginManager;
+namespace Laminas\Cache\PatternPluginManager;
 
-use Zend\Cache\Pattern;
-use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\Cache\Pattern;
+use Laminas\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 /**
- * zend-servicemanager v2-compatible plugin manager implementation for cache pattern adapters.
+ * laminas-servicemanager v2-compatible plugin manager implementation for cache pattern adapters.
  *
  * Enforces that retrieved adapters are instances of
  * Pattern\PatternInterface. Additionally, it registers a number of default
@@ -33,6 +34,20 @@ class PatternPluginManagerV2Polyfill extends AbstractPluginManager
         'Object'   => Pattern\ObjectCache::class,
         'output'   => Pattern\OutputCache::class,
         'Output'   => Pattern\OutputCache::class,
+
+        // Legacy Zend Framework aliases
+        \Zend\Cache\Pattern\CallbackCache::class => Pattern\CallbackCache::class,
+        \Zend\Cache\Pattern\CaptureCache::class => Pattern\CaptureCache::class,
+        \Zend\Cache\Pattern\ClassCache::class => Pattern\ClassCache::class,
+        \Zend\Cache\Pattern\ObjectCache::class => Pattern\ObjectCache::class,
+        \Zend\Cache\Pattern\OutputCache::class => Pattern\OutputCache::class,
+
+        // v2 normalized FQCNs
+        'zendcachepatterncallbackcache' => Pattern\CallbackCache::class,
+        'zendcachepatterncapturecache' => Pattern\CaptureCache::class,
+        'zendcachepatternclasscache' => Pattern\ClassCache::class,
+        'zendcachepatternobjectcache' => Pattern\ObjectCache::class,
+        'zendcachepatternoutputcache' => Pattern\OutputCache::class,
     ];
 
     protected $factories = [
@@ -43,11 +58,11 @@ class PatternPluginManagerV2Polyfill extends AbstractPluginManager
         Pattern\OutputCache::class      => InvokableFactory::class,
 
         // v2 normalized FQCNs
-        'zendcachepatterncallbackcache' => InvokableFactory::class,
-        'zendcachepatterncapturecache'  => InvokableFactory::class,
-        'zendcachepatternclasscache'    => InvokableFactory::class,
-        'zendcachepatternobjectcache'   => InvokableFactory::class,
-        'zendcachepatternoutputcache'   => InvokableFactory::class,
+        'laminascachepatterncallbackcache' => InvokableFactory::class,
+        'laminascachepatterncapturecache'  => InvokableFactory::class,
+        'laminascachepatternclasscache'    => InvokableFactory::class,
+        'laminascachepatternobjectcache'   => InvokableFactory::class,
+        'laminascachepatternoutputcache'   => InvokableFactory::class,
     ];
 
     /**

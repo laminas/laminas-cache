@@ -8,7 +8,7 @@ class being cached, and caches static properties.
 ## Quick Start
 
 ```php
-use Zend\Cache\PatternFactory;
+use Laminas\Cache\PatternFactory;
 
 $classCache = PatternFactory::factory('class', [
     'class'   => 'MyClass',
@@ -20,7 +20,7 @@ $classCache = PatternFactory::factory('class', [
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Zend\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
+`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
 `class` | `string` | none | Name of the class for which to cache method output.
 `cache_output` | `boolean` | `true` | Whether or not to cache method output.
 `cache_by_default` | `boolean` | `true` | Cache all method calls by default.
@@ -33,10 +33,10 @@ In addition to the methods defined in `PatternInterface`, this implementation
 exposes the following methods.
 
 ```php
-namespace Zend\Cache\Pattern;
+namespace Laminas\Cache\Pattern;
 
-use Zend\Cache;
-use Zend\Cache\Exception;
+use Laminas\Cache;
+use Laminas\Cache\Exception;
 
 class ClassCache extends CallbackCache
 {
@@ -134,8 +134,8 @@ class ClassCache extends CallbackCache
 ### Caching of Import Feeds
 
 ```php
-$cachedFeedReader = Zend\Cache\PatternFactory::factory('class', [
-    'class'   => 'Zend\Feed\Reader\Reader',
+$cachedFeedReader = Laminas\Cache\PatternFactory::factory('class', [
+    'class'   => 'Laminas\Feed\Reader\Reader',
     'storage' => 'apc',
 
     // The feed reader doesn't output anything,

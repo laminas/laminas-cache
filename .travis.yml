@@ -14,29 +14,30 @@ env:
     - COMPOSER_ARGS="--no-interaction"
     - COVERAGE_DEPS="php-coveralls/php-coveralls"
     - EXTMONGODB_DEPS="mongodb/mongodb"
-    - TESTS_ZEND_CACHE_APC_ENABLED=true
-    - TESTS_ZEND_CACHE_APCU_ENABLED=true
-    - TESTS_ZEND_CACHE_FILESYSTEM_DIR=/dev/shm
-    - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=true
-    - TESTS_ZEND_CACHE_MEMCACHED_HOST="127.0.0.1"
-    - TESTS_ZEND_CACHE_MEMCACHED_PORT=11211
-    - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false # Supported only on PHP 5.6
-    - TESTS_ZEND_CACHE_MEMCACHE_HOST=$TESTS_ZEND_CACHE_MEMCACHED_HOST
-    - TESTS_ZEND_CACHE_MEMCACHE_PORT=$TESTS_ZEND_CACHE_MEMCACHED_PORT
-    - TESTS_ZEND_CACHE_MONGODB_ENABLED=true
-    - TESTS_ZEND_CACHE_EXTMONGODB_ENABLED=true
-    - TESTS_ZEND_CACHE_REDIS_ENABLED=true
-    - TESTS_ZEND_CACHE_REDIS_HOST="127.0.0.1"
-    - TESTS_ZEND_CACHE_REDIS_PORT=6379
-    - TESTS_ZEND_CACHE_REDIS_PASSWORD=""
-    - TESTS_ZEND_CACHE_REDIS_DATABASE=0
-    - TESTS_ZEND_CACHE_XCACHE_ENABLED=false # Supported only on PHP 5.6
-    - TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH=true
-    - TESTS_ZEND_CACHE_XCACHE_ADMIN_USER=travis
-    - TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS=test
-    - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=false
+    - TESTS_LAMINAS_CACHE_APC_ENABLED=true
+    - TESTS_LAMINAS_CACHE_APCU_ENABLED=true
+    - TESTS_LAMINAS_CACHE_FILESYSTEM_DIR=/dev/shm
+    - TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED=true
+    - TESTS_LAMINAS_CACHE_MEMCACHED_HOST="127.0.0.1"
+    - TESTS_LAMINAS_CACHE_MEMCACHED_PORT=11211
+    - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=false # Supported only on PHP 5.6
+    - TESTS_LAMINAS_CACHE_MEMCACHE_HOST=$TESTS_LAMINAS_CACHE_MEMCACHED_HOST
+    - TESTS_LAMINAS_CACHE_MEMCACHE_PORT=$TESTS_LAMINAS_CACHE_MEMCACHED_PORT
+    - TESTS_LAMINAS_CACHE_MONGODB_ENABLED=true
+    - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=true
+    - TESTS_LAMINAS_CACHE_REDIS_ENABLED=true
+    - TESTS_LAMINAS_CACHE_REDIS_HOST="127.0.0.1"
+    - TESTS_LAMINAS_CACHE_REDIS_PORT=6379
+    - TESTS_LAMINAS_CACHE_REDIS_PASSWORD=""
+    - TESTS_LAMINAS_CACHE_REDIS_DATABASE=0
+    - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=false # Supported only on PHP 5.6
+    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_AUTH=true
+    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_USER=travis
+    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_PASS=test
+    - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=false
 
 matrix:
+  fast_finish: true
   include:
     - php: 5.6
       env:
@@ -45,20 +46,9 @@ matrix:
         - MEMCACHE_PECL_VERSION="memcache-2.2.7"
         - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - REDIS_PECL_VERSION="redis-2.2.3"
-        - TESTS_ZEND_CACHE_EXTMONGODB_ENABLED=false
-        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
-        - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
-    - php: 5.6
-      env:
-        - DEPS=locked
-        - LEGACY_DEPS="phpbench/phpbench phpunit/phpunit"
-        - APCU_PECL_VERSION="apcu-4.0.10"
-        - MEMCACHE_PECL_VERSION="memcache-3.0.7"
-        - MEMCACHED_PECL_VERSION="memcached-2.2.0"
-        - REDIS_PECL_VERSION="redis-3.1.6"
-        - TESTS_ZEND_CACHE_EXTMONGODB_ENABLED=false
-        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
-        - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
+        - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=true
+        - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=true
     - php: 5.6
       env:
         - DEPS=latest
@@ -66,79 +56,56 @@ matrix:
         - MEMCACHE_PECL_VERSION="memcache-3.0.8"
         - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - REDIS_PECL_VERSION="redis-4.3.0"
-        - TESTS_ZEND_CACHE_EXTMONGODB_ENABLED=false
-        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
-        - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
+        - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=true
+        - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=true
     - php: 7
       env:
         - DEPS=lowest
         - APCU_PECL_VERSION="apcu-5.1.2"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
         - REDIS_PECL_VERSION="redis-4.0.0"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
-        - TESTS_ZEND_CACHE_EXTMONGODB_ENABLED=false
-    - php: 7
-      env:
-        - DEPS=locked
-        - LEGACY_DEPS="phpbench/phpbench phpunit/phpunit"
-        - APCU_PECL_VERSION="apcu-5.1.8"
-        - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
-        - REDIS_PECL_VERSION="redis-5.0.0"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
-        - TESTS_ZEND_CACHE_EXTMONGODB_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
+        - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=false
     - php: 7
       env:
         - DEPS=latest
         - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc"
         - REDIS_PECL_VERSION="redis"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
-        - TESTS_ZEND_CACHE_EXTMONGODB_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
+        - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=false
     - php: 7.1
       env:
         - DEPS=lowest
         - APCU_PECL_VERSION="apcu-5.1.7"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
         - REDIS_PECL_VERSION="redis-4.0.0"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
+        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.1
       env:
-        - DEPS=locked
+        - DEPS=latest
         - CS_CHECK=true
         - BENCHMARKS=true
         - TEST_COVERAGE=true
-        - APCU_PECL_VERSION="apcu-5.1.8"
-        - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
-        - REDIS_PECL_VERSION="redis-5.0.0"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
-    - php: 7.1
-      env:
-        - DEPS=latest
         - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc"
         - REDIS_PECL_VERSION="redis"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
+        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.2
       env:
         - DEPS=lowest
         - APCU_PECL_VERSION="apcu-5.1.10"
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
         - REDIS_PECL_VERSION="redis-4.0.0"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
-    - php: 7.2
-      env:
-        - DEPS=locked
-        - APCU_PECL_VERSION="apcu-5.1.10"
-        - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
-        - REDIS_PECL_VERSION="redis-5.0.0"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
+        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.2
       env:
         - DEPS=latest
         - APCU_PECL_VERSION="apcu"
         - APCU_BC_PECL_VERSION="apcu_bc"
         - REDIS_PECL_VERSION="redis"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
+        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.3
       env:
         - DEPS=lowest
@@ -146,15 +113,7 @@ matrix:
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
         - MEMCACHED_PECL_VERSION="memcached-3.1.2"
         - REDIS_PECL_VERSION="redis-4.0.0"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
-    - php: 7.3
-      env:
-        - DEPS=locked
-        - APCU_PECL_VERSION="apcu-5.1.10"
-        - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
-        - MEMCACHED_PECL_VERSION="memcached-3.1.2"
-        - REDIS_PECL_VERSION="redis-5.0.0"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
+        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.3
       env:
         - DEPS=latest
@@ -162,7 +121,7 @@ matrix:
         - APCU_BC_PECL_VERSION="apcu_bc"
         - MEMCACHED_PECL_VERSION="memcached"
         - REDIS_PECL_VERSION="redis"
-        - TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL=true
+        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
 
 before_install:
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
@@ -180,7 +139,7 @@ install:
         sed -i 's/extension="apc.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
     fi ;
 
-  - if [[ $TESTS_ZEND_CACHE_XCACHE_ENABLED == 'true' ]]; then
+  - if [[ $TESTS_LAMINAS_CACHE_XCACHE_ENABLED == 'true' ]]; then
         git clone https://github.com/lighttpd/xcache.git
         && (
             cd xcache
@@ -195,29 +154,29 @@ install:
         phpenv config-add .ci/apcu_bc.ini ;
     fi ;
 
-  - if [[ $TESTS_ZEND_CACHE_REDIS_ENABLED == 'true' ]]; then
+  - if [[ $TESTS_LAMINAS_CACHE_REDIS_ENABLED == 'true' ]]; then
         echo "no" | pecl install -f $REDIS_PECL_VERSION ;
     fi ;
 
-  - if [[ $TESTS_ZEND_CACHE_MEMCACHE_ENABLED == 'true' ]]; then
+  - if [[ $TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED == 'true' ]]; then
         yes|CFLAGS="-fgnu89-inline" pecl install -f $MEMCACHE_PECL_VERSION ;
     fi ;
 
-  - if [[ $TESTS_ZEND_CACHE_MEMCACHED_ENABLED == 'true' && $MEMCACHED_PECL_VERSION != '' ]]; then
+  - if [[ $TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED == 'true' && $MEMCACHED_PECL_VERSION != '' ]]; then
         echo "no" | pecl install -f $MEMCACHED_PECL_VERSION ;
-    elif [[ $TESTS_ZEND_CACHE_MEMCACHED_ENABLED == 'true' ]]; then
+    elif [[ $TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED == 'true' ]]; then
         phpenv config-add .ci/memcached.ini ;
     fi ;
 
-  - if [[ $TESTS_ZEND_CACHE_MONGODB_ENABLED == 'true' && $TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL != 'true' ]]; then
+  - if [[ $TESTS_LAMINAS_CACHE_MONGODB_ENABLED == 'true' && $TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL != 'true' ]]; then
         phpenv config-add .ci/mongo.ini ;
     fi ;
 
-  - if [[ $TESTS_ZEND_CACHE_EXTMONGODB_ENABLED == 'true' ]]; then
+  - if [[ $TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED == 'true' ]]; then
         phpenv config-add .ci/mongodb.ini ;
     fi ;
 
-  - if [[ $TESTS_ZEND_CACHE_XCACHE_ENABLED == 'true' ]]; then
+  - if [[ $TESTS_LAMINAS_CACHE_XCACHE_ENABLED == 'true' ]]; then
         phpenv config-add .ci/xcache.ini ;
     fi ;
 
@@ -226,8 +185,8 @@ install:
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
-  - if [[ $TESTS_ZEND_CACHE_MONGODB_USE_POLYFILL == 'true' ]]; then travis_retry composer require --dev --no-update $COMPOSER_ARGS mongofill/mongofill:dev-master ; fi
-  - if [[ $TESTS_ZEND_CACHE_EXTMONGODB_ENABLED == 'true' ]]; then travis_retry composer require --dev --no-update $COMPOSER_ARGS $EXTMONGODB_DEPS ; fi
+  - if [[ $TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL == 'true' ]]; then travis_retry composer require --dev --no-update $COMPOSER_ARGS mongofill/mongofill:dev-master ; fi
+  - if [[ $TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED == 'true' ]]; then travis_retry composer require --dev --no-update $COMPOSER_ARGS $EXTMONGODB_DEPS ; fi
   - stty cols 120 && composer show
   - pecl list
   - php -m

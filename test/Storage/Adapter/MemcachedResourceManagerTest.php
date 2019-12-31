@@ -1,24 +1,23 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
+use Laminas\Cache\Storage\Adapter\MemcachedResourceManager;
 use PHPUnit\Framework\TestCase;
-use Zend\Cache\Storage\Adapter\MemcachedResourceManager;
 
 /**
  * PHPUnit test case
  */
 
 /**
- * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Adapter\MemcachedResourceManager
+ * @group      Laminas_Cache
+ * @covers Laminas\Cache\Storage\Adapter\MemcachedResourceManager
  */
 class MemcachedResourceManagerTest extends TestCase
 {
@@ -221,7 +220,7 @@ class MemcachedResourceManagerTest extends TestCase
         // php-memcached is required to set libmemcached options
         if (is_array($resource) && isset($resource['lib_options']) && count($resource['lib_options']) > 0) {
             if (! class_exists('Memcached', false)) {
-                $this->expectException('Zend\Cache\Exception\InvalidArgumentException');
+                $this->expectException('Laminas\Cache\Exception\InvalidArgumentException');
                 $this->expectExceptionMessage('Unknown libmemcached option');
             }
         }
@@ -248,7 +247,7 @@ class MemcachedResourceManagerTest extends TestCase
             ->getMock();
 
         if (! $memcachedInstalled) {
-            $this->expectException('Zend\Cache\Exception\InvalidArgumentException');
+            $this->expectException('Laminas\Cache\Exception\InvalidArgumentException');
         } else {
             $resourceMock
                 ->expects($this->once())

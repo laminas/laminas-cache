@@ -1,21 +1,22 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018-2019 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
+use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\Adapter\ExtMongoDbResourceManager;
 use MongoDB\Client;
 use MongoDB\Collection;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Zend\Cache\Exception;
-use Zend\Cache\Storage\Adapter\ExtMongoDbResourceManager;
 
 /**
- * @covers Zend\Cache\Storage\Adapter\ExtMongoDbResourceManager
+ * @covers Laminas\Cache\Storage\Adapter\ExtMongoDbResourceManager
  */
 class ExtMongoDbResourceManagerTest extends TestCase
 {
@@ -26,8 +27,8 @@ class ExtMongoDbResourceManagerTest extends TestCase
 
     public function setUp()
     {
-        if (getenv('TESTS_ZEND_CACHE_EXTMONGODB_ENABLED') != 'true') {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_EXTMONGODB_ENABLED to run this test');
+        if (getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED') != 'true') {
+            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED to run this test');
         }
 
         if (! extension_loaded('mongodb') || ! class_exists(Client::class)) {
@@ -43,10 +44,10 @@ class ExtMongoDbResourceManagerTest extends TestCase
 
         $id = 'foo';
 
-        $client = new Client(getenv('TESTS_ZEND_CACHE_EXTMONGODB_CONNECTSTRING'));
+        $client = new Client(getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_CONNECTSTRING'));
         $resource = $client->selectCollection(
-            getenv('TESTS_ZEND_CACHE_EXTMONGODB_DATABASE'),
-            getenv('TESTS_ZEND_CACHE_EXTMONGODB_COLLECTION')
+            getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_DATABASE'),
+            getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_COLLECTION')
         );
 
         $this->object->setResource($id, $resource);
@@ -105,10 +106,10 @@ class ExtMongoDbResourceManagerTest extends TestCase
     {
         $id = 'foo';
 
-        $client = new Client(getenv('TESTS_ZEND_CACHE_EXTMONGODB_CONNECTSTRING'));
+        $client = new Client(getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_CONNECTSTRING'));
         $resource = $client->selectCollection(
-            getenv('TESTS_ZEND_CACHE_EXTMONGODB_DATABASE'),
-            getenv('TESTS_ZEND_CACHE_EXTMONGODB_COLLECTION')
+            getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_DATABASE'),
+            getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_COLLECTION')
         );
 
         $this->object->setResource($id, $resource);
@@ -121,8 +122,8 @@ class ExtMongoDbResourceManagerTest extends TestCase
         $id = 'foo';
 
         $resource = [
-            'db' => getenv('TESTS_ZEND_CACHE_EXTMONGODB_DATABASE'),
-            'server' => getenv('TESTS_ZEND_CACHE_EXTMONGODB_CONNECTSTRING'),
+            'db' => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_DATABASE'),
+            'server' => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_CONNECTSTRING'),
         ];
 
         $this->object->setResource($id, $resource);
@@ -133,10 +134,10 @@ class ExtMongoDbResourceManagerTest extends TestCase
     public function testGetResourceNewResource()
     {
         $id                = 'foo';
-        $server            = getenv('TESTS_ZEND_CACHE_EXTMONGODB_CONNECTSTRING');
+        $server            = getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_CONNECTSTRING');
         $connectionOptions = ['connectTimeoutMS' => 5];
-        $database          = getenv('TESTS_ZEND_CACHE_EXTMONGODB_DATABASE');
-        $collection        = getenv('TESTS_ZEND_CACHE_EXTMONGODB_COLLECTION');
+        $database          = getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_DATABASE');
+        $collection        = getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_COLLECTION');
 
         $this->object->setServer($id, $server);
         $this->object->setConnectionOptions($id, $connectionOptions);
@@ -151,8 +152,8 @@ class ExtMongoDbResourceManagerTest extends TestCase
         $id                = 'foo';
         $server            = 'mongodb://unknown.unknown';
         $connectionOptions = ['connectTimeoutMS' => 5];
-        $database          = getenv('TESTS_ZEND_CACHE_EXTMONGODB_DATABASE');
-        $collection        = getenv('TESTS_ZEND_CACHE_EXTMONGODB_COLLECTION');
+        $database          = getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_DATABASE');
+        $collection        = getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_COLLECTION');
 
         $this->object->setServer($id, $server);
         $this->object->setConnectionOptions($id, $connectionOptions);
