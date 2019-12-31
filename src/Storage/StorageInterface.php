@@ -1,20 +1,18 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 use Traversable;
 
 /**
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage Storage
  */
 interface StorageInterface
@@ -43,7 +41,7 @@ interface StorageInterface
      * @param  bool $success
      * @param  mixed   $casToken
      * @return mixed Data on success, null on failure
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function getItem($key, & $success = null, & $casToken = null);
 
@@ -52,7 +50,7 @@ interface StorageInterface
      *
      * @param  array $keys
      * @return array Associative array of keys and values
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function getItems(array $keys);
 
@@ -61,7 +59,7 @@ interface StorageInterface
      *
      * @param  string $key
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function hasItem($key);
 
@@ -70,7 +68,7 @@ interface StorageInterface
      *
      * @param  array $keys
      * @return array Array of found keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function hasItems(array $keys);
 
@@ -79,7 +77,7 @@ interface StorageInterface
      *
      * @param  string $key
      * @return array|bool Metadata on success, false on failure
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function getMetadata($key);
 
@@ -88,7 +86,7 @@ interface StorageInterface
      *
      * @param  array $keys
      * @return array Associative array of keys and metadata
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function getMetadatas(array $keys);
 
@@ -100,7 +98,7 @@ interface StorageInterface
      * @param  string $key
      * @param  mixed  $value
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function setItem($key, $value);
 
@@ -109,7 +107,7 @@ interface StorageInterface
      *
      * @param  array $keyValuePairs
      * @return array Array of not stored keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function setItems(array $keyValuePairs);
 
@@ -119,7 +117,7 @@ interface StorageInterface
      * @param  string $key
      * @param  mixed  $value
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function addItem($key, $value);
 
@@ -128,7 +126,7 @@ interface StorageInterface
      *
      * @param  array $keyValuePairs
      * @return array Array of not stored keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function addItems(array $keyValuePairs);
 
@@ -138,7 +136,7 @@ interface StorageInterface
      * @param  string $key
      * @param  mixed  $value
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function replaceItem($key, $value);
 
@@ -147,7 +145,7 @@ interface StorageInterface
      *
      * @param  array $keyValuePairs
      * @return array Array of not stored keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function replaceItems(array $keyValuePairs);
 
@@ -161,7 +159,7 @@ interface StorageInterface
      * @param  string $key
      * @param  mixed  $value
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      * @see    getItem()
      * @see    setItem()
      */
@@ -172,7 +170,7 @@ interface StorageInterface
      *
      * @param  string $key
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function touchItem($key);
 
@@ -181,7 +179,7 @@ interface StorageInterface
      *
      * @param  array $keys
      * @return array Array of not updated keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function touchItems(array $keys);
 
@@ -190,7 +188,7 @@ interface StorageInterface
      *
      * @param  string $key
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function removeItem($key);
 
@@ -199,7 +197,7 @@ interface StorageInterface
      *
      * @param  array $keys
      * @return array Array of not removed keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function removeItems(array $keys);
 
@@ -209,7 +207,7 @@ interface StorageInterface
      * @param  string $key
      * @param  int    $value
      * @return int|bool The new value on success, false on failure
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function incrementItem($key, $value);
 
@@ -218,7 +216,7 @@ interface StorageInterface
      *
      * @param  array $keyValuePairs
      * @return array Associative array of keys and new values
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function incrementItems(array $keyValuePairs);
 
@@ -228,7 +226,7 @@ interface StorageInterface
      * @param  string $key
      * @param  int    $value
      * @return int|bool The new value on success, false on failure
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function decrementItem($key, $value);
 
@@ -237,7 +235,7 @@ interface StorageInterface
      *
      * @param  array $keyValuePairs
      * @return array Associative array of keys and new values
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function decrementItems(array $keyValuePairs);
 

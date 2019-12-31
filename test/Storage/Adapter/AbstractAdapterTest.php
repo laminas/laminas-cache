@@ -1,23 +1,21 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache;
-use Zend\Cache\Exception;
+use Laminas\Cache;
+use Laminas\Cache\Exception;
 
 /**
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage UnitTests
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +23,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Mock of the abstract storage adapter
      *
-     * @var Zend\Cache\Storage\Adapter\AbstractAdapter
+     * @var Laminas\Cache\Storage\Adapter\AbstractAdapter
      */
     protected $_storage;
 
@@ -39,7 +37,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $this->_storage = $this->getMockForAbstractAdapter();
 
         $options = $this->_storage->getOptions();
-        $this->assertInstanceOf('Zend\Cache\Storage\Adapter\AdapterOptions', $options);
+        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\AdapterOptions', $options);
         $this->assertInternalType('boolean', $options->getWritable());
         $this->assertInternalType('boolean', $options->getReadable());
         $this->assertInternalType('integer', $options->getTtl());
@@ -73,7 +71,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetTtlThrowsInvalidArgumentException()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setTtl(-1);
     }
 
@@ -109,7 +107,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetKeyPatternThrowsExceptionOnInvalidPattern()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setKeyPattern('#');
     }
 
@@ -117,7 +115,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storage = $this->getMockForAbstractAdapter();
 
-        $plugin = new \ZendTest\Cache\Storage\TestAsset\MockPlugin();
+        $plugin = new \LaminasTest\Cache\Storage\TestAsset\MockPlugin();
 
         // no plugin registered
         $this->assertFalse($this->_storage->hasPlugin($plugin));
@@ -145,7 +143,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storage = $this->getMockForAbstractAdapter();
 
-        $plugin = new \ZendTest\Cache\Storage\TestAsset\MockPlugin();
+        $plugin = new \LaminasTest\Cache\Storage\TestAsset\MockPlugin();
         $this->_storage->addPlugin($plugin);
 
         $params = new \ArrayObject(array(
@@ -157,14 +155,14 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod(get_class($this->_storage), 'triggerPre');
         $method->setAccessible(true);
         $rsCollection = $method->invoke($this->_storage, 'setItem', $params);
-        $this->assertInstanceOf('Zend\EventManager\ResponseCollection', $rsCollection);
+        $this->assertInstanceOf('Laminas\EventManager\ResponseCollection', $rsCollection);
 
         // test called event
         $calledEvents = $plugin->getCalledEvents();
         $this->assertEquals(1, count($calledEvents));
 
         $event = current($calledEvents);
-        $this->assertInstanceOf('Zend\Cache\Storage\Event', $event);
+        $this->assertInstanceOf('Laminas\Cache\Storage\Event', $event);
         $this->assertEquals('setItem.pre', $event->getName());
         $this->assertSame($this->_storage, $event->getTarget());
         $this->assertSame($params, $event->getParams());
@@ -174,7 +172,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storage = $this->getMockForAbstractAdapter();
 
-        $plugin = new \ZendTest\Cache\Storage\TestAsset\MockPlugin();
+        $plugin = new \LaminasTest\Cache\Storage\TestAsset\MockPlugin();
         $this->_storage->addPlugin($plugin);
 
         $params = new \ArrayObject(array(
@@ -196,7 +194,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         // return value of triggerPost and the called event should be the same
         $this->assertSame($result, $event->getResult());
 
-        $this->assertInstanceOf('Zend\Cache\Storage\PostEvent', $event);
+        $this->assertInstanceOf('Laminas\Cache\Storage\PostEvent', $event);
         $this->assertEquals('setItem.post', $event->getName());
         $this->assertSame($this->_storage, $event->getTarget());
         $this->assertSame($params, $event->getParams());
@@ -207,7 +205,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storage = $this->getMockForAbstractAdapter();
 
-        $plugin = new \ZendTest\Cache\Storage\TestAsset\MockPlugin();
+        $plugin = new \LaminasTest\Cache\Storage\TestAsset\MockPlugin();
         $this->_storage->addPlugin($plugin);
 
         $result = null;
@@ -220,7 +218,7 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod(get_class($this->_storage), 'triggerException');
         $method->setAccessible(true);
 
-        $this->setExpectedException('Zend\Cache\Exception\RuntimeException', 'test');
+        $this->setExpectedException('Laminas\Cache\Exception\RuntimeException', 'test');
         $method->invokeArgs($this->_storage, array('setItem', $params, & $result, new Exception\RuntimeException('test')));
     }
 
@@ -735,16 +733,16 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
      * Also sets the adapter options
      *
      * @param array $methods
-     * @return \Zend\Cache\Storage\Adapter\AbstractAdapter
+     * @return \Laminas\Cache\Storage\Adapter\AbstractAdapter
      */
     protected function getMockForAbstractAdapter(array $methods = array())
     {
-        $class = 'Zend\Cache\Storage\Adapter\AbstractAdapter';
+        $class = 'Laminas\Cache\Storage\Adapter\AbstractAdapter';
 
         if (!$methods) {
             $adapter = $this->getMockForAbstractClass($class);
         } else {
-            $reflection = new \ReflectionClass('Zend\Cache\Storage\Adapter\AbstractAdapter');
+            $reflection = new \ReflectionClass('Laminas\Cache\Storage\Adapter\AbstractAdapter');
             foreach ($reflection->getMethods() as $method) {
                 if ($method->isAbstract()) {
                     $methods[] = $method->getName();
