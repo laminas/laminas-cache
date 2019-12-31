@@ -1,18 +1,17 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache\Storage\Adapter\MongoDbResourceManager;
+use Laminas\Cache\Storage\Adapter\MongoDbResourceManager;
 
 /**
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,8 +19,8 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!defined('TESTS_ZEND_CACHE_MONGODB_ENABLED') || !TESTS_ZEND_CACHE_MONGODB_ENABLED) {
-            $this->markTestSkipped("Skipped by TestConfiguration (TESTS_ZEND_CACHE_MONGODB_ENABLED)");
+        if (!defined('TESTS_LAMINAS_CACHE_MONGODB_ENABLED') || !TESTS_LAMINAS_CACHE_MONGODB_ENABLED) {
+            $this->markTestSkipped("Skipped by TestConfiguration (TESTS_LAMINAS_CACHE_MONGODB_ENABLED)");
         }
 
         if (!extension_loaded('mongo') || !class_exists('\Mongo') || !class_exists('\MongoClient')) {
@@ -39,8 +38,8 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
         $id = 'foo';
 
         $clientClass = (version_compare(phpversion('mongo'), '1.3.0', '<')) ? '\Mongo' : '\MongoClient';
-        $client = new $clientClass(TESTS_ZEND_CACHE_MONGODB_CONNECTSTRING);
-        $resource = $client->selectCollection(TESTS_ZEND_CACHE_MONGODB_DATABASE, TESTS_ZEND_CACHE_MONGODB_COLLECTION);
+        $client = new $clientClass(TESTS_LAMINAS_CACHE_MONGODB_CONNECTSTRING);
+        $resource = $client->selectCollection(TESTS_LAMINAS_CACHE_MONGODB_DATABASE, TESTS_LAMINAS_CACHE_MONGODB_COLLECTION);
 
         $this->object->setResource($id, $resource);
 
@@ -64,7 +63,7 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
         $id = 'foo';
         $resource = new \stdClass();
 
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->object->setResource($id, $resource);
     }
 
@@ -90,7 +89,7 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->object->hasResource($id));
 
-        $this->setExpectedException('Zend\Cache\Exception\RuntimeException');
+        $this->setExpectedException('Laminas\Cache\Exception\RuntimeException');
         $this->object->getResource($id);
     }
 
@@ -99,8 +98,8 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
         $id = 'foo';
 
         $clientClass = (version_compare(phpversion('mongo'), '1.3.0', '<')) ? '\Mongo' : '\MongoClient';
-        $client = new $clientClass(TESTS_ZEND_CACHE_MONGODB_CONNECTSTRING);
-        $resource = $client->selectCollection(TESTS_ZEND_CACHE_MONGODB_DATABASE, TESTS_ZEND_CACHE_MONGODB_COLLECTION);
+        $client = new $clientClass(TESTS_LAMINAS_CACHE_MONGODB_CONNECTSTRING);
+        $resource = $client->selectCollection(TESTS_LAMINAS_CACHE_MONGODB_DATABASE, TESTS_LAMINAS_CACHE_MONGODB_COLLECTION);
 
         $this->object->setResource($id, $resource);
 
@@ -110,10 +109,10 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetResourceNewResource()
     {
         $id                = 'foo';
-        $server            = TESTS_ZEND_CACHE_MONGODB_CONNECTSTRING;
+        $server            = TESTS_LAMINAS_CACHE_MONGODB_CONNECTSTRING;
         $connectionOptions = array('connectTimeoutMS' => 5);
-        $database          = TESTS_ZEND_CACHE_MONGODB_DATABASE;
-        $collection        = TESTS_ZEND_CACHE_MONGODB_COLLECTION;
+        $database          = TESTS_LAMINAS_CACHE_MONGODB_DATABASE;
+        $collection        = TESTS_LAMINAS_CACHE_MONGODB_COLLECTION;
 
         $this->object->setServer($id, $server);
         $this->object->setConnectionOptions($id, $connectionOptions);
@@ -128,15 +127,15 @@ class MongoDbResourceManagerTest extends \PHPUnit_Framework_TestCase
         $id                = 'foo';
         $server            = 'mongodb://unknown.unknown';
         $connectionOptions = array('connectTimeoutMS' => 5);
-        $database          = TESTS_ZEND_CACHE_MONGODB_DATABASE;
-        $collection        = TESTS_ZEND_CACHE_MONGODB_COLLECTION;
+        $database          = TESTS_LAMINAS_CACHE_MONGODB_DATABASE;
+        $collection        = TESTS_LAMINAS_CACHE_MONGODB_COLLECTION;
 
         $this->object->setServer($id, $server);
         $this->object->setConnectionOptions($id, $connectionOptions);
         $this->object->setDatabase($id, $database);
         $this->object->setCollection($id, $collection);
 
-        $this->setExpectedException('Zend\Cache\Exception\RuntimeException');
+        $this->setExpectedException('Laminas\Cache\Exception\RuntimeException');
         $this->object->getResource($id);
     }
 }
