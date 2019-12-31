@@ -1,21 +1,20 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
+use Laminas\Cache\Storage\Adapter\AbstractZendServer;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use PHPUnit\Framework\TestCase;
-use Zend\Cache\Storage\Adapter\AdapterOptions;
-use Zend\Cache\Storage\Adapter\AbstractZendServer;
 
 /**
- * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Adapter\AdapterOptions<extended>
+ * @group      Laminas_Cache
+ * @covers Laminas\Cache\Storage\Adapter\AdapterOptions<extended>
  */
 class AbstractZendServerTest extends TestCase
 {
@@ -23,7 +22,7 @@ class AbstractZendServerTest extends TestCase
     {
         $this->_options = new AdapterOptions();
         $this->_storage = $this->getMockForAbstractClass(
-            'Zend\Cache\Storage\Adapter\AbstractZendServer',
+            'Laminas\Cache\Storage\Adapter\AbstractZendServer',
             [],
             '',
             true,
@@ -40,7 +39,7 @@ class AbstractZendServerTest extends TestCase
     public function testGetOptions()
     {
         $options = $this->_storage->getOptions();
-        $this->assertInstanceOf('Zend\Cache\Storage\Adapter\AdapterOptions', $options);
+        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\AdapterOptions', $options);
         $this->assertInternalType('boolean', $options->getWritable());
         $this->assertInternalType('boolean', $options->getReadable());
         $this->assertInternalType('integer', $options->getTtl());

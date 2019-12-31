@@ -1,20 +1,21 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage\Adapter;
+namespace Laminas\Cache\Storage\Adapter;
 
+use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\Capabilities;
+use Laminas\Cache\Storage\FlushableInterface;
+use MongoDB\BSON\UTCDateTime as MongoDate;
 use MongoDB\Client;
 use MongoDB\Collection;
-use MongoDB\BSON\UTCDateTime as MongoDate;
 use MongoDB\Driver\Exception\Exception as MongoDriverException;
 use stdClass;
-use Zend\Cache\Exception;
-use Zend\Cache\Storage\Capabilities;
-use Zend\Cache\Storage\FlushableInterface;
 
 /**
  * Cache storage adapter for ext-mongodb

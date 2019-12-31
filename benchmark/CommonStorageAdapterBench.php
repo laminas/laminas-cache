@@ -1,8 +1,8 @@
 <?php
 
-namespace ZendBench\Cache;
+namespace LaminasBench\Cache;
 
-use Zend\Cache\Storage\StorageAdapterInterface;
+use Laminas\Cache\Storage\StorageAdapterInterface;
 
 /**
  * @BeforeMethods({"setUp"})

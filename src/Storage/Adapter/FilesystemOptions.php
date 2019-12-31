@@ -1,14 +1,15 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage\Adapter;
+namespace Laminas\Cache\Storage\Adapter;
 
+use Laminas\Cache\Exception;
 use Traversable;
-use Zend\Cache\Exception;
 
 /**
  * These are options specific to the Filesystem adapter

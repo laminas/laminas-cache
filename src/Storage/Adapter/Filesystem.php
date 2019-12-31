@@ -1,29 +1,30 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage\Adapter;
+namespace Laminas\Cache\Storage\Adapter;
 
+use ArrayObject;
 use Exception as BaseException;
 use GlobIterator;
+use Laminas\Cache\Exception;
+use Laminas\Cache\Storage;
+use Laminas\Cache\Storage\AvailableSpaceCapableInterface;
+use Laminas\Cache\Storage\Capabilities;
+use Laminas\Cache\Storage\ClearByNamespaceInterface;
+use Laminas\Cache\Storage\ClearByPrefixInterface;
+use Laminas\Cache\Storage\ClearExpiredInterface;
+use Laminas\Cache\Storage\FlushableInterface;
+use Laminas\Cache\Storage\IterableInterface;
+use Laminas\Cache\Storage\OptimizableInterface;
+use Laminas\Cache\Storage\TaggableInterface;
+use Laminas\Cache\Storage\TotalSpaceCapableInterface;
+use Laminas\Stdlib\ErrorHandler;
 use stdClass;
-use Zend\Cache\Exception;
-use Zend\Cache\Storage;
-use Zend\Cache\Storage\AvailableSpaceCapableInterface;
-use Zend\Cache\Storage\Capabilities;
-use Zend\Cache\Storage\ClearByNamespaceInterface;
-use Zend\Cache\Storage\ClearByPrefixInterface;
-use Zend\Cache\Storage\ClearExpiredInterface;
-use Zend\Cache\Storage\FlushableInterface;
-use Zend\Cache\Storage\IterableInterface;
-use Zend\Cache\Storage\OptimizableInterface;
-use Zend\Cache\Storage\TaggableInterface;
-use Zend\Cache\Storage\TotalSpaceCapableInterface;
-use Zend\Stdlib\ErrorHandler;
-use ArrayObject;
 
 class Filesystem extends AbstractAdapter implements
     AvailableSpaceCapableInterface,

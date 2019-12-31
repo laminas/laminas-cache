@@ -1,28 +1,29 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\CacheItemPool;
+namespace LaminasTest\Cache\Psr\CacheItemPool;
 
+use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Laminas\Cache\Storage\Adapter\AbstractAdapter;
+use Laminas\Cache\Storage\Capabilities;
+use Laminas\Cache\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Psr\Cache\CacheItemInterface;
 use stdClass;
-use Zend\Cache\Exception;
-use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
-use Zend\Cache\Storage\Adapter\AbstractAdapter;
-use Zend\Cache\Storage\Capabilities;
-use Zend\Cache\Storage\StorageInterface;
 
 class CacheItemPoolDecoratorTest extends TestCase
 {
     use MockStorageTrait;
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\CacheException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
      */
     public function testStorageNotFlushableThrowsException()
     {
@@ -36,7 +37,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\CacheException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
      */
     public function testStorageNeedsSerializerWillThrowException()
     {
@@ -64,7 +65,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\CacheException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
      */
     public function testStorageFalseStaticTtlThrowsException()
     {
@@ -73,7 +74,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\CacheException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
      */
     public function testStorageZeroMinTtlThrowsException()
     {
@@ -94,7 +95,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testGetItemInvalidKeyThrowsException($key)
     {
@@ -112,7 +113,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testGetItemInvalidArgumentExceptionRethrown()
     {
@@ -167,7 +168,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testGetItemsInvalidKeyThrowsException()
     {
@@ -189,7 +190,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testGetItemsInvalidArgumentExceptionRethrown()
     {
@@ -239,7 +240,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testSaveForeignItemThrowsException()
     {
@@ -258,7 +259,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testSaveItemInvalidArgumentExceptionRethrown()
     {
@@ -304,7 +305,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testHasItemInvalidKeyThrowsException($key)
     {
@@ -320,7 +321,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testHasItemInvalidArgumentExceptionRethrown()
     {
@@ -363,7 +364,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testClearByNamespaceReturnsTrue()
     {
-        $storage = $this->getStorageProphesy(false, ['namespace' => 'zfcache']);
+        $storage = $this->getStorageProphesy(false, ['namespace' => 'laminascache']);
         $storage->clearByNamespace(Argument::any())->willReturn(true)->shouldBeCalled();
         $this->assertTrue($this->getAdapter($storage)->clear());
     }
@@ -377,7 +378,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testClearByNamespaceRuntimeExceptionReturnsFalse()
     {
-        $storage = $this->getStorageProphesy(false, ['namespace' => 'zfcache']);
+        $storage = $this->getStorageProphesy(false, ['namespace' => 'laminascache']);
         $storage->clearByNamespace(Argument::any())
             ->willThrow(Exception\RuntimeException::class)
             ->shouldBeCalled();
@@ -403,7 +404,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testDeleteItemInvalidKeyThrowsException($key)
     {
@@ -419,7 +420,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testDeleteItemInvalidArgumentExceptionRethrown()
     {
@@ -454,7 +455,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testDeleteItemsInvalidKeyThrowsException()
     {
@@ -471,7 +472,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testDeleteItemsInvalidArgumentExceptionRethrown()
     {
@@ -489,7 +490,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testSaveDeferredForeignItemThrowsException()
     {

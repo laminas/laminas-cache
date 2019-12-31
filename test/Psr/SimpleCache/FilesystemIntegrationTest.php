@@ -1,18 +1,19 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\SimpleCache;
+namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
 use DirectoryIterator;
-use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
-use Zend\Cache\Storage\Adapter\Filesystem;
-use Zend\Cache\Storage\Adapter\FilesystemOptions;
-use Zend\Cache\Storage\Plugin\Serializer;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Laminas\Cache\Storage\Adapter\Filesystem;
+use Laminas\Cache\Storage\Adapter\FilesystemOptions;
+use Laminas\Cache\Storage\Plugin\Serializer;
 
 class FilesystemIntegrationTest extends SimpleCacheTest
 {
@@ -26,13 +27,13 @@ class FilesystemIntegrationTest extends SimpleCacheTest
     {
         $this->umask = umask();
 
-        if (getenv('TESTS_ZEND_CACHE_FILESYSTEM_DIR')) {
-            $cacheDir = getenv('TESTS_ZEND_CACHE_FILESYSTEM_DIR');
+        if (getenv('TESTS_LAMINAS_CACHE_FILESYSTEM_DIR')) {
+            $cacheDir = getenv('TESTS_LAMINAS_CACHE_FILESYSTEM_DIR');
         } else {
             $cacheDir = sys_get_temp_dir();
         }
 
-        $this->tmpCacheDir = @tempnam($cacheDir, 'zend_cache_test_');
+        $this->tmpCacheDir = @tempnam($cacheDir, 'laminas_cache_test_');
         if (! $this->tmpCacheDir) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory-file: {$err['message']}");

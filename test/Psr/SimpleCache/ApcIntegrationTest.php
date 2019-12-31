@@ -1,17 +1,18 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\SimpleCache;
+namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
-use Zend\Cache\Exception\ExtensionNotLoadedException;
-use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
-use Zend\Cache\StorageFactory;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\Cache\Exception\ExtensionNotLoadedException;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Laminas\Cache\StorageFactory;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 
 class ApcIntegrationTest extends SimpleCacheTest
 {
@@ -30,8 +31,8 @@ class ApcIntegrationTest extends SimpleCacheTest
 
     protected function setUp()
     {
-        if (! getenv('TESTS_ZEND_CACHE_APC_ENABLED')) {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_APC_ENABLED to run this test');
+        if (! getenv('TESTS_LAMINAS_CACHE_APC_ENABLED')) {
+            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_APC_ENABLED to run this test');
         }
 
         // set non-UTC timezone

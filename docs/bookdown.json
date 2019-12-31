@@ -1,16 +1,16 @@
 {
-    "title": "Zend\\Cache",
+    "title": "Laminas\\Cache",
     "target": "html/",
     "content": [
-        "book/zend.cache.storage.adapter.md",
-        "book/zend.cache.storage.capabilities.md",
-        "book/zend.cache.storage.plugin.md",
-        "book/zend.cache.pattern.md",
-        "book/zend.cache.pattern.callback-cache.md",
-        "book/zend.cache.pattern.class-cache.md",
-        "book/zend.cache.pattern.object-cache.md",
-        "book/zend.cache.pattern.output-cache.md",
-        "book/zend.cache.pattern.capture-cache.md",
-        "book/zend.cache.psr.cacheitempooladapter.md"
+        "book/laminas.cache.storage.adapter.md",
+        "book/laminas.cache.storage.capabilities.md",
+        "book/laminas.cache.storage.plugin.md",
+        "book/laminas.cache.pattern.md",
+        "book/laminas.cache.pattern.callback-cache.md",
+        "book/laminas.cache.pattern.class-cache.md",
+        "book/laminas.cache.pattern.object-cache.md",
+        "book/laminas.cache.pattern.output-cache.md",
+        "book/laminas.cache.pattern.capture-cache.md",
+        "book/laminas.cache.psr.cacheitempooladapter.md"
     ]
 }
