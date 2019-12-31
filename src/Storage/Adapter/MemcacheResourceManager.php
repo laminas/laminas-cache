@@ -1,19 +1,18 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage\Adapter;
+namespace Laminas\Cache\Storage\Adapter;
 
 use ArrayAccess;
+use Laminas\Cache\Exception;
+use Laminas\Stdlib\ArrayUtils;
 use Memcache as MemcacheResource;
 use Traversable;
-use Zend\Cache\Exception;
-use Zend\Stdlib\ArrayUtils;
 
 /**
  * This is a resource manager for memcache
@@ -203,7 +202,7 @@ class MemcacheResourceManager
      *
      * @param  string $id
      * @return int|null
-     * @throws \Zend\Cache\Exception\RuntimeException
+     * @throws \Laminas\Cache\Exception\RuntimeException
      */
     public function getAutoCompressThreshold($id)
     {
@@ -276,7 +275,7 @@ class MemcacheResourceManager
      * @param  string            $id
      * @param  float|string|null $minSavings
      * @return MemcacheResourceManager
-     * @throws \Zend\Cache\Exception\RuntimeException
+     * @throws \Laminas\Cache\Exception\RuntimeException
      */
     public function setAutoCompressMinSavings($id, $minSavings)
     {
