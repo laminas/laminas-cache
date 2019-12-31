@@ -1,21 +1,20 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache;
-use Zend\Session\Container as SessionContainer;
-use Zend\Session\Config\StandardConfig as SessionConfig;
-use ZendTest\Session\TestAsset\TestManager as TestSessionManager;
+use Laminas\Cache;
+use Laminas\Session\Config\StandardConfig as SessionConfig;
+use Laminas\Session\Container as SessionContainer;
+use LaminasTest\Session\TestAsset\TestManager as TestSessionManager;
 
 /**
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class SessionTest extends CommonAdapterTest
 {
@@ -23,7 +22,7 @@ class SessionTest extends CommonAdapterTest
     {
         $_SESSION = array();
         SessionContainer::setDefaultManager(null);
-        $sessionConfig    = new SessionConfig(array('storage' => 'Zend\Session\Storage\ArrayStorage'));
+        $sessionConfig    = new SessionConfig(array('storage' => 'Laminas\Session\Storage\ArrayStorage'));
         $sessionManager   = $manager = new TestSessionManager($sessionConfig);
         $sessionContainer = new SessionContainer('Default', $manager);
 
