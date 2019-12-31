@@ -24,9 +24,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- [#10](https://github.com/zendframework/zend-cache/pull/10) adds TTL support
+- [zendframework/zend-cache#10](https://github.com/zendframework/zend-cache/pull/10) adds TTL support
   for the Redis adapter.
-- [#6](https://github.com/zendframework/zend-cache/pull/6) adds more suggestions
+- [zendframework/zend-cache#6](https://github.com/zendframework/zend-cache/pull/6) adds more suggestions
   to the `composer.json` for PHP extensions supported by storage adapters.
 
 ### Deprecated
@@ -39,5 +39,5 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#9](https://github.com/zendframework/zend-cache/pull/9) fixes an issue when
+- [zendframework/zend-cache#9](https://github.com/zendframework/zend-cache/pull/9) fixes an issue when
   connecting to a Redis instance with the `persistent_id` option.

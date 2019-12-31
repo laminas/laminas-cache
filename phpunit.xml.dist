@@ -4,7 +4,7 @@
          bootstrap="./test/bootstrap.php"
          colors="true">
     <testsuites>
-        <testsuite name="zend-cache Test Suite">
+        <testsuite name="laminas-cache Test Suite">
             <directory>./test/</directory>
         </testsuite>
     </testsuites>
@@ -26,37 +26,37 @@
 
         <!-- OB_ENABLED should be enabled for some tests to check if all
              functionality works as expected. Such tests include those for
-             Zend\Soap and Zend\Session, which require that headers not be sent
+             Laminas\Soap and Laminas\Session, which require that headers not be sent
              in order to work. -->
-        <env name="TESTS_ZEND_OB_ENABLED" value="false" />
+        <env name="TESTS_LAMINAS_OB_ENABLED" value="false" />
 
         <!-- Note: the following is a FULL list of ALL POSSIBLE constants
-             currently in use in ZF2 for ALL COMPONENTS; you should choose the
+             currently in use in Laminas for ALL COMPONENTS; you should choose the
              constants appropriate to the component you are migrating. -->
 
-        <env name="TESTS_ZEND_CACHE_APC_ENABLED" value="false" />
-        <env name="TESTS_ZEND_CACHE_XCACHE_ENABLED" value="false" />
-        <env name="TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH" value="false" />
-        <env name="TESTS_ZEND_CACHE_XCACHE_ADMIN_USER" value="" />
-        <env name="TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS" value="" />
-        <env name="TESTS_ZEND_CACHE_PLATFORM_ENABLED" value="false" />
-        <env name="TESTS_ZEND_CACHE_WINCACHE_ENABLED" value="false" />
-        <env name="TESTS_ZEND_CACHE_ZEND_SERVER_ENABLED" value="false" />
-        <env name="TESTS_ZEND_CACHE_MEMCACHED_ENABLED" value="false" />
-        <env name="TESTS_ZEND_CACHE_MEMCACHED_HOST" value="127.0.0.1" />
-        <env name="TESTS_ZEND_CACHE_MEMCACHED_PORT" value="11211" />
-        <env name="TESTS_ZEND_CACHE_MEMCACHE_ENABLED" value="false" />
-        <env name="TESTS_ZEND_CACHE_MEMCACHE_HOST" value="127.0.0.1" />
-        <env name="TESTS_ZEND_CACHE_MEMCACHE_PORT" value="11211" />
-        <env name="TESTS_ZEND_CACHE_MONGODB_ENABLED" value="false" />
-        <env name="TESTS_ZEND_CACHE_MONGODB_COLLECTION" value="cache" />
-        <env name="TESTS_ZEND_CACHE_MONGODB_CONNECTSTRING" value="mongodb://localhost/" />
-        <env name="TESTS_ZEND_CACHE_MONGODB_DATABASE" value="zend_test" />
-        <env name="TESTS_ZEND_CACHE_REDIS_ENABLED" value="false" />
-        <env name="TESTS_ZEND_CACHE_REDIS_HOST" value="127.0.0.1" />
-        <env name="TESTS_ZEND_CACHE_REDIS_PORT" value="6379" />
-        <env name="TESTS_ZEND_CACHE_REDIS_PASSWORD" value="" />
-        <env name="TESTS_ZEND_CACHE_REDIS_DATABASE" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_APC_ENABLED" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_XCACHE_ENABLED" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_XCACHE_ADMIN_AUTH" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_XCACHE_ADMIN_USER" value="" />
+        <env name="TESTS_LAMINAS_CACHE_XCACHE_ADMIN_PASS" value="" />
+        <env name="TESTS_LAMINAS_CACHE_PLATFORM_ENABLED" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_WINCACHE_ENABLED" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_ZEND_SERVER_ENABLED" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_MEMCACHED_HOST" value="127.0.0.1" />
+        <env name="TESTS_LAMINAS_CACHE_MEMCACHED_PORT" value="11211" />
+        <env name="TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_MEMCACHE_HOST" value="127.0.0.1" />
+        <env name="TESTS_LAMINAS_CACHE_MEMCACHE_PORT" value="11211" />
+        <env name="TESTS_LAMINAS_CACHE_MONGODB_ENABLED" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_MONGODB_COLLECTION" value="cache" />
+        <env name="TESTS_LAMINAS_CACHE_MONGODB_CONNECTSTRING" value="mongodb://localhost/" />
+        <env name="TESTS_LAMINAS_CACHE_MONGODB_DATABASE" value="laminas_test" />
+        <env name="TESTS_LAMINAS_CACHE_REDIS_ENABLED" value="false" />
+        <env name="TESTS_LAMINAS_CACHE_REDIS_HOST" value="127.0.0.1" />
+        <env name="TESTS_LAMINAS_CACHE_REDIS_PORT" value="6379" />
+        <env name="TESTS_LAMINAS_CACHE_REDIS_PASSWORD" value="" />
+        <env name="TESTS_LAMINAS_CACHE_REDIS_DATABASE" value="false" />
 
     </php>
 </phpunit>

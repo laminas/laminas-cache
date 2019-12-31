@@ -1,23 +1,22 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Pattern;
+namespace LaminasTest\Cache\Pattern;
 
-use Zend\Cache;
+use Laminas\Cache;
 
 /**
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class OutputCacheTest extends CommonPatternTest
 {
     /**
-     * @var \Zend\Cache\Storage\StorageInterface
+     * @var \Laminas\Cache\Storage\StorageInterface
      */
     protected $_storage;
 
@@ -94,7 +93,7 @@ class OutputCacheTest extends CommonPatternTest
 
     public function testThrowMissingKeyException()
     {
-        $this->setExpectedException('Zend\Cache\Exception\MissingKeyException');
+        $this->setExpectedException('Laminas\Cache\Exception\MissingKeyException');
         $this->_pattern->start(''); // empty key
     }
 }
