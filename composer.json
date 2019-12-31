@@ -42,6 +42,7 @@
         "laminas/laminas-cache-storage-adapter-redis": "1.0.0@dev || ^1.0",
         "laminas/laminas-cache-storage-adapter-session": "1.0.0@dev || ^1.0",
         "laminas/laminas-cache-storage-adapter-wincache": "1.0.0@dev || ^1.0",
+        "laminas/laminas-cache-storage-adapter-xcache": "1.0.0@dev || ^1.0",
         "laminas/laminas-eventmanager": "^2.6.3 || ^3.2",
         "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
         "laminas/laminas-stdlib": "^3.2.1",
@@ -61,7 +62,6 @@
         "psr/simple-cache-implementation": "1.0"
     },
     "suggest": {
-        "ext-xcache": "XCache, to use the XCache storage adapter",
         "laminas/laminas-serializer": "Laminas\\Serializer component"
     },
     "autoload": {
