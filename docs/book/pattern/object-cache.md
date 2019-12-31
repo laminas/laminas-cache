@@ -8,7 +8,7 @@ public properties.
 
 ```php
 use stdClass;
-use Zend\Cache\PatternFactory;
+use Laminas\Cache\PatternFactory;
 
 $object      = new stdClass();
 $objectCache = PatternFactory::factory('object', [
@@ -21,7 +21,7 @@ $objectCache = PatternFactory::factory('object', [
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Zend\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
+`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
 `object` | `object` | none | The object for which to cache method calls.
 `object_key` | `null | string` | Class name of object | Hopefully unique!
 `cache_output` | `boolean` | `true` | Whether or not to cache method output.
@@ -36,9 +36,9 @@ In addition to the methods defined in `PatternInterface`, this implementation
 defines the following methods.
 
 ```php
-namespace Zend\Cache\Pattern;
+namespace Laminas\Cache\Pattern;
 
-use Zend\Cache\Exception;
+use Laminas\Cache\Exception;
 
 class ObjectCache extends CallbackCache
 {
@@ -153,8 +153,8 @@ class ObjectCache extends CallbackCache
 ### Caching a filter
 
 ```php
-$filter       = new Zend\Filter\RealPath();
-$cachedFilter = Zend\Cache\PatternFactory::factory('object', [
+$filter       = new Laminas\Filter\RealPath();
+$cachedFilter = Laminas\Cache\PatternFactory::factory('object', [
     'object'     => $filter,
     'object_key' => 'RealpathFilter',
     'storage'    => 'apc',

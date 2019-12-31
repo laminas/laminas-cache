@@ -1,21 +1,20 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache;
+namespace LaminasTest\Cache;
 
+use Laminas\Cache\Exception\RuntimeException;
+use Laminas\Cache\Pattern\PatternInterface;
+use Laminas\Cache\PatternPluginManager;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\Test\CommonPluginManagerTrait;
 use PHPUnit\Framework\TestCase;
-use Zend\Cache\Exception\RuntimeException;
-use Zend\Cache\Pattern\PatternInterface;
-use Zend\Cache\PatternPluginManager;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\Test\CommonPluginManagerTrait;
 
 class PatternPluginManagerTest extends TestCase
 {
@@ -54,7 +53,7 @@ class PatternPluginManagerTest extends TestCase
         $plugins = $this->getPluginManager();
 
         if (! method_exists($plugins, 'configure')) {
-            $this->markTestSkipped('Test is only relevant for zend-servicemanager v3');
+            $this->markTestSkipped('Test is only relevant for laminas-servicemanager v3');
         }
 
         $storage = $this->prophesize(StorageInterface::class)->reveal();

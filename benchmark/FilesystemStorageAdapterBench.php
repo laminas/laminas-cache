@@ -1,8 +1,8 @@
 <?php
 
-namespace ZendBench\Cache;
+namespace LaminasBench\Cache;
 
-use Zend\Cache\StorageFactory;
+use Laminas\Cache\StorageFactory;
 
 /**
  * @Revs(100)
@@ -15,7 +15,7 @@ class FilesystemStorageAdapterBench extends CommonStorageAdapterBench
 
     public function __construct()
     {
-        $this->tmpCacheDir = @tempnam(sys_get_temp_dir(), 'zend_cache_test_');
+        $this->tmpCacheDir = @tempnam(sys_get_temp_dir(), 'laminas_cache_test_');
         if (! $this->tmpCacheDir) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory-file: {$err['message']}");

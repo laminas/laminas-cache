@@ -1,25 +1,24 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage\Adapter;
+namespace Laminas\Cache\Storage\Adapter;
 
+use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\AvailableSpaceCapableInterface;
+use Laminas\Cache\Storage\Capabilities;
+use Laminas\Cache\Storage\ClearByNamespaceInterface;
+use Laminas\Cache\Storage\ClearByPrefixInterface;
+use Laminas\Cache\Storage\ClearExpiredInterface;
+use Laminas\Cache\Storage\FlushableInterface;
+use Laminas\Cache\Storage\IterableInterface;
+use Laminas\Cache\Storage\TaggableInterface;
+use Laminas\Cache\Storage\TotalSpaceCapableInterface;
 use stdClass;
-use Zend\Cache\Exception;
-use Zend\Cache\Storage\AvailableSpaceCapableInterface;
-use Zend\Cache\Storage\Capabilities;
-use Zend\Cache\Storage\ClearByNamespaceInterface;
-use Zend\Cache\Storage\ClearByPrefixInterface;
-use Zend\Cache\Storage\ClearExpiredInterface;
-use Zend\Cache\Storage\FlushableInterface;
-use Zend\Cache\Storage\IterableInterface;
-use Zend\Cache\Storage\TaggableInterface;
-use Zend\Cache\Storage\TotalSpaceCapableInterface;
 
 class Memory extends AbstractAdapter implements
     AvailableSpaceCapableInterface,

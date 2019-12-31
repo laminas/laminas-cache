@@ -1,18 +1,19 @@
 <?php
+
 /**
- * @link      http://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Service;
+namespace LaminasTest\Cache\Service;
 
 use Interop\Container\ContainerInterface;
+use Laminas\Cache\Service\StoragePluginManagerFactory;
+use Laminas\Cache\Storage\Plugin\PluginInterface;
+use Laminas\Cache\Storage\PluginManager;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
-use Zend\Cache\Storage\Plugin\PluginInterface;
-use Zend\Cache\Storage\PluginManager;
-use Zend\Cache\Service\StoragePluginManagerFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 class StoragePluginManagerFactoryTest extends TestCase
 {
@@ -25,10 +26,10 @@ class StoragePluginManagerFactoryTest extends TestCase
         $this->assertInstanceOf(PluginManager::class, $plugins);
 
         if (method_exists($plugins, 'configure')) {
-            // zend-servicemanager v3
+            // laminas-servicemanager v3
             $this->assertAttributeSame($container, 'creationContext', $plugins);
         } else {
-            // zend-servicemanager v2
+            // laminas-servicemanager v2
             $this->assertSame($container, $plugins->getServiceLocator());
         }
     }

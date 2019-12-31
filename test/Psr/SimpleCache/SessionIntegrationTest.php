@@ -1,23 +1,24 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\SimpleCache;
+namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
-use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
-use Zend\Cache\StorageFactory;
-use Zend\Session\Container as SessionContainer;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Laminas\Cache\StorageFactory;
+use Laminas\Session\Container as SessionContainer;
 
 class SessionIntegrationTest extends SimpleCacheTest
 {
     public function setUp()
     {
         if (! class_exists(SessionContainer::class)) {
-            $this->markTestSkipped('Install zend-session to enable this test');
+            $this->markTestSkipped('Install laminas-session to enable this test');
         }
 
         $_SESSION = [];

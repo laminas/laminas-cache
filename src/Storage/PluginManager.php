@@ -1,18 +1,17 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
-use Zend\Cache\Exception;
-use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\Exception\InvalidServiceException;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\Cache\Exception;
+use Laminas\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\Exception\InvalidServiceException;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 /**
  * Plugin manager implementation for cache plugins
@@ -41,7 +40,21 @@ class PluginManager extends AbstractPluginManager
         'optimizeByFactor'        => Plugin\OptimizeByFactor::class,
         'OptimizeByFactor'        => Plugin\OptimizeByFactor::class,
         'serializer'              => Plugin\Serializer::class,
-        'Serializer'              => Plugin\Serializer::class
+        'Serializer'              => Plugin\Serializer::class,
+
+        // Legacy Zend Framework aliases
+        \Zend\Cache\Storage\Plugin\ClearExpiredByFactor::class => Plugin\ClearExpiredByFactor::class,
+        \Zend\Cache\Storage\Plugin\ExceptionHandler::class => Plugin\ExceptionHandler::class,
+        \Zend\Cache\Storage\Plugin\IgnoreUserAbort::class => Plugin\IgnoreUserAbort::class,
+        \Zend\Cache\Storage\Plugin\OptimizeByFactor::class => Plugin\OptimizeByFactor::class,
+        \Zend\Cache\Storage\Plugin\Serializer::class => Plugin\Serializer::class,
+
+        // v2 normalized FQCNs
+        'zendcachestoragepluginclearexpiredbyfactor' => Plugin\ClearExpiredByFactor::class,
+        'zendcachestoragepluginexceptionhandler' => Plugin\ExceptionHandler::class,
+        'zendcachestoragepluginignoreuserabort' => Plugin\IgnoreUserAbort::class,
+        'zendcachestoragepluginoptimizebyfactor' => Plugin\OptimizeByFactor::class,
+        'zendcachestoragepluginserializer' => Plugin\Serializer::class,
     ];
 
     protected $factories = [
@@ -52,11 +65,11 @@ class PluginManager extends AbstractPluginManager
         Plugin\Serializer::class                     => InvokableFactory::class,
 
         // v2 normalized FQCNs
-        'zendcachestoragepluginclearexpiredbyfactor' => InvokableFactory::class,
-        'zendcachestoragepluginexceptionhandler'     => InvokableFactory::class,
-        'zendcachestoragepluginignoreuserabort'      => InvokableFactory::class,
-        'zendcachestoragepluginoptimizebyfactor'     => InvokableFactory::class,
-        'zendcachestoragepluginserializer'           => InvokableFactory::class,
+        'laminascachestoragepluginclearexpiredbyfactor' => InvokableFactory::class,
+        'laminascachestoragepluginexceptionhandler'     => InvokableFactory::class,
+        'laminascachestoragepluginignoreuserabort'      => InvokableFactory::class,
+        'laminascachestoragepluginoptimizebyfactor'     => InvokableFactory::class,
+        'laminascachestoragepluginserializer'           => InvokableFactory::class,
     ];
 
     /**
