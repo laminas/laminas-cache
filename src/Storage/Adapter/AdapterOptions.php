@@ -1,21 +1,20 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage\Adapter;
+namespace Laminas\Cache\Storage\Adapter;
 
 use ArrayObject;
-use Zend\Cache\Exception;
-use Zend\Cache\Storage\Event;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\EventManager\EventsCapableInterface;
-use Zend\Stdlib\AbstractOptions;
-use Zend\Stdlib\ErrorHandler;
+use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\Event;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\EventManager\EventsCapableInterface;
+use Laminas\Stdlib\AbstractOptions;
+use Laminas\Stdlib\ErrorHandler;
 
 /**
  * Unless otherwise marked, all options in this class affect all adapters.
@@ -51,7 +50,7 @@ class AdapterOptions extends AbstractOptions
      *
      * @var string
      */
-    protected $namespace = 'zfcache';
+    protected $namespace = 'laminascache';
 
     /**
      * Readable option
@@ -320,7 +319,7 @@ class AdapterOptions extends AbstractOptions
                         __METHOD__,
                         'array',
                         'Traversable',
-                        'Zend\Stdlib\AbstractOptions'
+                        'Laminas\Stdlib\AbstractOptions'
                     )
                 );
             }

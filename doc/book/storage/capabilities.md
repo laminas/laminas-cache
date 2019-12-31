@@ -12,17 +12,17 @@ notifications; see the examples for details.
 
 If you are writing your own plugin or adapter, you can also change capabilities
 because you have access to the marker object and can create your own marker to
-instantiate a new instance of `Zend\Cache\Storage\Capabilities`.
+instantiate a new instance of `Laminas\Cache\Storage\Capabilities`.
 
 ## Available Methods
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 use ArrayObject;
 use stdClass;
-use Zend\Cache\Exception;
-use Zend\EventManager\EventsCapableInterface;
+use Laminas\Cache\Exception;
+use Laminas\EventManager\EventsCapableInterface;
 
 class Capabilities
 {
@@ -242,7 +242,7 @@ class Capabilities
 ### Get storage capabilities and do specific stuff based on them
 
 ```php
-use Zend\Cache\StorageFactory;
+use Laminas\Cache\StorageFactory;
 
 $cache = StorageFactory::adapterFactory('filesystem');
 $supportedDatatypes = $cache->getCapabilities()->getSupportedDatatypes();
@@ -258,7 +258,7 @@ if ($supportedDatatypes['object']) {
 ### Listen to the change event
 
 ```php
-use Zend\Cache\StorageFactory;
+use Laminas\Cache\StorageFactory;
 
 $cache = StorageFactory::adapterFactory('filesystem', [
     'no_atime' => false,

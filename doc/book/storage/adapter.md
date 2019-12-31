@@ -6,36 +6,36 @@ the well known *adapter* pattern.
 They come with tons of methods to read, write, and modify stored items, and to get information about
 stored items and the storage.
 
-All adapters implement `Zend\Cache\Storage\StorageInterface`, and most extend
-`Zend\Cache\Storage\Adapter\AbstractAdapter`, which provides a foundation of
+All adapters implement `Laminas\Cache\Storage\StorageInterface`, and most extend
+`Laminas\Cache\Storage\Adapter\AbstractAdapter`, which provides a foundation of
 common logic.
 
-Configuration is handled by either `Zend\Cache\Storage\Adapter\AdapterOptions`,
+Configuration is handled by either `Laminas\Cache\Storage\Adapter\AdapterOptions`,
 or an adapter-specific options class if it exists. You may pass the options
 instance to the class at instantiation, via the `setOptions()` method, or,
 alternately, pass an associative array of options in either place (internally,
 these are then passed to an options class instance). Alternately, you can pass
 either the options instance or associative array to the
-`Zend\Cache\StorageFactory::factory` method.
+`Laminas\Cache\StorageFactory::factory` method.
 
 > ### Many methods throw exceptions
 >
 > Because many caching operations throw an exception on error, you need to catch
 > them. You can do so manually, or you can use the plugin
-> `Zend\Cache\Storage\Plugin\ExceptionHandler` with `throw_exceptions` set to
+> `Laminas\Cache\Storage\Plugin\ExceptionHandler` with `throw_exceptions` set to
 > `false` to automatically catch them. You can also define an
 > `exception_callback` to log exceptions.
 
 ## Quick Start
 
 Caching adapters can either be created from the provided
-`Zend\Cache\StorageFactory`, or by instantiating one of the
-`Zend\Cache\Storage\Adapter\*` classes.  To make life easier, the
-`Zend\Cache\StorageFactory` comes with a `factory()` method to create an adapter
+`Laminas\Cache\StorageFactory`, or by instantiating one of the
+`Laminas\Cache\Storage\Adapter\*` classes.  To make life easier, the
+`Laminas\Cache\StorageFactory` comes with a `factory()` method to create an adapter
 and all requested plugins at once.
 
 ```php
-use Zend\Cache\StorageFactory;
+use Laminas\Cache\StorageFactory;
 
 // Via factory:
 $cache = StorageFactory::factory([
@@ -56,35 +56,35 @@ $plugin = StorageFactory::pluginFactory('exception_handler', [
 $cache->addPlugin($plugin);
 
 // Or do it completely manually:
-$cache  = new Zend\Cache\Storage\Adapter\Apc();
+$cache  = new Laminas\Cache\Storage\Adapter\Apc();
 $cache->getOptions()->setTtl(3600);
 
-$plugin = new Zend\Cache\Storage\Plugin\ExceptionHandler();
+$plugin = new Laminas\Cache\Storage\Plugin\ExceptionHandler();
 $plugin->getOptions()->setThrowExceptions(false);
 $cache->addPlugin($plugin);
 ```
 
 ## Basic Configuration Options
 
-The following configuration options are defined by `Zend\Cache\Storage\Adapter\AdapterOptions` and
+The following configuration options are defined by `Laminas\Cache\Storage\Adapter\AdapterOptions` and
 are available for every supported adapter. Adapter-specific configuration options are described on
 adapter level below.
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
 `ttl` | `integer` | `0` | Time to live
-`namespace` | `string` | “zfcache” | The “namespace” in which cache items will live
+`namespace` | `string` | “laminascache” | The “namespace” in which cache items will live
 `key_pattern` | `null|string` | `null` | Pattern against which to validate cache keys
 `readable` | `boolean` | `true` | Enable/Disable reading data from cache
 `writable` | `boolean` | `true` | Enable/Disable writing data to cache
 
 ## The StorageInterface
 
-`Zend\Cache\Storage\StorageInterface` is the basic interface implemented by all
+`Laminas\Cache\Storage\StorageInterface` is the basic interface implemented by all
 storage adapters.
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 use Traversable;
 
@@ -114,7 +114,7 @@ interface StorageInterface
      * @param  bool $success
      * @param  mixed   $casToken
      * @return mixed Data on success, null on failure
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function getItem($key, & $success = null, & $casToken = null);
 
@@ -123,7 +123,7 @@ interface StorageInterface
      *
      * @param  array $keys
      * @return array Associative array of keys and values
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function getItems(array $keys);
 
@@ -132,7 +132,7 @@ interface StorageInterface
      *
      * @param  string $key
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function hasItem($key);
 
@@ -141,7 +141,7 @@ interface StorageInterface
      *
      * @param  array $keys
      * @return array Array of found keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function hasItems(array $keys);
 
@@ -150,7 +150,7 @@ interface StorageInterface
      *
      * @param  string $key
      * @return array|bool Metadata on success, false on failure
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function getMetadata($key);
 
@@ -159,7 +159,7 @@ interface StorageInterface
      *
      * @param  array $keys
      * @return array Associative array of keys and metadata
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function getMetadatas(array $keys);
 
@@ -171,7 +171,7 @@ interface StorageInterface
      * @param  string $key
      * @param  mixed  $value
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function setItem($key, $value);
 
@@ -180,7 +180,7 @@ interface StorageInterface
      *
      * @param  array $keyValuePairs
      * @return array Array of not stored keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function setItems(array $keyValuePairs);
 
@@ -190,7 +190,7 @@ interface StorageInterface
      * @param  string $key
      * @param  mixed  $value
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function addItem($key, $value);
 
@@ -199,7 +199,7 @@ interface StorageInterface
      *
      * @param  array $keyValuePairs
      * @return array Array of not stored keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function addItems(array $keyValuePairs);
 
@@ -209,7 +209,7 @@ interface StorageInterface
      * @param  string $key
      * @param  mixed  $value
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function replaceItem($key, $value);
 
@@ -218,7 +218,7 @@ interface StorageInterface
      *
      * @param  array $keyValuePairs
      * @return array Array of not stored keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function replaceItems(array $keyValuePairs);
 
@@ -232,7 +232,7 @@ interface StorageInterface
      * @param  string $key
      * @param  mixed  $value
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      * @see    getItem()
      * @see    setItem()
      */
@@ -243,7 +243,7 @@ interface StorageInterface
      *
      * @param  string $key
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function touchItem($key);
 
@@ -252,7 +252,7 @@ interface StorageInterface
      *
      * @param  array $keys
      * @return array Array of not updated keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function touchItems(array $keys);
 
@@ -261,7 +261,7 @@ interface StorageInterface
      *
      * @param  string $key
      * @return bool
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function removeItem($key);
 
@@ -270,7 +270,7 @@ interface StorageInterface
      *
      * @param  array $keys
      * @return array Array of not removed keys
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function removeItems(array $keys);
 
@@ -280,7 +280,7 @@ interface StorageInterface
      * @param  string $key
      * @param  int    $value
      * @return int|bool The new value on success, false on failure
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function incrementItem($key, $value);
 
@@ -289,7 +289,7 @@ interface StorageInterface
      *
      * @param  array $keyValuePairs
      * @return array Associative array of keys and new values
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function incrementItems(array $keyValuePairs);
 
@@ -299,7 +299,7 @@ interface StorageInterface
      * @param  string $key
      * @param  int    $value
      * @return int|bool The new value on success, false on failure
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function decrementItem($key, $value);
 
@@ -308,7 +308,7 @@ interface StorageInterface
      *
      * @param  array $keyValuePairs
      * @return array Associative array of keys and new values
-     * @throws \Zend\Cache\Exception\ExceptionInterface
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
      */
     public function decrementItems(array $keyValuePairs);
 
@@ -325,11 +325,11 @@ interface StorageInterface
 
 ## The AvailableSpaceCapableInterface
 
-`Zend\Cache\Storage\AvailableSpaceCapableInterface` implements a method to allow
+`Laminas\Cache\Storage\AvailableSpaceCapableInterface` implements a method to allow
 retrieving the current available space remaining in storage.
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 interface AvailableSpaceCapableInterface
 {
@@ -344,11 +344,11 @@ interface AvailableSpaceCapableInterface
 
 ## The TotalSpaceCapableInterface
 
-`Zend\Cache\Storage\TotalSpaceCapableInterface` implements a method to allow
+`Laminas\Cache\Storage\TotalSpaceCapableInterface` implements a method to allow
 retrieving the total storage space.
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 interface TotalSpaceCapableInterface
 {
@@ -363,11 +363,11 @@ interface TotalSpaceCapableInterface
 
 ## The ClearByNamespaceInterface
 
-`Zend\Cache\Storage\ClearByNamespaceInterface` implements a method to allow
+`Laminas\Cache\Storage\ClearByNamespaceInterface` implements a method to allow
 clearing all cached items within a given namespace.
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 interface ClearByNamespaceInterface
 {
@@ -383,12 +383,12 @@ interface ClearByNamespaceInterface
 
 ## The ClearByPrefixInterface
 
-`Zend\Cache\Storage\ClearByPrefixInterface` implements a method to allow
+`Laminas\Cache\Storage\ClearByPrefixInterface` implements a method to allow
 clearing all cached items that have a given prefix (within the currently
 configured namespace).
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 interface ClearByPrefixInterface
 {
@@ -403,11 +403,11 @@ interface ClearByPrefixInterface
 ```
 ## The ClearExpiredInterface
 
-`Zend\Cache\Storage\ClearExpiredInterface` implements a method to allow clearing
+`Laminas\Cache\Storage\ClearExpiredInterface` implements a method to allow clearing
 all expired items (within the current configured namespace).
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 interface ClearExpiredInterface
 {
@@ -422,11 +422,11 @@ interface ClearExpiredInterface
 
 ## The FlushableInterface
 
-`Zend\Cache\Storage\FlushableInterface` implements a method for flushing the
+`Laminas\Cache\Storage\FlushableInterface` implements a method for flushing the
 entire cache storage.
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 interface FlushableInterface
 {
@@ -441,13 +441,13 @@ interface FlushableInterface
 
 ## The IterableInterface
 
-`Zend\Cache\Storage\IterableInterface` implements a method for retrieving an
+`Laminas\Cache\Storage\IterableInterface` implements a method for retrieving an
 iterator of all items in storage. It extends `IteratorAggregate`, so it's
 possible to directly iterate over the storage implementations that implement
 this interface using `foreach`.
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 use IteratorAggregate;
 
@@ -466,11 +466,11 @@ interface IterableInterface extends IteratorAggregate
 
 ## The OptimizableInterface
 
-`Zend\Cache\Storage\OptimizableInterface` implements a method for running
+`Laminas\Cache\Storage\OptimizableInterface` implements a method for running
 optimization processes on the storage adapter.
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 interface OptimizableInterface
 {
@@ -485,11 +485,11 @@ interface OptimizableInterface
 
 ## The TaggableInterface
 
-`Zend\Cache\Storage\TaggableInterface` implements methods for tagging items, and
+`Laminas\Cache\Storage\TaggableInterface` implements methods for tagging items, and
 cleaning (expiring) items matching tags.
 
 ```php
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
 interface TaggableInterface
 {
@@ -526,18 +526,18 @@ interface TaggableInterface
 ```
 ## The Apc Adapter
 
-`Zend\Cache\Storage\Adapter\Apc` stores cache items in shared memory through the
+`Laminas\Cache\Storage\Adapter\Apc` stores cache items in shared memory through the
 PHP extension [APC](http://pecl.php.net/package/APC) (Alternative PHP Cache).
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\StorageInterface`
-- `Zend\Cache\Storage\AvailableSpaceCapableInterface`
-- `Zend\Cache\Storage\ClearByNamespaceInterface`
-- `Zend\Cache\Storage\ClearByPrefixInterface`
-- `Zend\Cache\Storage\FlushableInterface`
-- `Zend\Cache\Storage\IterableInterface`
-- `Zend\Cache\Storage\TotalSpaceCapableInterface`
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\IterableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
 ### Capabilities
 
@@ -562,20 +562,20 @@ Name | Data Type | Default Value | Description
 
 ## The Dba Adapter
 
-`Zend\Cache\Storage\Adapter\Dba` stores cache items into
+`Laminas\Cache\Storage\Adapter\Dba` stores cache items into
 [dbm](http://en.wikipedia.org/wiki/Dbm)-like databases using the PHP extension
 [dba](http://php.net/manual/book.dba.php).
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\StorageInterface`
-- `Zend\Cache\Storage\AvailableSpaceCapableInterface`
-- `Zend\Cache\Storage\ClearByNamespaceInterface`
-- `Zend\Cache\Storage\ClearByPrefixInterface`
-- `Zend\Cache\Storage\FlushableInterface`
-- `Zend\Cache\Storage\IterableInterface`
-- `Zend\Cache\Storage\OptimizableInterface`
-- `Zend\Cache\Storage\TotalSpaceCapableInterface`
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\IterableInterface`
+- `Laminas\Cache\Storage\OptimizableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
 ### Capabilities
 
@@ -604,20 +604,20 @@ Name | Data Type | Default Value | Description
 
 ## The Filesystem Adapter
 
-`Zend\Cache\Storage\Adapter\Filesystem` stores cache items on the filesystem.
+`Laminas\Cache\Storage\Adapter\Filesystem` stores cache items on the filesystem.
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\StorageInterface`
-- `Zend\Cache\Storage\AvailableSpaceCapableInterface`
-- `Zend\Cache\Storage\ClearByNamespaceInterface`
-- `Zend\Cache\Storage\ClearByPrefixInterface`
-- `Zend\Cache\Storage\ClearExpiredInterface`
-- `Zend\Cache\Storage\FlushableInterface`
-- `Zend\Cache\Storage\IterableInterface`
-- `Zend\Cache\Storage\OptimizableInterface`
-- `Zend\Cache\Storage\TaggableInterface`
-- `Zend\Cache\Storage\TotalSpaceCapableInterface`
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
+- `Laminas\Cache\Storage\ClearExpiredInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\IterableInterface`
+- `Laminas\Cache\Storage\OptimizableInterface`
+- `Laminas\Cache\Storage\TaggableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
 ### Capabilities
 
@@ -652,16 +652,16 @@ Name | Data Type | Default Value | Description
 
 ## The Memcached Adapter
 
-`Zend\Cache\Storage\Adapter\Memcached` stores cache items over the memcached
+`Laminas\Cache\Storage\Adapter\Memcached` stores cache items over the memcached
 protocol, using the PHP extension [memcached](http://pecl.php.net/package/memcached),
 based on [Libmemcached](http://libmemcached.org/).
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\StorageInterface`
-- `Zend\Cache\Storage\AvailableSpaceCapableInterface`
-- `Zend\Cache\Storage\FlushableInterface`
-- `Zend\Cache\Storage\TotalSpaceCapableInterface`
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
 ### Capabilities
 
@@ -687,13 +687,13 @@ Name | Data Type | Default Value | Description
 
 ## The Redis Adapter
 
-`Zend\Cache\Storage\Adapter\Redis` stores cache items over the redis protocol
+`Laminas\Cache\Storage\Adapter\Redis` stores cache items over the redis protocol
 using the PHP extension [redis](https://github.com/nicolasff/phpredis).
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\FlushableInterface`
-- `Zend\Cache\Storage\TotalSpaceCapableInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
 ### Capabilities
 
@@ -730,19 +730,19 @@ Name | Data Type | Default Value | Description
 
 ## The Memory Adapter
 
-The `Zend\Cache\Storage\Adapter\Memory` stores items in-memory in the current
+The `Laminas\Cache\Storage\Adapter\Memory` stores items in-memory in the current
 process only.
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\StorageInterface`
-- `Zend\Cache\Storage\AvailableSpaceCapableInterface`
-- `Zend\Cache\Storage\ClearByPrefixInterface`
-- `Zend\Cache\Storage\ClearExpiredInterface`
-- `Zend\Cache\Storage\FlushableInterface`
-- `Zend\Cache\Storage\IterableInterface`
-- `Zend\Cache\Storage\TaggableInterface`
-- `Zend\Cache\Storage\TotalSpaceCapableInterface`
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
+- `Laminas\Cache\Storage\ClearExpiredInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\IterableInterface`
+- `Laminas\Cache\Storage\TaggableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
 ### Capabilities
 
@@ -781,13 +781,13 @@ Name | Data Type | Default Value | Description
 
 ## The MongoDB Adapter
 
-`Zend\Cache\Storage\Adapter\MongoDB` stores cache items using MongoDB, via either the
+`Laminas\Cache\Storage\Adapter\MongoDB` stores cache items using MongoDB, via either the
 PHP extension [mongo](http://php.net/mongo), or a MongoDB polyfill library, such as
 [Mongofill](https://github.com/mongofill/mongofill).
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
 
 ### Capabilities
 
@@ -815,22 +815,22 @@ Available keys for `lib_option` include:
 Key | Default | Description
 --- | ------- | -----------
 `server` | `mongodb://localhost:27017` | The MongoDB server connection string (see the [MongoClient docs](http://php.net/MongoClient)).
-`database` | `zend` | Name of the database to use; MongoDB will create this database if it does not exist.
+`database` | `laminas` | Name of the database to use; MongoDB will create this database if it does not exist.
 `collection` | `cache` | Name of the collection to use; MongoDB will create this collection if it does not exist.
 `connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).
 `driverOptions` | `[]` | Associative array of driver options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).
 
 ## The WinCache Adapter
 
-`Zend\Cache\Storage\Adapter\WinCache` stores cache items into shared memory
+`Laminas\Cache\Storage\Adapter\WinCache` stores cache items into shared memory
 through the PHP extension [WinCache](http://pecl.php.net/package/WinCache).
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\StorageInterface`
-- `Zend\Cache\Storage\AvailableSpaceCapableInterface`
-- `Zend\Cache\Storage\FlushableInterface`
-- `Zend\Cache\Storage\TotalSpaceCapableInterface`
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
 ### Capabilities
 
@@ -854,18 +854,18 @@ Name | Data Type | Default Value | Description
 
 ## The XCache Adapter
 
-`Zend\Cache\Storage\Adapter\XCache` stores cache items into shared memory through the
+`Laminas\Cache\Storage\Adapter\XCache` stores cache items into shared memory through the
 PHP extension [XCache](http://xcache.lighttpd.net/).
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\StorageInterface`
-- `Zend\Cache\Storage\AvailableSpaceCapableInterface`
-- `Zend\Cache\Storage\ClearByNamespaceInterface`
-- `Zend\Cache\Storage\ClearByPrefixInterface`
-- `Zend\Cache\Storage\FlushableInterface`
-- `Zend\Cache\Storage\IterableInterface`
-- `Zend\Cache\Storage\TotalSpaceCapableInterface`
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\IterableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
 ### Capabilities
 
@@ -893,16 +893,16 @@ Name | Data Type | Default Value | Description
 
 ## The ZendServerDisk Adapter
 
-`Zend\Cache\Storage\Adapter\ZendServerDisk` stores cache items on the filesystem
-using the [Zend Server Data Caching API](http://www.zend.com/en/products/server/).
+`Laminas\Cache\Storage\Adapter\ZendServerDisk` stores cache items on the filesystem
+using the [Zend Server Data Caching API](https://www.zend.com/en/products/server/).
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\StorageInterface`
-- `Zend\Cache\Storage\AvailableSpaceCapableInterface`
-- `Zend\Cache\Storage\ClearByNamespaceInterface`
-- `Zend\Cache\Storage\FlushableInterface`
-- `Zend\Cache\Storage\TotalSpaceCapableInterface`
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
 ### Capabilities
 
@@ -921,15 +921,15 @@ Capability | Value
 
 ## The ZendServerShm Adapter
 
-`Zend\Cache\Storage\Adapter\ZendServerShm` stores cache items in shared memory
-through the [Zend Server Data Caching API](http://www.zend.com/en/products/server/).
+`Laminas\Cache\Storage\Adapter\ZendServerShm` stores cache items in shared memory
+through the [Zend Server Data Caching API](https://www.zend.com/en/products/server/).
 
 This adapter implements the following interfaces:
 
-- `Zend\Cache\Storage\StorageInterface`
-- `Zend\Cache\Storage\ClearByNamespaceInterface`
-- `Zend\Cache\Storage\FlushableInterface`
-- `Zend\Cache\Storage\TotalSpaceCapableInterface`
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
 ### Capabilities
 
@@ -951,7 +951,7 @@ Capability | Value
 ### Basic usage
 
 ```php
-use Zend\Cache\StorageFactory;
+use Laminas\Cache\StorageFactory;
 
 $cache = StorageFactory::factory([
     'adapter' => [
@@ -976,7 +976,7 @@ if (! $success) {
 ### Get multiple rows from a database
 
 ```php
-use Zend\Cache\StorageFactory;
+use Laminas\Cache\StorageFactory;
 
 // Instantiate the cache instance using a namespace for the same type of items
 $cache = StorageFactory::factory([

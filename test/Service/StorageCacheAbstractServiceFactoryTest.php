@@ -1,29 +1,28 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Service;
+namespace LaminasTest\Cache\Service;
 
 use Interop\Container\ContainerInterface;
+use Laminas\Cache\Service\StorageCacheAbstractServiceFactory;
+use Laminas\Cache\Storage\Adapter\AbstractAdapter;
+use Laminas\Cache\Storage\Adapter\Memory;
+use Laminas\Cache\Storage\AdapterPluginManager;
+use Laminas\Cache\Storage\Plugin\PluginInterface;
+use Laminas\Cache\Storage\PluginManager;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\Cache\StorageFactory;
+use Laminas\ServiceManager\Config;
+use Laminas\ServiceManager\ServiceManager;
 use Prophecy\Argument;
-use Zend\Cache\Service\StorageCacheAbstractServiceFactory;
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Storage\AdapterPluginManager;
-use Zend\Cache\Storage\Adapter\AbstractAdapter;
-use Zend\Cache\Storage\Adapter\Memory;
-use Zend\Cache\Storage\PluginManager;
-use Zend\Cache\Storage\Plugin\PluginInterface;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
 
 /**
- * @covers Zend\Cache\StorageFactory<extended>
+ * @covers Laminas\Cache\StorageFactory<extended>
  */
 class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -99,6 +98,7 @@ class StorageCacheAbstractServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $container->has(AdapterPluginManager::class)->willReturn(true);
         $container->get(AdapterPluginManager::class)->willReturn($adapterPluginManager->reveal());
         $container->has(PluginManager::class)->willReturn(false);
+        $container->has(\Zend\Cache\Storage\PluginManager::class)->willReturn(false);
 
         $container->has('config')->willReturn(true);
         $container->get('config')->willReturn([

@@ -1,10 +1,10 @@
 <?php
 
-namespace ZendTest\Cache\Pattern\TestAsset;
+namespace LaminasTest\Cache\Pattern\TestAsset;
 
 /**
  * Test class
- * @covers Zend\Cache\Pattern\CallbackCache<extended>
+ * @covers Laminas\Cache\Pattern\CallbackCache<extended>
  */
 class TestCallbackCache
 {

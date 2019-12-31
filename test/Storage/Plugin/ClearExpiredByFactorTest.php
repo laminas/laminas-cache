@@ -1,22 +1,21 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Plugin;
+namespace LaminasTest\Cache\Storage\Plugin;
 
 use ArrayObject;
-use Zend\Cache;
-use Zend\Cache\Storage\PostEvent;
-use Zend\EventManager\Test\EventListenerIntrospectionTrait;
-use ZendTest\Cache\Storage\TestAsset\ClearExpiredMockAdapter;
+use Laminas\Cache;
+use Laminas\Cache\Storage\PostEvent;
+use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
+use LaminasTest\Cache\Storage\TestAsset\ClearExpiredMockAdapter;
 
 /**
- * @covers Zend\Cache\Storage\Plugin\ClearExpiredByFactor
+ * @covers Laminas\Cache\Storage\Plugin\ClearExpiredByFactor
  */
 class ClearExpiredByFactorTest extends CommonPluginTest
 {
@@ -26,7 +25,7 @@ class ClearExpiredByFactorTest extends CommonPluginTest
     /**
      * The storage adapter
      *
-     * @var ZendTest\Cache\Storage\TestAsset\MockAdapter
+     * @var LaminasTest\Cache\Storage\TestAsset\MockAdapter
      */
     protected $_adapter;
     // @codingStandardsIgnoreEnd

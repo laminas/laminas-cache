@@ -1,5 +1,3 @@
-sudo: false
-
 language: php
 
 branches:
@@ -11,7 +9,7 @@ cache:
   directories:
     - $HOME/.composer/cache
     - $HOME/.local
-    - zf-mkdoc-theme
+    - laminas-mkdoc-theme
 
 services:
   - memcached
@@ -20,41 +18,38 @@ services:
 
 env:
   global:
-    - TESTS_ZEND_CACHE_APC_ENABLED=true
-    - TESTS_ZEND_CACHE_APCU_ENABLED=true
-    - TESTS_ZEND_CACHE_FILESYSTEM_DIR=/dev/shm
-    - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=true
-    - TESTS_ZEND_CACHE_MEMCACHED_HOST="127.0.0.1"
-    - TESTS_ZEND_CACHE_MEMCACHED_PORT=11211
-    - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=true
-    - TESTS_ZEND_CACHE_MEMCACHE_HOST=$TESTS_ZEND_CACHE_MEMCACHED_HOST
-    - TESTS_ZEND_CACHE_MEMCACHE_PORT=$TESTS_ZEND_CACHE_MEMCACHED_PORT
-    - TESTS_ZEND_CACHE_MONGODB_ENABLED=true
-    - TESTS_ZEND_CACHE_REDIS_ENABLED=true
-    - TESTS_ZEND_CACHE_REDIS_HOST="127.0.0.1"
-    - TESTS_ZEND_CACHE_REDIS_PORT=6379
-    - TESTS_ZEND_CACHE_REDIS_PASSWORD=""
-    - TESTS_ZEND_CACHE_REDIS_DATABASE=0
-    - TESTS_ZEND_CACHE_XCACHE_ENABLED=true
-    - TESTS_ZEND_CACHE_XCACHE_ADMIN_AUTH=true
-    - TESTS_ZEND_CACHE_XCACHE_ADMIN_USER=travis
-    - TESTS_ZEND_CACHE_XCACHE_ADMIN_PASS=test
-    - SITE_URL="https://zendframework.github.io/zend-cache"
+    - TESTS_LAMINAS_CACHE_APC_ENABLED=true
+    - TESTS_LAMINAS_CACHE_APCU_ENABLED=true
+    - TESTS_LAMINAS_CACHE_FILESYSTEM_DIR=/dev/shm
+    - TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED=true
+    - TESTS_LAMINAS_CACHE_MEMCACHED_HOST="127.0.0.1"
+    - TESTS_LAMINAS_CACHE_MEMCACHED_PORT=11211
+    - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=true
+    - TESTS_LAMINAS_CACHE_MEMCACHE_HOST=$TESTS_LAMINAS_CACHE_MEMCACHED_HOST
+    - TESTS_LAMINAS_CACHE_MEMCACHE_PORT=$TESTS_LAMINAS_CACHE_MEMCACHED_PORT
+    - TESTS_LAMINAS_CACHE_MONGODB_ENABLED=true
+    - TESTS_LAMINAS_CACHE_REDIS_ENABLED=true
+    - TESTS_LAMINAS_CACHE_REDIS_HOST="127.0.0.1"
+    - TESTS_LAMINAS_CACHE_REDIS_PORT=6379
+    - TESTS_LAMINAS_CACHE_REDIS_PASSWORD=""
+    - TESTS_LAMINAS_CACHE_REDIS_DATABASE=0
+    - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=true
+    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_AUTH=true
+    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_USER=travis
+    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_PASS=test
+    - SITE_URL="https://docs.laminas.dev/laminas-cache"
     - GH_USER_NAME="Matthew Weier O'Phinney"
     - GH_USER_EMAIL="matthew@weierophinney.net"
-    - GH_REF="github.com/zendframework/zend-cache.git"
+    - GH_REF="github.com/laminas/laminas-cache.git"
     - secure: "ZYYlfFWTde5MCn6twsm/+s+mx4bLEaVFFG+tuaeiz7nCx+z495D6FxruzBbY1zheX9rNo9qReDo0Tyfn2wrUH8SJYbR9iKDqB95GPDDPW+I23Mw3Uuddr8XqbtabTJVqEQg6iAu7IIQG4TvFFmdq/g26jWim8Cngg/5zZh4Q2GuLSjIKRJBpLe7mSTjQVqaApS/a8wmvPJiSoqxWmY8Botc88ZXMmkRDPQoqEdZOeS4i029cGMXUnzGj7Vl7qwfol6Yj/R441Hd84Vt8P8BOdRyW0tjmllXLXJUYFKCcP5fEqIujbU68FwJMidCPzBcXv2N0klW43ViVwdJD6gBgZStwOyENGeEw1VcbZ6JReMa68F1mtqLhBhZtF8WRUI8+TYMYmLPGMVTcets4P3nIB18uX1CittwGDD2y2OL8MDvuIuaSQFoj/PdUb+BC/DvvmtPGnF6MLTAUjqNlxYbmzopufDEtivWHsqeyxHZj0L0HD5KkMslD9wnngfi+lcQ5e3iFQe/H5vQKE0BfooukxErIXk00cwwMoMjFY4v95CS0BKFhA4HMclKpGEA94CH4STxwyD2Nz/z6iGPqkZuzqDLOKhLr2FsY7bFbvEdNu57G3PGahtYJtc31lcnwKf2t1ALGcG9LS0/ezJSzqx659hWL0B5qgHjCNDnAyKJcNxM="
 
 matrix:
+  fast_finish: true
   include:
     - php: 5.5
       env:
         - DEPS=lowest
         - APCU_PECL_VERSION="apcu-4.0.8"
-    - php: 5.5
-      env:
-        - DEPS=locked
-        - APCU_PECL_VERSION="apcu-4.0.10"
     - php: 5.5
       env:
         - DEPS=latest
@@ -65,13 +60,9 @@ matrix:
         - APCU_PECL_VERSION="apcu-4.0.8"
     - php: 5.6
       env:
-        - DEPS=locked
-        - APCU_PECL_VERSION="apcu-4.0.10"
+        - DEPS=latest
         - DEPLOY_DOCS="$(if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then echo -n 'true' ; else echo -n 'false' ; fi)"
         - PATH="$HOME/.local/bin:$PATH"
-    - php: 5.6
-      env:
-        - DEPS=latest
         - TEST_COVERAGE=true
         - APCU_PECL_VERSION="apcu-4.0.11"
     - php: 7
@@ -81,53 +72,48 @@ matrix:
         - APCU_BC_PECL_VERSION="apcu_bc-1.0.0"
 
         # TODO: re-enable these extentions as soon as they are available and stable on php 7
-        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
-        - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
-        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
-        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
-    - php: 7
-      env:
-        - DEPS=locked
-        - CHECK_CS=true
-        - APCU_PECL_VERSION="apcu-5.1.3"
-        - APCU_BC_PECL_VERSION="apcu_bc-1.0.2"
+        - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MONGODB_ENABLED=false
+        - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=false
+
 
         # TODO: re-enable these extentions as soon as they are available and stable on php 7
-        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
-        - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
-        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
-        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MONGODB_ENABLED=false
+        - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=false
     - php: 7
       env:
         - DEPS=latest
+        - CS_CHECK=true
         - APCU_PECL_VERSION="apcu"            # PECL will download the latest stable version available
         - APCU_BC_PECL_VERSION="apcu_bc-beta" # TODO: change this as soon there is a stable version available
 
         # TODO: re-enable these extentions as soon as they are available and stable on php 7
-        - TESTS_ZEND_CACHE_MEMCACHE_ENABLED=false
-        - TESTS_ZEND_CACHE_MEMCACHED_ENABLED=false
-        - TESTS_ZEND_CACHE_MONGODB_ENABLED=false
-        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED=false
+        - TESTS_LAMINAS_CACHE_MONGODB_ENABLED=false
+        - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=false
     - php: hhvm
       env:
         - DEPS=lowest
-        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
-        - TESTS_ZEND_CACHE_APCU_ENABLED=false
+        - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=false
+        - TESTS_LAMINAS_CACHE_APCU_ENABLED=false
     - php: hhvm
       env:
         - DEPS=locked
-        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
-        - TESTS_ZEND_CACHE_APCU_ENABLED=false
+        - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=false
+        - TESTS_LAMINAS_CACHE_APCU_ENABLED=false
     - php: hhvm
       env:
         - DEPS=latest
-        - TESTS_ZEND_CACHE_XCACHE_ENABLED=false
-        - TESTS_ZEND_CACHE_APCU_ENABLED=false
+        - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=false
+        - TESTS_LAMINAS_CACHE_APCU_ENABLED=false
   allow_failures:
     - php: hhvm
 
 notifications:
-  irc: "irc.freenode.org#zftalk.dev"
   email: false
 
 before_install:
@@ -145,7 +131,7 @@ install:
         && sed -i 's/extension="apc.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
     fi
 
-  - if [[ $TESTS_ZEND_CACHE_XCACHE_ENABLED == 'true' ]]; then
+  - if [[ $TESTS_LAMINAS_CACHE_XCACHE_ENABLED == 'true' ]]; then
         git clone https://github.com/lighttpd/xcache.git
         && (
             cd xcache
@@ -167,30 +153,30 @@ before_script:
         elif [[ $APCU_BC_PECL_VERSION != '' ]]; then
             phpenv config-add .ci/apcu_bc.ini ;
         fi ;
-        if [[ $TESTS_ZEND_CACHE_REDIS_ENABLED == 'true' ]]; then
+        if [[ $TESTS_LAMINAS_CACHE_REDIS_ENABLED == 'true' ]]; then
             phpenv config-add .ci/redis.ini ;
         fi ;
-        if [[ $TESTS_ZEND_CACHE_MEMCACHE_ENABLED == 'true' ]]; then
+        if [[ $TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED == 'true' ]]; then
             phpenv config-add .ci/memcache.ini ;
         fi ;
-        if [[ $TESTS_ZEND_CACHE_MEMCACHED_ENABLED == 'true' ]]; then
+        if [[ $TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED == 'true' ]]; then
             phpenv config-add .ci/memcached.ini ;
         fi ;
-        if [[ $TESTS_ZEND_CACHE_MONGODB_ENABLED == 'true' ]]; then
+        if [[ $TESTS_LAMINAS_CACHE_MONGODB_ENABLED == 'true' ]]; then
             phpenv config-add .ci/mongo.ini ;
         fi ;
-        if [[ $TESTS_ZEND_CACHE_XCACHE_ENABLED == 'true' ]]; then
+        if [[ $TESTS_LAMINAS_CACHE_XCACHE_ENABLED == 'true' ]]; then
             phpenv config-add .ci/xcache.ini ;
         fi ;
     fi
 
 script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer run-script test-coverage --timeout=400 -- --verbose ; else composer run-script test --timeout=300 -- --verbose ; fi
-  - if [[ $CHECK_CS == 'true' ]]; then composer cs-check ; fi
-  - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then travis_retry curl -sSL https://raw.githubusercontent.com/zendframework/zf-mkdoc-theme/master/theme-installer.sh | bash ; fi
+  - if [[ $CS_CHECK == 'true' ]]; then composer cs-check ; fi
+  - if [[ $DEPLOY_DOCS == "true" && "$TRAVIS_TEST_RESULT" == "0" ]]; then travis_retry curl -sSL https://raw.githubusercontent.com/laminas/laminas-mkdoc-theme/master/theme-installer.sh | bash ; fi
 
 after_script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer upload-coverage ; fi
 
 after_success:
-  - if [[ $DEPLOY_DOCS == "true" ]]; then ./zf-mkdoc-theme/deploy.sh ; fi
+  - if [[ $DEPLOY_DOCS == "true" ]]; then ./laminas-mkdoc-theme/deploy.sh ; fi
