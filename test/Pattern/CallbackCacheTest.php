@@ -1,16 +1,14 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Pattern;
+namespace LaminasTest\Cache\Pattern;
 
-use Zend\Cache;
+use Laminas\Cache;
 
 /**
  * Test class
@@ -45,7 +43,7 @@ class FailableCallback
 
 /**
  * Test function
- * @see ZendTest\Cache\Pattern\Foo::bar
+ * @see LaminasTest\Cache\Pattern\Foo::bar
  */
 function bar()
 {
@@ -53,16 +51,16 @@ function bar()
 }
 
 /**
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage UnitTests
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class CallbackCacheTest extends CommonPatternTest
 {
 
     /**
-     * @var Zend\Cache\Storage\StorageInterface
+     * @var Laminas\Cache\Storage\StorageInterface
      */
     protected $_storage;
 
@@ -129,18 +127,18 @@ class CallbackCacheTest extends CommonPatternTest
 
     public function testCallInvalidCallbackException()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_pattern->call(1);
     }
 
     public function testCallUnknownCallbackException()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_pattern->call('notExiststingFunction');
     }
 
     /**
-     * Running tests calling ZendTest\Cache\Pattern\TestCallbackCache::bar
+     * Running tests calling LaminasTest\Cache\Pattern\TestCallbackCache::bar
      * using different callbacks resulting in this method call
      */
     protected function _testCall($callback, array $args)
