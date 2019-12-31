@@ -1,26 +1,24 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache\Storage\Adapter\MemcachedResourceManager;
+use Laminas\Cache\Storage\Adapter\MemcachedResourceManager;
 
 /**
  * PHPUnit test case
  */
 
 /**
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage UnitTests
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class MemcachedResourceManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -219,7 +217,7 @@ class MemcachedResourceManagerTest extends \PHPUnit_Framework_TestCase
         // php-memcached is required to set libmemcached options
         if (is_array($resource) && isset($resource['lib_options']) && count($resource['lib_options']) > 0) {
             if (!class_exists('Memcached', false)) {
-                $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException', 'Unknown libmemcached option');
+                $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException', 'Unknown libmemcached option');
             }
         }
 
