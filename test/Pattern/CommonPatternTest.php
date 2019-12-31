@@ -1,30 +1,29 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Pattern;
+namespace LaminasTest\Cache\Pattern;
 
-use Zend\Cache;
+use Laminas\Cache;
 
 /**
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 abstract class CommonPatternTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Zend\Cache\Pattern\PatternInterface
+     * @var \Laminas\Cache\Pattern\PatternInterface
      */
     protected $_pattern;
 
     public function setUp()
     {
         $this->assertInstanceOf(
-            'Zend\Cache\Pattern\PatternInterface',
+            'Laminas\Cache\Pattern\PatternInterface',
             $this->_pattern,
             'Internal pattern instance is needed for tests'
         );
@@ -38,7 +37,7 @@ abstract class CommonPatternTest extends \PHPUnit_Framework_TestCase
     public function testOptionNamesValid()
     {
         $options = $this->_pattern->getOptions();
-        $this->assertInstanceOf('Zend\Cache\Pattern\PatternOptions', $options);
+        $this->assertInstanceOf('Laminas\Cache\Pattern\PatternOptions', $options);
     }
 
     public function testOptionsGetAndSetDefault()
