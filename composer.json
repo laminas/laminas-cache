@@ -1,39 +1,22 @@
 {
-    "name": "zendframework/zend-cache",
+    "name": "laminas/laminas-cache",
     "description": "provides a generic way to cache any data",
     "license": "BSD-3-Clause",
     "keywords": [
-        "zf2",
+        "laminas",
         "cache"
     ],
-    "homepage": "https://github.com/zendframework/zend-cache",
-    "autoload": {
-        "psr-4": {
-            "Zend\\Cache\\": "src/"
-        }
+    "homepage": "https://laminas.dev",
+    "support": {
+        "docs": "https://docs.laminas.dev/laminas-cache/",
+        "issues": "https://github.com/laminas/laminas-cache/issues",
+        "source": "https://github.com/laminas/laminas-cache",
+        "rss": "https://github.com/laminas/laminas-cache/releases.atom",
+        "chat": "https://laminas.dev/chat",
+        "forum": "https://discourse.laminas.dev"
     },
-    "require": {
-        "php": ">=5.3.23",
-        "zendframework/zend-stdlib": "~2.4.0",
-        "zendframework/zend-servicemanager": "~2.4.0",
-        "zendframework/zend-serializer": "~2.4.0",
-        "zendframework/zend-eventmanager": "~2.4.0"
-    },
-    "require-dev": {
-        "zendframework/zend-session": "~2.4.0",
-        "fabpot/php-cs-fixer": "1.7.*",
-        "satooshi/php-coveralls": "dev-master",
-        "phpunit/PHPUnit": "~4.0"
-    },
-    "suggest": {
-        "zendframework/zend-serializer": "Zend\\Serializer component",
-        "zendframework/zend-session": "Zend\\Session component",
-        "ext-apc": "APC >= 3.1.6 to use the APC storage adapter",
-        "ext-dba": "DBA, to use the DBA storage adapter",
-        "ext-memcached": "Memcached >= 1.0.0 to use the Memcached storage adapter",
-        "ext-mongo": "Mongo, to use MongoDb storage adapter",
-        "ext-wincache": "WinCache, to use the WinCache storage adapter",
-        "mongofill/mongofill": "Alternative to ext-mongo - a pure PHP implementation designed as a drop in replacement"
+    "config": {
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {
@@ -41,9 +24,41 @@
             "dev-develop": "2.5-dev"
         }
     },
+    "require": {
+        "php": ">=5.3.23",
+        "laminas/laminas-eventmanager": "~2.4.0",
+        "laminas/laminas-serializer": "~2.4.0",
+        "laminas/laminas-servicemanager": "~2.4.0",
+        "laminas/laminas-stdlib": "~2.4.0",
+        "laminas/laminas-zendframework-bridge": "^1.0"
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "1.7.*",
+        "laminas/laminas-session": "~2.4.0",
+        "phpunit/phpunit": "~4.0",
+        "satooshi/php-coveralls": "dev-master"
+    },
+    "suggest": {
+        "ext-apc": "APC >= 3.1.6 to use the APC storage adapter",
+        "ext-dba": "DBA, to use the DBA storage adapter",
+        "ext-memcached": "Memcached >= 1.0.0 to use the Memcached storage adapter",
+        "ext-mongo": "Mongo, to use MongoDb storage adapter",
+        "ext-wincache": "WinCache, to use the WinCache storage adapter",
+        "laminas/laminas-serializer": "Laminas\\Serializer component",
+        "laminas/laminas-session": "Laminas\\Session component",
+        "mongofill/mongofill": "Alternative to ext-mongo - a pure PHP implementation designed as a drop in replacement"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laminas\\Cache\\": "src/"
+        }
+    },
     "autoload-dev": {
         "psr-4": {
-            "ZendTest\\Cache\\": "test/"
+            "LaminasTest\\Cache\\": "test/"
         }
+    },
+    "replace": {
+        "zendframework/zend-cache": "self.version"
     }
 }
