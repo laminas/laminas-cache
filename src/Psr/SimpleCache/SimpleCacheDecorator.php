@@ -1,27 +1,28 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Psr\SimpleCache;
+namespace Laminas\Cache\Psr\SimpleCache;
 
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
+use Laminas\Cache\Exception\InvalidArgumentException as LaminasCacheInvalidArgumentException;
+use Laminas\Cache\Psr\SerializationTrait;
+use Laminas\Cache\Storage\ClearByNamespaceInterface;
+use Laminas\Cache\Storage\FlushableInterface;
+use Laminas\Cache\Storage\StorageInterface;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use Throwable;
 use Traversable;
-use Zend\Cache\Exception\InvalidArgumentException as ZendCacheInvalidArgumentException;
-use Zend\Cache\Psr\SerializationTrait;
-use Zend\Cache\Storage\ClearByNamespaceInterface;
-use Zend\Cache\Storage\FlushableInterface;
-use Zend\Cache\Storage\StorageInterface;
 
 /**
- * Decorate a zend-cache storage adapter for usage as a PSR-16 implementation.
+ * Decorate a laminas-cache storage adapter for usage as a PSR-16 implementation.
  */
 class SimpleCacheDecorator implements SimpleCacheInterface
 {
@@ -60,7 +61,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         if ($this->isSerializationRequired($storage)) {
             throw new SimpleCacheException(sprintf(
                 'The storage adapter "%s" requires a serializer plugin; please see'
-                . ' https://docs.zendframework.com/zend-cache/storage/plugin/#quick-start'
+                . ' https://docs.laminas.dev/laminas-cache/storage/plugin/#quick-start'
                 . ' for details on how to attach the plugin to your adapter.',
                 get_class($storage)
             ));
@@ -293,7 +294,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     private static function translateException($e)
     {
-        $exceptionClass = $e instanceof ZendCacheInvalidArgumentException
+        $exceptionClass = $e instanceof LaminasCacheInvalidArgumentException
             ? SimpleCacheInvalidArgumentException::class
             : SimpleCacheException::class;
 

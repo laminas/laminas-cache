@@ -1,16 +1,17 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\CacheItemPool;
+namespace LaminasTest\Cache\Psr\CacheItemPool;
 
 use DateInterval;
 use DateTime;
+use Laminas\Cache\Psr\CacheItemPool\CacheItem;
 use PHPUnit\Framework\TestCase;
-use Zend\Cache\Psr\CacheItemPool\CacheItem;
 
 class CacheItemTest extends TestCase
 {
@@ -70,7 +71,7 @@ class CacheItemTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testExpireAtInvalidThrowsException()
     {
@@ -103,7 +104,7 @@ class CacheItemTest extends TestCase
     }
 
     /**
-     * @expectedException \Zend\Cache\Psr\CacheItemPool\InvalidArgumentException
+     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testExpiresAfterInvalidThrowsException()
     {

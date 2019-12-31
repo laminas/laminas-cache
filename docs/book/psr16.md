@@ -6,17 +6,17 @@
 cache access that does not involve cache pools, tags, deferment, etc.; it
 can be thought of as a key/value storage approach to caching.
 
-zend-cache provides PSR-16 support via the class
-`Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator`. This class implements PSR-16's
+laminas-cache provides PSR-16 support via the class
+`Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator`. This class implements PSR-16's
 `Psr\SimpleCache\CacheInterface`, and composes a
-`Zend\Cache\Storage\StorageInterface` instance to which it proxies all
+`Laminas\Cache\Storage\StorageInterface` instance to which it proxies all
 operations.
 
 Instantiation is as follows:
 
 ```php
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 
 $storage = StorageFactory::factory([
     'adapter' => [
@@ -71,8 +71,8 @@ PSR-16 has strict requirements around serialization of values. This is done to
 ensure that if you swap one PSR-16 adapter for another, the new one will be able
 to return the same values that the original adapter saved to the cache.
 
-Not all cache backends support the same data types, however. zend-cache provides
-a plugin, `Zend\Cache\Storage\Plugin\Serializer`, that you can attach to
+Not all cache backends support the same data types, however. laminas-cache provides
+a plugin, `Laminas\Cache\Storage\Plugin\Serializer`, that you can attach to
 adapters in order to ensure data is serialized to a string when saving to the
 cache, and deserialized to native PHP types on retrieval. The following adapters
 require this plugin in order to work with the `SimpleCacheDecorator`:
@@ -106,14 +106,14 @@ PSR-16 states that the `delete()` and `deleteMultiple()` methods should return
 `false` if an _error_ occured when deleting the key(s) provided, but `true`
 otherwise.
 
-Generally, zend-cache storage adapters comply with this. However, it is possible
+Generally, laminas-cache storage adapters comply with this. However, it is possible
 to configure your adapter such that you may get a false positive result from
 these methods.
 
 When an exception is raised and caught during key removal by an adapter, the
-adapter triggers an event with a `Zend\Cache\Storage\ExceptionEvent`. Plugins 
+adapter triggers an event with a `Laminas\Cache\Storage\ExceptionEvent`. Plugins 
 can react to these, and even manipulate the event instance. One such plugin,
-`Zend\Cache\Storage\Plugin\ExceptionHandler`, has a configuration option,
+`Laminas\Cache\Storage\Plugin\ExceptionHandler`, has a configuration option,
 `throw_exceptions` that, when boolean `false`, will prevent raising the
 exception. In such cases, adapters will typically return a boolean `false`
 anyways, but custom, third-party adapters may not.
@@ -122,7 +122,7 @@ Additionally, if you add a custom plugin that listens to removal event
 exceptions and modifies the return value and/or disables throwing the exception,
 a false positive return value could occur.
 
-As such, we recommend that if you wish to use zend-cache to provide a PSR-16
+As such, we recommend that if you wish to use laminas-cache to provide a PSR-16
 adapter, you audit the plugins you use with your adapter to ensure that you will
 get consistent, correct behavior for `delete()` and `deleteMultiple()`
 operations.

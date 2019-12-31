@@ -1,15 +1,16 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\PatternPluginManager;
+namespace Laminas\Cache\PatternPluginManager;
 
-use Zend\Cache\Exception;
-use Zend\Cache\Pattern;
-use Zend\ServiceManager\Exception\InvalidServiceException;
+use Laminas\Cache\Exception;
+use Laminas\Cache\Pattern;
+use Laminas\ServiceManager\Exception\InvalidServiceException;
 
 /**
  * Trait providing common logic between FormElementManager implementations.
