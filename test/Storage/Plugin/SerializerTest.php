@@ -1,22 +1,21 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Plugin;
+namespace LaminasTest\Cache\Storage\Plugin;
 
-use Zend\Cache;
-use Zend\Cache\Storage\Event;
-use Zend\Cache\Storage\PostEvent;
-use Zend\Serializer;
 use ArrayObject;
+use Laminas\Cache;
+use Laminas\Cache\Storage\Event;
+use Laminas\Cache\Storage\PostEvent;
+use Laminas\Serializer;
 
 /**
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class SerializerTest extends CommonPluginTest
 {
@@ -24,13 +23,13 @@ class SerializerTest extends CommonPluginTest
     /**
      * The storage adapter
      *
-     * @var \Zend\Cache\Storage\Adapter\AbstractAdapter
+     * @var \Laminas\Cache\Storage\Adapter\AbstractAdapter
      */
     protected $_adapter;
 
     public function setUp()
     {
-        $this->_adapter = $this->getMockForAbstractClass('Zend\Cache\Storage\Adapter\AbstractAdapter');
+        $this->_adapter = $this->getMockForAbstractClass('Laminas\Cache\Storage\Adapter\AbstractAdapter');
         $this->_options = new Cache\Storage\Plugin\PluginOptions();
         $this->_plugin  = new Cache\Storage\Plugin\Serializer();
         $this->_plugin->setOptions($this->_options);
