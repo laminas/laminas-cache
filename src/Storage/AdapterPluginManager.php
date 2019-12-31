@@ -1,16 +1,15 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Storage;
+namespace Laminas\Cache\Storage;
 
-use Zend\Cache\Exception;
-use Zend\ServiceManager\AbstractPluginManager;
+use Laminas\Cache\Exception;
+use Laminas\ServiceManager\AbstractPluginManager;
 
 /**
  * Plugin manager implementation for cache storage adapters
@@ -27,17 +26,17 @@ class AdapterPluginManager extends AbstractPluginManager
      * @var array
      */
     protected $invokableClasses = array(
-        'apc'            => 'Zend\Cache\Storage\Adapter\Apc',
-        'dba'            => 'Zend\Cache\Storage\Adapter\Dba',
-        'filesystem'     => 'Zend\Cache\Storage\Adapter\Filesystem',
-        'memcached'      => 'Zend\Cache\Storage\Adapter\Memcached',
-        'memory'         => 'Zend\Cache\Storage\Adapter\Memory',
-        'redis'          => 'Zend\Cache\Storage\Adapter\Redis',
-        'session'        => 'Zend\Cache\Storage\Adapter\Session',
-        'xcache'         => 'Zend\Cache\Storage\Adapter\XCache',
-        'wincache'       => 'Zend\Cache\Storage\Adapter\WinCache',
-        'zendserverdisk' => 'Zend\Cache\Storage\Adapter\ZendServerDisk',
-        'zendservershm'  => 'Zend\Cache\Storage\Adapter\ZendServerShm',
+        'apc'            => 'Laminas\Cache\Storage\Adapter\Apc',
+        'dba'            => 'Laminas\Cache\Storage\Adapter\Dba',
+        'filesystem'     => 'Laminas\Cache\Storage\Adapter\Filesystem',
+        'memcached'      => 'Laminas\Cache\Storage\Adapter\Memcached',
+        'memory'         => 'Laminas\Cache\Storage\Adapter\Memory',
+        'redis'          => 'Laminas\Cache\Storage\Adapter\Redis',
+        'session'        => 'Laminas\Cache\Storage\Adapter\Session',
+        'xcache'         => 'Laminas\Cache\Storage\Adapter\XCache',
+        'wincache'       => 'Laminas\Cache\Storage\Adapter\WinCache',
+        'zendserverdisk' => 'Laminas\Cache\Storage\Adapter\ZendServerDisk',
+        'zendservershm'  => 'Laminas\Cache\Storage\Adapter\ZendServerShm',
     );
 
     /**

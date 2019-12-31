@@ -1,18 +1,17 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache;
+use Laminas\Cache;
 
 /**
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class ApcTest extends CommonAdapterTest
 {
@@ -26,14 +25,14 @@ class ApcTest extends CommonAdapterTest
 
     public function setUp()
     {
-        if (!defined('TESTS_ZEND_CACHE_APC_ENABLED') || !TESTS_ZEND_CACHE_APC_ENABLED) {
-            $this->markTestSkipped("Skipped by TestConfiguration (TESTS_ZEND_CACHE_APC_ENABLED)");
+        if (!defined('TESTS_LAMINAS_CACHE_APC_ENABLED') || !TESTS_LAMINAS_CACHE_APC_ENABLED) {
+            $this->markTestSkipped("Skipped by TestConfiguration (TESTS_LAMINAS_CACHE_APC_ENABLED)");
         }
 
         if (version_compare('3.1.6', phpversion('apc')) > 0) {
             try {
                 new Cache\Storage\Adapter\Apc();
-                $this->fail("Expected exception Zend\Cache\Exception\ExtensionNotLoadedException");
+                $this->fail("Expected exception Laminas\Cache\Exception\ExtensionNotLoadedException");
             } catch (Cache\Exception\ExtensionNotLoadedException $e) {
                 $this->markTestSkipped("Missing ext/apc >= 3.1.6");
             }
@@ -47,7 +46,7 @@ class ApcTest extends CommonAdapterTest
         if (!$enabled) {
             try {
                 new Cache\Storage\Adapter\Apc();
-                $this->fail("Expected exception Zend\Cache\Exception\ExtensionNotLoadedException");
+                $this->fail("Expected exception Laminas\Cache\Exception\ExtensionNotLoadedException");
             } catch (Cache\Exception\ExtensionNotLoadedException $e) {
                 $this->markTestSkipped("ext/apc is disabled - see 'apc.enabled' and 'apc.enable_cli'");
             }
