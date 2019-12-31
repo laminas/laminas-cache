@@ -1,0 +1,2491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.">  
+    <link rel="canonical" href="https://docs.laminas.dev/storage/adapter/">
+    <link rel="shortcut icon" href="/img/trademark-laminas-foundation-rgb.svg">
+
+    <title>Adapters - laminas-cache - Laminas Docs</title>
+
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body id="page-top" class="components">
+
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        
+        <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+        </a>
+        <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
+            Documentation
+        </a>
+
+        
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
+                </li>
+            </ul>
+
+            
+            
+                <div class="d-block d-sm-none">
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">laminas-cache</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item">
+                                <span class="subnavigation__headline">Storage</span>
+                                <ul class="subnavigation__list">
+                                    
+                                        
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Adapters</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../capabilities/" class="subnavigation__link">Capabilities</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../plugin/" class="subnavigation__link">Plugins</a>
+    </li>
+
+                                    
+                                </ul>
+                            </li>
+                        
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item">
+                                <span class="subnavigation__headline">Cache Patterns</span>
+                                <ul class="subnavigation__list">
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/class-cache/" class="subnavigation__link">ClassCache</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/output-cache/" class="subnavigation__link">OutputCache</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
+    </li>
+
+                                    
+                                </ul>
+                            </li>
+                        
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item">
+                                <span class="subnavigation__headline">Standards Support</span>
+                                <ul class="subnavigation__list">
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../psr6/" class="subnavigation__link">PSR-6</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../psr16/" class="subnavigation__link">PSR-16</a>
+    </li>
+
+                                    
+                                </ul>
+                            </li>
+                        
+                    
+                
+            
+        </ul>
+    </div>
+
+                </div>
+            
+
+            
+            <div class="d-block d-sm-none">
+                <div class="component-selector">
+    
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    
+    <header class="header">
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="col-6 offset-md-2">
+                <h1 class="header__title">
+                    Components
+
+                    
+                        <small class="header__subtitle">laminas-cache</small>
+                    
+                </h1>
+            </div>
+
+            
+            <div class="col-4 text-sm-right">
+                
+                    
+
+                    <a href="#" class="header__link header__link--search" data-toggle="modal" data-target="#mkdocs_search_modal" title="Open search">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                    <a href="https://github.com/laminas/laminas-cache/" class="header__link header__link--github" title="Go to repository of laminas-cache">
+                        <i class="fa fa-github"></i> GitHub
+                    </a>
+                
+            </div>
+        </div>
+    </div>
+</header>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+                
+                    <li class="toc__entry">
+                        <a href="#quick-start" class="toc__link">Quick Start</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#basic-configuration-options" class="toc__link">Basic Configuration Options</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-storageinterface" class="toc__link">The StorageInterface</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-availablespacecapableinterface" class="toc__link">The AvailableSpaceCapableInterface</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-totalspacecapableinterface" class="toc__link">The TotalSpaceCapableInterface</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-clearbynamespaceinterface" class="toc__link">The ClearByNamespaceInterface</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-clearbyprefixinterface" class="toc__link">The ClearByPrefixInterface</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-clearexpiredinterface" class="toc__link">The ClearExpiredInterface</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-flushableinterface" class="toc__link">The FlushableInterface</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-iterableinterface" class="toc__link">The IterableInterface</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-optimizableinterface" class="toc__link">The OptimizableInterface</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-taggableinterface" class="toc__link">The TaggableInterface</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-apc-adapter" class="toc__link">The Apc Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-dba-adapter" class="toc__link">The Dba Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-filesystem-adapter" class="toc__link">The Filesystem Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-memcached-adapter" class="toc__link">The Memcached Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-redis-adapter" class="toc__link">The Redis Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-memory-adapter" class="toc__link">The Memory Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-mongodb-adapter" class="toc__link">The MongoDB Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-extmongodb-adapter" class="toc__link">The ExtMongoDB Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-wincache-adapter" class="toc__link">The WinCache Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-xcache-adapter" class="toc__link">The XCache Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-zendserverdisk-adapter" class="toc__link">The ZendServerDisk Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-zendservershm-adapter" class="toc__link">The ZendServerShm Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#examples" class="toc__link">Examples</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
+
+            </div>
+            <div class="col-md-7 col-sm-12 content" role="main" data-spy="scroll" data-target=".toc">
+                
+                    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        
+            <li class="breadcrumb-item"><a href="">Overview</a></li>
+
+            
+                <li class="breadcrumb-item"><a href="../..">laminas-cache</a></li>
+
+                
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Storage</li>
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">Adapters</li>
+            
+        
+    </ol>
+</nav>
+
+
+
+
+
+
+    
+    
+        <h2 class="chapter__headline">Storage</h2>
+    
+
+    <h1 id="adapters">Adapters</h1>
+<p>Storage adapters are wrappers for real storage resources such as memory or the filesystem, using
+the well known <em>adapter</em> pattern.</p>
+<p>They come with tons of methods to read, write, and modify stored items, and to get information about
+stored items and the storage.</p>
+<p>All adapters implement <code>Laminas\Cache\Storage\StorageInterface</code>, and most extend
+<code>Laminas\Cache\Storage\Adapter\AbstractAdapter</code>, which provides a foundation of
+common logic.</p>
+<p>Configuration is handled by either <code>Laminas\Cache\Storage\Adapter\AdapterOptions</code>,
+or an adapter-specific options class if it exists. You may pass the options
+instance to the class at instantiation, via the <code>setOptions()</code> method, or,
+alternately, pass an associative array of options in either place (internally,
+these are then passed to an options class instance). Alternately, you can pass
+either the options instance or associative array to the
+<code>Laminas\Cache\StorageFactory::factory</code> method.</p>
+<blockquote>
+<h3>Many Methods throw Exceptions</h3>
+<p>Because many caching operations throw an exception on error, you need to catch
+them. You can do so manually, or you can use the plugin
+<code>Laminas\Cache\Storage\Plugin\ExceptionHandler</code> with <code>throw_exceptions</code> set to
+<code>false</code> to automatically catch them. You can also define an
+<code>exception_callback</code> to log exceptions.</p>
+</blockquote>
+<h2 id="quick-start">Quick Start</h2>
+<p>Caching adapters can either be created from the provided
+<code>Laminas\Cache\StorageFactory</code>, or by instantiating one of the
+<code>Laminas\Cache\Storage\Adapter\*</code> classes.  To make life easier, the
+<code>Laminas\Cache\StorageFactory</code> comes with a <code>factory()</code> method to create an adapter
+and all requested plugins at once.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
+
+<span class=x>// Via factory:</span>
+<span class=x>$cache = StorageFactory::factory([</span>
+<span class=x>    &#39;adapter&#39; =&gt; [</span>
+<span class=x>        &#39;name&#39;    =&gt; &#39;apc&#39;,</span>
+<span class=x>        &#39;options&#39; =&gt; [&#39;ttl&#39; =&gt; 3600],</span>
+<span class=x>    ],</span>
+<span class=x>    &#39;plugins&#39; =&gt; [</span>
+<span class=x>        &#39;exception_handler&#39; =&gt; [&#39;throw_exceptions&#39; =&gt; false],</span>
+<span class=x>    ],</span>
+<span class=x>]);</span>
+
+<span class=x>// Alternately, create the adapter and plugin separately:</span>
+<span class=x>$cache  = StorageFactory::adapterFactory(&#39;apc&#39;, [&#39;ttl&#39; =&gt; 3600]);</span>
+<span class=x>$plugin = StorageFactory::pluginFactory(&#39;exception_handler&#39;, [</span>
+<span class=x>    &#39;throw_exceptions&#39; =&gt; false,</span>
+<span class=x>]);</span>
+<span class=x>$cache-&gt;addPlugin($plugin);</span>
+
+<span class=x>// Or do it completely manually:</span>
+<span class=x>$cache  = new Laminas\Cache\Storage\Adapter\Apc();</span>
+<span class=x>$cache-&gt;getOptions()-&gt;setTtl(3600);</span>
+
+<span class=x>$plugin = new Laminas\Cache\Storage\Plugin\ExceptionHandler();</span>
+<span class=x>$plugin-&gt;getOptions()-&gt;setThrowExceptions(false);</span>
+<span class=x>$cache-&gt;addPlugin($plugin);</span>
+</pre></div></p>
+<h2 id="basic-configuration-options">Basic Configuration Options</h2>
+<p>The following configuration options are defined by <code>Laminas\Cache\Storage\Adapter\AdapterOptions</code> and
+are available for every supported adapter. Adapter-specific configuration options are described on
+adapter level below.</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ttl</code></td>
+<td><code>integer</code></td>
+<td><code>0</code></td>
+<td>Time to live</td>
+</tr>
+<tr>
+<td><code>namespace</code></td>
+<td><code>string</code></td>
+<td>“laminascache”</td>
+<td>The “namespace” in which cache items will live</td>
+</tr>
+<tr>
+<td><code>key_pattern</code></td>
+<td><code>null|string</code></td>
+<td><code>null</code></td>
+<td>Pattern against which to validate cache keys</td>
+</tr>
+<tr>
+<td><code>readable</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Enable/Disable reading data from cache</td>
+</tr>
+<tr>
+<td><code>writable</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Enable/Disable writing data to cache</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-storageinterface">The StorageInterface</h2>
+<p><code>Laminas\Cache\Storage\StorageInterface</code> is the basic interface implemented by all
+storage adapters.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+
+<span class=x>use Traversable;</span>
+
+<span class=x>interface StorageInterface</span>
+<span class=x>{</span>
+<span class=x>    /**</span>
+<span class=x>     * Set options.</span>
+<span class=x>     *</span>
+<span class=x>     * @param array|Traversable|Adapter\AdapterOptions $options</span>
+<span class=x>     * @return StorageInterface Fluent interface</span>
+<span class=x>     */</span>
+<span class=x>    public function setOptions($options);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Get options</span>
+<span class=x>     *</span>
+<span class=x>     * @return Adapter\AdapterOptions</span>
+<span class=x>     */</span>
+<span class=x>    public function getOptions();</span>
+
+<span class=x>    /* reading */</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Get an item.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  string  $key</span>
+<span class=x>     * @param  bool $success</span>
+<span class=x>     * @param  mixed   $casToken</span>
+<span class=x>     * @return mixed Data on success, null on failure</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function getItem($key, &amp; $success = null, &amp; $casToken = null);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Get multiple items.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  array $keys</span>
+<span class=x>     * @return array Associative array of keys and values</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function getItems(array $keys);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Test if an item exists.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  string $key</span>
+<span class=x>     * @return bool</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function hasItem($key);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Test multiple items.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  array $keys</span>
+<span class=x>     * @return array Array of found keys</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function hasItems(array $keys);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Get metadata of an item.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  string $key</span>
+<span class=x>     * @return array|bool Metadata on success, false on failure</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function getMetadata($key);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Get multiple metadata</span>
+<span class=x>     *</span>
+<span class=x>     * @param  array $keys</span>
+<span class=x>     * @return array Associative array of keys and metadata</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function getMetadatas(array $keys);</span>
+
+<span class=x>    /* writing */</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Store an item.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  string $key</span>
+<span class=x>     * @param  mixed  $value</span>
+<span class=x>     * @return bool</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function setItem($key, $value);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Store multiple items.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  array $keyValuePairs</span>
+<span class=x>     * @return array Array of not stored keys</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function setItems(array $keyValuePairs);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Add an item.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  string $key</span>
+<span class=x>     * @param  mixed  $value</span>
+<span class=x>     * @return bool</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function addItem($key, $value);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Add multiple items.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  array $keyValuePairs</span>
+<span class=x>     * @return array Array of not stored keys</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function addItems(array $keyValuePairs);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Replace an existing item.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  string $key</span>
+<span class=x>     * @param  mixed  $value</span>
+<span class=x>     * @return bool</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function replaceItem($key, $value);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Replace multiple existing items.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  array $keyValuePairs</span>
+<span class=x>     * @return array Array of not stored keys</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function replaceItems(array $keyValuePairs);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Set an item only if token matches</span>
+<span class=x>     *</span>
+<span class=x>     * It uses the token received from getItem() to check if the item has</span>
+<span class=x>     * changed before overwriting it.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  mixed  $token</span>
+<span class=x>     * @param  string $key</span>
+<span class=x>     * @param  mixed  $value</span>
+<span class=x>     * @return bool</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     * @see    getItem()</span>
+<span class=x>     * @see    setItem()</span>
+<span class=x>     */</span>
+<span class=x>    public function checkAndSetItem($token, $key, $value);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Reset lifetime of an item</span>
+<span class=x>     *</span>
+<span class=x>     * @param  string $key</span>
+<span class=x>     * @return bool</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function touchItem($key);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Reset lifetime of multiple items.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  array $keys</span>
+<span class=x>     * @return array Array of not updated keys</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function touchItems(array $keys);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Remove an item.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  string $key</span>
+<span class=x>     * @return bool</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function removeItem($key);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Remove multiple items.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  array $keys</span>
+<span class=x>     * @return array Array of not removed keys</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function removeItems(array $keys);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Increment an item.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  string $key</span>
+<span class=x>     * @param  int    $value</span>
+<span class=x>     * @return int|bool The new value on success, false on failure</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function incrementItem($key, $value);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Increment multiple items.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  array $keyValuePairs</span>
+<span class=x>     * @return array Associative array of keys and new values</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function incrementItems(array $keyValuePairs);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Decrement an item.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  string $key</span>
+<span class=x>     * @param  int    $value</span>
+<span class=x>     * @return int|bool The new value on success, false on failure</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function decrementItem($key, $value);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Decrement multiple items.</span>
+<span class=x>     *</span>
+<span class=x>     * @param  array $keyValuePairs</span>
+<span class=x>     * @return array Associative array of keys and new values</span>
+<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
+<span class=x>     */</span>
+<span class=x>    public function decrementItems(array $keyValuePairs);</span>
+
+<span class=x>    /* status */</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Capabilities of this storage</span>
+<span class=x>     *</span>
+<span class=x>     * @return Capabilities</span>
+<span class=x>     */</span>
+<span class=x>    public function getCapabilities();</span>
+<span class=x>}</span>
+</pre></div></p>
+<h2 id="the-availablespacecapableinterface">The AvailableSpaceCapableInterface</h2>
+<p><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code> implements a method to allow
+retrieving the current available space remaining in storage.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+
+<span class=x>interface AvailableSpaceCapableInterface</span>
+<span class=x>{</span>
+<span class=x>    /**</span>
+<span class=x>     * Get available space in bytes</span>
+<span class=x>     *</span>
+<span class=x>     * @return int|float</span>
+<span class=x>     */</span>
+<span class=x>    public function getAvailableSpace();</span>
+<span class=x>}</span>
+</pre></div></p>
+<h2 id="the-totalspacecapableinterface">The TotalSpaceCapableInterface</h2>
+<p><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code> implements a method to allow
+retrieving the total storage space.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+
+<span class=x>interface TotalSpaceCapableInterface</span>
+<span class=x>{</span>
+<span class=x>    /**</span>
+<span class=x>     * Get total space in bytes</span>
+<span class=x>     *</span>
+<span class=x>     * @return int|float</span>
+<span class=x>     */</span>
+<span class=x>    public function getTotalSpace();</span>
+<span class=x>}</span>
+</pre></div></p>
+<h2 id="the-clearbynamespaceinterface">The ClearByNamespaceInterface</h2>
+<p><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code> implements a method to allow
+clearing all cached items within a given namespace.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+
+<span class=x>interface ClearByNamespaceInterface</span>
+<span class=x>{</span>
+<span class=x>    /**</span>
+<span class=x>     * Remove items of given namespace</span>
+<span class=x>     *</span>
+<span class=x>     * @param string $namespace</span>
+<span class=x>     * @return bool</span>
+<span class=x>     */</span>
+<span class=x>    public function clearByNamespace($namespace);</span>
+<span class=x>}</span>
+</pre></div></p>
+<h2 id="the-clearbyprefixinterface">The ClearByPrefixInterface</h2>
+<p><code>Laminas\Cache\Storage\ClearByPrefixInterface</code> implements a method to allow
+clearing all cached items that have a given prefix (within the currently
+configured namespace).</p>
+<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+
+<span class=x>interface ClearByPrefixInterface</span>
+<span class=x>{</span>
+<span class=x>    /**</span>
+<span class=x>     * Remove items matching given prefix</span>
+<span class=x>     *</span>
+<span class=x>     * @param string $prefix</span>
+<span class=x>     * @return bool</span>
+<span class=x>     */</span>
+<span class=x>    public function clearByPrefix($prefix);</span>
+<span class=x>}</span>
+</pre></div></p>
+<h2 id="the-clearexpiredinterface">The ClearExpiredInterface</h2>
+<p><code>Laminas\Cache\Storage\ClearExpiredInterface</code> implements a method to allow clearing
+all expired items (within the current configured namespace).</p>
+<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+
+<span class=x>interface ClearExpiredInterface</span>
+<span class=x>{</span>
+<span class=x>    /**</span>
+<span class=x>     * Remove expired items</span>
+<span class=x>     *</span>
+<span class=x>     * @return bool</span>
+<span class=x>     */</span>
+<span class=x>    public function clearExpired();</span>
+<span class=x>}</span>
+</pre></div></p>
+<h2 id="the-flushableinterface">The FlushableInterface</h2>
+<p><code>Laminas\Cache\Storage\FlushableInterface</code> implements a method for flushing the
+entire cache storage.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+
+<span class=x>interface FlushableInterface</span>
+<span class=x>{</span>
+<span class=x>    /**</span>
+<span class=x>     * Flush the whole storage</span>
+<span class=x>     *</span>
+<span class=x>     * @return bool</span>
+<span class=x>     */</span>
+<span class=x>    public function flush();</span>
+<span class=x>}</span>
+</pre></div></p>
+<h2 id="the-iterableinterface">The IterableInterface</h2>
+<p><code>Laminas\Cache\Storage\IterableInterface</code> implements a method for retrieving an
+iterator of all items in storage. It extends <code>IteratorAggregate</code>, so it's
+possible to directly iterate over the storage implementations that implement
+this interface using <code>foreach</code>.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+
+<span class=x>use IteratorAggregate;</span>
+
+<span class=x>/**</span>
+<span class=x> *</span>
+<span class=x> * @method IteratorInterface getIterator() Get the storage iterator</span>
+<span class=x> */</span>
+<span class=x>interface IterableInterface extends IteratorAggregate</span>
+<span class=x>{</span>
+<span class=x>    /**</span>
+<span class=x>     * @return \Traversable</span>
+<span class=x>     */</span>
+<span class=x>    public function getIterator();</span>
+<span class=x>}</span>
+</pre></div></p>
+<h2 id="the-optimizableinterface">The OptimizableInterface</h2>
+<p><code>Laminas\Cache\Storage\OptimizableInterface</code> implements a method for running
+optimization processes on the storage adapter.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+
+<span class=x>interface OptimizableInterface</span>
+<span class=x>{</span>
+<span class=x>    /**</span>
+<span class=x>     * Optimize the storage</span>
+<span class=x>     *</span>
+<span class=x>     * @return bool</span>
+<span class=x>     */</span>
+<span class=x>    public function optimize();</span>
+<span class=x>}</span>
+</pre></div></p>
+<h2 id="the-taggableinterface">The TaggableInterface</h2>
+<p><code>Laminas\Cache\Storage\TaggableInterface</code> implements methods for tagging items, and
+cleaning (expiring) items matching tags.</p>
+<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+
+<span class=x>interface TaggableInterface</span>
+<span class=x>{</span>
+<span class=x>    /**</span>
+<span class=x>     * Set tags to an item by given key.</span>
+<span class=x>     * An empty array will remove all tags.</span>
+<span class=x>     *</span>
+<span class=x>     * @param string   $key</span>
+<span class=x>     * @param string[] $tags</span>
+<span class=x>     * @return bool</span>
+<span class=x>     */</span>
+<span class=x>    public function setTags($key, array $tags);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Get tags of an item by given key</span>
+<span class=x>     *</span>
+<span class=x>     * @param string $key</span>
+<span class=x>     * @return string[]|FALSE</span>
+<span class=x>     */</span>
+<span class=x>    public function getTags($key);</span>
+
+<span class=x>    /**</span>
+<span class=x>     * Remove items matching given tags.</span>
+<span class=x>     *</span>
+<span class=x>     * If $disjunction only one of the given tags must match</span>
+<span class=x>     * else all given tags must match.</span>
+<span class=x>     *</span>
+<span class=x>     * @param string[] $tags</span>
+<span class=x>     * @param  bool  $disjunction</span>
+<span class=x>     * @return bool</span>
+<span class=x>     */</span>
+<span class=x>    public function clearByTags(array $tags, $disjunction = false);</span>
+<span class=x>}</span>
+</pre></div></p>
+<h2 id="the-apc-adapter">The Apc Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\Apc</code> stores cache items in shared memory through the
+PHP extension <a href="http://pecl.php.net/package/APC">APC</a> (Alternative PHP Cache).</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\StorageInterface</code></li>
+<li><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByPrefixInterface</code></li>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+<li><code>Laminas\Cache\Storage\IterableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>null</code>, <code>bool</code>, <code>int</code>, <code>float</code>, <code>string</code>, <code>array</code> (serialized), <code>object</code> (serialized)</td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>internal_key, atime, ctime, mtime, rtime, size, hits, ttl</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td>value of <code>apc.use_request_time</code> from <code>php.ini</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>5182</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td>Option value of <code>namespace_separator</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Adapter specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>namespace_separator</code></td>
+<td><code>string</code></td>
+<td>":"</td>
+<td>A separator for the namespace and prefix.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-dba-adapter">The Dba Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\Dba</code> stores cache items into
+<a href="http://en.wikipedia.org/wiki/Dbm">dbm</a>-like databases using the PHP extension
+<a href="http://php.net/manual/book.dba.php">dba</a>.</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\StorageInterface</code></li>
+<li><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByPrefixInterface</code></li>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+<li><code>Laminas\Cache\Storage\IterableInterface</code></li>
+<li><code>Laminas\Cache\Storage\OptimizableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>string</code>, <code>null</code> =&gt; <code>string</code>, <code>boolean</code> =&gt; <code>string</code>, <code>integer</code> =&gt; <code>string</code>, <code>double</code> =&gt; <code>string</code></td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td>Option value of <code>namespace_separator</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Adapter specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>namespace_separator</code></td>
+<td><code>string</code></td>
+<td>":"</td>
+<td>A separator for the namespace and prefix.</td>
+</tr>
+<tr>
+<td><code>pathname</code></td>
+<td><code>string</code></td>
+<td>""</td>
+<td>Pathname to the database file.</td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td><code>string</code></td>
+<td>"c"</td>
+<td>The mode with which to open the database; please read <a href="http://php.net/manual/function.dba-open.php">dba_open</a> for more information.</td>
+</tr>
+<tr>
+<td><code>handler</code></td>
+<td><code>string</code></td>
+<td>"flatfile"</td>
+<td>The name of the handler which shall be used for accessing the database.</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<h3>This adapter doesn't support automatic expiry</h3>
+<p>Because this adapter doesn't support automatic expiry, it's very important to clean
+outdated items periodically!</p>
+</blockquote>
+<h2 id="the-filesystem-adapter">The Filesystem Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\Filesystem</code> stores cache items on the filesystem.</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\StorageInterface</code></li>
+<li><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByPrefixInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearExpiredInterface</code></li>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+<li><code>Laminas\Cache\Storage\IterableInterface</code></li>
+<li><code>Laminas\Cache\Storage\OptimizableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TaggableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>string</code>, <code>null</code> =&gt; <code>string</code>, <code>boolean</code> =&gt; <code>string</code>, <code>integer</code> =&gt; <code>string</code>, <code>double</code> =&gt; <code>string</code></td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>mtime, filespec, atime, ctime</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>251</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td>Option value of <code>namespace_separator</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Adapter specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>namespace_separator</code></td>
+<td><code>string</code></td>
+<td>":"</td>
+<td>A separator for the namespace and prefix</td>
+</tr>
+<tr>
+<td><code>cache_dir</code></td>
+<td><code>string</code></td>
+<td>""</td>
+<td>Directory to store cache files.</td>
+</tr>
+<tr>
+<td><code>clear_stat_cache</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Call <code>clearstatcache()</code> enabled?</td>
+</tr>
+<tr>
+<td><code>dir_level</code></td>
+<td><code>integer</code></td>
+<td><code>1</code></td>
+<td>Defines how much sub-directories should be created.</td>
+</tr>
+<tr>
+<td><code>dir_permission</code></td>
+<td><code>integer</code></td>
+<td><code>false</code></td>
+<td>0700    Set explicit permission on creating new directories.</td>
+</tr>
+<tr>
+<td><code>file_locking</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Lock files on writing.</td>
+</tr>
+<tr>
+<td><code>file_permission</code></td>
+<td><code>integer</code></td>
+<td><code>false</code></td>
+<td>0600    Set explicit permission on creating new files.</td>
+</tr>
+<tr>
+<td><code>key_pattern</code></td>
+<td><code>string</code></td>
+<td><code>/^[a-z0-9_\+\-]*$/Di</code></td>
+<td>Validate key against pattern.</td>
+</tr>
+<tr>
+<td><code>no_atime</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Don’t get ‘fileatime’ as ‘atime’ on metadata.</td>
+</tr>
+<tr>
+<td><code>no_ctime</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Don’t get ‘filectime’ as ‘ctime’ on metadata.</td>
+</tr>
+<tr>
+<td><code>umask</code></td>
+<td><code>integer|false</code></td>
+<td><code>false</code></td>
+<td>Use <a href="http://wikipedia.org/wiki/Umask">umask</a> to set file and directory permissions.</td>
+</tr>
+<tr>
+<td><code>suffix</code></td>
+<td><code>string</code></td>
+<td><code>dat</code></td>
+<td>Suffix for cache files</td>
+</tr>
+<tr>
+<td><code>tag_suffix</code></td>
+<td><code>string</code></td>
+<td><code>tag</code></td>
+<td>Suffix for tag files</td>
+</tr>
+</tbody>
+</table></div>
+<p>Note: the <code>suffix</code> and <code>tag_suffix</code> options will be escaped in order to be safe
+for glob operations.</p>
+<h2 id="the-memcached-adapter">The Memcached Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\Memcached</code> stores cache items over the memcached
+protocol, using the PHP extension <a href="http://pecl.php.net/package/memcached">memcached</a>,
+based on <a href="http://libmemcached.org/">Libmemcached</a>.</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\StorageInterface</code></li>
+<li><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code></li>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>null</code>, <code>boolean</code>, <code>integer</code>, <code>double</code>, <code>string</code>, <code>array</code> (serialized), <code>object</code> (serialized)</td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>255</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td>none</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Adapter specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>servers</code></td>
+<td><code>array</code></td>
+<td><code>[]</code></td>
+<td>List of servers in the format <code>[] = [string host, integer port]</code></td>
+</tr>
+<tr>
+<td><code>lib_options</code></td>
+<td><code>array</code></td>
+<td><code>[]</code></td>
+<td>Associative array of Libmemcached options where the array key is the option name (without the prefix <code>OPT_</code>) or the constant value. The array value is the option value. Please read <a href="http://php.net/manual/memcached.setoption.php">the memcached setOption() page</a> for more information</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-redis-adapter">The Redis Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\Redis</code> stores cache items over the redis protocol
+using the PHP extension <a href="https://github.com/nicolasff/phpredis">redis</a>.</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>string</code>, <code>array</code> (serialized), <code>object</code> (serialized)</td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>255</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td>none</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Adapter specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>database</code></td>
+<td><code>integer</code></td>
+<td>0</td>
+<td>Set database identifier.</td>
+</tr>
+<tr>
+<td><code>lib_options</code></td>
+<td><code>array</code></td>
+<td><code>[]</code></td>
+<td>Associative array of redis options where the array key is the option name.</td>
+</tr>
+<tr>
+<td><code>namespace_separator</code></td>
+<td><code>string</code></td>
+<td>":"</td>
+<td>A separator for the namespace and prefix.</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td><code>string</code></td>
+<td>""</td>
+<td>Set password.</td>
+</tr>
+<tr>
+<td><code>persistent_id</code></td>
+<td><code>string</code></td>
+<td></td>
+<td>Set persistent id (name of the connection, leave blank to not use a persistent connection).</td>
+</tr>
+<tr>
+<td><code>resource_manager</code></td>
+<td><code>string</code></td>
+<td></td>
+<td>Set the redis resource manager to use</td>
+</tr>
+<tr>
+<td><code>server</code></td>
+<td></td>
+<td></td>
+<td>See below.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>server</code> can be described as any of the following:</p>
+<ul>
+<li>URI: <code>/path/to/sock.sock</code></li>
+<li>Associative array: <code>['host' =&gt; &lt;host&gt;[, 'port' =&gt; &lt;port&gt;[, 'timeout' =&gt; &lt;timeout&gt;]]]</code></li>
+<li>List: <code>[&lt;host&gt;[, &lt;port&gt;, [, &lt;timeout&gt;]]]</code></li>
+</ul>
+<h2 id="the-memory-adapter">The Memory Adapter</h2>
+<p>The <code>Laminas\Cache\Storage\Adapter\Memory</code> stores items in-memory in the current
+process only.</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\StorageInterface</code></li>
+<li><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByPrefixInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearExpiredInterface</code></li>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+<li><code>Laminas\Cache\Storage\IterableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TaggableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>string</code>, <code>null</code>, <code>boolean</code>, <code>integer</code>, <code>double</code>, <code>array</code>, <code>object</code>, <code>resource</code></td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>mtime</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>Value of <code>PHP_INT_MAX</code></td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>0.05</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Adapter specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memory_limit</code></td>
+<td><code>string|integer</code></td>
+<td>50% of <code>memory_limit</code> INI value</td>
+<td>Limit of how much memory can PHP allocate to allow store items.</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<h4>Memory Limit</h4>
+<p>The adapter has the following behavior with regards to the memory limit:</p>
+<ul>
+<li>If the consumed memory exceeds the limit provided, an <code>OutOfSpaceException</code>
+  is thrown.</li>
+<li>A number less the or equal to zero disables the memory limit.</li>
+<li>When a value is provided for the memory limit, the value is measured in
+  bytes. Shorthand notation may also be provided.</li>
+</ul>
+<h3>Current process only!</h3>
+<p>All stored items will be lost on termination of the script. For web-facing
+requests, this typically means the cache is volatile.</p>
+</blockquote>
+<h2 id="the-mongodb-adapter">The MongoDB Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\MongoDB</code> stores cache items using MongoDB, via either the
+PHP extension <a href="http://php.net/mongo">mongo</a>, or a MongoDB polyfill library, such as
+<a href="https://github.com/mongofill/mongofill">Mongofill</a>.</p>
+<blockquote>
+<h4>ext-mongodb</h4>
+<p>If you are using the mongodb extension (vs the mongo extension), you will need
+to use the <a href="#the-extmongodb-adapter">ExtMongoDb adapter</a> instead.</p>
+</blockquote>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>string</code>, <code>null</code>, <code>boolean</code>, <code>integer</code>, <code>double</code>, <code>array</code></td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>_id</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>255</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td><Option value of namespace_separator></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Adapter specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lib_option</code></td>
+<td><code>array</code></td>
+<td></td>
+<td>Associative array of options where the array key is the option name.</td>
+</tr>
+<tr>
+<td><code>namespace_separator</code></td>
+<td><code>string</code></td>
+<td>":"</td>
+<td>A separator for the namespace and prefix.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Available keys for <code>lib_option</code> include:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>server</code></td>
+<td><code>mongodb://localhost:27017</code></td>
+<td>The MongoDB server connection string (see the <a href="http://php.net/MongoClient">MongoClient docs</a>).</td>
+</tr>
+<tr>
+<td><code>database</code></td>
+<td><code>laminas</code></td>
+<td>Name of the database to use; MongoDB will create this database if it does not exist.</td>
+</tr>
+<tr>
+<td><code>collection</code></td>
+<td><code>cache</code></td>
+<td>Name of the collection to use; MongoDB will create this collection if it does not exist.</td>
+</tr>
+<tr>
+<td><code>connectionOptions</code></td>
+<td><code>['fsync' =&gt; false, 'journal' =&gt; true]</code></td>
+<td>Associative array of options to pass to <code>MongoClient</code> (see the <a href="http://php.net/MongoClient">MongoClient docs</a>).</td>
+</tr>
+<tr>
+<td><code>driverOptions</code></td>
+<td><code>[]</code></td>
+<td>Associative array of driver options to pass to <code>MongoClient</code> (see the <a href="http://php.net/MongoClient">MongoClient docs</a>).</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-extmongodb-adapter">The ExtMongoDB Adapter</h2>
+<blockquote>
+<p>Available since version 2.8.0</p>
+</blockquote>
+<p><code>Laminas\Cache\Storage\Adapter\ExtMongoDB</code> stores cache items using the mongodb extension, and
+requires that the MongoDB PHP Client library is also installed. You can install the client
+library using the following:</p>
+<p> <div class=codehilite><pre><span></span>$ composer require mongodb/mongodb
+</pre></div></p>
+<blockquote>
+<h4>ext-mongo</h4>
+<p>If you are using the mongo extension (vs the mongodb extension), you will need
+to use the <a href="#the-mongodb-adapter">MongoDb adapter</a> instead.</p>
+</blockquote>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>string</code>, <code>null</code>, <code>boolean</code>, <code>integer</code>, <code>double</code>, <code>array</code></td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>_id</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>255</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td><Option value of namespace_separator></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Adapter specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lib_option</code></td>
+<td><code>array</code></td>
+<td></td>
+<td>Associative array of options where the array key is the option name.</td>
+</tr>
+<tr>
+<td><code>namespace_separator</code></td>
+<td><code>string</code></td>
+<td>":"</td>
+<td>A separator for the namespace and prefix.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Available keys for <code>lib_option</code> include:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>server</code></td>
+<td><code>mongodb://localhost:27017</code></td>
+<td>The MongoDB server connection string (see the <a href="https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/">MongoDB\Client docs</a>).</td>
+</tr>
+<tr>
+<td><code>database</code></td>
+<td><code>laminas</code></td>
+<td>Name of the database to use; MongoDB will create this database if it does not exist.</td>
+</tr>
+<tr>
+<td><code>collection</code></td>
+<td><code>cache</code></td>
+<td>Name of the collection to use; MongoDB will create this collection if it does not exist.</td>
+</tr>
+<tr>
+<td><code>connectionOptions</code></td>
+<td><code>['fsync' =&gt; false, 'journal' =&gt; true]</code></td>
+<td>Associative array of URI options (such as authentication credentials or query string parameters) to pass to <code>MongoDB\\Client</code> (see the <a href="https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/">MongoDB\Client docs</a>).</td>
+</tr>
+<tr>
+<td><code>driverOptions</code></td>
+<td><code>[]</code></td>
+<td>Associative array of driver options to pass to <code>MongoDB\\Client</code> (see the <a href="https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/">MongoDB\Client docs</a>).</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-wincache-adapter">The WinCache Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\WinCache</code> stores cache items into shared memory
+through the PHP extension <a href="http://pecl.php.net/package/WinCache">WinCache</a>.</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\StorageInterface</code></li>
+<li><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code></li>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>null</code>, <code>boolean</code>, <code>integer</code>, <code>double</code>, <code>string</code>, <code>array</code> (serialized), <code>object</code> (serialized)</td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>internal_key, ttl, hits, size</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>apc.use_request_time</code> <code>php.ini</code> value.</td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td>Option value of <code>namespace_separator</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Adapter specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>namespace_separator</code></td>
+<td><code>string</code></td>
+<td>":"</td>
+<td>A separator for the namespace and prefix.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-xcache-adapter">The XCache Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\XCache</code> stores cache items into shared memory through the
+PHP extension <a href="http://xcache.lighttpd.net/">XCache</a>.</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\StorageInterface</code></li>
+<li><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByPrefixInterface</code></li>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+<li><code>Laminas\Cache\Storage\IterableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>boolean</code>, <code>integer</code>, <code>double</code>, <code>string</code>, <code>array</code> (serialized), <code>object</code> (serialized)</td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>internal_key, size, refcount, hits, ctime, atime, hvalue</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td><code>xcache.var_maxttl</code> <code>php.ini</code> value</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>5182</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td>Option value of <code>namespace_separator</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3>Adapter specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>namespace_separator</code></td>
+<td><code>string</code></td>
+<td>":"</td>
+<td>A separator for the namespace and prefix.</td>
+</tr>
+<tr>
+<td><code>admin_auth</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>Enable admin authentication by configuration options <code>admin_user</code> and <code>admin_pass</code>.  This makes XCache administration functions accessible without the need of HTTP-Authentication if <code>xcache.admin.enable_auth</code> is enabled.</td>
+</tr>
+<tr>
+<td><code>admin_user</code></td>
+<td><code>string</code></td>
+<td>""</td>
+<td>The username of <code>xcache.admin.user</code>.</td>
+</tr>
+<tr>
+<td><code>admin_pass</code></td>
+<td><code>string</code></td>
+<td>""</td>
+<td>The password of <code>xcache.admin.pass</code> in plain text.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-zendserverdisk-adapter">The ZendServerDisk Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\ZendServerDisk</code> stores cache items on the filesystem
+using the <a href="https://www.zend.com/en/products/server/">Zend Server Data Caching API</a>.</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\StorageInterface</code></li>
+<li><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code></li>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>null</code>, <code>boolean</code>, <code>integer</code>, <code>double</code>, <code>string</code>, <code>array</code> (serialized), <code>object</code> (serialized)</td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>if 'zend_datacache.lock_on_expire' is enabled 120 else 0</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td><code>::</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-zendservershm-adapter">The ZendServerShm Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\ZendServerShm</code> stores cache items in shared memory
+through the <a href="https://www.zend.com/en/products/server/">Zend Server Data Caching API</a>.</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\StorageInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code></li>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+<li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
+</ul>
+<h3>Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>null</code>, <code>boolean</code>, <code>integer</code>, <code>double</code>, <code>string</code>, <code>array</code> (serialized), <code>object</code> (serialized)</td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>if 'zend_datacache.lock_on_expire' is enabled 120 else 0</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td><code>::</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="examples">Examples</h2>
+<h3>Basic Usage</h3>
+<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
+
+<span class=x>$cache = StorageFactory::factory([</span>
+<span class=x>    &#39;adapter&#39; =&gt; [</span>
+<span class=x>        &#39;name&#39; =&gt; &#39;filesystem&#39;</span>
+<span class=x>    ],</span>
+<span class=x>    &#39;plugins&#39; =&gt; [</span>
+<span class=x>        // Don&#39;t throw exceptions on cache errors</span>
+<span class=x>        &#39;exception_handler&#39; =&gt; [</span>
+<span class=x>            &#39;throw_exceptions&#39; =&gt; false</span>
+<span class=x>        ],</span>
+<span class=x>    ],</span>
+<span class=x>]);</span>
+
+<span class=x>$key    = &#39;unique-cache-key&#39;;</span>
+<span class=x>$result = $cache-&gt;getItem($key, $success);</span>
+<span class=x>if (! $success) {</span>
+<span class=x>    $result = doExpensiveStuff();</span>
+<span class=x>    $cache-&gt;setItem($key, $result);</span>
+<span class=x>}</span>
+</pre></div></p>
+<h3>Get multiple Rows from a Database</h3>
+<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
+
+<span class=x>// Instantiate the cache instance using a namespace for the same type of items</span>
+<span class=x>$cache = StorageFactory::factory([</span>
+<span class=x>    &#39;adapter&#39; =&gt; [</span>
+<span class=x>        &#39;name&#39; =&gt; &#39;filesystem&#39;,</span>
+<span class=x>        // With a namespace, we can indicate the same type of items,</span>
+<span class=x>        // so we can simply use the database id as the cache key</span>
+<span class=x>        &#39;options&#39; =&gt; [</span>
+<span class=x>            &#39;namespace&#39; =&gt; &#39;dbtable&#39;,</span>
+<span class=x>        ],</span>
+<span class=x>    ],</span>
+<span class=x>    &#39;plugins&#39; =&gt; [</span>
+<span class=x>        // Don&#39;t throw exceptions on cache errors</span>
+<span class=x>        &#39;exception_handler&#39; =&gt; [</span>
+<span class=x>            &#39;throw_exceptions&#39; =&gt; false,</span>
+<span class=x>        ],</span>
+<span class=x>        // We store database rows on filesystem so we need to serialize them</span>
+<span class=x>        &#39;Serializer&#39;,</span>
+<span class=x>    ],</span>
+<span class=x>]);</span>
+
+<span class=x>// Load two rows from cache if possible</span>
+<span class=x>$ids     = [1, 2];</span>
+<span class=x>$results = $cache-&gt;getItems($ids);</span>
+<span class=x>if (count($results) &lt; count($ids)) {</span>
+<span class=x>    // Load rows from db if loading from cache failed</span>
+<span class=x>    $missingIds     = array_diff($ids, array_keys($results));</span>
+<span class=x>    $missingResults = [];</span>
+<span class=x>    $query          = &#39;SELECT * FROM dbtable WHERE id IN (&#39; . implode(&#39;,&#39;, $missingIds) . &#39;)&#39;;</span>
+<span class=x>    foreach ($pdo-&gt;query($query, PDO::FETCH_ASSOC) as $row) {</span>
+<span class=x>        $missingResults[ $row[&#39;id&#39;] ] = $row;</span>
+<span class=x>    }</span>
+
+<span class=x>    // Update cache items of the loaded rows from db</span>
+<span class=x>    $cache-&gt;setItems($missingResults);</span>
+
+<span class=x>    // merge results from cache and db</span>
+<span class=x>    $results = array_merge($results, $missingResults);</span>
+<span class=x>}</span>
+</pre></div></p>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../..">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../capabilities/">
+                    Next <i class="fa fa-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+
+    <div class="help-wanted">
+        <p>
+            Found a mistake or want to contribute to the documentation?
+            <a href="https://github.com/laminas/laminas-cache/edit/master/docs/book/storage/adapter.md" target="_blank" class="help-wanted__link">
+                Edit this page on GitHub!
+            </a>
+        </p>
+    </div>
+
+                
+            </div>
+            <div class="col-md-3 col-sm-12 sidebar">
+                
+                    <div class="component-selector">
+    
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">laminas-cache</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item">
+                                <span class="subnavigation__headline">Storage</span>
+                                <ul class="subnavigation__list">
+                                    
+                                        
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Adapters</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../capabilities/" class="subnavigation__link">Capabilities</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../plugin/" class="subnavigation__link">Plugins</a>
+    </li>
+
+                                    
+                                </ul>
+                            </li>
+                        
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item">
+                                <span class="subnavigation__headline">Cache Patterns</span>
+                                <ul class="subnavigation__list">
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/class-cache/" class="subnavigation__link">ClassCache</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/output-cache/" class="subnavigation__link">OutputCache</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
+    </li>
+
+                                    
+                                </ul>
+                            </li>
+                        
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item">
+                                <span class="subnavigation__headline">Standards Support</span>
+                                <ul class="subnavigation__list">
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../psr6/" class="subnavigation__link">PSR-6</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../psr16/" class="subnavigation__link">PSR-16</a>
+    </li>
+
+                                    
+                                </ul>
+                            </li>
+                        
+                    
+                
+            
+        </ul>
+    </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <footer class="footer">
+    <div class="container">
+
+        
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a class="footer__button" href="#page-top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7 offset-md-2">
+                <h5>Laminas</h5>
+                <ul>
+                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
+                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+
+            
+            <div class="col-md-4 offset-md-2">
+                <h4 class="footer__headline">Support</h4>
+                <ul class="support__list">
+                    <li class="support__list-item">
+                        <a href="https://discourse.laminas.dev" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://laminas.dev/chat" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://github.com/laminas" class="support__link" title="Github"><i class="fa fa-github"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://twitter.com/getlaminas" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://getlaminas.org/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://getlaminas.org/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
+                    </li>
+                </ul>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">License</h4>
+                <p>
+                    Code licensed under <a
+                        href="https://github.com/laminas/laminas-cache//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                </p>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">Copyright</h4>
+                <p>
+                    <!--Built with love by the Laminas team with the help of our
+                    <a href="https://github.com/laminas/laminas-cache//graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        let base_url = '../..',
+            project  = "components",
+            siteName = 'laminas-cache';
+    </script>
+    <script src="/js/scripts.js"></script>
+        <script src="../../search/main.js"></script>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Search</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search in laminas-cache" id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>
