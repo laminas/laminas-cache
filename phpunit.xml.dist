@@ -16,11 +16,6 @@
     </filter>
 
     <php>
-        <!-- OB_ENABLED should be enabled for some tests to check if all
-             functionality works as expected. Such tests include those for
-             Laminas\Soap and Laminas\Session, which require that headers not be sent
-             in order to work. -->
-        <env name="TESTS_LAMINAS_OB_ENABLED" value="false" />
 
         <!-- Note: the following is a FULL list of ALL POSSIBLE constants
              currently in use in Laminas for ALL COMPONENTS; you should choose the
