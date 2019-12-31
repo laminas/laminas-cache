@@ -1,37 +1,35 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache\Storage\IterableInterface;
-use Zend\Cache\Storage\IteratorInterface;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\Cache\Storage\ClearExpiredInterface;
-use Zend\Cache\Storage\ClearByNamespaceInterface;
-use Zend\Cache\Storage\ClearByPrefixInterface;
-use Zend\Cache\Storage\FlushableInterface;
-use Zend\Cache\Storage\OptimizableInterface;
-use Zend\Cache\Storage\TaggableInterface;
-use Zend\Cache\Storage\AvailableSpaceCapableInterface;
-use Zend\Cache\Storage\TotalSpaceCapableInterface;
-use Zend\Stdlib\ErrorHandler;
+use Laminas\Cache\Storage\AvailableSpaceCapableInterface;
+use Laminas\Cache\Storage\ClearByNamespaceInterface;
+use Laminas\Cache\Storage\ClearByPrefixInterface;
+use Laminas\Cache\Storage\ClearExpiredInterface;
+use Laminas\Cache\Storage\FlushableInterface;
+use Laminas\Cache\Storage\IterableInterface;
+use Laminas\Cache\Storage\IteratorInterface;
+use Laminas\Cache\Storage\OptimizableInterface;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\Cache\Storage\TaggableInterface;
+use Laminas\Cache\Storage\TotalSpaceCapableInterface;
+use Laminas\Stdlib\ErrorHandler;
 
 /**
  * PHPUnit test case
  */
 
 /**
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage UnitTests
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,12 +54,12 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->assertInstanceOf(
-            'Zend\Cache\Storage\StorageInterface',
+            'Laminas\Cache\Storage\StorageInterface',
             $this->_storage,
             'Storage adapter instance is needed for tests'
         );
         $this->assertInstanceOf(
-            'Zend\Cache\Storage\Adapter\AdapterOptions',
+            'Laminas\Cache\Storage\Adapter\AdapterOptions',
             $this->_options,
             'Options instance is needed for tests'
         );
@@ -141,7 +139,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
     public function testGetCapabilities()
     {
         $capabilities = $this->_storage->getCapabilities();
-        $this->assertInstanceOf('Zend\Cache\Storage\Capabilities', $capabilities);
+        $this->assertInstanceOf('Laminas\Cache\Storage\Capabilities', $capabilities);
     }
 
     public function testDatatypesCapability()
@@ -878,7 +876,7 @@ abstract class CommonAdapterTest extends \PHPUnit_Framework_TestCase
 
         // check iterator aggregate
         $iterator = $this->_storage->getIterator();
-        $this->assertInstanceOf('Zend\Cache\Storage\IteratorInterface', $iterator);
+        $this->assertInstanceOf('Laminas\Cache\Storage\IteratorInterface', $iterator);
         $this->assertSame(IteratorInterface::CURRENT_AS_KEY, $iterator->getMode());
 
         // check mode CURRENT_AS_KEY

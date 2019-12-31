@@ -1,24 +1,22 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Pattern;
+namespace Laminas\Cache\Pattern;
 
+use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\StorageInterface as Storage;
+use Laminas\Cache\StorageFactory;
+use Laminas\Stdlib\AbstractOptions;
 use Traversable;
-use Zend\Cache\Exception;
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Storage\StorageInterface as Storage;
-use Zend\Stdlib\AbstractOptions;
 
 /**
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage Pattern
  */
 class PatternOptions extends AbstractOptions
@@ -760,8 +758,8 @@ class PatternOptions extends AbstractOptions
             $storage = StorageFactory::adapterFactory($storage);
         } elseif (!($storage instanceof Storage)) {
             throw new Exception\InvalidArgumentException(
-                'The storage must be an instanceof Zend\Cache\Storage\StorageInterface '
-                . 'or an array passed to Zend\Cache\Storage::factory '
+                'The storage must be an instanceof Laminas\Cache\Storage\StorageInterface '
+                . 'or an array passed to Laminas\Cache\Storage::factory '
                 . 'or simply the name of the storage adapter'
             );
         }
