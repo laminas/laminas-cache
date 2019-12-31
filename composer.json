@@ -36,6 +36,7 @@
         "laminas/laminas-cache-storage-adapter-ext-mongodb": "1.0.0@dev || ^1.0",
         "laminas/laminas-cache-storage-adapter-filesystem": "1.0.0@dev || ^1.0",
         "laminas/laminas-cache-storage-adapter-memcache": "1.0.0@dev || ^1.0",
+        "laminas/laminas-cache-storage-adapter-memcached": "1.0.0@dev || ^1.0",
         "laminas/laminas-eventmanager": "^2.6.3 || ^3.2",
         "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
         "laminas/laminas-stdlib": "^3.2.1",
@@ -56,7 +57,6 @@
         "psr/simple-cache-implementation": "1.0"
     },
     "suggest": {
-        "ext-memcached": "Memcached >= 1.0.0 to use the Memcached storage adapter",
         "ext-mongo": "Mongo, to use MongoDb storage adapter",
         "ext-redis": "Redis, to use Redis storage adapter",
         "ext-wincache": "WinCache, to use the WinCache storage adapter",
