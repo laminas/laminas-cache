@@ -1,19 +1,20 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\SimpleCache;
+namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
+use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Laminas\Cache\Storage\Adapter\ExtMongoDbOptions;
+use Laminas\Cache\StorageFactory;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use MongoDB\Client;
-use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
-use Zend\Cache\Storage\Adapter\ExtMongoDbOptions;
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Exception;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 class ExtMongoDbIntegrationTest extends SimpleCacheTest
 {
@@ -30,8 +31,8 @@ class ExtMongoDbIntegrationTest extends SimpleCacheTest
 
     protected function setUp()
     {
-        if (! getenv('TESTS_ZEND_CACHE_EXTMONGODB_ENABLED')) {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_EXTMONGODB_ENABLED to run this test');
+        if (! getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED')) {
+            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED to run this test');
         }
 
         if (! extension_loaded('mongodb') || ! class_exists(Client::class)) {
@@ -59,9 +60,9 @@ class ExtMongoDbIntegrationTest extends SimpleCacheTest
     public function createSimpleCache()
     {
         $storage = StorageFactory::adapterFactory('extmongodb', [
-            'server'     => getenv('TESTS_ZEND_CACHE_EXTMONGODB_CONNECTSTRING'),
-            'database'   => getenv('TESTS_ZEND_CACHE_EXTMONGODB_DATABASE'),
-            'collection' => getenv('TESTS_ZEND_CACHE_EXTMONGODB_COLLECTION'),
+            'server'     => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_CONNECTSTRING'),
+            'database'   => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_DATABASE'),
+            'collection' => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_COLLECTION'),
         ]);
         return new SimpleCacheDecorator($storage);
     }

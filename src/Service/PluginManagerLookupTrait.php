@@ -1,16 +1,17 @@
 <?php
+
 /**
- * @link      http://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Service;
+namespace Laminas\Cache\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Storage\AdapterPluginManager;
-use Zend\Cache\Storage\PluginManager;
+use Laminas\Cache\Storage\AdapterPluginManager;
+use Laminas\Cache\Storage\PluginManager;
+use Laminas\Cache\StorageFactory;
 
 trait PluginManagerLookupTrait
 {
@@ -29,7 +30,7 @@ trait PluginManagerLookupTrait
     /**
      * Lookup the storage adapter plugin manager.
      *
-     * Returns the Zend\Cache\Storage\AdapterPluginManager service if present,
+     * Returns the Laminas\Cache\Storage\AdapterPluginManager service if present,
      * or creates a new instance otherwise.
      *
      * @param ContainerInterface $container
@@ -46,7 +47,7 @@ trait PluginManagerLookupTrait
     /**
      * Lookup the storage plugins plugin manager.
      *
-     * Returns the Zend\Cache\Storage\PluginManager service if present, or
+     * Returns the Laminas\Cache\Storage\PluginManager service if present, or
      * creates a new instance otherwise.
      *
      * @param ContainerInterface $container

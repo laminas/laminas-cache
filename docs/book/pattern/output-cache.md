@@ -5,7 +5,7 @@ The `OutputCache` pattern caches output between calls to `start()` and `end()`.
 ## Quick Start
 
 ```php
-use Zend\Cache\PatternFactory;
+use Laminas\Cache\PatternFactory;
 
 $outputCache = PatternFactory::factory('output', [
     'storage' => 'apc'
@@ -15,7 +15,7 @@ $outputCache = PatternFactory::factory('output', [
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Zend\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
+`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
 
 ## Available Methods
 
@@ -23,9 +23,9 @@ In addition to the methods defined in `PatternInterface`, this implementation
 defines the following methods.
 
 ```php
-namespace Zend\Cache\Pattern;
+namespace Laminas\Cache\Pattern;
 
-use Zend\Cache\Exception;
+use Laminas\Cache\Exception;
 
 class OutputCache extends AbstractPattern
 {
@@ -56,7 +56,7 @@ class OutputCache extends AbstractPattern
 ### Caching simple view scripts
 
 ```php
-$outputCache = Zend\Cache\PatternFactory::factory('output', [
+$outputCache = Laminas\Cache\PatternFactory::factory('output', [
     'storage' => 'apc',
 ]);
 

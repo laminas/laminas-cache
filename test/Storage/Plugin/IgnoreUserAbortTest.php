@@ -1,21 +1,20 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Plugin;
+namespace LaminasTest\Cache\Storage\Plugin;
 
-use Zend\Cache;
-use Zend\Cache\Storage\Event;
-use Zend\EventManager\Test\EventListenerIntrospectionTrait;
+use Laminas\Cache;
+use Laminas\Cache\Storage\Event;
+use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 
 /**
- * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Plugin\IgnoreUserAbort<extended>
+ * @group      Laminas_Cache
+ * @covers Laminas\Cache\Storage\Plugin\IgnoreUserAbort<extended>
  */
 class IgnoreUserAbortTest extends CommonPluginTest
 {
@@ -25,14 +24,14 @@ class IgnoreUserAbortTest extends CommonPluginTest
     /**
      * The storage adapter
      *
-     * @var \Zend\Cache\Storage\Adapter\AbstractAdapter
+     * @var \Laminas\Cache\Storage\Adapter\AbstractAdapter
      */
     protected $_adapter;
     // @codingStandardsIgnoreEnd
 
     public function setUp()
     {
-        $this->_adapter = $this->getMockForAbstractClass('Zend\Cache\Storage\Adapter\AbstractAdapter');
+        $this->_adapter = $this->getMockForAbstractClass('Laminas\Cache\Storage\Adapter\AbstractAdapter');
         $this->_options = new Cache\Storage\Plugin\PluginOptions();
         $this->_plugin  = new Cache\Storage\Plugin\IgnoreUserAbort();
         $this->_plugin->setOptions($this->_options);

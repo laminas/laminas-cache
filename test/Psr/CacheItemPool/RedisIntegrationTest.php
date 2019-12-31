@@ -1,19 +1,20 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\CacheItemPool;
+namespace LaminasTest\Cache\Psr\CacheItemPool;
 
 use Cache\IntegrationTests\CachePoolTest;
-use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
-use Zend\Cache\Storage\Adapter\Redis;
-use Zend\Cache\Storage\Plugin\Serializer;
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Exception;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Laminas\Cache\Storage\Adapter\Redis;
+use Laminas\Cache\Storage\Plugin\Serializer;
+use Laminas\Cache\StorageFactory;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 
 class RedisIntegrationTest extends CachePoolTest
 {
@@ -30,8 +31,8 @@ class RedisIntegrationTest extends CachePoolTest
 
     protected function setUp()
     {
-        if (! getenv('TESTS_ZEND_CACHE_REDIS_ENABLED')) {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_REDIS_ENABLED to run this test');
+        if (! getenv('TESTS_LAMINAS_CACHE_REDIS_ENABLED')) {
+            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_REDIS_ENABLED to run this test');
         }
 
         // set non-UTC timezone
@@ -56,18 +57,18 @@ class RedisIntegrationTest extends CachePoolTest
     {
         $options = ['resource_id' => __CLASS__];
 
-        if (getenv('TESTS_ZEND_CACHE_REDIS_HOST') && getenv('TESTS_ZEND_CACHE_REDIS_PORT')) {
-            $options['server'] = [getenv('TESTS_ZEND_CACHE_REDIS_HOST'), getenv('TESTS_ZEND_CACHE_REDIS_PORT')];
-        } elseif (getenv('TESTS_ZEND_CACHE_REDIS_HOST')) {
-            $options['server'] = [getenv('TESTS_ZEND_CACHE_REDIS_HOST')];
+        if (getenv('TESTS_LAMINAS_CACHE_REDIS_HOST') && getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')) {
+            $options['server'] = [getenv('TESTS_LAMINAS_CACHE_REDIS_HOST'), getenv('TESTS_LAMINAS_CACHE_REDIS_PORT')];
+        } elseif (getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')) {
+            $options['server'] = [getenv('TESTS_LAMINAS_CACHE_REDIS_HOST')];
         }
 
-        if (getenv('TESTS_ZEND_CACHE_REDIS_DATABASE')) {
-            $options['database'] = getenv('TESTS_ZEND_CACHE_REDIS_DATABASE');
+        if (getenv('TESTS_LAMINAS_CACHE_REDIS_DATABASE')) {
+            $options['database'] = getenv('TESTS_LAMINAS_CACHE_REDIS_DATABASE');
         }
 
-        if (getenv('TESTS_ZEND_CACHE_REDIS_PASSWORD')) {
-            $options['password'] = getenv('TESTS_ZEND_CACHE_REDIS_PASSWORD');
+        if (getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD')) {
+            $options['password'] = getenv('TESTS_LAMINAS_CACHE_REDIS_PASSWORD');
         }
 
         try {

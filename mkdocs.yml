@@ -1,6 +1,6 @@
 docs_dir: docs/book
 site_dir: docs/html
-pages:
+nav:
     - index.md
     - Storage:
         - Adapters: storage/adapter.md
@@ -16,7 +16,6 @@ pages:
     - "Standards Support":
         - PSR-6: psr6.md
         - PSR-16: psr16.md
-site_name: zend-cache
-site_description: Zend\Cache
-repo_url: 'https://github.com/zendframework/zend-cache'
-copyright: 'Copyright (c) 2005-2018 <a href="https://www.zend.com/">Zend Technologies USA Inc.</a>'
+site_name: laminas-cache
+site_description: Laminas\Cache
+repo_url: 'https://github.com/laminas/laminas-cache'
