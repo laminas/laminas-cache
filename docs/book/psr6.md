@@ -4,7 +4,7 @@
 
 ## Overview
 
-The `Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator` provides a [PSR-6](https://www.php-fig.org/psr/psr-6/)
+The `Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator` provides a [PSR-6](https://www.php-fig.org/psr/psr-6/)
 compliant wrapper for supported storage adapters.
 
 PSR-6 specifies a common interface to cache storage, enabling developers to switch between implementations without
@@ -17,8 +17,8 @@ To use the pool, instantiate your storage as normal, then pass it to the
 `CacheItemPoolDecorator`.
 
 ```php
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 
 $storage = StorageFactory::factory([
     'adapter' => [
@@ -58,12 +58,12 @@ item is saved. For this reason the following adapters cannot be used: `Dba`, `Fi
 `XCache` adapter calculates TTLs based on the request time, not the time the item is actually persisted, which means
 that it also cannot be used.
 
-In addition adapters must support the `Zend\Cache\FlushableInterface`. All the current `Zend\Cache\Storage\Adapter`s
+In addition adapters must support the `Laminas\Cache\FlushableInterface`. All the current `Laminas\Cache\Storage\Adapter`s
 fulfil this requirement.
 
 Attempting to use an unsupported adapter will throw an exception implementing `Psr\Cache\CacheException`.
 
-The `Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator` adapter doesn't support driver deferred saves, so cache items are saved
+The `Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator` adapter doesn't support driver deferred saves, so cache items are saved
 on destruct or on explicit `commit()` call.
 
 ### Quirks
@@ -90,7 +90,7 @@ key errors. To be PSR-6 compliant, cache keys must not contain the following cha
 storage adapters may have further restrictions. Check the documentation for your particular adapter to be sure.
 
 We strongly recommend tracking exceptions caught from storage, either by logging them or recording them in some other
-way. Doing so is as simple as adding an [`ExceptionHandler` plugin](zend.cache.storage.plugin.html#3.4). Say you have a
+way. Doing so is as simple as adding an [`ExceptionHandler` plugin](laminas.cache.storage.plugin.html#3.4). Say you have a
 [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) compliant logger
 called `$logger`:
 
@@ -134,5 +134,5 @@ returned as a value with exactly the same type.
 
 Not all adapters can natively store all these types. For instance, Redis stores booleans and integers as a string. Where
 this is the case *all* values will be automatically run through `serialize()` on save and `unserialize()` on get: you
-do not need to use a `Zend\Cache\Storage\Plugin\Serializer` plugin.
+do not need to use a `Laminas\Cache\Storage\Plugin\Serializer` plugin.
 

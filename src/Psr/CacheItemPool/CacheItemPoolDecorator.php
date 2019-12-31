@@ -1,22 +1,23 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache\Psr\CacheItemPool;
+namespace Laminas\Cache\Psr\CacheItemPool;
 
+use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\SerializationTrait;
+use Laminas\Cache\Storage\ClearByNamespaceInterface;
+use Laminas\Cache\Storage\FlushableInterface;
+use Laminas\Cache\Storage\StorageInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Zend\Cache\Exception;
-use Zend\Cache\Psr\SerializationTrait;
-use Zend\Cache\Storage\ClearByNamespaceInterface;
-use Zend\Cache\Storage\FlushableInterface;
-use Zend\Cache\Storage\StorageInterface;
 
 /**
- * Decorate zend-cache adapters as PSR-6 cache item pools.
+ * Decorate laminas-cache adapters as PSR-6 cache item pools.
  *
  * @link https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-6-cache.md
  * @link https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-6-cache-meta.md
@@ -290,7 +291,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
         if ($this->isSerializationRequired($storage)) {
             throw new CacheException(sprintf(
                 'The storage adapter "%s" requires a serializer plugin; please see'
-                . ' https://docs.zendframework.com/zend-cache/storage/plugin/#quick-start'
+                . ' https://docs.laminas.dev/laminas-cache/storage/plugin/#quick-start'
                 . ' for details on how to attach the plugin to your adapter.',
                 get_class($storage)
             ));

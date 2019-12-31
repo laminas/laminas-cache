@@ -1,27 +1,28 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018-2019 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\SimpleCache;
+namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use ArrayIterator;
+use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheException;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheInvalidArgumentException;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
+use Laminas\Cache\Storage\Capabilities;
+use Laminas\Cache\Storage\ClearByNamespaceInterface;
+use Laminas\Cache\Storage\FlushableInterface;
+use Laminas\Cache\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use ReflectionProperty;
-use Zend\Cache\Exception;
-use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
-use Zend\Cache\Psr\SimpleCache\SimpleCacheInvalidArgumentException;
-use Zend\Cache\Psr\SimpleCache\SimpleCacheException;
-use Zend\Cache\Storage\Adapter\AdapterOptions;
-use Zend\Cache\Storage\Capabilities;
-use Zend\Cache\Storage\ClearByNamespaceInterface;
-use Zend\Cache\Storage\FlushableInterface;
-use Zend\Cache\Storage\StorageInterface;
 
 /**
  * Test the PSR-16 decorator.

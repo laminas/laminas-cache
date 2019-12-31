@@ -1,17 +1,18 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\CacheItemPool;
+namespace LaminasTest\Cache\Psr\CacheItemPool;
 
 use Cache\IntegrationTests\CachePoolTest;
-use Zend\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Exception;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Laminas\Cache\StorageFactory;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 
 class ZendServerShmIntegrationTest extends CachePoolTest
 {
@@ -23,8 +24,8 @@ class ZendServerShmIntegrationTest extends CachePoolTest
 
     protected function setUp()
     {
-        if (! getenv('TESTS_ZEND_CACHE_ZEND_SERVER_ENABLED')) {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_ZEND_SERVER_ENABLED to run this test');
+        if (! getenv('TESTS_LAMINAS_CACHE_ZEND_SERVER_ENABLED')) {
+            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_ZEND_SERVER_ENABLED to run this test');
         }
 
         if (! function_exists('zend_shm_cache_store') || PHP_SAPI == 'cli') {

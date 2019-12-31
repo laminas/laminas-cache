@@ -1,25 +1,26 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
+use Laminas\Cache\Storage\Adapter\ExtMongoDb;
+use Laminas\Cache\Storage\Adapter\ExtMongoDbOptions;
 use MongoDB\Client;
-use Zend\Cache\Storage\Adapter\ExtMongoDb;
-use Zend\Cache\Storage\Adapter\ExtMongoDbOptions;
 
 /**
- * @covers Zend\Cache\Storage\Adapter\ExtMongoDb<extended>
+ * @covers Laminas\Cache\Storage\Adapter\ExtMongoDb<extended>
  */
 class ExtMongoDbTest extends CommonAdapterTest
 {
     public function setUp()
     {
-        if (getenv('TESTS_ZEND_CACHE_EXTMONGODB_ENABLED') != 'true') {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MONGODB_ENABLED to run this test');
+        if (getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED') != 'true') {
+            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_MONGODB_ENABLED to run this test');
         }
 
         if (! extension_loaded('mongodb') || ! class_exists(Client::class)) {
@@ -27,9 +28,9 @@ class ExtMongoDbTest extends CommonAdapterTest
         }
 
         $this->_options = new ExtMongoDbOptions([
-            'server'     => getenv('TESTS_ZEND_CACHE_EXTMONGODB_CONNECTSTRING'),
-            'database'   => getenv('TESTS_ZEND_CACHE_EXTMONGODB_DATABASE'),
-            'collection' => getenv('TESTS_ZEND_CACHE_EXTMONGODB_COLLECTION'),
+            'server'     => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_CONNECTSTRING'),
+            'database'   => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_DATABASE'),
+            'collection' => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_COLLECTION'),
         ]);
 
         $this->_storage = new ExtMongoDb();
@@ -63,9 +64,9 @@ class ExtMongoDbTest extends CommonAdapterTest
     public function testSetOptionsNotMongoDbOptions()
     {
         $this->_storage->setOptions([
-            'server'     => getenv('TESTS_ZEND_CACHE_EXTMONGODB_CONNECTSTRING'),
-            'database'   => getenv('TESTS_ZEND_CACHE_EXTMONGODB_DATABASE'),
-            'collection' => getenv('TESTS_ZEND_CACHE_EXTMONGODB_COLLECTION'),
+            'server'     => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_CONNECTSTRING'),
+            'database'   => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_DATABASE'),
+            'collection' => getenv('TESTS_LAMINAS_CACHE_EXTMONGODB_COLLECTION'),
         ]);
 
         $this->assertInstanceOf(ExtMongoDbOptions::class, $this->_storage->getOptions());

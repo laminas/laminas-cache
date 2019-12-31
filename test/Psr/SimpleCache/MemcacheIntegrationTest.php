@@ -1,19 +1,20 @@
 <?php
+
 /**
- * @see       https://github.com/zendframework/zend-cache for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zendframework/zend-cache/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Psr\SimpleCache;
+namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use Cache\IntegrationTests\SimpleCacheTest;
-use Zend\Cache\Psr\SimpleCache\SimpleCacheDecorator;
-use Zend\Cache\Storage\Adapter\Memcache;
-use Zend\Cache\Storage\Plugin\Serializer;
-use Zend\Cache\StorageFactory;
-use Zend\Cache\Exception;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Laminas\Cache\Storage\Adapter\Memcache;
+use Laminas\Cache\Storage\Plugin\Serializer;
+use Laminas\Cache\StorageFactory;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 
 /**
  * @require extension memcache
@@ -33,8 +34,8 @@ class MemcacheIntegrationTest extends SimpleCacheTest
 
     protected function setUp()
     {
-        if (! getenv('TESTS_ZEND_CACHE_MEMCACHE_ENABLED')) {
-            $this->markTestSkipped('Enable TESTS_ZEND_CACHE_MEMCACHE_ENABLED to run this test');
+        if (! getenv('TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED')) {
+            $this->markTestSkipped('Enable TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED to run this test');
         }
 
         // set non-UTC timezone
@@ -57,8 +58,8 @@ class MemcacheIntegrationTest extends SimpleCacheTest
 
     public function createSimpleCache()
     {
-        $host = getenv('TESTS_ZEND_CACHE_MEMCACHE_HOST');
-        $port = getenv('TESTS_ZEND_CACHE_MEMCACHE_PORT');
+        $host = getenv('TESTS_LAMINAS_CACHE_MEMCACHE_HOST');
+        $port = getenv('TESTS_LAMINAS_CACHE_MEMCACHE_PORT');
 
         $options = [
             'resource_id' => __CLASS__

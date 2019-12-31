@@ -1,19 +1,18 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache;
+use Laminas\Cache;
 
 /**
- * @group      Zend_Cache
- * @covers Zend\Cache\Storage\Adapter\Dba<extended>
+ * @group      Laminas_Cache
+ * @covers Laminas\Cache\Storage\Adapter\Dba<extended>
  */
 abstract class AbstractDbaTest extends CommonAdapterTest
 {
@@ -25,7 +24,7 @@ abstract class AbstractDbaTest extends CommonAdapterTest
         if (! extension_loaded('dba')) {
             try {
                 new Cache\Storage\Adapter\Dba();
-                $this->fail("Expected exception Zend\Cache\Exception\ExtensionNotLoadedException");
+                $this->fail("Expected exception Laminas\Cache\Exception\ExtensionNotLoadedException");
             } catch (Cache\Exception\ExtensionNotLoadedException $e) {
                 $this->markTestSkipped("Missing ext/dba");
             }
@@ -34,13 +33,13 @@ abstract class AbstractDbaTest extends CommonAdapterTest
         if (! in_array($this->handler, dba_handlers())) {
             try {
                 new Cache\Storage\Adapter\DbaOptions(['handler' => $this->handler]);
-                $this->fail("Expected exception Zend\Cache\Exception\ExtensionNotLoadedException");
+                $this->fail("Expected exception Laminas\Cache\Exception\ExtensionNotLoadedException");
             } catch (Cache\Exception\ExtensionNotLoadedException $e) {
                 $this->markTestSkipped("Missing ext/dba handler '{$this->handler}'");
             }
         }
 
-        $this->temporaryDbaFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('zfcache_dba_') . '.'
+        $this->temporaryDbaFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('laminascache_dba_') . '.'
             . $this->handler;
         $this->_options = new Cache\Storage\Adapter\DbaOptions([
             'pathname' => $this->temporaryDbaFile,
