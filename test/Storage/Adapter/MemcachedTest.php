@@ -1,26 +1,25 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache;
+use Laminas\Cache;
 
 /**
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class MemcachedTest extends CommonAdapterTest
 {
 
     public function setUp()
     {
-        if (!defined('TESTS_ZEND_CACHE_MEMCACHED_ENABLED') || !TESTS_ZEND_CACHE_MEMCACHED_ENABLED) {
-            $this->markTestSkipped("Skipped by TestConfiguration (TESTS_ZEND_CACHE_MEMCACHED_ENABLED)");
+        if (!defined('TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED') || !TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED) {
+            $this->markTestSkipped("Skipped by TestConfiguration (TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED)");
         }
 
         if (!extension_loaded('memcached')) {
@@ -31,13 +30,13 @@ class MemcachedTest extends CommonAdapterTest
             'resource_id' => __CLASS__
         ));
 
-        if (defined('TESTS_ZEND_CACHE_MEMCACHED_HOST') && defined('TESTS_ZEND_CACHE_MEMCACHED_PORT')) {
+        if (defined('TESTS_LAMINAS_CACHE_MEMCACHED_HOST') && defined('TESTS_LAMINAS_CACHE_MEMCACHED_PORT')) {
             $this->_options->getResourceManager()->setServers(__CLASS__, array(
-                array(TESTS_ZEND_CACHE_MEMCACHED_HOST, TESTS_ZEND_CACHE_MEMCACHED_PORT)
+                array(TESTS_LAMINAS_CACHE_MEMCACHED_HOST, TESTS_LAMINAS_CACHE_MEMCACHED_PORT)
             ));
-        } elseif (defined('TESTS_ZEND_CACHE_MEMCACHED_HOST')) {
+        } elseif (defined('TESTS_LAMINAS_CACHE_MEMCACHED_HOST')) {
             $this->_options->getResourceManager()->setServers(__CLASS__, array(
-                array(TESTS_ZEND_CACHE_MEMCACHED_HOST)
+                array(TESTS_LAMINAS_CACHE_MEMCACHED_HOST)
             ));
         }
 

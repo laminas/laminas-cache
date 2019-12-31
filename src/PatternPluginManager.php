@@ -1,15 +1,14 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Zend\Cache;
+namespace Laminas\Cache;
 
-use Zend\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\AbstractPluginManager;
 
 /**
  * Plugin manager implementation for cache pattern adapters
@@ -26,12 +25,12 @@ class PatternPluginManager extends AbstractPluginManager
      * @var array
      */
     protected $invokableClasses = array(
-        'callback' => 'Zend\Cache\Pattern\CallbackCache',
-        'capture'  => 'Zend\Cache\Pattern\CaptureCache',
-        'class'    => 'Zend\Cache\Pattern\ClassCache',
-        'object'   => 'Zend\Cache\Pattern\ObjectCache',
-        'output'   => 'Zend\Cache\Pattern\OutputCache',
-        'page'     => 'Zend\Cache\Pattern\PageCache',
+        'callback' => 'Laminas\Cache\Pattern\CallbackCache',
+        'capture'  => 'Laminas\Cache\Pattern\CaptureCache',
+        'class'    => 'Laminas\Cache\Pattern\ClassCache',
+        'object'   => 'Laminas\Cache\Pattern\ObjectCache',
+        'output'   => 'Laminas\Cache\Pattern\OutputCache',
+        'page'     => 'Laminas\Cache\Pattern\PageCache',
     );
 
     /**
