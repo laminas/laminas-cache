@@ -1,18 +1,17 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache;
+use Laminas\Cache;
 
 /**
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class FilesystemTest extends CommonAdapterTest
 {
@@ -24,7 +23,7 @@ class FilesystemTest extends CommonAdapterTest
     {
         $this->_umask = umask();
 
-        $this->_tmpCacheDir = @tempnam(sys_get_temp_dir(), 'zend_cache_test_');
+        $this->_tmpCacheDir = @tempnam(sys_get_temp_dir(), 'laminas_cache_test_');
         if (!$this->_tmpCacheDir) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory-file: {$err['message']}");
@@ -106,7 +105,7 @@ class FilesystemTest extends CommonAdapterTest
 
     public function testSetCacheDirNoDirectoryException()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setCacheDir(__FILE__);
     }
 
@@ -124,10 +123,10 @@ class FilesystemTest extends CommonAdapterTest
             }
         }
 
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
 
         // create a not writable temporaty directory
-        $testDir = tempnam(sys_get_temp_dir(), 'ZendTest');
+        $testDir = tempnam(sys_get_temp_dir(), 'LaminasTest');
         unlink($testDir); mkdir($testDir); chmod($testDir, 0557);
 
         try {
@@ -151,10 +150,10 @@ class FilesystemTest extends CommonAdapterTest
             }
         }
 
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
 
         // create a not readable temporaty directory
-        $testDir = tempnam(sys_get_temp_dir(), 'ZendTest');
+        $testDir = tempnam(sys_get_temp_dir(), 'LaminasTest');
         unlink($testDir); mkdir($testDir); chmod($testDir, 0337);
 
         try {
@@ -167,19 +166,19 @@ class FilesystemTest extends CommonAdapterTest
 
     public function testSetFilePermissionThrowsExceptionIfNotWritable()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setFilePermission(0466);
     }
 
     public function testSetFilePermissionThrowsExceptionIfNotReadable()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setFilePermission(0266);
     }
 
     public function testSetFilePermissionThrowsExceptionIfExecutable()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setFilePermission(0661);
     }
 
@@ -207,25 +206,25 @@ class FilesystemTest extends CommonAdapterTest
 
     public function testSetDirPermissionThrowsExceptionIfNotWritable()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setDirPermission(0577);
     }
 
     public function testSetDirPermissionThrowsExceptionIfNotReadable()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setDirPermission(0377);
     }
 
     public function testSetDirPermissionThrowsExceptionIfNotExecutable()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setDirPermission(0677);
     }
 
     public function testSetDirLevelInvalidException()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setDirLevel(17); // must between 0-16
     }
 
@@ -240,19 +239,19 @@ class FilesystemTest extends CommonAdapterTest
 
     public function testSetUmaskThrowsExceptionIfNotWritable()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setUmask(0300);
     }
 
     public function testSetUmaskThrowsExceptionIfNotReadable()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setUmask(0200);
     }
 
     public function testSetUmaskThrowsExceptionIfNotExecutable()
     {
-        $this->setExpectedException('Zend\Cache\Exception\InvalidArgumentException');
+        $this->setExpectedException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_options->setUmask(0100);
     }
 
