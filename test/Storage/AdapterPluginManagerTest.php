@@ -1,22 +1,21 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage;
+namespace LaminasTest\Cache\Storage;
 
+use Laminas\Cache\Exception\ExtensionNotLoadedException;
+use Laminas\Cache\Exception\RuntimeException;
+use Laminas\Cache\Storage\AdapterPluginManager;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\Test\CommonPluginManagerTrait;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Cache\Exception\ExtensionNotLoadedException;
-use Zend\Cache\Exception\RuntimeException;
-use Zend\Cache\Storage\AdapterPluginManager;
-use Zend\Cache\Storage\StorageInterface;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\Test\CommonPluginManagerTrait;
 
 class AdapterPluginManagerTest extends TestCase
 {

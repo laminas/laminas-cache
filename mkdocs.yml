@@ -1,6 +1,6 @@
 docs_dir: doc/book
 site_dir: doc/html
-pages:
+nav:
     - index.md
     - Storage:
         - Adapters: storage/adapter.md
@@ -13,7 +13,6 @@ pages:
         - ObjectCache: pattern/object-cache.md
         - OutputCache: pattern/output-cache.md
         - CaptureCache: pattern/capture-cache.md
-site_name: zend-cache
-site_description: Zend\Cache
-repo_url: 'https://github.com/zendframework/zend-cache'
-copyright: 'Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a>'
+site_name: laminas-cache
+site_description: Laminas\Cache
+repo_url: 'https://github.com/laminas/laminas-cache'
