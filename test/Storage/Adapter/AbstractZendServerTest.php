@@ -1,23 +1,21 @@
 <?php
+
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Cache
+ * @see       https://github.com/laminas/laminas-cache for the canonical source repository
+ * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZendTest\Cache\Storage\Adapter;
+namespace LaminasTest\Cache\Storage\Adapter;
 
-use Zend\Cache\Storage\Adapter\AdapterOptions;
-use Zend\Cache\Storage\Adapter\AbstractZendServer;
+use Laminas\Cache\Storage\Adapter\AbstractZendServer;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
 
 /**
- * @category   Zend
- * @package    Zend_Cache
+ * @category   Laminas
+ * @package    Laminas_Cache
  * @subpackage UnitTests
- * @group      Zend_Cache
+ * @group      Laminas_Cache
  */
 class AbstractZendServerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +23,7 @@ class AbstractZendServerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_options = new AdapterOptions();
-        $this->_storage = $this->getMockForAbstractClass('Zend\Cache\Storage\Adapter\AbstractZendServer');
+        $this->_storage = $this->getMockForAbstractClass('Laminas\Cache\Storage\Adapter\AbstractZendServer');
         $this->_storage->setOptions($this->_options);
         $this->_storage->expects($this->any())
                        ->method('getOptions')
@@ -35,7 +33,7 @@ class AbstractZendServerTest extends \PHPUnit_Framework_TestCase
     public function testGetOptions()
     {
         $options = $this->_storage->getOptions();
-        $this->assertInstanceOf('Zend\Cache\Storage\Adapter\AdapterOptions', $options);
+        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\AdapterOptions', $options);
         $this->assertInternalType('boolean', $options->getWritable());
         $this->assertInternalType('boolean', $options->getReadable());
         $this->assertInternalType('integer', $options->getTtl());
