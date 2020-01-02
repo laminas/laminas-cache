@@ -1,10 +1,21 @@
 docs_dir: docs/book
 site_dir: docs/html
 nav:
-    - { Home: index.md }
-    - { Storage: [{ Adapters: storage/adapter.md }, { Capabilities: storage/capabilities.md }, { Plugins: storage/plugin.md }] }
-    - { 'Cache Patterns': [{ Introduction: pattern/intro.md }, { CallbackCache: pattern/callback-cache.md }, { ClassCache: pattern/class-cache.md }, { ObjectCache: pattern/object-cache.md }, { OutputCache: pattern/output-cache.md }, { CaptureCache: pattern/capture-cache.md }] }
-    - { 'Standards Support': [{ PSR-6: psr6.md }, { PSR-16: psr16.md }] }
+    - Home: index.md
+    - Storage:
+        - Adapters: storage/adapter.md
+        - Capabilities: storage/capabilities.md
+        - Plugins: storage/plugin.md
+    - "Cache Patterns":
+        - Introduction: pattern/intro.md
+        - CallbackCache: pattern/callback-cache.md
+        - ClassCache: pattern/class-cache.md
+        - ObjectCache: pattern/object-cache.md
+        - OutputCache: pattern/output-cache.md
+        - CaptureCache: pattern/capture-cache.md
+    - "Standards Support":
+        - PSR-6: psr6.md
+        - PSR-16: psr16.md
 site_name: laminas-cache
 site_description: 'Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.'
 repo_url: 'https://github.com/laminas/laminas-cache'
