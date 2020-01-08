@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -334,24 +338,23 @@ influence behavior of a storage adapter.</p>
 <code>Laminas\Cache\Storage\Plugin\*</code> classes.</p>
 <p>To make life easier, <code>Laminas\Cache\StorageFactory::factory()</code> can create both the
 requested adapter and all specified plugins at once.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
 
-<span class=x>// All at once:</span>
-<span class=x>$cache = StorageFactory::factory([</span>
-<span class=x>    &#39;adapter&#39; =&gt; &#39;filesystem&#39;,</span>
-<span class=x>    &#39;plugins&#39; =&gt; [&#39;serializer&#39;],</span>
-<span class=x>]);</span>
+// All at once:
+$cache = StorageFactory::factory([
+    'adapter' =&gt; 'filesystem',
+    'plugins' =&gt; ['serializer'],
+]);
 
-<span class=x>// Alternately, via discrete factory methods:</span>
-<span class=x>$cache  = StorageFactory::adapterFactory(&#39;filesystem&#39;);</span>
-<span class=x>$plugin = StorageFactory::pluginFactory(&#39;serializer&#39;);</span>
-<span class=x>$cache-&gt;addPlugin($plugin);</span>
+// Alternately, via discrete factory methods:
+$cache  = StorageFactory::adapterFactory('filesystem');
+$plugin = StorageFactory::pluginFactory('serializer');
+$cache-&gt;addPlugin($plugin);
 
-<span class=x>// Or manually:</span>
-<span class=x>$cache  = new Laminas\Cache\Storage\Adapter\Filesystem();</span>
-<span class=x>$plugin = new Laminas\Cache\Storage\Plugin\Serializer();</span>
-<span class=x>$cache-&gt;addPlugin($plugin);</span>
-</pre></div></p>
+// Or manually:
+$cache  = new Laminas\Cache\Storage\Adapter\Filesystem();
+$plugin = new Laminas\Cache\Storage\Plugin\Serializer();
+$cache-&gt;addPlugin($plugin);</code></pre>
 <h2 id="the-clearexpiredbyfactor-plugin">The ClearExpiredByFactor Plugin</h2>
 <p><code>Laminas\Cache\Storage\Plugin\ClearExpiredByFactor</code> calls the storage method
 <code>clearExpired()</code> randomly (by factor) after every call of <code>setItem()</code>,
@@ -496,98 +499,96 @@ by the underlying storage adapter.</p>
 </ul>
 <h2 id="available-methods">Available Methods</h2>
 <p>The following methods are available to all <code>Laminas\Cache\Storage\Plugin\PluginInterface</code> implementations:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage\Plugin;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage\Plugin;
 
-<span class=x>use Laminas\EventManager\EventManagerInterface;</span>
-<span class=x>use Laminas\EventManager\ListenerAggregateInterface;</span>
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
 
-<span class=x>interface PluginInterface extends ListenerAggregateInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Set options</span>
-<span class=x>     *</span>
-<span class=x>     * @param  PluginOptions $options</span>
-<span class=x>     * @return PluginInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function setOptions(PluginOptions $options);</span>
+interface PluginInterface extends ListenerAggregateInterface
+{
+    /**
+     * Set options
+     *
+     * @param  PluginOptions $options
+     * @return PluginInterface
+     */
+    public function setOptions(PluginOptions $options);
 
-<span class=x>    /**</span>
-<span class=x>     * Get options</span>
-<span class=x>     *</span>
-<span class=x>     * @return PluginOptions</span>
-<span class=x>     */</span>
-<span class=x>    public function getOptions();</span>
+    /**
+     * Get options
+     *
+     * @return PluginOptions
+     */
+    public function getOptions();
 
-<span class=x>    /**</span>
-<span class=x>     * Attach listeners; inherited from ListenerAggregateInterface.</span>
-<span class=x>     *</span>
-<span class=x>     * @param EventManagerInterface $events</span>
-<span class=x>     * @return void</span>
-<span class=x>     */</span>
-<span class=x>    public function attach(EventManagerInterface $events);</span>
+    /**
+     * Attach listeners; inherited from ListenerAggregateInterface.
+     *
+     * @param EventManagerInterface $events
+     * @return void
+     */
+    public function attach(EventManagerInterface $events);
 
-<span class=x>    /**</span>
-<span class=x>     * Detach listeners; inherited from ListenerAggregateInterface.</span>
-<span class=x>     *</span>
-<span class=x>     * @param EventManagerInterface $events</span>
-<span class=x>     * @return void</span>
-<span class=x>     */</span>
-<span class=x>    public function attach(EventManagerInterface $events);</span>
-<span class=x>}</span>
-</pre></div></p>
+    /**
+     * Detach listeners; inherited from ListenerAggregateInterface.
+     *
+     * @param EventManagerInterface $events
+     * @return void
+     */
+    public function attach(EventManagerInterface $events);
+}</code></pre>
 <h2 id="examples">Examples</h2>
 <h3>Basic Plugin Implementation</h3>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\Storage\Event;</span>
-<span class=x>use Laminas\Cache\Storage\Plugin\AbstractPlugin;</span>
-<span class=x>use Laminas\EventManager\EventManagerInterface;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\Storage\Event;
+use Laminas\Cache\Storage\Plugin\AbstractPlugin;
+use Laminas\EventManager\EventManagerInterface;
 
-<span class=x>class MyPlugin extends AbstractPlugin</span>
-<span class=x>{</span>
-<span class=x>    protected $handles = [];</span>
+class MyPlugin extends AbstractPlugin
+{
+    protected $handles = [];
 
-<span class=x>    /**</span>
-<span class=x>     * Attach to all events this plugin is interested in.</span>
-<span class=x>     */</span>
-<span class=x>    public function attach(EventManagerInterface $events)</span>
-<span class=x>    {</span>
-<span class=x>        $this-&gt;handles[] = $events-&gt;attach(&#39;getItem.pre&#39;, array($this, &#39;onGetItemPre&#39;));</span>
-<span class=x>        $this-&gt;handles[] = $events-&gt;attach(&#39;getItem.post&#39;, array($this, &#39;onGetItemPost&#39;));</span>
-<span class=x>    }</span>
+    /**
+     * Attach to all events this plugin is interested in.
+     */
+    public function attach(EventManagerInterface $events)
+    {
+        $this-&gt;handles[] = $events-&gt;attach('getItem.pre', array($this, 'onGetItemPre'));
+        $this-&gt;handles[] = $events-&gt;attach('getItem.post', array($this, 'onGetItemPost'));
+    }
 
-<span class=x>    /**</span>
-<span class=x>     * Detach all handlers this plugin previously attached.</span>
-<span class=x>     */</span>
-<span class=x>    public function detach(EventManagerInterface $events)</span>
-<span class=x>    {</span>
-<span class=x>        foreach ($this-&gt;handles as $handle) {</span>
-<span class=x>           $events-&gt;detach($handle);</span>
-<span class=x>        }</span>
-<span class=x>        $this-&gt;handles = [];</span>
-<span class=x>    }</span>
+    /**
+     * Detach all handlers this plugin previously attached.
+     */
+    public function detach(EventManagerInterface $events)
+    {
+        foreach ($this-&gt;handles as $handle) {
+           $events-&gt;detach($handle);
+        }
+        $this-&gt;handles = [];
+    }
 
-<span class=x>    public function onGetItemPre(Event $event)</span>
-<span class=x>    {</span>
-<span class=x>        $params = $event-&gt;getParams();</span>
-<span class=x>        echo sprintf(&quot;Method &#39;getItem&#39; with key &#39;%s&#39; started\n&quot;, $params[&#39;key&#39;]);</span>
-<span class=x>    }</span>
+    public function onGetItemPre(Event $event)
+    {
+        $params = $event-&gt;getParams();
+        echo sprintf(&quot;Method 'getItem' with key '%s' started\n&quot;, $params['key']);
+    }
 
-<span class=x>    public function onGetItemPost(Event $event)</span>
-<span class=x>    {</span>
-<span class=x>        $params = $event-&gt;getParams();</span>
-<span class=x>        echo sprintf(&quot;Method &#39;getItem&#39; with key &#39;%s&#39; finished\n&quot;, $params[&#39;key&#39;]);</span>
-<span class=x>    }</span>
-<span class=x>}</span>
+    public function onGetItemPost(Event $event)
+    {
+        $params = $event-&gt;getParams();
+        echo sprintf(&quot;Method 'getItem' with key '%s' finished\n&quot;, $params['key']);
+    }
+}
 
-<span class=x>// After defining this plugin, we can instantiate and add it to an adapter</span>
-<span class=x>// instance:</span>
-<span class=x>$plugin = new MyPlugin();</span>
-<span class=x>$cache-&gt;addPlugin($plugin);</span>
+// After defining this plugin, we can instantiate and add it to an adapter
+// instance:
+$plugin = new MyPlugin();
+$cache-&gt;addPlugin($plugin);
 
-<span class=x>// Now when calling getItem(), our plugin should print the expected output:</span>
-<span class=x>$cache-&gt;getItem(&#39;cache-key&#39;);</span>
-<span class=x>// Method &#39;getItem&#39; with key &#39;cache-key&#39; started</span>
-<span class=x>// Method &#39;getItem&#39; with key &#39;cache-key&#39; finished</span>
-</pre></div></p>
+// Now when calling getItem(), our plugin should print the expected output:
+$cache-&gt;getItem('cache-key');
+// Method 'getItem' with key 'cache-key' started
+// Method 'getItem' with key 'cache-key' finished</code></pre>
 
 
 
@@ -789,9 +790,10 @@ by the underlying storage adapter.</p>
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -828,7 +830,7 @@ by the underlying storage adapter.</p>
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/laminas/laminas-cache//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -837,8 +839,8 @@ by the underlying storage adapter.</p>
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/laminas/laminas-cache//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>

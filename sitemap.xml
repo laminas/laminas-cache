@@ -2,62 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
      <loc>https://docs.laminas.dev/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/storage/adapter/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/storage/capabilities/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/storage/plugin/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/pattern/intro/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/pattern/callback-cache/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/pattern/class-cache/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/pattern/object-cache/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/pattern/output-cache/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/pattern/capture-cache/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/psr6/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.laminas.dev/psr16/</loc>
-     <lastmod>2019-12-31</lastmod>
+     <lastmod>2020-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

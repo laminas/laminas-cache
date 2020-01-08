@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -305,12 +309,11 @@
     <h1 id="outputcache">OutputCache</h1>
 <p>The <code>OutputCache</code> pattern caches output between calls to <code>start()</code> and <code>end()</code>.</p>
 <h2 id="quick-start">Quick Start</h2>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\PatternFactory;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\PatternFactory;
 
-<span class=x>$outputCache = PatternFactory::factory(&#39;output&#39;, [</span>
-<span class=x>    &#39;storage&#39; =&gt; &#39;apc&#39;</span>
-<span class=x>]);</span>
-</pre></div></p>
+$outputCache = PatternFactory::factory('output', [
+    'storage' =&gt; 'apc'
+]);</code></pre>
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -333,43 +336,41 @@
 <h2 id="available-methods">Available Methods</h2>
 <p>In addition to the methods defined in <code>PatternInterface</code>, this implementation
 defines the following methods.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Pattern;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Pattern;
 
-<span class=x>use Laminas\Cache\Exception;</span>
+use Laminas\Cache\Exception;
 
-<span class=x>class OutputCache extends AbstractPattern</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * If there is a cached item with the given key, display its data, and</span>
-<span class=x>     * return true. Otherwise, start buffering output until end() is called, or</span>
-<span class=x>     * the script ends.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string  $key Key</span>
-<span class=x>     * @throws Exception\MissingKeyException if key is missing</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function start($key);</span>
+class OutputCache extends AbstractPattern
+{
+    /**
+     * If there is a cached item with the given key, display its data, and
+     * return true. Otherwise, start buffering output until end() is called, or
+     * the script ends.
+     *
+     * @param  string  $key Key
+     * @throws Exception\MissingKeyException if key is missing
+     * @return bool
+     */
+    public function start($key);
 
-<span class=x>    /**</span>
-<span class=x>     * Stop buffering output, write buffered data to the cache using the key</span>
-<span class=x>     * provided to start(), and display the buffer.</span>
-<span class=x>     *</span>
-<span class=x>     * @throws Exception\RuntimeException if output cache not started or buffering not active</span>
-<span class=x>     * @return bool TRUE on success, FALSE on failure writing to cache</span>
-<span class=x>     */</span>
-<span class=x>    public function end();</span>
-<span class=x>}</span>
-</pre></div></p>
+    /**
+     * Stop buffering output, write buffered data to the cache using the key
+     * provided to start(), and display the buffer.
+     *
+     * @throws Exception\RuntimeException if output cache not started or buffering not active
+     * @return bool TRUE on success, FALSE on failure writing to cache
+     */
+    public function end();
+}</code></pre>
 <h2 id="examples">Examples</h2>
 <h3>Caching simple View Scripts</h3>
-<p> <div class=codehilite><pre><span></span><span class=x>$outputCache = Laminas\Cache\PatternFactory::factory(&#39;output&#39;, [</span>
-<span class=x>    &#39;storage&#39; =&gt; &#39;apc&#39;,</span>
-<span class=x>]);</span>
+<pre class=codehilite><code class=language-php>$outputCache = Laminas\Cache\PatternFactory::factory('output', [
+    'storage' =&gt; 'apc',
+]);
 
-<span class=x>$outputCache-&gt;start(&#39;mySimpleViewScript&#39;);</span>
-<span class=x>include &#39;/path/to/view/script.phtml&#39;;</span>
-<span class=x>$outputCache-&gt;end();</span>
-</pre></div></p>
+$outputCache-&gt;start('mySimpleViewScript');
+include '/path/to/view/script.phtml';
+$outputCache-&gt;end();</code></pre>
 
 
 
@@ -571,9 +572,10 @@ defines the following methods.</p>
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -610,7 +612,7 @@ defines the following methods.</p>
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/laminas/laminas-cache//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -619,8 +621,8 @@ defines the following methods.</p>
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/laminas/laminas-cache//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>

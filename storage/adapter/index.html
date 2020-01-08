@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -415,34 +419,33 @@ them. You can do so manually, or you can use the plugin
 <code>Laminas\Cache\Storage\Adapter\*</code> classes.  To make life easier, the
 <code>Laminas\Cache\StorageFactory</code> comes with a <code>factory()</code> method to create an adapter
 and all requested plugins at once.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
 
-<span class=x>// Via factory:</span>
-<span class=x>$cache = StorageFactory::factory([</span>
-<span class=x>    &#39;adapter&#39; =&gt; [</span>
-<span class=x>        &#39;name&#39;    =&gt; &#39;apc&#39;,</span>
-<span class=x>        &#39;options&#39; =&gt; [&#39;ttl&#39; =&gt; 3600],</span>
-<span class=x>    ],</span>
-<span class=x>    &#39;plugins&#39; =&gt; [</span>
-<span class=x>        &#39;exception_handler&#39; =&gt; [&#39;throw_exceptions&#39; =&gt; false],</span>
-<span class=x>    ],</span>
-<span class=x>]);</span>
+// Via factory:
+$cache = StorageFactory::factory([
+    'adapter' =&gt; [
+        'name'    =&gt; 'apc',
+        'options' =&gt; ['ttl' =&gt; 3600],
+    ],
+    'plugins' =&gt; [
+        'exception_handler' =&gt; ['throw_exceptions' =&gt; false],
+    ],
+]);
 
-<span class=x>// Alternately, create the adapter and plugin separately:</span>
-<span class=x>$cache  = StorageFactory::adapterFactory(&#39;apc&#39;, [&#39;ttl&#39; =&gt; 3600]);</span>
-<span class=x>$plugin = StorageFactory::pluginFactory(&#39;exception_handler&#39;, [</span>
-<span class=x>    &#39;throw_exceptions&#39; =&gt; false,</span>
-<span class=x>]);</span>
-<span class=x>$cache-&gt;addPlugin($plugin);</span>
+// Alternately, create the adapter and plugin separately:
+$cache  = StorageFactory::adapterFactory('apc', ['ttl' =&gt; 3600]);
+$plugin = StorageFactory::pluginFactory('exception_handler', [
+    'throw_exceptions' =&gt; false,
+]);
+$cache-&gt;addPlugin($plugin);
 
-<span class=x>// Or do it completely manually:</span>
-<span class=x>$cache  = new Laminas\Cache\Storage\Adapter\Apc();</span>
-<span class=x>$cache-&gt;getOptions()-&gt;setTtl(3600);</span>
+// Or do it completely manually:
+$cache  = new Laminas\Cache\Storage\Adapter\Apc();
+$cache-&gt;getOptions()-&gt;setTtl(3600);
 
-<span class=x>$plugin = new Laminas\Cache\Storage\Plugin\ExceptionHandler();</span>
-<span class=x>$plugin-&gt;getOptions()-&gt;setThrowExceptions(false);</span>
-<span class=x>$cache-&gt;addPlugin($plugin);</span>
-</pre></div></p>
+$plugin = new Laminas\Cache\Storage\Plugin\ExceptionHandler();
+$plugin-&gt;getOptions()-&gt;setThrowExceptions(false);
+$cache-&gt;addPlugin($plugin);</code></pre>
 <h2 id="basic-configuration-options">Basic Configuration Options</h2>
 <p>The following configuration options are defined by <code>Laminas\Cache\Storage\Adapter\AdapterOptions</code> and
 are available for every supported adapter. Adapter-specific configuration options are described on
@@ -492,411 +495,401 @@ adapter level below.</p>
 <h2 id="the-storageinterface">The StorageInterface</h2>
 <p><code>Laminas\Cache\Storage\StorageInterface</code> is the basic interface implemented by all
 storage adapters.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>use Traversable;</span>
+use Traversable;
 
-<span class=x>interface StorageInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Set options.</span>
-<span class=x>     *</span>
-<span class=x>     * @param array|Traversable|Adapter\AdapterOptions $options</span>
-<span class=x>     * @return StorageInterface Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setOptions($options);</span>
+interface StorageInterface
+{
+    /**
+     * Set options.
+     *
+     * @param array|Traversable|Adapter\AdapterOptions $options
+     * @return StorageInterface Fluent interface
+     */
+    public function setOptions($options);
 
-<span class=x>    /**</span>
-<span class=x>     * Get options</span>
-<span class=x>     *</span>
-<span class=x>     * @return Adapter\AdapterOptions</span>
-<span class=x>     */</span>
-<span class=x>    public function getOptions();</span>
+    /**
+     * Get options
+     *
+     * @return Adapter\AdapterOptions
+     */
+    public function getOptions();
 
-<span class=x>    /* reading */</span>
+    /* reading */
 
-<span class=x>    /**</span>
-<span class=x>     * Get an item.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string  $key</span>
-<span class=x>     * @param  bool $success</span>
-<span class=x>     * @param  mixed   $casToken</span>
-<span class=x>     * @return mixed Data on success, null on failure</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function getItem($key, &amp; $success = null, &amp; $casToken = null);</span>
+    /**
+     * Get an item.
+     *
+     * @param  string  $key
+     * @param  bool $success
+     * @param  mixed   $casToken
+     * @return mixed Data on success, null on failure
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function getItem($key, &amp; $success = null, &amp; $casToken = null);
 
-<span class=x>    /**</span>
-<span class=x>     * Get multiple items.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  array $keys</span>
-<span class=x>     * @return array Associative array of keys and values</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function getItems(array $keys);</span>
+    /**
+     * Get multiple items.
+     *
+     * @param  array $keys
+     * @return array Associative array of keys and values
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function getItems(array $keys);
 
-<span class=x>    /**</span>
-<span class=x>     * Test if an item exists.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $key</span>
-<span class=x>     * @return bool</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function hasItem($key);</span>
+    /**
+     * Test if an item exists.
+     *
+     * @param  string $key
+     * @return bool
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function hasItem($key);
 
-<span class=x>    /**</span>
-<span class=x>     * Test multiple items.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  array $keys</span>
-<span class=x>     * @return array Array of found keys</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function hasItems(array $keys);</span>
+    /**
+     * Test multiple items.
+     *
+     * @param  array $keys
+     * @return array Array of found keys
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function hasItems(array $keys);
 
-<span class=x>    /**</span>
-<span class=x>     * Get metadata of an item.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $key</span>
-<span class=x>     * @return array|bool Metadata on success, false on failure</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function getMetadata($key);</span>
+    /**
+     * Get metadata of an item.
+     *
+     * @param  string $key
+     * @return array|bool Metadata on success, false on failure
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function getMetadata($key);
 
-<span class=x>    /**</span>
-<span class=x>     * Get multiple metadata</span>
-<span class=x>     *</span>
-<span class=x>     * @param  array $keys</span>
-<span class=x>     * @return array Associative array of keys and metadata</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function getMetadatas(array $keys);</span>
+    /**
+     * Get multiple metadata
+     *
+     * @param  array $keys
+     * @return array Associative array of keys and metadata
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function getMetadatas(array $keys);
 
-<span class=x>    /* writing */</span>
+    /* writing */
 
-<span class=x>    /**</span>
-<span class=x>     * Store an item.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $key</span>
-<span class=x>     * @param  mixed  $value</span>
-<span class=x>     * @return bool</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function setItem($key, $value);</span>
+    /**
+     * Store an item.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @return bool
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function setItem($key, $value);
 
-<span class=x>    /**</span>
-<span class=x>     * Store multiple items.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  array $keyValuePairs</span>
-<span class=x>     * @return array Array of not stored keys</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function setItems(array $keyValuePairs);</span>
+    /**
+     * Store multiple items.
+     *
+     * @param  array $keyValuePairs
+     * @return array Array of not stored keys
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function setItems(array $keyValuePairs);
 
-<span class=x>    /**</span>
-<span class=x>     * Add an item.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $key</span>
-<span class=x>     * @param  mixed  $value</span>
-<span class=x>     * @return bool</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function addItem($key, $value);</span>
+    /**
+     * Add an item.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @return bool
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function addItem($key, $value);
 
-<span class=x>    /**</span>
-<span class=x>     * Add multiple items.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  array $keyValuePairs</span>
-<span class=x>     * @return array Array of not stored keys</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function addItems(array $keyValuePairs);</span>
+    /**
+     * Add multiple items.
+     *
+     * @param  array $keyValuePairs
+     * @return array Array of not stored keys
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function addItems(array $keyValuePairs);
 
-<span class=x>    /**</span>
-<span class=x>     * Replace an existing item.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $key</span>
-<span class=x>     * @param  mixed  $value</span>
-<span class=x>     * @return bool</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function replaceItem($key, $value);</span>
+    /**
+     * Replace an existing item.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     * @return bool
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function replaceItem($key, $value);
 
-<span class=x>    /**</span>
-<span class=x>     * Replace multiple existing items.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  array $keyValuePairs</span>
-<span class=x>     * @return array Array of not stored keys</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function replaceItems(array $keyValuePairs);</span>
+    /**
+     * Replace multiple existing items.
+     *
+     * @param  array $keyValuePairs
+     * @return array Array of not stored keys
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function replaceItems(array $keyValuePairs);
 
-<span class=x>    /**</span>
-<span class=x>     * Set an item only if token matches</span>
-<span class=x>     *</span>
-<span class=x>     * It uses the token received from getItem() to check if the item has</span>
-<span class=x>     * changed before overwriting it.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  mixed  $token</span>
-<span class=x>     * @param  string $key</span>
-<span class=x>     * @param  mixed  $value</span>
-<span class=x>     * @return bool</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     * @see    getItem()</span>
-<span class=x>     * @see    setItem()</span>
-<span class=x>     */</span>
-<span class=x>    public function checkAndSetItem($token, $key, $value);</span>
+    /**
+     * Set an item only if token matches
+     *
+     * It uses the token received from getItem() to check if the item has
+     * changed before overwriting it.
+     *
+     * @param  mixed  $token
+     * @param  string $key
+     * @param  mixed  $value
+     * @return bool
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     * @see    getItem()
+     * @see    setItem()
+     */
+    public function checkAndSetItem($token, $key, $value);
 
-<span class=x>    /**</span>
-<span class=x>     * Reset lifetime of an item</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $key</span>
-<span class=x>     * @return bool</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function touchItem($key);</span>
+    /**
+     * Reset lifetime of an item
+     *
+     * @param  string $key
+     * @return bool
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function touchItem($key);
 
-<span class=x>    /**</span>
-<span class=x>     * Reset lifetime of multiple items.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  array $keys</span>
-<span class=x>     * @return array Array of not updated keys</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function touchItems(array $keys);</span>
+    /**
+     * Reset lifetime of multiple items.
+     *
+     * @param  array $keys
+     * @return array Array of not updated keys
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function touchItems(array $keys);
 
-<span class=x>    /**</span>
-<span class=x>     * Remove an item.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $key</span>
-<span class=x>     * @return bool</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function removeItem($key);</span>
+    /**
+     * Remove an item.
+     *
+     * @param  string $key
+     * @return bool
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function removeItem($key);
 
-<span class=x>    /**</span>
-<span class=x>     * Remove multiple items.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  array $keys</span>
-<span class=x>     * @return array Array of not removed keys</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function removeItems(array $keys);</span>
+    /**
+     * Remove multiple items.
+     *
+     * @param  array $keys
+     * @return array Array of not removed keys
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function removeItems(array $keys);
 
-<span class=x>    /**</span>
-<span class=x>     * Increment an item.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $key</span>
-<span class=x>     * @param  int    $value</span>
-<span class=x>     * @return int|bool The new value on success, false on failure</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function incrementItem($key, $value);</span>
+    /**
+     * Increment an item.
+     *
+     * @param  string $key
+     * @param  int    $value
+     * @return int|bool The new value on success, false on failure
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function incrementItem($key, $value);
 
-<span class=x>    /**</span>
-<span class=x>     * Increment multiple items.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  array $keyValuePairs</span>
-<span class=x>     * @return array Associative array of keys and new values</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function incrementItems(array $keyValuePairs);</span>
+    /**
+     * Increment multiple items.
+     *
+     * @param  array $keyValuePairs
+     * @return array Associative array of keys and new values
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function incrementItems(array $keyValuePairs);
 
-<span class=x>    /**</span>
-<span class=x>     * Decrement an item.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $key</span>
-<span class=x>     * @param  int    $value</span>
-<span class=x>     * @return int|bool The new value on success, false on failure</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function decrementItem($key, $value);</span>
+    /**
+     * Decrement an item.
+     *
+     * @param  string $key
+     * @param  int    $value
+     * @return int|bool The new value on success, false on failure
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function decrementItem($key, $value);
 
-<span class=x>    /**</span>
-<span class=x>     * Decrement multiple items.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  array $keyValuePairs</span>
-<span class=x>     * @return array Associative array of keys and new values</span>
-<span class=x>     * @throws \Laminas\Cache\Exception\ExceptionInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function decrementItems(array $keyValuePairs);</span>
+    /**
+     * Decrement multiple items.
+     *
+     * @param  array $keyValuePairs
+     * @return array Associative array of keys and new values
+     * @throws \Laminas\Cache\Exception\ExceptionInterface
+     */
+    public function decrementItems(array $keyValuePairs);
 
-<span class=x>    /* status */</span>
+    /* status */
 
-<span class=x>    /**</span>
-<span class=x>     * Capabilities of this storage</span>
-<span class=x>     *</span>
-<span class=x>     * @return Capabilities</span>
-<span class=x>     */</span>
-<span class=x>    public function getCapabilities();</span>
-<span class=x>}</span>
-</pre></div></p>
+    /**
+     * Capabilities of this storage
+     *
+     * @return Capabilities
+     */
+    public function getCapabilities();
+}</code></pre>
 <h2 id="the-availablespacecapableinterface">The AvailableSpaceCapableInterface</h2>
 <p><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code> implements a method to allow
 retrieving the current available space remaining in storage.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>interface AvailableSpaceCapableInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Get available space in bytes</span>
-<span class=x>     *</span>
-<span class=x>     * @return int|float</span>
-<span class=x>     */</span>
-<span class=x>    public function getAvailableSpace();</span>
-<span class=x>}</span>
-</pre></div></p>
+interface AvailableSpaceCapableInterface
+{
+    /**
+     * Get available space in bytes
+     *
+     * @return int|float
+     */
+    public function getAvailableSpace();
+}</code></pre>
 <h2 id="the-totalspacecapableinterface">The TotalSpaceCapableInterface</h2>
 <p><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code> implements a method to allow
 retrieving the total storage space.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>interface TotalSpaceCapableInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Get total space in bytes</span>
-<span class=x>     *</span>
-<span class=x>     * @return int|float</span>
-<span class=x>     */</span>
-<span class=x>    public function getTotalSpace();</span>
-<span class=x>}</span>
-</pre></div></p>
+interface TotalSpaceCapableInterface
+{
+    /**
+     * Get total space in bytes
+     *
+     * @return int|float
+     */
+    public function getTotalSpace();
+}</code></pre>
 <h2 id="the-clearbynamespaceinterface">The ClearByNamespaceInterface</h2>
 <p><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code> implements a method to allow
 clearing all cached items within a given namespace.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>interface ClearByNamespaceInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Remove items of given namespace</span>
-<span class=x>     *</span>
-<span class=x>     * @param string $namespace</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function clearByNamespace($namespace);</span>
-<span class=x>}</span>
-</pre></div></p>
+interface ClearByNamespaceInterface
+{
+    /**
+     * Remove items of given namespace
+     *
+     * @param string $namespace
+     * @return bool
+     */
+    public function clearByNamespace($namespace);
+}</code></pre>
 <h2 id="the-clearbyprefixinterface">The ClearByPrefixInterface</h2>
 <p><code>Laminas\Cache\Storage\ClearByPrefixInterface</code> implements a method to allow
 clearing all cached items that have a given prefix (within the currently
 configured namespace).</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>interface ClearByPrefixInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Remove items matching given prefix</span>
-<span class=x>     *</span>
-<span class=x>     * @param string $prefix</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function clearByPrefix($prefix);</span>
-<span class=x>}</span>
-</pre></div></p>
+interface ClearByPrefixInterface
+{
+    /**
+     * Remove items matching given prefix
+     *
+     * @param string $prefix
+     * @return bool
+     */
+    public function clearByPrefix($prefix);
+}</code></pre>
 <h2 id="the-clearexpiredinterface">The ClearExpiredInterface</h2>
 <p><code>Laminas\Cache\Storage\ClearExpiredInterface</code> implements a method to allow clearing
 all expired items (within the current configured namespace).</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>interface ClearExpiredInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Remove expired items</span>
-<span class=x>     *</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function clearExpired();</span>
-<span class=x>}</span>
-</pre></div></p>
+interface ClearExpiredInterface
+{
+    /**
+     * Remove expired items
+     *
+     * @return bool
+     */
+    public function clearExpired();
+}</code></pre>
 <h2 id="the-flushableinterface">The FlushableInterface</h2>
 <p><code>Laminas\Cache\Storage\FlushableInterface</code> implements a method for flushing the
 entire cache storage.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>interface FlushableInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Flush the whole storage</span>
-<span class=x>     *</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function flush();</span>
-<span class=x>}</span>
-</pre></div></p>
+interface FlushableInterface
+{
+    /**
+     * Flush the whole storage
+     *
+     * @return bool
+     */
+    public function flush();
+}</code></pre>
 <h2 id="the-iterableinterface">The IterableInterface</h2>
 <p><code>Laminas\Cache\Storage\IterableInterface</code> implements a method for retrieving an
 iterator of all items in storage. It extends <code>IteratorAggregate</code>, so it's
 possible to directly iterate over the storage implementations that implement
 this interface using <code>foreach</code>.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>use IteratorAggregate;</span>
+use IteratorAggregate;
 
-<span class=x>/**</span>
-<span class=x> *</span>
-<span class=x> * @method IteratorInterface getIterator() Get the storage iterator</span>
-<span class=x> */</span>
-<span class=x>interface IterableInterface extends IteratorAggregate</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * @return \Traversable</span>
-<span class=x>     */</span>
-<span class=x>    public function getIterator();</span>
-<span class=x>}</span>
-</pre></div></p>
+/**
+ *
+ * @method IteratorInterface getIterator() Get the storage iterator
+ */
+interface IterableInterface extends IteratorAggregate
+{
+    /**
+     * @return \Traversable
+     */
+    public function getIterator();
+}</code></pre>
 <h2 id="the-optimizableinterface">The OptimizableInterface</h2>
 <p><code>Laminas\Cache\Storage\OptimizableInterface</code> implements a method for running
 optimization processes on the storage adapter.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>interface OptimizableInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Optimize the storage</span>
-<span class=x>     *</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function optimize();</span>
-<span class=x>}</span>
-</pre></div></p>
+interface OptimizableInterface
+{
+    /**
+     * Optimize the storage
+     *
+     * @return bool
+     */
+    public function optimize();
+}</code></pre>
 <h2 id="the-taggableinterface">The TaggableInterface</h2>
 <p><code>Laminas\Cache\Storage\TaggableInterface</code> implements methods for tagging items, and
 cleaning (expiring) items matching tags.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>interface TaggableInterface</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Set tags to an item by given key.</span>
-<span class=x>     * An empty array will remove all tags.</span>
-<span class=x>     *</span>
-<span class=x>     * @param string   $key</span>
-<span class=x>     * @param string[] $tags</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function setTags($key, array $tags);</span>
+interface TaggableInterface
+{
+    /**
+     * Set tags to an item by given key.
+     * An empty array will remove all tags.
+     *
+     * @param string   $key
+     * @param string[] $tags
+     * @return bool
+     */
+    public function setTags($key, array $tags);
 
-<span class=x>    /**</span>
-<span class=x>     * Get tags of an item by given key</span>
-<span class=x>     *</span>
-<span class=x>     * @param string $key</span>
-<span class=x>     * @return string[]|FALSE</span>
-<span class=x>     */</span>
-<span class=x>    public function getTags($key);</span>
+    /**
+     * Get tags of an item by given key
+     *
+     * @param string $key
+     * @return string[]|FALSE
+     */
+    public function getTags($key);
 
-<span class=x>    /**</span>
-<span class=x>     * Remove items matching given tags.</span>
-<span class=x>     *</span>
-<span class=x>     * If $disjunction only one of the given tags must match</span>
-<span class=x>     * else all given tags must match.</span>
-<span class=x>     *</span>
-<span class=x>     * @param string[] $tags</span>
-<span class=x>     * @param  bool  $disjunction</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function clearByTags(array $tags, $disjunction = false);</span>
-<span class=x>}</span>
-</pre></div></p>
+    /**
+     * Remove items matching given tags.
+     *
+     * If $disjunction only one of the given tags must match
+     * else all given tags must match.
+     *
+     * @param string[] $tags
+     * @param  bool  $disjunction
+     * @return bool
+     */
+    public function clearByTags(array $tags, $disjunction = false);
+}</code></pre>
 <h2 id="the-apc-adapter">The Apc Adapter</h2>
 <p><code>Laminas\Cache\Storage\Adapter\Apc</code> stores cache items in shared memory through the
 PHP extension <a href="http://pecl.php.net/package/APC">APC</a> (Alternative PHP Cache).</p>
@@ -1689,8 +1682,7 @@ to use the <a href="#the-extmongodb-adapter">ExtMongoDb adapter</a> instead.</p>
 <p><code>Laminas\Cache\Storage\Adapter\ExtMongoDB</code> stores cache items using the mongodb extension, and
 requires that the MongoDB PHP Client library is also installed. You can install the client
 library using the following:</p>
-<p> <div class=codehilite><pre><span></span>$ composer require mongodb/mongodb
-</pre></div></p>
+<pre class=codehilite><code class=language-bash>$ composer require mongodb/mongodb</code></pre>
 <blockquote>
 <h4>ext-mongo</h4>
 <p>If you are using the mongo extension (vs the mongodb extension), you will need
@@ -2135,69 +2127,67 @@ through the <a href="https://www.zend.com/en/products/server/">Zend Server Data 
 </table></div>
 <h2 id="examples">Examples</h2>
 <h3>Basic Usage</h3>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
 
-<span class=x>$cache = StorageFactory::factory([</span>
-<span class=x>    &#39;adapter&#39; =&gt; [</span>
-<span class=x>        &#39;name&#39; =&gt; &#39;filesystem&#39;</span>
-<span class=x>    ],</span>
-<span class=x>    &#39;plugins&#39; =&gt; [</span>
-<span class=x>        // Don&#39;t throw exceptions on cache errors</span>
-<span class=x>        &#39;exception_handler&#39; =&gt; [</span>
-<span class=x>            &#39;throw_exceptions&#39; =&gt; false</span>
-<span class=x>        ],</span>
-<span class=x>    ],</span>
-<span class=x>]);</span>
+$cache = StorageFactory::factory([
+    'adapter' =&gt; [
+        'name' =&gt; 'filesystem'
+    ],
+    'plugins' =&gt; [
+        // Don't throw exceptions on cache errors
+        'exception_handler' =&gt; [
+            'throw_exceptions' =&gt; false
+        ],
+    ],
+]);
 
-<span class=x>$key    = &#39;unique-cache-key&#39;;</span>
-<span class=x>$result = $cache-&gt;getItem($key, $success);</span>
-<span class=x>if (! $success) {</span>
-<span class=x>    $result = doExpensiveStuff();</span>
-<span class=x>    $cache-&gt;setItem($key, $result);</span>
-<span class=x>}</span>
-</pre></div></p>
+$key    = 'unique-cache-key';
+$result = $cache-&gt;getItem($key, $success);
+if (! $success) {
+    $result = doExpensiveStuff();
+    $cache-&gt;setItem($key, $result);
+}</code></pre>
 <h3>Get multiple Rows from a Database</h3>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
 
-<span class=x>// Instantiate the cache instance using a namespace for the same type of items</span>
-<span class=x>$cache = StorageFactory::factory([</span>
-<span class=x>    &#39;adapter&#39; =&gt; [</span>
-<span class=x>        &#39;name&#39; =&gt; &#39;filesystem&#39;,</span>
-<span class=x>        // With a namespace, we can indicate the same type of items,</span>
-<span class=x>        // so we can simply use the database id as the cache key</span>
-<span class=x>        &#39;options&#39; =&gt; [</span>
-<span class=x>            &#39;namespace&#39; =&gt; &#39;dbtable&#39;,</span>
-<span class=x>        ],</span>
-<span class=x>    ],</span>
-<span class=x>    &#39;plugins&#39; =&gt; [</span>
-<span class=x>        // Don&#39;t throw exceptions on cache errors</span>
-<span class=x>        &#39;exception_handler&#39; =&gt; [</span>
-<span class=x>            &#39;throw_exceptions&#39; =&gt; false,</span>
-<span class=x>        ],</span>
-<span class=x>        // We store database rows on filesystem so we need to serialize them</span>
-<span class=x>        &#39;Serializer&#39;,</span>
-<span class=x>    ],</span>
-<span class=x>]);</span>
+// Instantiate the cache instance using a namespace for the same type of items
+$cache = StorageFactory::factory([
+    'adapter' =&gt; [
+        'name' =&gt; 'filesystem',
+        // With a namespace, we can indicate the same type of items,
+        // so we can simply use the database id as the cache key
+        'options' =&gt; [
+            'namespace' =&gt; 'dbtable',
+        ],
+    ],
+    'plugins' =&gt; [
+        // Don't throw exceptions on cache errors
+        'exception_handler' =&gt; [
+            'throw_exceptions' =&gt; false,
+        ],
+        // We store database rows on filesystem so we need to serialize them
+        'Serializer',
+    ],
+]);
 
-<span class=x>// Load two rows from cache if possible</span>
-<span class=x>$ids     = [1, 2];</span>
-<span class=x>$results = $cache-&gt;getItems($ids);</span>
-<span class=x>if (count($results) &lt; count($ids)) {</span>
-<span class=x>    // Load rows from db if loading from cache failed</span>
-<span class=x>    $missingIds     = array_diff($ids, array_keys($results));</span>
-<span class=x>    $missingResults = [];</span>
-<span class=x>    $query          = &#39;SELECT * FROM dbtable WHERE id IN (&#39; . implode(&#39;,&#39;, $missingIds) . &#39;)&#39;;</span>
-<span class=x>    foreach ($pdo-&gt;query($query, PDO::FETCH_ASSOC) as $row) {</span>
-<span class=x>        $missingResults[ $row[&#39;id&#39;] ] = $row;</span>
-<span class=x>    }</span>
+// Load two rows from cache if possible
+$ids     = [1, 2];
+$results = $cache-&gt;getItems($ids);
+if (count($results) &lt; count($ids)) {
+    // Load rows from db if loading from cache failed
+    $missingIds     = array_diff($ids, array_keys($results));
+    $missingResults = [];
+    $query          = 'SELECT * FROM dbtable WHERE id IN (' . implode(',', $missingIds) . ')';
+    foreach ($pdo-&gt;query($query, PDO::FETCH_ASSOC) as $row) {
+        $missingResults[ $row['id'] ] = $row;
+    }
 
-<span class=x>    // Update cache items of the loaded rows from db</span>
-<span class=x>    $cache-&gt;setItems($missingResults);</span>
+    // Update cache items of the loaded rows from db
+    $cache-&gt;setItems($missingResults);
 
-<span class=x>    // merge results from cache and db</span>
-<span class=x>    $results = array_merge($results, $missingResults);</span>
-<span class=x>}</span>
-</pre></div></p>
+    // merge results from cache and db
+    $results = array_merge($results, $missingResults);
+}</code></pre>
 
 
 
@@ -2399,9 +2389,10 @@ through the <a href="https://www.zend.com/en/products/server/">Zend Server Data 
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -2438,7 +2429,7 @@ through the <a href="https://www.zend.com/en/products/server/">Zend Server Data 
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/laminas/laminas-cache//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -2447,8 +2438,8 @@ through the <a href="https://www.zend.com/en/products/server/">Zend Server Data 
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/laminas/laminas-cache//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>

@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -305,22 +309,21 @@
     <h1 id="callbackcache">CallbackCache</h1>
 <p>The callback cache pattern caches the results of arbitrary PHP callables.</p>
 <h2 id="quick-start">Quick Start</h2>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\PatternFactory;</span>
-<span class=x>use Laminas\Cache\Pattern\PatternOptions;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\PatternFactory;
+use Laminas\Cache\Pattern\PatternOptions;
 
-<span class=x>// Via the factory:</span>
-<span class=x>$callbackCache = PatternFactory::factory(&#39;callback&#39;, [</span>
-<span class=x>    &#39;storage&#39;      =&gt; &#39;apc&#39;,</span>
-<span class=x>    &#39;cache_output&#39; =&gt; true,</span>
-<span class=x>]);</span>
+// Via the factory:
+$callbackCache = PatternFactory::factory('callback', [
+    'storage'      =&gt; 'apc',
+    'cache_output' =&gt; true,
+]);
 
-<span class=x>// Or the equivalent manual instantiation:</span>
-<span class=x>$callbackCache = new \Laminas\Cache\Pattern\CallbackCache();</span>
-<span class=x>$callbackCache-&gt;setOptions(new PatternOptions([</span>
-<span class=x>    &#39;storage&#39;      =&gt; &#39;apc&#39;,</span>
-<span class=x>    &#39;cache_output&#39; =&gt; true,</span>
-<span class=x>]));</span>
-</pre></div></p>
+// Or the equivalent manual instantiation:
+$callbackCache = new \Laminas\Cache\Pattern\CallbackCache();
+$callbackCache-&gt;setOptions(new PatternOptions([
+    'storage'      =&gt; 'apc',
+    'cache_output' =&gt; true,
+]));</code></pre>
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -349,56 +352,54 @@
 <h2 id="available-methods">Available Methods</h2>
 <p>In addition to the methods defined in the <code>PatternInterface</code>, this
 implementation provides the following methods.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Pattern;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Pattern;
 
-<span class=x>use Laminas\Cache\Exception;</span>
-<span class=x>use Laminas\Stdlib\ErrorHandler;</span>
+use Laminas\Cache\Exception;
+use Laminas\Stdlib\ErrorHandler;
 
-<span class=x>class CallbackCache extends AbstractPattern</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Call the specified callback or get the result from cache</span>
-<span class=x>     *</span>
-<span class=x>     * @param  callable   $callback  A valid callback</span>
-<span class=x>     * @param  array      $args      Callback arguments</span>
-<span class=x>     * @return mixed Result</span>
-<span class=x>     * @throws Exception\RuntimeException if invalid cached data</span>
-<span class=x>     * @throws \Exception</span>
-<span class=x>     */</span>
-<span class=x>    public function call($callback, array $args = []);</span>
+class CallbackCache extends AbstractPattern
+{
+    /**
+     * Call the specified callback or get the result from cache
+     *
+     * @param  callable   $callback  A valid callback
+     * @param  array      $args      Callback arguments
+     * @return mixed Result
+     * @throws Exception\RuntimeException if invalid cached data
+     * @throws \Exception
+     */
+    public function call($callback, array $args = []);
 
-<span class=x>    /**</span>
-<span class=x>     * Intercept method overloading; proxies to call()</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $function  Function name to call</span>
-<span class=x>     * @param  array  $args      Function arguments</span>
-<span class=x>     * @return mixed</span>
-<span class=x>     * @throws Exception\RuntimeException</span>
-<span class=x>     * @throws \Exception</span>
-<span class=x>     */</span>
-<span class=x>    public function __call($function, array $args);</span>
+    /**
+     * Intercept method overloading; proxies to call()
+     *
+     * @param  string $function  Function name to call
+     * @param  array  $args      Function arguments
+     * @return mixed
+     * @throws Exception\RuntimeException
+     * @throws \Exception
+     */
+    public function __call($function, array $args);
 
-<span class=x>    /**</span>
-<span class=x>     * Generate a unique key in base of a key representing the callback part</span>
-<span class=x>     * and a key representing the arguments part.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  callable   $callback  A valid callback</span>
-<span class=x>     * @param  array      $args      Callback arguments</span>
-<span class=x>     * @return string</span>
-<span class=x>     * @throws Exception\RuntimeException</span>
-<span class=x>     * @throws Exception\InvalidArgumentException</span>
-<span class=x>     */</span>
-<span class=x>    public function generateKey($callback, array $args = []);</span>
-<span class=x>}</span>
-</pre></div></p>
+    /**
+     * Generate a unique key in base of a key representing the callback part
+     * and a key representing the arguments part.
+     *
+     * @param  callable   $callback  A valid callback
+     * @param  array      $args      Callback arguments
+     * @return string
+     * @throws Exception\RuntimeException
+     * @throws Exception\InvalidArgumentException
+     */
+    public function generateKey($callback, array $args = []);
+}</code></pre>
 <h2 id="examples">Examples</h2>
 <h3>Instantiating the Callback Cache Pattern</h3>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\PatternFactory;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\PatternFactory;
 
-<span class=x>$callbackCache = PatternFactory::factory(&#39;callback&#39;, [</span>
-<span class=x>    &#39;storage&#39; =&gt; &#39;apc&#39;</span>
-<span class=x>]);</span>
-</pre></div></p>
+$callbackCache = PatternFactory::factory('callback', [
+    'storage' =&gt; 'apc'
+]);</code></pre>
 
 
 
@@ -600,9 +601,10 @@ implementation provides the following methods.</p>
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -639,7 +641,7 @@ implementation provides the following methods.</p>
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/laminas/laminas-cache//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -648,8 +650,8 @@ implementation provides the following methods.</p>
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/laminas/laminas-cache//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>

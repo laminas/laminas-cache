@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -306,278 +310,275 @@ notifications; see the examples for details.</p>
 because you have access to the marker object and can create your own marker to
 instantiate a new instance of <code>Laminas\Cache\Storage\Capabilities</code>.</p>
 <h2 id="available-methods">Available Methods</h2>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Storage;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
 
-<span class=x>use ArrayObject;</span>
-<span class=x>use stdClass;</span>
-<span class=x>use Laminas\Cache\Exception;</span>
-<span class=x>use Laminas\EventManager\EventsCapableInterface;</span>
+use ArrayObject;
+use stdClass;
+use Laminas\Cache\Exception;
+use Laminas\EventManager\EventsCapableInterface;
 
-<span class=x>class Capabilities</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Constructor</span>
-<span class=x>     *</span>
-<span class=x>     * @param StorageInterface  $storage</span>
-<span class=x>     * @param stdClass          $marker</span>
-<span class=x>     * @param array             $capabilities</span>
-<span class=x>     * @param null|Capabilities $baseCapabilities</span>
-<span class=x>     */</span>
-<span class=x>    public function __construct(</span>
-<span class=x>        StorageInterface $storage,</span>
-<span class=x>        stdClass $marker,</span>
-<span class=x>        array $capabilities = [],</span>
-<span class=x>        Capabilities $baseCapabilities = null</span>
-<span class=x>    );</span>
+class Capabilities
+{
+    /**
+     * Constructor
+     *
+     * @param StorageInterface  $storage
+     * @param stdClass          $marker
+     * @param array             $capabilities
+     * @param null|Capabilities $baseCapabilities
+     */
+    public function __construct(
+        StorageInterface $storage,
+        stdClass $marker,
+        array $capabilities = [],
+        Capabilities $baseCapabilities = null
+    );
 
-<span class=x>    /**</span>
-<span class=x>     * Get the storage adapter</span>
-<span class=x>     *</span>
-<span class=x>     * @return StorageInterface</span>
-<span class=x>     */</span>
-<span class=x>    public function getAdapter();</span>
+    /**
+     * Get the storage adapter
+     *
+     * @return StorageInterface
+     */
+    public function getAdapter();
 
-<span class=x>    /**</span>
-<span class=x>     * Get supported datatypes</span>
-<span class=x>     *</span>
-<span class=x>     * @return array</span>
-<span class=x>     */</span>
-<span class=x>    public function getSupportedDatatypes();</span>
+    /**
+     * Get supported datatypes
+     *
+     * @return array
+     */
+    public function getSupportedDatatypes();
 
-<span class=x>    /**</span>
-<span class=x>     * Set supported datatypes</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  array $datatypes</span>
-<span class=x>     * @throws Exception\InvalidArgumentException</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setSupportedDatatypes(stdClass $marker, array $datatypes);</span>
+    /**
+     * Set supported datatypes
+     *
+     * @param  stdClass $marker
+     * @param  array $datatypes
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setSupportedDatatypes(stdClass $marker, array $datatypes);
 
-<span class=x>    /**</span>
-<span class=x>     * Get supported metadata</span>
-<span class=x>     *</span>
-<span class=x>     * @return array</span>
-<span class=x>     */</span>
-<span class=x>    public function getSupportedMetadata();</span>
+    /**
+     * Get supported metadata
+     *
+     * @return array
+     */
+    public function getSupportedMetadata();
 
-<span class=x>    /**</span>
-<span class=x>     * Set supported metadata</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  string[] $metadata</span>
-<span class=x>     * @throws Exception\InvalidArgumentException</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setSupportedMetadata(stdClass $marker, array $metadata);</span>
+    /**
+     * Set supported metadata
+     *
+     * @param  stdClass $marker
+     * @param  string[] $metadata
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setSupportedMetadata(stdClass $marker, array $metadata);
 
-<span class=x>    /**</span>
-<span class=x>     * Get minimum supported time-to-live</span>
-<span class=x>     *</span>
-<span class=x>     * @return int 0 means items never expire</span>
-<span class=x>     */</span>
-<span class=x>    public function getMinTtl();</span>
+    /**
+     * Get minimum supported time-to-live
+     *
+     * @return int 0 means items never expire
+     */
+    public function getMinTtl();
 
-<span class=x>    /**</span>
-<span class=x>     * Set minimum supported time-to-live</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  int $minTtl</span>
-<span class=x>     * @throws Exception\InvalidArgumentException</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setMinTtl(stdClass $marker, $minTtl);</span>
+    /**
+     * Set minimum supported time-to-live
+     *
+     * @param  stdClass $marker
+     * @param  int $minTtl
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setMinTtl(stdClass $marker, $minTtl);
 
-<span class=x>    /**</span>
-<span class=x>     * Get maximum supported time-to-live</span>
-<span class=x>     *</span>
-<span class=x>     * @return int 0 means infinite</span>
-<span class=x>     */</span>
-<span class=x>    public function getMaxTtl();</span>
+    /**
+     * Get maximum supported time-to-live
+     *
+     * @return int 0 means infinite
+     */
+    public function getMaxTtl();
 
-<span class=x>    /**</span>
-<span class=x>     * Set maximum supported time-to-live</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  int $maxTtl</span>
-<span class=x>     * @throws Exception\InvalidArgumentException</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setMaxTtl(stdClass $marker, $maxTtl);</span>
+    /**
+     * Set maximum supported time-to-live
+     *
+     * @param  stdClass $marker
+     * @param  int $maxTtl
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setMaxTtl(stdClass $marker, $maxTtl);
 
-<span class=x>    /**</span>
-<span class=x>     * Is the time-to-live handled static (on write)</span>
-<span class=x>     * or dynamic (on read)</span>
-<span class=x>     *</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function getStaticTtl();</span>
+    /**
+     * Is the time-to-live handled static (on write)
+     * or dynamic (on read)
+     *
+     * @return bool
+     */
+    public function getStaticTtl();
 
-<span class=x>    /**</span>
-<span class=x>     * Set if the time-to-live handled static (on write) or dynamic (on read)</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  bool $flag</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setStaticTtl(stdClass $marker, $flag);</span>
+    /**
+     * Set if the time-to-live handled static (on write) or dynamic (on read)
+     *
+     * @param  stdClass $marker
+     * @param  bool $flag
+     * @return Capabilities Fluent interface
+     */
+    public function setStaticTtl(stdClass $marker, $flag);
 
-<span class=x>    /**</span>
-<span class=x>     * Get time-to-live precision</span>
-<span class=x>     *</span>
-<span class=x>     * @return float</span>
-<span class=x>     */</span>
-<span class=x>    public function getTtlPrecision();</span>
+    /**
+     * Get time-to-live precision
+     *
+     * @return float
+     */
+    public function getTtlPrecision();
 
-<span class=x>    /**</span>
-<span class=x>     * Set time-to-live precision</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  float $ttlPrecision</span>
-<span class=x>     * @throws Exception\InvalidArgumentException</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setTtlPrecision(stdClass $marker, $ttlPrecision);</span>
+    /**
+     * Set time-to-live precision
+     *
+     * @param  stdClass $marker
+     * @param  float $ttlPrecision
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setTtlPrecision(stdClass $marker, $ttlPrecision);
 
-<span class=x>    /**</span>
-<span class=x>     * Get use request time</span>
-<span class=x>     *</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function getUseRequestTime();</span>
+    /**
+     * Get use request time
+     *
+     * @return bool
+     */
+    public function getUseRequestTime();
 
-<span class=x>    /**</span>
-<span class=x>     * Set use request time</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  bool $flag</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setUseRequestTime(stdClass $marker, $flag);</span>
+    /**
+     * Set use request time
+     *
+     * @param  stdClass $marker
+     * @param  bool $flag
+     * @return Capabilities Fluent interface
+     */
+    public function setUseRequestTime(stdClass $marker, $flag);
 
-<span class=x>    /**</span>
-<span class=x>     * Get if expired items are readable</span>
-<span class=x>     *</span>
-<span class=x>     * @return bool</span>
-<span class=x>     * @deprecated This capability has been deprecated and will be removed in the future.</span>
-<span class=x>     *             Please use getStaticTtl() instead</span>
-<span class=x>     */</span>
-<span class=x>    public function getExpiredRead();</span>
+    /**
+     * Get if expired items are readable
+     *
+     * @return bool
+     * @deprecated This capability has been deprecated and will be removed in the future.
+     *             Please use getStaticTtl() instead
+     */
+    public function getExpiredRead();
 
-<span class=x>    /**</span>
-<span class=x>     * Set if expired items are readable</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  bool $flag</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     * @deprecated This capability has been deprecated and will be removed in the future.</span>
-<span class=x>     *             Please use setStaticTtl() instead</span>
-<span class=x>     */</span>
-<span class=x>    public function setExpiredRead(stdClass $marker, $flag);</span>
+    /**
+     * Set if expired items are readable
+     *
+     * @param  stdClass $marker
+     * @param  bool $flag
+     * @return Capabilities Fluent interface
+     * @deprecated This capability has been deprecated and will be removed in the future.
+     *             Please use setStaticTtl() instead
+     */
+    public function setExpiredRead(stdClass $marker, $flag);
 
-<span class=x>    /**</span>
-<span class=x>     * Get &quot;lock-on-expire&quot; support in seconds.</span>
-<span class=x>     *</span>
-<span class=x>     * @return int  0 = Expired items will never be retrieved</span>
-<span class=x>     *             &gt;0 = Time in seconds an expired item could be retrieved</span>
-<span class=x>     *             -1 = Expired items could be retrieved forever</span>
-<span class=x>     */</span>
-<span class=x>    public function getLockOnExpire()</span>
-<span class=x>    {</span>
-<span class=x>        return $this-&gt;getCapability(&#39;lockOnExpire&#39;, 0);</span>
-<span class=x>    }</span>
+    /**
+     * Get &quot;lock-on-expire&quot; support in seconds.
+     *
+     * @return int  0 = Expired items will never be retrieved
+     *             &gt;0 = Time in seconds an expired item could be retrieved
+     *             -1 = Expired items could be retrieved forever
+     */
+    public function getLockOnExpire()
+    {
+        return $this-&gt;getCapability('lockOnExpire', 0);
+    }
 
-<span class=x>    /**</span>
-<span class=x>     * Set &quot;lock-on-expire&quot; support in seconds.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  int      $timeout</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setLockOnExpire(stdClass $marker, $timeout)</span>
-<span class=x>    {</span>
-<span class=x>        return $this-&gt;setCapability($marker, &#39;lockOnExpire&#39;, (int) $timeout);</span>
-<span class=x>    }</span>
+    /**
+     * Set &quot;lock-on-expire&quot; support in seconds.
+     *
+     * @param  stdClass $marker
+     * @param  int      $timeout
+     * @return Capabilities Fluent interface
+     */
+    public function setLockOnExpire(stdClass $marker, $timeout)
+    {
+        return $this-&gt;setCapability($marker, 'lockOnExpire', (int) $timeout);
+    }
 
-<span class=x>    /**</span>
-<span class=x>     * Get maximum key length</span>
-<span class=x>     *</span>
-<span class=x>     * @return int -1 means unknown, 0 means infinite</span>
-<span class=x>     */</span>
-<span class=x>    public function getMaxKeyLength();</span>
+    /**
+     * Get maximum key length
+     *
+     * @return int -1 means unknown, 0 means infinite
+     */
+    public function getMaxKeyLength();
 
-<span class=x>    /**</span>
-<span class=x>     * Set maximum key length</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  int $maxKeyLength</span>
-<span class=x>     * @throws Exception\InvalidArgumentException</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setMaxKeyLength(stdClass $marker, $maxKeyLength);</span>
+    /**
+     * Set maximum key length
+     *
+     * @param  stdClass $marker
+     * @param  int $maxKeyLength
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setMaxKeyLength(stdClass $marker, $maxKeyLength);
 
-<span class=x>    /**</span>
-<span class=x>     * Get if namespace support is implemented as prefix</span>
-<span class=x>     *</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function getNamespaceIsPrefix();</span>
+    /**
+     * Get if namespace support is implemented as prefix
+     *
+     * @return bool
+     */
+    public function getNamespaceIsPrefix();
 
-<span class=x>    /**</span>
-<span class=x>     * Set if namespace support is implemented as prefix</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  bool $flag</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setNamespaceIsPrefix(stdClass $marker, $flag);</span>
+    /**
+     * Set if namespace support is implemented as prefix
+     *
+     * @param  stdClass $marker
+     * @param  bool $flag
+     * @return Capabilities Fluent interface
+     */
+    public function setNamespaceIsPrefix(stdClass $marker, $flag);
 
-<span class=x>    /**</span>
-<span class=x>     * Get namespace separator if namespace is implemented as prefix</span>
-<span class=x>     *</span>
-<span class=x>     * @return string</span>
-<span class=x>     */</span>
-<span class=x>    public function getNamespaceSeparator();</span>
+    /**
+     * Get namespace separator if namespace is implemented as prefix
+     *
+     * @return string
+     */
+    public function getNamespaceSeparator();
 
-<span class=x>    /**</span>
-<span class=x>     * Set the namespace separator if namespace is implemented as prefix</span>
-<span class=x>     *</span>
-<span class=x>     * @param  stdClass $marker</span>
-<span class=x>     * @param  string $separator</span>
-<span class=x>     * @return Capabilities Fluent interface</span>
-<span class=x>     */</span>
-<span class=x>    public function setNamespaceSeparator(stdClass $marker, $separator);</span>
-<span class=x>}</span>
-</pre></div></p>
+    /**
+     * Set the namespace separator if namespace is implemented as prefix
+     *
+     * @param  stdClass $marker
+     * @param  string $separator
+     * @return Capabilities Fluent interface
+     */
+    public function setNamespaceSeparator(stdClass $marker, $separator);
+}</code></pre>
 <h2 id="examples">Examples</h2>
 <h3>Get Storage Capabilities and do specific Stuff based on them</h3>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
 
-<span class=x>$cache = StorageFactory::adapterFactory(&#39;filesystem&#39;);</span>
-<span class=x>$supportedDatatypes = $cache-&gt;getCapabilities()-&gt;getSupportedDatatypes();</span>
+$cache = StorageFactory::adapterFactory('filesystem');
+$supportedDatatypes = $cache-&gt;getCapabilities()-&gt;getSupportedDatatypes();
 
-<span class=x>// now you can run specific stuff in base of supported feature</span>
-<span class=x>if ($supportedDatatypes[&#39;object&#39;]) {</span>
-<span class=x>    $cache-&gt;set($key, $object);</span>
-<span class=x>} else {</span>
-<span class=x>    $cache-&gt;set($key, serialize($object));</span>
-<span class=x>}</span>
-</pre></div></p>
+// now you can run specific stuff in base of supported feature
+if ($supportedDatatypes['object']) {
+    $cache-&gt;set($key, $object);
+} else {
+    $cache-&gt;set($key, serialize($object));
+}</code></pre>
 <h3>Listen to the change Event</h3>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
 
-<span class=x>$cache = StorageFactory::adapterFactory(&#39;filesystem&#39;, [</span>
-<span class=x>    &#39;no_atime&#39; =&gt; false,</span>
-<span class=x>]);</span>
+$cache = StorageFactory::adapterFactory('filesystem', [
+    'no_atime' =&gt; false,
+]);
 
-<span class=x>// Catching capability changes</span>
-<span class=x>$cache-&gt;getEventManager()-&gt;attach(&#39;capability&#39;, function($event) {</span>
-<span class=x>    echo count($event-&gt;getParams()) . &#39; capabilities changed&#39;;</span>
-<span class=x>});</span>
+// Catching capability changes
+$cache-&gt;getEventManager()-&gt;attach('capability', function($event) {
+    echo count($event-&gt;getParams()) . ' capabilities changed';
+});
 
-<span class=x>// change option which changes capabilities</span>
-<span class=x>$cache-&gt;getOptions()-&gt;setNoATime(true);</span>
-</pre></div></p>
+// change option which changes capabilities
+$cache-&gt;getOptions()-&gt;setNoATime(true);</code></pre>
 
 
 
@@ -779,9 +780,10 @@ instantiate a new instance of <code>Laminas\Cache\Storage\Capabilities</code>.</
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -818,7 +820,7 @@ instantiate a new instance of <code>Laminas\Cache\Storage\Capabilities</code>.</
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/laminas/laminas-cache//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -827,8 +829,8 @@ instantiate a new instance of <code>Laminas\Cache\Storage\Capabilities</code>.</
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/laminas/laminas-cache//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>

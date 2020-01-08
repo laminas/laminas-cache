@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -307,46 +311,43 @@ can be thought of as a key/value storage approach to caching.</p>
 <code>Laminas\Cache\Storage\StorageInterface</code> instance to which it proxies all
 operations.</p>
 <p>Instantiation is as follows:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
-<span class=x>use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 
-<span class=x>$storage = StorageFactory::factory([</span>
-<span class=x>    &#39;adapter&#39; =&gt; [</span>
-<span class=x>        &#39;name&#39;    =&gt; &#39;apc&#39;,</span>
-<span class=x>        &#39;options&#39; =&gt; [],</span>
-<span class=x>    ],</span>
-<span class=x>]);</span>
+$storage = StorageFactory::factory([
+    'adapter' =&gt; [
+        'name'    =&gt; 'apc',
+        'options' =&gt; [],
+    ],
+]);
 
-<span class=x>$cache = new SimpleCacheDecorator($storage);</span>
-</pre></div></p>
+$cache = new SimpleCacheDecorator($storage);</code></pre>
 <p>Once you have a <code>SimpleCacheDecorator</code> instance, you can perform operations per
 that specification:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>// Use has() to determine whether to fetch the value or calculate it:</span>
-<span class=x>$value = $cache-&gt;has(&#39;someKey&#39;) ? $cache-&gt;get(&#39;someKey&#39;) : calculateValue();</span>
-<span class=x>if (! $cache-&gt;has(&#39;someKey&#39;)) {</span>
-<span class=x>    $cache-&gt;set(&#39;someKey&#39;, $value);</span>
-<span class=x>}</span>
+<pre class=codehilite><code class=language-php>// Use has() to determine whether to fetch the value or calculate it:
+$value = $cache-&gt;has('someKey') ? $cache-&gt;get('someKey') : calculateValue();
+if (! $cache-&gt;has('someKey')) {
+    $cache-&gt;set('someKey', $value);
+}
 
-<span class=x>// Or use a default value:</span>
-<span class=x>$value = $cache-&gt;get(&#39;someKey&#39;, $defaultValue);</span>
-</pre></div></p>
+// Or use a default value:
+$value = $cache-&gt;get('someKey', $defaultValue);</code></pre>
 <p>When setting values, whether single values or multiple, you can also optionally
 provide a Time To Live (TTL) value. This proxies to the underlying storage
 instance's options, temporarily resetting its TTL value for the duration of the
 operation. TTL values may be expressed as integers (in which case they represent
 seconds) or <code>DateInterval</code> instances. As examples:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>$cache-&gt;set(&#39;someKey&#39;, $value, 30); // set TTL to 30s</span>
-<span class=x>$cache-&gt;set(&#39;someKey&#39;, $value, new DateInterval(&#39;P1D&#39;); // set TTL to 1 day</span>
+<pre class=codehilite><code class=language-php>$cache-&gt;set('someKey', $value, 30); // set TTL to 30s
+$cache-&gt;set('someKey', $value, new DateInterval('P1D'); // set TTL to 1 day
 
-<span class=x>$cache-&gt;setMultiple([</span>
-<span class=x>    &#39;key1&#39; =&gt; $value1,</span>
-<span class=x>    &#39;key2&#39; =&gt; $value2,</span>
-<span class=x>], 3600); // set TTL to 1 hour</span>
-<span class=x>$cache-&gt;setMultiple([</span>
-<span class=x>    &#39;key1&#39; =&gt; $value1,</span>
-<span class=x>    &#39;key2&#39; =&gt; $value2,</span>
-<span class=x>], new DateInterval(&#39;P6H&#39;); // set TTL to 6 hours</span>
-</pre></div></p>
+$cache-&gt;setMultiple([
+    'key1' =&gt; $value1,
+    'key2' =&gt; $value2,
+], 3600); // set TTL to 1 hour
+$cache-&gt;setMultiple([
+    'key1' =&gt; $value1,
+    'key2' =&gt; $value2,
+], new DateInterval('P6H'); // set TTL to 6 hours</code></pre>
 <p>For more details on what methods are exposed, consult the <a href="https://www.php-fig.org/psr/psr-16/#21-cacheinterface">CacheInterface
 specification</a>.</p>
 <h2 id="serialization">Serialization</h2>
@@ -368,17 +369,16 @@ require this plugin in order to work with the <code>SimpleCacheDecorator</code>:
 </ul>
 <p>We provide a number of examples of <a href="../storage/plugin/">attaching plugins to storage adapters in the
 plugins chapter</a>. Generally, it will be one of:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>// Manual attachment after you have an instance:</span>
-<span class=x>$cache-&gt;addPlugin(new Serializer());</span>
+<pre class=codehilite><code class=language-php>// Manual attachment after you have an instance:
+$cache-&gt;addPlugin(new Serializer());
 
-<span class=x>// Via configuration:</span>
-<span class=x>$cache = StorageFactory::factory([</span>
-<span class=x>    &#39;adapter&#39; =&gt; &#39;filesystem&#39;,</span>
-<span class=x>    &#39;plugins&#39; =&gt; [</span>
-<span class=x>        &#39;serializer&#39;,</span>
-<span class=x>    ],</span>
-<span class=x>]);</span>
-</pre></div></p>
+// Via configuration:
+$cache = StorageFactory::factory([
+    'adapter' =&gt; 'filesystem',
+    'plugins' =&gt; [
+        'serializer',
+    ],
+]);</code></pre>
 <h2 id="deleting-items-and-exceptions">Deleting Items and Exceptions</h2>
 <p>PSR-16 states that the <code>delete()</code> and <code>deleteMultiple()</code> methods should return
 <code>false</code> if an <em>error</em> occured when deleting the key(s) provided, but <code>true</code>
@@ -597,9 +597,10 @@ operations.</p>
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -636,7 +637,7 @@ operations.</p>
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/laminas/laminas-cache//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -645,8 +646,8 @@ operations.</p>
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/laminas/laminas-cache//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>

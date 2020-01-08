@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -318,34 +322,33 @@ having to worry about any behind-the-scenes differences between them.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>To use the pool, instantiate your storage as normal, then pass it to the
 <code>CacheItemPoolDecorator</code>.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>use Laminas\Cache\StorageFactory;</span>
-<span class=x>use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;</span>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 
-<span class=x>$storage = StorageFactory::factory([</span>
-<span class=x>    &#39;adapter&#39; =&gt; [</span>
-<span class=x>        &#39;name&#39;    =&gt; &#39;apc&#39;,</span>
-<span class=x>        &#39;options&#39; =&gt; [],</span>
-<span class=x>    ],</span>
-<span class=x>]);</span>
+$storage = StorageFactory::factory([
+    'adapter' =&gt; [
+        'name'    =&gt; 'apc',
+        'options' =&gt; [],
+    ],
+]);
 
-<span class=x>$pool = new CacheItemPoolDecorator($storage);</span>
+$pool = new CacheItemPoolDecorator($storage);
 
-<span class=x>// attempt to get an item from cache</span>
-<span class=x>$item = $pool-&gt;getItem(&#39;foo&#39;);</span>
+// attempt to get an item from cache
+$item = $pool-&gt;getItem('foo');
 
-<span class=x>// check whether item was found</span>
-<span class=x>if (! $item-&gt;isHit()) {</span>
-<span class=x>    // ...</span>
-<span class=x>    // perform expensive operation to calculate $value for &#39;foo&#39;</span>
-<span class=x>    // ...</span>
+// check whether item was found
+if (! $item-&gt;isHit()) {
+    // ...
+    // perform expensive operation to calculate $value for 'foo'
+    // ...
 
-<span class=x>    $item-&gt;set($value);</span>
-<span class=x>    $pool-&gt;save($item);</span>
-<span class=x>}</span>
+    $item-&gt;set($value);
+    $pool-&gt;save($item);
+}
 
-<span class=x>// use the value of the item</span>
-<span class=x>echo $item-&gt;get();</span>
-</pre></div></p>
+// use the value of the item
+echo $item-&gt;get();</code></pre>
 <p>Note that you will always get back a <code>CacheItem</code> object, whether it was found in cache or not: this is so <code>false</code>-y
 values like an empty string, <code>null</code>, or <code>false</code> can be stored. Always check <code>isHit()</code> to determine if the item was
 found.</p>
@@ -380,31 +383,30 @@ storage adapters may have further restrictions. Check the documentation for your
 way. Doing so is as simple as adding an <a href="laminas.cache.storage.plugin.html#3.4"><code>ExceptionHandler</code> plugin</a>. Say you have a
 <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md">PSR-3</a> compliant logger
 called <code>$logger</code>:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>$cacheLogger = function (\Exception $e) use ($logger) {</span>
-<span class=x>    $message = sprintf(</span>
-<span class=x>        &#39;[CACHE] %s:%s %s &quot;%s&quot;&#39;,</span>
-<span class=x>        $exception-&gt;getFile(),</span>
-<span class=x>        $exception-&gt;getLine(),</span>
-<span class=x>        $exception-&gt;getCode(),</span>
-<span class=x>        $exception-&gt;getMessage()</span>
-<span class=x>    );</span>
-<span class=x>    $logger-&gt;error($message);</span>
-<span class=x>};</span>
-<span class=x>                                }</span>
-<span class=x>$storage = StorageFactory::factory([</span>
-<span class=x>    &#39;adapter&#39; =&gt; [</span>
-<span class=x>        &#39;name&#39;    =&gt; &#39;apc&#39;,</span>
-<span class=x>    ],</span>
-<span class=x>    &#39;plugins&#39; =&gt; [</span>
-<span class=x>        &#39;exceptionhandler&#39; =&gt; [</span>
-<span class=x>            &#39;exception_callback&#39; =&gt; $cacheLogger,</span>
-<span class=x>            &#39;throw_exceptions&#39; =&gt; true,</span>
-<span class=x>        ],</span>
-<span class=x>    ],</span>
-<span class=x>]);</span>
+<pre class=codehilite><code class=language-php>$cacheLogger = function (\Exception $e) use ($logger) {
+    $message = sprintf(
+        '[CACHE] %s:%s %s &quot;%s&quot;',
+        $exception-&gt;getFile(),
+        $exception-&gt;getLine(),
+        $exception-&gt;getCode(),
+        $exception-&gt;getMessage()
+    );
+    $logger-&gt;error($message);
+};
+                                }
+$storage = StorageFactory::factory([
+    'adapter' =&gt; [
+        'name'    =&gt; 'apc',
+    ],
+    'plugins' =&gt; [
+        'exceptionhandler' =&gt; [
+            'exception_callback' =&gt; $cacheLogger,
+            'throw_exceptions' =&gt; true,
+        ],
+    ],
+]);
 
-<span class=x>$pool = new CacheItemPoolDecorator($storage);</span>
-</pre></div></p>
+$pool = new CacheItemPoolDecorator($storage);</code></pre>
 <p>Note that <code>throw_exceptions</code> should always be <code>true</code> (the default) or you will not get the correct return values from
 calls on the pool such as <code>save()</code>.</p>
 <h2 id="supported-data-types">Supported Data Types</h2>
@@ -615,9 +617,10 @@ do not need to use a <code>Laminas\Cache\Storage\Plugin\Serializer</code> plugin
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -654,7 +657,7 @@ do not need to use a <code>Laminas\Cache\Storage\Plugin\Serializer</code> plugin
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/laminas/laminas-cache//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -663,8 +666,8 @@ do not need to use a <code>Laminas\Cache\Storage\Plugin\Serializer</code> plugin
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/laminas/laminas-cache//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>

@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -307,15 +311,14 @@
 the same methods, but instead caches output from any instance method calls or
 public properties.</p>
 <h2 id="quick-start">Quick Start</h2>
-<p> <div class=codehilite><pre><span></span><span class=x>use stdClass;</span>
-<span class=x>use Laminas\Cache\PatternFactory;</span>
+<pre class=codehilite><code class=language-php>use stdClass;
+use Laminas\Cache\PatternFactory;
 
-<span class=x>$object      = new stdClass();</span>
-<span class=x>$objectCache = PatternFactory::factory(&#39;object&#39;, [</span>
-<span class=x>    &#39;object&#39;  =&gt; $object,</span>
-<span class=x>    &#39;storage&#39; =&gt; &#39;apc&#39;</span>
-<span class=x>]);</span>
-</pre></div></p>
+$object      = new stdClass();
+$objectCache = PatternFactory::factory('object', [
+    'object'  =&gt; $object,
+    'storage' =&gt; 'apc'
+]);</code></pre>
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -380,135 +383,133 @@ public properties.</p>
 <h2 id="available-methods">Available Methods</h2>
 <p>In addition to the methods defined in <code>PatternInterface</code>, this implementation
 defines the following methods.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Pattern;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Pattern;
 
-<span class=x>use Laminas\Cache\Exception;</span>
+use Laminas\Cache\Exception;
 
-<span class=x>class ObjectCache extends CallbackCache</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Call and cache a class method</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $method  Method name to call</span>
-<span class=x>     * @param  array  $args    Method arguments</span>
-<span class=x>     * @return mixed</span>
-<span class=x>     * @throws Exception\RuntimeException</span>
-<span class=x>     * @throws \Exception</span>
-<span class=x>     */</span>
-<span class=x>    public function call($method, array $args = []);</span>
+class ObjectCache extends CallbackCache
+{
+    /**
+     * Call and cache a class method
+     *
+     * @param  string $method  Method name to call
+     * @param  array  $args    Method arguments
+     * @return mixed
+     * @throws Exception\RuntimeException
+     * @throws \Exception
+     */
+    public function call($method, array $args = []);
 
-<span class=x>    /**</span>
-<span class=x>     * Method overloading: proxies to call().</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $method  Method name to call</span>
-<span class=x>     * @param  array  $args    Method arguments</span>
-<span class=x>     * @return mixed</span>
-<span class=x>     * @throws Exception\RuntimeException</span>
-<span class=x>     * @throws \Exception</span>
-<span class=x>     */</span>
-<span class=x>    public function __call($method, array $args);</span>
+    /**
+     * Method overloading: proxies to call().
+     *
+     * @param  string $method  Method name to call
+     * @param  array  $args    Method arguments
+     * @return mixed
+     * @throws Exception\RuntimeException
+     * @throws \Exception
+     */
+    public function __call($method, array $args);
 
-<span class=x>    /**</span>
-<span class=x>     * Generate a unique key in base of a key representing the callback part</span>
-<span class=x>     * and a key representing the arguments part.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string     $method  The method</span>
-<span class=x>     * @param  array      $args    Callback arguments</span>
-<span class=x>     * @return string</span>
-<span class=x>     * @throws Exception\RuntimeException</span>
-<span class=x>     */</span>
-<span class=x>    public function generateKey($method, array $args = []);</span>
+    /**
+     * Generate a unique key in base of a key representing the callback part
+     * and a key representing the arguments part.
+     *
+     * @param  string     $method  The method
+     * @param  array      $args    Callback arguments
+     * @return string
+     * @throws Exception\RuntimeException
+     */
+    public function generateKey($method, array $args = []);
 
-<span class=x>    /**</span>
-<span class=x>     * Property overloading: write data to a named property.</span>
-<span class=x>     *</span>
-<span class=x>     * NOTE:</span>
-<span class=x>     * Magic properties will be cached too if the option cacheMagicProperties</span>
-<span class=x>     * is enabled and the property doesn&#39;t exist in real. If so it calls __set</span>
-<span class=x>     * and removes cached data of previous __get and __isset calls.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $name</span>
-<span class=x>     * @param  mixed  $value</span>
-<span class=x>     * @return void</span>
-<span class=x>     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members</span>
-<span class=x>     */</span>
-<span class=x>    public function __set($name, $value);</span>
+    /**
+     * Property overloading: write data to a named property.
+     *
+     * NOTE:
+     * Magic properties will be cached too if the option cacheMagicProperties
+     * is enabled and the property doesn't exist in real. If so it calls __set
+     * and removes cached data of previous __get and __isset calls.
+     *
+     * @param  string $name
+     * @param  mixed  $value
+     * @return void
+     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
+     */
+    public function __set($name, $value);
 
-<span class=x>    /**</span>
-<span class=x>     * Property overloading: read data from a named property.</span>
-<span class=x>     *</span>
-<span class=x>     * NOTE:</span>
-<span class=x>     * Magic properties will be cached too if the option cacheMagicProperties</span>
-<span class=x>     * is enabled and the property doesn&#39;t exist in real. If so it calls __get.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $name</span>
-<span class=x>     * @return mixed</span>
-<span class=x>     * @see http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members</span>
-<span class=x>     */</span>
-<span class=x>    public function __get($name);</span>
+    /**
+     * Property overloading: read data from a named property.
+     *
+     * NOTE:
+     * Magic properties will be cached too if the option cacheMagicProperties
+     * is enabled and the property doesn't exist in real. If so it calls __get.
+     *
+     * @param  string $name
+     * @return mixed
+     * @see http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
+     */
+    public function __get($name);
 
-<span class=x>    /**</span>
-<span class=x>     * Property overloading: check if a named property exists.</span>
-<span class=x>     *</span>
-<span class=x>     * NOTE:</span>
-<span class=x>     * Magic properties will be cached too if the option cacheMagicProperties</span>
-<span class=x>     * is enabled and the property doesn&#39;t exist in real. If so it calls __get.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $name</span>
-<span class=x>     * @return bool</span>
-<span class=x>     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members</span>
-<span class=x>     */</span>
-<span class=x>    public function __isset($name);</span>
+    /**
+     * Property overloading: check if a named property exists.
+     *
+     * NOTE:
+     * Magic properties will be cached too if the option cacheMagicProperties
+     * is enabled and the property doesn't exist in real. If so it calls __get.
+     *
+     * @param  string $name
+     * @return bool
+     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
+     */
+    public function __isset($name);
 
-<span class=x>    /**</span>
-<span class=x>     * Property overloading: unset a named property.</span>
-<span class=x>     *</span>
-<span class=x>     * NOTE:</span>
-<span class=x>     * Magic properties will be cached too if the option cacheMagicProperties</span>
-<span class=x>     * is enabled and the property doesn&#39;t exist in real. If so it removes</span>
-<span class=x>     * previous cached __isset and __get calls.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $name</span>
-<span class=x>     * @return void</span>
-<span class=x>     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members</span>
-<span class=x>     */</span>
-<span class=x>    public function __unset($name);</span>
+    /**
+     * Property overloading: unset a named property.
+     *
+     * NOTE:
+     * Magic properties will be cached too if the option cacheMagicProperties
+     * is enabled and the property doesn't exist in real. If so it removes
+     * previous cached __isset and __get calls.
+     *
+     * @param  string $name
+     * @return void
+     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
+     */
+    public function __unset($name);
 
-<span class=x>    /**</span>
-<span class=x>     * Handle casting to string</span>
-<span class=x>     *</span>
-<span class=x>     * @return string</span>
-<span class=x>     * @see    http://php.net/manual/language.oop5.magic.php#language.oop5.magic.tostring</span>
-<span class=x>     */</span>
-<span class=x>    public function __toString();</span>
+    /**
+     * Handle casting to string
+     *
+     * @return string
+     * @see    http://php.net/manual/language.oop5.magic.php#language.oop5.magic.tostring
+     */
+    public function __toString();
 
-<span class=x>    /**</span>
-<span class=x>     * Intercept and cache invokable usage.</span>
-<span class=x>     *</span>
-<span class=x>     * @return mixed</span>
-<span class=x>     * @see    http://php.net/manual/language.oop5.magic.php#language.oop5.magic.invoke</span>
-<span class=x>     */</span>
-<span class=x>    public function __invoke();</span>
-<span class=x>}</span>
-</pre></div></p>
+    /**
+     * Intercept and cache invokable usage.
+     *
+     * @return mixed
+     * @see    http://php.net/manual/language.oop5.magic.php#language.oop5.magic.invoke
+     */
+    public function __invoke();
+}</code></pre>
 <h2 id="examples">Examples</h2>
 <h3>Caching a Filter</h3>
-<p> <div class=codehilite><pre><span></span><span class=x>$filter       = new Laminas\Filter\RealPath();</span>
-<span class=x>$cachedFilter = Laminas\Cache\PatternFactory::factory(&#39;object&#39;, [</span>
-<span class=x>    &#39;object&#39;     =&gt; $filter,</span>
-<span class=x>    &#39;object_key&#39; =&gt; &#39;RealpathFilter&#39;,</span>
-<span class=x>    &#39;storage&#39;    =&gt; &#39;apc&#39;,</span>
+<pre class=codehilite><code class=language-php>$filter       = new Laminas\Filter\RealPath();
+$cachedFilter = Laminas\Cache\PatternFactory::factory('object', [
+    'object'     =&gt; $filter,
+    'object_key' =&gt; 'RealpathFilter',
+    'storage'    =&gt; 'apc',
 
-<span class=x>    // The realpath filter doesn&#39;t output anything</span>
-<span class=x>    // so the output don&#39;t need to be caught and cached</span>
-<span class=x>    &#39;cache_output&#39; =&gt; false,</span>
-<span class=x>]);</span>
+    // The realpath filter doesn't output anything
+    // so the output don't need to be caught and cached
+    'cache_output' =&gt; false,
+]);
 
-<span class=x>$path = $cachedFilter-&gt;call(&quot;filter&quot;, [&#39;/www/var/path/../../mypath&#39;]);</span>
+$path = $cachedFilter-&gt;call(&quot;filter&quot;, ['/www/var/path/../../mypath']);
 
-<span class=x>// OR</span>
-<span class=x>$path = $cachedFilter-&gt;filter(&#39;/www/var/path/../../mypath&#39;);</span>
-</pre></div></p>
+// OR
+$path = $cachedFilter-&gt;filter('/www/var/path/../../mypath');</code></pre>
 
 
 
@@ -710,9 +711,10 @@ defines the following methods.</p>
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -749,7 +751,7 @@ defines the following methods.</p>
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/laminas/laminas-cache//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -758,8 +760,8 @@ defines the following methods.</p>
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/laminas/laminas-cache//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>

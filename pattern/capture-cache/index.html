@@ -20,7 +20,7 @@
     <div class="container">
         
         <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
-            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Lamnias">
+            <img src="../../img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
             Documentation
@@ -36,13 +36,17 @@
             
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="https://getlaminas.org/about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://getlaminas.org/blog" class="nav-link">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://docs.laminas.dev" class="nav-link">All Docs</a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
+                            All Docs
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="https://docs.laminas.dev/components">Components</a>
+                            <a class="dropdown-item" href="https://docs.mezzio.dev/">Mezzio</a>
+                            <a class="dropdown-item" href="https://api-tools.getlaminas.org/docs">API Tools</a>
+                            <a class="dropdown-item" href="https://docs.laminas.dev/mvc">MVC</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a href="https://getlaminas.org/participate" class="nav-link">Community</a>
@@ -311,23 +315,21 @@ again.</p>
 <p>This pattern comes with basic logic for managing generated resources.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>For use with an Apache 404 handler:</p>
-<div class=md-fenced-code-tabs id=tab-tab-group-0><ul class="nav nav-tabs"><li class=nav-item><a class="nav-link active" href=#tab-group-0-0_apacheconf-panel role=tab id=tab-group-0-0_apacheconf-tab data-toggle=tab data-lang=apacheconf aria-controls=tab-group-0-0_apacheconf-panel aria-selected=true>Apacheconf</a></li><li class=nav-item><a class="nav-link " href=#tab-group-0-1_php-panel role=tab id=tab-group-0-1_php-tab data-toggle=tab data-lang=php aria-controls=tab-group-0-1_php-panel aria-selected=false>Php</a></li></ul><div class=tab-content><div id=tab-group-0-0_apacheconf-panel class="tab-pane show active" role=tabpanel aria-labelledby=tab-group-0-0_apacheconf-tab><div class=codehilite><pre><span></span><span class=c># .htdocs</span>
-<span class=nb>ErrorDocument</span> <span class=m>404</span> <span class=sx>/index.php</span>
-</pre></div></div><div id=tab-group-0-1_php-panel class="tab-pane " role=tabpanel aria-labelledby=tab-group-0-1_php-tab><div class=codehilite><pre><span></span><span class=x>// index.php</span>
-<span class=x>use Laminas\Cache\PatternFactory;</span>
-<span class=x>$capture = Laminas\Cache\PatternFactory::factory(&#39;capture&#39;, [</span>
-<span class=x>    &#39;public_dir&#39; =&gt; __DIR__,</span>
-<span class=x>]);</span>
+<div class=md-fenced-code-tabs id=tab-tab-group-0><ul class="nav nav-tabs"><li class=nav-item><a class="nav-link active" href=#tab-group-0-0_apacheconf-panel role=tab id=tab-group-0-0_apacheconf-tab data-toggle=tab data-lang=apacheconf aria-controls=tab-group-0-0_apacheconf-panel aria-selected=true>Apacheconf</a></li><li class=nav-item><a class="nav-link " href=#tab-group-0-1_php-panel role=tab id=tab-group-0-1_php-tab data-toggle=tab data-lang=php aria-controls=tab-group-0-1_php-panel aria-selected=false>Php</a></li></ul><div class=tab-content><div id=tab-group-0-0_apacheconf-panel class="tab-pane show active" role=tabpanel aria-labelledby=tab-group-0-0_apacheconf-tab><pre class=codehilite><code class=language-apacheconf># .htdocs
+ErrorDocument 404 /index.php</code></pre></div><div id=tab-group-0-1_php-panel class="tab-pane " role=tabpanel aria-labelledby=tab-group-0-1_php-tab><pre class=codehilite><code class=language-php>// index.php
+use Laminas\Cache\PatternFactory;
+$capture = Laminas\Cache\PatternFactory::factory('capture', [
+    'public_dir' =&gt; __DIR__,
+]);
 
-<span class=x>// Start capturing all output, excluding headers, and write to the public</span>
-<span class=x>// directory:</span>
-<span class=x>$capture-&gt;start();</span>
+// Start capturing all output, excluding headers, and write to the public
+// directory:
+$capture-&gt;start();
 
-<span class=x>// Don&#39;t forget to change the HTTP response code</span>
-<span class=x>header(&#39;Status: 200&#39;, true, 200);</span>
+// Don't forget to change the HTTP response code
+header('Status: 200', true, 200);
 
-<span class=x>// do stuff to dynamically generate output</span>
-</pre></div></div></div></div>
+// do stuff to dynamically generate output</code></pre></div></div></div>
 
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
@@ -381,90 +383,87 @@ again.</p>
 <h2 id="available-methods">Available Methods</h2>
 <p>In addition to the methods exposed in <code>PatternInterface</code>, this implementation
 exposes the following methods.</p>
-<p> <div class=codehilite><pre><span></span><span class=x>namespace Laminas\Cache\Pattern;</span>
+<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Pattern;
 
-<span class=x>use Laminas\Cache\Exception;</span>
-<span class=x>use Laminas\Stdlib\ErrorHandler;</span>
+use Laminas\Cache\Exception;
+use Laminas\Stdlib\ErrorHandler;
 
-<span class=x>class CaptureCache extends AbstractPattern</span>
-<span class=x>{</span>
-<span class=x>    /**</span>
-<span class=x>     * Start the cache.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  string $pageId  Page identifier</span>
-<span class=x>     * @return void</span>
-<span class=x>     */</span>
-<span class=x>    public function start($pageId = null);</span>
+class CaptureCache extends AbstractPattern
+{
+    /**
+     * Start the cache.
+     *
+     * @param  string $pageId  Page identifier
+     * @return void
+     */
+    public function start($pageId = null);
 
-<span class=x>    /**</span>
-<span class=x>     * Write a page to the requested path.</span>
-<span class=x>     *</span>
-<span class=x>     * @param string      $content</span>
-<span class=x>     * @param null|string $pageId</span>
-<span class=x>     * @throws Exception\LogicException</span>
-<span class=x>     */</span>
-<span class=x>    public function set($content, $pageId = null);</span>
+    /**
+     * Write a page to the requested path.
+     *
+     * @param string      $content
+     * @param null|string $pageId
+     * @throws Exception\LogicException
+     */
+    public function set($content, $pageId = null);
 
-<span class=x>    /**</span>
-<span class=x>     * Retrieve a generated page from the cache.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  null|string $pageId</span>
-<span class=x>     * @return string|null</span>
-<span class=x>     * @throws Exception\LogicException</span>
-<span class=x>     * @throws Exception\RuntimeException</span>
-<span class=x>     */</span>
-<span class=x>    public function get($pageId = null);</span>
+    /**
+     * Retrieve a generated page from the cache.
+     *
+     * @param  null|string $pageId
+     * @return string|null
+     * @throws Exception\LogicException
+     * @throws Exception\RuntimeException
+     */
+    public function get($pageId = null);
 
-<span class=x>    /**</span>
-<span class=x>     * Check if a cache exists for the given page.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  null|string $pageId</span>
-<span class=x>     * @throws Exception\LogicException</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function has($pageId = null);</span>
+    /**
+     * Check if a cache exists for the given page.
+     *
+     * @param  null|string $pageId
+     * @throws Exception\LogicException
+     * @return bool
+     */
+    public function has($pageId = null);
 
-<span class=x>    /**</span>
-<span class=x>     * Remove a page from the cache.</span>
-<span class=x>     *</span>
-<span class=x>     * @param  null|string $pageId</span>
-<span class=x>     * @throws Exception\LogicException</span>
-<span class=x>     * @throws Exception\RuntimeException</span>
-<span class=x>     * @return bool</span>
-<span class=x>     */</span>
-<span class=x>    public function remove($pageId = null);</span>
+    /**
+     * Remove a page from the cache.
+     *
+     * @param  null|string $pageId
+     * @throws Exception\LogicException
+     * @throws Exception\RuntimeException
+     * @return bool
+     */
+    public function remove($pageId = null);
 
-<span class=x>    /**</span>
-<span class=x>     * Clear cached pages that match the specified glob pattern.</span>
-<span class=x>     *</span>
-<span class=x>     * @param string $pattern</span>
-<span class=x>     * @throws Exception\LogicException</span>
-<span class=x>     */</span>
-<span class=x>    public function clearByGlob($pattern = &#39;**&#39;);</span>
+    /**
+     * Clear cached pages that match the specified glob pattern.
+     *
+     * @param string $pattern
+     * @throws Exception\LogicException
+     */
+    public function clearByGlob($pattern = '**');
 
-<span class=x>    /**</span>
-<span class=x>     * Returns the generated file name.</span>
-<span class=x>     *</span>
-<span class=x>     * @param null|string $pageId</span>
-<span class=x>     * @return string</span>
-<span class=x>     */</span>
-<span class=x>    public function getFilename($pageId = null);</span>
-<span class=x>}</span>
-</pre></div></p>
+    /**
+     * Returns the generated file name.
+     *
+     * @param null|string $pageId
+     * @return string
+     */
+    public function getFilename($pageId = null);
+}</code></pre>
 <h2 id="examples">Examples</h2>
 <h3>Scaling Images in the Web Root</h3>
 <p>Using the following Apache 404 configuration:</p>
-<p> <div class=codehilite><pre><span></span><span class=c># .htdocs</span>
-<span class=nb>ErrorDocument</span> <span class=m>404</span> <span class=sx>/index.php</span>
-</pre></div></p>
+<pre class=codehilite><code class=language-apacheconf># .htdocs
+ErrorDocument 404 /index.php</code></pre>
 <p>Use the following script:</p>
-<p> <div class=codehilite><pre><span></span><span class=x>// index.php</span>
-<span class=x>$captureCache = Laminas\Cache\PatternFactory::factory(&#39;capture&#39;, [</span>
-<span class=x>    &#39;public_dir&#39; =&gt; __DIR__,</span>
-<span class=x>]);</span>
+<pre class=codehilite><code class=language-php>// index.php
+$captureCache = Laminas\Cache\PatternFactory::factory('capture', [
+    'public_dir' =&gt; __DIR__,
+]);
 
-<span class=x>// TODO</span>
-</pre></div></p>
+// TODO</code></pre>
 
 
 
@@ -666,9 +665,10 @@ exposes the following methods.</p>
             <div class="col-md-7 offset-md-2">
                 <h5>Laminas</h5>
                 <ul>
-                    <li>Laminas Project <a href="https://getlaminas.org/">Components and MVC for Enterprise Applications</a></li>
-                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 Middleware in Minutes</a></li>
-                    <li>Laminas API Tools: <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
+                    <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
+                    <li>Laminas Components and MVC <a href="https://docs.laminas.dev/">Components and MVC for enterprise applications</a></li>
+                    <li>Mezzio <a href="https://docs.mezzio.dev/">PSR-15 middleware in minutes</a></li>
+                    <li>Laminas API Tools <a href="https://api-tools.getlaminas.org/">Build RESTful APIs in minutes</a></li>
                 </ul>
             </div>
         </div>
@@ -705,7 +705,7 @@ exposes the following methods.</p>
                 <h4 class="footer__headline">License</h4>
                 <p>
                     Code licensed under <a
-                        href="https://github.com/laminas/laminas-cache//blob/master/LICENSE.md">BSD 3-Clause</a>.
+                        href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
                 </p>
             </div>
 
@@ -714,8 +714,8 @@ exposes the following methods.</p>
                 <h4 class="footer__headline">Copyright</h4>
                 <p>
                     <!--Built with love by the Laminas team with the help of our
-                    <a href="https://github.com/laminas/laminas-cache//graphs/contributors">contributors</a>.<br>-->
-                    &copy; 2019-2019 by <a href="https://getlaminas.org/">The Laminas Project</a>.
+                    <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
+                    &copy; 2019-2020 by <a href="https://getlaminas.org/">The Laminas Project</a>.
                 </p>
             </div>
         </div>
