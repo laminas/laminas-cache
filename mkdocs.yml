@@ -21,4 +21,3 @@ site_description: 'Caching implementation with a variety of storage options, as 
 repo_url: 'https://github.com/laminas/laminas-cache'
 extra:
     project: Components
-    project_url: 'https://docs.laminas.dev'
