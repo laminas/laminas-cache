@@ -446,7 +446,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
      * Test if an item exists.
      *
      * @param  string $key
-     * @return bool
+     * @return mixed
      * @throws Exception\ExceptionInterface
      *
      * @triggers hasItem.pre(PreEvent)
@@ -660,7 +660,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
      *
      * @param  string $key
      * @param  mixed  $value
-     * @return bool
+     * @return mixed
      * @throws Exception\ExceptionInterface
      *
      * @triggers setItem.pre(PreEvent)
@@ -762,7 +762,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
      *
      * @param  string $key
      * @param  mixed  $value
-     * @return bool
+     * @return mixed
      * @throws Exception\ExceptionInterface
      *
      * @triggers addItem.pre(PreEvent)
@@ -870,7 +870,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
      *
      * @param  string $key
      * @param  mixed  $value
-     * @return bool
+     * @return mixed
      * @throws Exception\ExceptionInterface
      *
      * @triggers replaceItem.pre(PreEvent)
@@ -983,7 +983,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
      * @param  mixed  $token
      * @param  string $key
      * @param  mixed  $value
-     * @return bool
+     * @return mixed
      * @throws Exception\ExceptionInterface
      * @see    getItem()
      * @see    setItem()
@@ -1040,7 +1040,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
      * Reset lifetime of an item
      *
      * @param  string $key
-     * @return bool
+     * @return mixed
      * @throws Exception\ExceptionInterface
      *
      * @triggers touchItem.pre(PreEvent)
@@ -1147,7 +1147,7 @@ abstract class AbstractAdapter implements StorageInterface, EventsCapableInterfa
      * Remove an item.
      *
      * @param  string $key
-     * @return bool
+     * @return mixed
      * @throws Exception\ExceptionInterface
      *
      * @triggers removeItem.pre(PreEvent)
