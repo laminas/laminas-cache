@@ -122,6 +122,14 @@ matrix:
         - MEMCACHED_PECL_VERSION="memcached"
         - REDIS_PECL_VERSION="redis"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
+    - php: 7.4
+      env:
+        - DEPS=latest
+        - APCU_PECL_VERSION="apcu"
+        - APCU_BC_PECL_VERSION="apcu_bc"
+        - MEMCACHED_PECL_VERSION="memcached"
+        - REDIS_PECL_VERSION="redis"
+        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
 
 before_install:
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
