@@ -229,6 +229,10 @@ class RedisResourceManager
             throw new Exception\InvalidArgumentException('Missing required server host');
         }
 
+        if (isset($server['scheme']) && $server['scheme'] === 'tls') {
+            $host = 'tls://' . $host;
+        }
+
         $server = [
             'host'    => $host,
             'port'    => $port,
