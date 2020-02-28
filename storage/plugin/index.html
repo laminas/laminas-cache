@@ -12,14 +12,15 @@
     <title>Plugins - laminas-cache - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
+    
 </head>
-<body id="page-top" class="components">
+<body id="page-top" class="components" data-spy="scroll" data-target=".toc" data-offset="20">
 
     
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         
-        <a class="logo-link navbar-brand offset-md-2" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
+        <a class="logo-link navbar-brand" href="https://getlaminas.org/" data-tooltip data-placement="bottom" title="Go to the Laminas homepage">
             <img src="https://docs.laminas.dev/img/laminas-foundation-white.svg" height="28" alt="Laminas">
         </a>
         <a class="navbar-title" href="https://docs.laminas.dev/" data-tooltip data-placement="bottom" title="Go to the Laminas Documentation">
@@ -210,7 +211,7 @@
         <div class="row">
 
             
-            <div class="col-6 offset-md-2">
+            <div class="col-8">
                 <h1 class="header__title">
                     Components
 
@@ -240,7 +241,7 @@
     
     <div class="container">
         <div class="row">
-            <div class="col-md-2 col-sm-12">
+            <div class="col-md-9 col-sm-12 content" role="main">
                 
                 
                     
@@ -253,35 +254,35 @@
             <ul class="toc__list">
                 
                     <li class="toc__entry">
-                        <a href="#quick-start" class="toc__link">Quick Start</a>
+                        <a href="#quick-start" class="toc__link nav-link">Quick Start</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#the-clearexpiredbyfactor-plugin" class="toc__link">The ClearExpiredByFactor Plugin</a>
+                        <a href="#the-clearexpiredbyfactor-plugin" class="toc__link nav-link">The ClearExpiredByFactor Plugin</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#the-exceptionhandler-plugin" class="toc__link">The ExceptionHandler Plugin</a>
+                        <a href="#the-exceptionhandler-plugin" class="toc__link nav-link">The ExceptionHandler Plugin</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#the-ignoreuserabort-plugin" class="toc__link">The IgnoreUserAbort Plugin</a>
+                        <a href="#the-ignoreuserabort-plugin" class="toc__link nav-link">The IgnoreUserAbort Plugin</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#the-optimizebyfactor-plugin" class="toc__link">The OptimizeByFactor Plugin</a>
+                        <a href="#the-optimizebyfactor-plugin" class="toc__link nav-link">The OptimizeByFactor Plugin</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#the-serializer-plugin" class="toc__link">The Serializer Plugin</a>
+                        <a href="#the-serializer-plugin" class="toc__link nav-link">The Serializer Plugin</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#available-methods" class="toc__link">Available Methods</a>
+                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#examples" class="toc__link">Examples</a>
+                        <a href="#examples" class="toc__link nav-link">Examples</a>
                     </li>
                 
             </ul>
@@ -289,8 +290,7 @@
     
 
                 
-            </div>
-            <div class="col-md-7 col-sm-12 content" role="main" data-spy="scroll" data-target=".toc">
+
                 
                     <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -791,7 +791,7 @@ $cache-&gt;getItem('cache-key');
         </div>
 
         <div class="row">
-            <div class="col-md-10 offset-md-2">
+            <div class="col-md-12">
                 <h5>Laminas</h5>
                 <ul>
                     <li>Laminas Project <a href="https://getlaminas.org/">The new foundation for the community-supported, open source continuation of Zend Framework</a></li>
@@ -803,7 +803,7 @@ $cache-&gt;getItem('cache-key');
         </div>
 
         <div class="row">
-            <div class="col-md-10 offset-md-2"> 
+            <div class="col-md-12">
                 <div class="row">
 
                     
@@ -861,7 +861,9 @@ $cache-&gt;getItem('cache-key');
             siteName = 'laminas-cache';
     </script>
     <script src="https://docs.laminas.dev/js/scripts.js"></script>
+    
         <script src="../../search/main.js"></script>
+    
 
     
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
