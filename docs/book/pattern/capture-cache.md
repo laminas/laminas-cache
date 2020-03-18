@@ -10,15 +10,16 @@ This pattern comes with basic logic for managing generated resources.
 
 ## Quick Start
 
-For use with an Apache 404 handler:
+For use with an Apache 404 handler extend the Apache configuration, e.g.
+`.htdocs`: 
 
 ```apacheconf
-# .htdocs
 ErrorDocument 404 /index.php
 ```
 
+And add the cache to the related application script, e.g. `index.php`:
+
 ```php
-// index.php
 use Laminas\Cache\PatternFactory;
 $capture = Laminas\Cache\PatternFactory::factory('capture', [
     'public_dir' => __DIR__,
