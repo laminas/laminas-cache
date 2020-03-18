@@ -373,10 +373,11 @@ subsequent requests for the same resource can be shipped without calling PHP
 again.</p>
 <p>This pattern comes with basic logic for managing generated resources.</p>
 <h2 id="quick-start">Quick Start</h2>
-<p>For use with an Apache 404 handler:</p>
-<div class=md-fenced-code-tabs id=tab-tab-group-0><ul class="nav nav-tabs"><li class=nav-item><a class="nav-link active" href=#tab-group-0-0_apacheconf-panel role=tab id=tab-group-0-0_apacheconf-tab data-toggle=tab data-lang=apacheconf aria-controls=tab-group-0-0_apacheconf-panel aria-selected=true>Apacheconf</a></li><li class=nav-item><a class="nav-link " href=#tab-group-0-1_php-panel role=tab id=tab-group-0-1_php-tab data-toggle=tab data-lang=php aria-controls=tab-group-0-1_php-panel aria-selected=false>Php</a></li></ul><div class=tab-content><div id=tab-group-0-0_apacheconf-panel class="tab-pane show active" role=tabpanel aria-labelledby=tab-group-0-0_apacheconf-tab><pre class=codehilite><code class=language-apacheconf># .htdocs
-ErrorDocument 404 /index.php</code></pre></div><div id=tab-group-0-1_php-panel class="tab-pane " role=tabpanel aria-labelledby=tab-group-0-1_php-tab><pre class=codehilite><code class=language-php>// index.php
-use Laminas\Cache\PatternFactory;
+<p>For use with an Apache 404 handler extend the Apache configuration, e.g.
+<code>.htdocs</code>: </p>
+<pre class=codehilite><code class=language-apacheconf>ErrorDocument 404 /index.php</code></pre>
+<p>And add the cache to the related application script, e.g. <code>index.php</code>:</p>
+<pre class=codehilite><code class=language-php>use Laminas\Cache\PatternFactory;
 $capture = Laminas\Cache\PatternFactory::factory('capture', [
     'public_dir' =&gt; __DIR__,
 ]);
@@ -388,8 +389,7 @@ $capture-&gt;start();
 // Don't forget to change the HTTP response code
 header('Status: 200', true, 200);
 
-// do stuff to dynamically generate output</code></pre></div></div></div>
-
+// do stuff to dynamically generate output</code></pre>
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
