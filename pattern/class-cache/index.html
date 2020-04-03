@@ -371,12 +371,13 @@
 instead generates the callbacks for any public static method invoked on the
 class being cached, and caches static properties.</p>
 <h2 id="quick-start">Quick Start</h2>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\PatternFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\PatternFactory;
 
 $classCache = PatternFactory::factory('class', [
     'class'   =&gt; 'MyClass',
     'storage' =&gt; 'apc',
 ]);</code></pre>
+
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -429,7 +430,7 @@ $classCache = PatternFactory::factory('class', [
 <h2 id="available-methods">Available Methods</h2>
 <p>In addition to the methods defined in <code>PatternInterface</code>, this implementation
 exposes the following methods.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Pattern;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache;
 use Laminas\Cache\Exception;
@@ -523,9 +524,10 @@ class ClassCache extends CallbackCache
         unset($class::$name);
     }
 }</code></pre>
+
 <h2 id="examples">Examples</h2>
 <h3>Caching of Import Feeds</h3>
-<pre class=codehilite><code class=language-php>$cachedFeedReader = Laminas\Cache\PatternFactory::factory('class', [
+<pre class="highlight"><code class="language-php">$cachedFeedReader = Laminas\Cache\PatternFactory::factory('class', [
     'class'   =&gt; 'Laminas\Feed\Reader\Reader',
     'storage' =&gt; 'apc',
 
@@ -534,7 +536,7 @@ class ClassCache extends CallbackCache
     'cache_output' =&gt; false,
 ]);
 
-$feed = $cachedFeedReader-&gt;call(&quot;import&quot;, array('http://www.planet-php.net/rdf/'));
+$feed = $cachedFeedReader-&gt;call("import", array('http://www.planet-php.net/rdf/'));
 
 // OR
 $feed = $cachedFeedReader-&gt;import('http://www.planet-php.net/rdf/');</code></pre>

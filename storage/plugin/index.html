@@ -397,7 +397,7 @@ influence behavior of a storage adapter.</p>
 <code>Laminas\Cache\Storage\Plugin\*</code> classes.</p>
 <p>To make life easier, <code>Laminas\Cache\StorageFactory::factory()</code> can create both the
 requested adapter and all specified plugins at once.</p>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
 
 // All at once:
 $cache = StorageFactory::factory([
@@ -414,6 +414,7 @@ $cache-&gt;addPlugin($plugin);
 $cache  = new Laminas\Cache\Storage\Adapter\Filesystem();
 $plugin = new Laminas\Cache\Storage\Plugin\Serializer();
 $cache-&gt;addPlugin($plugin);</code></pre>
+
 <h2 id="the-clearexpiredbyfactor-plugin">The ClearExpiredByFactor Plugin</h2>
 <p><code>Laminas\Cache\Storage\Plugin\ClearExpiredByFactor</code> calls the storage method
 <code>clearExpired()</code> randomly (by factor) after every call of <code>setItem()</code>,
@@ -558,7 +559,7 @@ by the underlying storage adapter.</p>
 </ul>
 <h2 id="available-methods">Available Methods</h2>
 <p>The following methods are available to all <code>Laminas\Cache\Storage\Plugin\PluginInterface</code> implementations:</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage\Plugin;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage\Plugin;
 
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
@@ -596,9 +597,10 @@ interface PluginInterface extends ListenerAggregateInterface
      */
     public function attach(EventManagerInterface $events);
 }</code></pre>
+
 <h2 id="examples">Examples</h2>
 <h3>Basic Plugin Implementation</h3>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\Storage\Event;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Storage\Event;
 use Laminas\Cache\Storage\Plugin\AbstractPlugin;
 use Laminas\EventManager\EventManagerInterface;
 
@@ -629,13 +631,13 @@ class MyPlugin extends AbstractPlugin
     public function onGetItemPre(Event $event)
     {
         $params = $event-&gt;getParams();
-        echo sprintf(&quot;Method 'getItem' with key '%s' started\n&quot;, $params['key']);
+        echo sprintf("Method 'getItem' with key '%s' started\n", $params['key']);
     }
 
     public function onGetItemPost(Event $event)
     {
         $params = $event-&gt;getParams();
-        echo sprintf(&quot;Method 'getItem' with key '%s' finished\n&quot;, $params['key']);
+        echo sprintf("Method 'getItem' with key '%s' finished\n", $params['key']);
     }
 }
 

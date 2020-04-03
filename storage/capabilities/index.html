@@ -369,7 +369,7 @@ notifications; see the examples for details.</p>
 because you have access to the marker object and can create your own marker to
 instantiate a new instance of <code>Laminas\Cache\Storage\Capabilities</code>.</p>
 <h2 id="available-methods">Available Methods</h2>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 use ArrayObject;
 use stdClass;
@@ -539,7 +539,7 @@ class Capabilities
     public function setExpiredRead(stdClass $marker, $flag);
 
     /**
-     * Get &quot;lock-on-expire&quot; support in seconds.
+     * Get "lock-on-expire" support in seconds.
      *
      * @return int  0 = Expired items will never be retrieved
      *             &gt;0 = Time in seconds an expired item could be retrieved
@@ -551,7 +551,7 @@ class Capabilities
     }
 
     /**
-     * Set &quot;lock-on-expire&quot; support in seconds.
+     * Set "lock-on-expire" support in seconds.
      *
      * @param  stdClass $marker
      * @param  int      $timeout
@@ -611,9 +611,10 @@ class Capabilities
      */
     public function setNamespaceSeparator(stdClass $marker, $separator);
 }</code></pre>
+
 <h2 id="examples">Examples</h2>
 <h3>Get Storage Capabilities and do specific Stuff based on them</h3>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
 
 $cache = StorageFactory::adapterFactory('filesystem');
 $supportedDatatypes = $cache-&gt;getCapabilities()-&gt;getSupportedDatatypes();
@@ -624,8 +625,9 @@ if ($supportedDatatypes['object']) {
 } else {
     $cache-&gt;set($key, serialize($object));
 }</code></pre>
+
 <h3>Listen to the change Event</h3>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
 
 $cache = StorageFactory::adapterFactory('filesystem', [
     'no_atime' =&gt; false,

@@ -377,7 +377,7 @@ instance) to the second argument of the factory.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>Pattern objects can either be created from the provided <code>Laminas\Cache\PatternFactory</code>, or
 by instantiating one of the <code>Laminas\Cache\Pattern\*Cache</code> classes.</p>
-<pre class=codehilite><code class=language-php>// Via the factory:
+<pre class="highlight"><code class="language-php">// Via the factory:
 $callbackCache = Laminas\Cache\PatternFactory::factory('callback', [
     'storage' =&gt; 'apc',
 ]);
@@ -387,10 +387,11 @@ $callbackCache = new Laminas\Cache\Pattern\CallbackCache();
 $callbackCache-&gt;setOptions(new Laminas\Cache\Pattern\PatternOptions([
     'storage' =&gt; 'apc',
 ]));</code></pre>
+
 <h2 id="available-methods">Available Methods</h2>
 <p>The following methods are implemented by <code>Laminas\Cache\Pattern\AbstractPattern</code>.
 Please read documentation of specific patterns to get more information.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Pattern;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
 
 interface PatternInterface
 {

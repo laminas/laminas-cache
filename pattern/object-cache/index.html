@@ -370,7 +370,7 @@
 the same methods, but instead caches output from any instance method calls or
 public properties.</p>
 <h2 id="quick-start">Quick Start</h2>
-<pre class=codehilite><code class=language-php>use stdClass;
+<pre class="highlight"><code class="language-php">use stdClass;
 use Laminas\Cache\PatternFactory;
 
 $object      = new stdClass();
@@ -378,6 +378,7 @@ $objectCache = PatternFactory::factory('object', [
     'object'  =&gt; $object,
     'storage' =&gt; 'apc'
 ]);</code></pre>
+
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -442,7 +443,7 @@ $objectCache = PatternFactory::factory('object', [
 <h2 id="available-methods">Available Methods</h2>
 <p>In addition to the methods defined in <code>PatternInterface</code>, this implementation
 defines the following methods.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Pattern;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 
@@ -552,9 +553,10 @@ class ObjectCache extends CallbackCache
      */
     public function __invoke();
 }</code></pre>
+
 <h2 id="examples">Examples</h2>
 <h3>Caching a Filter</h3>
-<pre class=codehilite><code class=language-php>$filter       = new Laminas\Filter\RealPath();
+<pre class="highlight"><code class="language-php">$filter       = new Laminas\Filter\RealPath();
 $cachedFilter = Laminas\Cache\PatternFactory::factory('object', [
     'object'     =&gt; $filter,
     'object_key' =&gt; 'RealpathFilter',
@@ -565,7 +567,7 @@ $cachedFilter = Laminas\Cache\PatternFactory::factory('object', [
     'cache_output' =&gt; false,
 ]);
 
-$path = $cachedFilter-&gt;call(&quot;filter&quot;, ['/www/var/path/../../mypath']);
+$path = $cachedFilter-&gt;call("filter", ['/www/var/path/../../mypath']);
 
 // OR
 $path = $cachedFilter-&gt;filter('/www/var/path/../../mypath');</code></pre>

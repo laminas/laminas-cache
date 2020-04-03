@@ -375,9 +375,10 @@ again.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>For use with an Apache 404 handler extend the Apache configuration, e.g.
 <code>.htdocs</code>: </p>
-<pre class=codehilite><code class=language-apacheconf>ErrorDocument 404 /index.php</code></pre>
+<pre class="highlight"><code class="language-apacheconf">ErrorDocument 404 /index.php</code></pre>
+
 <p>And add the cache to the related application script, e.g. <code>index.php</code>:</p>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\PatternFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\PatternFactory;
 $capture = Laminas\Cache\PatternFactory::factory('capture', [
     'public_dir' =&gt; __DIR__,
 ]);
@@ -390,6 +391,7 @@ $capture-&gt;start();
 header('Status: 200', true, 200);
 
 // do stuff to dynamically generate output</code></pre>
+
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -442,7 +444,7 @@ header('Status: 200', true, 200);
 <h2 id="available-methods">Available Methods</h2>
 <p>In addition to the methods exposed in <code>PatternInterface</code>, this implementation
 exposes the following methods.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Pattern;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 use Laminas\Stdlib\ErrorHandler;
@@ -511,13 +513,15 @@ class CaptureCache extends AbstractPattern
      */
     public function getFilename($pageId = null);
 }</code></pre>
+
 <h2 id="examples">Examples</h2>
 <h3>Scaling Images in the Web Root</h3>
 <p>Using the following Apache 404 configuration:</p>
-<pre class=codehilite><code class=language-apacheconf># .htdocs
+<pre class="highlight"><code class="language-apacheconf"># .htdocs
 ErrorDocument 404 /index.php</code></pre>
+
 <p>Use the following script:</p>
-<pre class=codehilite><code class=language-php>// index.php
+<pre class="highlight"><code class="language-php">// index.php
 $captureCache = Laminas\Cache\PatternFactory::factory('capture', [
     'public_dir' =&gt; __DIR__,
 ]);

@@ -478,7 +478,7 @@ them. You can do so manually, or you can use the plugin
 <code>Laminas\Cache\Storage\Adapter\*</code> classes.  To make life easier, the
 <code>Laminas\Cache\StorageFactory</code> comes with a <code>factory()</code> method to create an adapter
 and all requested plugins at once.</p>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
 
 // Via factory:
 $cache = StorageFactory::factory([
@@ -505,6 +505,7 @@ $cache-&gt;getOptions()-&gt;setTtl(3600);
 $plugin = new Laminas\Cache\Storage\Plugin\ExceptionHandler();
 $plugin-&gt;getOptions()-&gt;setThrowExceptions(false);
 $cache-&gt;addPlugin($plugin);</code></pre>
+
 <h2 id="basic-configuration-options">Basic Configuration Options</h2>
 <p>The following configuration options are defined by <code>Laminas\Cache\Storage\Adapter\AdapterOptions</code> and
 are available for every supported adapter. Adapter-specific configuration options are described on
@@ -554,7 +555,7 @@ adapter level below.</p>
 <h2 id="the-storageinterface">The StorageInterface</h2>
 <p><code>Laminas\Cache\Storage\StorageInterface</code> is the basic interface implemented by all
 storage adapters.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 use Traversable;
 
@@ -791,10 +792,11 @@ interface StorageInterface
      */
     public function getCapabilities();
 }</code></pre>
+
 <h2 id="the-availablespacecapableinterface">The AvailableSpaceCapableInterface</h2>
 <p><code>Laminas\Cache\Storage\AvailableSpaceCapableInterface</code> implements a method to allow
 retrieving the current available space remaining in storage.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 interface AvailableSpaceCapableInterface
 {
@@ -805,10 +807,11 @@ interface AvailableSpaceCapableInterface
      */
     public function getAvailableSpace();
 }</code></pre>
+
 <h2 id="the-totalspacecapableinterface">The TotalSpaceCapableInterface</h2>
 <p><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code> implements a method to allow
 retrieving the total storage space.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 interface TotalSpaceCapableInterface
 {
@@ -819,10 +822,11 @@ interface TotalSpaceCapableInterface
      */
     public function getTotalSpace();
 }</code></pre>
+
 <h2 id="the-clearbynamespaceinterface">The ClearByNamespaceInterface</h2>
 <p><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code> implements a method to allow
 clearing all cached items within a given namespace.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 interface ClearByNamespaceInterface
 {
@@ -834,11 +838,12 @@ interface ClearByNamespaceInterface
      */
     public function clearByNamespace($namespace);
 }</code></pre>
+
 <h2 id="the-clearbyprefixinterface">The ClearByPrefixInterface</h2>
 <p><code>Laminas\Cache\Storage\ClearByPrefixInterface</code> implements a method to allow
 clearing all cached items that have a given prefix (within the currently
 configured namespace).</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 interface ClearByPrefixInterface
 {
@@ -850,10 +855,11 @@ interface ClearByPrefixInterface
      */
     public function clearByPrefix($prefix);
 }</code></pre>
+
 <h2 id="the-clearexpiredinterface">The ClearExpiredInterface</h2>
 <p><code>Laminas\Cache\Storage\ClearExpiredInterface</code> implements a method to allow clearing
 all expired items (within the current configured namespace).</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 interface ClearExpiredInterface
 {
@@ -864,10 +870,11 @@ interface ClearExpiredInterface
      */
     public function clearExpired();
 }</code></pre>
+
 <h2 id="the-flushableinterface">The FlushableInterface</h2>
 <p><code>Laminas\Cache\Storage\FlushableInterface</code> implements a method for flushing the
 entire cache storage.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 interface FlushableInterface
 {
@@ -878,12 +885,13 @@ interface FlushableInterface
      */
     public function flush();
 }</code></pre>
+
 <h2 id="the-iterableinterface">The IterableInterface</h2>
 <p><code>Laminas\Cache\Storage\IterableInterface</code> implements a method for retrieving an
 iterator of all items in storage. It extends <code>IteratorAggregate</code>, so it's
 possible to directly iterate over the storage implementations that implement
 this interface using <code>foreach</code>.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 use IteratorAggregate;
 
@@ -898,10 +906,11 @@ interface IterableInterface extends IteratorAggregate
      */
     public function getIterator();
 }</code></pre>
+
 <h2 id="the-optimizableinterface">The OptimizableInterface</h2>
 <p><code>Laminas\Cache\Storage\OptimizableInterface</code> implements a method for running
 optimization processes on the storage adapter.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 interface OptimizableInterface
 {
@@ -912,10 +921,11 @@ interface OptimizableInterface
      */
     public function optimize();
 }</code></pre>
+
 <h2 id="the-taggableinterface">The TaggableInterface</h2>
 <p><code>Laminas\Cache\Storage\TaggableInterface</code> implements methods for tagging items, and
 cleaning (expiring) items matching tags.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Storage;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
 
 interface TaggableInterface
 {
@@ -949,6 +959,7 @@ interface TaggableInterface
      */
     public function clearByTags(array $tags, $disjunction = false);
 }</code></pre>
+
 <h2 id="the-apc-adapter">The Apc Adapter</h2>
 <p><code>Laminas\Cache\Storage\Adapter\Apc</code> stores cache items in shared memory through the
 PHP extension <a href="http://pecl.php.net/package/APC">APC</a> (Alternative PHP Cache).</p>
@@ -1741,7 +1752,8 @@ to use the <a href="#the-extmongodb-adapter">ExtMongoDb adapter</a> instead.</p>
 <p><code>Laminas\Cache\Storage\Adapter\ExtMongoDB</code> stores cache items using the mongodb extension, and
 requires that the MongoDB PHP Client library is also installed. You can install the client
 library using the following:</p>
-<pre class=codehilite><code class=language-bash>$ composer require mongodb/mongodb</code></pre>
+<pre class="highlight"><code class="language-bash">$ composer require mongodb/mongodb</code></pre>
+
 <blockquote>
 <h4>ext-mongo</h4>
 <p>If you are using the mongo extension (vs the mongodb extension), you will need
@@ -2186,7 +2198,7 @@ through the <a href="https://www.zend.com/en/products/server/">Zend Server Data 
 </table></div>
 <h2 id="examples">Examples</h2>
 <h3>Basic Usage</h3>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
 
 $cache = StorageFactory::factory([
     'adapter' =&gt; [
@@ -2206,8 +2218,9 @@ if (! $success) {
     $result = doExpensiveStuff();
     $cache-&gt;setItem($key, $result);
 }</code></pre>
+
 <h3>Get multiple Rows from a Database</h3>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
 
 // Instantiate the cache instance using a namespace for the same type of items
 $cache = StorageFactory::factory([

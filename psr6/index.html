@@ -381,7 +381,7 @@ having to worry about any behind-the-scenes differences between them.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>To use the pool, instantiate your storage as normal, then pass it to the
 <code>CacheItemPoolDecorator</code>.</p>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
 use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 
 $storage = StorageFactory::factory([
@@ -408,6 +408,7 @@ if (! $item-&gt;isHit()) {
 
 // use the value of the item
 echo $item-&gt;get();</code></pre>
+
 <p>Note that you will always get back a <code>CacheItem</code> object, whether it was found in cache or not: this is so <code>false</code>-y
 values like an empty string, <code>null</code>, or <code>false</code> can be stored. Always check <code>isHit()</code> to determine if the item was
 found.</p>
@@ -442,9 +443,9 @@ storage adapters may have further restrictions. Check the documentation for your
 way. Doing so is as simple as adding an <a href="laminas.cache.storage.plugin.html#3.4"><code>ExceptionHandler</code> plugin</a>. Say you have a
 <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md">PSR-3</a> compliant logger
 called <code>$logger</code>:</p>
-<pre class=codehilite><code class=language-php>$cacheLogger = function (\Exception $e) use ($logger) {
+<pre class="highlight"><code class="language-php">$cacheLogger = function (\Exception $e) use ($logger) {
     $message = sprintf(
-        '[CACHE] %s:%s %s &quot;%s&quot;',
+        '[CACHE] %s:%s %s "%s"',
         $exception-&gt;getFile(),
         $exception-&gt;getLine(),
         $exception-&gt;getCode(),
@@ -466,6 +467,7 @@ $storage = StorageFactory::factory([
 ]);
 
 $pool = new CacheItemPoolDecorator($storage);</code></pre>
+
 <p>Note that <code>throw_exceptions</code> should always be <code>true</code> (the default) or you will not get the correct return values from
 calls on the pool such as <code>save()</code>.</p>
 <h2 id="supported-data-types">Supported Data Types</h2>

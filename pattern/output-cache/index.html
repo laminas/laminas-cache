@@ -368,11 +368,12 @@
     <h1 id="outputcache">OutputCache</h1>
 <p>The <code>OutputCache</code> pattern caches output between calls to <code>start()</code> and <code>end()</code>.</p>
 <h2 id="quick-start">Quick Start</h2>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\PatternFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\PatternFactory;
 
 $outputCache = PatternFactory::factory('output', [
     'storage' =&gt; 'apc'
 ]);</code></pre>
+
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -395,7 +396,7 @@ $outputCache = PatternFactory::factory('output', [
 <h2 id="available-methods">Available Methods</h2>
 <p>In addition to the methods defined in <code>PatternInterface</code>, this implementation
 defines the following methods.</p>
-<pre class=codehilite><code class=language-php>namespace Laminas\Cache\Pattern;
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 
@@ -421,9 +422,10 @@ class OutputCache extends AbstractPattern
      */
     public function end();
 }</code></pre>
+
 <h2 id="examples">Examples</h2>
 <h3>Caching simple View Scripts</h3>
-<pre class=codehilite><code class=language-php>$outputCache = Laminas\Cache\PatternFactory::factory('output', [
+<pre class="highlight"><code class="language-php">$outputCache = Laminas\Cache\PatternFactory::factory('output', [
     'storage' =&gt; 'apc',
 ]);
 

@@ -370,7 +370,7 @@ can be thought of as a key/value storage approach to caching.</p>
 <code>Laminas\Cache\Storage\StorageInterface</code> instance to which it proxies all
 operations.</p>
 <p>Instantiation is as follows:</p>
-<pre class=codehilite><code class=language-php>use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 
 $storage = StorageFactory::factory([
@@ -381,9 +381,10 @@ $storage = StorageFactory::factory([
 ]);
 
 $cache = new SimpleCacheDecorator($storage);</code></pre>
+
 <p>Once you have a <code>SimpleCacheDecorator</code> instance, you can perform operations per
 that specification:</p>
-<pre class=codehilite><code class=language-php>// Use has() to determine whether to fetch the value or calculate it:
+<pre class="highlight"><code class="language-php">// Use has() to determine whether to fetch the value or calculate it:
 $value = $cache-&gt;has('someKey') ? $cache-&gt;get('someKey') : calculateValue();
 if (! $cache-&gt;has('someKey')) {
     $cache-&gt;set('someKey', $value);
@@ -391,12 +392,13 @@ if (! $cache-&gt;has('someKey')) {
 
 // Or use a default value:
 $value = $cache-&gt;get('someKey', $defaultValue);</code></pre>
+
 <p>When setting values, whether single values or multiple, you can also optionally
 provide a Time To Live (TTL) value. This proxies to the underlying storage
 instance's options, temporarily resetting its TTL value for the duration of the
 operation. TTL values may be expressed as integers (in which case they represent
 seconds) or <code>DateInterval</code> instances. As examples:</p>
-<pre class=codehilite><code class=language-php>$cache-&gt;set('someKey', $value, 30); // set TTL to 30s
+<pre class="highlight"><code class="language-php">$cache-&gt;set('someKey', $value, 30); // set TTL to 30s
 $cache-&gt;set('someKey', $value, new DateInterval('P1D'); // set TTL to 1 day
 
 $cache-&gt;setMultiple([
@@ -407,6 +409,7 @@ $cache-&gt;setMultiple([
     'key1' =&gt; $value1,
     'key2' =&gt; $value2,
 ], new DateInterval('P6H'); // set TTL to 6 hours</code></pre>
+
 <p>For more details on what methods are exposed, consult the <a href="https://www.php-fig.org/psr/psr-16/#21-cacheinterface">CacheInterface
 specification</a>.</p>
 <h2 id="serialization">Serialization</h2>
@@ -428,7 +431,7 @@ require this plugin in order to work with the <code>SimpleCacheDecorator</code>:
 </ul>
 <p>We provide a number of examples of <a href="../storage/plugin/">attaching plugins to storage adapters in the
 plugins chapter</a>. Generally, it will be one of:</p>
-<pre class=codehilite><code class=language-php>// Manual attachment after you have an instance:
+<pre class="highlight"><code class="language-php">// Manual attachment after you have an instance:
 $cache-&gt;addPlugin(new Serializer());
 
 // Via configuration:
@@ -438,6 +441,7 @@ $cache = StorageFactory::factory([
         'serializer',
     ],
 ]);</code></pre>
+
 <h2 id="deleting-items-and-exceptions">Deleting Items and Exceptions</h2>
 <p>PSR-16 states that the <code>delete()</code> and <code>deleteMultiple()</code> methods should return
 <code>false</code> if an <em>error</em> occured when deleting the key(s) provided, but <code>true</code>
