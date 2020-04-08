@@ -8,8 +8,11 @@
 
 namespace LaminasTest\Cache;
 
+use ErrorException;
 use Laminas\Cache;
 use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\ErrorHandler;
+use LaminasTest\Cache\Storage\Adapter\TestAsset\AdapterWithStorageAndEventsCapableInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -204,5 +207,20 @@ class StorageFactoryTest extends TestCase
                     $this->fail("Unexpected plugin class '{$pluginClass}'");
             }
         }
+    }
+
+    public function testWillTriggerDeprecationWarningForMissingPluginAwareInterface()
+    {
+        $adapters = $this->prophesize(Cache\Storage\AdapterPluginManager::class);
+
+        $adapters->get('Foo')->willReturn(new AdapterWithStorageAndEventsCapableInterface());
+
+        Cache\StorageFactory::setAdapterPluginManager($adapters->reveal());
+        ErrorHandler::start(E_USER_DEPRECATED);
+
+        Cache\StorageFactory::factory(['adapter' => 'Foo', 'plugins' => ['IgnoreUserAbort']]);
+
+        $stack = ErrorHandler::stop();
+        $this->assertInstanceOf(ErrorException::class, $stack);
     }
 }
