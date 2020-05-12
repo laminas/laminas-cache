@@ -110,7 +110,7 @@ class Filesystem extends AbstractAdapter implements
                     rmdir($pathname);
                 } else {
                     // remove the file by ignoring errors if the file doesn't exist afterwards
-                    // to fix a possible race condition if onother process removed the faile already.
+                    // to fix a possible race condition if another process removed the file already.
                     ErrorHandler::start();
                     unlink($pathname);
                     $err = ErrorHandler::stop();
@@ -163,7 +163,7 @@ class Filesystem extends AbstractAdapter implements
         ErrorHandler::start();
         foreach ($glob as $pathname) {
             // get last modification time of the file but ignore if the file is missing
-            // to fix a possible race condition if onother process removed the faile already.
+            // to fix a possible race condition if another process removed the file already.
             ErrorHandler::start();
             $mtime = filemtime($pathname);
             $err = ErrorHandler::stop();
@@ -171,7 +171,7 @@ class Filesystem extends AbstractAdapter implements
                 ErrorHandler::addError($err->getSeverity(), $err->getMessage(), $err->getFile(), $err->getLine());
             } elseif ($time >= $mtime + $ttl) {
                 // remove the file by ignoring errors if the file doesn't exist afterwards
-                // to fix a possible race condition if onother process removed the faile already.
+                // to fix a possible race condition if another process removed the file already.
                 ErrorHandler::start();
                 unlink($pathname);
                 $err = ErrorHandler::stop();
@@ -235,7 +235,7 @@ class Filesystem extends AbstractAdapter implements
         ErrorHandler::start();
         foreach ($glob as $pathname) {
             // remove the file by ignoring errors if the file doesn't exist afterwards
-            // to fix a possible race condition if onother process removed the faile already.
+            // to fix a possible race condition if another process removed the file already.
             ErrorHandler::start();
             unlink($pathname);
             $err = ErrorHandler::stop();
@@ -286,7 +286,7 @@ class Filesystem extends AbstractAdapter implements
         ErrorHandler::start();
         foreach ($glob as $pathname) {
             // remove the file by ignoring errors if the file doesn't exist afterwards
-            // to fix a possible race condition if onother process removed the faile already.
+            // to fix a possible race condition if another process removed the file already.
             ErrorHandler::start();
             unlink($pathname);
             $err = ErrorHandler::stop();
