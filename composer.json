@@ -29,6 +29,7 @@
     },
     "require": {
         "php": "^5.6 || ^7.0",
+        "laminas/laminas-cache-storage-adapter-apc": "^1.0@dev",
         "laminas/laminas-eventmanager": "^2.6.3 || ^3.2",
         "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
         "laminas/laminas-stdlib": "^3.2.1",
@@ -49,7 +50,6 @@
         "psr/simple-cache-implementation": "1.0"
     },
     "suggest": {
-        "ext-apc": "APC or compatible extension, to use the APC storage adapter",
         "ext-apcu": "APCU >= 5.1.0, to use the APCu storage adapter",
         "ext-dba": "DBA, to use the DBA storage adapter",
         "ext-memcache": "Memcache >= 2.0.0 to use the Memcache storage adapter",
