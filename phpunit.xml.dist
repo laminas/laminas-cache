@@ -26,7 +26,6 @@
              currently in use in Laminas for ALL COMPONENTS; you should choose the
              constants appropriate to the component you are migrating. -->
 
-        <env name="TESTS_LAMINAS_CACHE_APC_ENABLED" value="false" />
         <env name="TESTS_LAMINAS_CACHE_APCU_ENABLED" value="false" />
         <env name="TESTS_LAMINAS_CACHE_FILESYSTEM_DIR" value="" />
         <env name="TESTS_LAMINAS_CACHE_XCACHE_ENABLED" value="false" />
