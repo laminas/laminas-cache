@@ -355,7 +355,19 @@ class BlackHole implements
         if ($this->capabilities === null) {
             // use default capabilities only
             $this->capabilityMarker = new stdClass();
-            $this->capabilities     = new Capabilities($this, $this->capabilityMarker);
+            $this->capabilities     = new Capabilities($this, $this->capabilityMarker, [
+                'supportedDatatypes' => [
+                    'NULL'     => true,
+                    'boolean'  => true,
+                    'integer'  => true,
+                    'double'   => true,
+                    'string'   => true,
+                    'array'    => true,
+                    'object'   => true,
+                    'resource' => true,
+                    'light'    => true
+                ],
+            ]);
         }
         return $this->capabilities;
     }

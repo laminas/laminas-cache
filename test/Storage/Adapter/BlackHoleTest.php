@@ -169,4 +169,14 @@ class BlackHoleTest extends TestCase
         $this->assertInstanceOf('Laminas\Cache\Storage\TotalSpaceCapableInterface', $this->storage);
         $this->assertSame(0, $this->storage->getTotalSpace());
     }
+
+    public function testSupportedDataTypes()
+    {
+        $capabilities = $this->storage->getCapabilities();
+        $supportedDataTypes = $capabilities->getSupportedDatatypes();
+        $this->assertNotEmpty($supportedDataTypes);
+        foreach ($supportedDataTypes as $supportedDataType) {
+            $this->assertTrue($supportedDataType);
+        }
+    }
 }
