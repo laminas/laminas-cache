@@ -52,7 +52,6 @@
         "cache/integration-tests": "^0.16",
         "laminas/laminas-coding-standard": "~1.0.0",
         "laminas/laminas-serializer": "^2.6",
-        "laminas/laminas-session": "^2.7.4",
         "phpbench/phpbench": "^0.13",
         "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2"
     },
