@@ -34,6 +34,7 @@
         "laminas/laminas-cache-storage-adapter-blackhole": "^1.0@dev || ^1.0",
         "laminas/laminas-cache-storage-adapter-dba": "^1.0@dev || ^1.0",
         "laminas/laminas-cache-storage-adapter-ext-mongodb": "1.0.0@dev || ^1.0",
+        "laminas/laminas-cache-storage-adapter-filesystem": "1.0.0@dev || ^1.0",
         "laminas/laminas-eventmanager": "^2.6.3 || ^3.2",
         "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
         "laminas/laminas-stdlib": "^3.2.1",
