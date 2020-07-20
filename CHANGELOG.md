@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#30](https://github.com/laminas/laminas-cache/pull/30) Move Memcache adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-memcache)
 - [#31](https://github.com/laminas/laminas-cache/pull/30) Move Memcache adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-memcached)
 - [#32](https://github.com/laminas/laminas-cache/pull/32) Move Memory adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-memory)
+- [#33](https://github.com/laminas/laminas-cache/pull/28) Move ExtMongodb adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-mongodb)
 
 ### Deprecated
 
