@@ -13,7 +13,6 @@ env:
   global:
     - COMPOSER_ARGS="--no-interaction"
     - COVERAGE_DEPS="php-coveralls/php-coveralls"
-    - EXTMONGODB_DEPS="mongodb/mongodb"
     - TESTS_LAMINAS_CACHE_FILESYSTEM_DIR=/dev/shm
     - TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED=true
     - TESTS_LAMINAS_CACHE_MEMCACHED_HOST="127.0.0.1"
@@ -22,7 +21,6 @@ env:
     - TESTS_LAMINAS_CACHE_MEMCACHE_HOST=$TESTS_LAMINAS_CACHE_MEMCACHED_HOST
     - TESTS_LAMINAS_CACHE_MEMCACHE_PORT=$TESTS_LAMINAS_CACHE_MEMCACHED_PORT
     - TESTS_LAMINAS_CACHE_MONGODB_ENABLED=true
-    - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=true
     - TESTS_LAMINAS_CACHE_REDIS_ENABLED=true
     - TESTS_LAMINAS_CACHE_REDIS_HOST="127.0.0.1"
     - TESTS_LAMINAS_CACHE_REDIS_PORT=6379
@@ -43,7 +41,6 @@ matrix:
         - MEMCACHE_PECL_VERSION="memcache-2.2.7"
         - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - REDIS_PECL_VERSION="redis-2.2.3"
-        - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=false
         - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=true
         - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=true
     - php: 5.6
@@ -52,7 +49,6 @@ matrix:
         - MEMCACHE_PECL_VERSION="memcache-3.0.8"
         - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - REDIS_PECL_VERSION="redis-4.3.0"
-        - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=false
         - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=true
         - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=true
     - php: 7
@@ -60,13 +56,11 @@ matrix:
         - DEPS=lowest
         - REDIS_PECL_VERSION="redis-4.0.0"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
-        - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=false
     - php: 7
       env:
         - DEPS=latest
         - REDIS_PECL_VERSION="redis"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
-        - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=false
     - php: 7.1
       env:
         - DEPS=lowest
@@ -135,10 +129,6 @@ install:
         phpenv config-add .ci/mongo.ini ;
     fi ;
 
-  - if [[ $TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED == 'true' ]]; then
-        phpenv config-add .ci/mongodb.ini ;
-    fi ;
-
   - if [[ $TESTS_LAMINAS_CACHE_XCACHE_ENABLED == 'true' ]]; then
         phpenv config-add .ci/xcache.ini ;
     fi ;
@@ -149,7 +139,6 @@ install:
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
   - if [[ $TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL == 'true' ]]; then travis_retry composer require --dev --no-update $COMPOSER_ARGS mongofill/mongofill:dev-master ; fi
-  - if [[ $TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED == 'true' ]]; then travis_retry composer require --dev --no-update $COMPOSER_ARGS $EXTMONGODB_DEPS ; fi
   - stty cols 120 && composer show
   - pecl list
   - php -m
