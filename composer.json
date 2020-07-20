@@ -62,7 +62,6 @@
         "ext-xcache": "XCache, to use the XCache storage adapter",
         "laminas/laminas-serializer": "Laminas\\Serializer component",
         "laminas/laminas-session": "Laminas\\Session component",
-        "mongodb/mongodb": "Required for use with the ext-mongodb adapter",
         "mongofill/mongofill": "Alternative to ext-mongo - a pure PHP implementation designed as a drop in replacement"
     },
     "autoload": {
