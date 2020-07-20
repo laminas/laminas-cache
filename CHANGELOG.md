@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#35](https://github.com/laminas/laminas-cache/pull/35) Move Session adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-session)
 - [#36](https://github.com/laminas/laminas-cache/pull/36) Move WinCache adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-wincache)
 - [#37](https://github.com/laminas/laminas-cache/pull/37) Move XCache adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-xcache)
+- [#38](https://github.com/laminas/laminas-cache/pull/38) Move ZendServer adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-zend-server)
 
 ### Deprecated
 
