@@ -84,7 +84,7 @@ abstract class StorageFactory
 
                 trigger_error(sprintf(
                     'Using "%s" to provide plugin capabilities to storage adapters is deprecated as of '
-                    . 'laminas-cache 2.9; please use "%s" instead',
+                    . 'laminas-cache 2.10; please use "%s" instead',
                     EventsCapableInterface::class,
                     PluginAwareInterface::class
                 ), E_USER_DEPRECATED);
