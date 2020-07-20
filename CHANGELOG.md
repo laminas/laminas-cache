@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#33](https://github.com/laminas/laminas-cache/pull/28) Move ExtMongodb adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-mongodb)
 - [#34](https://github.com/laminas/laminas-cache/pull/34) Move Redis adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-redis)
 - [#35](https://github.com/laminas/laminas-cache/pull/35) Move Session adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-session)
+- [#36](https://github.com/laminas/laminas-cache/pull/36) Move WinCache adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-wincache)
 
 ### Deprecated
 
