@@ -64,14 +64,11 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->cache = new SimpleCacheDecorator($this->storage);
     }
 
-    /**
-     * @param bool $staticTtl
-     * @param int $minTtl
-     */
     private function getMockCapabilities(
         ?array $supportedDataTypes = null,
-        $staticTtl = true,
-        $minTtl = 60
+        bool $staticTtl = true,
+        int $minTtl = 60,
+        int $maxKeyLength = -1
     ): Capabilities {
         $supportedDataTypes = $supportedDataTypes ?: $this->requiredTypes;
         $capabilities       = $this->createMock(Capabilities::class);
@@ -86,23 +83,25 @@ class SimpleCacheDecoratorTest extends TestCase
             ->method('getMinTtl')
             ->willReturn($minTtl);
 
+        $capabilities
+            ->method('getMaxKeyLength')
+            ->willReturn($maxKeyLength);
+
         return $capabilities;
     }
 
-    /**
-     * @param bool $staticTtl
-     * @param int $minTtl
-     */
-    public function mockCapabilities(
+    private function mockCapabilities(
         MockObject $storage,
         ?array $supportedDataTypes = null,
-        $staticTtl = true,
-        $minTtl = 60
+        bool $staticTtl = true,
+        int $minTtl = 60,
+        int $maxKeyLength = -1
     ): void {
         $capabilities = $this->getMockCapabilities(
             $supportedDataTypes,
             $staticTtl,
-            $minTtl
+            $minTtl,
+            $maxKeyLength
         );
 
         $storage
@@ -398,6 +397,36 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->expectException(SimpleCacheInvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
         $this->cache->set($key, 'value');
+    }
+
+    /**
+     * @depends testSetShouldRaisePsrInvalidArgumentExceptionForInvalidKeys
+     */
+    public function testSetShouldAcknowledgeStorageAdapterMaxKeyLengthWithPsrDecorator()
+    {
+        $validKeyLength   = str_repeat('abcd', 17); // length 68
+        $invalidKeyLength = str_repeat('abcd', 63); // length 252
+
+        $storage = $this->createMock(StorageInterface::class);
+        $storage
+            ->method('getOptions')
+            ->willReturn($this->options);
+
+        $this->mockCapabilities($storage, null, false, 60, 251);
+        $storage
+            ->expects(self::once())
+            ->method('setItem')
+            ->with($validKeyLength, 'value')
+            ->willReturn(true);
+
+        $cache = new SimpleCacheDecorator($storage);
+
+        $this->assertTrue($cache->set($validKeyLength, 'value'));
+
+        $this->expectException(SimpleCacheInvalidArgumentException::class);
+        $this->expectExceptionMessage('too long');
+
+        $cache->set($invalidKeyLength, 'value');
     }
 
     public function testSetShouldReRaiseExceptionThrownByStorage(): void
