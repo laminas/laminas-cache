@@ -90,7 +90,7 @@ key errors. To be PSR-6 compliant, cache keys must not contain the following cha
 storage adapters may have further restrictions. Check the documentation for your particular adapter to be sure.
 
 We strongly recommend tracking exceptions caught from storage, either by logging them or recording them in some other
-way. Doing so is as simple as adding an [`ExceptionHandler` plugin](laminas.cache.storage.plugin.html#3.4). Say you have a
+way. Doing so is as simple as adding an [`ExceptionHandler` plugin](storage/plugin.md#the-exceptionhandler-plugin). Say you have a
 [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) compliant logger
 called `$logger`:
 
