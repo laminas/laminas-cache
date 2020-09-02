@@ -2,6 +2,7 @@ docs_dir: docs/book
 site_dir: docs/html
 nav:
     - Home: index.md
+    - Installation: installation.md
     - Storage:
         - Adapters: storage/adapter.md
         - Capabilities: storage/capabilities.md
