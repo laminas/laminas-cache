@@ -14,7 +14,6 @@ env:
     - COMPOSER_ARGS="--no-interaction"
     - COVERAGE_DEPS="php-coveralls/php-coveralls"
     - EXTMONGODB_DEPS="mongodb/mongodb"
-    - TESTS_LAMINAS_CACHE_APCU_ENABLED=true
     - TESTS_LAMINAS_CACHE_FILESYSTEM_DIR=/dev/shm
     - TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED=true
     - TESTS_LAMINAS_CACHE_MEMCACHED_HOST="127.0.0.1"
@@ -41,7 +40,6 @@ matrix:
     - php: 5.6
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-4.0.8"
         - MEMCACHE_PECL_VERSION="memcache-2.2.7"
         - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - REDIS_PECL_VERSION="redis-2.2.3"
@@ -51,7 +49,6 @@ matrix:
     - php: 5.6
       env:
         - DEPS=latest
-        - APCU_PECL_VERSION="apcu-4.0.11"
         - MEMCACHE_PECL_VERSION="memcache-3.0.8"
         - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - REDIS_PECL_VERSION="redis-4.3.0"
@@ -61,21 +58,18 @@ matrix:
     - php: 7
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-5.1.2"
         - REDIS_PECL_VERSION="redis-4.0.0"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
         - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=false
     - php: 7
       env:
         - DEPS=latest
-        - APCU_PECL_VERSION="apcu"
         - REDIS_PECL_VERSION="redis"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
         - TESTS_LAMINAS_CACHE_EXTMONGODB_ENABLED=false
     - php: 7.1
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-5.1.7"
         - REDIS_PECL_VERSION="redis-4.0.0"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.1
@@ -84,32 +78,27 @@ matrix:
         - CS_CHECK=true
         - BENCHMARKS=true
         - TEST_COVERAGE=true
-        - APCU_PECL_VERSION="apcu"
         - REDIS_PECL_VERSION="redis"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.2
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-5.1.10"
         - REDIS_PECL_VERSION="redis-4.0.0"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.2
       env:
         - DEPS=latest
-        - APCU_PECL_VERSION="apcu"
         - REDIS_PECL_VERSION="redis"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.3
       env:
         - DEPS=lowest
-        - APCU_PECL_VERSION="apcu-5.1.10"
         - MEMCACHED_PECL_VERSION="memcached-3.1.2"
         - REDIS_PECL_VERSION="redis-4.0.0"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.3
       env:
         - DEPS=latest
-        - APCU_PECL_VERSION="apcu"
         - MEMCACHED_PECL_VERSION="memcached"
         - REDIS_PECL_VERSION="redis"
         - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
@@ -119,12 +108,6 @@ before_install:
   - pecl channel-update pecl.php.net
 
 install:
-  # prevent PECL from enabling the extension by default, see https://pear.php.net/bugs/bug.php?id=21007
-  - if [[ $APCU_PECL_VERSION != '' ]]; then
-        echo "yes\nno\n" | pecl install -f $APCU_PECL_VERSION || return 0 ;
-        sed -i 's/extension="apcu.so"//' ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ;
-    fi ;
-
   - if [[ $TESTS_LAMINAS_CACHE_XCACHE_ENABLED == 'true' ]]; then
         git clone https://github.com/lighttpd/xcache.git
         && (
@@ -132,10 +115,6 @@ install:
             && git checkout $(git rev-list --tags --max-count=1)
             && phpize && ./configure --enable-xcache && make install
         );
-    fi ;
-
-  - if [[ $APCU_PECL_VERSION != '' ]]; then
-        phpenv config-add .ci/apcu.ini ;
     fi ;
 
   - if [[ $TESTS_LAMINAS_CACHE_REDIS_ENABLED == 'true' ]]; then
