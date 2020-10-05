@@ -5,7 +5,6 @@ cache:
     - $HOME/.composer/cache
 
 services:
-  - mongodb
   - redis-server
 
 env:
@@ -13,7 +12,6 @@ env:
     - COMPOSER_ARGS="--no-interaction"
     - COVERAGE_DEPS="php-coveralls/php-coveralls"
     - TESTS_LAMINAS_CACHE_FILESYSTEM_DIR=/dev/shm
-    - TESTS_LAMINAS_CACHE_MONGODB_ENABLED=true
     - TESTS_LAMINAS_CACHE_REDIS_ENABLED=true
     - TESTS_LAMINAS_CACHE_REDIS_HOST="127.0.0.1"
     - TESTS_LAMINAS_CACHE_REDIS_PORT=6379
@@ -23,7 +21,6 @@ env:
     - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_AUTH=true
     - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_USER=travis
     - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_PASS=test
-    - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=false
 
 matrix:
   fast_finish: true
@@ -42,17 +39,14 @@ matrix:
       env:
         - DEPS=lowest
         - REDIS_PECL_VERSION="redis-4.0.0"
-        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7
       env:
         - DEPS=latest
         - REDIS_PECL_VERSION="redis"
-        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.1
       env:
         - DEPS=lowest
         - REDIS_PECL_VERSION="redis-4.0.0"
-        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.1
       env:
         - DEPS=latest
@@ -60,27 +54,22 @@ matrix:
         - BENCHMARKS=true
         - TEST_COVERAGE=true
         - REDIS_PECL_VERSION="redis"
-        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.2
       env:
         - DEPS=lowest
         - REDIS_PECL_VERSION="redis-4.0.0"
-        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.2
       env:
         - DEPS=latest
         - REDIS_PECL_VERSION="redis"
-        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.3
       env:
         - DEPS=lowest
         - REDIS_PECL_VERSION="redis-4.0.0"
-        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
     - php: 7.3
       env:
         - DEPS=latest
         - REDIS_PECL_VERSION="redis"
-        - TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL=true
 
 before_install:
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
@@ -100,10 +89,6 @@ install:
         echo "no" | pecl install -f $REDIS_PECL_VERSION ;
     fi ;
 
-  - if [[ $TESTS_LAMINAS_CACHE_MONGODB_ENABLED == 'true' && $TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL != 'true' ]]; then
-        phpenv config-add .ci/mongo.ini ;
-    fi ;
-
   - if [[ $TESTS_LAMINAS_CACHE_XCACHE_ENABLED == 'true' ]]; then
         phpenv config-add .ci/xcache.ini ;
     fi ;
@@ -113,7 +98,6 @@ install:
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
-  - if [[ $TESTS_LAMINAS_CACHE_MONGODB_USE_POLYFILL == 'true' ]]; then travis_retry composer require --dev --no-update $COMPOSER_ARGS mongofill/mongofill:dev-master ; fi
   - stty cols 120 && composer show
   - pecl list
   - php -m
