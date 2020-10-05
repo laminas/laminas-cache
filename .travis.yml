@@ -17,9 +17,6 @@ env:
     - TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED=true
     - TESTS_LAMINAS_CACHE_MEMCACHED_HOST="127.0.0.1"
     - TESTS_LAMINAS_CACHE_MEMCACHED_PORT=11211
-    - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=false # Supported only on PHP 5.6
-    - TESTS_LAMINAS_CACHE_MEMCACHE_HOST=$TESTS_LAMINAS_CACHE_MEMCACHED_HOST
-    - TESTS_LAMINAS_CACHE_MEMCACHE_PORT=$TESTS_LAMINAS_CACHE_MEMCACHED_PORT
     - TESTS_LAMINAS_CACHE_MONGODB_ENABLED=true
     - TESTS_LAMINAS_CACHE_REDIS_ENABLED=true
     - TESTS_LAMINAS_CACHE_REDIS_HOST="127.0.0.1"
@@ -38,18 +35,14 @@ matrix:
     - php: 5.6
       env:
         - DEPS=lowest
-        - MEMCACHE_PECL_VERSION="memcache-2.2.7"
         - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - REDIS_PECL_VERSION="redis-2.2.3"
-        - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=true
         - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=true
     - php: 5.6
       env:
         - DEPS=latest
-        - MEMCACHE_PECL_VERSION="memcache-3.0.8"
         - MEMCACHED_PECL_VERSION="memcached-2.2.0"
         - REDIS_PECL_VERSION="redis-4.3.0"
-        - TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED=true
         - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=true
     - php: 7
       env:
@@ -113,10 +106,6 @@ install:
 
   - if [[ $TESTS_LAMINAS_CACHE_REDIS_ENABLED == 'true' ]]; then
         echo "no" | pecl install -f $REDIS_PECL_VERSION ;
-    fi ;
-
-  - if [[ $TESTS_LAMINAS_CACHE_MEMCACHE_ENABLED == 'true' ]]; then
-        yes|CFLAGS="-fgnu89-inline" pecl install -f $MEMCACHE_PECL_VERSION ;
     fi ;
 
   - if [[ $TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED == 'true' && $MEMCACHED_PECL_VERSION != '' ]]; then
