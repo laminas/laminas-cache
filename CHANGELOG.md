@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#21](https://github.com/laminas/laminas-cache/pull/21) Adds new `PluginAwareInterface` and `PluginCapableInterface` to provide better typehinting against plugin capable storage adapters
 - [#40](https://github.com/laminas/laminas-cache/pull/40) Adds installation instructions to documentation.
 
 ### Changed
@@ -14,7 +15,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Deprecated
 
-- Nothing.
+- [#21](https://github.com/laminas/laminas-cache/pull/21) In case the `StorageFactory` has to create a custom `StorageAdapterInterface` implementation which does not extend the `AbstractAdapter`, the factory will trigger a deprecation message due to the missing `PluginAwareInterface` implementation when a `plugins` configuration was provided.
 
 ### Removed
 
