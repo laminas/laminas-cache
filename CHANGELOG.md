@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#40](https://github.com/laminas/laminas-cache/pull/40) Adds installation instructions to documentation.
 
 ### Changed
 

@@ -2,6 +2,7 @@ docs_dir: docs/book
 site_dir: docs/html
 nav:
     - Home: index.md
+    - Installation: installation.md
     - Storage:
         - Adapters: storage/adapter.md
         - Capabilities: storage/capabilities.md
@@ -21,3 +22,6 @@ site_description: 'Caching implementation with a variety of storage options, as 
 repo_url: 'https://github.com/laminas/laminas-cache'
 extra:
     project: Components
+    installation:
+        config_provider_class: 'Laminas\Cache\ConfigProvider'
+        module_class: 'Laminas\Cache\Module'
