@@ -33,9 +33,6 @@
         <env name="TESTS_LAMINAS_CACHE_PLATFORM_ENABLED" value="false" />
         <env name="TESTS_LAMINAS_CACHE_WINCACHE_ENABLED" value="false" />
         <env name="TESTS_LAMINAS_CACHE_ZEND_SERVER_ENABLED" value="false" />
-        <env name="TESTS_LAMINAS_CACHE_MEMCACHED_ENABLED" value="false" />
-        <env name="TESTS_LAMINAS_CACHE_MEMCACHED_HOST" value="127.0.0.1" />
-        <env name="TESTS_LAMINAS_CACHE_MEMCACHED_PORT" value="11211" />
         <env name="TESTS_LAMINAS_CACHE_MONGODB_ENABLED" value="false" />
         <env name="TESTS_LAMINAS_CACHE_MONGODB_COLLECTION" value="cache" />
         <env name="TESTS_LAMINAS_CACHE_MONGODB_CONNECTSTRING" value="mongodb://localhost/" />
