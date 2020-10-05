@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#24](https://github.com/laminas/laminas-cache/pull/24) Move APCu adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-apcu)
 - [#25](https://github.com/laminas/laminas-cache/pull/25) Move BlackHole adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-blackhole)
 - [#27](https://github.com/laminas/laminas-cache/pull/27) Move DBA adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-dba)
+- [#28](https://github.com/laminas/laminas-cache/pull/28) Move ExtMongodb adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-ext-mongodb)
 
 ### Deprecated
 
