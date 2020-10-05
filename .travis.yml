@@ -9,10 +9,6 @@ env:
     - COMPOSER_ARGS="--no-interaction"
     - COVERAGE_DEPS="php-coveralls/php-coveralls"
     - TESTS_LAMINAS_CACHE_FILESYSTEM_DIR=/dev/shm
-    - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=false # Supported only on PHP 5.6
-    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_AUTH=true
-    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_USER=travis
-    - TESTS_LAMINAS_CACHE_XCACHE_ADMIN_PASS=test
 
 matrix:
   fast_finish: true
@@ -20,11 +16,9 @@ matrix:
     - php: 5.6
       env:
         - DEPS=lowest
-        - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=true
     - php: 5.6
       env:
         - DEPS=latest
-        - TESTS_LAMINAS_CACHE_XCACHE_ENABLED=true
     - php: 7
       env:
         - DEPS=lowest
@@ -58,19 +52,6 @@ before_install:
   - pecl channel-update pecl.php.net
 
 install:
-  - if [[ $TESTS_LAMINAS_CACHE_XCACHE_ENABLED == 'true' ]]; then
-        git clone https://github.com/lighttpd/xcache.git
-        && (
-            cd xcache
-            && git checkout $(git rev-list --tags --max-count=1)
-            && phpize && ./configure --enable-xcache && make install
-        );
-    fi ;
-
-  - if [[ $TESTS_LAMINAS_CACHE_XCACHE_ENABLED == 'true' ]]; then
-        phpenv config-add .ci/xcache.ini ;
-    fi ;
-
   - travis_retry composer install $COMPOSER_ARGS --ignore-platform-reqs
   - if [[ $LEGACY_DEPS != '' ]]; then travis_retry composer update $COMPOSER_ARGS --with-dependencies $LEGACY_DEPS ; fi
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
