@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#23](https://github.com/laminas/laminas-cache/pull/23) Move APC adapter to its own [satellite package](https://github.com/laminas/laminas-cache-storage-adapter-apc)
 
 ### Deprecated
 
