@@ -26,7 +26,6 @@
         <env name="TESTS_LAMINAS_CACHE_XCACHE_ADMIN_USER" value="" />
         <env name="TESTS_LAMINAS_CACHE_XCACHE_ADMIN_PASS" value="" />
         <env name="TESTS_LAMINAS_CACHE_PLATFORM_ENABLED" value="false" />
-        <env name="TESTS_LAMINAS_CACHE_WINCACHE_ENABLED" value="false" />
         <env name="TESTS_LAMINAS_CACHE_ZEND_SERVER_ENABLED" value="false" />
     </php>
 </phpunit>
