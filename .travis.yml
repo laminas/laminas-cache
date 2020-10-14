@@ -12,6 +12,8 @@ env:
 
 matrix:
   fast_finish: true
+  allow_failures:
+    - php: nightly
   include:
     - php: 5.6
       env:
@@ -44,6 +46,18 @@ matrix:
       env:
         - DEPS=lowest
     - php: 7.3
+      env:
+        - DEPS=latest
+    - php: 7.4
+      env:
+        - DEPS=lowest
+    - php: 7.4
+      env:
+        - DEPS=latest
+    - php: nightly
+      env:
+        - DEPS=lowest
+    - php: nightly
       env:
         - DEPS=latest
 
