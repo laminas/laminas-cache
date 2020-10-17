@@ -14,9 +14,12 @@ use Laminas\Cache\PatternPluginManager;
 use Laminas\Cache\Service\PatternPluginManagerFactory;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class PatternPluginManagerFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testFactoryReturnsPluginManager()
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
@@ -24,14 +27,6 @@ class PatternPluginManagerFactoryTest extends TestCase
 
         $patterns = $factory($container, PatternPluginManager::class);
         $this->assertInstanceOf(PatternPluginManager::class, $patterns);
-
-        if (method_exists($patterns, 'configure')) {
-            // laminas-servicemanager v3
-            $this->assertAttributeSame($container, 'creationContext', $patterns);
-        } else {
-            // laminas-servicemanager v2
-            $this->assertSame($container, $patterns->getServiceLocator());
-        }
     }
 
     /**

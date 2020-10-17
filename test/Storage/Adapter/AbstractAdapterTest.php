@@ -37,7 +37,7 @@ class AbstractAdapterTest extends TestCase
     protected $_options;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_options = new AdapterOptions();
     }
@@ -48,11 +48,11 @@ class AbstractAdapterTest extends TestCase
 
         $options = $this->_storage->getOptions();
         $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\AdapterOptions', $options);
-        $this->assertInternalType('boolean', $options->getWritable());
-        $this->assertInternalType('boolean', $options->getReadable());
-        $this->assertInternalType('integer', $options->getTtl());
-        $this->assertInternalType('string', $options->getNamespace());
-        $this->assertInternalType('string', $options->getKeyPattern());
+        $this->assertIsBool($options->getWritable());
+        $this->assertIsBool($options->getReadable());
+        $this->assertIsInt($options->getTtl());
+        $this->assertIsString($options->getNamespace());
+        $this->assertIsString($options->getKeyPattern());
     }
 
     public function testSetWritable()
@@ -275,7 +275,7 @@ class AbstractAdapterTest extends TestCase
 
         $i = 0; // method call counter
         foreach ($items as $k => $v) {
-            $this->_storage->expects($this->at($i++))
+            $this->_storage
                 ->method('internalGetItem')
                 ->with(
                     $this->stringContains('key'),

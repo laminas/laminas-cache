@@ -30,7 +30,7 @@ class ClearExpiredByFactorTest extends CommonPluginTest
     protected $_adapter;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_adapter = new ClearExpiredMockAdapter();
         $this->_options = new Cache\Storage\Plugin\PluginOptions([

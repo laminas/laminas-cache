@@ -14,9 +14,12 @@ use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\PluginManager;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class StoragePluginManagerFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testFactoryReturnsPluginManager()
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
@@ -24,14 +27,6 @@ class StoragePluginManagerFactoryTest extends TestCase
 
         $plugins = $factory($container, PluginManager::class);
         $this->assertInstanceOf(PluginManager::class, $plugins);
-
-        if (method_exists($plugins, 'configure')) {
-            // laminas-servicemanager v3
-            $this->assertAttributeSame($container, 'creationContext', $plugins);
-        } else {
-            // laminas-servicemanager v2
-            $this->assertSame($container, $plugins->getServiceLocator());
-        }
     }
 
     /**

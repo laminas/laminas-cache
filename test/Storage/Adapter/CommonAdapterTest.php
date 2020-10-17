@@ -57,7 +57,7 @@ abstract class CommonAdapterTest extends TestCase
     ];
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->assertInstanceOf(
             'Laminas\Cache\Storage\StorageInterface',
@@ -71,7 +71,7 @@ abstract class CommonAdapterTest extends TestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         // be sure the error handler has been stopped
         if (ErrorHandler::started()) {
@@ -101,7 +101,7 @@ abstract class CommonAdapterTest extends TestCase
     {
         $options = $this->_storage->getOptions()->toArray();
         foreach ($options as $name => $value) {
-            $this->assertRegExp(
+            $this->assertMatchesRegularExpression(
                 '/^[a-z]+[a-z0-9_]*[a-z0-9]+$/',
                 $name,
                 "Invalid option name '{$name}'"
@@ -169,7 +169,7 @@ abstract class CommonAdapterTest extends TestCase
     {
         $capabilities = $this->_storage->getCapabilities();
         $datatypes = $capabilities->getSupportedDatatypes();
-        $this->assertInternalType('array', $datatypes);
+        $this->assertIsArray($datatypes);
 
         foreach ($datatypes as $sourceType => $targetType) {
             $this->assertContains(
@@ -184,8 +184,7 @@ abstract class CommonAdapterTest extends TestCase
                     "Unknown target type '{$targetType}'"
                 );
             } else {
-                $this->assertInternalType(
-                    'bool',
+                $this->assertIsBool(
                     $targetType,
                     "Target type must be a string or boolean"
                 );
@@ -197,10 +196,10 @@ abstract class CommonAdapterTest extends TestCase
     {
         $capabilities = $this->_storage->getCapabilities();
         $metadata = $capabilities->getSupportedMetadata();
-        $this->assertInternalType('array', $metadata);
+        $this->assertIsArray($metadata);
 
         foreach ($metadata as $property) {
-            $this->assertInternalType('string', $property);
+            $this->assertIsString($property);
         }
     }
 
@@ -208,27 +207,27 @@ abstract class CommonAdapterTest extends TestCase
     {
         $capabilities = $this->_storage->getCapabilities();
 
-        $this->assertInternalType('integer', $capabilities->getMaxTtl());
+        $this->assertIsInt($capabilities->getMaxTtl());
         $this->assertGreaterThanOrEqual(0, $capabilities->getMaxTtl());
 
-        $this->assertInternalType('bool', $capabilities->getStaticTtl());
+        $this->assertIsBool($capabilities->getStaticTtl());
 
-        $this->assertInternalType('numeric', $capabilities->getTtlPrecision());
+        $this->assertIsNumeric($capabilities->getTtlPrecision());
         $this->assertGreaterThan(0, $capabilities->getTtlPrecision());
 
-        $this->assertInternalType('int', $capabilities->getLockOnExpire());
+        $this->assertIsInt($capabilities->getLockOnExpire());
     }
 
     public function testKeyCapabilities()
     {
         $capabilities = $this->_storage->getCapabilities();
 
-        $this->assertInternalType('integer', $capabilities->getMaxKeyLength());
+        $this->assertIsInt($capabilities->getMaxKeyLength());
         $this->assertGreaterThanOrEqual(-1, $capabilities->getMaxKeyLength());
 
-        $this->assertInternalType('bool', $capabilities->getNamespaceIsPrefix());
+        $this->assertIsBool($capabilities->getNamespaceIsPrefix());
 
-        $this->assertInternalType('string', $capabilities->getNamespaceSeparator());
+        $this->assertIsString($capabilities->getNamespaceSeparator());
     }
 
     public function testHasItemReturnsTrueOnValidItem()
@@ -380,7 +379,7 @@ abstract class CommonAdapterTest extends TestCase
         $this->assertTrue($this->_storage->setItem('key', 'value'));
         $metadata = $this->_storage->getMetadata('key');
 
-        $this->assertInternalType('array', $metadata);
+        $this->assertIsArray($metadata);
         foreach ($supportedMetadatas as $supportedMetadata) {
             $this->assertArrayHasKey($supportedMetadata, $metadata);
         }
@@ -411,10 +410,10 @@ abstract class CommonAdapterTest extends TestCase
         $this->assertSame([], $this->_storage->setItems($items));
 
         $metadatas = $this->_storage->getMetadatas(array_keys($items));
-        $this->assertInternalType('array', $metadatas);
+        $this->assertIsArray($metadatas);
         $this->assertSame(count($items), count($metadatas));
         foreach ($metadatas as $k => $metadata) {
-            $this->assertInternalType('array', $metadata);
+            $this->assertIsArray($metadata);
             foreach ($supportedMetadatas as $supportedMetadata) {
                 $this->assertArrayHasKey($supportedMetadata, $metadata);
             }
@@ -465,14 +464,14 @@ abstract class CommonAdapterTest extends TestCase
         $this->assertSame([], $this->_storage->setItems($items));
 
         $rs = $this->_storage->getItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
         $rs = $this->_storage->hasItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
             $this->assertContains($key, $rs);
@@ -482,14 +481,14 @@ abstract class CommonAdapterTest extends TestCase
         unset($items['key1'], $items['key3']);
 
         $rs = $this->_storage->getItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
         $rs = $this->_storage->hasItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
             $this->assertContains($key, $rs);
@@ -542,14 +541,14 @@ abstract class CommonAdapterTest extends TestCase
 
         $this->_options->setNamespace('defaultns1');
         $rs = $this->_storage->getItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
         $rs = $this->_storage->hasItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
             $this->assertContains($key, $rs);
@@ -560,14 +559,14 @@ abstract class CommonAdapterTest extends TestCase
         unset($items['key1'], $items['key3']);
 
         $rs = $this->_storage->getItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         foreach ($items as $key => $value) {
             $this->assertArrayHasKey($key, $rs);
             $this->assertEquals($value, $rs[$key]);
         }
 
         $rs = $this->_storage->hasItems(array_keys($items));
-        $this->assertInternalType('array', $rs);
+        $this->assertIsArray($rs);
         $this->assertEquals(count($items), count($rs));
         foreach ($items as $key => $value) {
             $this->assertContains($key, $rs);
@@ -1188,7 +1187,7 @@ abstract class CommonAdapterTest extends TestCase
 
         // return tags
         $tags = $this->_storage->getTags('key1');
-        $this->assertInternalType('array', $tags);
+        $this->assertIsArray($tags);
         sort($tags);
         $this->assertSame(['tag1a', 'tag1b'], $tags);
 

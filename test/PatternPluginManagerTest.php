@@ -15,9 +15,12 @@ use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\ServiceManager\Test\CommonPluginManagerTrait;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class PatternPluginManagerTest extends TestCase
 {
+    use ProphecyTrait;
+
     use CommonPluginManagerTrait;
 
     protected function getPluginManager()

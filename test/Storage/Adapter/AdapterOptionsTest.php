@@ -35,7 +35,7 @@ class AdapterOptionsTest extends TestCase
      */
     protected $options;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->options = new AdapterOptions();
     }
@@ -155,10 +155,9 @@ class AdapterOptionsTest extends TestCase
         $propRef->setAccessible(true);
         $propRef->setValue($options, ['key_pattern', 'namespace']);
 
-        // expected order of setter be called
-        $options->expects($this->at(0))->method('setKeyPattern')->with($this->equalTo('/./'));
-        $options->expects($this->at(1))->method('setNamespace')->with($this->equalTo('foobar'));
-        $options->expects($this->at(2))->method('setWritable')->with($this->equalTo(false));
+        $options->method('setKeyPattern')->with($this->equalTo('/./'));
+        $options->method('setNamespace')->with($this->equalTo('foobar'));
+        $options->method('setWritable')->with($this->equalTo(false));
 
         // send unordered options array
         $this->assertSame($options, $options->setFromArray([
