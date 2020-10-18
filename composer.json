@@ -28,7 +28,7 @@
         }
     },
     "require": {
-        "php": "^7.0",
+        "php": "^7.3",
         "laminas/laminas-cache-storage-adapter-apc": "^1.0",
         "laminas/laminas-cache-storage-adapter-apcu": "^1.0",
         "laminas/laminas-cache-storage-adapter-blackhole": "^1.0",
@@ -44,8 +44,8 @@
         "laminas/laminas-cache-storage-adapter-wincache": "^1.0",
         "laminas/laminas-cache-storage-adapter-xcache": "^1.0",
         "laminas/laminas-cache-storage-adapter-zend-server": "^1.0",
-        "laminas/laminas-eventmanager": "^2.6.3 || ^3.2",
-        "laminas/laminas-servicemanager": "^2.7.8 || ^3.3",
+        "laminas/laminas-eventmanager": "^3.2",
+        "laminas/laminas-servicemanager": "^3.3",
         "laminas/laminas-stdlib": "^3.2.1",
         "laminas/laminas-zendframework-bridge": "^1.0",
         "psr/cache": "^1.0",
@@ -57,7 +57,7 @@
         "laminas/laminas-serializer": "^2.6",
         "phpbench/phpbench": "^0.13",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "^9.3"
+        "phpunit/phpunit": "^9.4"
     },
     "provide": {
         "psr/cache-implementation": "1.0",
