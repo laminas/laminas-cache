@@ -9,11 +9,12 @@
 namespace LaminasTest\Cache\Storage\Adapter;
 
 use Laminas\Cache;
-use Laminas\Cache\Exception;
-use Laminas\Cache\Storage\Adapter\AdapterOptions;
-use Laminas\Cache\Storage\Capabilities;
-use Laminas\Cache\Storage\Plugin\PluginOptions;
 use PHPUnit\Framework\TestCase;
+use Laminas\Cache\Storage\Capabilities;
+use Laminas\Cache\Exception\RuntimeException;
+use Laminas\Cache\Storage\Plugin\PluginOptions;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
+use Laminas\Cache\Exception\InvalidArgumentException;
 
 /**
  * @group      Laminas_Cache
@@ -81,7 +82,7 @@ class AbstractAdapterTest extends TestCase
 
     public function testSetTtlThrowsInvalidArgumentException()
     {
-        $this->expectException('Laminas\Cache\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->_options->setTtl(-1);
     }
 
@@ -117,7 +118,7 @@ class AbstractAdapterTest extends TestCase
 
     public function testSetKeyPatternThrowsExceptionOnInvalidPattern()
     {
-        $this->expectException('Laminas\Cache\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->_options->setKeyPattern('#');
     }
 
@@ -227,9 +228,9 @@ class AbstractAdapterTest extends TestCase
         $method = new \ReflectionMethod(get_class($this->_storage), 'triggerException');
         $method->setAccessible(true);
 
-        $this->expectException('Laminas\Cache\Exception\RuntimeException');
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('test');
-        $method->invokeArgs($this->_storage, ['setItem', $params, & $result, new Exception\RuntimeException('test')]);
+        $method->invokeArgs($this->_storage, ['setItem', $params, & $result, new RuntimeException('test')]);
     }
 
     public function testGetItemCallsInternalGetItem()

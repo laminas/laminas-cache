@@ -11,6 +11,7 @@ namespace LaminasTest\Cache\Psr\CacheItemPool;
 use DateInterval;
 use DateTime;
 use Laminas\Cache\Psr\CacheItemPool\CacheItem;
+use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class CacheItemTest extends TestCase
@@ -72,8 +73,9 @@ class CacheItemTest extends TestCase
 
     public function testExpireAtInvalidThrowsException()
     {
-        $this->expectException('Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException');
         $item = new CacheItem('key', 'value', true);
+
+        $this->expectException(InvalidArgumentException::class);
         $item->expiresAt('foo');
     }
 
@@ -103,8 +105,9 @@ class CacheItemTest extends TestCase
 
     public function testExpiresAfterInvalidThrowsException()
     {
-        $this->expectException('Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException');
         $item = new CacheItem('key', 'value', true);
+
+        $this->expectException(InvalidArgumentException::class);
         $item->expiresAfter([]);
     }
 }

@@ -8,6 +8,7 @@
 
 namespace LaminasTest\Cache\Storage\Adapter;
 
+use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\AvailableSpaceCapableInterface;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
@@ -1088,7 +1089,7 @@ abstract class CommonAdapterTest extends TestCase
             $this->markTestSkipped("Storage doesn't implement ClearByPrefixInterface");
         }
 
-        $this->expectException('Laminas\Cache\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->_storage->clearByPrefix('');
     }
 
@@ -1132,7 +1133,7 @@ abstract class CommonAdapterTest extends TestCase
             $this->markTestSkipped("Storage doesn't implement ClearByNamespaceInterface");
         }
 
-        $this->expectException('Laminas\Cache\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->_storage->clearByNamespace('');
     }
 

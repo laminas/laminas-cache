@@ -9,6 +9,7 @@
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
+use Laminas\Cache\Exception\InvalidArgumentException;
 use LaminasTest\Cache\Pattern\TestAsset\FailableCallback;
 use LaminasTest\Cache\Pattern\TestAsset\TestCallbackCache;
 
@@ -104,13 +105,13 @@ class CallbackCacheTest extends CommonPatternTest
 
     public function testCallInvalidCallbackException()
     {
-        $this->expectException('Laminas\Cache\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->_pattern->call(1);
     }
 
     public function testCallUnknownCallbackException()
     {
-        $this->expectException('Laminas\Cache\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->_pattern->call('notExiststingFunction');
     }
 

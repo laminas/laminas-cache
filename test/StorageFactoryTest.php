@@ -10,6 +10,7 @@ namespace LaminasTest\Cache;
 
 use ErrorException;
 use Laminas\Cache;
+use Laminas\Cache\Exception\RuntimeException;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ErrorHandler;
 use LaminasTest\Cache\Storage\Adapter\TestAsset\AdapterWithStorageAndEventsCapableInterface;
@@ -141,7 +142,7 @@ class StorageFactoryTest extends TestCase
     public function testFactoryInstantiateAdapterWithPluginsWithoutEventsCapableInterfaceThrowsException()
     {
         // The BlackHole adapter doesn't implement EventsCapableInterface
-        $this->expectException('Laminas\Cache\Exception\RuntimeException');
+        $this->expectException(RuntimeException::class);
         Cache\StorageFactory::factory([
             'adapter' => 'blackhole',
             'plugins' => ['Serializer'],

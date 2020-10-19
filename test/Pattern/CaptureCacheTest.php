@@ -9,6 +9,7 @@
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
+use Laminas\Cache\Exception\LogicException;
 
 /**
  * @group      Laminas_Cache
@@ -97,7 +98,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->expectException('Laminas\Cache\Exception\LogicException');
+        $this->expectException(LogicException::class);
         $captureCache->set('content', '/pageId');
     }
 
@@ -121,7 +122,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->expectException('Laminas\Cache\Exception\LogicException');
+        $this->expectException(LogicException::class);
         $captureCache->get('/pageId');
     }
 
@@ -129,7 +130,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->expectException('Laminas\Cache\Exception\LogicException');
+        $this->expectException(LogicException::class);
         $captureCache->has('/pageId');
     }
 
@@ -137,7 +138,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->expectException('Laminas\Cache\Exception\LogicException');
+        $this->expectException(LogicException::class);
         $captureCache->remove('/pageId');
     }
 

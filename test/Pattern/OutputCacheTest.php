@@ -9,6 +9,7 @@
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
+use Laminas\Cache\Exception\MissingKeyException;
 
 /**
  * @group      Laminas_Cache
@@ -104,7 +105,7 @@ class OutputCacheTest extends CommonPatternTest
 
     public function testThrowMissingKeyException()
     {
-        $this->expectException('Laminas\Cache\Exception\MissingKeyException');
+        $this->expectException(MissingKeyException::class);
         $this->_pattern->start(''); // empty key
     }
 }
