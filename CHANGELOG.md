@@ -33,7 +33,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#45](https://github.com/laminas/laminas-cache/pull/45) Removed abstract test classes as they're moved to an [own package](https://github.com/laminas/laminas-cache-storage-adapter-test).
 
 ### Fixed
 
