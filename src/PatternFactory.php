@@ -12,14 +12,9 @@ use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
 
-use function get_class;
-use function gettype;
-use function is_array;
-use function is_object;
-use function sprintf;
-
 /**
- * @phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+ * @deprecated Please do not use static factories anymore.
+ *             Inject {@see PatternPluginManager} instead.
  */
 abstract class PatternFactory
 {
@@ -34,7 +29,7 @@ abstract class PatternFactory
      * Instantiate a cache pattern
      *
      * @param  string|Pattern\PatternInterface $patternName
-     * @param  array|Traversable|Pattern\PatternOptions $options
+     * @param  array<string,mixed>|Traversable<string,mixed>|Pattern\PatternOptions $options
      * @return Pattern\PatternInterface
      * @throws Exception\InvalidArgumentException
      */
