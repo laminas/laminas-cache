@@ -2,10 +2,7 @@
 
 namespace LaminasTest\Cache\Pattern\TestAsset;
 
-/**
- * Test class
- */
-class TestClassCache
+final class TestClassCache
 {
     /**
      * A counter how oftern the method "bar" was called
