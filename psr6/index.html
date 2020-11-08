@@ -129,6 +129,20 @@
                     
                     
                         
+                            <li class="subnavigation__list-item ">
+                                <a href="../installation/" class="subnavigation__link">Installation</a>
+                            </li>
+                        
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                        
                             <li class="subnavigation__list-item">
                                 <span class="subnavigation__headline">Storage</span>
                                 <ul class="subnavigation__list">
@@ -277,7 +291,7 @@
             </div>
 
             
-            <div class="col-4 text-sm-right">
+            <div class="col-4 text-right">
                 
                     
 
@@ -408,7 +422,6 @@ if (! $item-&gt;isHit()) {
 
 // use the value of the item
 echo $item-&gt;get();</code></pre>
-
 <p>Note that you will always get back a <code>CacheItem</code> object, whether it was found in cache or not: this is so <code>false</code>-y
 values like an empty string, <code>null</code>, or <code>false</code> can be stored. Always check <code>isHit()</code> to determine if the item was
 found.</p>
@@ -440,7 +453,7 @@ storage exceptions that bubble up implement <code>Psr\Cache\InvalidArgumentExcep
 key errors. To be PSR-6 compliant, cache keys must not contain the following characters: <code>{}()/\@:</code>. However different
 storage adapters may have further restrictions. Check the documentation for your particular adapter to be sure.</p>
 <p>We strongly recommend tracking exceptions caught from storage, either by logging them or recording them in some other
-way. Doing so is as simple as adding an <a href="laminas.cache.storage.plugin.html#3.4"><code>ExceptionHandler</code> plugin</a>. Say you have a
+way. Doing so is as simple as adding an <a href="../storage/plugin/#the-exceptionhandler-plugin"><code>ExceptionHandler</code> plugin</a>. Say you have a
 <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md">PSR-3</a> compliant logger
 called <code>$logger</code>:</p>
 <pre class="highlight"><code class="language-php">$cacheLogger = function (\Exception $e) use ($logger) {
@@ -467,7 +480,6 @@ $storage = StorageFactory::factory([
 ]);
 
 $pool = new CacheItemPoolDecorator($storage);</code></pre>
-
 <p>Note that <code>throw_exceptions</code> should always be <code>true</code> (the default) or you will not get the correct return values from
 calls on the pool such as <code>save()</code>.</p>
 <h2 id="supported-data-types">Supported Data Types</h2>
@@ -545,6 +557,20 @@ do not need to use a <code>Laminas\Cache\Storage\Plugin\Serializer</code> plugin
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item ">
+                                <a href="../installation/" class="subnavigation__link">Installation</a>
+                            </li>
+                        
+                    
+                
             
 
                 

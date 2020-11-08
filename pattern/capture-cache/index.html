@@ -129,6 +129,20 @@
                     
                     
                         
+                            <li class="subnavigation__list-item ">
+                                <a href="../../installation/" class="subnavigation__link">Installation</a>
+                            </li>
+                        
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                        
                             <li class="subnavigation__list-item">
                                 <span class="subnavigation__headline">Storage</span>
                                 <ul class="subnavigation__list">
@@ -277,7 +291,7 @@
             </div>
 
             
-            <div class="col-4 text-sm-right">
+            <div class="col-4 text-right">
                 
                     
 
@@ -376,7 +390,6 @@ again.</p>
 <p>For use with an Apache 404 handler extend the Apache configuration, e.g.
 <code>.htdocs</code>: </p>
 <pre class="highlight"><code class="language-apacheconf">ErrorDocument 404 /index.php</code></pre>
-
 <p>And add the cache to the related application script, e.g. <code>index.php</code>:</p>
 <pre class="highlight"><code class="language-php">use Laminas\Cache\PatternFactory;
 $capture = Laminas\Cache\PatternFactory::factory('capture', [
@@ -391,7 +404,6 @@ $capture-&gt;start();
 header('Status: 200', true, 200);
 
 // do stuff to dynamically generate output</code></pre>
-
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -513,13 +525,11 @@ class CaptureCache extends AbstractPattern
      */
     public function getFilename($pageId = null);
 }</code></pre>
-
 <h2 id="examples">Examples</h2>
 <h3>Scaling Images in the Web Root</h3>
 <p>Using the following Apache 404 configuration:</p>
 <pre class="highlight"><code class="language-apacheconf"># .htdocs
 ErrorDocument 404 /index.php</code></pre>
-
 <p>Use the following script:</p>
 <pre class="highlight"><code class="language-php">// index.php
 $captureCache = Laminas\Cache\PatternFactory::factory('capture', [
@@ -595,6 +605,20 @@ $captureCache = Laminas\Cache\PatternFactory::factory('capture', [
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item ">
+                                <a href="../../installation/" class="subnavigation__link">Installation</a>
+                            </li>
+                        
+                    
+                
             
 
                 

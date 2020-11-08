@@ -129,6 +129,20 @@
                     
                     
                         
+                            <li class="subnavigation__list-item ">
+                                <a href="../installation/" class="subnavigation__link">Installation</a>
+                            </li>
+                        
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                        
                             <li class="subnavigation__list-item">
                                 <span class="subnavigation__headline">Storage</span>
                                 <ul class="subnavigation__list">
@@ -277,7 +291,7 @@
             </div>
 
             
-            <div class="col-4 text-sm-right">
+            <div class="col-4 text-right">
                 
                     
 
@@ -381,7 +395,6 @@ $storage = StorageFactory::factory([
 ]);
 
 $cache = new SimpleCacheDecorator($storage);</code></pre>
-
 <p>Once you have a <code>SimpleCacheDecorator</code> instance, you can perform operations per
 that specification:</p>
 <pre class="highlight"><code class="language-php">// Use has() to determine whether to fetch the value or calculate it:
@@ -392,7 +405,6 @@ if (! $cache-&gt;has('someKey')) {
 
 // Or use a default value:
 $value = $cache-&gt;get('someKey', $defaultValue);</code></pre>
-
 <p>When setting values, whether single values or multiple, you can also optionally
 provide a Time To Live (TTL) value. This proxies to the underlying storage
 instance's options, temporarily resetting its TTL value for the duration of the
@@ -409,7 +421,6 @@ $cache-&gt;setMultiple([
     'key1' =&gt; $value1,
     'key2' =&gt; $value2,
 ], new DateInterval('P6H'); // set TTL to 6 hours</code></pre>
-
 <p>For more details on what methods are exposed, consult the <a href="https://www.php-fig.org/psr/psr-16/#21-cacheinterface">CacheInterface
 specification</a>.</p>
 <h2 id="serialization">Serialization</h2>
@@ -441,7 +452,6 @@ $cache = StorageFactory::factory([
         'serializer',
     ],
 ]);</code></pre>
-
 <h2 id="deleting-items-and-exceptions">Deleting Items and Exceptions</h2>
 <p>PSR-16 states that the <code>delete()</code> and <code>deleteMultiple()</code> methods should return
 <code>false</code> if an <em>error</em> occured when deleting the key(s) provided, but <code>true</code>
@@ -527,6 +537,20 @@ operations.</p>
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
 
         <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item ">
+                                <a href="../installation/" class="subnavigation__link">Installation</a>
+                            </li>
+                        
+                    
+                
             
 
                 
