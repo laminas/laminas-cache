@@ -24,14 +24,6 @@ class PatternPluginManagerFactoryTest extends TestCase
 
         $patterns = $factory($container, PatternPluginManager::class);
         $this->assertInstanceOf(PatternPluginManager::class, $patterns);
-
-        if (method_exists($patterns, 'configure')) {
-            // laminas-servicemanager v3
-            $this->assertAttributeSame($container, 'creationContext', $patterns);
-        } else {
-            // laminas-servicemanager v2
-            $this->assertSame($container, $patterns->getServiceLocator());
-        }
     }
 
     public function testFactoryConfiguresPluginManagerUnderContainerInterop(): void

@@ -24,9 +24,14 @@ class PluginManagerTest extends TestCase
         return new PluginManager(new ServiceManager());
     }
 
+    public function testShareByDefaultAndSharedByDefault()
+    {
+        self::markTestSkipped('Support for servicemanager v2 is dropped.');
+    }
+
     protected function getV2InvalidPluginException()
     {
-        return RuntimeException::class;
+        self::fail('Somehow, servicemanager v2 compatibility is being tested.');
     }
 
     protected function getInstanceOf()

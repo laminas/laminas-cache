@@ -8,7 +8,6 @@
 
 namespace LaminasTest\Cache;
 
-use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Pattern\PatternInterface;
 use Laminas\Cache\PatternPluginManager;
 use Laminas\Cache\Storage\StorageInterface;
@@ -23,11 +22,6 @@ class PatternPluginManagerTest extends TestCase
     protected function getPluginManager()
     {
         return new PatternPluginManager(new ServiceManager());
-    }
-
-    protected function getV2InvalidPluginException()
-    {
-        return RuntimeException::class;
     }
 
     protected function getInstanceOf()
@@ -52,10 +46,6 @@ class PatternPluginManagerTest extends TestCase
     {
         $plugins = $this->getPluginManager();
 
-        if (! method_exists($plugins, 'configure')) {
-            $this->markTestSkipped('Test is only relevant for laminas-servicemanager v3');
-        }
-
         $storage = $this->prophesize(StorageInterface::class)->reveal();
         $plugin = $plugins->build('callback', [
             'cache_output' => false,
@@ -64,5 +54,15 @@ class PatternPluginManagerTest extends TestCase
         $options = $plugin->getOptions();
         $this->assertFalse($options->getCacheOutput());
         $this->assertSame($storage, $options->getStorage());
+    }
+
+    public function testShareByDefaultAndSharedByDefault()
+    {
+        self::markTestSkipped('Support for servicemanager v2 is dropped.');
+    }
+
+    protected function getV2InvalidPluginException()
+    {
+        self::fail('Somehow, servicemanager v2 compatibility is being tested.');
     }
 }

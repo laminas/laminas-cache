@@ -24,14 +24,6 @@ class StorageAdapterPluginManagerFactoryTest extends TestCase
 
         $adapters = $factory($container, AdapterPluginManager::class);
         $this->assertInstanceOf(AdapterPluginManager::class, $adapters);
-
-        if (method_exists($adapters, 'configure')) {
-            // laminas-servicemanager v3
-            $this->assertAttributeSame($container, 'creationContext', $adapters);
-        } else {
-            // laminas-servicemanager v2
-            $this->assertSame($container, $adapters->getServiceLocator());
-        }
     }
 
     public function testFactoryConfiguresPluginManagerUnderContainerInterop(): void
