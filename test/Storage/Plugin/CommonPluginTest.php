@@ -48,13 +48,13 @@ abstract class CommonPluginTest extends TestCase
         );
     }
 
-    public function testOptionObjectAvailable()
+    public function testOptionObjectAvailable(): void
     {
         $options = $this->_plugin->getOptions();
         $this->assertInstanceOf('Laminas\Cache\Storage\Plugin\PluginOptions', $options);
     }
 
-    public function testOptionsGetAndSetDefault()
+    public function testOptionsGetAndSetDefault(): void
     {
         $options = $this->_plugin->getOptions();
         $this->_plugin->setOptions($options);

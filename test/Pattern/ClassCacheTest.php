@@ -52,7 +52,7 @@ class ClassCacheTest extends CommonPatternTest
         ];
     }
 
-    public function testCallEnabledCacheOutputByDefault()
+    public function testCallEnabledCacheOutputByDefault(): void
     {
         $this->_testCall(
             'bar',
@@ -60,7 +60,7 @@ class ClassCacheTest extends CommonPatternTest
         );
     }
 
-    public function testCallDisabledCacheOutput()
+    public function testCallDisabledCacheOutput(): void
     {
         $this->_options->setCacheOutput(false);
         $this->_testCall(
@@ -69,7 +69,7 @@ class ClassCacheTest extends CommonPatternTest
         );
     }
 
-    public function testGenerateKey()
+    public function testGenerateKey(): void
     {
         $args = ['arg1', 2, 3.33, null];
 

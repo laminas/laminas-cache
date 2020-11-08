@@ -33,20 +33,20 @@ class StorageFactoryTest extends TestCase
         Cache\StorageFactory::resetPluginManager();
     }
 
-    public function testDefaultAdapterPluginManager()
+    public function testDefaultAdapterPluginManager(): void
     {
         $adapters = Cache\StorageFactory::getAdapterPluginManager();
         $this->assertInstanceOf('Laminas\Cache\Storage\AdapterPluginManager', $adapters);
     }
 
-    public function testChangeAdapterPluginManager()
+    public function testChangeAdapterPluginManager(): void
     {
         $adapters = new Cache\Storage\AdapterPluginManager(new ServiceManager);
         Cache\StorageFactory::setAdapterPluginManager($adapters);
         $this->assertSame($adapters, Cache\StorageFactory::getAdapterPluginManager());
     }
 
-    public function testAdapterFactory()
+    public function testAdapterFactory(): void
     {
         $adapter1 = Cache\StorageFactory::adapterFactory('Memory');
         $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\Memory', $adapter1);
@@ -57,20 +57,20 @@ class StorageFactoryTest extends TestCase
         $this->assertNotSame($adapter1, $adapter2);
     }
 
-    public function testDefaultPluginManager()
+    public function testDefaultPluginManager(): void
     {
         $manager = Cache\StorageFactory::getPluginManager();
         $this->assertInstanceOf('Laminas\Cache\Storage\PluginManager', $manager);
     }
 
-    public function testChangePluginManager()
+    public function testChangePluginManager(): void
     {
         $manager = new Cache\Storage\PluginManager(new ServiceManager);
         Cache\StorageFactory::setPluginManager($manager);
         $this->assertSame($manager, Cache\StorageFactory::getPluginManager());
     }
 
-    public function testPluginFactory()
+    public function testPluginFactory(): void
     {
         $plugin1 = Cache\StorageFactory::pluginFactory('Serializer');
         $this->assertInstanceOf('Laminas\Cache\Storage\Plugin\Serializer', $plugin1);
@@ -81,7 +81,7 @@ class StorageFactoryTest extends TestCase
         $this->assertNotSame($plugin1, $plugin2);
     }
 
-    public function testFactoryAdapterAsString()
+    public function testFactoryAdapterAsString(): void
     {
         $cache = Cache\StorageFactory::factory([
             'adapter' => 'Memory',
@@ -92,7 +92,7 @@ class StorageFactoryTest extends TestCase
     /**
      * @group 4445
      */
-    public function testFactoryWithAdapterAsStringAndOptions()
+    public function testFactoryWithAdapterAsStringAndOptions(): void
     {
         $cache = Cache\StorageFactory::factory([
             'adapter' => 'Memory',
@@ -105,7 +105,7 @@ class StorageFactoryTest extends TestCase
         $this->assertSame('test', $cache->getOptions()->getNamespace());
     }
 
-    public function testFactoryAdapterAsArray()
+    public function testFactoryAdapterAsArray(): void
     {
         $cache = Cache\StorageFactory::factory([
             'adapter' => [
@@ -115,7 +115,7 @@ class StorageFactoryTest extends TestCase
         $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\Memory', $cache);
     }
 
-    public function testFactoryWithPlugins()
+    public function testFactoryWithPlugins(): void
     {
         $adapter = 'Memory';
         $plugins = ['Serializer', 'ClearExpiredByFactor'];
@@ -135,7 +135,7 @@ class StorageFactoryTest extends TestCase
         }
     }
 
-    public function testFactoryInstantiateAdapterWithPluginsWithoutEventsCapableInterfaceThrowsException()
+    public function testFactoryInstantiateAdapterWithPluginsWithoutEventsCapableInterfaceThrowsException(): void
     {
         // The BlackHole adapter doesn't implement EventsCapableInterface
         $this->expectException('Laminas\Cache\Exception\RuntimeException');
@@ -145,7 +145,7 @@ class StorageFactoryTest extends TestCase
         ]);
     }
 
-    public function testFactoryWithPluginsAndOptionsArray()
+    public function testFactoryWithPluginsAndOptionsArray(): void
     {
         $factory = [
             'adapter' => [
@@ -209,7 +209,7 @@ class StorageFactoryTest extends TestCase
         }
     }
 
-    public function testWillTriggerDeprecationWarningForMissingPluginAwareInterface()
+    public function testWillTriggerDeprecationWarningForMissingPluginAwareInterface(): void
     {
         $adapters = $this->prophesize(Cache\Storage\AdapterPluginManager::class);
 

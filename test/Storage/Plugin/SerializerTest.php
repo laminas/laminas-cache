@@ -47,7 +47,7 @@ class SerializerTest extends CommonPluginTest
         ];
     }
 
-    public function testAddPlugin()
+    public function testAddPlugin(): void
     {
         $this->_adapter->addPlugin($this->_plugin, 100);
 
@@ -95,7 +95,7 @@ class SerializerTest extends CommonPluginTest
         }
     }
 
-    public function testRemovePlugin()
+    public function testRemovePlugin(): void
     {
         $this->_adapter->addPlugin($this->_plugin);
         $this->_adapter->removePlugin($this->_plugin);
@@ -104,7 +104,7 @@ class SerializerTest extends CommonPluginTest
         $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
     }
 
-    public function testUnserializeOnReadItem()
+    public function testUnserializeOnReadItem(): void
     {
         $args  = new ArrayObject([
             'key'      => 'test',
@@ -119,7 +119,7 @@ class SerializerTest extends CommonPluginTest
         $this->assertSame(123, $event->getResult(), 'Result was not unserialized');
     }
 
-    public function testDontUnserializeOnReadMissingItem()
+    public function testDontUnserializeOnReadMissingItem(): void
     {
         $args  = new ArrayObject(['key' => 'test']);
         $value = null;
@@ -130,7 +130,7 @@ class SerializerTest extends CommonPluginTest
         $this->assertSame($value, $event->getResult(), 'Missing item was unserialized');
     }
 
-    public function testUnserializeOnReadItems()
+    public function testUnserializeOnReadItems(): void
     {
         $values = ['key1' => serialize(123), 'key2' => serialize(456)];
         $args   = new ArrayObject(['keys' => array_keys($values) + ['missing']]);

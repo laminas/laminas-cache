@@ -56,13 +56,13 @@ class StorageCacheFactoryTest extends TestCase
         StorageFactory::resetPluginManager();
     }
 
-    public function testCreateServiceCache()
+    public function testCreateServiceCache(): void
     {
         $cache = $this->sm->get('CacheFactory');
         $this->assertEquals(Memory::class, get_class($cache));
     }
 
-    public function testSetsFactoryAdapterPluginManagerInstanceOnInvocation()
+    public function testSetsFactoryAdapterPluginManagerInstanceOnInvocation(): void
     {
         $adapter = $this->prophesize(AbstractAdapter::class);
         $adapter->willImplement(StorageInterface::class);
@@ -89,7 +89,7 @@ class StorageCacheFactoryTest extends TestCase
         $this->assertSame($adapterPluginManager->reveal(), StorageFactory::getAdapterPluginManager());
     }
 
-    public function testSetsFactoryPluginManagerInstanceOnInvocation()
+    public function testSetsFactoryPluginManagerInstanceOnInvocation(): void
     {
         $plugin = $this->prophesize(PluginInterface::class);
         $plugin->setOptions(Argument::any())->shouldNotBeCalled();

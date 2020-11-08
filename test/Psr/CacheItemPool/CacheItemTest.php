@@ -29,7 +29,7 @@ class CacheItemTest extends TestCase
         date_default_timezone_set($this->tz);
     }
 
-    public function testConstructorIsHit()
+    public function testConstructorIsHit(): void
     {
         $item = new CacheItem('key', 'value', true);
         $this->assertEquals('key', $item->getKey());
@@ -37,7 +37,7 @@ class CacheItemTest extends TestCase
         $this->assertTrue($item->isHit());
     }
 
-    public function testConstructorIsNotHit()
+    public function testConstructorIsNotHit(): void
     {
         $item = new CacheItem('key', 'value', false);
         $this->assertEquals('key', $item->getKey());
@@ -45,7 +45,7 @@ class CacheItemTest extends TestCase
         $this->assertFalse($item->isHit());
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $item = new CacheItem('key', 'value', true);
         $return = $item->set('value2');
@@ -53,7 +53,7 @@ class CacheItemTest extends TestCase
         $this->assertEquals('value2', $item->get());
     }
 
-    public function testExpiresAtDateTime()
+    public function testExpiresAtDateTime(): void
     {
         $item = new CacheItem('key', 'value', true);
         $dateTime = new DateTime('+5 seconds');
@@ -62,7 +62,7 @@ class CacheItemTest extends TestCase
         $this->assertEquals(5, $item->getTtl());
     }
 
-    public function testExpireAtNull()
+    public function testExpireAtNull(): void
     {
         $item = new CacheItem('key', 'value', true);
         $return = $item->expiresAt(null);
@@ -73,13 +73,13 @@ class CacheItemTest extends TestCase
     /**
      * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
-    public function testExpireAtInvalidThrowsException()
+    public function testExpireAtInvalidThrowsException(): void
     {
         $item = new CacheItem('key', 'value', true);
         $item->expiresAt('foo');
     }
 
-    public function testExpiresAfterInt()
+    public function testExpiresAfterInt(): void
     {
         $item = new CacheItem('key', 'value', true);
         $return = $item->expiresAfter(3600);
@@ -87,7 +87,7 @@ class CacheItemTest extends TestCase
         $this->assertEquals(3600, $item->getTtl());
     }
 
-    public function testExpiresAfterInterval()
+    public function testExpiresAfterInterval(): void
     {
         $item = new CacheItem('key', 'value', true);
         $interval = new DateInterval('PT1H');
@@ -96,7 +96,7 @@ class CacheItemTest extends TestCase
         $this->assertEquals(3600, $item->getTtl());
     }
 
-    public function testExpiresAfterNull()
+    public function testExpiresAfterNull(): void
     {
         $item = new CacheItem('key', 'value', true);
         $item->expiresAfter(null);
@@ -106,7 +106,7 @@ class CacheItemTest extends TestCase
     /**
      * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
-    public function testExpiresAfterInvalidThrowsException()
+    public function testExpiresAfterInvalidThrowsException(): void
     {
         $item = new CacheItem('key', 'value', true);
         $item->expiresAfter([]);

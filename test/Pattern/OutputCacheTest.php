@@ -72,7 +72,7 @@ class OutputCacheTest extends CommonPatternTest
         ];
     }
 
-    public function testStartEndCacheMiss()
+    public function testStartEndCacheMiss(): void
     {
         $output = 'foobar';
         $key    = 'testStartEndCacheMiss';
@@ -87,7 +87,7 @@ class OutputCacheTest extends CommonPatternTest
         $this->assertEquals($output, $this->_pattern->getOptions()->getStorage()->getItem($key));
     }
 
-    public function testStartEndCacheHit()
+    public function testStartEndCacheHit(): void
     {
         $output = 'foobar';
         $key    = 'testStartEndCacheHit';
@@ -102,7 +102,7 @@ class OutputCacheTest extends CommonPatternTest
         $this->assertSame($output, $data);
     }
 
-    public function testThrowMissingKeyException()
+    public function testThrowMissingKeyException(): void
     {
         $this->expectException('Laminas\Cache\Exception\MissingKeyException');
         $this->_pattern->start(''); // empty key

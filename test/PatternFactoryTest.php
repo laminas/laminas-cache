@@ -27,13 +27,13 @@ class PatternFactoryTest extends TestCase
         Cache\PatternFactory::resetPluginManager();
     }
 
-    public function testDefaultPluginManager()
+    public function testDefaultPluginManager(): void
     {
         $plugins = Cache\PatternFactory::getPluginManager();
         $this->assertInstanceOf('Laminas\Cache\PatternPluginManager', $plugins);
     }
 
-    public function testChangePluginManager()
+    public function testChangePluginManager(): void
     {
         $plugins = new Cache\PatternPluginManager(
             $this->getMockBuilder('Interop\Container\ContainerInterface')->getMock()
@@ -42,7 +42,7 @@ class PatternFactoryTest extends TestCase
         $this->assertSame($plugins, Cache\PatternFactory::getPluginManager());
     }
 
-    public function testFactory()
+    public function testFactory(): void
     {
         $pattern1 = Cache\PatternFactory::factory('capture');
         $this->assertInstanceOf('Laminas\Cache\Pattern\CaptureCache', $pattern1);

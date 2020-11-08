@@ -62,13 +62,13 @@ class StorageCacheAbstractServiceFactoryTest extends TestCase
         StorageFactory::resetPluginManager();
     }
 
-    public function testCanLookupCacheByName()
+    public function testCanLookupCacheByName(): void
     {
         $this->assertTrue($this->sm->has('Memory'));
         $this->assertTrue($this->sm->has('Foo'));
     }
 
-    public function testCanRetrieveCacheByName()
+    public function testCanRetrieveCacheByName(): void
     {
         $cacheA = $this->sm->get('Memory');
         $this->assertInstanceOf(Memory::class, $cacheA);
@@ -79,12 +79,12 @@ class StorageCacheAbstractServiceFactoryTest extends TestCase
         $this->assertNotSame($cacheA, $cacheB);
     }
 
-    public function testInvalidCacheServiceNameWillBeIgnored()
+    public function testInvalidCacheServiceNameWillBeIgnored(): void
     {
         $this->assertFalse($this->sm->has('invalid'));
     }
 
-    public function testSetsFactoryAdapterPluginManagerInstanceOnInvocation()
+    public function testSetsFactoryAdapterPluginManagerInstanceOnInvocation(): void
     {
         $adapter = $this->prophesize(AbstractAdapter::class);
         $adapter->willImplement(StorageInterface::class);
@@ -111,7 +111,7 @@ class StorageCacheAbstractServiceFactoryTest extends TestCase
         $this->assertSame($adapterPluginManager->reveal(), StorageFactory::getAdapterPluginManager());
     }
 
-    public function testSetsFactoryPluginManagerInstanceOnInvocation()
+    public function testSetsFactoryPluginManagerInstanceOnInvocation(): void
     {
         $plugin = $this->prophesize(PluginInterface::class);
         $plugin->setOptions(Argument::any())->shouldNotBeCalled();

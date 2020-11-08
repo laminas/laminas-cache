@@ -51,7 +51,7 @@ class ObjectCacheTest extends CommonPatternTest
         ];
     }
 
-    public function testCallEnabledCacheOutputByDefault()
+    public function testCallEnabledCacheOutputByDefault(): void
     {
         $this->_testCall(
             'bar',
@@ -59,7 +59,7 @@ class ObjectCacheTest extends CommonPatternTest
         );
     }
 
-    public function testCallDisabledCacheOutput()
+    public function testCallDisabledCacheOutput(): void
     {
         $this->_options->setCacheOutput(false);
         $this->_testCall(
@@ -68,13 +68,13 @@ class ObjectCacheTest extends CommonPatternTest
         );
     }
 
-    public function testCallInvoke()
+    public function testCallInvoke(): void
     {
         $this->_options->setCacheOutput(false);
         $this->_testCall('__invoke', ['arg1', 'arg2']);
     }
 
-    public function testGenerateKey()
+    public function testGenerateKey(): void
     {
         $args = ['arg1', 2, 3.33, null];
 
@@ -89,24 +89,24 @@ class ObjectCacheTest extends CommonPatternTest
         $this->assertEquals($generatedKey, $usedKey);
     }
 
-    public function testSetProperty()
+    public function testSetProperty(): void
     {
         $this->_pattern->property = 'testSetProperty';
         $this->assertEquals('testSetProperty', $this->_options->getObject()->property);
     }
 
-    public function testGetProperty()
+    public function testGetProperty(): void
     {
         $this->assertEquals($this->_options->getObject()->property, $this->_pattern->property);
     }
 
-    public function testIssetProperty()
+    public function testIssetProperty(): void
     {
         $this->assertTrue(isset($this->_pattern->property));
         $this->assertFalse(isset($this->_pattern->unknownProperty));
     }
 
-    public function testUnsetProperty()
+    public function testUnsetProperty(): void
     {
         unset($this->_pattern->property);
         $this->assertFalse(isset($this->_pattern->property));
@@ -115,7 +115,7 @@ class ObjectCacheTest extends CommonPatternTest
     /**
      * @group 7039
      */
-    public function testEmptyObjectKeys()
+    public function testEmptyObjectKeys(): void
     {
         $this->_options->setObjectKey('0');
         $this->assertSame('0', $this->_options->getObjectKey(), "Can't set string '0' as object key");

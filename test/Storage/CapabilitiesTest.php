@@ -57,25 +57,25 @@ class CapabilitiesTest extends TestCase
         $this->_capabilities     = new Capabilities($this->_adapter, $this->_marker, [], $this->_baseCapabilities);
     }
 
-    public function testGetAdapter()
+    public function testGetAdapter(): void
     {
         $this->assertSame($this->_adapter, $this->_capabilities->getAdapter());
         $this->assertSame($this->_adapter, $this->_baseCapabilities->getAdapter());
     }
 
-    public function testSetAndGetCapability()
+    public function testSetAndGetCapability(): void
     {
         $this->_capabilities->setMaxTtl($this->_marker, 100);
         $this->assertEquals(100, $this->_capabilities->getMaxTtl());
     }
 
-    public function testGetCapabilityByBaseCapabilities()
+    public function testGetCapabilityByBaseCapabilities(): void
     {
         $this->_baseCapabilities->setMaxTtl($this->_marker, 100);
         $this->assertEquals(100, $this->_capabilities->getMaxTtl());
     }
 
-    public function testTriggerCapabilityEvent()
+    public function testTriggerCapabilityEvent(): void
     {
         $em    = $this->_capabilities->getAdapter()->getEventManager();
         $event = null;

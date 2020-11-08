@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  */
 class KeyListIteratorTest extends TestCase
 {
-    public function testCount()
+    public function testCount(): void
     {
         $keys = ['key1', 'key2', 'key3'];
         $storage = $this->createMock('Laminas\Cache\Storage\StorageInterface');

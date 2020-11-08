@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class PatternPluginManagerFactoryTest extends TestCase
 {
-    public function testFactoryReturnsPluginManager()
+    public function testFactoryReturnsPluginManager(): void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
         $factory = new PatternPluginManagerFactory();
@@ -37,7 +37,7 @@ class PatternPluginManagerFactoryTest extends TestCase
     /**
      * @depends testFactoryReturnsPluginManager
      */
-    public function testFactoryConfiguresPluginManagerUnderContainerInterop()
+    public function testFactoryConfiguresPluginManagerUnderContainerInterop(): void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
         $pattern = $this->prophesize(PatternInterface::class)->reveal();
@@ -54,7 +54,7 @@ class PatternPluginManagerFactoryTest extends TestCase
     /**
      * @depends testFactoryReturnsPluginManager
      */
-    public function testFactoryConfiguresPluginManagerUnderServiceManagerV2()
+    public function testFactoryConfiguresPluginManagerUnderServiceManagerV2(): void
     {
         $container = $this->prophesize(ServiceLocatorInterface::class);
         $container->willImplement(ContainerInterface::class);

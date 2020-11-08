@@ -56,13 +56,13 @@ abstract class CommonPatternTest extends TestCase
         );
     }
 
-    public function testOptionNamesValid()
+    public function testOptionNamesValid(): void
     {
         $options = $this->_pattern->getOptions();
         $this->assertInstanceOf('Laminas\Cache\Pattern\PatternOptions', $options);
     }
 
-    public function testOptionsGetAndSetDefault()
+    public function testOptionsGetAndSetDefault(): void
     {
         $options = $this->_pattern->getOptions();
         $this->_pattern->setOptions($options);

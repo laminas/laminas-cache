@@ -60,7 +60,7 @@ class CallbackCacheTest extends CommonPatternTest
         ];
     }
 
-    public function testCallEnabledCacheOutputByDefault()
+    public function testCallEnabledCacheOutputByDefault(): void
     {
         $this->_testCall(
             __NAMESPACE__ . '\TestAsset\TestCallbackCache::bar',
@@ -68,7 +68,7 @@ class CallbackCacheTest extends CommonPatternTest
         );
     }
 
-    public function testCallDisabledCacheOutput()
+    public function testCallDisabledCacheOutput(): void
     {
         $options = $this->_pattern->getOptions();
         $options->setCacheOutput(false);
@@ -78,7 +78,7 @@ class CallbackCacheTest extends CommonPatternTest
         );
     }
 
-    public function testMagicFunctionCall()
+    public function testMagicFunctionCall(): void
     {
         $this->_testCall(
             __NAMESPACE__ . '\bar',
@@ -86,7 +86,7 @@ class CallbackCacheTest extends CommonPatternTest
         );
     }
 
-    public function testGenerateKey()
+    public function testGenerateKey(): void
     {
         $callback = __NAMESPACE__ . '\TestAsset\TestCallbackCache::emptyMethod';
         $args     = ['arg1', 2, 3.33, null];
@@ -102,13 +102,13 @@ class CallbackCacheTest extends CommonPatternTest
         $this->assertEquals($generatedKey, $usedKey);
     }
 
-    public function testCallInvalidCallbackException()
+    public function testCallInvalidCallbackException(): void
     {
         $this->expectException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_pattern->call(1);
     }
 
-    public function testCallUnknownCallbackException()
+    public function testCallUnknownCallbackException(): void
     {
         $this->expectException('Laminas\Cache\Exception\InvalidArgumentException');
         $this->_pattern->call('notExiststingFunction');
@@ -155,7 +155,7 @@ class CallbackCacheTest extends CommonPatternTest
      * @group 4629
      * @return void
      */
-    public function testCallCanReturnCachedNullValues()
+    public function testCallCanReturnCachedNullValues(): void
     {
         $callback = new FailableCallback();
         $key      = $this->_pattern->generateKey($callback, []);

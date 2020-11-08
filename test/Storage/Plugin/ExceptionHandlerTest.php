@@ -50,7 +50,7 @@ class ExceptionHandlerTest extends CommonPluginTest
         ];
     }
 
-    public function testAddPlugin()
+    public function testAddPlugin(): void
     {
         $this->_adapter->addPlugin($this->_plugin);
 
@@ -105,7 +105,7 @@ class ExceptionHandlerTest extends CommonPluginTest
         }
     }
 
-    public function testRemovePlugin()
+    public function testRemovePlugin(): void
     {
         $this->_adapter->addPlugin($this->_plugin);
         $this->_adapter->removePlugin($this->_plugin);
@@ -114,7 +114,7 @@ class ExceptionHandlerTest extends CommonPluginTest
         $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
     }
 
-    public function testOnExceptionCallCallback()
+    public function testOnExceptionCallCallback(): void
     {
         $expectedException = new \Exception();
         $callbackCalled    = false;
@@ -137,7 +137,7 @@ class ExceptionHandlerTest extends CommonPluginTest
         );
     }
 
-    public function testDontThrowException()
+    public function testDontThrowException(): void
     {
         $this->_options->setThrowExceptions(false);
 

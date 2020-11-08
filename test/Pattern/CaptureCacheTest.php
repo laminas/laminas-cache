@@ -93,7 +93,7 @@ class CaptureCacheTest extends CommonPatternTest
         ];
     }
 
-    public function testSetThrowsLogicExceptionOnMissingPublicDir()
+    public function testSetThrowsLogicExceptionOnMissingPublicDir(): void
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
@@ -101,14 +101,14 @@ class CaptureCacheTest extends CommonPatternTest
         $captureCache->set('content', '/pageId');
     }
 
-    public function testSetWithNormalPageId()
+    public function testSetWithNormalPageId(): void
     {
         $this->_pattern->set('content', '/dir1/dir2/file');
         $this->assertFileExists($this->_tmpCacheDir . '/dir1/dir2/file');
         $this->assertSame(file_get_contents($this->_tmpCacheDir . '/dir1/dir2/file'), 'content');
     }
 
-    public function testSetWithIndexFilename()
+    public function testSetWithIndexFilename(): void
     {
         $this->_options->setIndexFilename('test.html');
 
@@ -117,7 +117,7 @@ class CaptureCacheTest extends CommonPatternTest
         $this->assertSame(file_get_contents($this->_tmpCacheDir . '/dir1/dir2/test.html'), 'content');
     }
 
-    public function testGetThrowsLogicExceptionOnMissingPublicDir()
+    public function testGetThrowsLogicExceptionOnMissingPublicDir(): void
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
@@ -125,7 +125,7 @@ class CaptureCacheTest extends CommonPatternTest
         $captureCache->get('/pageId');
     }
 
-    public function testHasThrowsLogicExceptionOnMissingPublicDir()
+    public function testHasThrowsLogicExceptionOnMissingPublicDir(): void
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
@@ -133,7 +133,7 @@ class CaptureCacheTest extends CommonPatternTest
         $captureCache->has('/pageId');
     }
 
-    public function testRemoveThrowsLogicExceptionOnMissingPublicDir()
+    public function testRemoveThrowsLogicExceptionOnMissingPublicDir(): void
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
@@ -141,7 +141,7 @@ class CaptureCacheTest extends CommonPatternTest
         $captureCache->remove('/pageId');
     }
 
-    public function testGetFilenameWithoutPublicDir()
+    public function testGetFilenameWithoutPublicDir(): void
     {
         $captureCache = new Cache\Pattern\CaptureCache();
         $this->assertEquals(
@@ -162,14 +162,14 @@ class CaptureCacheTest extends CommonPatternTest
         );
     }
 
-    public function testGetFilenameWithoutPublicDirAndNoPageId()
+    public function testGetFilenameWithoutPublicDirAndNoPageId(): void
     {
         $_SERVER['REQUEST_URI'] = '/dir1/test.html';
         $captureCache = new Cache\Pattern\CaptureCache();
         $this->assertEquals(str_replace('/', DIRECTORY_SEPARATOR, '/dir1/test.html'), $captureCache->getFilename());
     }
 
-    public function testGetFilenameWithPublicDir()
+    public function testGetFilenameWithPublicDir(): void
     {
         $options = new Cache\Pattern\PatternOptions([
             'public_dir' => $this->_tmpCacheDir
@@ -196,7 +196,7 @@ class CaptureCacheTest extends CommonPatternTest
         );
     }
 
-    public function testGetFilenameWithPublicDirAndNoPageId()
+    public function testGetFilenameWithPublicDirAndNoPageId(): void
     {
         $_SERVER['REQUEST_URI'] = '/dir1/test.html';
 

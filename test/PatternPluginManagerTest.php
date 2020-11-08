@@ -35,7 +35,7 @@ class PatternPluginManagerTest extends TestCase
         return PatternInterface::class;
     }
 
-    public function testGetWillInjectProvidedOptionsAsPatternOptionsInstance()
+    public function testGetWillInjectProvidedOptionsAsPatternOptionsInstance(): void
     {
         $plugins = $this->getPluginManager();
         $storage = $this->prophesize(StorageInterface::class)->reveal();
@@ -48,7 +48,7 @@ class PatternPluginManagerTest extends TestCase
         $this->assertSame($storage, $options->getStorage());
     }
 
-    public function testBuildWillInjectProvidedOptionsAsPatternOptionsInstance()
+    public function testBuildWillInjectProvidedOptionsAsPatternOptionsInstance(): void
     {
         $plugins = $this->getPluginManager();
 
