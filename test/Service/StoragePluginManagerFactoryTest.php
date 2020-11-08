@@ -34,9 +34,6 @@ class StoragePluginManagerFactoryTest extends TestCase
         }
     }
 
-    /**
-     * @depends testFactoryReturnsPluginManager
-     */
     public function testFactoryConfiguresPluginManagerUnderContainerInterop(): void
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
@@ -51,9 +48,6 @@ class StoragePluginManagerFactoryTest extends TestCase
         $this->assertSame($plugin, $plugins->get('test'));
     }
 
-    /**
-     * @depends testFactoryReturnsPluginManager
-     */
     public function testFactoryConfiguresPluginManagerUnderServiceManagerV2(): void
     {
         $container = $this->prophesize(ServiceLocatorInterface::class);
