@@ -13,7 +13,7 @@ use LaminasTest\Cache\Pattern\TestAsset\TestClassCache;
 
 /**
  * @group      Laminas_Cache
- * @covers Laminas\Cache\Pattern\ClassCache<extended>
+ * @covers \Laminas\Cache\Pattern\ClassCache<extended>
  */
 class ClassCacheTest extends CommonPatternTest
 {
@@ -22,6 +22,11 @@ class ClassCacheTest extends CommonPatternTest
      * @var \Laminas\Cache\Storage\StorageInterface
      */
     protected $_storage;
+
+    /**
+     * @var Cache\Pattern\PatternOptions
+     */
+    private $_options;
     // @codingStandardsIgnoreEnd
 
     public function setUp(): void
@@ -30,18 +35,13 @@ class ClassCacheTest extends CommonPatternTest
             'memory_limit' => 0
         ]);
         $this->_options = new Cache\Pattern\PatternOptions([
-            'class'   => __NAMESPACE__ . '\TestAsset\TestClassCache',
+            'class'   => TestAsset\TestClassCache::class,
             'storage' => $this->_storage,
         ]);
         $this->_pattern = new Cache\Pattern\ClassCache();
         $this->_pattern->setOptions($this->_options);
 
         parent::setUp();
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
     }
 
     public function getCommonPatternNamesProvider()
@@ -81,7 +81,7 @@ class ClassCacheTest extends CommonPatternTest
         });
 
         $this->_pattern->call('emptyMethod', $args);
-        $this->assertEquals($generatedKey, $usedKey);
+        self::assertEquals($generatedKey, $usedKey);
     }
 
     // @codingStandardsIgnoreStart
@@ -99,8 +99,8 @@ class ClassCacheTest extends CommonPatternTest
         $return = call_user_func_array([$this->_pattern, $method], $args);
         $data = ob_get_clean();
 
-        $this->assertEquals($returnSpec . $firstCounter, $return);
-        $this->assertEquals($outputSpec . $firstCounter, $data);
+        self::assertEquals($returnSpec . $firstCounter, $return);
+        self::assertEquals($outputSpec . $firstCounter, $data);
 
         // second call - cached
         ob_start();
@@ -108,11 +108,11 @@ class ClassCacheTest extends CommonPatternTest
         $return = call_user_func_array([$this->_pattern, $method], $args);
         $data = ob_get_clean();
 
-        $this->assertEquals($returnSpec . $firstCounter, $return);
+        self::assertEquals($returnSpec . $firstCounter, $return);
         if ($this->_options->getCacheOutput()) {
-            $this->assertEquals($outputSpec . $firstCounter, $data);
+            self::assertEquals($outputSpec . $firstCounter, $data);
         } else {
-            $this->assertEquals('', $data);
+            self::assertEquals('', $data);
         }
     }
 }

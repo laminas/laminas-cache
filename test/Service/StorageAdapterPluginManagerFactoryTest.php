@@ -12,7 +12,6 @@ use Interop\Container\ContainerInterface;
 use Laminas\Cache\Service\StorageAdapterPluginManagerFactory;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\StorageInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
 
 class StorageAdapterPluginManagerFactoryTest extends TestCase

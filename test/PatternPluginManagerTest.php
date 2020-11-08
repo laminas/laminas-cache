@@ -32,28 +32,28 @@ class PatternPluginManagerTest extends TestCase
     public function testGetWillInjectProvidedOptionsAsPatternOptionsInstance(): void
     {
         $plugins = $this->getPluginManager();
-        $storage = $this->prophesize(StorageInterface::class)->reveal();
+        $storage = $this->createMock(StorageInterface::class);
         $plugin = $plugins->get('callback', [
             'cache_output' => false,
             'storage' => $storage,
         ]);
         $options = $plugin->getOptions();
-        $this->assertFalse($options->getCacheOutput());
-        $this->assertSame($storage, $options->getStorage());
+        self::assertFalse($options->getCacheOutput());
+        self::assertSame($storage, $options->getStorage());
     }
 
     public function testBuildWillInjectProvidedOptionsAsPatternOptionsInstance(): void
     {
         $plugins = $this->getPluginManager();
 
-        $storage = $this->prophesize(StorageInterface::class)->reveal();
+        $storage = $this->createMock(StorageInterface::class);
         $plugin = $plugins->build('callback', [
             'cache_output' => false,
             'storage' => $storage,
         ]);
         $options = $plugin->getOptions();
-        $this->assertFalse($options->getCacheOutput());
-        $this->assertSame($storage, $options->getStorage());
+        self::assertFalse($options->getCacheOutput());
+        self::assertSame($storage, $options->getStorage());
     }
 
     public function testShareByDefaultAndSharedByDefault()

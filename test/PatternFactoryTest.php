@@ -10,10 +10,13 @@ namespace LaminasTest\Cache;
 
 use Laminas\Cache;
 use PHPUnit\Framework\TestCase;
+use Laminas\Cache\PatternPluginManager;
+use Interop\Container\ContainerInterface;
+use Laminas\Cache\Pattern\CaptureCache;
 
 /**
  * @group      Laminas_Cache
- * @covers Laminas\Cache\PatternFactory
+ * @covers \Laminas\Cache\PatternFactory
  */
 class PatternFactoryTest extends TestCase
 {
@@ -30,26 +33,26 @@ class PatternFactoryTest extends TestCase
     public function testDefaultPluginManager(): void
     {
         $plugins = Cache\PatternFactory::getPluginManager();
-        $this->assertInstanceOf('Laminas\Cache\PatternPluginManager', $plugins);
+        self::assertInstanceOf(PatternPluginManager::class, $plugins);
     }
 
     public function testChangePluginManager(): void
     {
         $plugins = new Cache\PatternPluginManager(
-            $this->getMockBuilder('Interop\Container\ContainerInterface')->getMock()
+            $this->createMock(ContainerInterface::class)
         );
         Cache\PatternFactory::setPluginManager($plugins);
-        $this->assertSame($plugins, Cache\PatternFactory::getPluginManager());
+        self::assertSame($plugins, Cache\PatternFactory::getPluginManager());
     }
 
     public function testFactory(): void
     {
         $pattern1 = Cache\PatternFactory::factory('capture');
-        $this->assertInstanceOf('Laminas\Cache\Pattern\CaptureCache', $pattern1);
+        self::assertInstanceOf(CaptureCache::class, $pattern1);
 
         $pattern2 = Cache\PatternFactory::factory('capture');
-        $this->assertInstanceOf('Laminas\Cache\Pattern\CaptureCache', $pattern2);
+        self::assertInstanceOf(CaptureCache::class, $pattern2);
 
-        $this->assertNotSame($pattern1, $pattern2);
+        self::assertNotSame($pattern1, $pattern2);
     }
 }

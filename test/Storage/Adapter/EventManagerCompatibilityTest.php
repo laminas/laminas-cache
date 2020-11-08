@@ -28,9 +28,9 @@ class EventManagerCompatibilityTest extends TestCase
     public function testLazyLoadedEventManagerIsInjectedProperlyWithDefaultIdentifiers(): void
     {
         $events = $this->adapter->getEventManager();
-        $this->assertInstanceOf(EventManager::class, $events);
+        self::assertInstanceOf(EventManager::class, $events);
 
-        $this->assertEquals([
+        self::assertEquals([
             AbstractAdapter::class,
             MockAdapter::class,
         ], $events->getIdentifiers());

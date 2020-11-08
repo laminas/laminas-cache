@@ -10,14 +10,21 @@ namespace LaminasTest\Cache;
 
 use ErrorException;
 use Laminas\Cache;
+use Laminas\Cache\Storage\Adapter\Memory;
+use Laminas\Cache\Storage\Plugin\ClearExpiredByFactor;
+use Laminas\Cache\Storage\Plugin\IgnoreUserAbort;
+use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ErrorHandler;
 use LaminasTest\Cache\Storage\Adapter\TestAsset\AdapterWithStorageAndEventsCapableInterface;
 use PHPUnit\Framework\TestCase;
+use Laminas\Cache\Storage\PluginManager;
+use Laminas\Cache\Storage\AdapterPluginManager;
+use Laminas\Cache\Exception\RuntimeException;
 
 /**
  * @group      Laminas_Cache
- * @covers Laminas\Cache\StorageFactory
+ * @covers \Laminas\Cache\StorageFactory
  */
 class StorageFactoryTest extends TestCase
 {
@@ -36,49 +43,49 @@ class StorageFactoryTest extends TestCase
     public function testDefaultAdapterPluginManager(): void
     {
         $adapters = Cache\StorageFactory::getAdapterPluginManager();
-        $this->assertInstanceOf('Laminas\Cache\Storage\AdapterPluginManager', $adapters);
+        self::assertInstanceOf(AdapterPluginManager::class, $adapters);
     }
 
     public function testChangeAdapterPluginManager(): void
     {
         $adapters = new Cache\Storage\AdapterPluginManager(new ServiceManager);
         Cache\StorageFactory::setAdapterPluginManager($adapters);
-        $this->assertSame($adapters, Cache\StorageFactory::getAdapterPluginManager());
+        self::assertSame($adapters, Cache\StorageFactory::getAdapterPluginManager());
     }
 
     public function testAdapterFactory(): void
     {
         $adapter1 = Cache\StorageFactory::adapterFactory('Memory');
-        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\Memory', $adapter1);
+        self::assertInstanceOf(Memory::class, $adapter1);
 
         $adapter2 = Cache\StorageFactory::adapterFactory('Memory');
-        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\Memory', $adapter2);
+        self::assertInstanceOf(Memory::class, $adapter2);
 
-        $this->assertNotSame($adapter1, $adapter2);
+        self::assertNotSame($adapter1, $adapter2);
     }
 
     public function testDefaultPluginManager(): void
     {
         $manager = Cache\StorageFactory::getPluginManager();
-        $this->assertInstanceOf('Laminas\Cache\Storage\PluginManager', $manager);
+        self::assertInstanceOf(PluginManager::class, $manager);
     }
 
     public function testChangePluginManager(): void
     {
         $manager = new Cache\Storage\PluginManager(new ServiceManager);
         Cache\StorageFactory::setPluginManager($manager);
-        $this->assertSame($manager, Cache\StorageFactory::getPluginManager());
+        self::assertSame($manager, Cache\StorageFactory::getPluginManager());
     }
 
     public function testPluginFactory(): void
     {
         $plugin1 = Cache\StorageFactory::pluginFactory('Serializer');
-        $this->assertInstanceOf('Laminas\Cache\Storage\Plugin\Serializer', $plugin1);
+        self::assertInstanceOf(Serializer::class, $plugin1);
 
         $plugin2 = Cache\StorageFactory::pluginFactory('Serializer');
-        $this->assertInstanceOf('Laminas\Cache\Storage\Plugin\Serializer', $plugin2);
+        self::assertInstanceOf(Serializer::class, $plugin2);
 
-        $this->assertNotSame($plugin1, $plugin2);
+        self::assertNotSame($plugin1, $plugin2);
     }
 
     public function testFactoryAdapterAsString(): void
@@ -86,7 +93,7 @@ class StorageFactoryTest extends TestCase
         $cache = Cache\StorageFactory::factory([
             'adapter' => 'Memory',
         ]);
-        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\Memory', $cache);
+        self::assertInstanceOf(Memory::class, $cache);
     }
 
     /**
@@ -101,8 +108,8 @@ class StorageFactoryTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\Memory', $cache);
-        $this->assertSame('test', $cache->getOptions()->getNamespace());
+        self::assertInstanceOf(Memory::class, $cache);
+        self::assertSame('test', $cache->getOptions()->getNamespace());
     }
 
     public function testFactoryAdapterAsArray(): void
@@ -112,7 +119,7 @@ class StorageFactoryTest extends TestCase
                 'name' => 'Memory',
             ]
         ]);
-        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\Memory', $cache);
+        self::assertInstanceOf(Memory::class, $cache);
     }
 
     public function testFactoryWithPlugins(): void
@@ -126,19 +133,22 @@ class StorageFactoryTest extends TestCase
         ]);
 
         // test adapter
-        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\Memory', $cache);
+        self::assertInstanceOf(Memory::class, $cache);
 
         // test plugin structure
         $i = 0;
         foreach ($cache->getPluginRegistry() as $plugin) {
-            $this->assertInstanceOf('Laminas\Cache\Storage\Plugin\\' . $plugins[$i++], $plugin);
+            self::assertInstanceOf(sprintf(
+                'Laminas\Cache\Storage\Plugin\%s',
+                $plugins[$i++]
+            ), $plugin);
         }
     }
 
     public function testFactoryInstantiateAdapterWithPluginsWithoutEventsCapableInterfaceThrowsException(): void
     {
         // The BlackHole adapter doesn't implement EventsCapableInterface
-        $this->expectException('Laminas\Cache\Exception\RuntimeException');
+        $this->expectException(RuntimeException::class);
         Cache\StorageFactory::factory([
             'adapter' => 'blackhole',
             'plugins' => ['Serializer'],
@@ -180,47 +190,65 @@ class StorageFactoryTest extends TestCase
         $storage = Cache\StorageFactory::factory($factory);
 
         // test adapter
-        $this->assertInstanceOf('Laminas\Cache\Storage\Adapter\\' . $factory['adapter']['name'], $storage);
-        $this->assertEquals(123, $storage->getOptions()->getTtl());
-        $this->assertEquals('test', $storage->getOptions()->getNamespace());
+        self::assertInstanceOf(sprintf(
+            'Laminas\Cache\Storage\Adapter\%s',
+            $factory['adapter']['name']
+        ), $storage);
+        self::assertEquals(123, $storage->getOptions()->getTtl());
+        self::assertEquals('test', $storage->getOptions()->getNamespace());
 
         // test plugin structure
         foreach ($storage->getPluginRegistry() as $plugin) {
             // test plugin options
             $pluginClass = get_class($plugin);
             switch ($pluginClass) {
-                case 'Laminas\Cache\Storage\Plugin\ClearExpiredByFactor':
-                    $this->assertSame(
+                case ClearExpiredByFactor::class:
+                    self::assertSame(
                         $factory['plugins']['ClearExpiredByFactor']['clearing_factor'],
                         $plugin->getOptions()->getClearingFactor()
                     );
                     break;
 
-                case 'Laminas\Cache\Storage\Plugin\Serializer':
+                case IgnoreUserAbort::class:
+                    self::assertFalse($plugin->getOptions()->getExitOnAbort());
                     break;
 
-                case 'Laminas\Cache\Storage\Plugin\IgnoreUserAbort':
-                    $this->assertFalse($plugin->getOptions()->getExitOnAbort());
+                case Serializer::class:
                     break;
 
                 default:
-                    $this->fail("Unexpected plugin class '{$pluginClass}'");
+                    self::fail("Unexpected plugin class '{$pluginClass}'");
             }
         }
     }
 
     public function testWillTriggerDeprecationWarningForMissingPluginAwareInterface(): void
     {
-        $adapters = $this->prophesize(Cache\Storage\AdapterPluginManager::class);
+        $adapters = $this->createMock(Cache\Storage\AdapterPluginManager::class);
+        $mock = $this->createMock(AdapterWithStorageAndEventsCapableInterface::class);
 
-        $adapters->get('Foo')->willReturn(new AdapterWithStorageAndEventsCapableInterface());
+        $adapters
+            ->expects(self::once())
+            ->method('get')
+            ->with('Foo')
+            ->willReturn($mock);
 
-        Cache\StorageFactory::setAdapterPluginManager($adapters->reveal());
+        $mock
+            ->expects(self::once())
+            ->method('hasPlugin')
+            ->willReturn(false);
+
+        $mock
+            ->expects(self::once())
+            ->method('addPlugin')
+            ->willReturnSelf();
+
+        Cache\StorageFactory::setAdapterPluginManager($adapters);
         ErrorHandler::start(E_USER_DEPRECATED);
 
         Cache\StorageFactory::factory(['adapter' => 'Foo', 'plugins' => ['IgnoreUserAbort']]);
 
         $stack = ErrorHandler::stop();
-        $this->assertInstanceOf(ErrorException::class, $stack);
+        self::assertInstanceOf(ErrorException::class, $stack);
     }
 }

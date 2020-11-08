@@ -12,7 +12,6 @@ use Interop\Container\ContainerInterface;
 use Laminas\Cache\Pattern\PatternInterface;
 use Laminas\Cache\PatternPluginManager;
 use Laminas\Cache\Service\PatternPluginManagerFactory;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
 
 class PatternPluginManagerFactoryTest extends TestCase

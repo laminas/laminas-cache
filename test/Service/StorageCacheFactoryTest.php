@@ -15,12 +15,10 @@ use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\PluginManager;
-use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Cache\StorageFactory;
 use Laminas\ServiceManager\Config;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 
 /**
  * @covers \Laminas\Cache\Service\StorageCacheFactory

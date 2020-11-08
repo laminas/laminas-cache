@@ -8,7 +8,6 @@
 
 namespace Laminas\Cache\Pattern;
 
-use Laminas\Cache;
 use Laminas\Cache\Exception;
 
 class ClassCache extends CallbackCache

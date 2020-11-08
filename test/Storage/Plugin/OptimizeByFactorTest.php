@@ -15,7 +15,7 @@ use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use LaminasTest\Cache\Storage\TestAsset\OptimizableMockAdapter;
 
 /**
- * @covers Laminas\Cache\Storage\Plugin\OptimizeByFactor<extended>
+ * @covers \Laminas\Cache\Storage\Plugin\OptimizeByFactor<extended>
  */
 class OptimizeByFactorTest extends CommonPluginTest
 {
@@ -28,6 +28,11 @@ class OptimizeByFactorTest extends CommonPluginTest
      * @var \Laminas\Cache\Storage\Adapter\AbstractAdapter
      */
     protected $_adapter;
+
+    /**
+     * @var Cache\Storage\Plugin\PluginOptions
+     */
+    private $_options;
     // @codingStandardsIgnoreEnd
 
     public function setUp(): void
@@ -63,14 +68,14 @@ class OptimizeByFactorTest extends CommonPluginTest
             $listeners = $this->getArrayOfListenersForEvent($eventName, $this->_adapter->getEventManager());
 
             // event should attached only once
-            $this->assertSame(1, count($listeners));
+            self::assertSame(1, count($listeners));
 
             // check expected callback method
             $cb = array_shift($listeners);
-            $this->assertArrayHasKey(0, $cb);
-            $this->assertSame($this->_plugin, $cb[0]);
-            $this->assertArrayHasKey(1, $cb);
-            $this->assertSame($expectedCallbackMethod, $cb[1]);
+            self::assertArrayHasKey(0, $cb);
+            self::assertSame($this->_plugin, $cb[0]);
+            self::assertArrayHasKey(1, $cb);
+            self::assertSame($expectedCallbackMethod, $cb[1]);
         }
     }
 
@@ -80,7 +85,7 @@ class OptimizeByFactorTest extends CommonPluginTest
         $this->_adapter->removePlugin($this->_plugin);
 
         // no events should be attached
-        $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
+        self::assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
     }
 
     public function testOptimizeByFactor(): void
@@ -102,6 +107,6 @@ class OptimizeByFactorTest extends CommonPluginTest
 
         $this->_plugin->optimizeByFactor($event);
 
-        $this->assertTrue($event->getResult());
+        self::assertTrue($event->getResult());
     }
 }

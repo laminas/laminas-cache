@@ -9,7 +9,6 @@
 namespace LaminasTest\Cache\Storage;
 
 use Laminas\Cache\Exception\ExtensionNotLoadedException;
-use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
@@ -33,7 +32,7 @@ class AdapterPluginManagerTest extends TestCase
         } catch (ServiceNotCreatedException $e) {
             // if we get as far as "extension not loaded" we've hit the constructor: alias has resolved
             if (! $e->getPrevious() instanceof ExtensionNotLoadedException) {
-                $this->fail($e->getMessage());
+                self::fail($e->getMessage());
             }
         }
         $this->addToAssertionCount(1);

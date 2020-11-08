@@ -15,7 +15,7 @@ use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use LaminasTest\Cache\Storage\TestAsset\ClearExpiredMockAdapter;
 
 /**
- * @covers Laminas\Cache\Storage\Plugin\ClearExpiredByFactor
+ * @covers \Laminas\Cache\Storage\Plugin\ClearExpiredByFactor
  */
 class ClearExpiredByFactorTest extends CommonPluginTest
 {
@@ -25,9 +25,14 @@ class ClearExpiredByFactorTest extends CommonPluginTest
     /**
      * The storage adapter
      *
-     * @var LaminasTest\Cache\Storage\TestAsset\MockAdapter
+     * @var \LaminasTest\Cache\Storage\TestAsset\MockAdapter
      */
     protected $_adapter;
+
+    /**
+     * @var Cache\Storage\Plugin\PluginOptions
+     */
+    private $_options;
     // @codingStandardsIgnoreEnd
 
     public function setUp(): void
@@ -67,14 +72,14 @@ class ClearExpiredByFactorTest extends CommonPluginTest
             $listeners = $this->getArrayOfListenersForEvent($eventName, $this->_adapter->getEventManager());
 
             // event should attached only once
-            $this->assertSame(1, count($listeners));
+            self::assertSame(1, count($listeners));
 
             // check expected callback method
             $cb = array_shift($listeners);
-            $this->assertArrayHasKey(0, $cb);
-            $this->assertSame($this->_plugin, $cb[0]);
-            $this->assertArrayHasKey(1, $cb);
-            $this->assertSame($expectedCallbackMethod, $cb[1]);
+            self::assertArrayHasKey(0, $cb);
+            self::assertSame($this->_plugin, $cb[0]);
+            self::assertArrayHasKey(1, $cb);
+            self::assertSame($expectedCallbackMethod, $cb[1]);
         }
     }
 
@@ -84,7 +89,7 @@ class ClearExpiredByFactorTest extends CommonPluginTest
         $this->_adapter->removePlugin($this->_plugin);
 
         // no events should be attached
-        $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
+        self::assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
     }
 
     public function testClearExpiredByFactor(): void
@@ -107,6 +112,6 @@ class ClearExpiredByFactorTest extends CommonPluginTest
         ]), $result);
         $this->_plugin->clearExpiredByFactor($event);
 
-        $this->assertTrue($event->getResult());
+        self::assertTrue($event->getResult());
     }
 }

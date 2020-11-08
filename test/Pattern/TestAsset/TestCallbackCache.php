@@ -3,10 +3,9 @@
 namespace LaminasTest\Cache\Pattern\TestAsset;
 
 /**
- * Test class
- * @covers Laminas\Cache\Pattern\CallbackCache<extended>
+ * @covers \Laminas\Cache\Pattern\CallbackCache<extended>
  */
-class TestCallbackCache
+final class TestCallbackCache
 {
     /**
      * A counter how oftern the method "foo" was called

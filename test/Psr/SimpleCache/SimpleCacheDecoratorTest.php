@@ -20,11 +20,8 @@ use LaminasTest\Cache\Psr\TestAsset\FlushableNamespaceStorageInterface;
 use LaminasTest\Cache\Psr\TestAsset\FlushableStorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use ReflectionProperty;
-use function metaphone;
 
 /**
  * Test the PSR-16 decorator.
@@ -69,7 +66,6 @@ class SimpleCacheDecoratorTest extends TestCase
     /**
      * @param bool $staticTtl
      * @param int $minTtl
-     * @return ObjectProphecy
      */
     private function getMockCapabilities(
         array $supportedDataTypes = null,
@@ -198,7 +194,7 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testItIsASimpleCacheImplementation(): void
     {
-        $this->assertInstanceOf(SimpleCacheInterface::class, $this->cache);
+        self::assertInstanceOf(SimpleCacheInterface::class, $this->cache);
     }
 
     public function testGetReturnsDefaultValueWhenUnderlyingStorageDoesNotContainItem(): void
@@ -762,8 +758,10 @@ class SimpleCacheDecoratorTest extends TestCase
         self::assertTrue($this->cache->setMultiple($values, $ttl));
     }
 
+    // @codingStandardsIgnoreStart
     public function testSetMultipleShouldReturnFalseWhenProvidedWithPositiveTtlAndStorageDoesNotSupportPerItemTtl(): void
     {
+        // @codingStandardsIgnoreEnd
         $values = [
             'one' => 1,
             'two' => 'true',

@@ -10,18 +10,19 @@ namespace LaminasTest\Cache\Storage\Adapter;
 
 use Laminas\Cache\Storage\Adapter\KeyListIterator;
 use PHPUnit\Framework\TestCase;
+use Laminas\Cache\Storage\StorageInterface;
 
 /**
  * @group      Laminas_Cache
- * @covers Laminas\Cache\Storage\Adapter\KeyListIterator
+ * @covers \Laminas\Cache\Storage\Adapter\KeyListIterator
  */
 class KeyListIteratorTest extends TestCase
 {
     public function testCount(): void
     {
         $keys = ['key1', 'key2', 'key3'];
-        $storage = $this->createMock('Laminas\Cache\Storage\StorageInterface');
+        $storage = $this->createMock(StorageInterface::class);
         $iterator = new KeyListIterator($storage, $keys);
-        $this->assertEquals(3, $iterator->count());
+        self::assertEquals(3, $iterator->count());
     }
 }

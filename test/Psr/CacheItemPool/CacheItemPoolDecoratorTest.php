@@ -24,7 +24,7 @@ use stdClass;
 
 final class CacheItemPoolDecoratorTest extends TestCase
 {
-protected $defaultCapabilities = [
+    protected $defaultCapabilities = [
         'staticTtl' => true,
         'minTtl' => 1,
         'supportedDatatypes' => [
@@ -42,30 +42,21 @@ protected $defaultCapabilities = [
     /**
      * @var (Capabilities&MockObject)|null
      */
-private $capabilitiesMock;
+    private $capabilitiesMock;
 
     /**
      * @var (AdapterOptions&MockObject)|null
      */
-private $optionsMock;
+    private $optionsMock;
 
     /**
      * @return StorageInterface&MockObject
      */
-private function createMockedStorage(
+    private function createMockedStorage(
         array $capabilities = null,
         array $options = null
-<< << <<< HEAD
     ): StorageInterface {
-
-        $storage = $this->getMockBuilder(StorageAdapter::class)
-            ->disableProxyingToOriginalMethods()
-            ->getMock();
-=======
-    ): StorageInterface
-    {
         $storage = $this->createMock(FlushableNamespaceStorageInterface::class);
->>>>>>> 521678a8... qa: remove prophecy usage in `psr/cache` tests
 
         $storage
             ->method('getEventManager')

@@ -11,10 +11,12 @@ namespace LaminasTest\Cache\Pattern;
 use Laminas\Cache\PatternPluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
+use Laminas\Cache\Pattern\PatternInterface;
+use Laminas\Cache\Pattern\PatternOptions;
 
 /**
  * @group      Laminas_Cache
- * @covers Laminas\Cache\Pattern\PatternOptions<extended>
+ * @covers \Laminas\Cache\Pattern\PatternOptions<extended>
  */
 abstract class CommonPatternTest extends TestCase
 {
@@ -27,8 +29,8 @@ abstract class CommonPatternTest extends TestCase
 
     public function setUp(): void
     {
-        $this->assertInstanceOf(
-            'Laminas\Cache\Pattern\PatternInterface',
+        self::assertInstanceOf(
+            PatternInterface::class,
             $this->_pattern,
             'Internal pattern instance is needed for tests'
         );
@@ -50,7 +52,7 @@ abstract class CommonPatternTest extends TestCase
     public function testPatternPluginManagerWithCommonNames($commonPatternName)
     {
         $pluginManager = new PatternPluginManager(new ServiceManager);
-        $this->assertTrue(
+        self::assertTrue(
             $pluginManager->has($commonPatternName),
             "Pattern name '{$commonPatternName}' not found in PatternPluginManager"
         );
@@ -59,13 +61,13 @@ abstract class CommonPatternTest extends TestCase
     public function testOptionNamesValid(): void
     {
         $options = $this->_pattern->getOptions();
-        $this->assertInstanceOf('Laminas\Cache\Pattern\PatternOptions', $options);
+        self::assertInstanceOf(PatternOptions::class, $options);
     }
 
     public function testOptionsGetAndSetDefault(): void
     {
         $options = $this->_pattern->getOptions();
         $this->_pattern->setOptions($options);
-        $this->assertSame($options, $this->_pattern->getOptions());
+        self::assertSame($options, $this->_pattern->getOptions());
     }
 }

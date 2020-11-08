@@ -8,9 +8,7 @@
 
 namespace Laminas\Cache\Storage;
 
-use Laminas\Cache\Exception;
 use Laminas\ServiceManager\AbstractPluginManager;
-use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
 /**

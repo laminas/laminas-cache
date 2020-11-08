@@ -8,7 +8,6 @@
 
 namespace LaminasTest\Cache\Storage;
 
-use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\PluginManager;
 use Laminas\ServiceManager\ServiceManager;

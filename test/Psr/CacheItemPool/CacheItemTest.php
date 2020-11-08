@@ -33,25 +33,25 @@ class CacheItemTest extends TestCase
     public function testConstructorIsHit(): void
     {
         $item = new CacheItem('key', 'value', true);
-        $this->assertEquals('key', $item->getKey());
-        $this->assertEquals('value', $item->get());
-        $this->assertTrue($item->isHit());
+        self::assertEquals('key', $item->getKey());
+        self::assertEquals('value', $item->get());
+        self::assertTrue($item->isHit());
     }
 
     public function testConstructorIsNotHit(): void
     {
         $item = new CacheItem('key', 'value', false);
-        $this->assertEquals('key', $item->getKey());
-        $this->assertNull($item->get());
-        $this->assertFalse($item->isHit());
+        self::assertEquals('key', $item->getKey());
+        self::assertNull($item->get());
+        self::assertFalse($item->isHit());
     }
 
     public function testSet(): void
     {
         $item = new CacheItem('key', 'value', true);
         $return = $item->set('value2');
-        $this->assertEquals($item, $return);
-        $this->assertEquals('value2', $item->get());
+        self::assertEquals($item, $return);
+        self::assertEquals('value2', $item->get());
     }
 
     public function testExpiresAtDateTime(): void
@@ -59,16 +59,16 @@ class CacheItemTest extends TestCase
         $item = new CacheItem('key', 'value', true);
         $dateTime = new DateTime('+5 seconds');
         $return = $item->expiresAt($dateTime);
-        $this->assertEquals($item, $return);
-        $this->assertEquals(5, $item->getTtl());
+        self::assertEquals($item, $return);
+        self::assertEquals(5, $item->getTtl());
     }
 
     public function testExpireAtNull(): void
     {
         $item = new CacheItem('key', 'value', true);
         $return = $item->expiresAt(null);
-        $this->assertEquals($item, $return);
-        $this->assertNull($item->getTtl());
+        self::assertEquals($item, $return);
+        self::assertNull($item->getTtl());
     }
 
     public function testExpireAtInvalidThrowsException(): void
@@ -82,8 +82,8 @@ class CacheItemTest extends TestCase
     {
         $item = new CacheItem('key', 'value', true);
         $return = $item->expiresAfter(3600);
-        $this->assertEquals($item, $return);
-        $this->assertEquals(3600, $item->getTtl());
+        self::assertEquals($item, $return);
+        self::assertEquals(3600, $item->getTtl());
     }
 
     public function testExpiresAfterInterval(): void
@@ -91,15 +91,15 @@ class CacheItemTest extends TestCase
         $item = new CacheItem('key', 'value', true);
         $interval = new DateInterval('PT1H');
         $return = $item->expiresAfter($interval);
-        $this->assertEquals($item, $return);
-        $this->assertEquals(3600, $item->getTtl());
+        self::assertEquals($item, $return);
+        self::assertEquals(3600, $item->getTtl());
     }
 
     public function testExpiresAfterNull(): void
     {
         $item = new CacheItem('key', 'value', true);
         $item->expiresAfter(null);
-        $this->assertNull($item->getTtl());
+        self::assertNull($item->getTtl());
     }
 
     public function testExpiresAfterInvalidThrowsException(): void

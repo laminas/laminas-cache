@@ -15,7 +15,7 @@ use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
 /**
- * @covers Laminas\Cache\Storage\Plugin\ExceptionHandler<extended>
+ * @covers \Laminas\Cache\Storage\Plugin\ExceptionHandler<extended>
  */
 class ExceptionHandlerTest extends CommonPluginTest
 {
@@ -28,6 +28,11 @@ class ExceptionHandlerTest extends CommonPluginTest
      * @var \Laminas\Cache\Storage\Adapter\AbstractAdapter
      */
     protected $_adapter;
+
+    /**
+     * @var Cache\Storage\Plugin\PluginOptions
+     */
+    private $_options;
     // @codingStandardsIgnoreEnd
 
     public function setUp(): void
@@ -94,14 +99,14 @@ class ExceptionHandlerTest extends CommonPluginTest
             $listeners = $this->getArrayOfListenersForEvent($eventName, $this->_adapter->getEventManager());
 
             // event should attached only once
-            $this->assertSame(1, count($listeners));
+            self::assertSame(1, count($listeners));
 
             // check expected callback method
             $cb = array_shift($listeners);
-            $this->assertArrayHasKey(0, $cb);
-            $this->assertSame($this->_plugin, $cb[0]);
-            $this->assertArrayHasKey(1, $cb);
-            $this->assertSame($expectedCallbackMethod, $cb[1]);
+            self::assertArrayHasKey(0, $cb);
+            self::assertSame($this->_plugin, $cb[0]);
+            self::assertArrayHasKey(1, $cb);
+            self::assertSame($expectedCallbackMethod, $cb[1]);
         }
     }
 
@@ -111,7 +116,7 @@ class ExceptionHandlerTest extends CommonPluginTest
         $this->_adapter->removePlugin($this->_plugin);
 
         // no events should be attached
-        $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
+        self::assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
     }
 
     public function testOnExceptionCallCallback(): void
@@ -131,7 +136,7 @@ class ExceptionHandlerTest extends CommonPluginTest
         ]), $result, $expectedException);
         $this->_plugin->onException($event);
 
-        $this->assertTrue(
+        self::assertTrue(
             $callbackCalled,
             "Expected callback wasn't called or the expected exception wasn't the first argument"
         );
@@ -149,7 +154,7 @@ class ExceptionHandlerTest extends CommonPluginTest
         ]), $result, new \Exception());
         $this->_plugin->onException($event);
 
-        $this->assertFalse($event->getThrowException());
-        $this->assertSame('test', $event->getResult());
+        self::assertFalse($event->getThrowException());
+        self::assertSame('test', $event->getResult());
     }
 }

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @group      Laminas_Cache
- * @covers Laminas\Cache\Storage\Capabilities
+ * @covers \Laminas\Cache\Storage\Capabilities
  */
 class CapabilitiesTest extends TestCase
 {
@@ -59,20 +59,20 @@ class CapabilitiesTest extends TestCase
 
     public function testGetAdapter(): void
     {
-        $this->assertSame($this->_adapter, $this->_capabilities->getAdapter());
-        $this->assertSame($this->_adapter, $this->_baseCapabilities->getAdapter());
+        self::assertSame($this->_adapter, $this->_capabilities->getAdapter());
+        self::assertSame($this->_adapter, $this->_baseCapabilities->getAdapter());
     }
 
     public function testSetAndGetCapability(): void
     {
         $this->_capabilities->setMaxTtl($this->_marker, 100);
-        $this->assertEquals(100, $this->_capabilities->getMaxTtl());
+        self::assertEquals(100, $this->_capabilities->getMaxTtl());
     }
 
     public function testGetCapabilityByBaseCapabilities(): void
     {
         $this->_baseCapabilities->setMaxTtl($this->_marker, 100);
-        $this->assertEquals(100, $this->_capabilities->getMaxTtl());
+        self::assertEquals(100, $this->_capabilities->getMaxTtl());
     }
 
     public function testTriggerCapabilityEvent(): void
@@ -85,13 +85,13 @@ class CapabilitiesTest extends TestCase
 
         $this->_capabilities->setMaxTtl($this->_marker, 100);
 
-        $this->assertInstanceOf('Laminas\EventManager\Event', $event);
-        $this->assertEquals('capability', $event->getName());
-        $this->assertSame($this->_adapter, $event->getTarget());
+        self::assertInstanceOf('Laminas\EventManager\Event', $event);
+        self::assertEquals('capability', $event->getName());
+        self::assertSame($this->_adapter, $event->getTarget());
 
         $params = $event->getParams();
-        $this->assertInstanceOf('ArrayObject', $params);
-        $this->assertTrue(isset($params ['maxTtl']));
-        $this->assertEquals(100, $params['maxTtl']);
+        self::assertInstanceOf('ArrayObject', $params);
+        self::assertTrue(isset($params ['maxTtl']));
+        self::assertEquals(100, $params['maxTtl']);
     }
 }
