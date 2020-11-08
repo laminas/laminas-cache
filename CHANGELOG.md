@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## 2.10.0 - TBD
 
+**As decided within the [TSC meeting in November 2020](https://github.com/laminas/technical-steering-committee/blob/main/meetings/minutes/2020-11-02-TSC-Minutes.md#cache-adapters), v2.10 is the last minor version in the v2 series.**
+
 ### Added
 
 - [#21](https://github.com/laminas/laminas-cache/pull/21) Adds new `PluginAwareInterface` and `PluginCapableInterface` to provide better typehinting against plugin capable storage adapters
