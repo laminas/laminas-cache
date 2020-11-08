@@ -75,10 +75,7 @@
         "psr-4": {
             "LaminasTest\\Cache\\": "test/",
             "LaminasBench\\Cache\\": "benchmark/"
-        },
-        "files": [
-            "test/autoload.php"
-        ]
+        }
     },
     "scripts": {
         "check": [
