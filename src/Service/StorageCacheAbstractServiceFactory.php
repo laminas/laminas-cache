@@ -10,8 +10,7 @@ namespace Laminas\Cache\Service;
 
 use Interop\Container\ContainerInterface;
 use Laminas\Cache\StorageFactory;
-use Laminas\ServiceManager\AbstractFactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 
 /**
  * Storage cache factory for multiple caches.
@@ -47,17 +46,6 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
     }
 
     /**
-     * @param  ServiceLocatorInterface $serviceLocator
-     * @param  string $name
-     * @param  string $requestedName
-     * @return boolean
-     */
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {
-        return $this->canCreate($serviceLocator, $requestedName);
-    }
-
-    /**
      * Create an object
      *
      * @param  ContainerInterface $container
@@ -71,11 +59,6 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
 
         $config = $this->getConfig($container);
         return StorageFactory::factory($config[$requestedName]);
-    }
-
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {
-        return $this($serviceLocator, $requestedName);
     }
 
     /**

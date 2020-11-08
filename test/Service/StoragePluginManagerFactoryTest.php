@@ -19,17 +19,17 @@ class StoragePluginManagerFactoryTest extends TestCase
 {
     public function testFactoryReturnsPluginManager(): void
     {
-        $container = $this->prophesize(ContainerInterface::class)->reveal();
+        $container = $this->createMock(ContainerInterface::class);
         $factory = new StoragePluginManagerFactory();
 
         $plugins = $factory($container, PluginManager::class);
-        $this->assertInstanceOf(PluginManager::class, $plugins);
+        self::assertInstanceOf(PluginManager::class, $plugins);
     }
 
     public function testFactoryConfiguresPluginManagerUnderContainerInterop(): void
     {
-        $container = $this->prophesize(ContainerInterface::class)->reveal();
-        $plugin = $this->prophesize(pluginInterface::class)->reveal();
+        $container = $this->createMock(ContainerInterface::class);
+        $plugin = $this->createMock(PluginInterface::class);
 
         $factory = new StoragePluginManagerFactory();
         $plugins = $factory($container, PluginManager::class, [
@@ -37,24 +37,6 @@ class StoragePluginManagerFactoryTest extends TestCase
                 'test' => $plugin,
             ],
         ]);
-        $this->assertSame($plugin, $plugins->get('test'));
-    }
-
-    public function testFactoryConfiguresPluginManagerUnderServiceManagerV2(): void
-    {
-        $container = $this->prophesize(ServiceLocatorInterface::class);
-        $container->willImplement(ContainerInterface::class);
-
-        $plugin = $this->prophesize(PluginInterface::class)->reveal();
-
-        $factory = new StoragePluginManagerFactory();
-        $factory->setCreationOptions([
-            'services' => [
-                'test' => $plugin,
-            ],
-        ]);
-
-        $plugins = $factory->createService($container->reveal());
-        $this->assertSame($plugin, $plugins->get('test'));
+        self::assertSame($plugin, $plugins->get('test'));
     }
 }

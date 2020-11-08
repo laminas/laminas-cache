@@ -19,17 +19,17 @@ class PatternPluginManagerFactoryTest extends TestCase
 {
     public function testFactoryReturnsPluginManager(): void
     {
-        $container = $this->prophesize(ContainerInterface::class)->reveal();
+        $container = $this->createMock(ContainerInterface::class);
         $factory = new PatternPluginManagerFactory();
 
         $patterns = $factory($container, PatternPluginManager::class);
-        $this->assertInstanceOf(PatternPluginManager::class, $patterns);
+        self::assertInstanceOf(PatternPluginManager::class, $patterns);
     }
 
     public function testFactoryConfiguresPluginManagerUnderContainerInterop(): void
     {
-        $container = $this->prophesize(ContainerInterface::class)->reveal();
-        $pattern = $this->prophesize(PatternInterface::class)->reveal();
+        $container = $this->createMock(ContainerInterface::class);
+        $pattern = $this->createMock(PatternInterface::class);
 
         $factory = new PatternPluginManagerFactory();
         $patterns = $factory($container, PatternPluginManager::class, [
@@ -37,24 +37,6 @@ class PatternPluginManagerFactoryTest extends TestCase
                 'test' => $pattern,
             ],
         ]);
-        $this->assertSame($pattern, $patterns->get('test'));
-    }
-
-    public function testFactoryConfiguresPluginManagerUnderServiceManagerV2(): void
-    {
-        $container = $this->prophesize(ServiceLocatorInterface::class);
-        $container->willImplement(ContainerInterface::class);
-
-        $pattern = $this->prophesize(PatternInterface::class)->reveal();
-
-        $factory = new PatternPluginManagerFactory();
-        $factory->setCreationOptions([
-            'services' => [
-                'test' => $pattern,
-            ],
-        ]);
-
-        $patterns = $factory->createService($container->reveal());
-        $this->assertSame($pattern, $patterns->get('test'));
+        self::assertSame($pattern, $patterns->get('test'));
     }
 }

@@ -97,24 +97,6 @@ class AdapterPluginManager extends AbstractPluginManager
         \Zend\Cache\Storage\Adapter\XCache::class => Adapter\XCache::class,
         \Zend\Cache\Storage\Adapter\ZendServerDisk::class => Adapter\ZendServerDisk::class,
         \Zend\Cache\Storage\Adapter\ZendServerShm::class => Adapter\ZendServerShm::class,
-
-        // v2 normalized FQCNs
-        'zendcachestorageadapterapc' => Adapter\Apc::class,
-        'zendcachestorageadapterapcu' => Adapter\Apcu::class,
-        'zendcachestorageadapterblackhole' => Adapter\BlackHole::class,
-        'zendcachestorageadapterdba' => Adapter\Dba::class,
-        'zendcachestorageadapterextmongodb' => Adapter\ExtMongoDb::class,
-        'zendcachestorageadapterfilesystem' => Adapter\Filesystem::class,
-        'zendcachestorageadaptermemcache' => Adapter\Memcache::class,
-        'zendcachestorageadaptermemcached' => Adapter\Memcached::class,
-        'zendcachestorageadaptermemory' => Adapter\Memory::class,
-        'zendcachestorageadaptermongodb' => Adapter\MongoDb::class,
-        'zendcachestorageadapterredis' => Adapter\Redis::class,
-        'zendcachestorageadaptersession' => Adapter\Session::class,
-        'zendcachestorageadapterwincache' => Adapter\WinCache::class,
-        'zendcachestorageadapterxcache' => Adapter\XCache::class,
-        'zendcachestorageadapterzendserverdisk' => Adapter\ZendServerDisk::class,
-        'zendcachestorageadapterzendservershm' => Adapter\ZendServerShm::class,
     ];
 
     protected $factories = [
@@ -134,79 +116,17 @@ class AdapterPluginManager extends AbstractPluginManager
         Adapter\XCache::class                   => InvokableFactory::class,
         Adapter\ZendServerDisk::class           => InvokableFactory::class,
         Adapter\ZendServerShm::class            => InvokableFactory::class,
-
-        // v2 normalized FQCNs
-        'laminascachestorageadapterapc'            => InvokableFactory::class,
-        'laminascachestorageadapterapcu'           => InvokableFactory::class,
-        'laminascachestorageadapterblackhole'      => InvokableFactory::class,
-        'laminascachestorageadapterdba'            => InvokableFactory::class,
-        'laminascachestorageadapterextmongodb'     => InvokableFactory::class,
-        'laminascachestorageadapterfilesystem'     => InvokableFactory::class,
-        'laminascachestorageadaptermemcache'       => InvokableFactory::class,
-        'laminascachestorageadaptermemcached'      => InvokableFactory::class,
-        'laminascachestorageadaptermemory'         => InvokableFactory::class,
-        'laminascachestorageadaptermongodb'        => InvokableFactory::class,
-        'laminascachestorageadapterredis'          => InvokableFactory::class,
-        'laminascachestorageadaptersession'        => InvokableFactory::class,
-        'laminascachestorageadapterwincache'       => InvokableFactory::class,
-        'laminascachestorageadapterxcache'         => InvokableFactory::class,
-        'laminascachestorageadapterzendserverdisk' => InvokableFactory::class,
-        'laminascachestorageadapterzendservershm'  => InvokableFactory::class,
     ];
 
     /**
-     * Do not share by default (v3)
+     * Do not share by default
      *
-     * @var array
+     * @var bool
      */
     protected $sharedByDefault = false;
-
-    /**
-     * Don't share by default (v2)
-     *
-     * @var boolean
-     */
-    protected $shareByDefault = false;
 
     /**
      * @var string
      */
     protected $instanceOf = StorageInterface::class;
-
-    /**
-     * Validate the plugin is of the expected type (v3).
-     *
-     * Validates against `$instanceOf`.
-     *
-     * @param mixed $instance
-     * @throws InvalidServiceException
-     */
-    public function validate($instance)
-    {
-        if (! $instance instanceof $this->instanceOf) {
-            throw new InvalidServiceException(sprintf(
-                '%s can only create instances of %s; %s is invalid',
-                get_class($this),
-                $this->instanceOf,
-                (is_object($instance) ? get_class($instance) : gettype($instance))
-            ));
-        }
-    }
-
-    /**
-     * Validate the plugin is of the expected type (v2).
-     *
-     * Proxies to `validate()`.
-     *
-     * @param mixed $instance
-     * @throws InvalidServiceException
-     */
-    public function validatePlugin($instance)
-    {
-        try {
-            $this->validate($instance);
-        } catch (InvalidServiceException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
-        }
-    }
 }

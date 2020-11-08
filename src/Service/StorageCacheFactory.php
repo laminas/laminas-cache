@@ -9,10 +9,8 @@
 namespace Laminas\Cache\Service;
 
 use Interop\Container\ContainerInterface;
-use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Cache\StorageFactory;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Storage cache factory.
@@ -28,10 +26,5 @@ class StorageCacheFactory implements FactoryInterface
         $config = $container->get('config');
         $cacheConfig = isset($config['cache']) ? $config['cache'] : [];
         return StorageFactory::factory($cacheConfig);
-    }
-
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, StorageInterface::class);
     }
 }
