@@ -16,7 +16,7 @@ use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\EventManager\EventManager;
-use LaminasTest\Cache\Psr\CacheItemPool\TestAsset\StorageAdapter;
+use LaminasTest\Cache\Psr\TestAsset\FlushableNamespaceStorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
@@ -24,7 +24,7 @@ use stdClass;
 
 final class CacheItemPoolDecoratorTest extends TestCase
 {
-    protected $defaultCapabilities = [
+protected $defaultCapabilities = [
         'staticTtl' => true,
         'minTtl' => 1,
         'supportedDatatypes' => [
@@ -42,24 +42,30 @@ final class CacheItemPoolDecoratorTest extends TestCase
     /**
      * @var (Capabilities&MockObject)|null
      */
-    private $capabilitiesMock;
+private $capabilitiesMock;
 
     /**
      * @var (AdapterOptions&MockObject)|null
      */
-    private $optionsMock;
+private $optionsMock;
 
     /**
      * @return StorageInterface&MockObject
      */
-    private function createMockedStorage(
+private function createMockedStorage(
         array $capabilities = null,
         array $options = null
+<< << <<< HEAD
     ): StorageInterface {
 
         $storage = $this->getMockBuilder(StorageAdapter::class)
             ->disableProxyingToOriginalMethods()
             ->getMock();
+=======
+    ): StorageInterface
+    {
+        $storage = $this->createMock(FlushableNamespaceStorageInterface::class);
+>>>>>>> 521678a8... qa: remove prophecy usage in `psr/cache` tests
 
         $storage
             ->method('getEventManager')
