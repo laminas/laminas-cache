@@ -9,8 +9,9 @@
 namespace LaminasTest\Cache\Psr\CacheItemPool;
 
 use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\CacheItemPool\CacheException;
 use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
-use Laminas\Cache\Storage\Adapter\AbstractAdapter;
+use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
@@ -22,11 +23,9 @@ class CacheItemPoolDecoratorTest extends TestCase
 {
     use MockStorageTrait;
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
-     */
     public function testStorageNotFlushableThrowsException(): void
     {
+        $this->expectException(CacheException::class);
         $storage = $this->prophesize(StorageInterface::class);
 
         $capabilities = new Capabilities($storage->reveal(), new stdClass(), $this->defaultCapabilities);
@@ -36,11 +35,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->getAdapter($storage);
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
-     */
     public function testStorageNeedsSerializerWillThrowException(): void
     {
+        $this->expectException(CacheException::class);
         $storage = $this->prophesize(StorageInterface::class);
 
         $dataTypes = [
@@ -64,20 +61,16 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->getAdapter($storage);
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
-     */
     public function testStorageFalseStaticTtlThrowsException(): void
     {
+        $this->expectException(CacheException::class);
         $storage = $this->getStorageProphesy(['staticTtl' => false]);
         $this->getAdapter($storage);
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
-     */
     public function testStorageZeroMinTtlThrowsException(): void
     {
+        $this->expectException(CacheException::class);
         $storage = $this->getStorageProphesy(['staticTtl' => true, 'minTtl' => 0]);
         $this->getAdapter($storage);
     }
@@ -95,10 +88,10 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testGetItemInvalidKeyThrowsException($key)
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->getAdapter()->getItem($key);
     }
 
@@ -112,11 +105,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->assertFalse($item->isHit());
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
     public function testGetItemInvalidArgumentExceptionRethrown(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $storage = $this->getStorageProphesy();
         $storage->getItem(Argument::type('string'), Argument::any())
             ->willThrow(Exception\InvalidArgumentException::class);
@@ -167,11 +158,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->assertTrue($items['bar']->isHit());
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
     public function testGetItemsInvalidKeyThrowsException(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $keys = ['ok'] + $this->getInvalidKeys();
         $this->getAdapter()->getItems($keys);
     }
@@ -189,11 +178,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
     public function testGetItemsInvalidArgumentExceptionRethrown(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $storage = $this->getStorageProphesy();
         $storage->getItems(Argument::type('array'))
             ->willThrow(Exception\InvalidArgumentException::class);
@@ -239,11 +226,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->assertFalse($saved->isHit());
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
     public function testSaveForeignItemThrowsException(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $item = $this->prophesize(CacheItemInterface::class);
         $this->getAdapter()->save($item->reveal());
     }
@@ -258,11 +243,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->assertFalse($adapter->save($item));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
     public function testSaveItemInvalidArgumentExceptionRethrown(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $storage = $this->getStorageProphesy();
         $storage->setItem(Argument::type('string'), Argument::any())
             ->willThrow(Exception\InvalidArgumentException::class);
@@ -305,10 +288,10 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testHasItemInvalidKeyThrowsException($key)
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->getAdapter()->hasItem($key);
     }
 
@@ -320,11 +303,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->assertFalse($this->getAdapter($storage)->hasItem('foo'));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
     public function testHasItemInvalidArgumentExceptionRethrown(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $storage = $this->getStorageProphesy();
         $storage->hasItem(Argument::type('string'))
             ->willThrow(Exception\InvalidArgumentException::class);
@@ -404,10 +385,10 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testDeleteItemInvalidKeyThrowsException($key)
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->getAdapter()->deleteItem($key);
     }
 
@@ -419,11 +400,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->assertFalse($this->getAdapter($storage)->deleteItem('foo'));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
     public function testDeleteItemInvalidArgumentExceptionRethrown(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $storage = $this->getStorageProphesy();
         $storage->removeItems(Argument::type('array'))
             ->willThrow(Exception\InvalidArgumentException::class);
@@ -454,11 +433,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->assertTrue($adapter->hasItem('baz'));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
     public function testDeleteItemsInvalidKeyThrowsException(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $keys = ['ok'] + $this->getInvalidKeys();
         $this->getAdapter()->deleteItems($keys);
     }
@@ -471,11 +448,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->assertFalse($this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
     public function testDeleteItemsInvalidArgumentExceptionRethrown(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $storage = $this->getStorageProphesy();
         $storage->removeItems(Argument::type('array'))
             ->willThrow(Exception\InvalidArgumentException::class);
@@ -489,11 +464,9 @@ class CacheItemPoolDecoratorTest extends TestCase
         $this->assertTrue($adapter->saveDeferred($item));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
     public function testSaveDeferredForeignItemThrowsException(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $item = $this->prophesize(CacheItemInterface::class);
         $this->getAdapter()->saveDeferred($item->reveal());
     }
