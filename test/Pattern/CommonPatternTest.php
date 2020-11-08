@@ -25,7 +25,7 @@ abstract class CommonPatternTest extends TestCase
     protected $_pattern;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->assertInstanceOf(
             'Laminas\Cache\Pattern\PatternInterface',
@@ -34,7 +34,7 @@ abstract class CommonPatternTest extends TestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->_pattern);
     }

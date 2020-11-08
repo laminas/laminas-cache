@@ -29,7 +29,7 @@ class IgnoreUserAbortTest extends CommonPluginTest
     protected $_adapter;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_adapter = $this->getMockForAbstractClass('Laminas\Cache\Storage\Adapter\AbstractAdapter');
         $this->_options = new Cache\Storage\Plugin\PluginOptions();

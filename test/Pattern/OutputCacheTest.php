@@ -30,7 +30,7 @@ class OutputCacheTest extends CommonPatternTest
     protected $_obLevel;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0
@@ -47,7 +47,7 @@ class OutputCacheTest extends CommonPatternTest
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->_obLevel > ob_get_Level()) {
             for ($i = ob_get_level(); $i < $this->_obLevel; $i++) {
