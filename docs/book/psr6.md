@@ -106,7 +106,7 @@ $cacheLogger = function (\Exception $e) use ($logger) {
     );
     $logger->error($message);
 };
-                                }
+
 $storage = StorageFactory::factory([
     'adapter' => [
         'name'    => 'apc',

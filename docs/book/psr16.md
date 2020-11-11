@@ -50,7 +50,7 @@ seconds) or `DateInterval` instances. As examples:
 
 ```php
 $cache->set('someKey', $value, 30); // set TTL to 30s
-$cache->set('someKey', $value, new DateInterval('P1D'); // set TTL to 1 day
+$cache->set('someKey', $value, new DateInterval('P1D')); // set TTL to 1 day
 
 $cache->setMultiple([
     'key1' => $value1,
@@ -59,7 +59,7 @@ $cache->setMultiple([
 $cache->setMultiple([
     'key1' => $value1,
     'key2' => $value2,
-], new DateInterval('P6H'); // set TTL to 6 hours
+], new DateInterval('P6H')); // set TTL to 6 hours
 ```
 
 For more details on what methods are exposed, consult the [CacheInterface
