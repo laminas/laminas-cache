@@ -149,7 +149,7 @@ class AdapterOptionsTest extends TestCase
     public function testSetFromArrayWithPrioritizedOptions(): void
     {
         $options = new AdapterOptionsWithPrioritizedOptions();
-        
+
         // send unordered options array
         self::assertSame($options, $options->setFromArray([
             'nAmeSpace'   => 'foobar',
