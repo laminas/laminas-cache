@@ -4,8 +4,6 @@ namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache\Pattern\PatternInterface;
 use Laminas\Cache\Pattern\PatternOptions;
-use Laminas\Cache\PatternPluginManager;
-use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,31 +33,14 @@ abstract class AbstractCommonPatternTest extends TestCase
 
     /**
      * A data provider for common pattern names
+     *
+     * @psalm-return non-empty-array<non-empty-string,array{0:non-empty-string}>
      */
-    abstract public function getCommonPatternNamesProvider();
+    abstract public function getCommonPatternNamesProvider(): array;
 
-    /**
-     * @dataProvider getCommonPatternNamesProvider
-     */
-    public function testPatternPluginManagerWithCommonNames(string $commonPatternName): void
-    {
-        $pluginManager = new PatternPluginManager(new ServiceManager());
-        $this->assertTrue(
-            $pluginManager->has($commonPatternName),
-            "Pattern name '{$commonPatternName}' not found in PatternPluginManager"
-        );
-    }
-
-    public function testOptionNamesValid()
+    public function testOptionNamesValid(): void
     {
         $options = $this->pattern->getOptions();
         $this->assertInstanceOf(PatternOptions::class, $options);
-    }
-
-    public function testOptionsGetAndSetDefault()
-    {
-        $options = $this->pattern->getOptions();
-        $this->pattern->setOptions($options);
-        $this->assertSame($options, $this->pattern->getOptions());
     }
 }

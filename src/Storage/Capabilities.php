@@ -12,9 +12,6 @@ use function array_keys;
 use function in_array;
 use function is_string;
 use function strtolower;
-use function trigger_error;
-
-use const E_USER_DEPRECATED;
 
 class Capabilities
 {
@@ -396,41 +393,6 @@ class Capabilities
     public function setUseRequestTime(stdClass $marker, $flag)
     {
         return $this->setCapability($marker, 'useRequestTime', (bool) $flag);
-    }
-
-    /**
-     * Get if expired items are readable
-     *
-     * @deprecated This capability has been deprecated and will be removed in the future.
-     *             Please use getStaticTtl() instead
-     *
-     * @return bool
-     */
-    public function getExpiredRead()
-    {
-        trigger_error(
-            'This capability has been deprecated and will be removed in the future. Please use static_ttl instead',
-            E_USER_DEPRECATED
-        );
-        return ! $this->getCapability('staticTtl', true);
-    }
-
-    /**
-     * Set if expired items are readable
-     *
-     * @deprecated This capability has been deprecated and will be removed in the future.
-     *             Please use setStaticTtl() instead
-     *
-     * @param  bool $flag
-     * @return Capabilities Fluent interface
-     */
-    public function setExpiredRead(stdClass $marker, $flag)
-    {
-        trigger_error(
-            'This capability has been deprecated and will be removed in the future. Please use static_ttl instead',
-            E_USER_DEPRECATED
-        );
-        return $this->setCapability($marker, 'staticTtl', (bool) $flag);
     }
 
     /**

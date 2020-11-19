@@ -4,7 +4,6 @@ namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 use Laminas\Cache\Storage\StorageInterface as Storage;
-use Laminas\Cache\StorageFactory;
 use Laminas\Stdlib\AbstractOptions;
 use Traversable;
 
@@ -14,7 +13,6 @@ use function array_unique;
 use function array_values;
 use function get_class;
 use function gettype;
-use function is_array;
 use function is_dir;
 use function is_object;
 use function is_readable;
@@ -712,46 +710,6 @@ class PatternOptions extends AbstractOptions
     }
 
     /**
-     * Set storage adapter
-     *
-     * Required for the following Pattern classes:
-     * - CallbackCache
-     * - ClassCache
-     * - ObjectCache
-     * - OutputCache
-     *
-     * @deprecated This method will be removed with v3.0.0.
-     *             The underlying storage will be a dependency of the cache pattern instead.
-     *
-     * @param  string|array|Storage $storage
-     * @return PatternOptions Provides a fluent interface
-     */
-    public function setStorage($storage)
-    {
-        $this->storage = $this->storageFactory($storage);
-        return $this;
-    }
-
-    /**
-     * Get storage adapter
-     *
-     * Used by:
-     * - CallbackCache
-     * - ClassCache
-     * - ObjectCache
-     * - OutputCache
-     *
-     * @deprecated This method will be removed with v3.0.0.
-     *             The underlying storage will be a dependency of the cache pattern instead.
-     *
-     * @return null|Storage
-     */
-    public function getStorage()
-    {
-        return $this->storage;
-    }
-
-    /**
      * Recursively apply strtolower on all values of an array, and return as a
      * list of unique values
      *
@@ -783,29 +741,5 @@ class PatternOptions extends AbstractOptions
             );
         }
         return $methods;
-    }
-
-    /**
-     * Create a storage object from a given specification
-     *
-     * @param  array|string|Storage $storage
-     * @throws Exception\InvalidArgumentException
-     * @return Storage
-     */
-    protected function storageFactory($storage)
-    {
-        if (is_array($storage)) {
-            $storage = StorageFactory::factory($storage);
-        } elseif (is_string($storage)) {
-            $storage = StorageFactory::adapterFactory($storage);
-        } elseif (! $storage instanceof Storage) {
-            throw new Exception\InvalidArgumentException(
-                'The storage must be an instanceof Laminas\Cache\Storage\StorageInterface '
-                . 'or an array passed to Laminas\Cache\Storage::factory '
-                . 'or simply the name of the storage adapter'
-            );
-        }
-
-        return $storage;
     }
 }

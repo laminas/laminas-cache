@@ -3,6 +3,7 @@
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
+use Laminas\Cache\Pattern\PatternOptions;
 use LaminasTest\Cache\Pattern\TestAsset\TestObjectCache;
 
 use function get_class;
@@ -17,24 +18,23 @@ use function ob_start;
  */
 class ObjectCacheTest extends AbstractCommonStoragePatternTest
 {
+    /** @var PatternOptions */
+    protected $options;
+
     protected function setUp(): void
     {
         $this->storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0,
         ]);
         $this->options = new Cache\Pattern\PatternOptions([
-            'object'  => new TestObjectCache(),
-            'storage' => $this->storage,
+            'object' => new TestObjectCache(),
         ]);
         $this->pattern = new Cache\Pattern\ObjectCache($this->storage, $this->options);
 
         parent::setUp();
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
-     */
-    public function getCommonPatternNamesProvider()
+    public function getCommonPatternNamesProvider(): array
     {
         return [
             'lowercase' => ['object'],
@@ -71,7 +71,7 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
 
         $generatedKey = $this->pattern->generateKey('emptyMethod', $args);
         $usedKey      = null;
-        $this->options->getStorage()->getEventManager()->attach('setItem.pre', function ($event) use (&$usedKey) {
+        $this->storage->getEventManager()->attach('setItem.pre', function ($event) use (&$usedKey) {
             $params  = $event->getParams();
             $usedKey = $params['key'];
         });

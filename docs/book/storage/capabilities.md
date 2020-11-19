@@ -166,25 +166,6 @@ class Capabilities
      */
     public function setUseRequestTime(stdClass $marker, $flag);
 
-    /**
-     * Get if expired items are readable
-     *
-     * @return bool
-     * @deprecated This capability has been deprecated and will be removed in the future.
-     *             Please use getStaticTtl() instead
-     */
-    public function getExpiredRead();
-
-    /**
-     * Set if expired items are readable
-     *
-     * @param  stdClass $marker
-     * @param  bool $flag
-     * @return Capabilities Fluent interface
-     * @deprecated This capability has been deprecated and will be removed in the future.
-     *             Please use setStaticTtl() instead
-     */
-    public function setExpiredRead(stdClass $marker, $flag);
 
     /**
      * Get "lock-on-expire" support in seconds.

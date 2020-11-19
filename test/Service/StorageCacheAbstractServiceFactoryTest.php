@@ -3,178 +3,100 @@
 namespace LaminasTest\Cache\Service;
 
 use Interop\Container\ContainerInterface;
+use InvalidArgumentException;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use Laminas\Cache\Service\StorageCacheAbstractServiceFactory;
-use Laminas\Cache\Storage\Adapter\AbstractAdapter;
-use Laminas\Cache\Storage\Adapter\Memory;
-use Laminas\Cache\Storage\AdapterPluginManager;
-use Laminas\Cache\Storage\Plugin\PluginInterface;
-use Laminas\Cache\Storage\PluginManager;
-use Laminas\Cache\StorageFactory;
-use Laminas\ServiceManager\Config;
-use Laminas\ServiceManager\ServiceManager;
+use Laminas\Cache\Storage\StorageInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class StorageCacheAbstractServiceFactoryTest extends TestCase
+final class StorageCacheAbstractServiceFactoryTest extends TestCase
 {
-    /** @var ServiceManager */
-    protected $sm;
+    /** @var StorageCacheAbstractServiceFactory */
+    private $factory;
 
-    public function setUp(): void
-    {
-        StorageFactory::resetAdapterPluginManager();
-        StorageFactory::resetPluginManager();
-        $config   = [
-            'services'           => [
-                'config' => [
-                    'caches' => [
-                        'Memory' => [
-                            'adapter' => 'Memory',
-                            'plugins' => ['Serializer', 'ClearExpiredByFactor'],
-                        ],
-                        'Foo'    => [
-                            'adapter' => 'Memory',
-                            'plugins' => ['Serializer', 'ClearExpiredByFactor'],
-                        ],
-                    ],
-                ],
-            ],
-            'abstract_factories' => [
-                StorageCacheAbstractServiceFactory::class,
-            ],
-        ];
-        $this->sm = new ServiceManager();
-        (new Config($config))->configureServiceManager($this->sm);
-    }
+    /** @var StorageAdapterFactoryInterface&MockObject */
+    private $adapterFactory;
 
-    public function tearDown(): void
+    /** @var array<string,array{Foo:array,Memory:array}> */
+    private $config = [
+        'caches' => [
+            'Memory' => [
+                'adapter' => 'Memory',
+                'plugins' => ['Serializer', 'ClearExpiredByFactor'],
+            ],
+            'Foo'    => [
+                'adapter' => 'Memory',
+                'plugins' => ['Serializer', 'ClearExpiredByFactor'],
+            ],
+        ],
+    ];
+
+    /** @var ContainerInterface&MockObject */
+    private $container;
+
+    protected function setUp(): void
     {
-        StorageFactory::resetAdapterPluginManager();
-        StorageFactory::resetPluginManager();
+        parent::setUp();
+        $this->factory        = new StorageCacheAbstractServiceFactory();
+        $this->adapterFactory = $this->createMock(StorageAdapterFactoryInterface::class);
+        $this->container      = $this->createMock(ContainerInterface::class);
+        $this->container
+            ->method('has')
+            ->with('config')
+            ->willReturn(true);
+
+        $this->container
+            ->method('get')
+            ->willReturnMap([
+                ['config', $this->config],
+                [StorageAdapterFactoryInterface::class, $this->adapterFactory],
+            ]);
     }
 
     public function testCanLookupCacheByName(): void
     {
-        self::assertTrue($this->sm->has('Memory'));
-        self::assertTrue($this->sm->has('Foo'));
+        self::assertTrue($this->factory->canCreate($this->container, 'Memory'));
+        self::assertTrue($this->factory->canCreate($this->container, 'Foo'));
     }
 
     public function testCanRetrieveCacheByName(): void
     {
-        $cacheA = $this->sm->get('Memory');
-        self::assertInstanceOf(Memory::class, $cacheA);
+        $this->adapterFactory
+            ->expects(self::once())
+            ->method('createFromArrayConfiguration')
+            ->with($this->config['caches']['Memory'])
+            ->willReturn($this->createMock(StorageInterface::class));
 
-        $cacheB = $this->sm->get('Foo');
-        self::assertInstanceOf(Memory::class, $cacheB);
+        ($this->factory)($this->container, 'Memory');
+    }
 
-        self::assertNotSame($cacheA, $cacheB);
+    public function testWillAssertConfigurationValidity(): void
+    {
+        $this->adapterFactory
+            ->expects(self::once())
+            ->method('assertValidConfigurationStructure')
+            ->with($this->config['caches']['Foo']);
+
+        ($this->factory)($this->container, 'Foo');
+    }
+
+    public function testWillPassInvalidArgumentExceptionFromConfigurationValidityAssertion(): void
+    {
+        $exception = new InvalidArgumentException();
+        $this->adapterFactory
+            ->expects(self::once())
+            ->method('assertValidConfigurationStructure')
+            ->willThrowException($exception);
+
+        $this->expectExceptionObject($exception);
+        ($this->factory)($this->container, 'Foo');
     }
 
     public function testInvalidCacheServiceNameWillBeIgnored(): void
     {
-        self::assertFalse($this->sm->has('invalid'));
-    }
-
-    public function testSetsFactoryAdapterPluginManagerInstanceOnInvocation(): void
-    {
-        $adapter = $this->createMock(AbstractAdapter::class);
-        $adapter
-            ->expects(self::never())
-            ->method('setOptions');
-
-        $adapter
-            ->expects(self::never())
-            ->method('hasPlugin');
-        $adapter
-            ->expects(self::never())
-            ->method('addPlugin');
-
-        $adapterPluginManager = $this->createMock(AdapterPluginManager::class);
-        $adapterPluginManager
-            ->expects(self::once())
-            ->method('get')
-            ->with('Memory')
-            ->willReturn($adapter);
-
-        $container = $this->createMock(ContainerInterface::class);
-
-        $container
-            ->method('has')
-            ->withConsecutive(
-                [AdapterPluginManager::class],
-                [PluginManager::class],
-                ['config']
-            )
-            ->willReturnOnConsecutiveCalls(true, false, true);
-
-        $container
-            ->method('get')
-            ->withConsecutive([AdapterPluginManager::class], ['config'])
-            ->willReturnOnConsecutiveCalls($adapterPluginManager, [
-                'caches' => ['Cache' => ['adapter' => 'Memory']],
-            ]);
-
-        $factory = new StorageCacheAbstractServiceFactory();
-        self::assertSame($adapter, $factory($container, 'Cache'));
-        self::assertSame($adapterPluginManager, StorageFactory::getAdapterPluginManager());
-    }
-
-    public function testSetsFactoryPluginManagerInstanceOnInvocation(): void
-    {
-        $plugin = $this->createMock(PluginInterface::class);
-        $plugin
-            ->expects(self::never())
-            ->method('setOptions');
-
-        $pluginManager = $this->createMock(PluginManager::class);
-        $pluginManager
-            ->expects(self::once())
-            ->method('get')
-            ->with('Serializer')
-            ->willReturn($plugin);
-
-        $adapter = $this->createMock(AbstractAdapter::class);
-        $adapter
-            ->expects(self::never())
-            ->method('setOptions');
-
-        $adapter
-            ->expects(self::once())
-            ->method('hasPlugin')
-            ->with($plugin)
-            ->willReturn(false);
-
-        $adapter
-            ->expects(self::once())
-            ->method('addPlugin')
-            ->with($plugin);
-
-        $adapterPluginManager = $this->createMock(AdapterPluginManager::class);
-        $adapterPluginManager
-            ->expects(self::once())
-            ->method('get')
-            ->with('Memory')
-            ->willReturn($adapter);
-
-        $container = $this->createMock(ContainerInterface::class);
-        $container
-            ->method('has')
-            ->withConsecutive([AdapterPluginManager::class], [PluginManager::class], ['config'])
-            ->willReturn(true);
-
-        $container
-            ->method('get')
-            ->withConsecutive([AdapterPluginManager::class], [PluginManager::class], ['config'])
-            ->willReturnOnConsecutiveCalls($adapterPluginManager, $pluginManager, [
-                'caches' => [
-                    'Cache' => [
-                        'adapter' => 'Memory',
-                        'plugins' => ['Serializer'],
-                    ],
-                ],
-            ]);
-
-        $factory = new StorageCacheAbstractServiceFactory();
-        $factory($container, 'Cache');
-        self::assertSame($pluginManager, StorageFactory::getPluginManager());
+        self::assertFalse(
+            $this->factory->canCreate($this->container, 'non existent configuration')
+        );
     }
 }
