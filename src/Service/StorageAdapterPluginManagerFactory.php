@@ -8,19 +8,13 @@
 
 namespace Laminas\Cache\Service;
 
-use Interop\Container\ContainerInterface;
 use Laminas\Cache\Storage\AdapterPluginManager;
-use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
-class StorageAdapterPluginManagerFactory implements FactoryInterface
+final class StorageAdapterPluginManagerFactory
 {
-    /**
-     * {@inheritDoc}
-     *
-     * @return AdapterPluginManager
-     */
-    public function __invoke(ContainerInterface $container, $name, array $options = null)
+    public function __invoke(ContainerInterface $container): AdapterPluginManager
     {
-        return new AdapterPluginManager($container, $options ?: []);
+        return new AdapterPluginManager($container);
     }
 }

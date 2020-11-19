@@ -8,23 +8,22 @@
 
 namespace Laminas\Cache\Service;
 
-use Interop\Container\ContainerInterface;
+use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Cache\StorageFactory;
-use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Storage cache factory.
  */
-class StorageCacheFactory implements FactoryInterface
+final class StorageCacheFactory
 {
     use PluginManagerLookupTrait;
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container): StorageInterface
     {
         $this->prepareStorageFactory($container);
 
-        $config = $container->get('config');
-        $cacheConfig = isset($config['cache']) ? $config['cache'] : [];
+        $cacheConfig = $container->get('config')['cache'] ?? [];
         return StorageFactory::factory($cacheConfig);
     }
 }
