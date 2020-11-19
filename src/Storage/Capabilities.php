@@ -403,40 +403,6 @@ class Capabilities
     }
 
     /**
-     * Get if expired items are readable
-     *
-     * @return bool
-     * @deprecated This capability has been deprecated and will be removed in the future.
-     *             Please use getStaticTtl() instead
-     */
-    public function getExpiredRead()
-    {
-        trigger_error(
-            'This capability has been deprecated and will be removed in the future. Please use static_ttl instead',
-            E_USER_DEPRECATED
-        );
-        return ! $this->getCapability('staticTtl', true);
-    }
-
-    /**
-     * Set if expired items are readable
-     *
-     * @param  stdClass $marker
-     * @param  bool $flag
-     * @return Capabilities Fluent interface
-     * @deprecated This capability has been deprecated and will be removed in the future.
-     *             Please use setStaticTtl() instead
-     */
-    public function setExpiredRead(stdClass $marker, $flag)
-    {
-        trigger_error(
-            'This capability has been deprecated and will be removed in the future. Please use static_ttl instead',
-            E_USER_DEPRECATED
-        );
-        return $this->setCapability($marker, 'staticTtl', (bool) $flag);
-    }
-
-    /**
      * Get "lock-on-expire" support in seconds.
      *
      * @return int 0  = Expired items will never be retrieved

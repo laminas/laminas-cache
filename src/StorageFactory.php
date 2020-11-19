@@ -13,6 +13,8 @@ use Laminas\EventManager\EventsCapableInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
+use function get_class;
+use function sprintf;
 
 abstract class StorageFactory
 {
@@ -74,20 +76,11 @@ abstract class StorageFactory
         // add plugins
         if (isset($cfg['plugins'])) {
             if (! $adapter instanceof PluginAwareInterface) {
-                if (! $adapter instanceof EventsCapableInterface) {
-                    throw new Exception\RuntimeException(sprintf(
-                        "The adapter '%s' doesn't implement '%s' and therefore can't handle plugins",
-                        get_class($adapter),
-                        EventsCapableInterface::class
-                    ));
-                }
-
-                trigger_error(sprintf(
-                    'Using "%s" to provide plugin capabilities to storage adapters is deprecated as of '
-                    . 'laminas-cache 2.10; please use "%s" instead',
-                    EventsCapableInterface::class,
-                    PluginAwareInterface::class
-                ), E_USER_DEPRECATED);
+                throw new Exception\RuntimeException(sprintf(
+                    "The adapter '%s' doesn't implement '%s' and therefore can't handle plugins",
+                    get_class($adapter),
+                    EventsCapableInterface::class
+                ));
             }
 
             if (! is_array($cfg['plugins'])) {
