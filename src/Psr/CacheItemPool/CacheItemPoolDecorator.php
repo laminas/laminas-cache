@@ -20,11 +20,18 @@ use function array_diff;
 use function array_diff_key;
 use function array_flip;
 use function array_keys;
+use function array_map;
+use function array_merge;
+use function array_unique;
+use function array_walk;
+use function current;
 use function get_class;
 use function gettype;
+use function in_array;
 use function is_string;
 use function preg_match;
 use function sprintf;
+use function var_export;
 
 /**
  * Decorate laminas-cache adapters as PSR-6 cache item pools.
@@ -82,9 +89,9 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             }
 
             return new CacheItem($key, $value, $isHit);
-        } else {
-            return clone $this->deferred[$key];
         }
+
+        return clone $this->deferred[$key];
     }
 
     /**
@@ -162,7 +169,8 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
         $this->deferred = [];
 
         try {
-            $namespace = $this->storage->getOptions()->getNamespace();
+            $options   = $this->storage->getOptions();
+            $namespace = $options->getNamespace();
             if ($this->storage instanceof ClearByNamespaceInterface && $namespace) {
                 $cleared = $this->storage->clearByNamespace($namespace);
             } else {
@@ -212,40 +220,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             throw new InvalidArgumentException('$item must be an instance of ' . CacheItem::class);
         }
 
-        $itemTtl = $item->getTtl();
-
-        // delete expired item
-        if ($itemTtl < 0) {
-            $this->deleteItem($item->getKey());
-            $item->setIsHit(false);
-            return false;
-        }
-
-        $saved   = true;
-        $options = $this->storage->getOptions();
-        $ttl     = $options->getTtl();
-
-        try {
-            // get item value and serialize, if required
-            $value = $item->get();
-
-            // reset TTL on adapter, if required
-            if ($itemTtl > 0) {
-                $options->setTtl($itemTtl);
-            }
-
-            $saved = $this->storage->setItem($item->getKey(), $value);
-            // saved items are a hit? see integration test CachePoolTest::testIsHit()
-            $item->setIsHit($saved);
-        } catch (Exception\InvalidArgumentException $e) {
-            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-        } catch (Exception\ExceptionInterface $e) {
-            $saved = false;
-        } finally {
-            $options->setTtl($ttl);
-        }
-
-        return $saved;
+        return $this->saveMultipleItems([$item], $item->getTtl()) === [];
     }
 
     /**
@@ -269,14 +244,22 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      */
     public function commit()
     {
-        $notSaved = [];
-
-        foreach ($this->deferred as &$item) {
-            if (! $this->save($item)) {
-                $notSaved[] = $item;
-            }
+        /** @var array<string,non-empty-array<string,CacheItem>> $groupedByTtl */
+        $groupedByTtl = [];
+        foreach ($this->deferred as $cacheKey => $item) {
+            $itemTtl                = var_export($item->getTtl(), true);
+            $group                  = $groupedByTtl[$itemTtl] ?? [];
+            $group[$cacheKey]       = $item;
+            $groupedByTtl[$itemTtl] = $group;
         }
-        $this->deferred = $notSaved;
+
+        $notSavedItems = [];
+        foreach ($groupedByTtl as $keyValuePairs) {
+            $itemTtl         = current($keyValuePairs)->getTtl();
+            $notSavedItems[] = $this->saveMultipleItems($keyValuePairs, $itemTtl);
+        }
+
+        $this->deferred = array_unique(array_merge([], ...$notSavedItems));
 
         return empty($this->deferred);
     }
@@ -285,6 +268,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      * Throws exception is storage is not compatible with PSR-6
      *
      * @throws CacheException
+     * @psalm-assert-if-true StorageInterface&FlushableInterface $storage
      */
     private function validateStorage(StorageInterface $storage)
     {
@@ -372,5 +356,63 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
         foreach ($keys as $key) {
             $this->validateKey($key);
         }
+    }
+
+    /**
+     * @param array<int,CacheItem> $items
+     * @psalm-param list<CacheItem> $items
+     * @return array<string,CacheItem>
+     */
+    private function saveMultipleItems(array $items, ?int $itemTtl): array
+    {
+        // delete expired item
+        if ($itemTtl < 0) {
+            $this->deleteItems(array_map(static function (CacheItemInterface $item): string {
+                return $item->getKey();
+            }, $items));
+            array_walk($items, static function (CacheItem $cacheItem): void {
+                $cacheItem->setIsHit(false);
+            });
+
+            return $items;
+        }
+
+        $options = $this->storage->getOptions();
+        $ttl     = $options->getTtl();
+
+        $keyValuePair = [];
+        $keyItemPair  = [];
+        foreach ($items as $item) {
+            $key                = $item->getKey();
+            $keyValuePair[$key] = $item->get();
+            $keyItemPair[$key]  = $item;
+        }
+
+        $options->setTtl($itemTtl ?? 0);
+
+        $notSavedKeys = [];
+        try {
+            $notSavedKeys = $this->storage->setItems($keyValuePair);
+        } catch (Exception\InvalidArgumentException $e) {
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+        } catch (Exception\ExceptionInterface $e) {
+            foreach (array_keys($keyValuePair) as $key) {
+                $notSavedKeys[] = $key;
+            }
+        } finally {
+            $options->setTtl($ttl);
+        }
+
+        $notSavedItems = [];
+        foreach ($keyItemPair as $key => $item) {
+            if (in_array($key, $notSavedKeys, true)) {
+                $notSavedItems[] = $item;
+                continue;
+            }
+
+            $item->setIsHit(true);
+        }
+
+        return $notSavedItems;
     }
 }
