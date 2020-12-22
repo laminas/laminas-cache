@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * @see       https://github.com/laminas/laminas-cache for the canonical source repository
@@ -8,20 +9,14 @@
 
 namespace Laminas\Cache\Service;
 
-use Interop\Container\ContainerInterface;
 use Laminas\Cache\PatternPluginManager;
-use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
-class PatternPluginManagerFactory implements FactoryInterface
+final class PatternPluginManagerFactory
 {
 
-    /**
-     * {@inheritDoc}
-     *
-     * @return PatternPluginManager
-     */
-    public function __invoke(ContainerInterface $container, $name, array $options = null)
+    public function __invoke(ContainerInterface $container): PatternPluginManager
     {
-        return new PatternPluginManager($container, $options ?: []);
+        return new PatternPluginManager($container);
     }
 }
