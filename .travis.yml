@@ -27,6 +27,14 @@ matrix:
         - CS_CHECK=true
         - BENCHMARKS=true
         - TEST_COVERAGE=true
+    - php: 8.0
+      env:
+        - COMPOSER_ARGS="$COMPOSER_ARGS --ignore-platform-reqs"
+        - DEPS=lowest
+    - php: 8.0
+      env:
+        - COMPOSER_ARGS="$COMPOSER_ARGS --ignore-platform-reqs"
+        - DEPS=latest
     - php: nightly
       env:
         - COMPOSER_ARGS="$COMPOSER_ARGS --ignore-platform-reqs"
@@ -35,6 +43,8 @@ matrix:
       env:
         - COMPOSER_ARGS="$COMPOSER_ARGS --ignore-platform-reqs"
         - DEPS=latest
+  allow_failures:
+    - php: nightly
 
 before_install:
   - if [[ $TEST_COVERAGE != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
