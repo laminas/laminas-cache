@@ -8,11 +8,10 @@
 
 namespace LaminasTest\Cache\Service;
 
-use Interop\Container\ContainerInterface;
-use Laminas\Cache\Pattern\PatternInterface;
 use Laminas\Cache\PatternPluginManager;
 use Laminas\Cache\Service\PatternPluginManagerFactory;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class PatternPluginManagerFactoryTest extends TestCase
 {
@@ -21,21 +20,7 @@ class PatternPluginManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $factory = new PatternPluginManagerFactory();
 
-        $patterns = $factory($container, PatternPluginManager::class);
+        $patterns = $factory($container);
         self::assertInstanceOf(PatternPluginManager::class, $patterns);
-    }
-
-    public function testFactoryConfiguresPluginManagerUnderContainerInterop(): void
-    {
-        $container = $this->createMock(ContainerInterface::class);
-        $pattern = $this->createMock(PatternInterface::class);
-
-        $factory = new PatternPluginManagerFactory();
-        $patterns = $factory($container, PatternPluginManager::class, [
-            'services' => [
-                'test' => $pattern,
-            ],
-        ]);
-        self::assertSame($pattern, $patterns->get('test'));
     }
 }

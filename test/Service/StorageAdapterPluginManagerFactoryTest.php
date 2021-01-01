@@ -8,11 +8,10 @@
 
 namespace LaminasTest\Cache\Service;
 
-use Interop\Container\ContainerInterface;
 use Laminas\Cache\Service\StorageAdapterPluginManagerFactory;
 use Laminas\Cache\Storage\AdapterPluginManager;
-use Laminas\Cache\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class StorageAdapterPluginManagerFactoryTest extends TestCase
 {
@@ -21,21 +20,7 @@ class StorageAdapterPluginManagerFactoryTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $factory = new StorageAdapterPluginManagerFactory();
 
-        $adapters = $factory($container, AdapterPluginManager::class);
+        $adapters = $factory($container);
         self::assertInstanceOf(AdapterPluginManager::class, $adapters);
-    }
-
-    public function testFactoryConfiguresPluginManagerUnderContainerInterop(): void
-    {
-        $container = $this->createMock(ContainerInterface::class);
-        $adapter = $this->createMock(StorageInterface::class);
-
-        $factory = new StorageAdapterPluginManagerFactory();
-        $adapters = $factory($container, AdapterPluginManager::class, [
-            'services' => [
-                'test' => $adapter,
-            ],
-        ]);
-        self::assertSame($adapter, $adapters->get('test'));
     }
 }
