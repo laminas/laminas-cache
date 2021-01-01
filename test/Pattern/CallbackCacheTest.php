@@ -12,13 +12,15 @@ use Laminas\Cache;
 use LaminasTest\Cache\Pattern\TestAsset\FailableCallback;
 use LaminasTest\Cache\Pattern\TestAsset\TestCallbackCache;
 use Laminas\Cache\Exception\InvalidArgumentException;
+use function func_get_args;
 
 /**
  * @see \LaminasTest\Cache\Pattern\Foo::bar
  */
 function bar()
 {
-    return call_user_func_array([TestCallbackCache::class, 'bar'], func_get_args());
+    $args = func_get_args();
+    return TestCallbackCache::bar(...$args);
 }
 
 /**

@@ -2,6 +2,8 @@
 
 namespace LaminasTest\Cache\Pattern\TestAsset;
 
+use function func_get_args;
+
 /**
  * @covers \Laminas\Cache\Pattern\ObjectCache<extended>
  */
@@ -25,7 +27,8 @@ final class TestObjectCache
 
     public function __invoke()
     {
-        return call_user_func_array([$this, 'bar'], func_get_args());
+        $args = func_get_args();
+        return $this->bar(...$args);
     }
 
     public function emptyMethod()

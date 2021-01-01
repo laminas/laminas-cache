@@ -96,7 +96,7 @@ class ClassCacheTest extends CommonPatternTest
 
         ob_start();
         ob_implicit_flush(0);
-        $return = call_user_func_array([$this->_pattern, $method], $args);
+        $return = $this->_pattern->{$method}(...$args);
         $data = ob_get_clean();
 
         self::assertEquals($returnSpec . $firstCounter, $return);
@@ -105,7 +105,7 @@ class ClassCacheTest extends CommonPatternTest
         // second call - cached
         ob_start();
         ob_implicit_flush(0);
-        $return = call_user_func_array([$this->_pattern, $method], $args);
+        $return = $this->_pattern->{$method}(...$args);
         $data = ob_get_clean();
 
         self::assertEquals($returnSpec . $firstCounter, $return);

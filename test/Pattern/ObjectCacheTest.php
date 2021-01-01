@@ -145,7 +145,7 @@ class ObjectCacheTest extends CommonPatternTest
 
         ob_start();
         ob_implicit_flush(0);
-        $return = call_user_func_array($callback, $args);
+        $return = $callback(...$args);
         $data = ob_get_contents();
         ob_end_clean();
 
@@ -155,7 +155,7 @@ class ObjectCacheTest extends CommonPatternTest
         // second call - cached
         ob_start();
         ob_implicit_flush(0);
-        $return = call_user_func_array($callback, $args);
+        $return = $callback(...$args);
         $data = ob_get_contents();
         ob_end_clean();
 

@@ -65,9 +65,9 @@ class CallbackCache extends AbstractPattern
 
         try {
             if ($args) {
-                $ret = call_user_func_array($callback, $args);
+                $ret = $callback(...$args);
             } else {
-                $ret = call_user_func($callback);
+                $ret = $callback();
             }
         } catch (\Exception $e) {
             if ($cacheOutput) {
