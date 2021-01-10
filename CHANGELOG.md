@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#48](https://github.com/laminas/laminas-cache/pull/48) Adds PHP 8.0 support
 
 ### Changed
 
@@ -18,7 +18,11 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#48](https://github.com/laminas/laminas-cache/pull/48) Removed support for `laminas/laminas-servicemanager` v2 and thus removed polyfills `PatternPluginManagerV2Polyfill` and `PatternPluginManagerV3Polyfill` along with the shared trait `PatternPluginManagerTrait`.
+
+- [#48](https://github.com/laminas/laminas-cache/pull/48) Removed zendframework replacements and thus is not a drop-in replacement for `zendframework/zend-cache` anymore
+
+- [#48](https://github.com/laminas/laminas-cache/pull/48) Removed PHP support prio 7.3.0
 
 ### Fixed
 
