@@ -15,24 +15,22 @@ use PHPUnit\Framework\TestCase;
 
 class EventManagerCompatibilityTest extends TestCase
 {
-    public function setUp()
+    /**
+     * @var MockAdapter
+     */
+    private $adapter;
+
+    public function setUp(): void
     {
         $this->adapter = new MockAdapter();
     }
 
-    public function testCanLazyLoadEventManager()
+    public function testLazyLoadedEventManagerIsInjectedProperlyWithDefaultIdentifiers(): void
     {
         $events = $this->adapter->getEventManager();
-        $this->assertInstanceOf(EventManager::class, $events);
-        return $events;
-    }
+        self::assertInstanceOf(EventManager::class, $events);
 
-    /**
-     * @depends testCanLazyLoadEventManager
-     */
-    public function testLazyLoadedEventManagerIsInjectedProperlyWithDefaultIdentifiers(EventManager $events)
-    {
-        $this->assertEquals([
+        self::assertEquals([
             AbstractAdapter::class,
             MockAdapter::class,
         ], $events->getIdentifiers());

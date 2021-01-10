@@ -8,7 +8,7 @@
 
 namespace Laminas\Cache\Service;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\PluginManager;
 use Laminas\Cache\StorageFactory;

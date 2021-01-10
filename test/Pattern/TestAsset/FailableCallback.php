@@ -2,7 +2,7 @@
 
 namespace LaminasTest\Cache\Pattern\TestAsset;
 
-class FailableCallback
+final class FailableCallback
 {
     public function __invoke()
     {

@@ -21,9 +21,14 @@ class ObjectCacheTest extends CommonPatternTest
      * @var \Laminas\Cache\Storage\StorageInterface
      */
     protected $_storage;
+
+    /**
+     * @var Cache\Pattern\PatternOptions
+     */
+    private $_options;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0
@@ -38,7 +43,7 @@ class ObjectCacheTest extends CommonPatternTest
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
@@ -51,7 +56,7 @@ class ObjectCacheTest extends CommonPatternTest
         ];
     }
 
-    public function testCallEnabledCacheOutputByDefault()
+    public function testCallEnabledCacheOutputByDefault(): void
     {
         $this->_testCall(
             'bar',
@@ -59,7 +64,7 @@ class ObjectCacheTest extends CommonPatternTest
         );
     }
 
-    public function testCallDisabledCacheOutput()
+    public function testCallDisabledCacheOutput(): void
     {
         $this->_options->setCacheOutput(false);
         $this->_testCall(
@@ -68,13 +73,13 @@ class ObjectCacheTest extends CommonPatternTest
         );
     }
 
-    public function testCallInvoke()
+    public function testCallInvoke(): void
     {
         $this->_options->setCacheOutput(false);
         $this->_testCall('__invoke', ['arg1', 'arg2']);
     }
 
-    public function testGenerateKey()
+    public function testGenerateKey(): void
     {
         $args = ['arg1', 2, 3.33, null];
 
@@ -86,45 +91,45 @@ class ObjectCacheTest extends CommonPatternTest
         });
 
         $this->_pattern->call('emptyMethod', $args);
-        $this->assertEquals($generatedKey, $usedKey);
+        self::assertEquals($generatedKey, $usedKey);
     }
 
-    public function testSetProperty()
+    public function testSetProperty(): void
     {
         $this->_pattern->property = 'testSetProperty';
-        $this->assertEquals('testSetProperty', $this->_options->getObject()->property);
+        self::assertEquals('testSetProperty', $this->_options->getObject()->property);
     }
 
-    public function testGetProperty()
+    public function testGetProperty(): void
     {
-        $this->assertEquals($this->_options->getObject()->property, $this->_pattern->property);
+        self::assertEquals($this->_options->getObject()->property, $this->_pattern->property);
     }
 
-    public function testIssetProperty()
+    public function testIssetProperty(): void
     {
-        $this->assertTrue(isset($this->_pattern->property));
-        $this->assertFalse(isset($this->_pattern->unknownProperty));
+        self::assertTrue(isset($this->_pattern->property));
+        self::assertFalse(isset($this->_pattern->unknownProperty));
     }
 
-    public function testUnsetProperty()
+    public function testUnsetProperty(): void
     {
         unset($this->_pattern->property);
-        $this->assertFalse(isset($this->_pattern->property));
+        self::assertFalse(isset($this->_pattern->property));
     }
 
     /**
      * @group 7039
      */
-    public function testEmptyObjectKeys()
+    public function testEmptyObjectKeys(): void
     {
         $this->_options->setObjectKey('0');
-        $this->assertSame('0', $this->_options->getObjectKey(), "Can't set string '0' as object key");
+        self::assertSame('0', $this->_options->getObjectKey(), "Can't set string '0' as object key");
 
         $this->_options->setObjectKey('');
-        $this->assertSame('', $this->_options->getObjectKey(), "Can't set an empty string as object key");
+        self::assertSame('', $this->_options->getObjectKey(), "Can't set an empty string as object key");
 
         $this->_options->setObjectKey(null);
-        $this->assertSame(get_class($this->_options->getObject()), $this->_options->getObjectKey());
+        self::assertSame(get_class($this->_options->getObject()), $this->_options->getObjectKey());
     }
 
     // @codingStandardsIgnoreStart
@@ -140,25 +145,25 @@ class ObjectCacheTest extends CommonPatternTest
 
         ob_start();
         ob_implicit_flush(0);
-        $return = call_user_func_array($callback, $args);
+        $return = $callback(...$args);
         $data = ob_get_contents();
         ob_end_clean();
 
-        $this->assertEquals($returnSpec . $firstCounter, $return);
-        $this->assertEquals($outputSpec . $firstCounter, $data);
+        self::assertEquals($returnSpec . $firstCounter, $return);
+        self::assertEquals($outputSpec . $firstCounter, $data);
 
         // second call - cached
         ob_start();
         ob_implicit_flush(0);
-        $return = call_user_func_array($callback, $args);
+        $return = $callback(...$args);
         $data = ob_get_contents();
         ob_end_clean();
 
-        $this->assertEquals($returnSpec . $firstCounter, $return);
+        self::assertEquals($returnSpec . $firstCounter, $return);
         if ($this->_options->getCacheOutput()) {
-            $this->assertEquals($outputSpec . $firstCounter, $data);
+            self::assertEquals($outputSpec . $firstCounter, $data);
         } else {
-            $this->assertEquals('', $data);
+            self::assertEquals('', $data);
         }
     }
 }

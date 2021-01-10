@@ -8,67 +8,19 @@
 
 namespace LaminasTest\Cache\Service;
 
-use Interop\Container\ContainerInterface;
-use Laminas\Cache\Pattern\PatternInterface;
 use Laminas\Cache\PatternPluginManager;
 use Laminas\Cache\Service\PatternPluginManagerFactory;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class PatternPluginManagerFactoryTest extends TestCase
 {
-    public function testFactoryReturnsPluginManager()
+    public function testFactoryReturnsPluginManager(): void
     {
-        $container = $this->prophesize(ContainerInterface::class)->reveal();
+        $container = $this->createMock(ContainerInterface::class);
         $factory = new PatternPluginManagerFactory();
 
-        $patterns = $factory($container, PatternPluginManager::class);
-        $this->assertInstanceOf(PatternPluginManager::class, $patterns);
-
-        if (method_exists($patterns, 'configure')) {
-            // laminas-servicemanager v3
-            $this->assertAttributeSame($container, 'creationContext', $patterns);
-        } else {
-            // laminas-servicemanager v2
-            $this->assertSame($container, $patterns->getServiceLocator());
-        }
-    }
-
-    /**
-     * @depends testFactoryReturnsPluginManager
-     */
-    public function testFactoryConfiguresPluginManagerUnderContainerInterop()
-    {
-        $container = $this->prophesize(ContainerInterface::class)->reveal();
-        $pattern = $this->prophesize(PatternInterface::class)->reveal();
-
-        $factory = new PatternPluginManagerFactory();
-        $patterns = $factory($container, PatternPluginManager::class, [
-            'services' => [
-                'test' => $pattern,
-            ],
-        ]);
-        $this->assertSame($pattern, $patterns->get('test'));
-    }
-
-    /**
-     * @depends testFactoryReturnsPluginManager
-     */
-    public function testFactoryConfiguresPluginManagerUnderServiceManagerV2()
-    {
-        $container = $this->prophesize(ServiceLocatorInterface::class);
-        $container->willImplement(ContainerInterface::class);
-
-        $pattern = $this->prophesize(PatternInterface::class)->reveal();
-
-        $factory = new PatternPluginManagerFactory();
-        $factory->setCreationOptions([
-            'services' => [
-                'test' => $pattern,
-            ],
-        ]);
-
-        $patterns = $factory->createService($container->reveal());
-        $this->assertSame($pattern, $patterns->get('test'));
+        $patterns = $factory($container);
+        self::assertInstanceOf(PatternPluginManager::class, $patterns);
     }
 }

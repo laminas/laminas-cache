@@ -137,7 +137,7 @@ class ObjectCache extends CallbackCache
 
         if (! $cache) {
             if ($args) {
-                return call_user_func_array([$object, $method], $args);
+                return $object->{$method}(...$args);
             }
             return $object->{$method}();
         }

@@ -8,48 +8,13 @@
 
 namespace Laminas\Cache\Service;
 
-use Interop\Container\ContainerInterface;
 use Laminas\Cache\Storage\PluginManager;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
 
-class StoragePluginManagerFactory implements FactoryInterface
+final class StoragePluginManagerFactory
 {
-    /**
-     * laminas-servicemanager v2 support for invocation options.
-     *
-     * @param array
-     */
-    protected $creationOptions;
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return PluginManager
-     */
-    public function __invoke(ContainerInterface $container, $name, array $options = null)
+    public function __invoke(ContainerInterface $container): PluginManager
     {
-        return new PluginManager($container, $options ?: []);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return PluginManager
-     */
-    public function createService(ServiceLocatorInterface $container, $name = null, $requestedName = null)
-    {
-        return $this($container, $requestedName ?: PluginManager::class, $this->creationOptions);
-    }
-
-    /**
-     * laminas-servicemanager v2 support for invocation options.
-     *
-     * @param array $options
-     * @return void
-     */
-    public function setCreationOptions(array $options)
-    {
-        $this->creationOptions = $options;
+        return new PluginManager($container);
     }
 }

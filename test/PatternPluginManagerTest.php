@@ -8,7 +8,6 @@
 
 namespace LaminasTest\Cache;
 
-use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Pattern\PatternInterface;
 use Laminas\Cache\PatternPluginManager;
 use Laminas\Cache\Storage\StorageInterface;
@@ -25,44 +24,45 @@ class PatternPluginManagerTest extends TestCase
         return new PatternPluginManager(new ServiceManager());
     }
 
-    protected function getV2InvalidPluginException()
-    {
-        return RuntimeException::class;
-    }
-
     protected function getInstanceOf()
     {
         return PatternInterface::class;
     }
 
-    public function testGetWillInjectProvidedOptionsAsPatternOptionsInstance()
+    public function testGetWillInjectProvidedOptionsAsPatternOptionsInstance(): void
     {
         $plugins = $this->getPluginManager();
-        $storage = $this->prophesize(StorageInterface::class)->reveal();
+        $storage = $this->createMock(StorageInterface::class);
         $plugin = $plugins->get('callback', [
             'cache_output' => false,
             'storage' => $storage,
         ]);
         $options = $plugin->getOptions();
-        $this->assertFalse($options->getCacheOutput());
-        $this->assertSame($storage, $options->getStorage());
+        self::assertFalse($options->getCacheOutput());
+        self::assertSame($storage, $options->getStorage());
     }
 
-    public function testBuildWillInjectProvidedOptionsAsPatternOptionsInstance()
+    public function testBuildWillInjectProvidedOptionsAsPatternOptionsInstance(): void
     {
         $plugins = $this->getPluginManager();
 
-        if (! method_exists($plugins, 'configure')) {
-            $this->markTestSkipped('Test is only relevant for laminas-servicemanager v3');
-        }
-
-        $storage = $this->prophesize(StorageInterface::class)->reveal();
+        $storage = $this->createMock(StorageInterface::class);
         $plugin = $plugins->build('callback', [
             'cache_output' => false,
             'storage' => $storage,
         ]);
         $options = $plugin->getOptions();
-        $this->assertFalse($options->getCacheOutput());
-        $this->assertSame($storage, $options->getStorage());
+        self::assertFalse($options->getCacheOutput());
+        self::assertSame($storage, $options->getStorage());
+    }
+
+    public function testShareByDefaultAndSharedByDefault()
+    {
+        self::markTestSkipped('Support for servicemanager v2 is dropped.');
+    }
+
+    protected function getV2InvalidPluginException()
+    {
+        self::fail('Somehow, servicemanager v2 compatibility is being tested.');
     }
 }

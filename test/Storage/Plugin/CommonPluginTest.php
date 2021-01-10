@@ -11,6 +11,7 @@ namespace LaminasTest\Cache\Storage\Plugin;
 use Laminas\Cache\Storage\PluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
+use Laminas\Cache\Storage\Plugin\PluginOptions;
 
 /**
  * PHPUnit test case
@@ -18,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @group      Laminas_Cache
- * @covers Laminas\Cache\Storage\Plugin\PluginOptions<extended>
+ * @covers \Laminas\Cache\Storage\Plugin\PluginOptions<extended>
  */
 abstract class CommonPluginTest extends TestCase
 {
@@ -42,22 +43,22 @@ abstract class CommonPluginTest extends TestCase
     public function testPluginManagerWithCommonNames($commonPluginName)
     {
         $pluginManager = new PluginManager(new ServiceManager);
-        $this->assertTrue(
+        self::assertTrue(
             $pluginManager->has($commonPluginName),
             "Storage plugin name '{$commonPluginName}' not found in storage plugin manager"
         );
     }
 
-    public function testOptionObjectAvailable()
+    public function testOptionObjectAvailable(): void
     {
         $options = $this->_plugin->getOptions();
-        $this->assertInstanceOf('Laminas\Cache\Storage\Plugin\PluginOptions', $options);
+        self::assertInstanceOf(PluginOptions::class, $options);
     }
 
-    public function testOptionsGetAndSetDefault()
+    public function testOptionsGetAndSetDefault(): void
     {
         $options = $this->_plugin->getOptions();
         $this->_plugin->setOptions($options);
-        $this->assertSame($options, $this->_plugin->getOptions());
+        self::assertSame($options, $this->_plugin->getOptions());
     }
 }

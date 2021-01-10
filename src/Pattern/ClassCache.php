@@ -8,7 +8,6 @@
 
 namespace Laminas\Cache\Pattern;
 
-use Laminas\Cache;
 use Laminas\Cache\Exception;
 
 class ClassCache extends CallbackCache
@@ -57,10 +56,10 @@ class ClassCache extends CallbackCache
 
         if (! $cache) {
             if ($args) {
-                return call_user_func_array($callback, $args);
-            } else {
-                return $classname::$method();
+                return $callback(...$args);
             }
+
+            return $classname::$method();
         }
 
         return parent::call($callback, $args);

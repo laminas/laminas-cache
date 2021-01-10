@@ -9,10 +9,11 @@
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
+use Laminas\Cache\Exception\MissingKeyException;
 
 /**
  * @group      Laminas_Cache
- * @covers Laminas\Cache\Pattern\OutputCache<extended>
+ * @covers \Laminas\Cache\Pattern\OutputCache<extended>
  */
 class OutputCacheTest extends CommonPatternTest
 {
@@ -30,7 +31,7 @@ class OutputCacheTest extends CommonPatternTest
     protected $_obLevel;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0
@@ -47,7 +48,7 @@ class OutputCacheTest extends CommonPatternTest
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->_obLevel > ob_get_Level()) {
             for ($i = ob_get_level(); $i < $this->_obLevel; $i++) {
@@ -72,22 +73,22 @@ class OutputCacheTest extends CommonPatternTest
         ];
     }
 
-    public function testStartEndCacheMiss()
+    public function testStartEndCacheMiss(): void
     {
         $output = 'foobar';
         $key    = 'testStartEndCacheMiss';
 
         ob_start();
-        $this->assertFalse($this->_pattern->start($key));
+        self::assertFalse($this->_pattern->start($key));
         echo $output;
-        $this->assertTrue($this->_pattern->end());
+        self::assertTrue($this->_pattern->end());
         $data = ob_get_clean();
 
-        $this->assertEquals($output, $data);
-        $this->assertEquals($output, $this->_pattern->getOptions()->getStorage()->getItem($key));
+        self::assertEquals($output, $data);
+        self::assertEquals($output, $this->_pattern->getOptions()->getStorage()->getItem($key));
     }
 
-    public function testStartEndCacheHit()
+    public function testStartEndCacheHit(): void
     {
         $output = 'foobar';
         $key    = 'testStartEndCacheHit';
@@ -96,15 +97,15 @@ class OutputCacheTest extends CommonPatternTest
         $this->_pattern->getOptions()->getStorage()->setItem($key, $output);
 
         ob_start();
-        $this->assertTrue($this->_pattern->start($key));
+        self::assertTrue($this->_pattern->start($key));
         $data = ob_get_clean();
 
-        $this->assertSame($output, $data);
+        self::assertSame($output, $data);
     }
 
-    public function testThrowMissingKeyException()
+    public function testThrowMissingKeyException(): void
     {
-        $this->expectException('Laminas\Cache\Exception\MissingKeyException');
+        $this->expectException(MissingKeyException::class);
         $this->_pattern->start(''); // empty key
     }
 }

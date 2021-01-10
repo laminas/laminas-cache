@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * @see       https://github.com/laminas/laminas-cache for the canonical source repository
@@ -6,8 +7,11 @@
  * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-use PHPUnit\Framework\TestCase;
+namespace LaminasTest\Cache\Psr\TestAsset;
 
-if (! class_exists('PHPUnit_Framework_TestCase')) {
-    class_alias(TestCase::class, 'PHPUnit_Framework_TestCase');
+use Laminas\Cache\Storage\ClearByNamespaceInterface;
+
+interface FlushableNamespaceStorageInterface extends FlushableStorageInterface, ClearByNamespaceInterface
+{
+
 }

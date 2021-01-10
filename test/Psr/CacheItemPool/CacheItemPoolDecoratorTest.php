@@ -9,39 +9,94 @@
 namespace LaminasTest\Cache\Psr\CacheItemPool;
 
 use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\CacheItemPool\CacheException;
 use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
-use Laminas\Cache\Storage\Adapter\AbstractAdapter;
+use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\StorageInterface;
+use Laminas\EventManager\EventManager;
+use LaminasTest\Cache\Psr\TestAsset\FlushableNamespaceStorageInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Psr\Cache\CacheItemInterface;
 use stdClass;
 
-class CacheItemPoolDecoratorTest extends TestCase
+final class CacheItemPoolDecoratorTest extends TestCase
 {
-    use MockStorageTrait;
+    protected $defaultCapabilities = [
+        'staticTtl' => true,
+        'minTtl' => 1,
+        'supportedDatatypes' => [
+            'NULL'     => true,
+            'boolean'  => true,
+            'integer'  => true,
+            'double'   => true,
+            'string'   => true,
+            'array'    => true,
+            'object'   => 'object',
+            'resource' => false,
+        ],
+    ];
 
     /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
+     * @var (Capabilities&MockObject)|null
      */
-    public function testStorageNotFlushableThrowsException()
+    private $capabilitiesMock;
+
+    /**
+     * @var (AdapterOptions&MockObject)|null
+     */
+    private $optionsMock;
+
+    /**
+     * @return StorageInterface&MockObject
+     */
+    private function createMockedStorage(
+        array $capabilities = null,
+        array $options = null
+    ): StorageInterface {
+        $storage = $this->createMock(FlushableNamespaceStorageInterface::class);
+
+        $storage
+            ->method('getEventManager')
+            ->willReturn(new EventManager());
+
+        $capabilities = $this->createCapabilitiesMock(
+            $storage,
+            $capabilities ?? $this->defaultCapabilities
+        );
+
+        $storage
+            ->method('getCapabilities')
+            ->willReturn($capabilities);
+
+        $storage
+            ->method('getOptions')
+            ->willReturn($this->createOptionsMock($options));
+
+        return $storage;
+    }
+
+    public function testStorageNotFlushableThrowsException(): void
     {
-        $storage = $this->prophesize(StorageInterface::class);
+        $this->expectException(CacheException::class);
+        $storage = $this->createMock(StorageInterface::class);
 
-        $capabilities = new Capabilities($storage->reveal(), new stdClass(), $this->defaultCapabilities);
+        $capabilities = new Capabilities($storage, new stdClass(), $this->defaultCapabilities);
 
-        $storage->getCapabilities()->willReturn($capabilities);
+        $storage
+            ->expects(self::once())
+            ->method('getCapabilities')
+            ->willReturn($capabilities);
 
         $this->getAdapter($storage);
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
-     */
-    public function testStorageNeedsSerializerWillThrowException()
+    public function testStorageNeedsSerializerWillThrowException(): void
     {
-        $storage = $this->prophesize(StorageInterface::class);
+        $this->expectException(CacheException::class);
+        $storage = $this->createMock(StorageInterface::class);
 
         $dataTypes = [
             'staticTtl' => true,
@@ -57,91 +112,116 @@ class CacheItemPoolDecoratorTest extends TestCase
                 'resource' => false,
             ],
         ];
-        $capabilities = new Capabilities($storage->reveal(), new stdClass(), $dataTypes);
+        $capabilities = new Capabilities($storage, new stdClass(), $dataTypes);
 
-        $storage->getCapabilities()->willReturn($capabilities);
+        $storage
+            ->expects(self::once())
+            ->method('getCapabilities')
+            ->willReturn($capabilities);
 
         $this->getAdapter($storage);
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
-     */
-    public function testStorageFalseStaticTtlThrowsException()
+    public function testStorageFalseStaticTtlThrowsException(): void
     {
-        $storage = $this->getStorageProphesy(['staticTtl' => false]);
+        $this->expectException(CacheException::class);
+        $storage = $this->createMockedStorage(['staticTtl' => false]);
         $this->getAdapter($storage);
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\CacheException
-     */
-    public function testStorageZeroMinTtlThrowsException()
+    public function testStorageZeroMinTtlThrowsException(): void
     {
-        $storage = $this->getStorageProphesy(['staticTtl' => true, 'minTtl' => 0]);
+        $this->expectException(CacheException::class);
+        $storage = $this->createMockedStorage(['staticTtl' => true, 'minTtl' => 0]);
         $this->getAdapter($storage);
     }
 
-    public function testGetDeferredItem()
+    public function testGetDeferredItem(): void
     {
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $adapter = $this->getAdapter($storage);
+
+        $storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->with('foo')
+            ->willReturnOnConsecutiveCalls(null);
+
         $item = $adapter->getItem('foo');
         $item->set('bar');
         $adapter->saveDeferred($item);
         $item = $adapter->getItem('foo');
-        $this->assertTrue($item->isHit());
-        $this->assertEquals('bar', $item->get());
+        self::assertTrue($item->isHit());
+        self::assertEquals('bar', $item->get());
     }
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testGetItemInvalidKeyThrowsException($key)
     {
-        $this->getAdapter()->getItem($key);
+        $this->expectException(InvalidArgumentException::class);
+        $storage = $this->createMockedStorage();
+        $this->getAdapter($storage)->getItem($key);
     }
 
-    public function testGetItemRuntimeExceptionIsMiss()
+    public function testGetItemRuntimeExceptionIsMiss(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->getItem(Argument::type('string'), Argument::any())
-            ->willThrow(Exception\RuntimeException::class);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->willThrowException(new Exception\RuntimeException());
+
         $adapter = $this->getAdapter($storage);
         $item = $adapter->getItem('foo');
-        $this->assertFalse($item->isHit());
+        self::assertFalse($item->isHit());
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
-    public function testGetItemInvalidArgumentExceptionRethrown()
+    public function testGetItemInvalidArgumentExceptionRethrown(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->getItem(Argument::type('string'), Argument::any())
-            ->willThrow(Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->willThrowException(new Exception\InvalidArgumentException());
         $this->getAdapter($storage)->getItem('foo');
     }
 
-    public function testGetNonexistentItems()
+    public function testGetNonexistentItems(): void
     {
         $keys = ['foo', 'bar'];
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('getItems')
+            ->with($keys)
+            ->willReturn([]);
+
+        $adapter = $this->getAdapter($storage);
         $items = $adapter->getItems($keys);
-        $this->assertEquals($keys, array_keys($items));
+        self::assertEquals($keys, array_keys($items));
         foreach ($keys as $key) {
-            $this->assertEquals($key, $items[$key]->getKey());
+            self::assertEquals($key, $items[$key]->getKey());
         }
         foreach ($items as $item) {
-            $this->assertNull($item->get());
-            $this->assertFalse($item->isHit());
+            self::assertNull($item->get());
+            self::assertFalse($item->isHit());
         }
     }
 
-    public function testGetDeferredItems()
+    public function testGetDeferredItems(): void
     {
         $keys = ['foo', 'bar'];
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('getItems')
+            ->with($keys)
+            ->willReturn([]);
+
+        $adapter = $this->getAdapter($storage);
         $items = $adapter->getItems($keys);
         foreach ($items as $item) {
             $item->set('baz');
@@ -149,299 +229,492 @@ class CacheItemPoolDecoratorTest extends TestCase
         }
         $items = $adapter->getItems($keys);
         foreach ($items as $item) {
-            $this->assertTrue($item->isHit());
+            self::assertTrue($item->isHit());
         }
     }
 
-    public function testGetMixedItems()
+    public function testGetMixedItems(): void
     {
         $keys = ['foo', 'bar'];
-        $storage = $this->getStorageProphesy();
-        $storage->getItems($keys)
+        $storage = $this->createMockedStorage();
+
+        $storage
+            ->expects(self::once())
+            ->method('getItems')
+            ->with($keys)
             ->willReturn(['bar' => 'value']);
+
         $items = $this->getAdapter($storage)->getItems($keys);
-        $this->assertEquals(2, count($items));
-        $this->assertNull($items['foo']->get());
-        $this->assertFalse($items['foo']->isHit());
-        $this->assertEquals('value', $items['bar']->get());
-        $this->assertTrue($items['bar']->isHit());
+        self::assertCount(2, $items);
+        self::assertNull($items['foo']->get());
+        self::assertFalse($items['foo']->isHit());
+        self::assertEquals('value', $items['bar']->get());
+        self::assertTrue($items['bar']->isHit());
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
-    public function testGetItemsInvalidKeyThrowsException()
+    public function testGetItemsInvalidKeyThrowsException(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $keys = ['ok'] + $this->getInvalidKeys();
-        $this->getAdapter()->getItems($keys);
+        $this->getAdapter($this->createMockedStorage())->getItems($keys);
     }
 
-    public function testGetItemsRuntimeExceptionIsMiss()
+    public function testGetItemsRuntimeExceptionIsMiss(): void
     {
         $keys = ['foo', 'bar'];
-        $storage = $this->getStorageProphesy();
-        $storage->getItems(Argument::type('array'))
-            ->willThrow(Exception\RuntimeException::class);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('getItems')
+            ->with($keys)
+            ->willThrowException(new Exception\RuntimeException());
+
         $items = $this->getAdapter($storage)->getItems($keys);
-        $this->assertEquals(2, count($items));
+        self::assertCount(2, $items);
         foreach ($keys as $key) {
-            $this->assertFalse($items[$key]->isHit());
+            self::assertFalse($items[$key]->isHit());
         }
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
-    public function testGetItemsInvalidArgumentExceptionRethrown()
+    public function testGetItemsInvalidArgumentExceptionRethrown(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->getItems(Argument::type('array'))
-            ->willThrow(Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('getItems')
+            ->willThrowException(new Exception\InvalidArgumentException());
         $this->getAdapter($storage)->getItems(['foo', 'bar']);
     }
 
-    public function testSaveItem()
+    public function testSaveItem(): void
     {
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->with('foo')
+            ->wilLReturn(null);
+
+        $storage
+            ->expects(self::once())
+            ->method('getItems')
+            ->with(['foo'])
+            ->willReturn(['foo' => 'bar']);
+
+        $storage
+            ->expects(self::once())
+            ->method('setItem')
+            ->with('foo', 'bar')
+            ->willReturn(true);
+
+        $adapter = $this->getAdapter($storage);
         $item = $adapter->getItem('foo');
         $item->set('bar');
-        $this->assertTrue($adapter->save($item));
+        self::assertTrue($adapter->save($item));
         $saved = $adapter->getItems(['foo']);
-        $this->assertEquals('bar', $saved['foo']->get());
-        $this->assertTrue($saved['foo']->isHit());
+        self::assertEquals('bar', $saved['foo']->get());
+        self::assertTrue($saved['foo']->isHit());
     }
 
-    public function testSaveItemWithExpiration()
+    public function testSaveItemWithExpiration(): void
     {
-        $storage = $this->getStorageProphesy()->reveal();
-        $adapter = new CacheItemPoolDecorator($storage);
+        $storage = $this->createMockedStorage();
+        $adapter = $this->getAdapter($storage);
+
+        $storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->with('foo')
+            ->willReturn(null);
+
+        assert($this->optionsMock instanceof MockObject);
+        $this->optionsMock
+            ->expects(self::exactly(2))
+            ->method('setTtl')
+            ->withConsecutive([3600], [0])
+            ->willReturnSelf();
+
+        $storage
+            ->expects(self::once())
+            ->method('setItem')
+            ->with('foo', 'bar')
+            ->willReturn(true);
+
+        $storage
+            ->expects(self::once())
+            ->method('getItems')
+            ->with(['foo'])
+            ->willReturn(['foo' => 'bar']);
+
         $item = $adapter->getItem('foo');
         $item->set('bar');
         $item->expiresAfter(3600);
-        $this->assertTrue($adapter->save($item));
+        self::assertTrue($adapter->save($item));
         $saved = $adapter->getItems(['foo']);
-        $this->assertEquals('bar', $saved['foo']->get());
-        $this->assertTrue($saved['foo']->isHit());
+        self::assertEquals('bar', $saved['foo']->get());
+        self::assertTrue($saved['foo']->isHit());
         // ensure original TTL not modified
         $options = $storage->getOptions();
-        $this->assertEquals(0, $options->getTtl());
+        self::assertEquals(0, $options->getTtl());
     }
 
-    public function testExpiredItemNotSaved()
+    public function testExpiredItemNotSaved(): void
     {
-        $storage = $this->getStorageProphesy()->reveal();
-        $adapter = new CacheItemPoolDecorator($storage);
+        $storage = $this->createMockedStorage();
+        $adapter = $this->getAdapter($storage);
+
+        $storage
+            ->expects(self::exactly(2))
+            ->method('getItem')
+            ->with('foo')
+            ->willReturnOnConsecutiveCalls(null, 'bar');
+
+        $storage
+            ->expects(self::once())
+            ->method('setItem')
+            ->with('foo', 'bar')
+            ->willReturn(true);
+
+        assert($this->optionsMock instanceof MockObject);
+        $this->optionsMock
+            ->expects(self::once())
+            ->method('setTtl')
+            ->with(0)
+            ->willReturnSelf();
+
         $item = $adapter->getItem('foo');
         $item->set('bar');
         $item->expiresAfter(0);
-        $this->assertTrue($adapter->save($item));
+        self::assertTrue($adapter->save($item));
         $saved = $adapter->getItem('foo');
-        $this->assertFalse($saved->isHit());
+        self::assertFalse($saved->isHit());
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
-    public function testSaveForeignItemThrowsException()
+    public function testSaveForeignItemThrowsException(): void
     {
-        $item = $this->prophesize(CacheItemInterface::class);
-        $this->getAdapter()->save($item->reveal());
+        $this->expectException(InvalidArgumentException::class);
+        $item = $this->createMock(CacheItemInterface::class);
+        $this->getAdapter($this->createMockedStorage())->save($item);
     }
 
-    public function testSaveItemRuntimeExceptionReturnsFalse()
+    public function testSaveItemRuntimeExceptionReturnsFalse(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->setItem(Argument::type('string'), Argument::any())
-            ->willThrow(Exception\RuntimeException::class);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('setItem')
+            ->willThrowException(new Exception\RuntimeException());
         $adapter = $this->getAdapter($storage);
         $item = $adapter->getItem('foo');
-        $this->assertFalse($adapter->save($item));
+        self::assertFalse($adapter->save($item));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
-    public function testSaveItemInvalidArgumentExceptionRethrown()
+    public function testSaveItemInvalidArgumentExceptionRethrown(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->setItem(Argument::type('string'), Argument::any())
-            ->willThrow(Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('setItem')
+            ->willThrowException(new Exception\InvalidArgumentException());
         $adapter = $this->getAdapter($storage);
         $item = $adapter->getItem('foo');
         $adapter->save($item);
     }
 
-    public function testHasItemReturnsTrue()
+    public function testHasItemReturnsTrue(): void
     {
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->with('foo')
+            ->willReturn(null);
+
+        $storage
+            ->expects(self::once())
+            ->method('setItem')
+            ->with('foo', 'bar')
+            ->willReturn(true);
+
+        $storage
+            ->expects(self::once())
+            ->method('hasItem')
+            ->with('foo')
+            ->willReturn(true);
+
+        $adapter = $this->getAdapter($storage);
         $item = $adapter->getItem('foo');
         $item->set('bar');
         $adapter->save($item);
-        $this->assertTrue($adapter->hasItem('foo'));
+        self::assertTrue($adapter->hasItem('foo'));
     }
 
-    public function testHasNonexistentItemReturnsFalse()
+    public function testHasNonexistentItemReturnsFalse(): void
     {
-        $this->assertFalse($this->getAdapter()->hasItem('foo'));
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('hasItem')
+            ->with('foo')
+            ->willReturn(false);
+
+        self::assertFalse($this->getAdapter($storage)->hasItem('foo'));
     }
 
-    public function testHasDeferredItemReturnsTrue()
+    public function testHasDeferredItemReturnsTrue(): void
     {
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $adapter = $this->getAdapter($storage);
+
+        $storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->with('foo')
+            ->willReturn(null);
+
         $item = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
-        $this->assertTrue($adapter->hasItem('foo'));
+        self::assertTrue($adapter->hasItem('foo'));
     }
 
-    public function testHasExpiredDeferredItemReturnsFalse()
+    public function testHasExpiredDeferredItemReturnsFalse(): void
     {
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $adapter = $this->getAdapter($storage);
+
+        $storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->with('foo')
+            ->willReturn(null);
+
+        $storage
+            ->expects(self::once())
+            ->method('hasItem')
+            ->with('foo')
+            ->willReturn(false);
+
         $item = $adapter->getItem('foo');
         $item->set('bar');
         $item->expiresAfter(0);
         $adapter->saveDeferred($item);
-        $this->assertFalse($adapter->hasItem('foo'));
+        self::assertFalse($adapter->hasItem('foo'));
     }
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testHasItemInvalidKeyThrowsException($key)
     {
-        $this->getAdapter()->hasItem($key);
+        $this->expectException(InvalidArgumentException::class);
+        $this->getAdapter($this->createMockedStorage())->hasItem($key);
     }
 
-    public function testHasItemRuntimeExceptionReturnsFalse()
+    public function testHasItemRuntimeExceptionReturnsFalse(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->hasItem(Argument::type('string'))
-            ->willThrow(Exception\RuntimeException::class);
-        $this->assertFalse($this->getAdapter($storage)->hasItem('foo'));
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('hasItem')
+            ->willThrowException(new Exception\RuntimeException());
+        self::assertFalse($this->getAdapter($storage)->hasItem('foo'));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
-    public function testHasItemInvalidArgumentExceptionRethrown()
+    public function testHasItemInvalidArgumentExceptionRethrown(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->hasItem(Argument::type('string'))
-            ->willThrow(Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('hasItem')
+            ->willThrowException(new Exception\InvalidArgumentException());
         $this->getAdapter($storage)->hasItem('foo');
     }
 
-    public function testClearReturnsTrue()
+    public function testClearReturnsTrue(): void
     {
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $adapter = $this->getAdapter($storage);
+        $storage
+            ->expects(self::once())
+            ->method('clearByNamespace')
+            ->with('laminascache')
+            ->willReturn(true);
+
         $item = $adapter->getItem('foo');
         $item->set('bar');
         $adapter->save($item);
-        $this->assertTrue($adapter->clear());
+        self::assertTrue($adapter->clear());
     }
 
-    public function testClearEmptyReturnsTrue()
+    public function testClearWithoutNamespaceReturnsTrue(): void
     {
-        $this->assertTrue($this->getAdapter()->clear());
+        $storage = $this->createMockedStorage(null, ['namespace' => '']);
+        $adapter = $this->getAdapter($storage);
+        $storage
+            ->expects(self::once())
+            ->method('flush')
+            ->willReturn(true);
+
+        $item = $adapter->getItem('foo');
+        $item->set('bar');
+        $adapter->save($item);
+        self::assertTrue($adapter->clear());
     }
 
-    public function testClearDeferred()
+    public function testClearEmptyReturnsTrue(): void
     {
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage(null, ['namespace' => '']);
+        $storage
+            ->expects(self::once())
+            ->method('flush')
+            ->willReturn(true);
+
+        self::assertTrue($this->getAdapter($storage)->clear());
+    }
+
+    public function testClearDeferred(): void
+    {
+        $storage = $this->createMockedStorage();
+        $adapter = $this->getAdapter($storage);
+
+        $storage
+            ->expects(self::once())
+            ->method('hasItem')
+            ->willReturn(false);
+
         $item = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
         $adapter->clear();
-        $this->assertFalse($adapter->hasItem('foo'));
+        self::assertFalse($adapter->hasItem('foo'));
     }
 
-    public function testClearRuntimeExceptionReturnsFalse()
+    public function testClearRuntimeExceptionReturnsFalse(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->flush()
-            ->willThrow(Exception\RuntimeException::class);
-        $this->assertFalse($this->getAdapter($storage)->clear());
+        $storage = $this->createMockedStorage(null, ['namespace' => '']);
+        $storage
+            ->expects(self::once())
+            ->method('flush')
+            ->willThrowException(new Exception\RuntimeException());
+        self::assertFalse($this->getAdapter($storage)->clear());
     }
 
-    public function testClearByNamespaceReturnsTrue()
+    public function testClearByNamespaceReturnsTrue(): void
     {
-        $storage = $this->getStorageProphesy(false, ['namespace' => 'laminascache']);
-        $storage->clearByNamespace(Argument::any())->willReturn(true)->shouldBeCalled();
-        $this->assertTrue($this->getAdapter($storage)->clear());
+        $storage = $this->createMockedStorage(null, ['namespace' => 'laminascache']);
+        $storage
+            ->expects(self::once())
+            ->method('clearByNamespace')
+            ->with('laminascache')
+            ->willReturn(true);
+
+        self::assertTrue($this->getAdapter($storage)->clear());
     }
 
-    public function testClearByEmptyNamespaceCallsFlush()
+    public function testClearByEmptyNamespaceCallsFlush(): void
     {
-        $storage = $this->getStorageProphesy(false, ['namespace' => '']);
-        $storage->flush()->willReturn(true)->shouldBeCalled();
-        $this->assertTrue($this->getAdapter($storage)->clear());
+        $storage = $this->createMockedStorage(null, ['namespace' => '']);
+        $storage
+            ->expects(self::once())
+            ->method('flush')
+            ->willReturn(true);
+
+        self::assertTrue($this->getAdapter($storage)->clear());
     }
 
-    public function testClearByNamespaceRuntimeExceptionReturnsFalse()
+    public function testClearByNamespaceRuntimeExceptionReturnsFalse(): void
     {
-        $storage = $this->getStorageProphesy(false, ['namespace' => 'laminascache']);
-        $storage->clearByNamespace(Argument::any())
-            ->willThrow(Exception\RuntimeException::class)
-            ->shouldBeCalled();
-        $this->assertFalse($this->getAdapter($storage)->clear());
+        $storage = $this->createMockedStorage(null, ['namespace' => 'laminascache']);
+        $storage
+            ->expects(self::once())
+            ->method('clearByNamespace')
+            ->willThrowException(new Exception\RuntimeException());
+        self::assertFalse($this->getAdapter($storage)->clear());
     }
 
-    public function testDeleteItemReturnsTrue()
+    public function testDeleteItemReturnsTrue(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->removeItems(['foo'])->shouldBeCalled()->willReturn(['foo']);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('removeItems')
+            ->with(['foo'])
+            ->willReturn(['foo']);
 
-        $this->assertTrue($this->getAdapter($storage)->deleteItem('foo'));
+        self::assertTrue($this->getAdapter($storage)->deleteItem('foo'));
     }
 
-    public function testDeleteDeferredItem()
+    public function testDeleteDeferredItem(): void
     {
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('hasItem')
+            ->with('foo')
+            ->willReturn(false);
+
+        $adapter = $this->getAdapter($storage);
         $item = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
         $adapter->deleteItem('foo');
-        $this->assertFalse($adapter->hasItem('foo'));
+        self::assertFalse($adapter->hasItem('foo'));
     }
 
     /**
      * @dataProvider invalidKeyProvider
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
      */
     public function testDeleteItemInvalidKeyThrowsException($key)
     {
-        $this->getAdapter()->deleteItem($key);
+        $this->expectException(InvalidArgumentException::class);
+        $this->getAdapter($this->createMockedStorage())->deleteItem($key);
     }
 
-    public function testDeleteItemRuntimeExceptionReturnsFalse()
+    public function testDeleteItemRuntimeExceptionReturnsFalse(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->removeItems(Argument::type('array'))
-            ->willThrow(Exception\RuntimeException::class);
-        $this->assertFalse($this->getAdapter($storage)->deleteItem('foo'));
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('removeItems')
+            ->willThrowException(new Exception\RuntimeException());
+        self::assertFalse($this->getAdapter($storage)->deleteItem('foo'));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
-    public function testDeleteItemInvalidArgumentExceptionRethrown()
+    public function testDeleteItemInvalidArgumentExceptionRethrown(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->removeItems(Argument::type('array'))
-            ->willThrow(Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('removeItems')
+            ->willThrowException(new Exception\InvalidArgumentException());
         $this->getAdapter($storage)->deleteItem('foo');
     }
 
-    public function testDeleteItemsReturnsTrue()
+    public function testDeleteItemsReturnsTrue(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->removeItems(['foo', 'bar', 'baz'])->shouldBeCalled()->willReturn(['foo']);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('removeItems')
+            ->with(['foo', 'bar', 'baz'])
+            ->willReturn(['foo']);
 
-        $this->assertTrue($this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']));
+        self::assertTrue($this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']));
     }
 
-    public function testDeleteDeferredItems()
+    public function testDeleteDeferredItems(): void
     {
         $keys = ['foo', 'bar', 'baz'];
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::exactly(2))
+            ->method('hasItem')
+            ->withConsecutive(['foo'], ['bar'])
+            ->willReturn(false);
+
+        $adapter = $this->getAdapter($storage);
         foreach ($keys as $key) {
             $item = $adapter->getItem($key);
             $adapter->saveDeferred($item);
@@ -449,77 +722,94 @@ class CacheItemPoolDecoratorTest extends TestCase
         $keys = ['foo', 'bar'];
         $adapter->deleteItems($keys);
         foreach ($keys as $key) {
-            $this->assertFalse($adapter->hasItem($key));
+            self::assertFalse($adapter->hasItem($key));
         }
-        $this->assertTrue($adapter->hasItem('baz'));
+        self::assertTrue($adapter->hasItem('baz'));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
-    public function testDeleteItemsInvalidKeyThrowsException()
+    public function testDeleteItemsInvalidKeyThrowsException(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $keys = ['ok'] + $this->getInvalidKeys();
-        $this->getAdapter()->deleteItems($keys);
+        $this->getAdapter($this->createMockedStorage())->deleteItems($keys);
     }
 
-    public function testDeleteItemsRuntimeExceptionReturnsFalse()
+    public function testDeleteItemsRuntimeExceptionReturnsFalse(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->removeItems(Argument::type('array'))
-            ->willThrow(Exception\RuntimeException::class);
-        $this->assertFalse($this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']));
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('removeItems')
+            ->willThrowException(new Exception\RuntimeException());
+        self::assertFalse($this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
-    public function testDeleteItemsInvalidArgumentExceptionRethrown()
+    public function testDeleteItemsInvalidArgumentExceptionRethrown(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->removeItems(Argument::type('array'))
-            ->willThrow(Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
+        $storage = $this->createMockedStorage();
+        $storage
+            ->expects(self::once())
+            ->method('removeItems')
+            ->willThrowException(new Exception\InvalidArgumentException());
         $this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']);
     }
 
-    public function testSaveDeferredReturnsTrue()
+    public function testSaveDeferredReturnsTrue(): void
     {
-        $adapter = $this->getAdapter();
+        $adapter = $this->getAdapter($this->createMockedStorage());
         $item = $adapter->getItem('foo');
-        $this->assertTrue($adapter->saveDeferred($item));
+        self::assertTrue($adapter->saveDeferred($item));
     }
 
-    /**
-     * @expectedException \Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException
-     */
-    public function testSaveDeferredForeignItemThrowsException()
+    public function testSaveDeferredForeignItemThrowsException(): void
     {
-        $item = $this->prophesize(CacheItemInterface::class);
-        $this->getAdapter()->saveDeferred($item->reveal());
+        $this->expectException(InvalidArgumentException::class);
+        $item = $this->createMock(CacheItemInterface::class);
+        $this->getAdapter($this->createMockedStorage())->saveDeferred($item);
     }
 
-    public function testCommitReturnsTrue()
+    public function testCommitReturnsTrue(): void
     {
-        $adapter = $this->getAdapter();
+        $storage = $this->createMockedStorage();
+        $adapter = $this->getAdapter($storage);
+        $storage
+            ->expects(self::once())
+            ->method('setItem')
+            ->with('foo', null)
+            ->willReturn(true);
+
         $item = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
-        $this->assertTrue($adapter->commit());
+        self::assertTrue($adapter->commit());
     }
 
-    public function testCommitEmptyReturnsTrue()
+    public function testCommitEmptyReturnsTrue(): void
     {
-        $this->assertTrue($this->getAdapter()->commit());
+        self::assertTrue($this->getAdapter($this->createMockedStorage())->commit());
     }
 
-    public function testCommitRuntimeExceptionReturnsFalse()
+    public function testCommitRuntimeExceptionReturnsFalse(): void
     {
-        $storage = $this->getStorageProphesy();
-        $storage->setItem(Argument::type('string'), Argument::any())
-            ->willThrow(Exception\RuntimeException::class);
+        $storage = $this->createMockedStorage();
+        $counter = 0;
+        $storage
+            ->expects(self::atLeastOnce())
+            ->method('setItem')
+            ->willReturnCallback(static function () use (&$counter): bool {
+                // Using this counter as `__destruct` is calling commit aswell.
+                $counter++;
+                if ($counter === 1) {
+                    throw new Exception\RuntimeException();
+                }
+
+                return false;
+            });
+
         $adapter = $this->getAdapter($storage);
         $item = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
-        $this->assertFalse($adapter->commit());
+        self::assertFalse($adapter->commit());
     }
 
     public function invalidKeyProvider()
@@ -545,14 +835,43 @@ class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @param Prophesy $storage
      * @return CacheItemPoolDecorator
      */
-    private function getAdapter($storage = null)
+    private function getAdapter(StorageInterface $storage): CacheItemPoolDecorator
     {
-        if (! $storage) {
-            $storage = $this->getStorageProphesy();
+        return new CacheItemPoolDecorator($storage);
+    }
+
+    /**
+     * @param array<string,mixed> $capabilities
+     *
+     * @return Capabilities&MockObject
+     */
+    private function createCapabilitiesMock(StorageInterface $storage, array $capabilities): Capabilities
+    {
+        return $this->capabilitiesMock = $this
+            ->getMockBuilder(Capabilities::class)
+            ->enableProxyingToOriginalMethods()
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([
+                $storage,
+                new \stdClass(),
+                $capabilities,
+            ])->getMock();
+    }
+
+    private function createOptionsMock(?array $options): AdapterOptions
+    {
+        $mock = $this->optionsMock = $this
+            ->getMockBuilder(AdapterOptions::class)
+            ->enableProxyingToOriginalMethods()
+            ->enableOriginalConstructor()
+            ->getMock();
+
+        if ($options) {
+            $mock->setFromArray($options);
         }
-        return new CacheItemPoolDecorator($storage->reveal());
+
+        return $mock;
     }
 }

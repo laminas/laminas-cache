@@ -7,16 +7,13 @@ declare(strict_types=1);
  * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
 
-namespace Laminas\Cache\Service;
+namespace LaminasTest\Cache\Psr\TestAsset;
 
-use Laminas\Cache\PatternPluginManager;
-use Psr\Container\ContainerInterface;
+use Laminas\Cache\Storage\FlushableInterface;
+use Laminas\Cache\Storage\PluginAwareInterface;
+use Laminas\Cache\Storage\StorageInterface;
 
-final class PatternPluginManagerFactory
+interface FlushableStorageInterface extends StorageInterface, FlushableInterface, PluginAwareInterface
 {
 
-    public function __invoke(ContainerInterface $container): PatternPluginManager
-    {
-        return new PatternPluginManager($container);
-    }
 }
