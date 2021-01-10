@@ -12,15 +12,12 @@ use Laminas\Cache\Exception;
 
 abstract class AbstractPattern implements PatternInterface
 {
-    /**
-     * @var PatternOptions
-     */
+    /** @var PatternOptions */
     protected $options;
 
     /**
      * Set pattern options
      *
-     * @param  PatternOptions $options
      * @return AbstractPattern Provides a fluent interface
      * @throws Exception\InvalidArgumentException
      */

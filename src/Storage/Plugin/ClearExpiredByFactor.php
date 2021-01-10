@@ -12,6 +12,8 @@ use Laminas\Cache\Storage\ClearExpiredInterface;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\EventManagerInterface;
 
+use function random_int;
+
 class ClearExpiredByFactor extends AbstractPlugin
 {
     /**
@@ -30,18 +32,18 @@ class ClearExpiredByFactor extends AbstractPlugin
     /**
      * Clear expired items by factor after writing new item(s)
      *
-     * @param  PostEvent $event
      * @return void
+     * @phpcs:disable Generic.NamingConventions.ConstructorName.OldStyle
      */
     public function clearExpiredByFactor(PostEvent $event)
     {
         $storage = $event->getStorage();
-        if (! ($storage instanceof ClearExpiredInterface)) {
+        if (! $storage instanceof ClearExpiredInterface) {
             return;
         }
 
         $factor = $this->getOptions()->getClearingFactor();
-        if ($factor && mt_rand(1, $factor) == 1) {
+        if ($factor && random_int(1, $factor) === 1) {
             $storage->clearExpired();
         }
     }

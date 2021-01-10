@@ -14,6 +14,18 @@ use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
 
+use function array_merge;
+use function get_class;
+use function is_array;
+use function is_string;
+use function sprintf;
+use function trigger_error;
+
+use const E_USER_DEPRECATED;
+
+/**
+ * @phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+ */
 abstract class StorageFactory
 {
     /**
@@ -21,14 +33,14 @@ abstract class StorageFactory
      *
      * @var null|Storage\AdapterPluginManager
      */
-    protected static $adapters = null;
+    protected static $adapters;
 
     /**
      * Plugin manager for loading plugins
      *
      * @var null|Storage\PluginManager
      */
-    protected static $plugins = null;
+    protected static $plugins;
 
     /**
      * The storage factory
@@ -63,7 +75,7 @@ abstract class StorageFactory
             }
 
             $adapterName    = $cfg['adapter']['name'];
-            $adapterOptions = isset($cfg['adapter']['options']) ? $cfg['adapter']['options'] : [];
+            $adapterOptions = $cfg['adapter']['options'] ?? [];
         }
         if (isset($cfg['options'])) {
             $adapterOptions = array_merge($adapterOptions, $cfg['options']);
@@ -171,7 +183,7 @@ abstract class StorageFactory
     public static function getAdapterPluginManager()
     {
         if (static::$adapters === null) {
-            static::$adapters = new Storage\AdapterPluginManager(new ServiceManager);
+            static::$adapters = new Storage\AdapterPluginManager(new ServiceManager());
         }
         return static::$adapters;
     }
@@ -179,7 +191,6 @@ abstract class StorageFactory
     /**
      * Change the adapter plugin manager
      *
-     * @param  Storage\AdapterPluginManager $adapters
      * @return void
      */
     public static function setAdapterPluginManager(Storage\AdapterPluginManager $adapters)
@@ -232,7 +243,7 @@ abstract class StorageFactory
     public static function getPluginManager()
     {
         if (static::$plugins === null) {
-            static::$plugins = new Storage\PluginManager(new ServiceManager);
+            static::$plugins = new Storage\PluginManager(new ServiceManager());
         }
         return static::$plugins;
     }
@@ -240,7 +251,6 @@ abstract class StorageFactory
     /**
      * Change the plugin manager
      *
-     * @param  Storage\PluginManager $plugins
      * @return void
      */
     public static function setPluginManager(Storage\PluginManager $plugins)

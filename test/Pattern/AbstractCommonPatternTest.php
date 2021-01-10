@@ -8,50 +8,49 @@
 
 namespace LaminasTest\Cache\Pattern;
 
+use Laminas\Cache\Pattern\PatternInterface;
+use Laminas\Cache\Pattern\PatternOptions;
 use Laminas\Cache\PatternPluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
-use Laminas\Cache\Pattern\PatternInterface;
-use Laminas\Cache\Pattern\PatternOptions;
 
 /**
  * @group      Laminas_Cache
  * @covers \Laminas\Cache\Pattern\PatternOptions<extended>
  */
-abstract class CommonPatternTest extends TestCase
+abstract class AbstractCommonPatternTest extends TestCase
 {
-    // @codingStandardsIgnoreStart
-    /**
-     * @var \Laminas\Cache\Pattern\PatternInterface
-     */
-    protected $_pattern;
-    // @codingStandardsIgnoreEnd
+    /** @var PatternInterface */
+    protected $pattern;
 
     public function setUp(): void
     {
         self::assertInstanceOf(
             PatternInterface::class,
-            $this->_pattern,
+            $this->pattern,
             'Internal pattern instance is needed for tests'
         );
     }
 
     public function tearDown(): void
     {
-        unset($this->_pattern);
+        unset($this->pattern);
+        parent::tearDown();
     }
 
     /**
      * A data provider for common pattern names
+     *
+     * @return iterable<string,array{0:string}>
      */
     abstract public function getCommonPatternNamesProvider();
 
     /**
      * @dataProvider getCommonPatternNamesProvider
      */
-    public function testPatternPluginManagerWithCommonNames($commonPatternName)
+    public function testPatternPluginManagerWithCommonNames(string $commonPatternName)
     {
-        $pluginManager = new PatternPluginManager(new ServiceManager);
+        $pluginManager = new PatternPluginManager(new ServiceManager());
         self::assertTrue(
             $pluginManager->has($commonPatternName),
             "Pattern name '{$commonPatternName}' not found in PatternPluginManager"
@@ -60,14 +59,14 @@ abstract class CommonPatternTest extends TestCase
 
     public function testOptionNamesValid(): void
     {
-        $options = $this->_pattern->getOptions();
+        $options = $this->pattern->getOptions();
         self::assertInstanceOf(PatternOptions::class, $options);
     }
 
     public function testOptionsGetAndSetDefault(): void
     {
-        $options = $this->_pattern->getOptions();
-        $this->_pattern->setOptions($options);
-        self::assertSame($options, $this->_pattern->getOptions());
+        $options = $this->pattern->getOptions();
+        $this->pattern->setOptions($options);
+        self::assertSame($options, $this->pattern->getOptions());
     }
 }

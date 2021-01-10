@@ -14,12 +14,34 @@ use Laminas\Cache\StorageFactory;
 use Laminas\Stdlib\AbstractOptions;
 use Traversable;
 
+use function array_intersect;
+use function array_map;
+use function array_unique;
+use function array_values;
+use function get_class;
+use function gettype;
+use function is_array;
+use function is_dir;
+use function is_object;
+use function is_readable;
+use function is_string;
+use function is_writable;
+use function octdec;
+use function realpath;
+use function rtrim;
+use function sprintf;
+use function stripos;
+
+use const DIRECTORY_SEPARATOR;
+use const PHP_OS;
+
 class PatternOptions extends AbstractOptions
 {
     /**
      * Used by:
      * - ClassCache
      * - ObjectCache
+     *
      * @var bool
      */
     protected $cacheByDefault = true;
@@ -29,6 +51,7 @@ class PatternOptions extends AbstractOptions
      * - CallbackCache
      * - ClassCache
      * - ObjectCache
+     *
      * @var bool
      */
     protected $cacheOutput = true;
@@ -36,6 +59,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - ClassCache
+     *
      * @var null|string
      */
     protected $class;
@@ -43,6 +67,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - ClassCache
+     *
      * @var array
      */
     protected $classCacheMethods = [];
@@ -50,6 +75,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - ClassCache
+     *
      * @var array
      */
     protected $classNonCacheMethods = [];
@@ -57,6 +83,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - CaptureCache
+     *
      * @var false|int
      */
     protected $umask = false;
@@ -64,6 +91,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - CaptureCache
+     *
      * @var false|int
      */
     protected $dirPermission = 0700;
@@ -71,6 +99,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - CaptureCache
+     *
      * @var false|int
      */
     protected $filePermission = 0600;
@@ -78,6 +107,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - CaptureCache
+     *
      * @var bool
      */
     protected $fileLocking = true;
@@ -85,6 +115,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - CaptureCache
+     *
      * @var string
      */
     protected $indexFilename = 'index.html';
@@ -92,6 +123,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - ObjectCache
+     *
      * @var null|object
      */
     protected $object;
@@ -99,6 +131,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - ObjectCache
+     *
      * @var bool
      */
     protected $objectCacheMagicProperties = false;
@@ -106,6 +139,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - ObjectCache
+     *
      * @var array
      */
     protected $objectCacheMethods = [];
@@ -113,6 +147,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - ObjectCache
+     *
      * @var null|string
      */
     protected $objectKey;
@@ -120,6 +155,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - ObjectCache
+     *
      * @var array
      */
     protected $objectNonCacheMethods = ['__tostring'];
@@ -127,6 +163,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - CaptureCache
+     *
      * @var null|string
      */
     protected $publicDir;
@@ -137,6 +174,7 @@ class PatternOptions extends AbstractOptions
      * - ClassCache
      * - ObjectCache
      * - OutputCache
+     *
      * @var null|Storage
      */
     protected $storage;
@@ -153,7 +191,7 @@ class PatternOptions extends AbstractOptions
         // disable file/directory permissions by default on windows systems
         if (stripos(PHP_OS, 'WIN') === 0) {
             $this->filePermission = false;
-            $this->dirPermission = false;
+            $this->dirPermission  = false;
         }
 
         parent::__construct($options);
@@ -312,7 +350,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Set directory permission
      *
-     * @param  false|int $dirPermission
+     * @param  false|int|string|float $dirPermission
      * @throws Exception\InvalidArgumentException
      * @return PatternOptions Provides a fluent interface
      */
@@ -325,7 +363,11 @@ class PatternOptions extends AbstractOptions
                 $dirPermission = (int) $dirPermission;
             }
 
-            // validate
+            /**
+             * Code is untested, applying strict type check might lead to unexpected errors.
+             *
+             * @phpcs:disable SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedNotEqualOperator
+             */
             if (($dirPermission & 0700) != 0700) {
                 throw new Exception\InvalidArgumentException(
                     'Invalid directory permission: need permission to execute, read and write by owner'
@@ -353,7 +395,7 @@ class PatternOptions extends AbstractOptions
      * Used by:
      * - CaptureCache
      *
-     * @param  false|int $umask
+     * @param  false|int|string|float $umask
      * @throws Exception\InvalidArgumentException
      * @return PatternOptions Provides a fluent interface
      */
@@ -374,7 +416,7 @@ class PatternOptions extends AbstractOptions
             }
 
             // normalize
-            $umask = $umask & ~0002;
+            $umask &= ~0002;
         }
 
         $this->umask = $umask;
@@ -425,7 +467,7 @@ class PatternOptions extends AbstractOptions
     /**
      * Set file permission
      *
-     * @param  false|int $filePermission
+     * @param  false|int|string|float $filePermission
      * @throws Exception\InvalidArgumentException
      * @return PatternOptions Provides a fluent interface
      */
@@ -438,12 +480,18 @@ class PatternOptions extends AbstractOptions
                 $filePermission = (int) $filePermission;
             }
 
-            // validate
+            /**
+             * Code is untested, applying strict type check might lead to unexpected errors.
+             *
+             * @phpcs:disable SlevomatCodingStandard.Operators.DisallowEqualOperators.DisallowedNotEqualOperator
+             */
             if (($filePermission & 0600) != 0600) {
                 throw new Exception\InvalidArgumentException(
                     'Invalid file permission: need permission to read and write by owner'
                 );
-            } elseif ($filePermission & 0111) {
+            }
+
+            if ($filePermission & 0111) {
                 throw new Exception\InvalidArgumentException(
                     "Invalid file permission: Files shouldn't be executable"
                 );
@@ -751,7 +799,7 @@ class PatternOptions extends AbstractOptions
             $storage = StorageFactory::factory($storage);
         } elseif (is_string($storage)) {
             $storage = StorageFactory::adapterFactory($storage);
-        } elseif (! ($storage instanceof Storage)) {
+        } elseif (! $storage instanceof Storage) {
             throw new Exception\InvalidArgumentException(
                 'The storage must be an instanceof Laminas\Cache\Storage\StorageInterface '
                 . 'or an array passed to Laminas\Cache\Storage::factory '

@@ -8,6 +8,9 @@
 
 namespace Laminas\Cache;
 
+use Zend\Cache\Storage\AdapterPluginManager;
+use Zend\Cache\Storage\PluginManager;
+
 class ConfigProvider
 {
     /**
@@ -31,18 +34,18 @@ class ConfigProvider
     {
         return [
             // Legacy Zend Framework aliases
-            'aliases' => [
+            'aliases'            => [
                 \Zend\Cache\PatternPluginManager::class => PatternPluginManager::class,
-                \Zend\Cache\Storage\AdapterPluginManager::class => Storage\AdapterPluginManager::class,
-                \Zend\Cache\Storage\PluginManager::class => Storage\PluginManager::class,
+                AdapterPluginManager::class             => Storage\AdapterPluginManager::class,
+                PluginManager::class                    => Storage\PluginManager::class,
             ],
             'abstract_factories' => [
                 Service\StorageCacheAbstractServiceFactory::class,
             ],
-            'factories' => [
-                PatternPluginManager::class => Service\PatternPluginManagerFactory::class,
+            'factories'          => [
+                PatternPluginManager::class         => Service\PatternPluginManagerFactory::class,
                 Storage\AdapterPluginManager::class => Service\StorageAdapterPluginManagerFactory::class,
-                Storage\PluginManager::class => Service\StoragePluginManagerFactory::class,
+                Storage\PluginManager::class        => Service\StoragePluginManagerFactory::class,
             ],
         ];
     }

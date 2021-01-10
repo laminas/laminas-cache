@@ -10,17 +10,22 @@ namespace LaminasTest\Cache;
 
 use ErrorException;
 use Laminas\Cache;
+use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Storage\Adapter\Memory;
+use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\Plugin\ClearExpiredByFactor;
 use Laminas\Cache\Storage\Plugin\IgnoreUserAbort;
 use Laminas\Cache\Storage\Plugin\Serializer;
+use Laminas\Cache\Storage\PluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ErrorHandler;
 use LaminasTest\Cache\Storage\Adapter\TestAsset\AdapterWithStorageAndEventsCapableInterface;
 use PHPUnit\Framework\TestCase;
-use Laminas\Cache\Storage\PluginManager;
-use Laminas\Cache\Storage\AdapterPluginManager;
-use Laminas\Cache\Exception\RuntimeException;
+
+use function get_class;
+use function sprintf;
+
+use const E_USER_DEPRECATED;
 
 /**
  * @group      Laminas_Cache
@@ -48,7 +53,7 @@ class StorageFactoryTest extends TestCase
 
     public function testChangeAdapterPluginManager(): void
     {
-        $adapters = new Cache\Storage\AdapterPluginManager(new ServiceManager);
+        $adapters = new Cache\Storage\AdapterPluginManager(new ServiceManager());
         Cache\StorageFactory::setAdapterPluginManager($adapters);
         self::assertSame($adapters, Cache\StorageFactory::getAdapterPluginManager());
     }
@@ -72,7 +77,7 @@ class StorageFactoryTest extends TestCase
 
     public function testChangePluginManager(): void
     {
-        $manager = new Cache\Storage\PluginManager(new ServiceManager);
+        $manager = new Cache\Storage\PluginManager(new ServiceManager());
         Cache\StorageFactory::setPluginManager($manager);
         self::assertSame($manager, Cache\StorageFactory::getPluginManager());
     }
@@ -104,7 +109,7 @@ class StorageFactoryTest extends TestCase
         $cache = Cache\StorageFactory::factory([
             'adapter' => 'Memory',
             'options' => [
-                'namespace' => 'test'
+                'namespace' => 'test',
             ],
         ]);
 
@@ -117,7 +122,7 @@ class StorageFactoryTest extends TestCase
         $cache = Cache\StorageFactory::factory([
             'adapter' => [
                 'name' => 'Memory',
-            ]
+            ],
         ]);
         self::assertInstanceOf(Memory::class, $cache);
     }
@@ -159,11 +164,11 @@ class StorageFactoryTest extends TestCase
     {
         $factory = [
             'adapter' => [
-                 'name' => 'Memory',
-                 'options' => [
-                     'ttl' => 123,
-                     'namespace' => 'willBeOverwritten'
-                 ],
+                'name'    => 'Memory',
+                'options' => [
+                    'ttl'       => 123,
+                    'namespace' => 'willBeOverwritten',
+                ],
             ],
             'plugins' => [
                 // plugin as a simple string entry
@@ -185,7 +190,7 @@ class StorageFactoryTest extends TestCase
             ],
             'options' => [
                 'namespace' => 'test',
-            ]
+            ],
         ];
         $storage = Cache\StorageFactory::factory($factory);
 
@@ -225,7 +230,7 @@ class StorageFactoryTest extends TestCase
     public function testWillTriggerDeprecationWarningForMissingPluginAwareInterface(): void
     {
         $adapters = $this->createMock(Cache\Storage\AdapterPluginManager::class);
-        $mock = $this->createMock(AdapterWithStorageAndEventsCapableInterface::class);
+        $mock     = $this->createMock(AdapterWithStorageAndEventsCapableInterface::class);
 
         $adapters
             ->expects(self::once())

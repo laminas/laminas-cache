@@ -16,6 +16,16 @@ use Laminas\Cache\Storage\StorageInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
+use function array_diff;
+use function array_diff_key;
+use function array_flip;
+use function array_keys;
+use function get_class;
+use function gettype;
+use function is_string;
+use function preg_match;
+use function sprintf;
+
 /**
  * Decorate laminas-cache adapters as PSR-6 cache item pools.
  *
@@ -26,24 +36,16 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 {
     use SerializationTrait;
 
-    /**
-     * @var StorageInterface
-     */
+    /** @var StorageInterface */
     private $storage;
 
-    /**
-     * @var CacheItem[]
-     */
+    /** @var CacheItem[] */
     private $deferred = [];
 
     /**
-     * Constructor.
-     *
      * PSR-6 requires that all implementing libraries support TTL so the given storage adapter must also support static
      * TTL or an exception will be raised. Currently the following adapters do *not* support static TTL: Dba,
      * Filesystem, Memory, Session and Redis < v2.
-     *
-     * @param StorageInterface $storage
      *
      * @throws CacheException
      */
@@ -54,8 +56,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     }
 
     /**
-     * Destructor.
-     *
      * Saves any deferred items that have not been committed
      */
     public function __destruct()
@@ -115,7 +115,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             }
 
             foreach ($cacheItems as $key => $value) {
-                $isHit = true;
+                $isHit       = true;
                 $items[$key] = new CacheItem($key, $value, $isHit);
             }
 
@@ -283,7 +283,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
     /**
      * Throws exception is storage is not compatible with PSR-6
-     * @param StorageInterface $storage
+     *
      * @throws CacheException
      */
     private function validateStorage(StorageInterface $storage)
@@ -332,6 +332,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
     /**
      * Returns true if deferred item exists for given key and has not expired
+     *
      * @param string $key
      * @return bool
      */
@@ -346,6 +347,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
     /**
      * Throws exception if given key is invalid
+     *
      * @param mixed $key
      * @throws InvalidArgumentException
      */
@@ -361,6 +363,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
     /**
      * Throws exception if any of given keys is invalid
+     *
      * @param array $keys
      * @throws InvalidArgumentException
      */

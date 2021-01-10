@@ -2,7 +2,9 @@
 
 namespace LaminasBench\Cache;
 
-use Laminas\Cache\Storage\StorageAdapterInterface;
+use Laminas\Cache\Storage\StorageInterface;
+
+use function array_keys;
 
 /**
  * @BeforeMethods({"setUp"})
@@ -10,20 +12,22 @@ use Laminas\Cache\Storage\StorageAdapterInterface;
  * @BeforeClassMethods({"setUpClass"})
  * @AfterClassMethods({"tearDownClass"})
  */
-abstract class CommonStorageAdapterBench
+abstract class AbstractCommonStorageAdapterBench
 {
-    /**
-     * @var StorageAdapterInterface
-     */
+    /** @var StorageInterface */
     protected $storage;
 
     /**
      * Key-Value-Pairs of existing items
+     *
+     * @var array<string,int>
      */
     protected $warmItems = [];
 
     /**
      * Key-Value-Pairs of missing items
+     *
+     * @var array<string,int>
      */
     protected $coldItems = [];
 
@@ -48,14 +52,6 @@ abstract class CommonStorageAdapterBench
     public function tearDown()
     {
         $this->storage->removeItems(array_keys($this->coldItems));
-    }
-
-    public static function setUpClass()
-    {
-    }
-
-    public static function tearDownClass()
-    {
     }
 
     /**

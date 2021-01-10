@@ -8,8 +8,29 @@
 
 namespace Laminas\Cache\Pattern;
 
+use GlobIterator;
 use Laminas\Cache\Exception;
 use Laminas\Stdlib\ErrorHandler;
+
+use function array_unshift;
+use function basename;
+use function chmod;
+use function decoct;
+use function dirname;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function mkdir;
+use function ob_implicit_flush;
+use function ob_start;
+use function rtrim;
+use function str_replace;
+use function substr;
+use function umask;
+use function unlink;
+
+use const DIRECTORY_SEPARATOR;
+use const LOCK_EX;
 
 class CaptureCache extends AbstractPattern
 {
@@ -169,9 +190,9 @@ class CaptureCache extends AbstractPattern
             throw new Exception\LogicException("Option 'public_dir' no set");
         }
 
-        $it = new \GlobIterator(
+        $it = new GlobIterator(
             $publicDir . '/' . $pattern,
-            \GlobIterator::CURRENT_AS_SELF | \GlobIterator::SKIP_DOTS | \GlobIterator::UNIX_PATHS
+            GlobIterator::CURRENT_AS_SELF | GlobIterator::SKIP_DOTS | GlobIterator::UNIX_PATHS
         );
         foreach ($it as $pathname => $entry) {
             if ($entry->isFile()) {
@@ -218,14 +239,14 @@ class CaptureCache extends AbstractPattern
      */
     protected function pageId2Path($pageId)
     {
-        if (substr($pageId, -1) == '/') {
+        if (substr($pageId, -1) === '/') {
             $path = rtrim($pageId, '/');
         } else {
             $path = dirname($pageId);
         }
 
         // convert requested "/" to the valid local directory separator
-        if ('/' != DIRECTORY_SEPARATOR) {
+        if (DIRECTORY_SEPARATOR !== '/') {
             $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
         }
 
@@ -247,12 +268,12 @@ class CaptureCache extends AbstractPattern
         $perm    = $options->getFilePermission();
         $umask   = $options->getUmask();
         if ($umask !== false && $perm !== false) {
-            $perm = $perm & ~$umask;
+            $perm &= ~$umask;
         }
 
         ErrorHandler::start();
 
-        $umask = ($umask !== false) ? umask($umask) : false;
+        $umask = $umask !== false ? umask($umask) : false;
         $rs    = file_put_contents($file, $data, $locking ? LOCK_EX : 0);
         if ($umask) {
             umask($umask);
@@ -290,7 +311,7 @@ class CaptureCache extends AbstractPattern
         $perm    = $options->getDirPermission();
         $umask   = $options->getUmask();
         if ($umask !== false && $perm !== false) {
-            $perm = $perm & ~$umask;
+            $perm &= ~$umask;
         }
 
         ErrorHandler::start();
@@ -298,15 +319,15 @@ class CaptureCache extends AbstractPattern
         if ($perm === false) {
             // built-in mkdir function is enough
 
-            $umask = ($umask !== false) ? umask($umask) : false;
-            $res   = mkdir($pathname, ($perm !== false) ? $perm : 0775, true);
+            $umask = $umask !== false ? umask($umask) : false;
+            $res   = mkdir($pathname, $perm !== false ? $perm : 0775, true);
 
             if ($umask !== false) {
                 umask($umask);
             }
 
             if (! $res) {
-                $oct = ($perm === false) ? '775' : decoct($perm);
+                $oct = $perm === false ? '775' : decoct($perm);
                 $err = ErrorHandler::stop();
                 throw new Exception\RuntimeException("mkdir('{$pathname}', 0{$oct}, true) failed", 0, $err);
             }
@@ -338,14 +359,14 @@ class CaptureCache extends AbstractPattern
                 $path .= DIRECTORY_SEPARATOR . $part;
 
                 // create a single directory, set and reset umask immediately
-                $umask = ($umask !== false) ? umask($umask) : false;
-                $res   = mkdir($path, ($perm === false) ? 0775 : $perm, false);
+                $umask = $umask !== false ? umask($umask) : false;
+                $res   = mkdir($path, $perm === false ? 0775 : $perm, false);
                 if ($umask !== false) {
                     umask($umask);
                 }
 
                 if (! $res) {
-                    $oct = ($perm === false) ? '775' : decoct($perm);
+                    $oct = $perm === false ? '775' : decoct($perm);
                     ErrorHandler::stop();
                     throw new Exception\RuntimeException(
                         "mkdir('{$path}', 0{$oct}, false) failed"

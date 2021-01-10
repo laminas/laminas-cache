@@ -12,6 +12,8 @@ use Countable;
 use Laminas\Cache\Storage\IteratorInterface;
 use Laminas\Cache\Storage\StorageInterface;
 
+use function count;
+
 class KeyListIterator implements IteratorInterface, Countable
 {
     /**
@@ -52,7 +54,6 @@ class KeyListIterator implements IteratorInterface, Countable
     /**
      * Constructor
      *
-     * @param StorageInterface $storage
      * @param array            $keys
      */
     public function __construct(StorageInterface $storage, array $keys)
@@ -101,15 +102,17 @@ class KeyListIterator implements IteratorInterface, Countable
      */
     public function current()
     {
-        if ($this->mode == IteratorInterface::CURRENT_AS_SELF) {
+        if ($this->mode === IteratorInterface::CURRENT_AS_SELF) {
             return $this;
         }
 
         $key = $this->key();
 
-        if ($this->mode == IteratorInterface::CURRENT_AS_METADATA) {
+        if ($this->mode === IteratorInterface::CURRENT_AS_METADATA) {
             return $this->storage->getMetadata($key);
-        } elseif ($this->mode == IteratorInterface::CURRENT_AS_VALUE) {
+        }
+
+        if ($this->mode === IteratorInterface::CURRENT_AS_VALUE) {
             return $this->storage->getItem($key);
         }
 

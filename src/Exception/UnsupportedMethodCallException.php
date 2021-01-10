@@ -8,7 +8,9 @@
 
 namespace Laminas\Cache\Exception;
 
-class UnsupportedMethodCallException extends \BadMethodCallException implements
+use BadMethodCallException;
+
+class UnsupportedMethodCallException extends BadMethodCallException implements
     ExceptionInterface
 {
 }

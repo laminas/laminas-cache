@@ -12,6 +12,8 @@ use Interop\Container\ContainerInterface;
 use Laminas\Cache\StorageFactory;
 use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 
+use function is_array;
+
 /**
  * Storage cache factory for multiple caches.
  */
@@ -19,9 +21,7 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
 {
     use PluginManagerLookupTrait;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $config;
 
     /**
@@ -32,7 +32,6 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
     protected $configKey = 'caches';
 
     /**
-     * @param ContainerInterface $container
      * @param string $requestedName
      * @return boolean
      */
@@ -42,18 +41,17 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
         if (empty($config)) {
             return false;
         }
-        return (isset($config[$requestedName]) && is_array($config[$requestedName]));
+        return isset($config[$requestedName]) && is_array($config[$requestedName]);
     }
 
     /**
      * Create an object
      *
-     * @param  ContainerInterface $container
      * @param  string             $requestedName
      * @param  null|array         $options
      * @return object
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->prepareStorageFactory($container);
 
@@ -64,7 +62,6 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
     /**
      * Retrieve cache configuration, if any
      *
-     * @param  ContainerInterface $container
      * @return array
      */
     protected function getConfig(ContainerInterface $container)

@@ -18,7 +18,7 @@ class PatternPluginManagerFactoryTest extends TestCase
     public function testFactoryReturnsPluginManager(): void
     {
         $container = $this->createMock(ContainerInterface::class);
-        $factory = new PatternPluginManagerFactory();
+        $factory   = new PatternPluginManagerFactory();
 
         $patterns = $factory($container);
         self::assertInstanceOf(PatternPluginManager::class, $patterns);

@@ -8,6 +8,8 @@
 
 namespace Laminas\Cache\Exception;
 
-class OutOfSpaceException extends \OverflowException implements ExceptionInterface
+use OverflowException;
+
+class OutOfSpaceException extends OverflowException implements ExceptionInterface
 {
 }

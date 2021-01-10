@@ -10,6 +10,11 @@ namespace Laminas\Cache\Storage;
 
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Zend\Cache\Storage\Plugin\ClearExpiredByFactor;
+use Zend\Cache\Storage\Plugin\ExceptionHandler;
+use Zend\Cache\Storage\Plugin\IgnoreUserAbort;
+use Zend\Cache\Storage\Plugin\OptimizeByFactor;
+use Zend\Cache\Storage\Plugin\Serializer;
 
 /**
  * Plugin manager implementation for cache plugins
@@ -20,6 +25,7 @@ use Laminas\ServiceManager\Factory\InvokableFactory;
  */
 class PluginManager extends AbstractPluginManager
 {
+    /** @var array<string,string> */
     protected $aliases = [
         'clear_expired_by_factor' => Plugin\ClearExpiredByFactor::class,
         'clearexpiredbyfactor'    => Plugin\ClearExpiredByFactor::class,
@@ -41,19 +47,20 @@ class PluginManager extends AbstractPluginManager
         'Serializer'              => Plugin\Serializer::class,
 
         // Legacy Zend Framework aliases
-        \Zend\Cache\Storage\Plugin\ClearExpiredByFactor::class => Plugin\ClearExpiredByFactor::class,
-        \Zend\Cache\Storage\Plugin\ExceptionHandler::class => Plugin\ExceptionHandler::class,
-        \Zend\Cache\Storage\Plugin\IgnoreUserAbort::class => Plugin\IgnoreUserAbort::class,
-        \Zend\Cache\Storage\Plugin\OptimizeByFactor::class => Plugin\OptimizeByFactor::class,
-        \Zend\Cache\Storage\Plugin\Serializer::class => Plugin\Serializer::class,
+        ClearExpiredByFactor::class => Plugin\ClearExpiredByFactor::class,
+        ExceptionHandler::class     => Plugin\ExceptionHandler::class,
+        IgnoreUserAbort::class      => Plugin\IgnoreUserAbort::class,
+        OptimizeByFactor::class     => Plugin\OptimizeByFactor::class,
+        Serializer::class           => Plugin\Serializer::class,
     ];
 
+    /** @var array<string,string> */
     protected $factories = [
-        Plugin\ClearExpiredByFactor::class           => InvokableFactory::class,
-        Plugin\ExceptionHandler::class               => InvokableFactory::class,
-        Plugin\IgnoreUserAbort::class                => InvokableFactory::class,
-        Plugin\OptimizeByFactor::class               => InvokableFactory::class,
-        Plugin\Serializer::class                     => InvokableFactory::class,
+        Plugin\ClearExpiredByFactor::class => InvokableFactory::class,
+        Plugin\ExceptionHandler::class     => InvokableFactory::class,
+        Plugin\IgnoreUserAbort::class      => InvokableFactory::class,
+        Plugin\OptimizeByFactor::class     => InvokableFactory::class,
+        Plugin\Serializer::class           => InvokableFactory::class,
     ];
 
     /**
@@ -63,8 +70,6 @@ class PluginManager extends AbstractPluginManager
      */
     protected $sharedByDefault = false;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $instanceOf = Plugin\PluginInterface::class;
 }

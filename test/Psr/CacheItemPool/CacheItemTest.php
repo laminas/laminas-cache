@@ -14,8 +14,12 @@ use Laminas\Cache\Psr\CacheItemPool\CacheItem;
 use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
+use function date_default_timezone_get;
+use function date_default_timezone_set;
+
 class CacheItemTest extends TestCase
 {
+    /** @var string */
     private $tz;
 
     protected function setUp(): void
@@ -48,7 +52,7 @@ class CacheItemTest extends TestCase
 
     public function testSet(): void
     {
-        $item = new CacheItem('key', 'value', true);
+        $item   = new CacheItem('key', 'value', true);
         $return = $item->set('value2');
         self::assertEquals($item, $return);
         self::assertEquals('value2', $item->get());
@@ -56,16 +60,16 @@ class CacheItemTest extends TestCase
 
     public function testExpiresAtDateTime(): void
     {
-        $item = new CacheItem('key', 'value', true);
+        $item     = new CacheItem('key', 'value', true);
         $dateTime = new DateTime('+5 seconds');
-        $return = $item->expiresAt($dateTime);
+        $return   = $item->expiresAt($dateTime);
         self::assertEquals($item, $return);
         self::assertEquals(5, $item->getTtl());
     }
 
     public function testExpireAtNull(): void
     {
-        $item = new CacheItem('key', 'value', true);
+        $item   = new CacheItem('key', 'value', true);
         $return = $item->expiresAt(null);
         self::assertEquals($item, $return);
         self::assertNull($item->getTtl());
@@ -80,7 +84,7 @@ class CacheItemTest extends TestCase
 
     public function testExpiresAfterInt(): void
     {
-        $item = new CacheItem('key', 'value', true);
+        $item   = new CacheItem('key', 'value', true);
         $return = $item->expiresAfter(3600);
         self::assertEquals($item, $return);
         self::assertEquals(3600, $item->getTtl());
@@ -88,9 +92,9 @@ class CacheItemTest extends TestCase
 
     public function testExpiresAfterInterval(): void
     {
-        $item = new CacheItem('key', 'value', true);
+        $item     = new CacheItem('key', 'value', true);
         $interval = new DateInterval('PT1H');
-        $return = $item->expiresAfter($interval);
+        $return   = $item->expiresAfter($interval);
         self::assertEquals($item, $return);
         self::assertEquals(3600, $item->getTtl());
     }
