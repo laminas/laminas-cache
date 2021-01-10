@@ -9,8 +9,6 @@ use function array_keys;
 /**
  * @BeforeMethods({"setUp"})
  * @AfterMethods({"tearDown"})
- * @BeforeClassMethods({"setUpClass"})
- * @AfterClassMethods({"tearDownClass"})
  */
 abstract class AbstractCommonStorageAdapterBench
 {
