@@ -10,22 +10,6 @@ namespace Laminas\Cache\Storage;
 
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use Zend\Cache\Storage\Adapter\Apc;
-use Zend\Cache\Storage\Adapter\Apcu;
-use Zend\Cache\Storage\Adapter\BlackHole;
-use Zend\Cache\Storage\Adapter\Dba;
-use Zend\Cache\Storage\Adapter\ExtMongoDb;
-use Zend\Cache\Storage\Adapter\Filesystem;
-use Zend\Cache\Storage\Adapter\Memcache;
-use Zend\Cache\Storage\Adapter\Memcached;
-use Zend\Cache\Storage\Adapter\Memory;
-use Zend\Cache\Storage\Adapter\MongoDb;
-use Zend\Cache\Storage\Adapter\Redis;
-use Zend\Cache\Storage\Adapter\Session;
-use Zend\Cache\Storage\Adapter\WinCache;
-use Zend\Cache\Storage\Adapter\XCache;
-use Zend\Cache\Storage\Adapter\ZendServerDisk;
-use Zend\Cache\Storage\Adapter\ZendServerShm;
 
 /**
  * Plugin manager implementation for cache storage adapters
@@ -94,24 +78,6 @@ class AdapterPluginManager extends AbstractPluginManager
         'zendServerSHM'    => Adapter\ZendServerShm::class,
         'ZendServerShm'    => Adapter\ZendServerShm::class,
         'ZendServerSHM'    => Adapter\ZendServerShm::class,
-
-        // Legacy Zend Framework aliases
-        Apc::class            => Adapter\Apc::class,
-        Apcu::class           => Adapter\Apcu::class,
-        BlackHole::class      => Adapter\BlackHole::class,
-        Dba::class            => Adapter\Dba::class,
-        ExtMongoDb::class     => Adapter\ExtMongoDb::class,
-        Filesystem::class     => Adapter\Filesystem::class,
-        Memcache::class       => Adapter\Memcache::class,
-        Memcached::class      => Adapter\Memcached::class,
-        Memory::class         => Adapter\Memory::class,
-        MongoDb::class        => Adapter\MongoDb::class,
-        Redis::class          => Adapter\Redis::class,
-        Session::class        => Adapter\Session::class,
-        WinCache::class       => Adapter\WinCache::class,
-        XCache::class         => Adapter\XCache::class,
-        ZendServerDisk::class => Adapter\ZendServerDisk::class,
-        ZendServerShm::class  => Adapter\ZendServerShm::class,
     ];
 
     /** @var array<string,string> */

@@ -14,11 +14,6 @@ use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Webmozart\Assert\Assert;
-use Zend\Cache\Pattern\CallbackCache;
-use Zend\Cache\Pattern\CaptureCache;
-use Zend\Cache\Pattern\ClassCache;
-use Zend\Cache\Pattern\ObjectCache;
-use Zend\Cache\Pattern\OutputCache;
 
 use function assert;
 
@@ -39,13 +34,6 @@ class PatternPluginManager extends AbstractPluginManager
         'Object'   => Pattern\ObjectCache::class,
         'output'   => Pattern\OutputCache::class,
         'Output'   => Pattern\OutputCache::class,
-
-        // Legacy Zend Framework aliases
-        CallbackCache::class => Pattern\CallbackCache::class,
-        CaptureCache::class  => Pattern\CaptureCache::class,
-        ClassCache::class    => Pattern\ClassCache::class,
-        ObjectCache::class   => Pattern\ObjectCache::class,
-        OutputCache::class   => Pattern\OutputCache::class,
     ];
 
     /** @var array<string,string> */
