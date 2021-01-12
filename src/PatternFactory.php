@@ -12,6 +12,15 @@ use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
 
+use function get_class;
+use function gettype;
+use function is_array;
+use function is_object;
+use function sprintf;
+
+/**
+ * @phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+ */
 abstract class PatternFactory
 {
     /**
@@ -19,7 +28,7 @@ abstract class PatternFactory
      *
      * @var null|PatternPluginManager
      */
-    protected static $plugins = null;
+    protected static $plugins;
 
     /**
      * Instantiate a cache pattern
@@ -44,7 +53,7 @@ abstract class PatternFactory
                 '%s expects an array, Traversable object, or %s\Pattern\PatternOptions object; received "%s"',
                 __METHOD__,
                 __NAMESPACE__,
-                (is_object($options) ? get_class($options) : gettype($options))
+                is_object($options) ? get_class($options) : gettype($options)
             ));
         }
 
@@ -64,7 +73,7 @@ abstract class PatternFactory
     public static function getPluginManager()
     {
         if (static::$plugins === null) {
-            static::$plugins = new PatternPluginManager(new ServiceManager);
+            static::$plugins = new PatternPluginManager(new ServiceManager());
         }
 
         return static::$plugins;
@@ -73,7 +82,6 @@ abstract class PatternFactory
     /**
      * Set the pattern plugin manager
      *
-     * @param  PatternPluginManager $plugins
      * @return void
      */
     public static function setPluginManager(PatternPluginManager $plugins)

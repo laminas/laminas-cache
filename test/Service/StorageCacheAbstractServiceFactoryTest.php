@@ -22,30 +22,31 @@ use PHPUnit\Framework\TestCase;
 
 class StorageCacheAbstractServiceFactoryTest extends TestCase
 {
+    /** @var ServiceManager */
     protected $sm;
 
     public function setUp(): void
     {
         StorageFactory::resetAdapterPluginManager();
         StorageFactory::resetPluginManager();
-        $config = [
-            'services' => [
+        $config   = [
+            'services'           => [
                 'config' => [
                     'caches' => [
                         'Memory' => [
                             'adapter' => 'Memory',
                             'plugins' => ['Serializer', 'ClearExpiredByFactor'],
                         ],
-                        'Foo' => [
+                        'Foo'    => [
                             'adapter' => 'Memory',
                             'plugins' => ['Serializer', 'ClearExpiredByFactor'],
                         ],
-                    ]
+                    ],
                 ],
             ],
             'abstract_factories' => [
-                StorageCacheAbstractServiceFactory::class
-            ]
+                StorageCacheAbstractServiceFactory::class,
+            ],
         ];
         $this->sm = new ServiceManager();
         (new Config($config))->configureServiceManager($this->sm);
@@ -115,7 +116,7 @@ class StorageCacheAbstractServiceFactoryTest extends TestCase
             ->method('get')
             ->withConsecutive([AdapterPluginManager::class], ['config'])
             ->willReturnOnConsecutiveCalls($adapterPluginManager, [
-                'caches' => [ 'Cache' => [ 'adapter' => 'Memory' ]],
+                'caches' => ['Cache' => ['adapter' => 'Memory']],
             ]);
 
         $factory = new StorageCacheAbstractServiceFactory();
@@ -170,10 +171,12 @@ class StorageCacheAbstractServiceFactoryTest extends TestCase
             ->method('get')
             ->withConsecutive([AdapterPluginManager::class], [PluginManager::class], ['config'])
             ->willReturnOnConsecutiveCalls($adapterPluginManager, $pluginManager, [
-            'caches' => [ 'Cache' => [
-                'adapter' => 'Memory',
-                'plugins' => ['Serializer'],
-            ]],
+                'caches' => [
+                    'Cache' => [
+                        'adapter' => 'Memory',
+                        'plugins' => ['Serializer'],
+                    ],
+                ],
             ]);
 
         $factory = new StorageCacheAbstractServiceFactory();

@@ -10,6 +10,22 @@ namespace Laminas\Cache\Storage;
 
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Zend\Cache\Storage\Adapter\Apc;
+use Zend\Cache\Storage\Adapter\Apcu;
+use Zend\Cache\Storage\Adapter\BlackHole;
+use Zend\Cache\Storage\Adapter\Dba;
+use Zend\Cache\Storage\Adapter\ExtMongoDb;
+use Zend\Cache\Storage\Adapter\Filesystem;
+use Zend\Cache\Storage\Adapter\Memcache;
+use Zend\Cache\Storage\Adapter\Memcached;
+use Zend\Cache\Storage\Adapter\Memory;
+use Zend\Cache\Storage\Adapter\MongoDb;
+use Zend\Cache\Storage\Adapter\Redis;
+use Zend\Cache\Storage\Adapter\Session;
+use Zend\Cache\Storage\Adapter\WinCache;
+use Zend\Cache\Storage\Adapter\XCache;
+use Zend\Cache\Storage\Adapter\ZendServerDisk;
+use Zend\Cache\Storage\Adapter\ZendServerShm;
 
 /**
  * Plugin manager implementation for cache storage adapters
@@ -20,6 +36,7 @@ use Laminas\ServiceManager\Factory\InvokableFactory;
  */
 class AdapterPluginManager extends AbstractPluginManager
 {
+    /** @var array<string,string> */
     protected $aliases = [
         'apc'              => Adapter\Apc::class,
         'Apc'              => Adapter\Apc::class,
@@ -79,41 +96,42 @@ class AdapterPluginManager extends AbstractPluginManager
         'ZendServerSHM'    => Adapter\ZendServerShm::class,
 
         // Legacy Zend Framework aliases
-        \Zend\Cache\Storage\Adapter\Apc::class => Adapter\Apc::class,
-        \Zend\Cache\Storage\Adapter\Apcu::class => Adapter\Apcu::class,
-        \Zend\Cache\Storage\Adapter\BlackHole::class => Adapter\BlackHole::class,
-        \Zend\Cache\Storage\Adapter\Dba::class => Adapter\Dba::class,
-        \Zend\Cache\Storage\Adapter\ExtMongoDb::class => Adapter\ExtMongoDb::class,
-        \Zend\Cache\Storage\Adapter\Filesystem::class => Adapter\Filesystem::class,
-        \Zend\Cache\Storage\Adapter\Memcache::class => Adapter\Memcache::class,
-        \Zend\Cache\Storage\Adapter\Memcached::class => Adapter\Memcached::class,
-        \Zend\Cache\Storage\Adapter\Memory::class => Adapter\Memory::class,
-        \Zend\Cache\Storage\Adapter\MongoDb::class => Adapter\MongoDb::class,
-        \Zend\Cache\Storage\Adapter\Redis::class => Adapter\Redis::class,
-        \Zend\Cache\Storage\Adapter\Session::class => Adapter\Session::class,
-        \Zend\Cache\Storage\Adapter\WinCache::class => Adapter\WinCache::class,
-        \Zend\Cache\Storage\Adapter\XCache::class => Adapter\XCache::class,
-        \Zend\Cache\Storage\Adapter\ZendServerDisk::class => Adapter\ZendServerDisk::class,
-        \Zend\Cache\Storage\Adapter\ZendServerShm::class => Adapter\ZendServerShm::class,
+        Apc::class            => Adapter\Apc::class,
+        Apcu::class           => Adapter\Apcu::class,
+        BlackHole::class      => Adapter\BlackHole::class,
+        Dba::class            => Adapter\Dba::class,
+        ExtMongoDb::class     => Adapter\ExtMongoDb::class,
+        Filesystem::class     => Adapter\Filesystem::class,
+        Memcache::class       => Adapter\Memcache::class,
+        Memcached::class      => Adapter\Memcached::class,
+        Memory::class         => Adapter\Memory::class,
+        MongoDb::class        => Adapter\MongoDb::class,
+        Redis::class          => Adapter\Redis::class,
+        Session::class        => Adapter\Session::class,
+        WinCache::class       => Adapter\WinCache::class,
+        XCache::class         => Adapter\XCache::class,
+        ZendServerDisk::class => Adapter\ZendServerDisk::class,
+        ZendServerShm::class  => Adapter\ZendServerShm::class,
     ];
 
+    /** @var array<string,string> */
     protected $factories = [
-        Adapter\Apc::class                      => InvokableFactory::class,
-        Adapter\Apcu::class                     => InvokableFactory::class,
-        Adapter\BlackHole::class                => InvokableFactory::class,
-        Adapter\Dba::class                      => InvokableFactory::class,
-        Adapter\ExtMongoDb::class               => InvokableFactory::class,
-        Adapter\Filesystem::class               => InvokableFactory::class,
-        Adapter\Memcache::class                 => InvokableFactory::class,
-        Adapter\Memcached::class                => InvokableFactory::class,
-        Adapter\Memory::class                   => InvokableFactory::class,
-        Adapter\MongoDb::class                  => InvokableFactory::class,
-        Adapter\Redis::class                    => InvokableFactory::class,
-        Adapter\Session::class                  => InvokableFactory::class,
-        Adapter\WinCache::class                 => InvokableFactory::class,
-        Adapter\XCache::class                   => InvokableFactory::class,
-        Adapter\ZendServerDisk::class           => InvokableFactory::class,
-        Adapter\ZendServerShm::class            => InvokableFactory::class,
+        Adapter\Apc::class            => InvokableFactory::class,
+        Adapter\Apcu::class           => InvokableFactory::class,
+        Adapter\BlackHole::class      => InvokableFactory::class,
+        Adapter\Dba::class            => InvokableFactory::class,
+        Adapter\ExtMongoDb::class     => InvokableFactory::class,
+        Adapter\Filesystem::class     => InvokableFactory::class,
+        Adapter\Memcache::class       => InvokableFactory::class,
+        Adapter\Memcached::class      => InvokableFactory::class,
+        Adapter\Memory::class         => InvokableFactory::class,
+        Adapter\MongoDb::class        => InvokableFactory::class,
+        Adapter\Redis::class          => InvokableFactory::class,
+        Adapter\Session::class        => InvokableFactory::class,
+        Adapter\WinCache::class       => InvokableFactory::class,
+        Adapter\XCache::class         => InvokableFactory::class,
+        Adapter\ZendServerDisk::class => InvokableFactory::class,
+        Adapter\ZendServerShm::class  => InvokableFactory::class,
     ];
 
     /**
@@ -123,8 +141,6 @@ class AdapterPluginManager extends AbstractPluginManager
      */
     protected $sharedByDefault = false;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $instanceOf = StorageInterface::class;
 }

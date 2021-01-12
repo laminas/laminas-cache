@@ -20,29 +20,32 @@ use Laminas\ServiceManager\Config;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 
+use function get_class;
+
 /**
  * @covers \Laminas\Cache\Service\StorageCacheFactory
  */
 class StorageCacheFactoryTest extends TestCase
 {
+    /** @var ServiceManager */
     protected $sm;
 
     public function setUp(): void
     {
         StorageFactory::resetAdapterPluginManager();
         StorageFactory::resetPluginManager();
-        $config = [
-            'services' => [
+        $config   = [
+            'services'  => [
                 'config' => [
                     'cache' => [
                         'adapter' => 'Memory',
                         'plugins' => ['Serializer', 'ClearExpiredByFactor'],
-                    ]
-                ]
+                    ],
+                ],
             ],
             'factories' => [
-                'CacheFactory' => StorageCacheFactory::class
-            ]
+                'CacheFactory' => StorageCacheFactory::class,
+            ],
         ];
         $this->sm = new ServiceManager();
         (new Config($config))->configureServiceManager($this->sm);
@@ -90,7 +93,7 @@ class StorageCacheFactoryTest extends TestCase
             ->method('get')
             ->withConsecutive([AdapterPluginManager::class], ['config'])
             ->willReturnOnConsecutiveCalls($adapterPluginManager, [
-                'cache' => [ 'adapter' => 'Memory' ],
+                'cache' => ['adapter' => 'Memory'],
             ]);
 
         $factory = new StorageCacheFactory();

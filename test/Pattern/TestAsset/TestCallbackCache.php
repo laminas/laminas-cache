@@ -2,6 +2,9 @@
 
 namespace LaminasTest\Cache\Pattern\TestAsset;
 
+use function func_get_args;
+use function implode;
+
 /**
  * @covers \Laminas\Cache\Pattern\CallbackCache<extended>
  */
@@ -9,16 +12,18 @@ final class TestCallbackCache
 {
     /**
      * A counter how oftern the method "foo" was called
+     *
+     * @var int
      */
     public static $fooCounter = 0;
 
-    public static function bar()
+    public static function bar(): string
     {
         ++static::$fooCounter;
         $args = func_get_args();
 
-        echo   'foobar_output('.implode(', ', $args) . ') : ' . static::$fooCounter;
-        return 'foobar_return('.implode(', ', $args) . ') : ' . static::$fooCounter;
+        echo 'foobar_output(' . implode(', ', $args) . ') : ' . static::$fooCounter;
+        return 'foobar_return(' . implode(', ', $args) . ') : ' . static::$fooCounter;
     }
 
     public static function emptyMethod()

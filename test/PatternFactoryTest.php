@@ -8,11 +8,11 @@
 
 namespace LaminasTest\Cache;
 
-use Laminas\Cache;
-use PHPUnit\Framework\TestCase;
-use Laminas\Cache\PatternPluginManager;
 use Interop\Container\ContainerInterface;
+use Laminas\Cache;
 use Laminas\Cache\Pattern\CaptureCache;
+use Laminas\Cache\PatternPluginManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group      Laminas_Cache

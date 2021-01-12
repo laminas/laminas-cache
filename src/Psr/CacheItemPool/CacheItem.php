@@ -14,46 +14,52 @@ use DateTimeInterface;
 use DateTimeZone;
 use Psr\Cache\CacheItemInterface;
 
+use function gettype;
+use function is_int;
+use function sprintf;
+use function time;
+
 final class CacheItem implements CacheItemInterface
 {
     /**
      * Cache key
+     *
      * @var string
      */
     private $key;
 
     /**
      * Cache value
+     *
      * @var mixed|null
      */
     private $value;
 
     /**
      * True if the cache item lookup resulted in a cache hit or if they item is deferred or successfully saved
+     *
      * @var bool
      */
     private $isHit = false;
 
     /**
      * Timestamp item will expire at if expiresAt() called, null otherwise
+     *
      * @var int|null
      */
-    private $expiration = null;
+    private $expiration;
 
     /**
      * Seconds after item is stored it will expire at if expiresAfter() called, null otherwise
+     *
      * @var int|null
      */
-    private $ttl = null;
+    private $ttl;
 
-    /**
-     * @var DateTimeZone
-     */
+    /** @var DateTimeZone */
     private $utc;
 
     /**
-     * Constructor.
-     *
      * @param string $key
      * @param mixed $value
      * @param bool $isHit
@@ -130,7 +136,7 @@ final class CacheItem implements CacheItemInterface
         }
 
         $this->expiration = $expiration instanceof DateTimeInterface ? $expiration->getTimestamp() : null;
-        $this->ttl = null;
+        $this->ttl        = null;
 
         return $this;
     }
@@ -141,8 +147,8 @@ final class CacheItem implements CacheItemInterface
     public function expiresAfter($time)
     {
         if ($time instanceof DateInterval) {
-            $now = new DateTimeImmutable('now', $this->utc);
-            $end = $now->add($time);
+            $now       = new DateTimeImmutable('now', $this->utc);
+            $end       = $now->add($time);
             $this->ttl = $end->getTimestamp() - $now->getTimestamp();
         } elseif (is_int($time) || $time === null) {
             $this->ttl = $time;

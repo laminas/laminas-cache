@@ -22,11 +22,16 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use stdClass;
 
+use function array_keys;
+use function array_map;
+use function assert;
+
 final class CacheItemPoolDecoratorTest extends TestCase
 {
+    /** @var array<string,mixed> */
     protected $defaultCapabilities = [
-        'staticTtl' => true,
-        'minTtl' => 1,
+        'staticTtl'          => true,
+        'minTtl'             => 1,
         'supportedDatatypes' => [
             'NULL'     => true,
             'boolean'  => true,
@@ -39,22 +44,15 @@ final class CacheItemPoolDecoratorTest extends TestCase
         ],
     ];
 
-    /**
-     * @var (Capabilities&MockObject)|null
-     */
-    private $capabilitiesMock;
-
-    /**
-     * @var (AdapterOptions&MockObject)|null
-     */
+    /** @var (AdapterOptions&MockObject)|null */
     private $optionsMock;
 
     /**
      * @return StorageInterface&MockObject
      */
     private function createMockedStorage(
-        array $capabilities = null,
-        array $options = null
+        ?array $capabilities = null,
+        ?array $options = null
     ): StorageInterface {
         $storage = $this->createMock(FlushableNamespaceStorageInterface::class);
 
@@ -98,9 +96,9 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $this->expectException(CacheException::class);
         $storage = $this->createMock(StorageInterface::class);
 
-        $dataTypes = [
-            'staticTtl' => true,
-            'minTtl' => 1,
+        $dataTypes    = [
+            'staticTtl'          => true,
+            'minTtl'             => 1,
             'supportedDatatypes' => [
                 'NULL'     => true,
                 'boolean'  => true,
@@ -156,6 +154,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
+     * @param mixed $key
      * @dataProvider invalidKeyProvider
      */
     public function testGetItemInvalidKeyThrowsException($key)
@@ -174,7 +173,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willThrowException(new Exception\RuntimeException());
 
         $adapter = $this->getAdapter($storage);
-        $item = $adapter->getItem('foo');
+        $item    = $adapter->getItem('foo');
         self::assertFalse($item->isHit());
     }
 
@@ -191,7 +190,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testGetNonexistentItems(): void
     {
-        $keys = ['foo', 'bar'];
+        $keys    = ['foo', 'bar'];
         $storage = $this->createMockedStorage();
         $storage
             ->expects(self::once())
@@ -200,7 +199,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willReturn([]);
 
         $adapter = $this->getAdapter($storage);
-        $items = $adapter->getItems($keys);
+        $items   = $adapter->getItems($keys);
         self::assertEquals($keys, array_keys($items));
         foreach ($keys as $key) {
             self::assertEquals($key, $items[$key]->getKey());
@@ -213,7 +212,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testGetDeferredItems(): void
     {
-        $keys = ['foo', 'bar'];
+        $keys    = ['foo', 'bar'];
         $storage = $this->createMockedStorage();
         $storage
             ->expects(self::once())
@@ -222,7 +221,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willReturn([]);
 
         $adapter = $this->getAdapter($storage);
-        $items = $adapter->getItems($keys);
+        $items   = $adapter->getItems($keys);
         foreach ($items as $item) {
             $item->set('baz');
             $adapter->saveDeferred($item);
@@ -235,7 +234,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testGetMixedItems(): void
     {
-        $keys = ['foo', 'bar'];
+        $keys    = ['foo', 'bar'];
         $storage = $this->createMockedStorage();
 
         $storage
@@ -261,7 +260,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testGetItemsRuntimeExceptionIsMiss(): void
     {
-        $keys = ['foo', 'bar'];
+        $keys    = ['foo', 'bar'];
         $storage = $this->createMockedStorage();
         $storage
             ->expects(self::once())
@@ -309,7 +308,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willReturn(true);
 
         $adapter = $this->getAdapter($storage);
-        $item = $adapter->getItem('foo');
+        $item    = $adapter->getItem('foo');
         $item->set('bar');
         self::assertTrue($adapter->save($item));
         $saved = $adapter->getItems(['foo']);
@@ -406,7 +405,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->method('setItem')
             ->willThrowException(new Exception\RuntimeException());
         $adapter = $this->getAdapter($storage);
-        $item = $adapter->getItem('foo');
+        $item    = $adapter->getItem('foo');
         self::assertFalse($adapter->save($item));
     }
 
@@ -419,7 +418,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->method('setItem')
             ->willThrowException(new Exception\InvalidArgumentException());
         $adapter = $this->getAdapter($storage);
-        $item = $adapter->getItem('foo');
+        $item    = $adapter->getItem('foo');
         $adapter->save($item);
     }
 
@@ -445,7 +444,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willReturn(true);
 
         $adapter = $this->getAdapter($storage);
-        $item = $adapter->getItem('foo');
+        $item    = $adapter->getItem('foo');
         $item->set('bar');
         $adapter->save($item);
         self::assertTrue($adapter->hasItem('foo'));
@@ -504,6 +503,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
+     * @param mixed $key
      * @dataProvider invalidKeyProvider
      */
     public function testHasItemInvalidKeyThrowsException($key)
@@ -656,13 +656,14 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willReturn(false);
 
         $adapter = $this->getAdapter($storage);
-        $item = $adapter->getItem('foo');
+        $item    = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
         $adapter->deleteItem('foo');
         self::assertFalse($adapter->hasItem('foo'));
     }
 
     /**
+     * @param mixed $key
      * @dataProvider invalidKeyProvider
      */
     public function testDeleteItemInvalidKeyThrowsException($key)
@@ -706,7 +707,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testDeleteDeferredItems(): void
     {
-        $keys = ['foo', 'bar', 'baz'];
+        $keys    = ['foo', 'bar', 'baz'];
         $storage = $this->createMockedStorage();
         $storage
             ->expects(self::exactly(2))
@@ -758,7 +759,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     public function testSaveDeferredReturnsTrue(): void
     {
         $adapter = $this->getAdapter($this->createMockedStorage());
-        $item = $adapter->getItem('foo');
+        $item    = $adapter->getItem('foo');
         self::assertTrue($adapter->saveDeferred($item));
     }
 
@@ -807,19 +808,27 @@ final class CacheItemPoolDecoratorTest extends TestCase
             });
 
         $adapter = $this->getAdapter($storage);
-        $item = $adapter->getItem('foo');
+        $item    = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
         self::assertFalse($adapter->commit());
     }
 
-    public function invalidKeyProvider()
+    /**
+     * @return array<int,array{0:string|object}>
+     * @psalm-return list<array{0:string|object}>
+     */
+    public function invalidKeyProvider(): array
     {
         return array_map(function ($v) {
             return [$v];
         }, $this->getInvalidKeys());
     }
 
-    private function getInvalidKeys()
+    /**
+     * @return array<int,string|object>
+     * @psalm-return list<string|object>
+     */
+    private function getInvalidKeys(): array
     {
         return [
             'key{',
@@ -830,13 +839,10 @@ final class CacheItemPoolDecoratorTest extends TestCase
             'key\\',
             'key@',
             'key:',
-            new stdClass()
+            new stdClass(),
         ];
     }
 
-    /**
-     * @return CacheItemPoolDecorator
-     */
     private function getAdapter(StorageInterface $storage): CacheItemPoolDecorator
     {
         return new CacheItemPoolDecorator($storage);
@@ -844,18 +850,17 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     /**
      * @param array<string,mixed> $capabilities
-     *
      * @return Capabilities&MockObject
      */
     private function createCapabilitiesMock(StorageInterface $storage, array $capabilities): Capabilities
     {
-        return $this->capabilitiesMock = $this
+        return $this
             ->getMockBuilder(Capabilities::class)
             ->enableProxyingToOriginalMethods()
             ->enableOriginalConstructor()
             ->setConstructorArgs([
                 $storage,
-                new \stdClass(),
+                new stdClass(),
                 $capabilities,
             ])->getMock();
     }

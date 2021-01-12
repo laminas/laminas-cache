@@ -9,15 +9,21 @@
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
+use Laminas\Cache\Exception\InvalidArgumentException;
+use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\FailableCallback;
 use LaminasTest\Cache\Pattern\TestAsset\TestCallbackCache;
-use Laminas\Cache\Exception\InvalidArgumentException;
+
 use function func_get_args;
+use function implode;
+use function ob_get_clean;
+use function ob_implicit_flush;
+use function ob_start;
 
 /**
  * @see \LaminasTest\Cache\Pattern\Foo::bar
  */
-function bar()
+function bar(): string
 {
     $args = func_get_args();
     return TestCallbackCache::bar(...$args);
@@ -26,45 +32,42 @@ function bar()
 /**
  * @group      Laminas_Cache
  */
-class CallbackCacheTest extends CommonPatternTest
+class CallbackCacheTestAbstract extends AbstractCommonPatternTest
 {
-    // @codingStandardsIgnoreStart
-    /**
-     * @var \Laminas\Cache\Storage\StorageInterface
-     */
-    protected $_storage;
+    /** @var StorageInterface */
+    protected $storage;
 
-    /**
-     * @var Cache\Pattern\PatternOptions
-     */
-    private $_options;
-    // @codingStandardsIgnoreEnd
+    /** @var Cache\Pattern\PatternOptions */
+    private $options;
 
     public function setUp(): void
     {
-        $this->_storage = new Cache\Storage\Adapter\Memory([
-            'memory_limit' => 0
+        $this->storage = new Cache\Storage\Adapter\Memory([
+            'memory_limit' => 0,
         ]);
-        $this->_options = new Cache\Pattern\PatternOptions([
-            'storage' => $this->_storage,
+        $this->options = new Cache\Pattern\PatternOptions([
+            'storage' => $this->storage,
         ]);
-        $this->_pattern = new Cache\Pattern\CallbackCache();
-        $this->_pattern->setOptions($this->_options);
+        $this->pattern = new Cache\Pattern\CallbackCache();
+        $this->pattern->setOptions($this->options);
 
         parent::setUp();
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+     */
     public function getCommonPatternNamesProvider()
     {
         return [
-            ['callback'],
-            ['Callback'],
+            'lowercase' => ['callback'],
+            'lcfirst'   => ['Callback'],
         ];
     }
 
     public function testCallEnabledCacheOutputByDefault(): void
     {
-        $this->_testCall(
+        $this->executeCallbackAndMakeAssertions(
             [TestCallbackCache::class, 'bar'],
             ['testCallEnabledCacheOutputByDefault', 'arg2']
         );
@@ -72,9 +75,9 @@ class CallbackCacheTest extends CommonPatternTest
 
     public function testCallDisabledCacheOutput(): void
     {
-        $options = $this->_pattern->getOptions();
+        $options = $this->pattern->getOptions();
         $options->setCacheOutput(false);
-        $this->_testCall(
+        $this->executeCallbackAndMakeAssertions(
             [TestCallbackCache::class, 'bar'],
             ['testCallDisabledCacheOutput', 'arg2']
         );
@@ -82,7 +85,7 @@ class CallbackCacheTest extends CommonPatternTest
 
     public function testMagicFunctionCall(): void
     {
-        $this->_testCall(
+        $this->executeCallbackAndMakeAssertions(
             __NAMESPACE__ . '\bar',
             ['testMagicFunctionCall', 'arg2']
         );
@@ -93,37 +96,35 @@ class CallbackCacheTest extends CommonPatternTest
         $callback = [TestCallbackCache::class, 'emptyMethod'];
         $args     = ['arg1', 2, 3.33, null];
 
-        $generatedKey = $this->_pattern->generateKey($callback, $args);
+        $generatedKey = $this->pattern->generateKey($callback, $args);
         $usedKey      = null;
-        $this->_options->getStorage()->getEventManager()->attach('setItem.pre', function ($event) use (&$usedKey) {
-            $params = $event->getParams();
+        $this->options->getStorage()->getEventManager()->attach('setItem.pre', function ($event) use (&$usedKey) {
+            $params  = $event->getParams();
             $usedKey = $params['key'];
         });
 
-        $this->_pattern->call($callback, $args);
+        $this->pattern->call($callback, $args);
         self::assertEquals($generatedKey, $usedKey);
     }
 
     public function testCallInvalidCallbackException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->_pattern->call(1);
+        $this->pattern->call(1);
     }
 
     public function testCallUnknownCallbackException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->_pattern->call('notExiststingFunction');
+        $this->pattern->call('notExiststingFunction');
     }
 
     /**
      * Running tests calling {@see \LaminasTest\Cache\Pattern\TestCallbackCache::bar}
      * using different callbacks resulting in this method call
      */
-    // @codingStandardsIgnoreStart
-    protected function _testCall($callback, array $args)
+    protected function executeCallbackAndMakeAssertions(string $callback, array $args): void
     {
-        // @codingStandardsIgnoreEnd
         $returnSpec = 'foobar_return(' . implode(', ', $args) . ') : ';
         $outputSpec = 'foobar_output(' . implode(', ', $args) . ') : ';
 
@@ -132,8 +133,8 @@ class CallbackCacheTest extends CommonPatternTest
 
         ob_start();
         ob_implicit_flush(0);
-        $return = $this->_pattern->call($callback, $args);
-        $data = ob_get_clean();
+        $return = $this->pattern->call($callback, $args);
+        $data   = ob_get_clean();
 
         self::assertEquals($returnSpec . $firstCounter, $return);
         self::assertEquals($outputSpec . $firstCounter, $data);
@@ -141,11 +142,11 @@ class CallbackCacheTest extends CommonPatternTest
         // second call - cached
         ob_start();
         ob_implicit_flush(0);
-        $return = $this->_pattern->call($callback, $args);
-        $data = ob_get_clean();
+        $return = $this->pattern->call($callback, $args);
+        $data   = ob_get_clean();
 
         self::assertEquals($returnSpec . $firstCounter, $return);
-        $options = $this->_pattern->getOptions();
+        $options = $this->pattern->getOptions();
         if ($options->getCacheOutput()) {
             self::assertEquals($outputSpec . $firstCounter, $data);
         } else {
@@ -159,9 +160,9 @@ class CallbackCacheTest extends CommonPatternTest
     public function testCallCanReturnCachedNullValues(): void
     {
         $callback = new FailableCallback();
-        $key      = $this->_pattern->generateKey($callback, []);
-        $this->_storage->setItem($key, [null]);
-        $value    = $this->_pattern->call($callback);
+        $key      = $this->pattern->generateKey($callback, []);
+        $this->storage->setItem($key, [null]);
+        $value = $this->pattern->call($callback);
         self::assertNull($value);
     }
 }

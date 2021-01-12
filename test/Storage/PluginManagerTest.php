@@ -18,7 +18,7 @@ class PluginManagerTest extends TestCase
 {
     use CommonPluginManagerTrait;
 
-    protected function getPluginManager()
+    protected function getPluginManager(): PluginManager
     {
         return new PluginManager(new ServiceManager());
     }
@@ -33,7 +33,7 @@ class PluginManagerTest extends TestCase
         self::fail('Somehow, servicemanager v2 compatibility is being tested.');
     }
 
-    protected function getInstanceOf()
+    protected function getInstanceOf(): string
     {
         return PluginInterface::class;
     }

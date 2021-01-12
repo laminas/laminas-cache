@@ -19,14 +19,22 @@ class TtlStorage extends Adapter\AbstractAdapter
     /** @var array */
     public $ttl = [];
 
-    protected function internalGetItem(& $normalizedKey, & $success = null, & $casToken = null)
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
+     */
+    protected function internalGetItem(&$normalizedKey, &$success = null, &$casToken = null)
     {
         $success = isset($this->data[$normalizedKey]);
 
         return $success ? $this->data[$normalizedKey] : null;
     }
 
-    protected function internalSetItem(& $normalizedKey, & $value)
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
+     */
+    protected function internalSetItem(&$normalizedKey, &$value)
     {
         $this->ttl[$normalizedKey] = $this->getOptions()->getTtl();
 
@@ -34,7 +42,11 @@ class TtlStorage extends Adapter\AbstractAdapter
         return true;
     }
 
-    protected function internalRemoveItem(& $normalizedKey)
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
+     */
+    protected function internalRemoveItem(&$normalizedKey)
     {
         unset($this->data[$normalizedKey]);
         return true;

@@ -8,17 +8,16 @@
 
 namespace Laminas\Cache\Service;
 
-use Psr\Container\ContainerInterface;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\PluginManager;
 use Laminas\Cache\StorageFactory;
+use Psr\Container\ContainerInterface;
 
 trait PluginManagerLookupTrait
 {
     /**
      * Prepare the storage factory with the adapter and plugins plugin managers.
      *
-     * @param ContainerInterface $container
      * @return void
      */
     private function prepareStorageFactory(ContainerInterface $container)
@@ -33,7 +32,6 @@ trait PluginManagerLookupTrait
      * Returns the Laminas\Cache\Storage\AdapterPluginManager service if present,
      * or creates a new instance otherwise.
      *
-     * @param ContainerInterface $container
      * @return AdapterPluginManager
      */
     private function lookupStorageAdapterPluginManager(ContainerInterface $container)
@@ -50,7 +48,6 @@ trait PluginManagerLookupTrait
      * Returns the Laminas\Cache\Storage\PluginManager service if present, or
      * creates a new instance otherwise.
      *
-     * @param ContainerInterface $container
      * @return PluginManager
      */
     private function lookupStoragePluginManager(ContainerInterface $container)

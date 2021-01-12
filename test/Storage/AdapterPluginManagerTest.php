@@ -25,7 +25,7 @@ class AdapterPluginManagerTest extends TestCase
     /**
      * @dataProvider aliasProvider
      */
-    public function testPluginAliasesResolve($alias, $expected)
+    public function testPluginAliasesResolve(string $alias, string $expected)
     {
         try {
             $this->commonPluginAliasesResolve($alias, $expected);
@@ -38,7 +38,7 @@ class AdapterPluginManagerTest extends TestCase
         $this->addToAssertionCount(1);
     }
 
-    protected function getPluginManager()
+    protected function getPluginManager(): AdapterPluginManager
     {
         return new AdapterPluginManager(new ServiceManager());
     }
@@ -53,7 +53,7 @@ class AdapterPluginManagerTest extends TestCase
         self::fail('Somehow, servicemanager v2 compatibility is being tested.');
     }
 
-    protected function getInstanceOf()
+    protected function getInstanceOf(): string
     {
         return StorageInterface::class;
     }

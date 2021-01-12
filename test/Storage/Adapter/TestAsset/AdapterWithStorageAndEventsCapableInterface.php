@@ -9,5 +9,9 @@ use Laminas\EventManager\EventsCapableInterface;
 interface AdapterWithStorageAndEventsCapableInterface extends StorageInterface, EventsCapableInterface
 {
     public function hasPlugin(PluginInterface $plugin): bool;
+
+    /**
+     * @param int $priority
+     */
     public function addPlugin(PluginInterface $plugin, $priority = 1);
 }

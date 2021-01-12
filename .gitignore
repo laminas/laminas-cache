@@ -7,3 +7,4 @@
 /phpunit.xml
 /vendor/
 /.phpunit.result.cache
+/.phpcs-cache

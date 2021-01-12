@@ -2,20 +2,30 @@
 
 namespace LaminasBench\Cache;
 
+use DirectoryIterator;
 use Laminas\Cache\StorageFactory;
+
+use function error_get_last;
+use function file_exists;
+use function mkdir;
+use function rmdir;
+use function sys_get_temp_dir;
+use function tempnam;
+use function unlink;
 
 /**
  * @Revs(100)
  * @Iterations(10)
  * @Warmup(1)
  */
-class FilesystemStorageAdapterBench extends CommonStorageAdapterBench
+class FilesystemStorageAdapterBenchAbstract extends AbstractCommonStorageAdapterBench
 {
+    /** @var string */
     private $tmpCacheDir;
 
     public function __construct()
     {
-        $this->tmpCacheDir = @tempnam(sys_get_temp_dir(), 'laminas_cache_test_');
+        $this->tmpCacheDir = (string) @tempnam(sys_get_temp_dir(), 'laminas_cache_test_');
         if (! $this->tmpCacheDir) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory-file: {$err['message']}");
@@ -39,13 +49,13 @@ class FilesystemStorageAdapterBench extends CommonStorageAdapterBench
         $this->removeRecursive($this->tmpCacheDir);
     }
 
-    private function removeRecursive($dir)
+    private function removeRecursive(string $dir): void
     {
         if (file_exists($dir)) {
-            $dirIt = new \DirectoryIterator($dir);
+            $dirIt = new DirectoryIterator($dir);
             foreach ($dirIt as $entry) {
                 $fname = $entry->getFilename();
-                if ($fname == '.' || $fname == '..') {
+                if ($fname === '.' || $fname === '..') {
                     continue;
                 }
 

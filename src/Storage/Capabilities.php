@@ -13,6 +13,15 @@ use Laminas\Cache\Exception;
 use Laminas\EventManager\EventsCapableInterface;
 use stdClass;
 
+use function array_diff;
+use function array_keys;
+use function in_array;
+use function is_string;
+use function strtolower;
+use function trigger_error;
+
+use const E_USER_DEPRECATED;
+
 class Capabilities
 {
     /**
@@ -153,19 +162,16 @@ class Capabilities
     /**
      * Constructor
      *
-     * @param StorageInterface  $storage
-     * @param stdClass          $marker
      * @param array             $capabilities
-     * @param null|Capabilities $baseCapabilities
      */
     public function __construct(
         StorageInterface $storage,
         stdClass $marker,
         array $capabilities = [],
-        Capabilities $baseCapabilities = null
+        ?Capabilities $baseCapabilities = null
     ) {
-        $this->storage = $storage;
-        $this->marker  = $marker;
+        $this->storage          = $storage;
+        $this->marker           = $marker;
         $this->baseCapabilities = $baseCapabilities;
 
         foreach ($capabilities as $name => $value) {
@@ -205,7 +211,6 @@ class Capabilities
     /**
      * Set supported datatypes
      *
-     * @param  stdClass $marker
      * @param  array $datatypes
      * @throws Exception\InvalidArgumentException
      * @return Capabilities Fluent interface
@@ -261,7 +266,6 @@ class Capabilities
     /**
      * Set supported metadata
      *
-     * @param  stdClass $marker
      * @param  string[] $metadata
      * @throws Exception\InvalidArgumentException
      * @return Capabilities Fluent interface
@@ -289,7 +293,6 @@ class Capabilities
     /**
      * Set minimum supported time-to-live
      *
-     * @param  stdClass $marker
      * @param  int $minTtl
      * @throws Exception\InvalidArgumentException
      * @return Capabilities Fluent interface
@@ -316,7 +319,6 @@ class Capabilities
     /**
      * Set maximum supported time-to-live
      *
-     * @param  stdClass $marker
      * @param  int $maxTtl
      * @throws Exception\InvalidArgumentException
      * @return Capabilities Fluent interface
@@ -344,7 +346,6 @@ class Capabilities
     /**
      * Set if the time-to-live handled static (on write) or dynamic (on read)
      *
-     * @param  stdClass $marker
      * @param  bool $flag
      * @return Capabilities Fluent interface
      */
@@ -366,7 +367,6 @@ class Capabilities
     /**
      * Set time-to-live precision
      *
-     * @param  stdClass $marker
      * @param  float $ttlPrecision
      * @throws Exception\InvalidArgumentException
      * @return Capabilities Fluent interface
@@ -393,7 +393,6 @@ class Capabilities
     /**
      * Set use request time
      *
-     * @param  stdClass $marker
      * @param  bool $flag
      * @return Capabilities Fluent interface
      */
@@ -405,9 +404,10 @@ class Capabilities
     /**
      * Get if expired items are readable
      *
-     * @return bool
      * @deprecated This capability has been deprecated and will be removed in the future.
      *             Please use getStaticTtl() instead
+     *
+     * @return bool
      */
     public function getExpiredRead()
     {
@@ -421,11 +421,11 @@ class Capabilities
     /**
      * Set if expired items are readable
      *
-     * @param  stdClass $marker
-     * @param  bool $flag
-     * @return Capabilities Fluent interface
      * @deprecated This capability has been deprecated and will be removed in the future.
      *             Please use setStaticTtl() instead
+     *
+     * @param  bool $flag
+     * @return Capabilities Fluent interface
      */
     public function setExpiredRead(stdClass $marker, $flag)
     {
@@ -451,7 +451,6 @@ class Capabilities
     /**
      * Set "lock-on-expire" support in seconds.
      *
-     * @param  stdClass $marker
      * @param  int      $timeout
      * @return Capabilities Fluent interface
      */
@@ -473,7 +472,6 @@ class Capabilities
     /**
      * Set maximum key length
      *
-     * @param  stdClass $marker
      * @param  int $maxKeyLength
      * @throws Exception\InvalidArgumentException
      * @return Capabilities Fluent interface
@@ -500,7 +498,6 @@ class Capabilities
     /**
      * Set if namespace support is implemented as prefix
      *
-     * @param  stdClass $marker
      * @param  bool $flag
      * @return Capabilities Fluent interface
      */
@@ -522,7 +519,6 @@ class Capabilities
     /**
      * Set the namespace separator if namespace is implemented as prefix
      *
-     * @param  stdClass $marker
      * @param  string $separator
      * @return Capabilities Fluent interface
      */
@@ -552,7 +548,6 @@ class Capabilities
     /**
      * Change a capability
      *
-     * @param  stdClass $marker
      * @param  string $property
      * @param  mixed $value
      * @return Capabilities Fluent interface
@@ -570,7 +565,7 @@ class Capabilities
             // trigger event
             if ($this->storage instanceof EventsCapableInterface) {
                 $this->storage->getEventManager()->trigger('capability', $this->storage, new ArrayObject([
-                    $property => $value
+                    $property => $value,
                 ]));
             }
         }

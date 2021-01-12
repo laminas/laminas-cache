@@ -23,6 +23,10 @@ use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use ReflectionProperty;
 
+use function array_keys;
+use function iterator_to_array;
+use function str_repeat;
+
 /**
  * Test the PSR-16 decorator.
  *
@@ -32,9 +36,12 @@ use ReflectionProperty;
  * types. The class passes the original exception as the previous exception
  * when doing so, and the only way to test that this has happened is to use
  * try/catch blocks and assert identity against the result of getPrevious().
+ *
+ * phpcs:disable Generic.Files.LineLength.TooLong
  */
 class SimpleCacheDecoratorTest extends TestCase
 {
+    /** @var array<string,bool|string> */
     private $requiredTypes = [
         'NULL'     => true,
         'boolean'  => true,
@@ -68,12 +75,12 @@ class SimpleCacheDecoratorTest extends TestCase
      * @param int $minTtl
      */
     private function getMockCapabilities(
-        array $supportedDataTypes = null,
+        ?array $supportedDataTypes = null,
         $staticTtl = true,
         $minTtl = 60
     ): Capabilities {
         $supportedDataTypes = $supportedDataTypes ?: $this->requiredTypes;
-        $capabilities = $this->createMock(Capabilities::class);
+        $capabilities       = $this->createMock(Capabilities::class);
         $capabilities
             ->method('getSupportedDatatypes')
             ->willReturn($supportedDataTypes);
@@ -94,7 +101,7 @@ class SimpleCacheDecoratorTest extends TestCase
      */
     public function mockCapabilities(
         MockObject $storage,
-        array $supportedDataTypes = null,
+        ?array $supportedDataTypes = null,
         $staticTtl = true,
         $minTtl = 60
     ): void {
@@ -109,7 +116,7 @@ class SimpleCacheDecoratorTest extends TestCase
             ->willReturn($capabilities);
     }
 
-    public function setSuccessReference(SimpleCacheDecorator $cache, $success): void
+    public function setSuccessReference(SimpleCacheDecorator $cache, bool $success): void
     {
         $r = new ReflectionProperty($cache, 'success');
         $r->setAccessible(true);
@@ -171,10 +178,10 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testStorageNeedsSerializerWillThrowException(): void
     {
         $dataTypes = [
-            'staticTtl' => true,
-            'minTtl' => 1,
+            'staticTtl'          => true,
+            'minTtl'             => 1,
             'supportedDatatypes' => [
-                'double'   => false,
+                'double' => false,
             ],
         ];
 
@@ -200,7 +207,7 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testGetReturnsDefaultValueWhenUnderlyingStorageDoesNotContainItem(): void
     {
         $testCase = $this;
-        $cache = $this->cache;
+        $cache    = $this->cache;
         $this->storage
             ->expects(self::once())
             ->method('getItem')
@@ -218,7 +225,7 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testGetReturnsDefaultValueWhenStorageIndicatesFailure(): void
     {
         $testCase = $this;
-        $cache = $this->cache;
+        $cache    = $this->cache;
         $this->storage
             ->expects(self::once())
             ->method('getItem')
@@ -235,7 +242,7 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testGetReturnsValueReturnedByStorage(): void
     {
         $testCase = $this;
-        $cache = $this->cache;
+        $cache    = $this->cache;
         $expected = 'returned value';
 
         $this->storage
@@ -273,7 +280,7 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testSetProxiesToStorageAndModifiesAndResetsOptions(): void
     {
         $originalTtl = 600;
-        $ttl = 86400;
+        $ttl         = 86400;
 
         $this->options
             ->expects(self::once())
@@ -402,7 +409,7 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testSetShouldReRaiseExceptionThrownByStorage(): void
     {
         $originalTtl = 600;
-        $ttl = 86400;
+        $ttl         = 86400;
 
         $this->options
             ->expects(self::once())
@@ -566,10 +573,10 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testGetMultipleProxiesToStorageAndProvidesDefaultsForUnfoundKeysWhenNonNullDefaultPresent(): void
     {
-        $keys = ['one', 'two', 'three'];
+        $keys     = ['one', 'two', 'three'];
         $expected = [
-            'one' => 1,
-            'two' => 'default',
+            'one'   => 1,
+            'two'   => 'default',
             'three' => 3,
         ];
 
@@ -578,7 +585,7 @@ class SimpleCacheDecoratorTest extends TestCase
             ->method('getItems')
             ->with($keys)
             ->willReturn([
-                'one' => 1,
+                'one'   => 1,
                 'three' => 3,
             ]);
 
@@ -587,10 +594,10 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testGetMultipleProxiesToStorageAndOmitsValuesForUnfoundKeysWhenNullDefaultPresent(): void
     {
-        $keys = ['one', 'two', 'three'];
+        $keys     = ['one', 'two', 'three'];
         $expected = [
-            'one' => 1,
-            'two' => null,
+            'one'   => 1,
+            'two'   => null,
             'three' => 3,
         ];
 
@@ -599,7 +606,7 @@ class SimpleCacheDecoratorTest extends TestCase
             ->method('getItems')
             ->with($keys)
             ->willReturn([
-                'one' => 1,
+                'one'   => 1,
                 'three' => 3,
             ]);
 
@@ -608,10 +615,10 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testGetMultipleReturnsValuesFromStorageWhenProvidedWithIterableKeys(): void
     {
-        $keys = new ArrayIterator(['one', 'two', 'three']);
+        $keys     = new ArrayIterator(['one', 'two', 'three']);
         $expected = [
-            'one' => 1,
-            'two' => 'two',
+            'one'   => 1,
+            'two'   => 'two',
             'three' => 3,
         ];
 
@@ -626,7 +633,7 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testGetMultipleReRaisesExceptionFromStorage(): void
     {
-        $keys = ['one', 'two', 'three'];
+        $keys      = ['one', 'two', 'three'];
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
 
         $this->storage
@@ -648,7 +655,7 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testSetMultipleProxiesToStorageAndModifiesAndResetsOptions(): void
     {
         $originalTtl = 600;
-        $ttl = 86400;
+        $ttl         = 86400;
 
         $this->options
             ->expects(self::once())
@@ -680,7 +687,7 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testSetMultipleProxiesToStorageAndModifiesAndResetsOptionsWhenProvidedAnIterable(): void
     {
         $originalTtl = 600;
-        $ttl = 86400;
+        $ttl         = 86400;
 
         $this->options
             ->expects(self::once())
@@ -699,7 +706,7 @@ class SimpleCacheDecoratorTest extends TestCase
             ->willReturn($this->options);
 
         $values = new ArrayIterator([
-            'one' => 1,
+            'one'   => 1,
             'three' => 3,
         ]);
 
@@ -738,8 +745,8 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testSetMultipleShouldRemoveItemsFromCacheIfTtlIsBelow1($ttl)
     {
         $values = [
-            'one' => 1,
-            'two' => 'true',
+            'one'   => 1,
+            'two'   => 'true',
             'three' => ['tags' => true],
         ];
 
@@ -758,13 +765,11 @@ class SimpleCacheDecoratorTest extends TestCase
         self::assertTrue($this->cache->setMultiple($values, $ttl));
     }
 
-    // @codingStandardsIgnoreStart
     public function testSetMultipleShouldReturnFalseWhenProvidedWithPositiveTtlAndStorageDoesNotSupportPerItemTtl(): void
     {
-        // @codingStandardsIgnoreEnd
         $values = [
-            'one' => 1,
-            'two' => 'true',
+            'one'   => 1,
+            'two'   => 'true',
             'three' => ['tags' => true],
         ];
 
@@ -790,8 +795,8 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testSetMultipleShouldRemoveItemsFromCacheIfTtlIsBelow1AndStorageDoesNotSupportPerItemTtl($ttl)
     {
         $values = [
-            'one' => 1,
-            'two' => 'true',
+            'one'   => 1,
+            'two'   => 'true',
             'three' => ['tags' => true],
         ];
 
@@ -835,7 +840,7 @@ class SimpleCacheDecoratorTest extends TestCase
     public function testSetMultipleReRaisesExceptionFromStorage(): void
     {
         $originalTtl = 600;
-        $ttl = 86400;
+        $ttl         = 86400;
 
         $this->options
             ->expects(self::once())
@@ -854,7 +859,7 @@ class SimpleCacheDecoratorTest extends TestCase
             ->willReturn($this->options);
 
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
-        $values = ['one' => 1, 'three' => 3];
+        $values    = ['one' => 1, 'three' => 3];
 
         $this->storage
             ->expects(self::once())
@@ -942,7 +947,7 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testDeleteMultipleReturnFalseWhenExceptionThrownByStorage(): void
     {
-        $keys = ['one', 'two', 'three'];
+        $keys      = ['one', 'two', 'three'];
         $exception = new Exception\InvalidArgumentException('bad key', 500);
         $this->storage
             ->expects(self::once())
@@ -953,10 +958,13 @@ class SimpleCacheDecoratorTest extends TestCase
         self::assertFalse($this->cache->deleteMultiple($keys));
     }
 
-    public function hasResultProvider()
+    /**
+     * @return array<string,array{0:bool}>
+     */
+    public function hasResultProvider(): array
     {
         return [
-            'true' => [true],
+            'true'  => [true],
             'false' => [false],
         ];
     }
@@ -964,7 +972,7 @@ class SimpleCacheDecoratorTest extends TestCase
     /**
      * @dataProvider hasResultProvider
      */
-    public function testHasProxiesToStorage($result)
+    public function testHasProxiesToStorage(bool $result)
     {
         $this->storage
             ->expects(self::once())
@@ -1033,7 +1041,6 @@ class SimpleCacheDecoratorTest extends TestCase
             ->method('setTtl')
             ->with(40)
             ->willReturnSelf();
-
 
         $this->storage
             ->expects(self::once())

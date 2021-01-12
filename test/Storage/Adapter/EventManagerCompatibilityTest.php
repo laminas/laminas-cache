@@ -15,9 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class EventManagerCompatibilityTest extends TestCase
 {
-    /**
-     * @var MockAdapter
-     */
+    /** @var MockAdapter */
     private $adapter;
 
     public function setUp(): void

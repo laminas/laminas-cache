@@ -10,14 +10,17 @@ namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 
+use function in_array;
+use function md5;
+use function strtolower;
+
 class ClassCache extends CallbackCache
 {
     /**
      * Set options
      *
-     * @param  PatternOptions $options
      * @return ClassCache Provides a fluent interface
-     * @throws Exception\InvalidArgumentException if missing 'class' or 'storage' options
+     * @throws Exception\InvalidArgumentException If missing 'class' or 'storage' options.
      */
     public function setOptions(PatternOptions $options)
     {
@@ -115,23 +118,25 @@ class ClassCache extends CallbackCache
     /**
      * Set a static property
      *
+     * @see   http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
+     *
      * @param  string $name
      * @param  mixed  $value
      * @return void
-     * @see   http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
      */
     public function __set($name, $value)
     {
-        $class = $this->getOptions()->getClass();
+        $class        = $this->getOptions()->getClass();
         $class::$name = $value;
     }
 
     /**
      * Get a static property
      *
+     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
+     *
      * @param  string $name
      * @return mixed
-     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
      */
     public function __get($name)
     {

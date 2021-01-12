@@ -10,53 +10,55 @@ namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
 use Laminas\Cache\Exception\MissingKeyException;
+use Laminas\Cache\Storage\StorageInterface;
+
+use function ob_end_clean;
+use function ob_get_clean;
+use function ob_get_level;
+use function ob_start;
 
 /**
  * @group      Laminas_Cache
  * @covers \Laminas\Cache\Pattern\OutputCache<extended>
  */
-class OutputCacheTest extends CommonPatternTest
+class OutputCacheTestAbstract extends AbstractCommonPatternTest
 {
-    // @codingStandardsIgnoreStart
-    /**
-     * @var \Laminas\Cache\Storage\StorageInterface
-     */
-    protected $_storage;
+    /** @var StorageInterface */
+    protected $storage;
 
     /**
      * Nesting level of output buffering used to restore on tearDown()
      *
      * @var null|int
      */
-    protected $_obLevel;
-    // @codingStandardsIgnoreEnd
+    protected $obLevel;
 
     public function setUp(): void
     {
-        $this->_storage = new Cache\Storage\Adapter\Memory([
-            'memory_limit' => 0
+        $this->storage = new Cache\Storage\Adapter\Memory([
+            'memory_limit' => 0,
         ]);
-        $this->_options = new Cache\Pattern\PatternOptions([
-            'storage' => $this->_storage,
+        $this->options = new Cache\Pattern\PatternOptions([
+            'storage' => $this->storage,
         ]);
-        $this->_pattern = new Cache\Pattern\OutputCache();
-        $this->_pattern->setOptions($this->_options);
+        $this->pattern = new Cache\Pattern\OutputCache();
+        $this->pattern->setOptions($this->options);
 
         // used to reset the level on tearDown
-        $this->_obLevel = ob_get_level();
+        $this->obLevel = ob_get_level();
 
         parent::setUp();
     }
 
     public function tearDown(): void
     {
-        if ($this->_obLevel > ob_get_Level()) {
-            for ($i = ob_get_level(); $i < $this->_obLevel; $i++) {
+        if ($this->obLevel > ob_get_level()) {
+            for ($i = ob_get_level(); $i < $this->obLevel; $i++) {
                 ob_start();
             }
             $this->fail("Nesting level of output buffering to often ended");
-        } elseif ($this->_obLevel < ob_get_level()) {
-            for ($i = ob_get_level(); $i > $this->_obLevel; $i--) {
+        } elseif ($this->obLevel < ob_get_level()) {
+            for ($i = ob_get_level(); $i > $this->obLevel; $i--) {
                 ob_end_clean();
             }
             $this->fail("Nesting level of output buffering not well restored");
@@ -65,11 +67,14 @@ class OutputCacheTest extends CommonPatternTest
         parent::tearDown();
     }
 
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+     */
     public function getCommonPatternNamesProvider()
     {
         return [
-            ['output'],
-            ['Output'],
+            'lowercase' => ['output'],
+            'lcfirst'   => ['Output'],
         ];
     }
 
@@ -79,13 +84,13 @@ class OutputCacheTest extends CommonPatternTest
         $key    = 'testStartEndCacheMiss';
 
         ob_start();
-        self::assertFalse($this->_pattern->start($key));
+        self::assertFalse($this->pattern->start($key));
         echo $output;
-        self::assertTrue($this->_pattern->end());
+        self::assertTrue($this->pattern->end());
         $data = ob_get_clean();
 
         self::assertEquals($output, $data);
-        self::assertEquals($output, $this->_pattern->getOptions()->getStorage()->getItem($key));
+        self::assertEquals($output, $this->pattern->getOptions()->getStorage()->getItem($key));
     }
 
     public function testStartEndCacheHit(): void
@@ -94,10 +99,10 @@ class OutputCacheTest extends CommonPatternTest
         $key    = 'testStartEndCacheHit';
 
         // fill cache
-        $this->_pattern->getOptions()->getStorage()->setItem($key, $output);
+        $this->pattern->getOptions()->getStorage()->setItem($key, $output);
 
         ob_start();
-        self::assertTrue($this->_pattern->start($key));
+        self::assertTrue($this->pattern->start($key));
         $data = ob_get_clean();
 
         self::assertSame($output, $data);
@@ -106,6 +111,6 @@ class OutputCacheTest extends CommonPatternTest
     public function testThrowMissingKeyException(): void
     {
         $this->expectException(MissingKeyException::class);
-        $this->_pattern->start(''); // empty key
+        $this->pattern->start(''); // empty key
     }
 }

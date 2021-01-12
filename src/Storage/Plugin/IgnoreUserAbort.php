@@ -9,16 +9,20 @@
 namespace Laminas\Cache\Storage\Plugin;
 
 use Laminas\Cache\Storage\Event;
+use Laminas\Cache\Storage\StorageInterface;
 use Laminas\EventManager\EventManagerInterface;
+
+use function connection_aborted;
+use function ignore_user_abort;
 
 class IgnoreUserAbort extends AbstractPlugin
 {
     /**
      * The storage who activated ignore_user_abort.
      *
-     * @var null|\Laminas\Cache\Storage\StorageInterface
+     * @var null|StorageInterface
      */
-    protected $activatedTarget = null;
+    protected $activatedTarget;
 
     /**
      * {@inheritDoc}
@@ -78,7 +82,6 @@ class IgnoreUserAbort extends AbstractPlugin
      * Activate ignore_user_abort if not already done
      * and save the target who activated it.
      *
-     * @param  Event $event
      * @return void
      */
     public function onBefore(Event $event)
@@ -95,7 +98,6 @@ class IgnoreUserAbort extends AbstractPlugin
      * If exit_on_abort is enabled and the connection has been aborted
      * exit the script.
      *
-     * @param  Event $event
      * @return void
      */
     public function onAfter(Event $event)

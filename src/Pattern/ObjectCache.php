@@ -10,12 +10,18 @@ namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 
+use function array_shift;
+use function array_unshift;
+use function func_get_args;
+use function in_array;
+use function md5;
+use function method_exists;
+use function property_exists;
+use function strtolower;
+
 class ObjectCache extends CallbackCache
 {
     /**
-     * Set options
-     *
-     * @param  PatternOptions $options
      * @return void
      * @throws Exception\InvalidArgumentException
      */
@@ -25,7 +31,9 @@ class ObjectCache extends CallbackCache
 
         if (! $options->getObject()) {
             throw new Exception\InvalidArgumentException("Missing option 'object'");
-        } elseif (! $options->getStorage()) {
+        }
+
+        if (! $options->getStorage()) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
     }
@@ -53,7 +61,8 @@ class ObjectCache extends CallbackCache
 
                 $object->{$property} = $value;
 
-                if (! $options->getObjectCacheMagicProperties()
+                if (
+                    ! $options->getObjectCacheMagicProperties()
                     || property_exists($object, $property)
                 ) {
                     // no caching if property isn't magic
@@ -77,7 +86,8 @@ class ObjectCache extends CallbackCache
             case '__get':
                 $property = array_shift($args);
 
-                if (! $options->getObjectCacheMagicProperties()
+                if (
+                    ! $options->getObjectCacheMagicProperties()
                     || property_exists($object, $property)
                 ) {
                     // no caching if property isn't magic
@@ -91,7 +101,8 @@ class ObjectCache extends CallbackCache
             case '__isset':
                 $property = array_shift($args);
 
-                if (! $options->getObjectCacheMagicProperties()
+                if (
+                    ! $options->getObjectCacheMagicProperties()
                     || property_exists($object, $property)
                 ) {
                     // no caching if property isn't magic
@@ -106,7 +117,8 @@ class ObjectCache extends CallbackCache
 
                 unset($object->{$property});
 
-                if (! $options->getObjectCacheMagicProperties()
+                if (
+                    ! $options->getObjectCacheMagicProperties()
                     || property_exists($object, $property)
                 ) {
                     // no caching if property isn't magic
@@ -200,10 +212,13 @@ class ObjectCache extends CallbackCache
      * is enabled and the property doesn't exist in real. If so it calls __set
      * and removes cached data of previous __get and __isset calls.
      *
+     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
+     *
+     * @phpcs:disable Squiz.Commenting.FunctionComment.InvalidReturnVoid
+     *
      * @param  string $name
      * @param  mixed  $value
      * @return void
-     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
      */
     public function __set($name, $value)
     {
@@ -217,9 +232,10 @@ class ObjectCache extends CallbackCache
      * Magic properties will be cached too if the option cacheMagicProperties
      * is enabled and the property doesn't exist in real. If so it calls __get.
      *
+     * @see http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
+     *
      * @param  string $name
      * @return mixed
-     * @see http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
      */
     public function __get($name)
     {
@@ -233,9 +249,10 @@ class ObjectCache extends CallbackCache
      * Magic properties will be cached too if the option cacheMagicProperties
      * is enabled and the property doesn't exist in real. If so it calls __get.
      *
+     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
+     *
      * @param  string $name
      * @return bool
-     * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
      */
     public function __isset($name)
     {
@@ -250,9 +267,13 @@ class ObjectCache extends CallbackCache
      * is enabled and the property doesn't exist in real. If so it removes
      * previous cached __isset and __get calls.
      *
-     * @param  string $name
-     * @return void
      * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
+     *
+     * @phpcs:disable Squiz.Commenting.FunctionComment.InvalidReturnVoid
+     *
+     * @param  string $name
+     *
+     * @return void
      */
     public function __unset($name)
     {
@@ -262,8 +283,9 @@ class ObjectCache extends CallbackCache
     /**
      * Handle casting to string
      *
-     * @return string
      * @see    http://php.net/manual/language.oop5.magic.php#language.oop5.magic.tostring
+     *
+     * @return string
      */
     public function __toString()
     {
@@ -273,8 +295,9 @@ class ObjectCache extends CallbackCache
     /**
      * Handle invoke calls
      *
-     * @return mixed
      * @see    http://php.net/manual/language.oop5.magic.php#language.oop5.magic.invoke
+     *
+     * @return mixed
      */
     public function __invoke()
     {

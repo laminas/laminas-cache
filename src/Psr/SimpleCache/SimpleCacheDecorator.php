@@ -21,6 +21,21 @@ use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use Throwable;
 use Traversable;
 
+use function array_keys;
+use function array_walk;
+use function get_class;
+use function gettype;
+use function is_array;
+use function is_float;
+use function is_int;
+use function is_object;
+use function is_scalar;
+use function is_string;
+use function preg_match;
+use function preg_quote;
+use function sprintf;
+use function var_export;
+
 /**
  * Decorate a laminas-cache storage adapter for usage as a PSR-16 implementation.
  */
@@ -31,16 +46,12 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /**
      * Characters reserved by PSR-16 that are not valid in cache keys.
      */
-    const INVALID_KEY_CHARS = ':@{}()/\\';
+    public const INVALID_KEY_CHARS = ':@{}()/\\';
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $providesPerItemTtl = true;
 
-    /**
-     * @var StorageInterface
-     */
+    /** @var StorageInterface */
     private $storage;
 
     /**
@@ -51,9 +62,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     private $success;
 
-    /**
-     * @var DateTimeZone
-     */
+    /** @var DateTimeZone */
     private $utc;
 
     public function __construct(StorageInterface $storage)
@@ -69,7 +78,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
         $this->memoizeTtlCapabilities($storage);
         $this->storage = $storage;
-        $this->utc = new DateTimeZone('UTC');
+        $this->utc     = new DateTimeZone('UTC');
     }
 
     /**
@@ -84,11 +93,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             $result = $this->storage->getItem($key, $this->success);
         } catch (Throwable $e) {
             throw static::translateException($e);
-        } catch (Exception $e) {
-            throw static::translateException($e);
         }
 
-        $result = $result === null ? $default : $result;
+        $result = $result ?? $default;
         return $this->success ? $result : $default;
     }
 
@@ -112,7 +119,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             return false;
         }
 
-        $options = $this->storage->getOptions();
+        $options     = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
 
         if ($ttl !== null) {
@@ -122,8 +129,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $result = $this->storage->setItem($key, $value);
         } catch (Throwable $e) {
-            throw static::translateException($e);
-        } catch (Exception $e) {
             throw static::translateException($e);
         } finally {
             $options->setTtl($previousTtl);
@@ -142,8 +147,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             return null !== $this->storage->removeItem($key);
         } catch (Throwable $e) {
-            return false;
-        } catch (Exception $e) {
             return false;
         }
     }
@@ -178,8 +181,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             $results = $this->storage->getItems($keys);
         } catch (Throwable $e) {
             throw static::translateException($e);
-        } catch (Exception $e) {
-            throw static::translateException($e);
         }
 
         foreach ($keys as $key) {
@@ -198,8 +199,8 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     public function setMultiple($values, $ttl = null)
     {
         $values = $this->convertIterableToArray($values, true, __FUNCTION__);
-        $keys = array_keys($values);
-        $ttl = $this->convertTtlToInteger($ttl);
+        $keys   = array_keys($values);
+        $ttl    = $this->convertTtlToInteger($ttl);
 
         // PSR-16 states that 0 or negative TTL values should result in cache
         // invalidation for the items.
@@ -215,7 +216,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             return false;
         }
 
-        $options = $this->storage->getOptions();
+        $options     = $this->storage->getOptions();
         $previousTtl = $options->getTtl();
 
         if ($ttl !== null) {
@@ -225,8 +226,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $result = $this->storage->setItems($values);
         } catch (Throwable $e) {
-            throw static::translateException($e);
-        } catch (Exception $e) {
             throw static::translateException($e);
         } finally {
             $options->setTtl($previousTtl);
@@ -261,8 +260,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             $result = $this->storage->removeItems($keys);
         } catch (Throwable $e) {
             return false;
-        } catch (Exception $e) {
-            return false;
         }
 
         if (empty($result)) {
@@ -289,8 +286,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             return $this->storage->hasItem($key);
         } catch (Throwable $e) {
             throw static::translateException($e);
-        } catch (Exception $e) {
-            throw static::translateException($e);
         }
     }
 
@@ -308,9 +303,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * @param string $key
+     * @param string|int $key
      * @return void
-     * @throws SimpleCacheInvalidArgumentException if key is invalid
+     * @throws SimpleCacheInvalidArgumentException If key is invalid.
      */
     private function validateKey($key)
     {
@@ -327,7 +322,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             // we need to catch just this single value so tests pass.
             // I have filed an issue to correct the test:
             // https://github.com/php-cache/integration-tests/issues/92
-            return $key;
+            return;
         }
 
         if (! is_string($key)) {
@@ -358,19 +353,18 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /**
      * Determine if the storage adapter provides per-item TTL capabilities
      *
-     * @param StorageInterface $storage
      * @return void
      */
     private function memoizeTtlCapabilities(StorageInterface $storage)
     {
-        $capabilities = $storage->getCapabilities();
+        $capabilities             = $storage->getCapabilities();
         $this->providesPerItemTtl = $capabilities->getStaticTtl() && (0 < $capabilities->getMinTtl());
     }
 
     /**
-     * @param int|DateInterval
+     * @param int|DateInterval|string $ttl
      * @return null|int
-     * @throws SimpleCacheInvalidArgumentException for invalid arguments
+     * @throws SimpleCacheInvalidArgumentException For invalid arguments.
      */
     private function convertTtlToInteger($ttl)
     {
@@ -385,7 +379,8 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
 
         // Numeric strings evaluating to integers can be cast
-        if (is_string($ttl)
+        if (
+            is_string($ttl)
             && ('0' === $ttl
                 || preg_match('/^[1-9][0-9]+$/', $ttl)
             )
@@ -414,7 +409,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      * @param string $forMethod Method that called this one; used for reporting
      *     invalid values.
      * @return array
-     * @throws SimpleCacheInvalidArgumentException for invalid $iterable values
+     * @throws SimpleCacheInvalidArgumentException For invalid $iterable values.
      */
     private function convertIterableToArray($iterable, $useKeys, $forMethod)
     {
@@ -425,7 +420,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         if (! $iterable instanceof Traversable) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'Invalid value provided to %s::%s; must be an array or Traversable',
-                __CLASS__,
+                self::class,
                 $forMethod
             ));
         }

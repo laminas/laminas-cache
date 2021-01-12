@@ -19,12 +19,12 @@ class PatternPluginManagerTest extends TestCase
 {
     use CommonPluginManagerTrait;
 
-    protected function getPluginManager()
+    protected function getPluginManager(): PatternPluginManager
     {
         return new PatternPluginManager(new ServiceManager());
     }
 
-    protected function getInstanceOf()
+    protected function getInstanceOf(): string
     {
         return PatternInterface::class;
     }
@@ -33,9 +33,9 @@ class PatternPluginManagerTest extends TestCase
     {
         $plugins = $this->getPluginManager();
         $storage = $this->createMock(StorageInterface::class);
-        $plugin = $plugins->get('callback', [
+        $plugin  = $plugins->get('callback', [
             'cache_output' => false,
-            'storage' => $storage,
+            'storage'      => $storage,
         ]);
         $options = $plugin->getOptions();
         self::assertFalse($options->getCacheOutput());
@@ -47,9 +47,9 @@ class PatternPluginManagerTest extends TestCase
         $plugins = $this->getPluginManager();
 
         $storage = $this->createMock(StorageInterface::class);
-        $plugin = $plugins->build('callback', [
+        $plugin  = $plugins->build('callback', [
             'cache_output' => false,
-            'storage' => $storage,
+            'storage'      => $storage,
         ]);
         $options = $plugin->getOptions();
         self::assertFalse($options->getCacheOutput());

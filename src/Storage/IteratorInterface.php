@@ -12,10 +12,10 @@ use Iterator;
 
 interface IteratorInterface extends Iterator
 {
-    const CURRENT_AS_SELF     = 0;
-    const CURRENT_AS_KEY      = 1;
-    const CURRENT_AS_VALUE    = 2;
-    const CURRENT_AS_METADATA = 3;
+    public const CURRENT_AS_SELF     = 0;
+    public const CURRENT_AS_KEY      = 1;
+    public const CURRENT_AS_VALUE    = 2;
+    public const CURRENT_AS_METADATA = 3;
 
     /**
      * Get storage instance

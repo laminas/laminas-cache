@@ -18,7 +18,7 @@ class StorageAdapterPluginManagerFactoryTest extends TestCase
     public function testFactoryReturnsPluginManager(): void
     {
         $container = $this->createMock(ContainerInterface::class);
-        $factory = new StorageAdapterPluginManagerFactory();
+        $factory   = new StorageAdapterPluginManagerFactory();
 
         $adapters = $factory($container);
         self::assertInstanceOf(AdapterPluginManager::class, $adapters);

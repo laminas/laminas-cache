@@ -13,11 +13,19 @@ use Laminas\Serializer\Adapter\AdapterInterface as SerializerAdapter;
 use Laminas\Serializer\Serializer as SerializerFactory;
 use Laminas\Stdlib\AbstractOptions;
 
+use function get_class;
+use function gettype;
+use function is_callable;
+use function is_object;
+use function is_string;
+use function sprintf;
+
 class PluginOptions extends AbstractOptions
 {
     /**
      * Used by:
      * - ClearByFactor
+     *
      * @var int
      */
     protected $clearingFactor = 0;
@@ -25,6 +33,7 @@ class PluginOptions extends AbstractOptions
     /**
      * Used by:
      * - ExceptionHandler
+     *
      * @var null|callable
      */
     protected $exceptionCallback;
@@ -32,6 +41,7 @@ class PluginOptions extends AbstractOptions
     /**
      * Used by:
      * - IgnoreUserAbort
+     *
      * @var bool
      */
     protected $exitOnAbort = true;
@@ -39,6 +49,7 @@ class PluginOptions extends AbstractOptions
     /**
      * Used by:
      * - OptimizeByFactor
+     *
      * @var int
      */
     protected $optimizingFactor = 0;
@@ -46,6 +57,7 @@ class PluginOptions extends AbstractOptions
     /**
      * Used by:
      * - Serializer
+     *
      * @var string|SerializerAdapter
      */
     protected $serializer;
@@ -53,6 +65,7 @@ class PluginOptions extends AbstractOptions
     /**
      * Used by:
      * - Serializer
+     *
      * @var array
      */
     protected $serializerOptions = [];
@@ -60,6 +73,7 @@ class PluginOptions extends AbstractOptions
     /**
      * Used by:
      * - ExceptionHandler
+     *
      * @var bool
      */
     protected $throwExceptions = true;
@@ -191,7 +205,7 @@ class PluginOptions extends AbstractOptions
                 '%s expects either a string serializer name or Laminas\Serializer\Adapter\AdapterInterface instance; '
                 . 'received "%s"',
                 __METHOD__,
-                (is_object($serializer) ? get_class($serializer) : gettype($serializer))
+                is_object($serializer) ? get_class($serializer) : gettype($serializer)
             ));
         }
         $this->serializer = $serializer;

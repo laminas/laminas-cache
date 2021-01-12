@@ -9,7 +9,7 @@ use Laminas\Cache\StorageFactory;
  * @Iterations(10)
  * @Warmup(1)
  */
-class MemoryStorageAdapterBench extends CommonStorageAdapterBench
+class MemoryStorageAdapterBenchAbstract extends AbstractCommonStorageAdapterBench
 {
     public function __construct()
     {
