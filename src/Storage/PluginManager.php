@@ -10,11 +10,6 @@ namespace Laminas\Cache\Storage;
 
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Factory\InvokableFactory;
-use Zend\Cache\Storage\Plugin\ClearExpiredByFactor;
-use Zend\Cache\Storage\Plugin\ExceptionHandler;
-use Zend\Cache\Storage\Plugin\IgnoreUserAbort;
-use Zend\Cache\Storage\Plugin\OptimizeByFactor;
-use Zend\Cache\Storage\Plugin\Serializer;
 
 /**
  * Plugin manager implementation for cache plugins
@@ -45,13 +40,6 @@ class PluginManager extends AbstractPluginManager
         'OptimizeByFactor'        => Plugin\OptimizeByFactor::class,
         'serializer'              => Plugin\Serializer::class,
         'Serializer'              => Plugin\Serializer::class,
-
-        // Legacy Zend Framework aliases
-        ClearExpiredByFactor::class => Plugin\ClearExpiredByFactor::class,
-        ExceptionHandler::class     => Plugin\ExceptionHandler::class,
-        IgnoreUserAbort::class      => Plugin\IgnoreUserAbort::class,
-        OptimizeByFactor::class     => Plugin\OptimizeByFactor::class,
-        Serializer::class           => Plugin\Serializer::class,
     ];
 
     /** @var array<string,string> */
