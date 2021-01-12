@@ -8,9 +8,6 @@
 
 namespace Laminas\Cache;
 
-use Zend\Cache\Storage\AdapterPluginManager;
-use Zend\Cache\Storage\PluginManager;
-
 class ConfigProvider
 {
     /**
@@ -33,12 +30,6 @@ class ConfigProvider
     public function getDependencyConfig()
     {
         return [
-            // Legacy Zend Framework aliases
-            'aliases'            => [
-                \Zend\Cache\PatternPluginManager::class => PatternPluginManager::class,
-                AdapterPluginManager::class             => Storage\AdapterPluginManager::class,
-                PluginManager::class                    => Storage\PluginManager::class,
-            ],
             'abstract_factories' => [
                 Service\StorageCacheAbstractServiceFactory::class,
             ],
