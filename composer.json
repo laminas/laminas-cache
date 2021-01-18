@@ -29,6 +29,15 @@
     },
     "require": {
         "php": "^7.3 || ~8.0.0",
+        "laminas/laminas-eventmanager": "^3.2",
+        "laminas/laminas-servicemanager": "^3.4",
+        "laminas/laminas-stdlib": "^3.2.1",
+        "psr/cache": "^1.0",
+        "psr/simple-cache": "^1.0",
+        "webmozart/assert": "^1.9"
+    },
+    "require-dev": {
+        "cache/integration-tests": "^0.16",
         "laminas/laminas-cache-storage-adapter-apc": "^1.0",
         "laminas/laminas-cache-storage-adapter-apcu": "^1.0",
         "laminas/laminas-cache-storage-adapter-blackhole": "^1.0",
@@ -44,15 +53,6 @@
         "laminas/laminas-cache-storage-adapter-wincache": "^1.0",
         "laminas/laminas-cache-storage-adapter-xcache": "^1.0",
         "laminas/laminas-cache-storage-adapter-zend-server": "^1.0",
-        "laminas/laminas-eventmanager": "^3.2",
-        "laminas/laminas-servicemanager": "^3.4",
-        "laminas/laminas-stdlib": "^3.2.1",
-        "psr/cache": "^1.0",
-        "psr/simple-cache": "^1.0",
-        "webmozart/assert": "^1.9"
-    },
-    "require-dev": {
-        "cache/integration-tests": "^0.16",
         "laminas/laminas-coding-standard": "^2.1",
         "laminas/laminas-serializer": "^2.6",
         "phpbench/phpbench": "^0.17.1",
@@ -63,7 +63,22 @@
         "psr/simple-cache-implementation": "1.0"
     },
     "suggest": {
-        "laminas/laminas-serializer": "Laminas\\Serializer component"
+        "laminas/laminas-serializer": "Laminas\\Serializer component",
+        "laminas/laminas-cache-storage-adapter-apc": "Laminas\\Cache\\Storage\\Adapter\\Apc storage adapter",
+        "laminas/laminas-cache-storage-adapter-apcu": "Laminas\\Cache\\Storage\\Adapter\\Apcu storage adapter",
+        "laminas/laminas-cache-storage-adapter-blackhole": "Laminas\\Cache\\Storage\\Adapter\\Blackhole storage adapter",
+        "laminas/laminas-cache-storage-adapter-dba": "Laminas\\Cache\\Storage\\Adapter\\Dba storage adapter",
+        "laminas/laminas-cache-storage-adapter-ext-mongodb": "Laminas\\Cache\\Storage\\Adapter\\ExtMongoDb storage adapter",
+        "laminas/laminas-cache-storage-adapter-filesystem": "Laminas\\Cache\\Storage\\Adapter\\Filesystem storage adapter",
+        "laminas/laminas-cache-storage-adapter-memcache": "Laminas\\Cache\\Storage\\Adapter\\Memcache storage adapter",
+        "laminas/laminas-cache-storage-adapter-memcached": "Laminas\\Cache\\Storage\\Adapter\\Memcached storage adapter",
+        "laminas/laminas-cache-storage-adapter-memory": "Laminas\\Cache\\Storage\\Adapter\\Memory storage adapter",
+        "laminas/laminas-cache-storage-adapter-mongodb": "Laminas\\Cache\\Storage\\Adapter\\MongoDb storage adapter",
+        "laminas/laminas-cache-storage-adapter-redis": "Laminas\\Cache\\Storage\\Adapter\\Redis storage adapter",
+        "laminas/laminas-cache-storage-adapter-session": "Laminas\\Cache\\Storage\\Adapter\\Session storage adapter",
+        "laminas/laminas-cache-storage-adapter-wincache": "Laminas\\Cache\\Storage\\Adapter\\WinCache storage adapter",
+        "laminas/laminas-cache-storage-adapter-xcache": "Laminas\\Cache\\Storage\\Adapter\\XCache storage adapter",
+        "laminas/laminas-cache-storage-adapter-zend-server": "Laminas\\Cache\\Storage\\Adapter\\ZendServer storage adapter"
     },
     "autoload": {
         "psr-4": {
