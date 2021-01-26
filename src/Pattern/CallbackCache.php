@@ -68,7 +68,7 @@ class CallbackCache extends AbstractPattern
         // TODO: do not cache on errors using [set|restore]_error_handler
 
         try {
-            $ret = $args ? $callback(...$args) : $callback();
+            $ret = $callback(...$args);
         } catch (\Exception $e) {
             if ($cacheOutput) {
                 ob_end_flush();

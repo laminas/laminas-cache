@@ -45,7 +45,7 @@ class ClassCacheTest extends AbstractCommonPatternTest
     {
         return [
             'lowercase' => ['class'],
-            'lcfirst'   => ['Class'],
+            'ucfirst'   => ['Class'],
         ];
     }
 

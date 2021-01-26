@@ -142,10 +142,7 @@ class ObjectCache extends CallbackCache
         }
 
         if (! $cache) {
-            if ($args) {
-                return $object->{$method}(...$args);
-            }
-            return $object->{$method}();
+            return $object->{$method}(...$args);
         }
 
         return parent::call([$object, $method], $args);
