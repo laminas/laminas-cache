@@ -16,6 +16,8 @@ use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Storage\Adapter\TestAsset\AdapterOptionsWithPrioritizedOptions;
 use PHPUnit\Framework\TestCase;
 
+use function func_get_args;
+
 /**
  * @group      Laminas_Cache
  * @covers Laminas\Cache\Storage\Adapter\AdapterOptions<extended>
@@ -121,7 +123,7 @@ class AdapterOptionsTest extends TestCase
 
         // setup event listener
         $calledArgs = null;
-        $adapter->getEventManager()->attach('option', function () use (& $calledArgs) {
+        $adapter->getEventManager()->attach('option', function () use (&$calledArgs) {
             $calledArgs = func_get_args();
         });
 

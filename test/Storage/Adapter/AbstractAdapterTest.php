@@ -8,6 +8,7 @@
 
 namespace LaminasTest\Cache\Storage\Adapter;
 
+use ArrayObject;
 use Laminas\Cache\Exception;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
@@ -16,13 +17,27 @@ use Laminas\Cache\Storage\Event;
 use Laminas\Cache\Storage\ExceptionEvent;
 use Laminas\Cache\Storage\Plugin\ExceptionHandler;
 use Laminas\Cache\Storage\Plugin\PluginOptions;
+use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\ResponseCollection;
 use LaminasTest\Cache\Storage\TestAsset\MockPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Laminas\Cache\Storage\PostEvent;
+use ReflectionClass;
+use ReflectionMethod;
+use stdClass;
 
+use function array_keys;
+use function array_map;
+use function array_unique;
+use function assert;
+use function call_user_func_array;
+use function count;
+use function current;
+use function get_class;
+use function is_array;
 use function is_callable;
+use function sprintf;
+use function ucfirst;
 
 /**
  * @group      \Laminas_Cache
@@ -155,13 +170,13 @@ final class AbstractAdapterTest extends TestCase
         $plugin = new MockPlugin();
         $storage->addPlugin($plugin);
 
-        $params = new \ArrayObject([
+        $params = new ArrayObject([
             'key'   => 'key1',
-            'value' => 'value1'
+            'value' => 'value1',
         ]);
 
         // call protected method
-        $method = new \ReflectionMethod(get_class($storage), 'triggerPre');
+        $method = new ReflectionMethod(get_class($storage), 'triggerPre');
         $method->setAccessible(true);
         $rsCollection = $method->invoke($storage, 'setItem', $params);
         $this->assertInstanceOf(ResponseCollection::class, $rsCollection);
@@ -184,14 +199,14 @@ final class AbstractAdapterTest extends TestCase
         $plugin = new MockPlugin();
         $storage->addPlugin($plugin);
 
-        $params = new \ArrayObject([
+        $params = new ArrayObject([
             'key'   => 'key1',
-            'value' => 'value1'
+            'value' => 'value1',
         ]);
         $result = true;
 
         // call protected method
-        $method = new \ReflectionMethod(get_class($storage), 'triggerPost');
+        $method = new ReflectionMethod(get_class($storage), 'triggerPost');
         $method->setAccessible(true);
         $result = $method->invokeArgs($storage, ['setItem', $params, &$result]);
 
@@ -218,18 +233,18 @@ final class AbstractAdapterTest extends TestCase
         $storage->addPlugin($plugin);
 
         $result = null;
-        $params = new \ArrayObject([
+        $params = new ArrayObject([
             'key'   => 'key1',
-            'value' => 'value1'
+            'value' => 'value1',
         ]);
 
         // call protected method
-        $method = new \ReflectionMethod(get_class($storage), 'triggerException');
+        $method = new ReflectionMethod(get_class($storage), 'triggerException');
         $method->setAccessible(true);
 
         $this->expectException(Exception\RuntimeException::class);
         $this->expectExceptionMessage('test');
-        $method->invokeArgs($storage, ['setItem', $params, & $result, new Exception\RuntimeException('test')]);
+        $method->invokeArgs($storage, ['setItem', $params, &$result, new Exception\RuntimeException('test')]);
     }
 
     public function testGetItemCallsInternalGetItem(): void
@@ -336,7 +351,7 @@ final class AbstractAdapterTest extends TestCase
     {
         $storage = $this->getMockForAbstractAdapter(['internalHasItem']);
 
-        $items  = ['key1' => true];
+        $items = ['key1' => true];
 
         $storage
             ->expects($this->atLeastOnce())
@@ -352,13 +367,13 @@ final class AbstractAdapterTest extends TestCase
     {
         $storage = $this->getMockForAbstractAdapter(['internalGetItem']);
 
-        $key    = 'key1';
+        $key = 'key1';
 
         // Do not throw exceptions outside the adapter
         $pluginOptions = new PluginOptions(
             ['throw_exceptions' => false]
         );
-        $plugin = new ExceptionHandler();
+        $plugin        = new ExceptionHandler();
         $plugin->setOptions($pluginOptions);
         $storage->addPlugin($plugin);
 
@@ -376,51 +391,45 @@ final class AbstractAdapterTest extends TestCase
 
     public function simpleEventHandlingMethodDefinitions(): array
     {
-        $capabilities = new Capabilities($this->getMockForAbstractAdapter(), new \stdClass());
+        $capabilities = new Capabilities($this->getMockForAbstractAdapter(), new stdClass());
 
         return [
             //    name, internalName, args, returnValue
             ['hasItem', 'internalGetItem', ['k'], 'v'],
             ['hasItems', 'internalHasItems', [['k1', 'k2']], ['v1', 'v2']],
-
             ['getItem', 'internalGetItem', ['k'], 'v'],
             ['getItems', 'internalGetItems', [['k1', 'k2']], ['k1' => 'v1', 'k2' => 'v2']],
-
             ['getMetadata', 'internalGetMetadata', ['k'], []],
             ['getMetadatas', 'internalGetMetadatas', [['k1', 'k2']], ['k1' => [], 'k2' => []]],
-
             ['setItem', 'internalSetItem', ['k', 'v'], true],
             ['setItems', 'internalSetItems', [['k1' => 'v1', 'k2' => 'v2']], []],
-
             ['replaceItem', 'internalReplaceItem', ['k', 'v'], true],
             ['replaceItems', 'internalReplaceItems', [['k1' => 'v1', 'k2' => 'v2']], []],
-
             ['addItem', 'internalAddItem', ['k', 'v'], true],
             ['addItems', 'internalAddItems', [['k1' => 'v1', 'k2' => 'v2']], []],
-
             ['checkAndSetItem', 'internalCheckAndSetItem', [123, 'k', 'v'], true],
-
             ['touchItem', 'internalTouchItem', ['k'], true],
             ['touchItems', 'internalTouchItems', [['k1', 'k2']], []],
-
             ['removeItem', 'internalRemoveItem', ['k'], true],
             ['removeItems', 'internalRemoveItems', [['k1', 'k2']], []],
-
             ['incrementItem', 'internalIncrementItem', ['k', 1], true],
             ['incrementItems', 'internalIncrementItems', [['k1' => 1, 'k2' => 2]], []],
-
             ['decrementItem', 'internalDecrementItem', ['k', 1], true],
             ['decrementItems', 'internalDecrementItems', [['k1' => 1, 'k2' => 2]], []],
-
             ['getCapabilities', 'internalGetCapabilities', [], $capabilities],
         ];
     }
 
     /**
+     * @param mixed $retVal
      * @dataProvider simpleEventHandlingMethodDefinitions
      */
-    public function testEventHandlingSimple($methodName, $internalMethodName, $methodArgs, $retVal): void
-    {
+    public function testEventHandlingSimple(
+        string $methodName,
+        string $internalMethodName,
+        array $methodArgs,
+        $retVal
+    ): void {
         $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
 
         $eventList    = [];
@@ -428,8 +437,8 @@ final class AbstractAdapterTest extends TestCase
             $eventList[] = $event->getName();
         };
         $this->attachEventListeners($storage, $methodName, [
-            'pre' => $eventHandler,
-            'post' => $eventHandler,
+            'pre'       => $eventHandler,
+            'post'      => $eventHandler,
             'exception' => $eventHandler,
         ]);
 
@@ -443,7 +452,7 @@ final class AbstractAdapterTest extends TestCase
 
         $expectedEventList = [
             $methodName . '.pre',
-            $methodName . '.post'
+            $methodName . '.post',
         ];
         $this->assertSame($expectedEventList, $eventList);
     }
@@ -451,8 +460,11 @@ final class AbstractAdapterTest extends TestCase
     /**
      * @dataProvider simpleEventHandlingMethodDefinitions
      */
-    public function testEventHandlingCatchException($methodName, $internalMethodName, $methodArgs, $retVal): void
-    {
+    public function testEventHandlingCatchException(
+        string $methodName,
+        string $internalMethodName,
+        array $methodArgs
+    ): void {
         $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
 
         $eventList    = [];
@@ -464,8 +476,8 @@ final class AbstractAdapterTest extends TestCase
         };
 
         $this->attachEventListeners($storage, $methodName, [
-            'pre' => $eventHandler,
-            'post' => $eventHandler,
+            'pre'       => $eventHandler,
+            'post'      => $eventHandler,
             'exception' => $eventHandler,
         ]);
 
@@ -485,10 +497,15 @@ final class AbstractAdapterTest extends TestCase
     }
 
     /**
+     * @param mixed $retVal
      * @dataProvider simpleEventHandlingMethodDefinitions
      */
-    public function testEventHandlingStopInPre($methodName, $internalMethodName, $methodArgs, $retVal): void
-    {
+    public function testEventHandlingStopInPre(
+        string $methodName,
+        string $internalMethodName,
+        array $methodArgs,
+        $retVal
+    ): void {
         $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
 
         $eventList    = [];
@@ -496,14 +513,14 @@ final class AbstractAdapterTest extends TestCase
             $eventList[] = $event->getName();
         };
         $this->attachEventListeners($storage, $methodName, [
-            'pre' => [
+            'pre'       => [
                 $eventHandler,
                 function ($event) use ($retVal) {
                     $event->stopPropagation();
                     return $retVal;
                 },
             ],
-            'post' => $eventHandler,
+            'post'      => $eventHandler,
             'exception' => $eventHandler,
         ]);
 
@@ -597,14 +614,17 @@ final class AbstractAdapterTest extends TestCase
     public function testAddItems(): void
     {
         $storage = $this->getMockForAbstractAdapter([
-            'getItem', 'internalGetItem',
-            'hasItem', 'internalHasItem',
-            'setItem', 'internalSetItem'
+            'getItem',
+            'internalGetItem',
+            'hasItem',
+            'internalHasItem',
+            'setItem',
+            'internalSetItem',
         ]);
 
         $items = [
             'key1' => 'value1',
-            'key2' => 'value2'
+            'key2' => 'value2',
         ];
 
         // first check if the items already exists using has
@@ -655,7 +675,7 @@ final class AbstractAdapterTest extends TestCase
     {
         $storage = $this->getMockForAbstractAdapter(['internalHasItem', 'internalSetItem']);
 
-        $items   = [
+        $items = [
             'key1' => 'value1',
             'key2' => 'value2',
             'key3' => 'value3',
@@ -680,14 +700,17 @@ final class AbstractAdapterTest extends TestCase
     public function testReplaceItems(): void
     {
         $storage = $this->getMockForAbstractAdapter([
-            'hasItem', 'internalHasItem',
-            'getItem', 'internalGetItem',
-            'setItem', 'internalSetItem',
+            'hasItem',
+            'internalHasItem',
+            'getItem',
+            'internalGetItem',
+            'setItem',
+            'internalSetItem',
         ]);
 
         $items = [
             'key1' => 'value1',
-            'key2' => 'value2'
+            'key2' => 'value2',
         ];
 
         // First check if the item already exists using has
@@ -908,20 +931,20 @@ final class AbstractAdapterTest extends TestCase
     {
         // getItem(s)
         $this->checkPreEventCanChangeArguments('getItem', [
-            'key' => 'key'
+            'key' => 'key',
         ], [
             'key' => 'changedKey',
         ]);
 
         $this->checkPreEventCanChangeArguments('getItems', [
-            'keys' => ['key']
+            'keys' => ['key'],
         ], [
             'keys' => ['changedKey'],
         ]);
 
         // hasItem(s)
         $this->checkPreEventCanChangeArguments('hasItem', [
-            'key' => 'key'
+            'key' => 'key',
         ], [
             'key' => 'changedKey',
         ]);
@@ -934,7 +957,7 @@ final class AbstractAdapterTest extends TestCase
 
         // getMetadata(s)
         $this->checkPreEventCanChangeArguments('getMetadata', [
-            'key' => 'key'
+            'key' => 'key',
         ], [
             'key' => 'changedKey',
         ]);
@@ -1030,7 +1053,7 @@ final class AbstractAdapterTest extends TestCase
         // incrementItem(s)
         $this->checkPreEventCanChangeArguments('incrementItem', [
             'key'   => 'key',
-            'value' => 1
+            'value' => 1,
         ], [
             'key'   => 'changedKey',
             'value' => 2,
@@ -1045,7 +1068,7 @@ final class AbstractAdapterTest extends TestCase
         // decrementItem(s)
         $this->checkPreEventCanChangeArguments('decrementItem', [
             'key'   => 'key',
-            'value' => 1
+            'value' => 1,
         ], [
             'key'   => 'changedKey',
             'value' => 2,
@@ -1058,7 +1081,7 @@ final class AbstractAdapterTest extends TestCase
         ]);
     }
 
-    protected function checkPreEventCanChangeArguments($method, array $args, array $expectedArgs): void
+    protected function checkPreEventCanChangeArguments(string $method, array $args, array $expectedArgs): void
     {
         $internalMethod = 'internal' . ucfirst($method);
         $eventName      = $method . '.pre';
@@ -1073,7 +1096,7 @@ final class AbstractAdapterTest extends TestCase
         });
 
         // set expected arguments of internal method call
-        $tmp = $storage->expects($this->once())->method($internalMethod);
+        $tmp    = $storage->expects($this->once())->method($internalMethod);
         $equals = [];
         foreach ($expectedArgs as $v) {
             $equals[] = $this->equalTo($v);
@@ -1111,7 +1134,7 @@ final class AbstractAdapterTest extends TestCase
             return $this->getMockForAbstractClass(AbstractAdapter::class);
         }
 
-        $reflection = new \ReflectionClass(AbstractAdapter::class);
+        $reflection = new ReflectionClass(AbstractAdapter::class);
         foreach ($reflection->getMethods() as $method) {
             if ($method->isAbstract()) {
                 $methods[] = $method->getName();
@@ -1131,7 +1154,7 @@ final class AbstractAdapterTest extends TestCase
     ): void {
         $eventManager = $adapter->getEventManager();
         foreach ($listenersByEventName as $eventName => $listenersOrListener) {
-            if (!is_array($listenersOrListener)) {
+            if (! is_array($listenersOrListener)) {
                 $listenersOrListener = [$listenersOrListener];
             }
 

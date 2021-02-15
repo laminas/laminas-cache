@@ -10,69 +10,76 @@ namespace LaminasTest\Cache\Storage\TestAsset;
 
 use Laminas\Cache\Storage\Plugin;
 use Laminas\Cache\Storage\Plugin\AbstractPlugin;
-use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\Event;
+use Laminas\EventManager\EventManagerInterface;
 
 class MockPlugin extends AbstractPlugin
 {
-
+    /** @var Plugin\PluginOptions */
     protected $options;
+
+    /** @var array<callable> */
     protected $handles = [];
+
+    /** @var array<int,Event> */
     protected $calledEvents = [];
-    protected $eventCallbacks  = [
+
+    /** @var array<string,string> */
+    protected $eventCallbacks = [
         'setItem.pre'  => 'onSetItemPre',
-        'setItem.post' => 'onSetItemPost'
+        'setItem.post' => 'onSetItemPost',
     ];
 
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
-        if (is_array($options)) {
-            $options = new Plugin\PluginOptions($options);
-        }
+        $options = new Plugin\PluginOptions($options);
         if ($options instanceof Plugin\PluginOptions) {
             $this->setOptions($options);
         }
     }
 
-    public function setOptions(Plugin\PluginOptions $options)
+    public function setOptions(Plugin\PluginOptions $options): self
     {
         $this->options = $options;
         return $this;
     }
 
-    public function getOptions()
+    public function getOptions(): Plugin\PluginOptions
     {
         return $this->options;
     }
 
-    public function attach(EventManagerInterface $eventCollection, $priority = 1)
+    /**
+     * @param int $priority
+     */
+    public function attach(EventManagerInterface $events, $priority = 1): void
     {
         foreach ($this->eventCallbacks as $eventName => $method) {
-            $this->listeners[] = $eventCollection->attach($eventName, [$this, $method], $priority);
+            $this->listeners[] = $events->attach($eventName, [$this, $method], $priority);
         }
     }
 
-    public function onSetItemPre(Event $event)
+    public function onSetItemPre(Event $event): void
     {
         $this->calledEvents[] = $event;
     }
 
-    public function onSetItemPost(Event $event)
+    public function onSetItemPost(Event $event): void
     {
         $this->calledEvents[] = $event;
     }
 
-    public function getHandles()
+    public function getHandles(): array
     {
         return $this->listeners;
     }
 
-    public function getEventCallbacks()
+    public function getEventCallbacks(): array
     {
         return $this->eventCallbacks;
     }
 
-    public function getCalledEvents()
+    public function getCalledEvents(): array
     {
         return $this->calledEvents;
     }
