@@ -56,7 +56,9 @@
         "laminas/laminas-coding-standard": "^2.1",
         "laminas/laminas-serializer": "^2.6",
         "phpbench/phpbench": "^0.17.1",
-        "phpunit/phpunit": "^9.4"
+        "phpunit/phpunit": "^9.4",
+        "psalm/plugin-phpunit": "^0.15.1",
+        "vimeo/psalm": "^4.5"
     },
     "provide": {
         "psr/cache-implementation": "1.0",
@@ -85,6 +87,7 @@
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "test": "phpunit --colors=always",
-        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "static-analysis": "psalm --shepherd --stats"
     }
 }
