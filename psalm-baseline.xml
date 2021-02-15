@@ -993,13 +993,6 @@
     <PossiblyNullReference occurrences="1">
       <code>getEventManager</code>
     </PossiblyNullReference>
-    <PropertyNotSetInConstructor occurrences="5">
-      <code>$options</code>
-      <code>$storage</code>
-      <code>CallbackCacheTestAbstract</code>
-      <code>CallbackCacheTestAbstract</code>
-      <code>CallbackCacheTestAbstract</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="9">
       <code>call</code>
       <code>call</code>
@@ -1021,15 +1014,6 @@
       <code>$err['message']</code>
       <code>$err['message']</code>
     </PossiblyNullArrayAccess>
-    <PropertyNotSetInConstructor occurrences="7">
-      <code>$bufferedServerSuperGlobal</code>
-      <code>$options</code>
-      <code>$tmpCacheDir</code>
-      <code>$umask</code>
-      <code>CaptureCacheTestAbstract</code>
-      <code>CaptureCacheTestAbstract</code>
-      <code>CaptureCacheTestAbstract</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="2">
       <code>set</code>
       <code>set</code>
@@ -1056,13 +1040,6 @@
     <PossiblyNullReference occurrences="1">
       <code>getEventManager</code>
     </PossiblyNullReference>
-    <PropertyNotSetInConstructor occurrences="5">
-      <code>$options</code>
-      <code>$storage</code>
-      <code>ClassCacheTestAbstract</code>
-      <code>ClassCacheTestAbstract</code>
-      <code>ClassCacheTestAbstract</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="3">
       <code>call</code>
       <code>generateKey</code>
@@ -1109,13 +1086,6 @@
     <PossiblyNullReference occurrences="1">
       <code>getEventManager</code>
     </PossiblyNullReference>
-    <PropertyNotSetInConstructor occurrences="5">
-      <code>$options</code>
-      <code>$storage</code>
-      <code>ObjectCacheTestAbstract</code>
-      <code>ObjectCacheTestAbstract</code>
-      <code>ObjectCacheTestAbstract</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="3">
       <code>call</code>
       <code>generateKey</code>
@@ -1127,12 +1097,6 @@
       <code>getItem</code>
       <code>setItem</code>
     </PossiblyNullReference>
-    <PropertyNotSetInConstructor occurrences="4">
-      <code>$storage</code>
-      <code>OutputCacheTestAbstract</code>
-      <code>OutputCacheTestAbstract</code>
-      <code>OutputCacheTestAbstract</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="4">
       <code>end</code>
       <code>start</code>
@@ -1148,12 +1112,6 @@
       <code>emptyMethod</code>
     </MissingReturnType>
   </file>
-  <file src="test/PatternFactoryTest.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>PatternFactoryTest</code>
-      <code>PatternFactoryTest</code>
-    </PropertyNotSetInConstructor>
-  </file>
   <file src="test/PatternPluginManagerTest.php">
     <MissingReturnType occurrences="1">
       <code>testShareByDefaultAndSharedByDefault</code>
@@ -1167,10 +1125,6 @@
       <code>getOptions</code>
       <code>getStorage</code>
     </MixedMethodCall>
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>PatternPluginManagerTest</code>
-      <code>PatternPluginManagerTest</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Psr/CacheItemPool/CacheItemPoolDecoratorTest.php">
     <InvalidArgument occurrences="2">
@@ -1219,10 +1173,6 @@
     <PossiblyInvalidArgument occurrences="1">
       <code>$items</code>
     </PossiblyInvalidArgument>
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>CacheItemPoolDecoratorTest</code>
-      <code>CacheItemPoolDecoratorTest</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="10">
       <code>$items</code>
       <code>$items</code>
@@ -1241,11 +1191,6 @@
       <code>'foo'</code>
       <code>[]</code>
     </InvalidArgument>
-    <PropertyNotSetInConstructor occurrences="3">
-      <code>$tz</code>
-      <code>CacheItemTest</code>
-      <code>CacheItemTest</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Psr/CacheItemPool/TestAsset/StorageAdapter.php">
     <InvalidReturnType occurrences="5">
@@ -1275,13 +1220,11 @@
       <code>$ttl</code>
       <code>$ttl</code>
     </MixedArgument>
-    <PropertyNotSetInConstructor occurrences="5">
-      <code>$cache</code>
-      <code>$options</code>
-      <code>$storage</code>
-      <code>SimpleCacheDecoratorTest</code>
-      <code>SimpleCacheDecoratorTest</code>
-    </PropertyNotSetInConstructor>
+    <MixedInferredReturnType occurrences="3">
+      <code>array</code>
+      <code>array</code>
+      <code>array</code>
+    </MixedInferredReturnType>
   </file>
   <file src="test/Psr/SimpleCache/TestAsset/TtlStorage.php">
     <MissingReturnType occurrences="1">
@@ -1291,25 +1234,6 @@
       <code>TtlStorage</code>
     </PropertyNotSetInConstructor>
   </file>
-  <file src="test/Service/PatternPluginManagerFactoryTest.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>PatternPluginManagerFactoryTest</code>
-      <code>PatternPluginManagerFactoryTest</code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="test/Service/StorageAdapterPluginManagerFactoryTest.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>StorageAdapterPluginManagerFactoryTest</code>
-      <code>StorageAdapterPluginManagerFactoryTest</code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="test/Service/StorageCacheAbstractServiceFactoryTest.php">
-    <PropertyNotSetInConstructor occurrences="3">
-      <code>$sm</code>
-      <code>StorageCacheAbstractServiceFactoryTest</code>
-      <code>StorageCacheAbstractServiceFactoryTest</code>
-    </PropertyNotSetInConstructor>
-  </file>
   <file src="test/Service/StorageCacheFactoryTest.php">
     <MixedArgument occurrences="1">
       <code>$cache</code>
@@ -1317,21 +1241,10 @@
     <MixedAssignment occurrences="1">
       <code>$cache</code>
     </MixedAssignment>
-    <PropertyNotSetInConstructor occurrences="3">
-      <code>$sm</code>
-      <code>StorageCacheFactoryTest</code>
-      <code>StorageCacheFactoryTest</code>
-    </PropertyNotSetInConstructor>
     <TooManyArguments occurrences="2">
       <code>$factory</code>
       <code>$factory</code>
     </TooManyArguments>
-  </file>
-  <file src="test/Service/StoragePluginManagerFactoryTest.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>StoragePluginManagerFactoryTest</code>
-      <code>StoragePluginManagerFactoryTest</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Storage/Adapter/AbstractAdapterTest.php">
     <InvalidReturnStatement occurrences="1">
@@ -1386,6 +1299,9 @@
       <code>$v</code>
       <code>$v</code>
     </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>array</code>
+    </MixedInferredReturnType>
     <MixedMethodCall occurrences="8">
       <code>getName</code>
       <code>getName</code>
@@ -1414,10 +1330,6 @@
     <PossiblyUndefinedVariable occurrences="1">
       <code>$success</code>
     </PossiblyUndefinedVariable>
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>AbstractAdapterTest</code>
-      <code>AbstractAdapterTest</code>
-    </PropertyNotSetInConstructor>
     <RedundantCondition occurrences="1">
       <code>assert($adapter instanceof AbstractAdapter)</code>
     </RedundantCondition>
@@ -1448,24 +1360,6 @@
       <code>setTtl</code>
       <code>setWritable</code>
     </PossiblyNullReference>
-    <PropertyNotSetInConstructor occurrences="3">
-      <code>$storage</code>
-      <code>AdapterOptionsTest</code>
-      <code>AdapterOptionsTest</code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="test/Storage/Adapter/EventManagerCompatibilityTest.php">
-    <PropertyNotSetInConstructor occurrences="3">
-      <code>$adapter</code>
-      <code>EventManagerCompatibilityTest</code>
-      <code>EventManagerCompatibilityTest</code>
-    </PropertyNotSetInConstructor>
-  </file>
-  <file src="test/Storage/Adapter/KeyListIteratorTest.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>KeyListIteratorTest</code>
-      <code>KeyListIteratorTest</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Storage/Adapter/TestAsset/AdapterWithStorageAndEventsCapableInterface.php">
     <MissingReturnType occurrences="1">
@@ -1480,10 +1374,6 @@
       <code>testPluginAliasesResolve</code>
       <code>testShareByDefaultAndSharedByDefault</code>
     </MissingReturnType>
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>AdapterPluginManagerTest</code>
-      <code>AdapterPluginManagerTest</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Storage/CapabilitiesTest.php">
     <ArgumentTypeCoercion occurrences="1">
@@ -1499,14 +1389,6 @@
     <MixedMethodCall occurrences="1">
       <code>attach</code>
     </MixedMethodCall>
-    <PropertyNotSetInConstructor occurrences="6">
-      <code>$adapter</code>
-      <code>$baseCapabilities</code>
-      <code>$capabilities</code>
-      <code>$marker</code>
-      <code>CapabilitiesTest</code>
-      <code>CapabilitiesTest</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="1">
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
@@ -1536,13 +1418,6 @@
     <InvalidReturnType occurrences="1">
       <code>getCommonPluginNamesProvider</code>
     </InvalidReturnType>
-    <PropertyNotSetInConstructor occurrences="5">
-      <code>$adapter</code>
-      <code>$options</code>
-      <code>ClearExpiredByFactorTestAbstract</code>
-      <code>ClearExpiredByFactorTestAbstract</code>
-      <code>ClearExpiredByFactorTestAbstract</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="1">
       <code>clearExpiredByFactor</code>
     </UndefinedInterfaceMethod>
@@ -1563,13 +1438,6 @@
     <MissingClosureParamType occurrences="1">
       <code>$exception</code>
     </MissingClosureParamType>
-    <PropertyNotSetInConstructor occurrences="5">
-      <code>$adapter</code>
-      <code>$options</code>
-      <code>ExceptionHandlerTestAbstract</code>
-      <code>ExceptionHandlerTestAbstract</code>
-      <code>ExceptionHandlerTestAbstract</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="2">
       <code>onException</code>
       <code>onException</code>
@@ -1588,13 +1456,6 @@
       <code>$cb[0]</code>
       <code>$cb[1]</code>
     </InvalidArrayAccess>
-    <PropertyNotSetInConstructor occurrences="5">
-      <code>$adapter</code>
-      <code>$options</code>
-      <code>IgnoreUserAbortTestAbstract</code>
-      <code>IgnoreUserAbortTestAbstract</code>
-      <code>IgnoreUserAbortTestAbstract</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Storage/Plugin/OptimizeByFactorTestAbstract.php">
     <ArgumentTypeCoercion occurrences="2">
@@ -1612,13 +1473,6 @@
       <code>$cb[0]</code>
       <code>$cb[1]</code>
     </InvalidArrayAccess>
-    <PropertyNotSetInConstructor occurrences="5">
-      <code>$adapter</code>
-      <code>$options</code>
-      <code>OptimizeByFactorTestAbstract</code>
-      <code>OptimizeByFactorTestAbstract</code>
-      <code>OptimizeByFactorTestAbstract</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="1">
       <code>optimizeByFactor</code>
     </UndefinedInterfaceMethod>
@@ -1647,13 +1501,6 @@
     <MixedAssignment occurrences="1">
       <code>$values</code>
     </MixedAssignment>
-    <PropertyNotSetInConstructor occurrences="5">
-      <code>$adapter</code>
-      <code>$options</code>
-      <code>SerializerTestAbstract</code>
-      <code>SerializerTestAbstract</code>
-      <code>SerializerTestAbstract</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="3">
       <code>onReadItemPost</code>
       <code>onReadItemPost</code>
@@ -1664,10 +1511,6 @@
     <MissingReturnType occurrences="1">
       <code>testShareByDefaultAndSharedByDefault</code>
     </MissingReturnType>
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>PluginManagerTest</code>
-      <code>PluginManagerTest</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Storage/TestAsset/ClearExpiredMockAdapter.php">
     <InvalidReturnType occurrences="1">
@@ -1711,10 +1554,6 @@
     <MixedAssignment occurrences="1">
       <code>$plugin</code>
     </MixedAssignment>
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>StorageFactoryTest</code>
-      <code>StorageFactoryTest</code>
-    </PropertyNotSetInConstructor>
     <UndefinedInterfaceMethod occurrences="1">
       <code>getPluginRegistry</code>
     </UndefinedInterfaceMethod>
