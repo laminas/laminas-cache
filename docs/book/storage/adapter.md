@@ -561,6 +561,50 @@ Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
 `namespace_separator` | `string` |  ":" | A separator for the namespace and prefix.
 
+## The BlackHole Adapter
+
+`Laminas\Cache\Storage\Adapter\BlackHole` **does not** store any cache items. This adapter is useful to bypass caching behavior. This might be the case in development mode or unit testing.
+
+This adapter implements the following interfaces:
+
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
+- `Laminas\Cache\Storage\ClearExpiredInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\IterableInterface`
+- `Laminas\Cache\Storage\OptimizableInterface`
+- `Laminas\Cache\Storage\TaggableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
+
+### Capabilities
+
+Capability | Value
+---------- | -----
+`supportedDatatypes` | `null`, `bool`, `int`, `float`, `string`, `array`, `object`
+`supportedMetadata` | none
+`minTtl` | 0 or 1, depending on `psr` option.
+`maxTtl` | 0
+`staticTtl` | `false` or `true`, depending on `psr` option
+`ttlPrecision` | 1
+`useRequestTime` | false
+`lockOnExpire` | 0
+`maxKeyLength` | -1
+`namespaceIsPrefix` | `true`
+`namespaceSeparator` | none
+
+### Adapter specific Options
+
+Name | Data Type | Default Value | Description
+---- | --------- | ------------- | -----------
+`psr` | `bool` |  `false` | Flag to specify whether the adapter should be compatible with `CacheItemPoolDecorator` or `SimpleCacheDecorator`
+
+>### Deprecation Notice
+>
+> The `psr` option was introduce to provide non-BC compatible way to use the `BlackHole` adapter with the PSR-6 and PSR-16 decorator. Ignore this option if this adapter is not used in combination with these decorators. This option is already flagged as internal and thus will be removed in `laminas/laminas-cache-storage-adapter-blackhole` 2.0.
+
+
 ## The Dba Adapter
 
 `Laminas\Cache\Storage\Adapter\Dba` stores cache items into
