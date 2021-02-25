@@ -78,7 +78,7 @@ Option | Data Type | Default Value | Description
 `readable` | `boolean` | `true` | Enable/Disable reading data from cache
 `writable` | `boolean` | `true` | Enable/Disable writing data to cache
 
-## The StorageInterface
+## StorageInterface
 
 `Laminas\Cache\Storage\StorageInterface` is the basic interface implemented by all
 storage adapters.
@@ -323,7 +323,7 @@ interface StorageInterface
 }
 ```
 
-## The AvailableSpaceCapableInterface
+## AvailableSpaceCapableInterface
 
 `Laminas\Cache\Storage\AvailableSpaceCapableInterface` implements a method to allow
 retrieving the current available space remaining in storage.
@@ -342,7 +342,7 @@ interface AvailableSpaceCapableInterface
 }
 ```
 
-## The TotalSpaceCapableInterface
+## TotalSpaceCapableInterface
 
 `Laminas\Cache\Storage\TotalSpaceCapableInterface` implements a method to allow
 retrieving the total storage space.
@@ -361,7 +361,7 @@ interface TotalSpaceCapableInterface
 }
 ```
 
-## The ClearByNamespaceInterface
+## ClearByNamespaceInterface
 
 `Laminas\Cache\Storage\ClearByNamespaceInterface` implements a method to allow
 clearing all cached items within a given namespace.
@@ -381,7 +381,7 @@ interface ClearByNamespaceInterface
 }
 ```
 
-## The ClearByPrefixInterface
+## ClearByPrefixInterface
 
 `Laminas\Cache\Storage\ClearByPrefixInterface` implements a method to allow
 clearing all cached items that have a given prefix (within the currently
@@ -401,7 +401,7 @@ interface ClearByPrefixInterface
     public function clearByPrefix($prefix);
 }
 ```
-## The ClearExpiredInterface
+## ClearExpiredInterface
 
 `Laminas\Cache\Storage\ClearExpiredInterface` implements a method to allow clearing
 all expired items (within the current configured namespace).
@@ -420,7 +420,7 @@ interface ClearExpiredInterface
 }
 ```
 
-## The FlushableInterface
+## FlushableInterface
 
 `Laminas\Cache\Storage\FlushableInterface` implements a method for flushing the
 entire cache storage.
@@ -439,7 +439,7 @@ interface FlushableInterface
 }
 ```
 
-## The IterableInterface
+## IterableInterface
 
 `Laminas\Cache\Storage\IterableInterface` implements a method for retrieving an
 iterator of all items in storage. It extends `IteratorAggregate`, so it's
@@ -464,7 +464,7 @@ interface IterableInterface extends IteratorAggregate
 }
 ```
 
-## The OptimizableInterface
+## OptimizableInterface
 
 `Laminas\Cache\Storage\OptimizableInterface` implements a method for running
 optimization processes on the storage adapter.
@@ -483,7 +483,7 @@ interface OptimizableInterface
 }
 ```
 
-## The TaggableInterface
+## TaggableInterface
 
 `Laminas\Cache\Storage\TaggableInterface` implements methods for tagging items, and
 cleaning (expiring) items matching tags.
@@ -524,7 +524,7 @@ interface TaggableInterface
     public function clearByTags(array $tags, $disjunction = false);
 }
 ```
-## The Apc Adapter
+## Apc Adapter
 
 `Laminas\Cache\Storage\Adapter\Apc` stores cache items in shared memory through the
 PHP extension [APC](http://pecl.php.net/package/APC) (Alternative PHP Cache).
@@ -561,7 +561,7 @@ Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
 `namespace_separator` | `string` |  ":" | A separator for the namespace and prefix.
 
-## The BlackHole Adapter
+## BlackHole Adapter
 
 `Laminas\Cache\Storage\Adapter\BlackHole` **does not** store any cache items. This adapter is useful to bypass caching behavior. This might be the case in development mode or unit testing.
 
@@ -605,7 +605,7 @@ Name | Data Type | Default Value | Description
 > The `psr` option was introduce to provide non-BC compatible way to use the `BlackHole` adapter with the PSR-6 and PSR-16 decorator. Ignore this option if this adapter is not used in combination with these decorators. This option is already flagged as internal and thus will be removed in `laminas/laminas-cache-storage-adapter-blackhole` 2.0.
 
 
-## The Dba Adapter
+## Dba Adapter
 
 `Laminas\Cache\Storage\Adapter\Dba` stores cache items into
 [dbm](http://en.wikipedia.org/wiki/Dbm)-like databases using the PHP extension
@@ -647,7 +647,7 @@ Name | Data Type | Default Value | Description
 > Because this adapter doesn't support automatic expiry, it's very important to clean
 > outdated items periodically!
 
-## The Filesystem Adapter
+## Filesystem Adapter
 
 `Laminas\Cache\Storage\Adapter\Filesystem` stores cache items on the filesystem.
 
@@ -701,7 +701,7 @@ Name | Data Type | Default Value | Description
 Note: the `suffix` and `tag_suffix` options will be escaped in order to be safe
 for glob operations.
 
-## The Memcached Adapter
+## Memcached Adapter
 
 `Laminas\Cache\Storage\Adapter\Memcached` stores cache items over the memcached
 protocol, using the PHP extension [memcached](http://pecl.php.net/package/memcached),
@@ -737,7 +737,7 @@ Name | Data Type | Default Value | Description
 `servers` | `array` | `[]` | List of servers in the format `[] = [string host, integer port]`
 `lib_options` | `array` | `[]` | Associative array of Libmemcached options where the array key is the option name (without the prefix `OPT_`) or the constant value. The array value is the option value. Please read [the memcached setOption() page](http://php.net/manual/memcached.setoption.php) for more information
 
-## The Redis Adapter
+## Redis Adapter
 
 `Laminas\Cache\Storage\Adapter\Redis` stores cache items over the redis protocol
 using the PHP extension [redis](https://github.com/nicolasff/phpredis).
@@ -781,7 +781,7 @@ Name | Data Type | Default Value | Description
 - Associative array: `['host' => <host>[, 'port' => <port>[, 'timeout' => <timeout>]]]`
 - List: `[<host>[, <port>, [, <timeout>]]]`
 
-## The Memory Adapter
+## Memory Adapter
 
 The `Laminas\Cache\Storage\Adapter\Memory` stores items in-memory in the current
 process only.
@@ -833,7 +833,7 @@ Name | Data Type | Default Value | Description
 > All stored items will be lost on termination of the script. For web-facing
 > requests, this typically means the cache is volatile.
 
-## The MongoDB Adapter
+## MongoDB Adapter
 
 `Laminas\Cache\Storage\Adapter\MongoDB` stores cache items using MongoDB, via either the
 PHP extension [mongo](http://php.net/mongo), or a MongoDB polyfill library, such as
@@ -881,7 +881,7 @@ Key | Default | Description
 `connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).
 `driverOptions` | `[]` | Associative array of driver options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).
 
-## The ExtMongoDB Adapter
+## ExtMongoDB Adapter
 
 > Available since version 2.8.0
 
@@ -935,7 +935,7 @@ Key | Default | Description
 `connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of URI options (such as authentication credentials or query string parameters) to pass to `MongoDB\\Client` (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
 `driverOptions` | `[]` | Associative array of driver options to pass to `MongoDB\\Client` (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
 
-## The WinCache Adapter
+## WinCache Adapter
 
 `Laminas\Cache\Storage\Adapter\WinCache` stores cache items into shared memory
 through the PHP extension [WinCache](http://pecl.php.net/package/WinCache).
@@ -968,7 +968,7 @@ Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
 `namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
 
-## The XCache Adapter
+## XCache Adapter
 
 `Laminas\Cache\Storage\Adapter\XCache` stores cache items into shared memory through the
 PHP extension [XCache](http://xcache.lighttpd.net/).
@@ -1008,7 +1008,7 @@ Name | Data Type | Default Value | Description
 `admin_user` | `string` | "" | The username of `xcache.admin.user`.
 `admin_pass` | `string` | "" | The password of `xcache.admin.pass` in plain text.
 
-## The ZendServerDisk Adapter
+## ZendServerDisk Adapter
 
 `Laminas\Cache\Storage\Adapter\ZendServerDisk` stores cache items on the filesystem
 using the [Zend Server Data Caching API](https://www.zend.com/en/products/server/).
@@ -1037,7 +1037,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | `::`
 
-## The ZendServerShm Adapter
+## ZendServerShm Adapter
 
 `Laminas\Cache\Storage\Adapter\ZendServerShm` stores cache items in shared memory
 through the [Zend Server Data Caching API](https://www.zend.com/en/products/server/).
