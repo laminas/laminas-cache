@@ -555,7 +555,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -594,7 +594,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -633,7 +633,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -680,7 +680,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -730,7 +730,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -763,7 +763,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -812,7 +812,7 @@ Capability | Value
 `maxKeyLength` | 0
 `namespaceIsPrefix` | `false`
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -864,7 +864,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | <Option value of namespace_separator>
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -918,7 +918,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | <Option value of namespace_separator>
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -962,7 +962,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
@@ -999,7 +999,7 @@ Capability | Value
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | Option value of `namespace_separator`
 
-### Adapter specific Options
+### Adapter Specific Options
 
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
