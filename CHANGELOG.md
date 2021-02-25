@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#57](https://github.com/laminas/laminas-cache/pull/57) Internal cache handling of `CacheItemPoolDecorator` is changed to use `StorageInterface::setItems` instead of `StorageInterface::setItem`. This will result in a faster store procedure when multiple deferred cache items needs to be stored.
 
 ### Deprecated
 
