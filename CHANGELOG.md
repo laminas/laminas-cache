@@ -24,6 +24,29 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
+## 2.10.1 - 2021-02-25
+
+
+-----
+
+### Release Notes for [2.10.1](https://github.com/laminas/laminas-cache/milestone/4)
+
+2.10.x bugfix release (patch)
+
+### Added
+
+- Added documentation for `BlackHole` Adapter
+
+### 2.10.1
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Documentation
+
+ - [68: docs: add `BlackHole` adapter docs](https://github.com/laminas/laminas-cache/pull/68) thanks to @boesing
+
 ## 2.10.0 - 2020-11-08
 
 **As decided within the [TSC meeting in November 2020](https://github.com/laminas/technical-steering-committee/blob/main/meetings/minutes/2020-11-02-TSC-Minutes.md#cache-adapters), v2.10 is the last minor version in the v2 series.**
