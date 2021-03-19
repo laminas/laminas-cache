@@ -13,6 +13,7 @@ use Laminas\Cache\Exception\InvalidArgumentException;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\FailableCallback;
 use LaminasTest\Cache\Pattern\TestAsset\TestCallbackCache;
+use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
 use function func_get_args;
 use function implode;
@@ -31,8 +32,9 @@ function bar(): string
 
 /**
  * @group      Laminas_Cache
+ * @property Cache\Pattern\CallbackCache $pattern
  */
-class CallbackCacheTestAbstract extends AbstractCommonPatternTest
+class CallbackCacheTest extends AbstractCommonPatternTestCase
 {
     /** @var StorageInterface */
     protected $storage;
@@ -42,9 +44,7 @@ class CallbackCacheTestAbstract extends AbstractCommonPatternTest
 
     public function setUp(): void
     {
-        $this->storage = new Cache\Storage\Adapter\Memory([
-            'memory_limit' => 0,
-        ]);
+        $this->storage = new MockAdapter();
         $this->options = new Cache\Pattern\PatternOptions([
             'storage' => $this->storage,
         ]);
@@ -123,7 +123,7 @@ class CallbackCacheTestAbstract extends AbstractCommonPatternTest
      * Running tests calling {@see \LaminasTest\Cache\Pattern\TestCallbackCache::bar}
      * using different callbacks resulting in this method call
      */
-    protected function executeCallbackAndMakeAssertions(string $callback, array $args): void
+    protected function executeCallbackAndMakeAssertions(callable $callback, array $args): void
     {
         $returnSpec = 'foobar_return(' . implode(', ', $args) . ') : ';
         $outputSpec = 'foobar_output(' . implode(', ', $args) . ') : ';

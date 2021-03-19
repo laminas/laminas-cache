@@ -11,8 +11,10 @@ namespace LaminasTest\Cache\Pattern;
 use Laminas\Cache;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\TestClassCache;
+use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
 use function implode;
+use function ob_end_clean;
 use function ob_get_clean;
 use function ob_implicit_flush;
 use function ob_start;
@@ -20,8 +22,9 @@ use function ob_start;
 /**
  * @group      Laminas_Cache
  * @covers \Laminas\Cache\Pattern\ClassCache<extended>
+ * @property Cache\Pattern\ClassCache $pattern
  */
-class ClassCacheTestAbstract extends AbstractCommonPatternTest
+class ClassCacheTest extends AbstractCommonPatternTestCase
 {
     /** @var StorageInterface */
     protected $storage;
@@ -31,9 +34,7 @@ class ClassCacheTestAbstract extends AbstractCommonPatternTest
 
     public function setUp(): void
     {
-        $this->storage = new Cache\Storage\Adapter\Memory([
-            'memory_limit' => 0,
-        ]);
+        $this->storage = new MockAdapter();
         $this->options = new Cache\Pattern\PatternOptions([
             'class'   => TestClassCache::class,
             'storage' => $this->storage,
@@ -57,19 +58,24 @@ class ClassCacheTestAbstract extends AbstractCommonPatternTest
 
     public function testCallEnabledCacheOutputByDefault(): void
     {
-        $this->testCall(
+        ob_start();
+        $this->pattern->call(
             'bar',
             ['testCallEnabledCacheOutputByDefault', 'arg2']
         );
+        ob_end_clean();
     }
 
     public function testCallDisabledCacheOutput(): void
     {
         $this->options->setCacheOutput(false);
-        $this->testCall(
+
+        ob_start();
+        $this->pattern->call(
             'bar',
             ['testCallDisabledCacheOutput', 'arg2']
         );
+        ob_end_clean();
     }
 
     public function testGenerateKey(): void

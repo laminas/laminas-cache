@@ -12,6 +12,7 @@ use Laminas\Cache;
 use Laminas\Cache\Pattern\PatternOptions;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\TestObjectCache;
+use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
 use function get_class;
 use function implode;
@@ -22,8 +23,9 @@ use function ob_start;
 
 /**
  * @group      Laminas_Cache
+ * @property Cache\Pattern\ObjectCache $pattern
  */
-class ObjectCacheTestAbstract extends AbstractCommonPatternTest
+class ObjectCacheTest extends AbstractCommonPatternTestCase
 {
     /** @var StorageInterface */
     protected $storage;
@@ -33,9 +35,7 @@ class ObjectCacheTestAbstract extends AbstractCommonPatternTest
 
     public function setUp(): void
     {
-        $this->storage = new Cache\Storage\Adapter\Memory([
-            'memory_limit' => 0,
-        ]);
+        $this->storage = new MockAdapter();
         $this->options = new PatternOptions([
             'object'  => new TestObjectCache(),
             'storage' => $this->storage,

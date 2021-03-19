@@ -12,12 +12,18 @@ use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 
 class MockAdapter extends AbstractAdapter
 {
+    /** @var array<mixed, mixed> */
+    private $data = [];
+
     /**
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
      */
     protected function internalGetItem(&$normalizedKey, &$success = null, &$casToken = null)
     {
+        $success = isset($this->data[$normalizedKey]);
+
+        return $this->data[$normalizedKey] ?? null;
     }
 
     /**
@@ -26,6 +32,9 @@ class MockAdapter extends AbstractAdapter
      */
     protected function internalSetItem(&$normalizedKey, &$value)
     {
+        $this->data[$normalizedKey] = $value;
+
+        return true;
     }
 
     /**
@@ -34,5 +43,8 @@ class MockAdapter extends AbstractAdapter
      */
     protected function internalRemoveItem(&$normalizedKey)
     {
+        unset($this->data[$normalizedKey]);
+
+        return true;
     }
 }

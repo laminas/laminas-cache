@@ -11,6 +11,7 @@ namespace LaminasTest\Cache\Pattern;
 use Laminas\Cache;
 use Laminas\Cache\Exception\MissingKeyException;
 use Laminas\Cache\Storage\StorageInterface;
+use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
 use function ob_end_clean;
 use function ob_get_clean;
@@ -20,8 +21,9 @@ use function ob_start;
 /**
  * @group      Laminas_Cache
  * @covers \Laminas\Cache\Pattern\OutputCache<extended>
+ * @property Cache\Pattern\OutputCache $pattern
  */
-class OutputCacheTestAbstract extends AbstractCommonPatternTest
+class OutputCacheTest extends AbstractCommonPatternTestCase
 {
     /** @var StorageInterface */
     protected $storage;
@@ -33,11 +35,12 @@ class OutputCacheTestAbstract extends AbstractCommonPatternTest
      */
     protected $obLevel;
 
+    /** @var Cache\Pattern\PatternOptions */
+    private $options;
+
     public function setUp(): void
     {
-        $this->storage = new Cache\Storage\Adapter\Memory([
-            'memory_limit' => 0,
-        ]);
+        $this->storage = new MockAdapter();
         $this->options = new Cache\Pattern\PatternOptions([
             'storage' => $this->storage,
         ]);
