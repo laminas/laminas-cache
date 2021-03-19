@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="vendor/autoload.php"
-         colors="true">
-    <testsuites>
-        <testsuite name="laminas-cache Test Suite">
-            <directory>./test</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
-
-    <php>
-
-        <!-- Note: the following is a FULL list of ALL POSSIBLE constants
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="vendor/autoload.php" colors="true">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="laminas-cache Test Suite">
+      <directory>./test</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <!-- Note: the following is a FULL list of ALL POSSIBLE constants
              currently in use in Laminas for ALL COMPONENTS; you should choose the
              constants appropriate to the component you are migrating. -->
-
-        <env name="TESTS_LAMINAS_CACHE_PLATFORM_ENABLED" value="false" />
-    </php>
+    <env name="TESTS_LAMINAS_CACHE_PLATFORM_ENABLED" value="false"/>
+  </php>
 </phpunit>
