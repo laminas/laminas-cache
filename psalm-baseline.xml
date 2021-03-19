@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.5.2@15a9eece1305fd26eb1336a78e5a2ee7a4b36214">
+<files psalm-version="4.6.4@97fe86c4e158b5a57c5150aa5055c38b5a809aab">
   <file src="src/Pattern/AbstractPattern.php">
     <DocblockTypeContradiction occurrences="1">
       <code>null === $this-&gt;options</code>
@@ -272,6 +272,9 @@
   </file>
   <file src="src/Psr/CacheItemPool/CacheItemPoolDecorator.php">
     <InvalidCatch occurrences="6"/>
+    <InvalidReturnStatement occurrences="1">
+      <code>$notSavedItems</code>
+    </InvalidReturnStatement>
     <InvalidScalarArgument occurrences="5">
       <code>$e-&gt;getCode()</code>
       <code>$e-&gt;getCode()</code>
@@ -284,20 +287,30 @@
       <code>validateKeys</code>
       <code>validateStorage</code>
     </MissingReturnType>
-    <MixedAssignment occurrences="4">
+    <MixedArgumentTypeCoercion occurrences="2">
+      <code>$key</code>
+      <code>$keyValuePairs</code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment occurrences="5">
       <code>$cleared</code>
       <code>$key</code>
+      <code>$keyValuePair[$key]</code>
       <code>$value</code>
       <code>$value</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="6">
+    <MixedInferredReturnType occurrences="1">
       <code>clear</code>
-      <code>deleteItems</code>
-      <code>getItem</code>
-      <code>getItems</code>
-      <code>hasItem</code>
-      <code>save</code>
     </MixedInferredReturnType>
+    <MixedReturnStatement occurrences="1">
+      <code>$cleared</code>
+    </MixedReturnStatement>
+    <MixedReturnTypeCoercion occurrences="2">
+      <code>$items</code>
+      <code>array&lt;string,CacheItem&gt;</code>
+    </MixedReturnTypeCoercion>
+    <PossiblyNullArgument occurrences="1">
+      <code>$isHit</code>
+    </PossiblyNullArgument>
     <RedundantConditionGivenDocblockType occurrences="1">
       <code>null !== $this-&gt;storage-&gt;removeItems($keys)</code>
     </RedundantConditionGivenDocblockType>
@@ -666,9 +679,7 @@
     </RedundantCastGivenDocblockType>
   </file>
   <file src="src/Storage/AdapterPluginManager.php">
-    <NonInvariantDocblockPropertyType occurrences="3">
-      <code>$aliases</code>
-      <code>$factories</code>
+    <NonInvariantDocblockPropertyType occurrences="1">
       <code>$instanceOf</code>
     </NonInvariantDocblockPropertyType>
   </file>
@@ -959,28 +970,22 @@
       <code>hasPlugin</code>
     </PossiblyUndefinedMethod>
   </file>
-  <file src="test/Pattern/AbstractCommonPatternTest.php">
+  <file src="test/Pattern/AbstractCommonPatternTestCase.php">
     <MissingReturnType occurrences="1">
       <code>testPatternPluginManagerWithCommonNames</code>
     </MissingReturnType>
   </file>
-  <file src="test/Pattern/CallbackCacheTestAbstract.php">
-    <InvalidArgument occurrences="2">
-      <code>[TestCallbackCache::class, 'bar']</code>
-      <code>[TestCallbackCache::class, 'bar']</code>
+  <file src="test/Pattern/CallbackCacheTest.php">
+    <InvalidArgument occurrences="1">
+      <code>1</code>
     </InvalidArgument>
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>
-    <MixedArgument occurrences="1">
-      <code>$key</code>
-    </MixedArgument>
     <MixedArrayAccess occurrences="1">
       <code>$params['key']</code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="6">
-      <code>$generatedKey</code>
-      <code>$key</code>
+    <MixedAssignment occurrences="4">
       <code>$params</code>
       <code>$return</code>
       <code>$return</code>
@@ -993,19 +998,14 @@
     <PossiblyNullReference occurrences="1">
       <code>getEventManager</code>
     </PossiblyNullReference>
-    <UndefinedInterfaceMethod occurrences="9">
-      <code>call</code>
-      <code>call</code>
-      <code>call</code>
-      <code>call</code>
-      <code>call</code>
-      <code>call</code>
-      <code>generateKey</code>
-      <code>generateKey</code>
+    <UndefinedFunction occurrences="1">
+      <code>'notExiststingFunction'</code>
+    </UndefinedFunction>
+    <UndefinedInterfaceMethod occurrences="1">
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
   </file>
-  <file src="test/Pattern/CaptureCacheTestAbstract.php">
+  <file src="test/Pattern/CaptureCacheTest.php">
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$_SERVER</code>
     </MixedPropertyTypeCoercion>
@@ -1014,20 +1014,15 @@
       <code>$err['message']</code>
       <code>$err['message']</code>
     </PossiblyNullArrayAccess>
-    <UndefinedInterfaceMethod occurrences="2">
-      <code>set</code>
-      <code>set</code>
-    </UndefinedInterfaceMethod>
   </file>
-  <file src="test/Pattern/ClassCacheTestAbstract.php">
+  <file src="test/Pattern/ClassCacheTest.php">
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>
     <MixedArrayAccess occurrences="1">
       <code>$params['key']</code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="5">
-      <code>$generatedKey</code>
+    <MixedAssignment occurrences="4">
       <code>$params</code>
       <code>$return</code>
       <code>$return</code>
@@ -1040,25 +1035,18 @@
     <PossiblyNullReference occurrences="1">
       <code>getEventManager</code>
     </PossiblyNullReference>
-    <UndefinedInterfaceMethod occurrences="3">
-      <code>call</code>
-      <code>generateKey</code>
+    <UndefinedInterfaceMethod occurrences="1">
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
-    <UndefinedMethod occurrences="2">
-      <code>testCall</code>
-      <code>testCall</code>
-    </UndefinedMethod>
   </file>
-  <file src="test/Pattern/ObjectCacheTestAbstract.php">
+  <file src="test/Pattern/ObjectCacheTest.php">
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>
     <MixedArrayAccess occurrences="1">
       <code>$params['key']</code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="5">
-      <code>$generatedKey</code>
+    <MixedAssignment occurrences="4">
       <code>$params</code>
       <code>$return</code>
       <code>$return</code>
@@ -1068,14 +1056,6 @@
       <code>attach</code>
       <code>getParams</code>
     </MixedMethodCall>
-    <NoInterfaceProperties occurrences="6">
-      <code>$this-&gt;pattern-&gt;property</code>
-      <code>$this-&gt;pattern-&gt;property</code>
-      <code>$this-&gt;pattern-&gt;property</code>
-      <code>$this-&gt;pattern-&gt;property</code>
-      <code>$this-&gt;pattern-&gt;property</code>
-      <code>$this-&gt;pattern-&gt;unknownProperty</code>
-    </NoInterfaceProperties>
     <PossiblyNullArgument occurrences="1">
       <code>$this-&gt;options-&gt;getObject()</code>
     </PossiblyNullArgument>
@@ -1086,26 +1066,15 @@
     <PossiblyNullReference occurrences="1">
       <code>getEventManager</code>
     </PossiblyNullReference>
-    <UndefinedInterfaceMethod occurrences="3">
-      <code>call</code>
-      <code>generateKey</code>
+    <UndefinedInterfaceMethod occurrences="1">
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
   </file>
-  <file src="test/Pattern/OutputCacheTestAbstract.php">
+  <file src="test/Pattern/OutputCacheTest.php">
     <PossiblyNullReference occurrences="2">
       <code>getItem</code>
       <code>setItem</code>
     </PossiblyNullReference>
-    <UndefinedInterfaceMethod occurrences="4">
-      <code>end</code>
-      <code>start</code>
-      <code>start</code>
-      <code>start</code>
-    </UndefinedInterfaceMethod>
-    <UndefinedThisPropertyAssignment occurrences="1">
-      <code>$this-&gt;options</code>
-    </UndefinedThisPropertyAssignment>
   </file>
   <file src="test/Pattern/TestAsset/TestCallbackCache.php">
     <MissingReturnType occurrences="1">
@@ -1145,8 +1114,7 @@
     <MixedArgumentTypeCoercion occurrences="1">
       <code>$capabilities ?? $this-&gt;defaultCapabilities</code>
     </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="4">
-      <code>$counter</code>
+    <MixedAssignment occurrences="3">
       <code>$item</code>
       <code>$item</code>
       <code>$item</code>
@@ -1167,12 +1135,12 @@
       <code>isHit</code>
       <code>set</code>
     </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$counter</code>
-    </MixedOperand>
     <PossiblyInvalidArgument occurrences="1">
       <code>$items</code>
     </PossiblyInvalidArgument>
+    <PossiblyNullPropertyAssignmentValue occurrences="1">
+      <code>null</code>
+    </PossiblyNullPropertyAssignmentValue>
     <UndefinedInterfaceMethod occurrences="10">
       <code>$items</code>
       <code>$items</code>
@@ -1521,11 +1489,6 @@
     </PropertyNotSetInConstructor>
   </file>
   <file src="test/Storage/TestAsset/MockAdapter.php">
-    <InvalidReturnType occurrences="3">
-      <code>internalGetItem</code>
-      <code>internalRemoveItem</code>
-      <code>internalSetItem</code>
-    </InvalidReturnType>
     <PropertyNotSetInConstructor occurrences="1">
       <code>MockAdapter</code>
     </PropertyNotSetInConstructor>
