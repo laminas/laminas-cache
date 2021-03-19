@@ -11,13 +11,13 @@ namespace LaminasTest\Cache\Service;
 use Interop\Container\ContainerInterface;
 use Laminas\Cache\Service\StorageCacheFactory;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
-use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\PluginManager;
 use Laminas\Cache\StorageFactory;
 use Laminas\ServiceManager\Config;
 use Laminas\ServiceManager\ServiceManager;
+use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 use PHPUnit\Framework\TestCase;
 
 use function get_class;
@@ -38,7 +38,7 @@ class StorageCacheFactoryTest extends TestCase
             'services'  => [
                 'config' => [
                     'cache' => [
-                        'adapter' => 'Memory',
+                        'adapter' => MockAdapter::class,
                         'plugins' => ['Serializer', 'ClearExpiredByFactor'],
                     ],
                 ],
@@ -60,7 +60,7 @@ class StorageCacheFactoryTest extends TestCase
     public function testCreateServiceCache(): void
     {
         $cache = $this->sm->get('CacheFactory');
-        self::assertEquals(Memory::class, get_class($cache));
+        self::assertEquals(MockAdapter::class, get_class($cache));
     }
 
     public function testSetsFactoryAdapterPluginManagerInstanceOnInvocation(): void

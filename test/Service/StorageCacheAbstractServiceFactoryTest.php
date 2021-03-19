@@ -11,13 +11,13 @@ namespace LaminasTest\Cache\Service;
 use Interop\Container\ContainerInterface;
 use Laminas\Cache\Service\StorageCacheAbstractServiceFactory;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
-use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\PluginManager;
 use Laminas\Cache\StorageFactory;
 use Laminas\ServiceManager\Config;
 use Laminas\ServiceManager\ServiceManager;
+use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 use PHPUnit\Framework\TestCase;
 
 class StorageCacheAbstractServiceFactoryTest extends TestCase
@@ -34,11 +34,11 @@ class StorageCacheAbstractServiceFactoryTest extends TestCase
                 'config' => [
                     'caches' => [
                         'Memory' => [
-                            'adapter' => 'Memory',
+                            'adapter' => MockAdapter::class,
                             'plugins' => ['Serializer', 'ClearExpiredByFactor'],
                         ],
                         'Foo'    => [
-                            'adapter' => 'Memory',
+                            'adapter' => MockAdapter::class,
                             'plugins' => ['Serializer', 'ClearExpiredByFactor'],
                         ],
                     ],
@@ -67,10 +67,10 @@ class StorageCacheAbstractServiceFactoryTest extends TestCase
     public function testCanRetrieveCacheByName(): void
     {
         $cacheA = $this->sm->get('Memory');
-        self::assertInstanceOf(Memory::class, $cacheA);
+        self::assertInstanceOf(MockAdapter::class, $cacheA);
 
         $cacheB = $this->sm->get('Foo');
-        self::assertInstanceOf(Memory::class, $cacheB);
+        self::assertInstanceOf(MockAdapter::class, $cacheB);
 
         self::assertNotSame($cacheA, $cacheB);
     }

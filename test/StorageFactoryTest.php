@@ -11,7 +11,6 @@ namespace LaminasTest\Cache;
 use ErrorException;
 use Laminas\Cache;
 use Laminas\Cache\Exception\RuntimeException;
-use Laminas\Cache\Storage\Adapter\Memory;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\Plugin\ClearExpiredByFactor;
 use Laminas\Cache\Storage\Plugin\IgnoreUserAbort;
@@ -20,6 +19,7 @@ use Laminas\Cache\Storage\PluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ErrorHandler;
 use LaminasTest\Cache\Storage\Adapter\TestAsset\AdapterWithStorageAndEventsCapableInterface;
+use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 use PHPUnit\Framework\TestCase;
 
 use function get_class;
@@ -60,11 +60,11 @@ class StorageFactoryTest extends TestCase
 
     public function testAdapterFactory(): void
     {
-        $adapter1 = Cache\StorageFactory::adapterFactory('Memory');
-        self::assertInstanceOf(Memory::class, $adapter1);
+        $adapter1 = Cache\StorageFactory::adapterFactory(MockAdapter::class);
+        self::assertInstanceOf(MockAdapter::class, $adapter1);
 
-        $adapter2 = Cache\StorageFactory::adapterFactory('Memory');
-        self::assertInstanceOf(Memory::class, $adapter2);
+        $adapter2 = Cache\StorageFactory::adapterFactory(MockAdapter::class);
+        self::assertInstanceOf(MockAdapter::class, $adapter2);
 
         self::assertNotSame($adapter1, $adapter2);
     }
@@ -96,9 +96,9 @@ class StorageFactoryTest extends TestCase
     public function testFactoryAdapterAsString(): void
     {
         $cache = Cache\StorageFactory::factory([
-            'adapter' => 'Memory',
+            'adapter' => MockAdapter::class,
         ]);
-        self::assertInstanceOf(Memory::class, $cache);
+        self::assertInstanceOf(MockAdapter::class, $cache);
     }
 
     /**
@@ -107,13 +107,13 @@ class StorageFactoryTest extends TestCase
     public function testFactoryWithAdapterAsStringAndOptions(): void
     {
         $cache = Cache\StorageFactory::factory([
-            'adapter' => 'Memory',
+            'adapter' => MockAdapter::class,
             'options' => [
                 'namespace' => 'test',
             ],
         ]);
 
-        self::assertInstanceOf(Memory::class, $cache);
+        self::assertInstanceOf(MockAdapter::class, $cache);
         self::assertSame('test', $cache->getOptions()->getNamespace());
     }
 
@@ -121,15 +121,15 @@ class StorageFactoryTest extends TestCase
     {
         $cache = Cache\StorageFactory::factory([
             'adapter' => [
-                'name' => 'Memory',
+                'name' => MockAdapter::class,
             ],
         ]);
-        self::assertInstanceOf(Memory::class, $cache);
+        self::assertInstanceOf(MockAdapter::class, $cache);
     }
 
     public function testFactoryWithPlugins(): void
     {
-        $adapter = 'Memory';
+        $adapter = MockAdapter::class;
         $plugins = ['Serializer', 'ClearExpiredByFactor'];
 
         $cache = Cache\StorageFactory::factory([
@@ -138,7 +138,7 @@ class StorageFactoryTest extends TestCase
         ]);
 
         // test adapter
-        self::assertInstanceOf(Memory::class, $cache);
+        self::assertInstanceOf(MockAdapter::class, $cache);
 
         // test plugin structure
         $i = 0;
@@ -152,10 +152,11 @@ class StorageFactoryTest extends TestCase
 
     public function testFactoryInstantiateAdapterWithPluginsWithoutEventsCapableInterfaceThrowsException(): void
     {
-        // The BlackHole adapter doesn't implement EventsCapableInterface
+        $blackHoleAdapter = $this->createMock(Cache\Storage\StorageInterface::class);
+
         $this->expectException(RuntimeException::class);
         Cache\StorageFactory::factory([
-            'adapter' => 'blackhole',
+            'adapter' => get_class($blackHoleAdapter),
             'plugins' => ['Serializer'],
         ]);
     }
@@ -164,7 +165,7 @@ class StorageFactoryTest extends TestCase
     {
         $factory = [
             'adapter' => [
-                'name'    => 'Memory',
+                'name'    => MockAdapter::class,
                 'options' => [
                     'ttl'       => 123,
                     'namespace' => 'willBeOverwritten',
@@ -196,7 +197,7 @@ class StorageFactoryTest extends TestCase
 
         // test adapter
         self::assertInstanceOf(sprintf(
-            'Laminas\Cache\Storage\Adapter\%s',
+            MockAdapter::class,
             $factory['adapter']['name']
         ), $storage);
         self::assertEquals(123, $storage->getOptions()->getTtl());
