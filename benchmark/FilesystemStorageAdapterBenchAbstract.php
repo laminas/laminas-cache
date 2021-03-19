@@ -3,15 +3,21 @@
 namespace LaminasBench\Cache;
 
 use DirectoryIterator;
-use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 
 use function error_get_last;
 use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
 use function mkdir;
 use function rmdir;
+use function serialize;
 use function sys_get_temp_dir;
 use function tempnam;
 use function unlink;
+use function unserialize;
+
+use const DIRECTORY_SEPARATOR;
 
 /**
  * @Revs(100)
@@ -37,9 +43,51 @@ class FilesystemStorageAdapterBenchAbstract extends AbstractCommonStorageAdapter
             $this->fail("Can't create temporary cache directory: {$err['message']}");
         }
 
-        $this->storage = StorageFactory::adapterFactory('filesystem', [
-            'cache_dir' => $this->tmpCacheDir,
-        ]);
+        $filesystemAdapter = new class ($this->tmpCacheDir) extends AbstractAdapter {
+            /** @var string */
+            private $folder;
+
+            public function __construct(string $folder)
+            {
+                $this->folder = $folder;
+
+                parent::__construct();
+            }
+
+            /**
+             * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+             * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
+             */
+            protected function internalGetItem(&$normalizedKey, &$success = null, &$casToken = null)
+            {
+                $filename = $this->folder . DIRECTORY_SEPARATOR . $normalizedKey;
+                $success  = file_exists($filename);
+
+                return $success ? unserialize(file_get_contents($filename)) : null;
+            }
+
+            /**
+             * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+             * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
+             */
+            protected function internalSetItem(&$normalizedKey, &$value)
+            {
+                $filename = $this->folder . DIRECTORY_SEPARATOR . $normalizedKey;
+                return (bool) file_put_contents($filename, serialize($value));
+            }
+
+            /**
+             * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
+             * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
+             */
+            protected function internalRemoveItem(&$normalizedKey)
+            {
+                $filename = $this->folder . DIRECTORY_SEPARATOR . $normalizedKey;
+                return unlink($filename);
+            }
+        };
+
+        $this->storage = $filesystemAdapter;
 
         parent::__construct();
     }
