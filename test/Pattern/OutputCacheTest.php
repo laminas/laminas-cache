@@ -27,7 +27,7 @@ class OutputCacheTest extends AbstractCommonPatternTest
     protected $storage;
 
     /**
-     * Nesting level of output buffering used to restore on tearDown()
+     * Nesting level of output buffering used to restore on tearDown(): void
      *
      * @var null|int
      */
