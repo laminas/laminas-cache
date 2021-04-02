@@ -29,7 +29,7 @@ class StorageCacheAbstractServiceFactoryTest extends TestCase
 {
     protected $sm;
 
-    public function setUp()
+    protected function setUp(): void
     {
         StorageFactory::resetAdapterPluginManager();
         StorageFactory::resetPluginManager();
@@ -56,7 +56,7 @@ class StorageCacheAbstractServiceFactoryTest extends TestCase
         (new Config($config))->configureServiceManager($this->sm);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         StorageFactory::resetAdapterPluginManager();
         StorageFactory::resetPluginManager();

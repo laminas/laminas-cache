@@ -23,7 +23,7 @@ class ObjectCacheTest extends CommonPatternTest
     protected $_storage;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0
@@ -38,7 +38,7 @@ class ObjectCacheTest extends CommonPatternTest
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

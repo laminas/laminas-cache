@@ -56,7 +56,7 @@ class SimpleCacheDecoratorTest extends TestCase
     /** @var SimpleCacheDecorator */
     private $cache;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->options = $this->prophesize(AdapterOptions::class);
         $this->storage = $this->prophesize(StorageInterface::class);

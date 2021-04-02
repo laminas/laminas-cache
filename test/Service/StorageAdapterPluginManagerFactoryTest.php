@@ -14,6 +14,7 @@ use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 class StorageAdapterPluginManagerFactoryTest extends TestCase
 {
@@ -70,5 +71,16 @@ class StorageAdapterPluginManagerFactoryTest extends TestCase
 
         $adapters = $factory->createService($container->reveal());
         $this->assertSame($adapter, $adapters->get('test'));
+    }
+
+    private function assertAttributeSame(
+        ContainerInterface $container,
+        string $property,
+        AdapterPluginManager $adapters
+    ): void {
+
+        $reflection = new ReflectionProperty($adapters, $property);
+        $reflection->setAccessible(true);
+        $this->assertSame($container, $reflection->getValue($adapters));
     }
 }

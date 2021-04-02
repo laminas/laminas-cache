@@ -17,12 +17,12 @@ use PHPUnit\Framework\TestCase;
  */
 class PatternFactoryTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         Cache\PatternFactory::resetPluginManager();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Cache\PatternFactory::resetPluginManager();
     }

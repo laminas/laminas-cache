@@ -14,6 +14,7 @@ use Laminas\Cache\PatternPluginManager;
 use Laminas\Cache\Service\PatternPluginManagerFactory;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 class PatternPluginManagerFactoryTest extends TestCase
 {
@@ -70,5 +71,16 @@ class PatternPluginManagerFactoryTest extends TestCase
 
         $patterns = $factory->createService($container->reveal());
         $this->assertSame($pattern, $patterns->get('test'));
+    }
+
+    private function assertAttributeSame(
+        ContainerInterface $container,
+        string $property,
+        PatternPluginManager $patterns
+    ): void {
+
+        $reflection = new ReflectionProperty($patterns, $property);
+        $reflection->setAccessible(true);
+        $this->assertSame($container, $reflection->getValue($patterns));
     }
 }
