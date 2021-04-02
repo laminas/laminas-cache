@@ -18,6 +18,7 @@ use Laminas\Cache\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Cache\CacheItemInterface;
 use stdClass;
 
@@ -67,14 +68,14 @@ class CacheItemPoolDecoratorTest extends TestCase
     public function testStorageFalseStaticTtlThrowsException()
     {
         $this->expectException(CacheException::class);
-        $storage = $this->getStorageProphesy(['staticTtl' => false]);
+        $storage = $this->getStorageProphecy(['staticTtl' => false]);
         $this->getAdapter($storage);
     }
 
     public function testStorageZeroMinTtlThrowsException()
     {
         $this->expectException(CacheException::class);
-        $storage = $this->getStorageProphesy(['staticTtl' => true, 'minTtl' => 0]);
+        $storage = $this->getStorageProphecy(['staticTtl' => true, 'minTtl' => 0]);
         $this->getAdapter($storage);
     }
 
@@ -100,7 +101,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testGetItemRuntimeExceptionIsMiss()
     {
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->getItem(Argument::type('string'), Argument::any())
             ->willThrow(Exception\RuntimeException::class);
         $adapter = $this->getAdapter($storage);
@@ -111,7 +112,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     public function testGetItemInvalidArgumentExceptionRethrown()
     {
         $this->expectException(InvalidArgumentException::class);
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->getItem(Argument::type('string'), Argument::any())
             ->willThrow(Exception\InvalidArgumentException::class);
         $this->getAdapter($storage)->getItem('foo');
@@ -150,7 +151,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     public function testGetMixedItems()
     {
         $keys = ['foo', 'bar'];
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->getItems($keys)
             ->willReturn(['bar' => 'value']);
         $items = $this->getAdapter($storage)->getItems($keys);
@@ -171,7 +172,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     public function testGetItemsRuntimeExceptionIsMiss()
     {
         $keys = ['foo', 'bar'];
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->getItems(Argument::type('array'))
             ->willThrow(Exception\RuntimeException::class);
         $items = $this->getAdapter($storage)->getItems($keys);
@@ -184,7 +185,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     public function testGetItemsInvalidArgumentExceptionRethrown()
     {
         $this->expectException(InvalidArgumentException::class);
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->getItems(Argument::type('array'))
             ->willThrow(Exception\InvalidArgumentException::class);
         $this->getAdapter($storage)->getItems(['foo', 'bar']);
@@ -203,7 +204,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testSaveItemWithExpiration()
     {
-        $storage = $this->getStorageProphesy()->reveal();
+        $storage = $this->getStorageProphecy()->reveal();
         $adapter = new CacheItemPoolDecorator($storage);
         $item = $adapter->getItem('foo');
         $item->set('bar');
@@ -219,7 +220,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testExpiredItemNotSaved()
     {
-        $storage = $this->getStorageProphesy()->reveal();
+        $storage = $this->getStorageProphecy()->reveal();
         $adapter = new CacheItemPoolDecorator($storage);
         $item = $adapter->getItem('foo');
         $item->set('bar');
@@ -238,7 +239,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testSaveItemRuntimeExceptionReturnsFalse()
     {
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->setItem(Argument::type('string'), Argument::any())
             ->willThrow(Exception\RuntimeException::class);
         $adapter = $this->getAdapter($storage);
@@ -249,7 +250,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     public function testSaveItemInvalidArgumentExceptionRethrown()
     {
         $this->expectException(InvalidArgumentException::class);
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->setItem(Argument::type('string'), Argument::any())
             ->willThrow(Exception\InvalidArgumentException::class);
         $adapter = $this->getAdapter($storage);
@@ -300,7 +301,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testHasItemRuntimeExceptionReturnsFalse()
     {
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->hasItem(Argument::type('string'))
             ->willThrow(Exception\RuntimeException::class);
         $this->assertFalse($this->getAdapter($storage)->hasItem('foo'));
@@ -309,7 +310,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     public function testHasItemInvalidArgumentExceptionRethrown()
     {
         $this->expectException(InvalidArgumentException::class);
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->hasItem(Argument::type('string'))
             ->willThrow(Exception\InvalidArgumentException::class);
         $this->getAdapter($storage)->hasItem('foo');
@@ -340,7 +341,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testClearRuntimeExceptionReturnsFalse()
     {
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->flush()
             ->willThrow(Exception\RuntimeException::class);
         $this->assertFalse($this->getAdapter($storage)->clear());
@@ -348,21 +349,21 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testClearByNamespaceReturnsTrue()
     {
-        $storage = $this->getStorageProphesy(false, ['namespace' => 'laminascache']);
+        $storage = $this->getStorageProphecy(false, ['namespace' => 'laminascache']);
         $storage->clearByNamespace(Argument::any())->willReturn(true)->shouldBeCalled();
         $this->assertTrue($this->getAdapter($storage)->clear());
     }
 
     public function testClearByEmptyNamespaceCallsFlush()
     {
-        $storage = $this->getStorageProphesy(false, ['namespace' => '']);
+        $storage = $this->getStorageProphecy(false, ['namespace' => '']);
         $storage->flush()->willReturn(true)->shouldBeCalled();
         $this->assertTrue($this->getAdapter($storage)->clear());
     }
 
     public function testClearByNamespaceRuntimeExceptionReturnsFalse()
     {
-        $storage = $this->getStorageProphesy(false, ['namespace' => 'laminascache']);
+        $storage = $this->getStorageProphecy(false, ['namespace' => 'laminascache']);
         $storage->clearByNamespace(Argument::any())
             ->willThrow(Exception\RuntimeException::class)
             ->shouldBeCalled();
@@ -371,7 +372,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testDeleteItemReturnsTrue()
     {
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->removeItems(['foo'])->shouldBeCalled()->willReturn(['foo']);
 
         $this->assertTrue($this->getAdapter($storage)->deleteItem('foo'));
@@ -397,7 +398,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testDeleteItemRuntimeExceptionReturnsFalse()
     {
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->removeItems(Argument::type('array'))
             ->willThrow(Exception\RuntimeException::class);
         $this->assertFalse($this->getAdapter($storage)->deleteItem('foo'));
@@ -406,7 +407,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     public function testDeleteItemInvalidArgumentExceptionRethrown()
     {
         $this->expectException(InvalidArgumentException::class);
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->removeItems(Argument::type('array'))
             ->willThrow(Exception\InvalidArgumentException::class);
         $this->getAdapter($storage)->deleteItem('foo');
@@ -414,7 +415,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testDeleteItemsReturnsTrue()
     {
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->removeItems(['foo', 'bar', 'baz'])->shouldBeCalled()->willReturn(['foo']);
 
         $this->assertTrue($this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']));
@@ -445,7 +446,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testDeleteItemsRuntimeExceptionReturnsFalse()
     {
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->removeItems(Argument::type('array'))
             ->willThrow(Exception\RuntimeException::class);
         $this->assertFalse($this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']));
@@ -454,7 +455,7 @@ class CacheItemPoolDecoratorTest extends TestCase
     public function testDeleteItemsInvalidArgumentExceptionRethrown()
     {
         $this->expectException(InvalidArgumentException::class);
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->removeItems(Argument::type('array'))
             ->willThrow(Exception\InvalidArgumentException::class);
         $this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']);
@@ -489,7 +490,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testCommitRuntimeExceptionReturnsFalse()
     {
-        $storage = $this->getStorageProphesy();
+        $storage = $this->getStorageProphecy();
         $storage->setItem(Argument::type('string'), Argument::any())
             ->willThrow(Exception\RuntimeException::class);
         $adapter = $this->getAdapter($storage);
@@ -520,15 +521,14 @@ class CacheItemPoolDecoratorTest extends TestCase
         ];
     }
 
-    /**
-     * @param Prophesy $storage
-     * @return CacheItemPoolDecorator
-     */
-    private function getAdapter($storage = null)
+    private function getAdapter(?ObjectProphecy $storage = null): CacheItemPoolDecorator
     {
         if (! $storage) {
-            $storage = $this->getStorageProphesy();
+            $storage = $this->getStorageProphecy();
         }
-        return new CacheItemPoolDecorator($storage->reveal());
+
+        $revealedStorage = $storage->reveal();
+        assert($revealedStorage instanceof StorageInterface);
+        return new CacheItemPoolDecorator($revealedStorage);
     }
 }

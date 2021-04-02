@@ -37,7 +37,7 @@ trait MockStorageTrait
         ],
     ];
 
-    protected function getStorageProphesy($capabilities = false, $options = false, $class = StorageInterface::class)
+    protected function getStorageProphecy($capabilities = false, $options = false, $class = StorageInterface::class)
     {
         if ($capabilities === false) {
             $capabilities = $this->defaultCapabilities;
