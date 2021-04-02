@@ -18,14 +18,6 @@ these are then passed to an options class instance). Alternately, you can pass
 either the options instance or associative array to the
 `Laminas\Cache\StorageFactory::factory` method.
 
-> ### Many Methods throw Exceptions
->
-> Because many caching operations throw an exception on error, you need to catch
-> them. You can do so manually, or you can use the plugin
-> `Laminas\Cache\Storage\Plugin\ExceptionHandler` with `throw_exceptions` set to
-> `false` to automatically catch them. You can also define an
-> `exception_callback` to log exceptions.
-
 ## Quick Start
 
 Caching adapters can either be created from the provided
@@ -63,6 +55,14 @@ $plugin = new Laminas\Cache\Storage\Plugin\ExceptionHandler();
 $plugin->getOptions()->setThrowExceptions(false);
 $cache->addPlugin($plugin);
 ```
+
+> ### Many Methods throw Exceptions
+>
+> Because many caching operations throw an exception on error, you need to catch
+> them. You can do so manually, or you can use the plugin
+> `Laminas\Cache\Storage\Plugin\ExceptionHandler` with `throw_exceptions` set to
+> `false` to automatically catch them. You can also define an
+> `exception_callback` to log exceptions.
 
 ## Basic Configuration Options
 
@@ -401,6 +401,7 @@ interface ClearByPrefixInterface
     public function clearByPrefix($prefix);
 }
 ```
+
 ## ClearExpiredInterface
 
 `Laminas\Cache\Storage\ClearExpiredInterface` implements a method to allow clearing
@@ -524,6 +525,7 @@ interface TaggableInterface
     public function clearByTags(array $tags, $disjunction = false);
 }
 ```
+
 ## Apc Adapter
 
 `Laminas\Cache\Storage\Adapter\Apc` stores cache items in shared memory through the
@@ -603,7 +605,6 @@ Name | Data Type | Default Value | Description
 >### Deprecation Notice
 >
 > The `psr` option was introduce to provide non-BC compatible way to use the `BlackHole` adapter with the PSR-6 and PSR-16 decorator. Ignore this option if this adapter is not used in combination with these decorators. This option is already flagged as internal and thus will be removed in `laminas/laminas-cache-storage-adapter-blackhole` 2.0.
-
 
 ## Dba Adapter
 
@@ -828,7 +829,7 @@ Name | Data Type | Default Value | Description
 > - When a value is provided for the memory limit, the value is measured in
 >   bytes. Shorthand notation may also be provided.
 
-> ### Current process only!
+> ### Current process only
 >
 > All stored items will be lost on termination of the script. For web-facing
 > requests, this typically means the cache is volatile.
@@ -839,7 +840,7 @@ Name | Data Type | Default Value | Description
 PHP extension [mongo](http://php.net/mongo), or a MongoDB polyfill library, such as
 [Mongofill](https://github.com/mongofill/mongofill).
 
-> #### ext-mongodb
+> ### ext-mongodb
 >
 > If you are using the mongodb extension (vs the mongo extension), you will need
 > to use the [ExtMongoDb adapter](#the-extmongodb-adapter) instead.
@@ -862,7 +863,7 @@ Capability | Value
 `lockOnExpire` | 0
 `maxKeyLength` | 255
 `namespaceIsPrefix` | `true`
-`namespaceSeparator` | <Option value of namespace_separator>
+`namespaceSeparator` | *Option value of `namespace_separator`*
 
 ### Adapter Specific Options
 
@@ -893,7 +894,7 @@ library using the following:
 $ composer require mongodb/mongodb
 ```
 
-> #### ext-mongo
+> ### ext-mongo
 >
 > If you are using the mongo extension (vs the mongodb extension), you will need
 > to use the [MongoDb adapter](#the-mongodb-adapter) instead.
@@ -916,7 +917,7 @@ Capability | Value
 `lockOnExpire` | 0
 `maxKeyLength` | 255
 `namespaceIsPrefix` | `true`
-`namespaceSeparator` | <Option value of namespace_separator>
+`namespaceSeparator` | *Option value of `namespace_separator`*
 
 ### Adapter Specific Options
 

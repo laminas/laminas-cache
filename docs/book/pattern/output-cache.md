@@ -11,6 +11,7 @@ $outputCache = PatternFactory::factory('output', [
     'storage' => 'apc'
 ]);
 ```
+
 ## Configuration Options
 
 Option | Data Type | Default Value | Description

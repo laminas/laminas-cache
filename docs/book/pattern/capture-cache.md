@@ -11,7 +11,7 @@ This pattern comes with basic logic for managing generated resources.
 ## Quick Start
 
 For use with an Apache 404 handler extend the Apache configuration, e.g.
-`.htdocs`: 
+`.htdocs`:
 
 ```apacheconf
 ErrorDocument 404 /index.php
