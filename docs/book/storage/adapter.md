@@ -18,14 +18,6 @@ these are then passed to an options class instance). Alternately, you can pass
 either the options instance or associative array to the
 `Laminas\Cache\StorageFactory::factory` method.
 
-> **Many Methods throw Exceptions**
->
-> Because many caching operations throw an exception on error, you need to catch
-> them. You can do so manually, or you can use the plugin
-> `Laminas\Cache\Storage\Plugin\ExceptionHandler` with `throw_exceptions` set to
-> `false` to automatically catch them. You can also define an
-> `exception_callback` to log exceptions.
-
 ## Quick Start
 
 Caching adapters can either be created from the provided
@@ -63,6 +55,14 @@ $plugin = new Laminas\Cache\Storage\Plugin\ExceptionHandler();
 $plugin->getOptions()->setThrowExceptions(false);
 $cache->addPlugin($plugin);
 ```
+
+> ### Many Methods throw Exceptions
+>
+> Because many caching operations throw an exception on error, you need to catch
+> them. You can do so manually, or you can use the plugin
+> `Laminas\Cache\Storage\Plugin\ExceptionHandler` with `throw_exceptions` set to
+> `false` to automatically catch them. You can also define an
+> `exception_callback` to log exceptions.
 
 ## Basic Configuration Options
 
