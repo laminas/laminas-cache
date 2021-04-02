@@ -1,6 +1,5 @@
 # CallbackCache
 
-
 The callback cache pattern caches the results of arbitrary PHP callables.
 
 ## Quick Start
