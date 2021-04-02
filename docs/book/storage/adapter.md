@@ -840,7 +840,7 @@ Name | Data Type | Default Value | Description
 PHP extension [mongo](http://php.net/mongo), or a MongoDB polyfill library, such as
 [Mongofill](https://github.com/mongofill/mongofill).
 
-> **ext-mongodb**
+> ### ext-mongodb
 >
 > If you are using the mongodb extension (vs the mongo extension), you will need
 > to use the [ExtMongoDb adapter](#the-extmongodb-adapter) instead.
@@ -894,7 +894,7 @@ library using the following:
 $ composer require mongodb/mongodb
 ```
 
-> **ext-mongo**
+> ### ext-mongo
 >
 > If you are using the mongo extension (vs the mongodb extension), you will need
 > to use the [MongoDb adapter](#the-mongodb-adapter) instead.
