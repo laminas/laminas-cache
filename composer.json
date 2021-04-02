@@ -52,7 +52,6 @@
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
-        "cache/integration-tests": "^0.16",
         "laminas/laminas-coding-standard": "^2.1",
         "laminas/laminas-serializer": "^2.6",
         "phpbench/phpbench": "^1.0.0-beta2",
