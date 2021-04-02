@@ -20,6 +20,7 @@ use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use ReflectionProperty;
@@ -36,6 +37,8 @@ use ReflectionProperty;
  */
 class SimpleCacheDecoratorTest extends TestCase
 {
+    use ProphecyTrait;
+
     private $requiredTypes = [
         'NULL'     => true,
         'boolean'  => true,

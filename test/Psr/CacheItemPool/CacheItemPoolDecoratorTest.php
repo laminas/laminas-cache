@@ -17,12 +17,14 @@ use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Cache\CacheItemInterface;
 use stdClass;
 
 class CacheItemPoolDecoratorTest extends TestCase
 {
     use MockStorageTrait;
+    use ProphecyTrait;
 
     public function testStorageNotFlushableThrowsException()
     {

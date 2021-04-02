@@ -21,12 +21,15 @@ use Laminas\ServiceManager\Config;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers Laminas\Cache\StorageFactory<extended>
  */
 class StorageCacheAbstractServiceFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     protected $sm;
 
     protected function setUp(): void

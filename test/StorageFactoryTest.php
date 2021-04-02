@@ -14,6 +14,7 @@ use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ErrorHandler;
 use LaminasTest\Cache\Storage\Adapter\TestAsset\AdapterWithStorageAndEventsCapableInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @group      Laminas_Cache
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
  */
 class StorageFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     protected function setUp(): void
     {
         Cache\StorageFactory::resetAdapterPluginManager();

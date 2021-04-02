@@ -14,10 +14,13 @@ use Laminas\Cache\PatternPluginManager;
 use Laminas\Cache\Service\PatternPluginManagerFactory;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionProperty;
 
 class PatternPluginManagerFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testFactoryReturnsPluginManager()
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
