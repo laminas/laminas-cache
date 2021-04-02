@@ -1,7 +1,7 @@
 # laminas-cache
 
-[![Build Status](https://travis-ci.com/laminas/laminas-cache.svg?branch=master)](https://travis-ci.com/laminas/laminas-cache)
-[![Coverage Status](https://coveralls.io/repos/github/laminas/laminas-cache/badge.svg?branch=master)](https://coveralls.io/github/laminas/laminas-cache?branch=master)
+[![Build Status](https://github.com/laminas/laminas-cache/actions/workflows/continous-integration.yml/badge.svg)](https://github.com/laminas/laminas-cache/actions/workflows/continous-integration.yml)
+[![Coverage Status](https://coveralls.io/repos/github/laminas/laminas-cache/badge.svg)](https://coveralls.io/github/laminas/laminas-cache)
 
 `Laminas\Cache` provides a general cache system for PHP. The `Laminas\Cache` component
 is able to cache different patterns (class, object, output, etc) using different
