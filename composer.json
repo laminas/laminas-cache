@@ -28,7 +28,7 @@
         }
     },
     "require": {
-        "php": "^5.6 || ^7.0",
+        "php": "^7.3",
         "laminas/laminas-cache-storage-adapter-apc": "^1.0",
         "laminas/laminas-cache-storage-adapter-apcu": "^1.0",
         "laminas/laminas-cache-storage-adapter-blackhole": "^1.0",
