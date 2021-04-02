@@ -23,14 +23,14 @@ class OutputCacheTest extends CommonPatternTest
     protected $_storage;
 
     /**
-     * Nesting level of output buffering used to restore on tearDown()
+     * Nesting level of output buffering used to restore on tearDown(): void
      *
      * @var null|int
      */
     protected $_obLevel;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0
@@ -47,7 +47,7 @@ class OutputCacheTest extends CommonPatternTest
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->_obLevel > ob_get_Level()) {
             for ($i = ob_get_level(); $i < $this->_obLevel; $i++) {

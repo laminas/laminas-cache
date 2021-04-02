@@ -30,7 +30,7 @@ class ExceptionHandlerTest extends CommonPluginTest
     protected $_adapter;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_adapter = new MockAdapter();
         $this->_options = new Cache\Storage\Plugin\PluginOptions();

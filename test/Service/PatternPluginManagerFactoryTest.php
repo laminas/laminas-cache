@@ -14,9 +14,13 @@ use Laminas\Cache\PatternPluginManager;
 use Laminas\Cache\Service\PatternPluginManagerFactory;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use ReflectionProperty;
 
 class PatternPluginManagerFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testFactoryReturnsPluginManager()
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
@@ -70,5 +74,16 @@ class PatternPluginManagerFactoryTest extends TestCase
 
         $patterns = $factory->createService($container->reveal());
         $this->assertSame($pattern, $patterns->get('test'));
+    }
+
+    private function assertAttributeSame(
+        ContainerInterface $container,
+        string $property,
+        PatternPluginManager $patterns
+    ): void {
+
+        $reflection = new ReflectionProperty($patterns, $property);
+        $reflection->setAccessible(true);
+        $this->assertSame($container, $reflection->getValue($patterns));
     }
 }

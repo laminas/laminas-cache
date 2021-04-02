@@ -21,15 +21,18 @@ use Laminas\ServiceManager\Config;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers Laminas\Cache\StorageFactory<extended>
  */
 class StorageCacheAbstractServiceFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     protected $sm;
 
-    public function setUp()
+    protected function setUp(): void
     {
         StorageFactory::resetAdapterPluginManager();
         StorageFactory::resetPluginManager();
@@ -56,7 +59,7 @@ class StorageCacheAbstractServiceFactoryTest extends TestCase
         (new Config($config))->configureServiceManager($this->sm);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         StorageFactory::resetAdapterPluginManager();
         StorageFactory::resetPluginManager();

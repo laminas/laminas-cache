@@ -22,7 +22,7 @@ class CaptureCacheTest extends CommonPatternTest
     protected $_bufferedServerSuperGlobal;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_bufferedServerSuperGlobal = $_SERVER;
         $this->_umask = umask();
@@ -48,7 +48,7 @@ class CaptureCacheTest extends CommonPatternTest
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $_SERVER = $this->_bufferedServerSuperGlobal;
 

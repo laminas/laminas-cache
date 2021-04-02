@@ -14,9 +14,13 @@ use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\PluginManager;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use ReflectionProperty;
 
 class StoragePluginManagerFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testFactoryReturnsPluginManager()
     {
         $container = $this->prophesize(ContainerInterface::class)->reveal();
@@ -70,5 +74,12 @@ class StoragePluginManagerFactoryTest extends TestCase
 
         $plugins = $factory->createService($container->reveal());
         $this->assertSame($plugin, $plugins->get('test'));
+    }
+
+    private function assertAttributeSame(ContainerInterface $container, string $property, PluginManager $plugins): void
+    {
+        $reflection = new ReflectionProperty($plugins, $property);
+        $reflection->setAccessible(true);
+        $this->assertSame($container, $reflection->getValue($plugins));
     }
 }

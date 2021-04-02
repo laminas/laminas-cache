@@ -48,7 +48,7 @@ class CapabilitiesTest extends TestCase
     protected $_adapter;
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_marker  = new \stdClass();
         $this->_adapter = new MemoryAdapter();
