@@ -8,6 +8,19 @@
 
 namespace Laminas\Cache;
 
+use Laminas\Cache\Service\PatternPluginManagerFactory;
+use Laminas\Cache\Service\StorageAdapterFactory;
+use Laminas\Cache\Service\StorageAdapterFactoryFactory;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Laminas\Cache\Service\StorageAdapterPluginManagerFactory;
+use Laminas\Cache\Service\StorageCacheAbstractServiceFactory;
+use Laminas\Cache\Service\StoragePluginFactory;
+use Laminas\Cache\Service\StoragePluginFactoryFactory;
+use Laminas\Cache\Service\StoragePluginFactoryInterface;
+use Laminas\Cache\Service\StoragePluginManagerFactory;
+use Laminas\Cache\Storage\AdapterPluginManager;
+use Laminas\Cache\Storage\PluginManager;
+
 class ConfigProvider
 {
     /**
@@ -31,12 +44,18 @@ class ConfigProvider
     {
         return [
             'abstract_factories' => [
-                Service\StorageCacheAbstractServiceFactory::class,
+                StorageCacheAbstractServiceFactory::class,
             ],
             'factories'          => [
-                PatternPluginManager::class         => Service\PatternPluginManagerFactory::class,
-                Storage\AdapterPluginManager::class => Service\StorageAdapterPluginManagerFactory::class,
-                Storage\PluginManager::class        => Service\StoragePluginManagerFactory::class,
+                PatternPluginManager::class  => PatternPluginManagerFactory::class,
+                AdapterPluginManager::class  => StorageAdapterPluginManagerFactory::class,
+                PluginManager::class         => StoragePluginManagerFactory::class,
+                StoragePluginFactory::class  => StoragePluginFactoryFactory::class,
+                StorageAdapterFactory::class => StorageAdapterFactoryFactory::class,
+            ],
+            'aliases'            => [
+                StoragePluginFactoryInterface::class  => StoragePluginFactory::class,
+                StorageAdapterFactoryInterface::class => StorageAdapterFactory::class,
             ],
         ];
     }

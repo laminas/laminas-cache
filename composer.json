@@ -55,6 +55,7 @@
         "cache/integration-tests": "^0.16",
         "laminas/laminas-coding-standard": "^2.1",
         "laminas/laminas-serializer": "^2.6",
+        "lctrs/psalm-psr-container-plugin": "^1.1",
         "phpbench/phpbench": "^0.17.1",
         "phpunit/phpunit": "^9.4",
         "psalm/plugin-phpunit": "^0.15.1",
