@@ -9,63 +9,74 @@
 namespace Laminas\Cache\Service;
 
 use Interop\Container\ContainerInterface;
-use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
+use Webmozart\Assert\Assert;
 
-use function is_array;
+use function is_bool;
+use function trim;
 
 /**
  * Storage cache factory for multiple caches.
+ *
+ * @psalm-import-type StorageAdapterArrayConfigurationType from StorageAdapterFactoryInterface
+ * @psalm-type StorageAdapterArrayConfigurationMapType = array<non-empty-string,StorageAdapterArrayConfigurationType>
  */
-class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
+final class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
 {
-    use PluginManagerLookupTrait;
+    /** @psalm-var StorageAdapterArrayConfigurationMapType|null */
+    private $config;
 
-    /** @var array */
-    protected $config;
+    public const CONFIG_KEY = 'caches';
 
-    /**
-     * Configuration key for cache objects
-     *
-     * @var string
-     */
-    protected $configKey = 'caches';
+    /** @var StorageAdapterFactoryInterface|null|bool */
+    private $storageAdapterFactory = false;
 
     /**
      * @param string $requestedName
-     * @return boolean
+     * @return bool
      */
     public function canCreate(ContainerInterface $container, $requestedName)
     {
-        $config = $this->getConfig($container);
-        if (empty($config)) {
+        $storageAdapterFactory = $this->getStorageAdapterFactory($container);
+        if ($storageAdapterFactory === null) {
             return false;
         }
-        return isset($config[$requestedName]) && is_array($config[$requestedName]);
+
+        if (trim($requestedName) === '') {
+            return false;
+        }
+
+        $config = $this->getConfig($container, $storageAdapterFactory);
+
+        return isset($config[$requestedName]);
     }
 
     /**
-     * Create an object
-     *
-     * @param  string             $requestedName
-     * @param  null|array         $options
-     * @return object
+     * @param string            $requestedName
+     * @param null|array<mixed> $options
+     * @return StorageInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $this->prepareStorageFactory($container);
-
-        $config = $this->getConfig($container);
-        return StorageFactory::factory($config[$requestedName]);
+        $adapterFactory = $this->getStorageAdapterFactory($container);
+        Assert::isInstanceOf($adapterFactory, StorageAdapterFactoryInterface::class);
+        $config = $this->getConfig($container, $adapterFactory);
+        Assert::stringNotEmpty($requestedName);
+        Assert::keyExists($config, $requestedName);
+        return $adapterFactory->createFromArrayConfiguration($config[$requestedName]);
     }
 
     /**
-     * Retrieve cache configuration, if any
+     * Retrieve cache configuration, if any available.
      *
-     * @return array
+     * @psalm-suppress InvalidReturnType
+     * @psalm-return StorageAdapterArrayConfigurationMapType
      */
-    protected function getConfig(ContainerInterface $container)
-    {
+    private function getConfig(
+        ContainerInterface $container,
+        StorageAdapterFactoryInterface $storageAdapterFactory
+    ): array {
         if ($this->config !== null) {
             return $this->config;
         }
@@ -76,12 +87,51 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
         }
 
         $config = $container->get('config');
-        if (! isset($config[$this->configKey])) {
+        Assert::isArrayAccessible($config);
+        if (! isset($config[self::CONFIG_KEY])) {
             $this->config = [];
             return $this->config;
         }
 
-        $this->config = $config[$this->configKey];
+        $configuration = $config[self::CONFIG_KEY];
+        $this->assertConfigurationIsValid($storageAdapterFactory, $configuration);
+
+        /** @psalm-suppress InvalidPropertyAssignmentValue */
+        $this->config = $configuration;
+        /** @psalm-suppress InvalidReturnStatement */
         return $this->config;
+    }
+
+    /**
+     * @param mixed $configuration
+     * @psalm-assert StorageAdapterArrayConfigurationMapType $configuration
+     */
+    private function assertConfigurationIsValid(
+        StorageAdapterFactoryInterface $storageAdapterFactory,
+        $configuration
+    ): void {
+        Assert::isMap($configuration);
+        foreach ($configuration as $cache => $cacheConfiguration) {
+            Assert::stringNotEmpty($cache);
+            Assert::isMap($cacheConfiguration);
+            $storageAdapterFactory->assertValidConfigurationStructure($cacheConfiguration);
+        }
+    }
+
+    private function getStorageAdapterFactory(ContainerInterface $container): ?StorageAdapterFactoryInterface
+    {
+        if (! is_bool($this->storageAdapterFactory)) {
+            return $this->storageAdapterFactory;
+        }
+
+        if (! $container->has(StorageAdapterFactoryInterface::class)) {
+            $this->storageAdapterFactory = null;
+            return null;
+        }
+
+        $storageAdapterFactory       = $container->get(StorageAdapterFactoryInterface::class);
+        $this->storageAdapterFactory = $storageAdapterFactory;
+
+        return $storageAdapterFactory;
     }
 }
