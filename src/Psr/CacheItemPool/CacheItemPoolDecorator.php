@@ -20,14 +20,15 @@ use function array_diff;
 use function array_diff_key;
 use function array_flip;
 use function array_keys;
-use function array_map;
 use function array_merge;
 use function array_unique;
-use function array_walk;
+use function array_values;
+use function assert;
 use function current;
 use function get_class;
 use function gettype;
 use function in_array;
+use function is_bool;
 use function is_string;
 use function preg_match;
 use function sprintf;
@@ -46,7 +47,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /** @var StorageInterface */
     private $storage;
 
-    /** @var CacheItem[] */
+    /** @var array<string,CacheItem> */
     private $deferred = [];
 
     /**
@@ -88,7 +89,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
                 // ignore
             }
 
-            return new CacheItem($key, $value, $isHit);
+            return new CacheItem($key, $value, $isHit ?? false);
         }
 
         return clone $this->deferred[$key];
@@ -122,8 +123,8 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             }
 
             foreach ($cacheItems as $key => $value) {
-                $isHit       = true;
-                $items[$key] = new CacheItem($key, $value, $isHit);
+                assert(is_string($key));
+                $items[$key] = new CacheItem($key, $value, true);
             }
 
             // Return empty items for any keys that where not found
@@ -180,6 +181,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             $cleared = false;
         }
 
+        assert(is_bool($cleared));
         return $cleared;
     }
 
@@ -244,16 +246,20 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      */
     public function commit()
     {
-        /** @var array<string,non-empty-array<string,CacheItem>> $groupedByTtl */
         $groupedByTtl = [];
         foreach ($this->deferred as $cacheKey => $item) {
             $itemTtl                = var_export($item->getTtl(), true);
             $group                  = $groupedByTtl[$itemTtl] ?? [];
             $group[$cacheKey]       = $item;
-            $groupedByTtl[$itemTtl] = $group;
+            $groupedByTtl[$itemTtl] = array_values($group);
         }
 
         $notSavedItems = [];
+        /**
+         * NOTE: we are not using the array key for the TTL in here as TTL might be `null`.
+         *       Since we stringify the TTL by using `var_export`, the array has string and integer keys.
+         *       Converting a string `null` back to native null-type would be a huge mess.
+         */
         foreach ($groupedByTtl as $keyValuePairs) {
             $itemTtl         = current($keyValuePairs)->getTtl();
             $notSavedItems[] = $this->saveMultipleItems($keyValuePairs, $itemTtl);
@@ -359,33 +365,34 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     }
 
     /**
-     * @param array<int,CacheItem> $items
-     * @psalm-param list<CacheItem> $items
-     * @return array<string,CacheItem>
+     * @psalm-param non-empty-list<CacheItem> $items
+     * @psalm-return array<string,CacheItem>
      */
     private function saveMultipleItems(array $items, ?int $itemTtl): array
     {
+        $keyItemPair = [];
+        foreach ($items as $item) {
+            $keyItemPair[$item->getKey()] = $item;
+        }
+
         // delete expired item
         if ($itemTtl < 0) {
-            $this->deleteItems(array_map(static function (CacheItemInterface $item): string {
-                return $item->getKey();
-            }, $items));
-            array_walk($items, static function (CacheItem $cacheItem): void {
+            $this->deleteItems(array_keys($keyItemPair));
+            foreach ($keyItemPair as $cacheItem) {
                 $cacheItem->setIsHit(false);
-            });
+            }
 
-            return $items;
+            return $keyItemPair;
         }
 
         $options = $this->storage->getOptions();
         $ttl     = $options->getTtl();
 
         $keyValuePair = [];
-        $keyItemPair  = [];
         foreach ($items as $item) {
-            $key                = $item->getKey();
+            $key = $item->getKey();
+            /** @psalm-suppress MixedAssignment */
             $keyValuePair[$key] = $item->get();
-            $keyItemPair[$key]  = $item;
         }
 
         $options->setTtl($itemTtl ?? 0);
@@ -396,9 +403,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
         } catch (Exception\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         } catch (Exception\ExceptionInterface $e) {
-            foreach (array_keys($keyValuePair) as $key) {
-                $notSavedKeys[] = $key;
-            }
+            $notSavedKeys = array_keys($keyValuePair);
         } finally {
             $options->setTtl($ttl);
         }
@@ -406,7 +411,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
         $notSavedItems = [];
         foreach ($keyItemPair as $key => $item) {
             if (in_array($key, $notSavedKeys, true)) {
-                $notSavedItems[] = $item;
+                $notSavedItems[$key] = $item;
                 continue;
             }
 
