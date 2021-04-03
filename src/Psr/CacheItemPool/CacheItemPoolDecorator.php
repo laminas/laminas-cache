@@ -194,7 +194,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
         $this->deferred = array_diff_key($this->deferred, array_flip($keys));
 
         try {
-            return null !== $this->storage->removeItems($keys);
+            return $this->storage->removeItems($keys) === [];
         } catch (Exception\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         } catch (Exception\ExceptionInterface $e) {
