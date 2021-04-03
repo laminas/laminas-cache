@@ -284,19 +284,18 @@
       <code>validateKeys</code>
       <code>validateStorage</code>
     </MissingReturnType>
-    <MixedAssignment occurrences="4">
+    <MixedAssignment occurrences="3">
       <code>$cleared</code>
       <code>$key</code>
       <code>$value</code>
-      <code>$value</code>
     </MixedAssignment>
     <MixedInferredReturnType occurrences="6">
+      <code>array&lt;string,CacheItem&gt;</code>
       <code>clear</code>
       <code>deleteItems</code>
       <code>getItem</code>
       <code>getItems</code>
       <code>hasItem</code>
-      <code>save</code>
     </MixedInferredReturnType>
     <RedundantConditionGivenDocblockType occurrences="1">
       <code>null !== $this-&gt;storage-&gt;removeItems($keys)</code>
@@ -1145,8 +1144,7 @@
     <MixedArgumentTypeCoercion occurrences="1">
       <code>$capabilities ?? $this-&gt;defaultCapabilities</code>
     </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="4">
-      <code>$counter</code>
+    <MixedAssignment occurrences="3">
       <code>$item</code>
       <code>$item</code>
       <code>$item</code>
@@ -1167,9 +1165,6 @@
       <code>isHit</code>
       <code>set</code>
     </MixedMethodCall>
-    <MixedOperand occurrences="1">
-      <code>$counter</code>
-    </MixedOperand>
     <PossiblyInvalidArgument occurrences="1">
       <code>$items</code>
     </PossiblyInvalidArgument>
@@ -1191,18 +1186,6 @@
       <code>'foo'</code>
       <code>[]</code>
     </InvalidArgument>
-  </file>
-  <file src="test/Psr/CacheItemPool/TestAsset/StorageAdapter.php">
-    <InvalidReturnType occurrences="5">
-      <code>clearByNamespace</code>
-      <code>flush</code>
-      <code>internalGetItem</code>
-      <code>internalRemoveItem</code>
-      <code>internalSetItem</code>
-    </InvalidReturnType>
-    <PropertyNotSetInConstructor occurrences="1">
-      <code>StorageAdapter</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Psr/SimpleCache/SimpleCacheDecoratorTest.php">
     <MissingReturnType occurrences="9">

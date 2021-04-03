@@ -615,6 +615,11 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
         $item = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
+        $this->storage
+            ->expects(self::once())
+            ->method('clearByNamespace')
+            ->willReturn(true);
+
         $adapter->clear();
         self::assertFalse($adapter->hasItem('foo'));
     }
@@ -906,6 +911,11 @@ final class CacheItemPoolDecoratorTest extends TestCase
         } catch (Throwable $throwable) {
             /** Cleanup deferred items as {@see CacheItemPoolDecorator::__destruct} is gonna try to store them. */
         } finally {
+            /**
+             * Suppress this as we are safe in tear down
+             *
+             * @psalm-suppress PossiblyNullPropertyAssignmentValue
+             */
             $this->adapter = null;
         }
         parent::tearDown();
