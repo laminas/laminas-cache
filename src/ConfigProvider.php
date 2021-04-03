@@ -4,6 +4,10 @@ namespace Laminas\Cache;
 
 use Laminas\Cache\Command\DeprecatedStorageFactoryConfigurationCheckCommand;
 use Laminas\Cache\Command\DeprecatedStorageFactoryConfigurationCheckCommandFactory;
+use Laminas\Cache\Service\StorageAdapterFactory;
+use Laminas\Cache\Service\StorageAdapterFactoryFactory;
+use Laminas\Cache\Service\StoragePluginFactory;
+use Laminas\Cache\Service\StoragePluginFactoryFactory;
 
 class ConfigProvider
 {
@@ -35,9 +39,10 @@ class ConfigProvider
                 PatternPluginManager::class         => Service\PatternPluginManagerFactory::class,
                 Storage\AdapterPluginManager::class => Service\StorageAdapterPluginManagerFactory::class,
                 Storage\PluginManager::class        => Service\StoragePluginManagerFactory::class,
-                Storage\PluginManager::class        => Service\StoragePluginManagerFactory::class,
                 DeprecatedStorageFactoryConfigurationCheckCommand::class
                     => DeprecatedStorageFactoryConfigurationCheckCommandFactory::class,
+                StoragePluginFactory::class  => StoragePluginFactoryFactory::class,
+                StorageAdapterFactory::class => StorageAdapterFactoryFactory::class,
             ],
         ];
     }

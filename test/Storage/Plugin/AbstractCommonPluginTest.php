@@ -29,7 +29,7 @@ abstract class AbstractCommonPluginTest extends TestCase
     /**
      * @dataProvider getCommonPluginNamesProvider
      */
-    public function testPluginManagerWithCommonNames($commonPluginName)
+    public function testPluginManagerWithCommonNames(string $commonPluginName): void
     {
         $pluginManager = new PluginManager(new ServiceManager());
         self::assertTrue(

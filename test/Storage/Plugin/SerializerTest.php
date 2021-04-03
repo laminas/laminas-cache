@@ -143,7 +143,7 @@ final class SerializerTest extends AbstractCommonPluginTest
             ->expects(self::once())
             ->method('getItem')
             ->willReturnCallback(static function (string $key, &$success, &$casToken): int {
-                $success = true;
+                $success  = true;
                 $casToken = 10;
 
                 return $casToken;
@@ -156,7 +156,7 @@ final class SerializerTest extends AbstractCommonPluginTest
             ->willReturn(true);
 
         $event = new Event('', $adapter, new ArrayObject([
-            'key' => 'foo',
+            'key'   => 'foo',
             'value' => 5,
         ]));
 
