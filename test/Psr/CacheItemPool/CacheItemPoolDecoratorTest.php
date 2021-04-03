@@ -674,7 +674,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->expects(self::once())
             ->method('removeItems')
             ->with(['foo'])
-            ->willReturn(['foo']);
+            ->willReturn([]);
 
         self::assertTrue($this->getAdapter($storage)->deleteItem('foo'));
     }
@@ -733,7 +733,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->expects(self::once())
             ->method('removeItems')
             ->with(['foo', 'bar', 'baz'])
-            ->willReturn(['foo']);
+            ->willReturn([]);
 
         self::assertTrue($this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']));
     }
