@@ -2,12 +2,19 @@
 show_file_content: true
 ---
 
-## Avoid unused cache adapters are being installed
+## Avoid Unused Cache Adapters Are Being Installed
+
+> ### Only necessary in 2.10+
+>
+> Starting with 3.0.0, no storage adapter is required by this component and thus, each project has to specify the storage adapters which are required by the project.
+> When migrated to 3.0.0, the `replace` section is not needed anymore.
+
 With `laminas-cache` v2.10.0, we introduced satellite packages for all cache adapters.
 
 In case, there is no need for several adapters in your project, you can use composer to ensure these adapters are not being installed. To make this happen, you have to specify a `replace` property within the `composer.json` of your project.
 
-### Example composer.json with only memory adapter being installed
+### Example `composer.json` with Only Memory Adapter Being Installed
+
 ```json
 {
     "name": "vendor/project",
@@ -35,10 +42,6 @@ In case, there is no need for several adapters in your project, you can use comp
     }
 }
 ```
-
-> ### Only necessary in 2.10+
-> Starting with 3.0.0, no storage adapter is required by this component and thus, each project has to specify the storage adapters which are required by the project.
-> When migrated to 3.0.0, the `replace` section is not needed anymore.
 
 When using `composer install` on this, only the `laminas/laminas-cache-storage-adapter-memory` is being installed.
 
