@@ -2,27 +2,31 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.10.2 - TBD
+## 2.10.2 - 2021-04-29
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [2.10.2](https://github.com/laminas/laminas-cache/milestone/5)
 
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
+2.10.x bugfix release (patch)
 
 ### Fixed
+- The decorator for PSR-6 `CacheItemPool` assumed that a deletion was successful even if the underlying storage failed to delete these items.
 
-- Nothing.
+### 2.10.2
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **2**
+- Total contributors: **1**
+
+#### Bug
+
+ - [85: bugfix: remove items returned true even when removal failed](https://github.com/laminas/laminas-cache/pull/85) thanks to @boesing
+
+#### Documentation
+
+ - [81: docs: add example `composer.json` for required cache adapters](https://github.com/laminas/laminas-cache/pull/81) thanks to @boesing
 
 ## 2.10.1 - 2021-02-25
 
