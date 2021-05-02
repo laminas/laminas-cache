@@ -183,7 +183,6 @@ class PatternOptions extends AbstractOptions
      * Constructor
      *
      * @param  array|Traversable|null $options
-     * @return PatternOptions
      * @throws Exception\InvalidArgumentException
      */
     public function __construct($options = null)

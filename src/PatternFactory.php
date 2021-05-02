@@ -19,6 +19,9 @@ use function is_object;
 use function sprintf;
 
 /**
+ * @deprecated Please do not use static factories anymore.
+ *             Inject {@see PatternPluginManager} instead.
+ *
  * @phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
  */
 abstract class PatternFactory
@@ -34,7 +37,7 @@ abstract class PatternFactory
      * Instantiate a cache pattern
      *
      * @param  string|Pattern\PatternInterface $patternName
-     * @param  array|Traversable|Pattern\PatternOptions $options
+     * @param  array<string,mixed>|Traversable<string,mixed>|Pattern\PatternOptions $options
      * @return Pattern\PatternInterface
      * @throws Exception\InvalidArgumentException
      */
