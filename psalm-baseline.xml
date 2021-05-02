@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.5.2@15a9eece1305fd26eb1336a78e5a2ee7a4b36214">
+<files psalm-version="4.6.1@e93e532e4eaad6d68c4d7b606853800eaceccc72">
   <file src="src/Pattern/AbstractPattern.php">
     <DocblockTypeContradiction occurrences="1">
       <code>null === $this-&gt;options</code>
@@ -297,9 +297,6 @@
       <code>getItems</code>
       <code>hasItem</code>
     </MixedInferredReturnType>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>null !== $this-&gt;storage-&gt;removeItems($keys)</code>
-    </RedundantConditionGivenDocblockType>
     <UndefinedInterfaceMethod occurrences="1">
       <code>flush</code>
     </UndefinedInterfaceMethod>
@@ -1110,6 +1107,17 @@
     <MissingReturnType occurrences="1">
       <code>emptyMethod</code>
     </MissingReturnType>
+  </file>
+  <file src="test/PatternFactoryTest.php">
+    <DeprecatedClass occurrences="7">
+      <code>Cache\PatternFactory::factory('capture')</code>
+      <code>Cache\PatternFactory::factory('capture')</code>
+      <code>Cache\PatternFactory::getPluginManager()</code>
+      <code>Cache\PatternFactory::getPluginManager()</code>
+      <code>Cache\PatternFactory::resetPluginManager()</code>
+      <code>Cache\PatternFactory::resetPluginManager()</code>
+      <code>Cache\PatternFactory::setPluginManager($plugins)</code>
+    </DeprecatedClass>
   </file>
   <file src="test/PatternPluginManagerTest.php">
     <MissingReturnType occurrences="1">
