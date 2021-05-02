@@ -45,18 +45,18 @@ class PatternPluginManagerV3Polyfill extends AbstractPluginManager
     ];
 
     protected $factories = [
-        Pattern\CallbackCache::class    => InvokableFactory::class,
-        Pattern\CaptureCache::class     => InvokableFactory::class,
-        Pattern\ClassCache::class       => InvokableFactory::class,
-        Pattern\ObjectCache::class      => InvokableFactory::class,
-        Pattern\OutputCache::class      => InvokableFactory::class,
+        Pattern\CallbackCache::class    => Pattern\StoragePatternCacheFactory::class,
+        Pattern\CaptureCache::class     => Pattern\PatternCacheFactory::class,
+        Pattern\ClassCache::class       => Pattern\StoragePatternCacheFactory::class,
+        Pattern\ObjectCache::class      => Pattern\StoragePatternCacheFactory::class,
+        Pattern\OutputCache::class      => Pattern\StoragePatternCacheFactory::class,
 
         // v2 normalized FQCNs
-        'laminascachepatterncallbackcache' => InvokableFactory::class,
-        'laminascachepatterncapturecache'  => InvokableFactory::class,
-        'laminascachepatternclasscache'    => InvokableFactory::class,
-        'laminascachepatternobjectcache'   => InvokableFactory::class,
-        'laminascachepatternoutputcache'   => InvokableFactory::class,
+        'laminascachepatterncallbackcache' => Pattern\StoragePatternCacheFactory::class,
+        'laminascachepatterncapturecache'  => Pattern\PatternCacheFactory::class,
+        'laminascachepatternclasscache'    => Pattern\StoragePatternCacheFactory::class,
+        'laminascachepatternobjectcache'   => Pattern\StoragePatternCacheFactory::class,
+        'laminascachepatternoutputcache'   => Pattern\StoragePatternCacheFactory::class,
     ];
 
     /**

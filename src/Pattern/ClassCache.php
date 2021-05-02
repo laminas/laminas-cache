@@ -7,22 +7,19 @@ use Laminas\Cache\Exception;
 
 class ClassCache extends CallbackCache
 {
-    /**
-     * Set options
-     *
-     * @param  PatternOptions $options
-     * @return ClassCache Provides a fluent interface
-     * @throws Exception\InvalidArgumentException if missing 'class' or 'storage' options
-     */
+
     public function setOptions(PatternOptions $options)
     {
         parent::setOptions($options);
 
         if (! $options->getClass()) {
             throw new Exception\InvalidArgumentException("Missing option 'class'");
-        } elseif (! $options->getStorage()) {
+        }
+
+        if (! $this->getStorage()) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
+
         return $this;
     }
 

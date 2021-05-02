@@ -5,42 +5,40 @@ The callback cache pattern caches the results of arbitrary PHP callables.
 ## Quick Start
 
 ```php
-use Laminas\Cache\PatternFactory;
+use Laminas\Cache\Pattern\CallbackCache;
 use Laminas\Cache\Pattern\PatternOptions;
+use Laminas\Cache\Storage\StorageInterface;
 
-// Via the factory:
-$callbackCache = PatternFactory::factory('callback', [
-    'storage'      => 'apc',
-    'cache_output' => true,
-]);
+/** @var StorageInterface $storage */
+$storage = null; // Can be any instance of StorageInterface
 
 // Or the equivalent manual instantiation:
-$callbackCache = new \Laminas\Cache\Pattern\CallbackCache();
-$callbackCache->setOptions(new PatternOptions([
-    'storage'      => 'apc',
-    'cache_output' => true,
-]));
+$callbackCache = new CallbackCache(
+    $storage,
+    new PatternOptions([
+        'cache_output' => true,
+    ])
+);
 ```
 
 ## Configuration Options
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
-`cache_output` | `boolean` | `true` | Whether or not to cache callback output.
+`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
+`cache_output` | `bool` | `true` | Whether or not to cache callback output.
 
 ## Available Methods
 
-In addition to the methods defined in the `PatternInterface`, this
+In addition to the methods defined in the `PatternInterface` and the `StorageCapableInterface`, this
 implementation provides the following methods.
 
 ```php
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
-use Laminas\Stdlib\ErrorHandler;
 
-class CallbackCache extends AbstractPattern
+class CallbackCache extends AbstractStorageCapablePattern
 {
     /**
      * Call the specified callback or get the result from cache

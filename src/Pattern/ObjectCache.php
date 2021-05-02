@@ -6,22 +6,17 @@ use Laminas\Cache\Exception;
 
 class ObjectCache extends CallbackCache
 {
-    /**
-     * Set options
-     *
-     * @param  PatternOptions $options
-     * @return void
-     * @throws Exception\InvalidArgumentException
-     */
     public function setOptions(PatternOptions $options)
     {
         parent::setOptions($options);
 
         if (! $options->getObject()) {
             throw new Exception\InvalidArgumentException("Missing option 'object'");
-        } elseif (! $options->getStorage()) {
+        } elseif (! $this->getStorage()) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
+
+        return $this;
     }
 
     /**
@@ -64,7 +59,8 @@ class ObjectCache extends CallbackCache
                     $removeKeys[] = $this->generateKey('__isset', [$property]);
                 }
                 if ($removeKeys) {
-                    $options->getStorage()->removeItems($removeKeys);
+                    $storage = $this->getStorage();
+                    $storage->removeItems($removeKeys);
                 }
                 return;
 
@@ -117,7 +113,8 @@ class ObjectCache extends CallbackCache
                     $removeKeys[] = $this->generateKey('__isset', [$property]);
                 }
                 if ($removeKeys) {
-                    $options->getStorage()->removeItems($removeKeys);
+                    $storage = $this->getStorage();
+                    $storage->removeItems($removeKeys);
                 }
                 return;
         }

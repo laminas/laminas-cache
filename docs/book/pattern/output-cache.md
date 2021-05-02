@@ -5,22 +5,28 @@ The `OutputCache` pattern caches output between calls to `start()` and `end()`.
 ## Quick Start
 
 ```php
-use Laminas\Cache\PatternFactory;
+use Laminas\Cache\Pattern\OutputCache;
+use Laminas\Cache\Pattern\PatternOptions;
+use Laminas\Cache\Storage\StorageInterface;
 
-$outputCache = PatternFactory::factory('output', [
-    'storage' => 'apc'
-]);
+/** @var StorageInterface $storage */
+$storage = null; // Can be any instance of StorageInterface
+
+$outputCache = new OutputCache(
+    $storage,
+    new PatternOptions()
+);
 ```
 
 ## Configuration Options
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
+`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
 
 ## Available Methods
 
-In addition to the methods defined in `PatternInterface`, this implementation
+In addition to the methods defined in `PatternInterface` and `StorageCapableInterface`, this implementation
 defines the following methods.
 
 ```php
@@ -28,7 +34,7 @@ namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 
-class OutputCache extends AbstractPattern
+class OutputCache extends AbstractStorageCapablePattern
 {
     /**
      * If there is a cached item with the given key, display its data, and
@@ -57,9 +63,17 @@ class OutputCache extends AbstractPattern
 ### Caching simple View Scripts
 
 ```php
-$outputCache = Laminas\Cache\PatternFactory::factory('output', [
-    'storage' => 'apc',
-]);
+use Laminas\Cache\Pattern\OutputCache;
+use Laminas\Cache\Pattern\PatternOptions;
+use Laminas\Cache\Storage\StorageInterface;
+
+/** @var StorageInterface $storage */
+$storage = null; // Can be any instance of StorageInterface
+
+$outputCache = new OutputCache(
+    $storage,
+    new PatternOptions()
+);
 
 $outputCache->start('mySimpleViewScript');
 include '/path/to/view/script.phtml';

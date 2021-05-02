@@ -674,7 +674,10 @@ class PatternOptions extends AbstractOptions
      * - OutputCache
      *
      * @param  string|array|Storage $storage
+     *
      * @return PatternOptions Provides a fluent interface
+     * @deprecated This method will be removed with v3.0.0.
+     *             The underlying storage will be a dependency of the cache pattern instead.
      */
     public function setStorage($storage)
     {
@@ -692,6 +695,8 @@ class PatternOptions extends AbstractOptions
      * - OutputCache
      *
      * @return null|Storage
+     * @deprecated This method will be removed with v3.0.0.
+     *             The underlying storage will be a dependency of the cache pattern instead.
      */
     public function getStorage()
     {
