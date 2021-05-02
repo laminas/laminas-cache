@@ -54,7 +54,7 @@
     "require-dev": {
         "laminas/laminas-coding-standard": "~1.0.0",
         "laminas/laminas-serializer": "^2.6",
-        "phpbench/phpbench": "^1.0.0-alpha8",
+        "phpbench/phpbench": "^1.0.0-beta2",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.5"
     },
