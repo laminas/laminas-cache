@@ -720,6 +720,9 @@ class PatternOptions extends AbstractOptions
      * - ObjectCache
      * - OutputCache
      *
+     * @deprecated This method will be removed with v3.0.0.
+     *             The underlying storage will be a dependency of the cache pattern instead.
+     *
      * @param  string|array|Storage $storage
      * @return PatternOptions Provides a fluent interface
      */
@@ -737,6 +740,9 @@ class PatternOptions extends AbstractOptions
      * - ClassCache
      * - ObjectCache
      * - OutputCache
+     *
+     * @deprecated This method will be removed with v3.0.0.
+     *             The underlying storage will be a dependency of the cache pattern instead.
      *
      * @return null|Storage
      */

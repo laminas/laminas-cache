@@ -10,57 +10,56 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @group      Laminas_Cache
- * @covers \Laminas\Cache\Pattern\PatternOptions<extended>
+ * @covers Laminas\Cache\Pattern\PatternOptions<extended>
  */
 abstract class AbstractCommonPatternTest extends TestCase
 {
     /** @var PatternInterface */
     protected $pattern;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         self::assertInstanceOf(
             PatternInterface::class,
             $this->pattern,
             'Internal pattern instance is needed for tests'
         );
+
+        parent::setUp();
     }
 
     public function tearDown(): void
     {
         unset($this->pattern);
-        parent::tearDown();
     }
 
     /**
      * A data provider for common pattern names
-     *
-     * @return iterable<string,array{0:string}>
      */
     abstract public function getCommonPatternNamesProvider();
 
     /**
      * @dataProvider getCommonPatternNamesProvider
      */
-    public function testPatternPluginManagerWithCommonNames(string $commonPatternName)
+    public function testPatternPluginManagerWithCommonNames($commonPatternName)
     {
         $pluginManager = new PatternPluginManager(new ServiceManager());
-        self::assertTrue(
+        $this->assertTrue(
             $pluginManager->has($commonPatternName),
             "Pattern name '{$commonPatternName}' not found in PatternPluginManager"
         );
     }
 
-    public function testOptionNamesValid(): void
+    public function testOptionNamesValid()
     {
         $options = $this->pattern->getOptions();
-        self::assertInstanceOf(PatternOptions::class, $options);
+        $this->assertInstanceOf(PatternOptions::class, $options);
     }
 
-    public function testOptionsGetAndSetDefault(): void
+    public function testOptionsGetAndSetDefault()
     {
         $options = $this->pattern->getOptions();
         $this->pattern->setOptions($options);
-        self::assertSame($options, $this->pattern->getOptions());
+        $this->assertSame($options, $this->pattern->getOptions());
     }
 }

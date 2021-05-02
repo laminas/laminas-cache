@@ -4,7 +4,6 @@ namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
 use Laminas\Cache\Exception\MissingKeyException;
-use Laminas\Cache\Storage\StorageInterface;
 
 use function ob_end_clean;
 use function ob_get_clean;
@@ -15,11 +14,8 @@ use function ob_start;
  * @group      Laminas_Cache
  * @covers \Laminas\Cache\Pattern\OutputCache<extended>
  */
-class OutputCacheTest extends AbstractCommonPatternTest
+class OutputCacheTest extends AbstractCommonStoragePatternTest
 {
-    /** @var StorageInterface */
-    protected $storage;
-
     /**
      * Nesting level of output buffering used to restore on tearDown(): void
      *

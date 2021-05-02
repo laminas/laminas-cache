@@ -2,34 +2,22 @@
 
 namespace Laminas\Cache\Pattern;
 
-use Laminas\Cache\Exception;
-
 abstract class AbstractPattern implements PatternInterface
 {
-    /** @var PatternOptions */
+    /** @var PatternOptions|null */
     protected $options;
 
-    /**
-     * Set pattern options
-     *
-     * @return AbstractPattern Provides a fluent interface
-     * @throws Exception\InvalidArgumentException
-     */
+    public function __construct(?PatternOptions $options = null)
+    {
+        $this->options = $options;
+    }
+
     public function setOptions(PatternOptions $options)
     {
-        if (! $options instanceof PatternOptions) {
-            $options = new PatternOptions($options);
-        }
-
         $this->options = $options;
         return $this;
     }
 
-    /**
-     * Get all pattern options
-     *
-     * @return PatternOptions
-     */
     public function getOptions()
     {
         if (null === $this->options) {

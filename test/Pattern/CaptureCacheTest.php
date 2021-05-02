@@ -33,9 +33,6 @@ class CaptureCacheTest extends AbstractCommonPatternTest
     /** @var array<string,mixed> */
     protected $bufferedServerSuperGlobal;
 
-    /** @var Cache\Pattern\PatternOptions */
-    private $options;
-
     public function setUp(): void
     {
         $this->bufferedServerSuperGlobal = $_SERVER;

@@ -15,10 +15,6 @@ use function strtolower;
 
 class ObjectCache extends CallbackCache
 {
-    /**
-     * @return void
-     * @throws Exception\InvalidArgumentException
-     */
     public function setOptions(PatternOptions $options)
     {
         parent::setOptions($options);
@@ -27,9 +23,11 @@ class ObjectCache extends CallbackCache
             throw new Exception\InvalidArgumentException("Missing option 'object'");
         }
 
-        if (! $options->getStorage()) {
+        if (! $this->getStorage()) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
+
+        return $this;
     }
 
     /**
@@ -73,7 +71,8 @@ class ObjectCache extends CallbackCache
                     $removeKeys[] = $this->generateKey('__isset', [$property]);
                 }
                 if ($removeKeys) {
-                    $options->getStorage()->removeItems($removeKeys);
+                    $storage = $this->getStorage();
+                    $storage->removeItems($removeKeys);
                 }
                 return;
 
@@ -129,7 +128,8 @@ class ObjectCache extends CallbackCache
                     $removeKeys[] = $this->generateKey('__isset', [$property]);
                 }
                 if ($removeKeys) {
-                    $options->getStorage()->removeItems($removeKeys);
+                    $storage = $this->getStorage();
+                    $storage->removeItems($removeKeys);
                 }
                 return;
         }

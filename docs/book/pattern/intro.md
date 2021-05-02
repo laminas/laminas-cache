@@ -26,21 +26,23 @@ Pattern objects can either be created from the provided `Laminas\Cache\PatternFa
 by instantiating one of the `Laminas\Cache\Pattern\*Cache` classes.
 
 ```php
-// Via the factory:
-$callbackCache = Laminas\Cache\PatternFactory::factory('callback', [
-    'storage' => 'apc',
-]);
+use Laminas\Cache\Pattern\CallbackCache;
+use Laminas\Cache\Pattern\PatternOptions;
+use Laminas\Cache\Storage\StorageInterface;
+
+/** @var StorageInterface $storage */
+$storage = null; // Can be any instance of StorageInterface
 
 // Or the equivalent manual instantiation:
-$callbackCache = new Laminas\Cache\Pattern\CallbackCache();
-$callbackCache->setOptions(new Laminas\Cache\Pattern\PatternOptions([
-    'storage' => 'apc',
-]));
+$callbackCache = new CallbackCache(
+    $storage,
+    new PatternOptions()
+);
 ```
 
 ## Available Methods
 
-The following methods are implemented by `Laminas\Cache\Pattern\AbstractPattern`.
+The following methods are implemented by every cache pattern.
 Please read documentation of specific patterns to get more information.
 
 ```php
@@ -48,13 +50,6 @@ namespace Laminas\Cache\Pattern;
 
 interface PatternInterface
 {
-    /**
-     * Set pattern options
-     *
-     * @param  PatternOptions $options
-     * @return PatternInterface
-     */
-    public function setOptions(PatternOptions $options);
 
     /**
      * Get all pattern options
@@ -62,5 +57,18 @@ interface PatternInterface
      * @return PatternOptions
      */
     public function getOptions();
+}
+```
+
+There are cache patterns which depend on a storage. In this case, these adapters implement the `StorageCapableInterface`:
+
+```php
+namespace Laminas\Cache\Pattern;
+
+use Laminas\Cache\Storage\StorageInterface;
+
+interface StorageCapableInterface extends PatternInterface
+{
+    public function getStorage(): ?StorageInterface;
 }
 ```

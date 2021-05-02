@@ -10,21 +10,18 @@ use function strtolower;
 
 class ClassCache extends CallbackCache
 {
-    /**
-     * Set options
-     *
-     * @return ClassCache Provides a fluent interface
-     * @throws Exception\InvalidArgumentException If missing 'class' or 'storage' options.
-     */
     public function setOptions(PatternOptions $options)
     {
         parent::setOptions($options);
 
         if (! $options->getClass()) {
             throw new Exception\InvalidArgumentException("Missing option 'class'");
-        } elseif (! $options->getStorage()) {
+        }
+
+        if (! $this->getStorage()) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
+
         return $this;
     }
 
