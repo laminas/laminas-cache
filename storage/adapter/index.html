@@ -482,14 +482,6 @@ alternately, pass an associative array of options in either place (internally,
 these are then passed to an options class instance). Alternately, you can pass
 either the options instance or associative array to the
 <code>Laminas\Cache\StorageFactory::factory</code> method.</p>
-<blockquote>
-<h3 id="many-methods-throw-exceptions">Many Methods throw Exceptions</h3>
-<p>Because many caching operations throw an exception on error, you need to catch
-them. You can do so manually, or you can use the plugin
-<code>Laminas\Cache\Storage\Plugin\ExceptionHandler</code> with <code>throw_exceptions</code> set to
-<code>false</code> to automatically catch them. You can also define an
-<code>exception_callback</code> to log exceptions.</p>
-</blockquote>
 <h2 id="quick-start">Quick Start</h2>
 <p>Caching adapters can either be created from the provided
 <code>Laminas\Cache\StorageFactory</code>, or by instantiating one of the
@@ -523,6 +515,14 @@ $cache-&gt;getOptions()-&gt;setTtl(3600);
 $plugin = new Laminas\Cache\Storage\Plugin\ExceptionHandler();
 $plugin-&gt;getOptions()-&gt;setThrowExceptions(false);
 $cache-&gt;addPlugin($plugin);</code></pre>
+<blockquote>
+<h3 id="many-methods-throw-exceptions">Many Methods throw Exceptions</h3>
+<p>Because many caching operations throw an exception on error, you need to catch
+them. You can do so manually, or you can use the plugin
+<code>Laminas\Cache\Storage\Plugin\ExceptionHandler</code> with <code>throw_exceptions</code> set to
+<code>false</code> to automatically catch them. You can also define an
+<code>exception_callback</code> to log exceptions.</p>
+</blockquote>
 <h2 id="basic-configuration-options">Basic Configuration Options</h2>
 <p>The following configuration options are defined by <code>Laminas\Cache\Storage\Adapter\AdapterOptions</code> and
 are available for every supported adapter. Adapter-specific configuration options are described on
@@ -1711,7 +1711,7 @@ process only.</p>
 <li>When a value is provided for the memory limit, the value is measured in
   bytes. Shorthand notation may also be provided.</li>
 </ul>
-<h3 id="current-process-only">Current process only!</h3>
+<h3 id="current-process-only">Current process only</h3>
 <p>All stored items will be lost on termination of the script. For web-facing
 requests, this typically means the cache is volatile.</p>
 </blockquote>
@@ -1720,7 +1720,7 @@ requests, this typically means the cache is volatile.</p>
 PHP extension <a href="http://php.net/mongo">mongo</a>, or a MongoDB polyfill library, such as
 <a href="https://github.com/mongofill/mongofill">Mongofill</a>.</p>
 <blockquote>
-<h4 id="ext-mongodb">ext-mongodb</h4>
+<h3 id="ext-mongodb">ext-mongodb</h3>
 <p>If you are using the mongodb extension (vs the mongo extension), you will need
 to use the <a href="#the-extmongodb-adapter">ExtMongoDb adapter</a> instead.</p>
 </blockquote>
@@ -1779,7 +1779,7 @@ to use the <a href="#the-extmongodb-adapter">ExtMongoDb adapter</a> instead.</p>
 </tr>
 <tr>
 <td><code>namespaceSeparator</code></td>
-<td><Option value of namespace_separator></td>
+<td><em>Option value of <code>namespace_separator</code></em></td>
 </tr>
 </tbody>
 </table></div>
@@ -1854,7 +1854,7 @@ requires that the MongoDB PHP Client library is also installed. You can install 
 library using the following:</p>
 <pre class="highlight"><code class="language-bash">$ composer require mongodb/mongodb</code></pre>
 <blockquote>
-<h4 id="ext-mongo">ext-mongo</h4>
+<h3 id="ext-mongo">ext-mongo</h3>
 <p>If you are using the mongo extension (vs the mongodb extension), you will need
 to use the <a href="#the-mongodb-adapter">MongoDb adapter</a> instead.</p>
 </blockquote>
@@ -1913,7 +1913,7 @@ to use the <a href="#the-mongodb-adapter">MongoDb adapter</a> instead.</p>
 </tr>
 <tr>
 <td><code>namespaceSeparator</code></td>
-<td><Option value of namespace_separator></td>
+<td><em>Option value of <code>namespace_separator</code></em></td>
 </tr>
 </tbody>
 </table></div>
