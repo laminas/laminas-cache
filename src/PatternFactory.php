@@ -12,9 +12,17 @@ use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
 
+use function get_class;
+use function gettype;
+use function is_array;
+use function is_object;
+use function sprintf;
+
 /**
  * @deprecated Please do not use static factories anymore.
  *             Inject {@see PatternPluginManager} instead.
+ *
+ * @phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
  */
 abstract class PatternFactory
 {
