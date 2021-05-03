@@ -555,4 +555,46 @@ class CacheItemPoolDecoratorTest extends TestCase
         }
         return new CacheItemPoolDecorator($storage->reveal());
     }
+
+    public function testCanHandleRemoveItemsReturningNonArray()
+    {
+        $adapter = $this->getStorageProphesy();
+        $adapter
+            ->removeItems(Argument::type('array'))
+            ->willReturn(null);
+
+        $cache = new CacheItemPoolDecorator($adapter->reveal());
+
+        self::assertFalse($cache->deleteItems(['foo']));
+    }
+
+    /**
+     * @param bool $exists
+     * @param bool $sucsessful
+     *
+     * @dataProvider deletionVerificationProvider
+     */
+    public function testWillVerifyKeyExistenceByUsingHasItemsWhenDeletionWasNotSuccessful($exists, $sucsessful)
+    {
+        $adapter = $this->getStorageProphesy();
+        $adapter
+            ->removeItems(Argument::type('array'))
+            ->willReturn(['foo']);
+
+        $adapter
+            ->hasItems(Argument::exact(['foo']))
+            ->willReturn(['foo' => $exists]);
+
+        $cache = new CacheItemPoolDecorator($adapter->reveal());
+
+        self::assertEquals($sucsessful, $cache->deleteItems(['foo']));
+    }
+
+    public function deletionVerificationProvider()
+    {
+        return [
+            'deletion failed due to hasItems states the key still exists' => [true, false],
+            'deletion successful due to hasItems states the key does not exist' => [false, true],
+        ];
+    }
 }
