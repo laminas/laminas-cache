@@ -2,27 +2,27 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.10.3 - TBD
+## 2.10.3 - 2021-05-03
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [2.10.3](https://github.com/laminas/laminas-cache/milestone/6)
 
-- Nothing.
+2.10.x bugfix release (patch)
 
-### Deprecated
+### Fixes
+- Fixes a `PSR-6` deletion regression which was introduced in 2.10.2. The `CacheItemPoolDecorator` now verifies that all keys are absent from the storage. This is now in sync with the `SimpleCacheDecorator`.
 
-- Nothing.
+### 2.10.3
 
-### Removed
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
 
-- Nothing.
+#### Bug
 
-### Fixed
-
-- Nothing.
+ - [100: bugfix: `CacheItemPoolDecorator` uses `StorageItemInterface::hasItems` to verify deletion](https://github.com/laminas/laminas-cache/pull/100) thanks to @boesing
 
 ## 2.10.2 - 2021-04-29
 
