@@ -28,6 +28,7 @@ use function current;
 use function get_class;
 use function gettype;
 use function in_array;
+use function is_array;
 use function is_bool;
 use function is_string;
 use function preg_match;
@@ -204,13 +205,25 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
         $this->deferred = array_diff_key($this->deferred, array_flip($keys));
 
         try {
-            return $this->storage->removeItems($keys) === [];
+            $result = $this->storage->removeItems($keys);
         } catch (Exception\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         } catch (Exception\ExceptionInterface $e) {
+            return false;
         }
 
-        return false;
+        // BC compatibility can be removed in 3.0
+        if (! is_array($result)) {
+            return $result !== null;
+        }
+
+        if ($result === []) {
+            return true;
+        }
+
+        $existing = $this->storage->hasItems($result);
+        $unified  = array_unique($existing);
+        return ! in_array(true, $unified, true);
     }
 
     /**
