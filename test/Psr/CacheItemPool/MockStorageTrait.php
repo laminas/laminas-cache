@@ -73,6 +73,16 @@ trait MockStorageTrait
                 return $adapterOptions;
             });
 
+        $storage->hasItems(Argument::type('array'))
+            ->will(function ($args) use (&$items) {
+                $keys = $args[0];
+                $status = [];
+                foreach ($keys as $key) {
+                    $status[$key] = array_key_exists($key, $items);
+                }
+
+                return $status;
+            });
         $storage->hasItem(Argument::type('string'))
             ->will(function ($args) use (&$items) {
                 $key = $args[0];
@@ -118,7 +128,7 @@ trait MockStorageTrait
         $storage->removeItems(Argument::type('array'))
             ->will(function ($args) use (&$items) {
                 $items = array_diff_key($items, array_flip($args[0]));
-                return true;
+                return [];
             });
 
         return $storage;
