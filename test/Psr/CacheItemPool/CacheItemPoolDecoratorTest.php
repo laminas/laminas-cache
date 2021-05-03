@@ -534,7 +534,7 @@ class CacheItemPoolDecoratorTest extends TestCase
 
     public function testCanHandleRemoveItemsReturningNonArray()
     {
-        $adapter = $this->getStorageProphesy();
+        $adapter = $this->getStorageProphecy();
         $adapter
             ->removeItems(Argument::type('array'))
             ->willReturn(null);
@@ -552,7 +552,7 @@ class CacheItemPoolDecoratorTest extends TestCase
      */
     public function testWillVerifyKeyExistenceByUsingHasItemsWhenDeletionWasNotSuccessful($exists, $sucsessful)
     {
-        $adapter = $this->getStorageProphesy();
+        $adapter = $this->getStorageProphecy();
         $adapter
             ->removeItems(Argument::type('array'))
             ->willReturn(['foo']);
