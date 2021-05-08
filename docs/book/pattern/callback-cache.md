@@ -25,7 +25,7 @@ $callbackCache = new CallbackCache(
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
+`storage` | `string\|array\|Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
 `cache_output` | `bool` | `true` | Whether or not to cache callback output.
 
 ## Available Methods

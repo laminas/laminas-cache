@@ -46,9 +46,9 @@ Option | Data Type | Default Value | Description
 `public_dir` | `string` | none | Location of the public web root directory in which to write output.
 `index_filename` | `string` | "index.html" | The name of the index file if only a directory was requested.
 `file_locking` | `bool` | `true` | Whether or not to lock output files when writing.
-`file_permission` | `int | bool` | `0600` (`false` on Windows) | Default permissions for generated output files.
-`dir_permission` | `int | bool` | `0700` (`false` on Windows) | Default permissions for generated output directories.
-`umask` | `int | false` | `false` | Whether or not to umask generated output files / directories.
+`file_permission` | `int\|false` | `0600` (`false` on Windows) | Default permissions for generated output files.
+`dir_permission` | `int\|false` | `0700` (`false` on Windows) | Default permissions for generated output directories.
+`umask` | `int\|false` | `false` | Whether or not to umask generated output files / directories.
 
 ## Available Methods
 

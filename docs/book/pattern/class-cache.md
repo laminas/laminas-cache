@@ -27,7 +27,7 @@ $classCache = new ClassCache(
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
+`storage` | `string\|array\|Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
 `class` | `string` | none | Name of the class for which to cache method output.
 `cache_output` | `bool` | `true` | Whether or not to cache method output.
 `cache_by_default` | `bool` | `true` | Cache all method calls by default.
