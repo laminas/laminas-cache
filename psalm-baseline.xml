@@ -960,11 +960,7 @@
       <code>testPatternPluginManagerWithCommonNames</code>
     </MissingReturnType>
   </file>
-  <file src="test/Pattern/CallbackCacheTestAbstract.php">
-    <InvalidArgument occurrences="2">
-      <code>[TestCallbackCache::class, 'bar']</code>
-      <code>[TestCallbackCache::class, 'bar']</code>
-    </InvalidArgument>
+  <file src="test/Pattern/CallbackCacheTest.php">
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>
@@ -1001,7 +997,7 @@
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
   </file>
-  <file src="test/Pattern/CaptureCacheTestAbstract.php">
+  <file src="test/Pattern/CaptureCacheTest.php">
     <MixedPropertyTypeCoercion occurrences="1">
       <code>$_SERVER</code>
     </MixedPropertyTypeCoercion>
@@ -1015,7 +1011,7 @@
       <code>set</code>
     </UndefinedInterfaceMethod>
   </file>
-  <file src="test/Pattern/ClassCacheTestAbstract.php">
+  <file src="test/Pattern/ClassCacheTest.php">
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>
@@ -1041,12 +1037,8 @@
       <code>generateKey</code>
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
-    <UndefinedMethod occurrences="2">
-      <code>testCall</code>
-      <code>testCall</code>
-    </UndefinedMethod>
   </file>
-  <file src="test/Pattern/ObjectCacheTestAbstract.php">
+  <file src="test/Pattern/ObjectCacheTest.php">
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>
@@ -1088,7 +1080,7 @@
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
   </file>
-  <file src="test/Pattern/OutputCacheTestAbstract.php">
+  <file src="test/Pattern/OutputCacheTest.php">
     <PossiblyNullReference occurrences="2">
       <code>getItem</code>
       <code>setItem</code>

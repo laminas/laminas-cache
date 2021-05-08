@@ -28,7 +28,7 @@ use const DIRECTORY_SEPARATOR;
  * @group      Laminas_Cache
  * @covers \Laminas\Cache\Pattern\CaptureCache<extended>
  */
-class CaptureCacheTestAbstract extends AbstractCommonPatternTest
+class CaptureCacheTest extends AbstractCommonPatternTest
 {
     /** @var string */
     protected $tmpCacheDir;
