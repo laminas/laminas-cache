@@ -12,9 +12,9 @@ use Webmozart\Assert\Assert;
  */
 final class StorageCacheFactory
 {
-    public const CACHE_CONFIGURATION_KEY = 'cache';
-
     use PluginManagerLookupTrait;
+
+    public const CACHE_CONFIGURATION_KEY = 'cache';
 
     public function __invoke(ContainerInterface $container): StorageInterface
     {

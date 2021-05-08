@@ -1,9 +1,9 @@
 <?php
+
 /**
  * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
  */
+
 declare(strict_types=1);
 
 namespace LaminasTest\Cache\Command;
@@ -21,9 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCase
 {
-    /**
-     * @var DeprecatedSchemaDetectorInterface&MockObject
-     */
+    /** @var DeprecatedSchemaDetectorInterface&MockObject */
     private $detector;
 
     protected function setUp(): void
@@ -34,13 +32,13 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
 
     public function testWillExitEarlyWhenProjectDoesNotHaveCacheConfigurations(): void
     {
-        $config = new ArrayObject([]);
+        $config  = new ArrayObject([]);
         $command = new DeprecatedStorageFactoryConfigurationCheckCommand(
             $config,
             $this->detector
         );
 
-        $input = $this->createMock(InputInterface::class);
+        $input  = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
 
         self::assertEquals(Command::SUCCESS, $command->run($input, $output));
@@ -48,7 +46,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
 
     public function testWillExitEarlyWhenProjectContainsCacheConfigurationButItsEmpty(): void
     {
-        $config = new ArrayObject([
+        $config  = new ArrayObject([
             StorageCacheFactory::CACHE_CONFIGURATION_KEY => [],
         ]);
         $command = new DeprecatedStorageFactoryConfigurationCheckCommand(
@@ -56,7 +54,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
             $this->detector
         );
 
-        $input = $this->createMock(InputInterface::class);
+        $input  = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
 
         self::assertEquals(Command::SUCCESS, $command->run($input, $output));
@@ -64,7 +62,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
 
     public function testWillExitEarlyWhenProjectContainsCachesConfigurationButItsEmpty(): void
     {
-        $config = new ArrayObject([
+        $config  = new ArrayObject([
             StorageCacheAbstractServiceFactory::CACHES_CONFIGURATION_KEY => [],
         ]);
         $command = new DeprecatedStorageFactoryConfigurationCheckCommand(
@@ -72,7 +70,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
             $this->detector
         );
 
-        $input = $this->createMock(InputInterface::class);
+        $input  = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
 
         self::assertEquals(Command::SUCCESS, $command->run($input, $output));
@@ -80,7 +78,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
 
     public function testWillDetectInvalidCachesConfiguration(): void
     {
-        $config = new ArrayObject([
+        $config  = new ArrayObject([
             StorageCacheAbstractServiceFactory::CACHES_CONFIGURATION_KEY => [
                 'foo' => [],
             ],
@@ -96,7 +94,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
             ->with([])
             ->willReturn(true);
 
-        $input = $this->createMock(InputInterface::class);
+        $input  = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
 
         self::assertEquals(Command::FAILURE, $command->run($input, $output));
@@ -104,7 +102,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
 
     public function testWillDetectMultipleInvalidCachesConfiguration(): void
     {
-        $config = new ArrayObject([
+        $config  = new ArrayObject([
             StorageCacheAbstractServiceFactory::CACHES_CONFIGURATION_KEY => [
                 'foo' => ['key' => 'foo'],
                 'bar' => ['key' => 'bar'],
@@ -122,19 +120,18 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
             ->withConsecutive([['key' => 'foo']], [['key' => 'bar']], [['key' => 'baz']])
             ->willReturnOnConsecutiveCalls(true, false, true);
 
-        $input = $this->createMock(InputInterface::class);
+        $input  = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
 
-
         $output
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(2))
             ->method('writeln')
             ->withConsecutive([], [
                 self::callback(static function (string $message): bool {
                     self::assertStringContainsString('Please normalize the `caches` configuration', $message);
                     self::assertStringContainsString('"foo", "baz"', $message);
                     return true;
-                })
+                }),
             ]);
 
         self::assertEquals(Command::FAILURE, $command->run($input, $output));
@@ -142,7 +139,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
 
     public function testWillDetectInvalidCacheConfiguration(): void
     {
-        $config = new ArrayObject([
+        $config  = new ArrayObject([
             StorageCacheFactory::CACHE_CONFIGURATION_KEY => [
                 'foo' => 'bar',
             ],
@@ -158,16 +155,16 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
             ->with(['foo' => 'bar'])
             ->willReturn(true);
 
-        $input = $this->createMock(InputInterface::class);
+        $input  = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
         $output
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(2))
             ->method('writeln')
             ->withConsecutive([], [
                 self::callback(static function (string $message): bool {
                     self::assertStringContainsString('Please normalize the `cache` configuration', $message);
                     return true;
-                })
+                }),
             ]);
 
         self::assertEquals(Command::FAILURE, $command->run($input, $output));
@@ -175,8 +172,8 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
 
     public function testWontDetectNormalizedConfiguration(): void
     {
-        $config = new ArrayObject([
-            StorageCacheFactory::CACHE_CONFIGURATION_KEY => [
+        $config  = new ArrayObject([
+            StorageCacheFactory::CACHE_CONFIGURATION_KEY                 => [
                 'foo' => 'bar',
             ],
             StorageCacheAbstractServiceFactory::CACHES_CONFIGURATION_KEY => [
@@ -194,10 +191,10 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
             ->withConsecutive([['bar' => 'baz']], [['foo' => 'bar']])
             ->willReturn(false);
 
-        $input = $this->createMock(InputInterface::class);
+        $input  = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
         $output
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(2))
             ->method('writeln')
             ->withConsecutive([], [
                 self::callback(static function (string $message): bool {
@@ -206,7 +203,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
                         $message
                     );
                     return true;
-                })
+                }),
             ]);
 
         self::assertEquals(Command::SUCCESS, $command->run($input, $output));

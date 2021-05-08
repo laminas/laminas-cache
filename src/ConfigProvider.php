@@ -2,6 +2,9 @@
 
 namespace Laminas\Cache;
 
+use Laminas\Cache\Command\DeprecatedStorageFactoryConfigurationCheckCommand;
+use Laminas\Cache\Command\DeprecatedStorageFactoryConfigurationCheckCommandFactory;
+
 class ConfigProvider
 {
     /**
@@ -13,6 +16,7 @@ class ConfigProvider
     {
         return [
             'dependencies' => $this->getDependencyConfig(),
+            'laminas-cli'  => $this->getCliConfig(),
         ];
     }
 
@@ -31,6 +35,22 @@ class ConfigProvider
                 PatternPluginManager::class         => Service\PatternPluginManagerFactory::class,
                 Storage\AdapterPluginManager::class => Service\StorageAdapterPluginManagerFactory::class,
                 Storage\PluginManager::class        => Service\StoragePluginManagerFactory::class,
+                Storage\PluginManager::class        => Service\StoragePluginManagerFactory::class,
+                DeprecatedStorageFactoryConfigurationCheckCommand::class
+                    => DeprecatedStorageFactoryConfigurationCheckCommandFactory::class,
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    public function getCliConfig(): array
+    {
+        return [
+            'commands' => [
+                DeprecatedStorageFactoryConfigurationCheckCommand::NAME
+                    => DeprecatedStorageFactoryConfigurationCheckCommand::class,
             ],
         ];
     }

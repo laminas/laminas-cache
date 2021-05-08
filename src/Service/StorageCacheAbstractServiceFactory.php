@@ -13,8 +13,9 @@ use function is_array;
  */
 class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
 {
-    public const CACHES_CONFIGURATION_KEY = 'caches';
     use PluginManagerLookupTrait;
+
+    public const CACHES_CONFIGURATION_KEY = 'caches';
 
     /** @var array */
     protected $config;

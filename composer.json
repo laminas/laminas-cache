@@ -60,6 +60,9 @@
         "psalm/plugin-phpunit": "^0.15.1",
         "vimeo/psalm": "^4.5.2"
     },
+    "conflict": {
+        "symfony/console": "<5.1"
+    },
     "provide": {
         "psr/cache-implementation": "1.0",
         "psr/simple-cache-implementation": "1.0"
