@@ -18,6 +18,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  */
 class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
 {
+    public const CACHES_CONFIGURATION_KEY = 'caches';
     use PluginManagerLookupTrait;
 
     /**
@@ -30,7 +31,7 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
      *
      * @var string
      */
-    protected $configKey = 'caches';
+    protected $configKey = self::CACHES_CONFIGURATION_KEY;
 
     /**
      * @param ContainerInterface $container

@@ -19,6 +19,8 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  */
 class StorageCacheFactory implements FactoryInterface
 {
+    public const CACHE_CONFIGURATION_KEY = 'cache';
+
     use PluginManagerLookupTrait;
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
@@ -26,7 +28,7 @@ class StorageCacheFactory implements FactoryInterface
         $this->prepareStorageFactory($container);
 
         $config = $container->get('config');
-        $cacheConfig = isset($config['cache']) ? $config['cache'] : [];
+        $cacheConfig = $config[self::CACHE_CONFIGURATION_KEY] ?? [];
         return StorageFactory::factory($cacheConfig);
     }
 
