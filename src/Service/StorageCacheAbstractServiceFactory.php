@@ -13,6 +13,7 @@ use function is_array;
  */
 class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
 {
+    public const CACHES_CONFIGURATION_KEY = 'caches';
     use PluginManagerLookupTrait;
 
     /** @var array */
@@ -23,7 +24,7 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
      *
      * @var string
      */
-    protected $configKey = 'caches';
+    protected $configKey = self::CACHES_CONFIGURATION_KEY;
 
     /**
      * @param string $requestedName

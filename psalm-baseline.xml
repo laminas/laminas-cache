@@ -379,14 +379,6 @@
       <code>$this-&gt;config !== null</code>
     </RedundantConditionGivenDocblockType>
   </file>
-  <file src="src/Service/StorageCacheFactory.php">
-    <MixedArgument occurrences="1">
-      <code>$cacheConfig</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$cacheConfig</code>
-    </MixedAssignment>
-  </file>
   <file src="src/Storage/Adapter/AbstractAdapter.php">
     <ArgumentTypeCoercion occurrences="1">
       <code>$plugin</code>

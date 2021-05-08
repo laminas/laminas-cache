@@ -5,19 +5,25 @@ namespace Laminas\Cache\Service;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Cache\StorageFactory;
 use Psr\Container\ContainerInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * Storage cache factory.
  */
 final class StorageCacheFactory
 {
+    public const CACHE_CONFIGURATION_KEY = 'cache';
+
     use PluginManagerLookupTrait;
 
     public function __invoke(ContainerInterface $container): StorageInterface
     {
         $this->prepareStorageFactory($container);
 
-        $cacheConfig = $container->get('config')['cache'] ?? [];
+        $config = $container->get('config');
+        Assert::isArrayAccessible($config);
+        $cacheConfig = $config['cache'] ?? [];
+        Assert::isMap($cacheConfig);
         return StorageFactory::factory($cacheConfig);
     }
 }
