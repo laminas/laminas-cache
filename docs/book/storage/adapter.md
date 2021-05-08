@@ -31,12 +31,15 @@ use Laminas\Cache\StorageFactory;
 
 // Via factory:
 $cache = StorageFactory::factory([
-    'adapter' => [
-        'name'    => 'apc',
-        'options' => ['ttl' => 3600],
-    ],
+    'adapter' => 'apc',
+    'options' => ['ttl' => 3600],
     'plugins' => [
-        'exception_handler' => ['throw_exceptions' => false],
+        [
+            'name' => 'exception_handler',
+            'options' => [
+                'throw_exceptions' => false,
+             ], 
+        ],
     ],
 ]);
 
@@ -1074,13 +1077,14 @@ Capability | Value
 use Laminas\Cache\StorageFactory;
 
 $cache = StorageFactory::factory([
-    'adapter' => [
-        'name' => 'filesystem'
-    ],
+    'adapter' => 'filesystem',
     'plugins' => [
         // Don't throw exceptions on cache errors
-        'exception_handler' => [
-            'throw_exceptions' => false
+        [
+            'name' => 'exception_handler',
+            'options' => [
+                'throw_exceptions' => false
+            ],
         ],
     ],
 ]);
@@ -1100,21 +1104,24 @@ use Laminas\Cache\StorageFactory;
 
 // Instantiate the cache instance using a namespace for the same type of items
 $cache = StorageFactory::factory([
-    'adapter' => [
-        'name' => 'filesystem',
-        // With a namespace, we can indicate the same type of items,
+    'adapter' => 'filesystem',
+    // With a namespace, we can indicate the same type of items,
         // so we can simply use the database id as the cache key
-        'options' => [
-            'namespace' => 'dbtable',
-        ],
+    'options' => [
+        'namespace' => 'dbtable',
     ],
     'plugins' => [
         // Don't throw exceptions on cache errors
-        'exception_handler' => [
-            'throw_exceptions' => false,
+        [
+            'name' => 'exception_handler',
+            'options' => [
+                'throw_exceptions' => false,
+            ],
         ],
         // We store database rows on filesystem so we need to serialize them
-        'Serializer',
+        [
+            'name' => 'Serializer',
+        ],
     ],
 ]);
 

@@ -52,6 +52,7 @@
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
+        "laminas/laminas-cli": "^1.0",
         "laminas/laminas-coding-standard": "~2.2",
         "laminas/laminas-serializer": "^2.6",
         "phpbench/phpbench": "^1.0.0-beta2",
@@ -64,6 +65,7 @@
         "psr/simple-cache-implementation": "1.0"
     },
     "suggest": {
+        "laminas/laminas-cli": "The laminas-cli binary can be used to consume commands provided by this component",
         "laminas/laminas-serializer": "Laminas\\Serializer component"
     },
     "autoload": {

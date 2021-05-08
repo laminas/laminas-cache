@@ -25,7 +25,7 @@ use Laminas\Cache\StorageFactory;
 // All at once:
 $cache = StorageFactory::factory([
     'adapter' => 'filesystem',
-    'plugins' => ['serializer'],
+    'plugins' => [['name' => 'serializer']],
 ]);
 
 // Alternately, via discrete factory methods:
