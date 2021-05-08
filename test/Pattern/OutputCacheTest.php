@@ -21,7 +21,7 @@ use function ob_start;
  * @group      Laminas_Cache
  * @covers \Laminas\Cache\Pattern\OutputCache<extended>
  */
-class OutputCacheTestAbstract extends AbstractCommonPatternTest
+class OutputCacheTest extends AbstractCommonPatternTest
 {
     /** @var StorageInterface */
     protected $storage;

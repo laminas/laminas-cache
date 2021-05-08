@@ -23,7 +23,7 @@ use function ob_start;
 /**
  * @group      Laminas_Cache
  */
-class ObjectCacheTestAbstract extends AbstractCommonPatternTest
+class ObjectCacheTest extends AbstractCommonPatternTest
 {
     /** @var StorageInterface */
     protected $storage;
