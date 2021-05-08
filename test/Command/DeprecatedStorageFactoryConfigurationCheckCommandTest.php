@@ -127,7 +127,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
 
 
         $output
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(2))
             ->method('writeln')
             ->withConsecutive([], [
                 self::callback(static function (string $message): bool {
@@ -161,7 +161,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
         $input = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
         $output
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(2))
             ->method('writeln')
             ->withConsecutive([], [
                 self::callback(static function (string $message): bool {
@@ -197,7 +197,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandTest extends TestCa
         $input = $this->createMock(InputInterface::class);
         $output = $this->createMock(OutputInterface::class);
         $output
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(2))
             ->method('writeln')
             ->withConsecutive([], [
                 self::callback(static function (string $message): bool {

@@ -59,6 +59,9 @@
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpunit": "^9.5"
     },
+    "conflict": {
+        "symfony/console": "<5.1"
+    },
     "provide": {
         "psr/cache-implementation": "1.0",
         "psr/simple-cache-implementation": "1.0"

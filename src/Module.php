@@ -20,6 +20,7 @@ class Module
         $provider = new ConfigProvider();
         return [
             'service_manager' => $provider->getDependencyConfig(),
+            'laminas-cli' => $provider->getCliConfig(),
         ];
     }
 }
