@@ -19,10 +19,7 @@ use Laminas\Cache\StorageFactory;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 
 $storage = StorageFactory::factory([
-    'adapter' => [
-        'name'    => 'apc',
-        'options' => [],
-    ],
+    'adapter' => 'apc',
 ]);
 
 $cache = new SimpleCacheDecorator($storage);
@@ -94,9 +91,7 @@ $cache->addPlugin(new Serializer());
 // Via configuration:
 $cache = StorageFactory::factory([
     'adapter' => 'filesystem',
-    'plugins' => [
-        'serializer',
-    ],
+    'plugins' => [['name' => 'serializer']],
 ]);
 ```
 

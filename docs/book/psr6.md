@@ -21,10 +21,7 @@ use Laminas\Cache\StorageFactory;
 use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 
 $storage = StorageFactory::factory([
-    'adapter' => [
-        'name'    => 'apc',
-        'options' => [],
-    ],
+    'adapter' => 'apc',
 ]);
 
 $pool = new CacheItemPoolDecorator($storage);
@@ -108,13 +105,14 @@ $cacheLogger = function (\Exception $e) use ($logger) {
 };
                                 }
 $storage = StorageFactory::factory([
-    'adapter' => [
-        'name'    => 'apc',
-    ],
+    'adapter' => 'apc',
     'plugins' => [
-        'exceptionhandler' => [
-            'exception_callback' => $cacheLogger,
-            'throw_exceptions' => true,
+        [
+            'name' => 'exceptionhandler',
+            'options' => [
+                'exception_callback' => $cacheLogger,
+                'throw_exceptions' => true,
+            ],
         ],
     ],
 ]);
