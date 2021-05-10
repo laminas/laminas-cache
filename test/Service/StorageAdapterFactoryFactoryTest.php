@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- */
-
 declare(strict_types=1);
 
 namespace LaminasTest\Cache\Service;
