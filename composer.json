@@ -54,6 +54,7 @@
     "require-dev": {
         "laminas/laminas-cli": "^1.0",
         "laminas/laminas-coding-standard": "~2.2",
+        "laminas/laminas-config-aggregator": "^1.5",
         "laminas/laminas-serializer": "^2.6",
         "phpbench/phpbench": "^1.0.0-beta2",
         "phpunit/phpunit": "^9.5",
