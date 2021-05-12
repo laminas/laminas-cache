@@ -52,7 +52,8 @@ class ClassCache extends CallbackCache
             return $classname::$method(...$args);
         }
 
-        return parent::call([$classname, $method], $args);
+        $callable = $classname . '::' . $method;
+        return parent::call($callable, $args);
     }
 
     /**
