@@ -124,7 +124,7 @@ class ClassCache extends CallbackCache
     public function __unset($name)
     {
         $class = $this->getOptions()->getClass();
-        unset($class::$name);
+        $class::$name = null;
     }
 }
 ```
