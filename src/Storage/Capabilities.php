@@ -9,6 +9,9 @@ use stdClass;
 
 class Capabilities
 {
+    public const UNKNOWN_KEY_LENGTH = -1;
+    public const UNLIMITED_KEY_LENGTH = 0;
+
     /**
      * The storage instance
      *
@@ -461,7 +464,7 @@ class Capabilities
      */
     public function getMaxKeyLength()
     {
-        return $this->getCapability('maxKeyLength', -1);
+        return $this->getCapability('maxKeyLength', self::UNKNOWN_KEY_LENGTH);
     }
 
     /**
