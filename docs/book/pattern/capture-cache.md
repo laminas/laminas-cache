@@ -50,6 +50,33 @@ Option | Data Type | Default Value | Description
 `dir_permission` | `int\|false` | `0700` (`false` on Windows) | Default permissions for generated output directories.
 `umask` | `int\|false` | `false` | Whether or not to umask generated output files / directories.
 
+## Examples
+
+### Scaling Images in the Web Root
+
+Using the following Apache 404 configuration:
+
+```apacheconf
+# .htdocs
+ErrorDocument 404 /index.php
+```
+
+Use the following script:
+
+```php
+// index.php
+use Laminas\Cache\Pattern\CaptureCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$capture = new CaptureCache(
+    new PatternOptions([
+        'public_dir' => __DIR__,
+    ])
+);
+
+// TODO
+```
+
 ## Available Methods
 
 In addition to the methods exposed in `PatternInterface`, this implementation
@@ -124,31 +151,4 @@ class CaptureCache extends AbstractPattern
      */
     public function getFilename($pageId = null);
 }
-```
-
-## Examples
-
-### Scaling Images in the Web Root
-
-Using the following Apache 404 configuration:
-
-```apacheconf
-# .htdocs
-ErrorDocument 404 /index.php
-```
-
-Use the following script:
-
-```php
-// index.php
-use Laminas\Cache\Pattern\CaptureCache;
-use Laminas\Cache\Pattern\PatternOptions;
-
-$capture = new CaptureCache(
-    new PatternOptions([
-        'public_dir' => __DIR__,
-    ])
-);
-
-// TODO
 ```

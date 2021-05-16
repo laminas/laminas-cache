@@ -9,11 +9,7 @@ public properties.
 ```php
 use Laminas\Cache\Pattern\ObjectCache;
 use Laminas\Cache\Pattern\PatternOptions;
-use Laminas\Cache\Storage\StorageInterface;
 use stdClass;
-
-/** @var StorageInterface $storage */
-$storage = null; // Can be any instance of StorageInterface
 
 $object      = new stdClass();
 $objectCache = new ObjectCache(
@@ -23,6 +19,10 @@ $objectCache = new ObjectCache(
     ])
 );
 ```
+
+> ### Storage Adapter
+>
+> The `$storage` adapter can be any adapter which implements the `StorageInterface`. Check out the [Pattern Quick Start](./intro.md#quick-start)-Section for a standard adapter which can be used here.
 
 ## Configuration Options
 
@@ -36,6 +36,33 @@ Option | Data Type | Default Value | Description
 `object_cache_methods` | `array` | `[]` | List of methods to cache (if `cache_by_default` is disabled).
 `object_non_cache_methods` | `array` | `[]` | List of methods to blacklist (if `cache_by_default` is enabled).
 `object_cache_magic_properties` | `bool` | `false` | Whether or not to cache properties exposed by method overloading.
+
+## Examples
+
+### Caching a Filter
+
+```php
+use Laminas\Cache\Pattern\ObjectCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$filter       = new \Laminas\Filter\RealPath();
+$cachedFilter = new ObjectCache(
+    $storage,
+    new PatternOptions([
+        'object'     => $filter,
+        'object_key' => 'RealpathFilter',
+        
+        // The realpath filter doesn't output anything
+        // so the output don't need to be caught and cached
+        'cache_output' => false,
+    ])
+);
+
+$path = $cachedFilter->call("filter", ['/www/var/path/../../mypath']);
+
+// OR
+$path = $cachedFilter->filter('/www/var/path/../../mypath');
+```
 
 ## Available Methods
 
@@ -153,34 +180,4 @@ class ObjectCache extends CallbackCache
      */
     public function __invoke();
 }
-```
-
-## Examples
-
-### Caching a Filter
-
-```php
-use Laminas\Cache\Pattern\ObjectCache;
-use Laminas\Cache\Pattern\PatternOptions;
-use Laminas\Cache\Storage\StorageInterface;
-
-/** @var StorageInterface $storage */
-$storage      = null; // Can be any instance of StorageInterface
-$filter       = new \Laminas\Filter\RealPath();
-$cachedFilter = new ObjectCache(
-    $storage,
-    new PatternOptions([
-        'object'     => $filter,
-        'object_key' => 'RealpathFilter',
-        
-        // The realpath filter doesn't output anything
-        // so the output don't need to be caught and cached
-        'cache_output' => false,
-    ])
-);
-
-$path = $cachedFilter->call("filter", ['/www/var/path/../../mypath']);
-
-// OR
-$path = $cachedFilter->filter('/www/var/path/../../mypath');
 ```

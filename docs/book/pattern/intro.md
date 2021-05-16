@@ -22,18 +22,22 @@ It's also possible to use a single instance of
 
 ## Quick Start
 
-Pattern objects can either be created from the provided `Laminas\Cache\PatternFactory`, or
+Pattern objects can be created
 by instantiating one of the `Laminas\Cache\Pattern\*Cache` classes.
+
+> ### Standard Storage Adapter
+>
+> A standard storage adapter which can be used with the pattern caches might be the APCu adapter.
+>
+> ```php
+> use Laminas\Cache\Storage\Adapter\Apcu;
+> $storage = new Apcu();
+> ```
 
 ```php
 use Laminas\Cache\Pattern\CallbackCache;
 use Laminas\Cache\Pattern\PatternOptions;
-use Laminas\Cache\Storage\StorageInterface;
 
-/** @var StorageInterface $storage */
-$storage = null; // Can be any instance of StorageInterface
-
-// Or the equivalent manual instantiation:
 $callbackCache = new CallbackCache(
     $storage,
     new PatternOptions()

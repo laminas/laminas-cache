@@ -7,10 +7,6 @@ The `OutputCache` pattern caches output between calls to `start()` and `end()`.
 ```php
 use Laminas\Cache\Pattern\OutputCache;
 use Laminas\Cache\Pattern\PatternOptions;
-use Laminas\Cache\Storage\StorageInterface;
-
-/** @var StorageInterface $storage */
-$storage = null; // Can be any instance of StorageInterface
 
 $outputCache = new OutputCache(
     $storage,
@@ -18,11 +14,33 @@ $outputCache = new OutputCache(
 );
 ```
 
+> ### Storage Adapter
+>
+> The `$storage` adapter can be any adapter which implements the `StorageInterface`. Check out the [Pattern Quick Start](./intro.md#quick-start)-Section for a standard adapter which can be used here.
+
 ## Configuration Options
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
 `storage` | `string\|array\|Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
+
+## Examples
+
+### Caching simple View Scripts
+
+```php
+use Laminas\Cache\Pattern\OutputCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$outputCache = new OutputCache(
+    $storage,
+    new PatternOptions()
+);
+
+$outputCache->start('mySimpleViewScript');
+include '/path/to/view/script.phtml';
+$outputCache->end();
+```
 
 ## Available Methods
 
@@ -56,26 +74,4 @@ class OutputCache extends AbstractStorageCapablePattern
      */
     public function end();
 }
-```
-
-## Examples
-
-### Caching simple View Scripts
-
-```php
-use Laminas\Cache\Pattern\OutputCache;
-use Laminas\Cache\Pattern\PatternOptions;
-use Laminas\Cache\Storage\StorageInterface;
-
-/** @var StorageInterface $storage */
-$storage = null; // Can be any instance of StorageInterface
-
-$outputCache = new OutputCache(
-    $storage,
-    new PatternOptions()
-);
-
-$outputCache->start('mySimpleViewScript');
-include '/path/to/view/script.phtml';
-$outputCache->end();
 ```
