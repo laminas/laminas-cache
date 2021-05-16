@@ -3,6 +3,7 @@
 namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use ArrayIterator;
+use Generator;
 use Laminas\Cache\Exception;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheException;
@@ -18,6 +19,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use ReflectionProperty;
+use stdClass;
 
 /**
  * Test the PSR-16 decorator.
@@ -53,6 +55,16 @@ class SimpleCacheDecoratorTest extends TestCase
     /** @var SimpleCacheDecorator */
     private $cache;
 
+    /**
+     * @psalm-return Generator<non-empty-string,array{0:Capabilities}>
+     */
+    public function unsupportedCapabilities(): Generator
+    {
+        yield 'minimum key length <64 characters' => [
+            $this->getMockCapabilities(null, true, 60, 63)->reveal(),
+        ];
+    }
+
     protected function setUp(): void
     {
         $this->options = $this->prophesize(AdapterOptions::class);
@@ -69,13 +81,15 @@ class SimpleCacheDecoratorTest extends TestCase
     private function getMockCapabilities(
         array $supportedDataTypes = null,
         $staticTtl = true,
-        $minTtl = 60
+        $minTtl = 60,
+        $maxKeyLength = -1
     ) {
         $supportedDataTypes = $supportedDataTypes ?: $this->requiredTypes;
         $capabilities = $this->prophesize(Capabilities::class);
         $capabilities->getSupportedDatatypes()->willReturn($supportedDataTypes);
         $capabilities->getStaticTtl()->willReturn($staticTtl);
         $capabilities->getMinTtl()->willReturn($minTtl);
+        $capabilities->getMaxKeyLength()->willReturn($maxKeyLength);
 
         return $capabilities;
     }
@@ -88,9 +102,10 @@ class SimpleCacheDecoratorTest extends TestCase
         ObjectProphecy $storage,
         array $supportedDataTypes = null,
         $staticTtl = true,
-        $minTtl = 60
+        $minTtl = 60,
+        $maxKeyLength = -1
     ) {
-        $capabilities = $this->getMockCapabilities($supportedDataTypes, $staticTtl, $minTtl);
+        $capabilities = $this->getMockCapabilities($supportedDataTypes, $staticTtl, $minTtl, $maxKeyLength);
 
         $storage->getCapabilities()->will([$capabilities, 'reveal']);
     }
@@ -334,6 +349,27 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->expectException(SimpleCacheInvalidArgumentException::class);
         $this->expectExceptionMessage($expectedMessage);
         $this->cache->set($key, 'value');
+    }
+
+    public function testSetShouldAcknowledgeStorageAdapterMaxKeyLengthWithPsrDecorator()
+    {
+        $key_valid_length = str_repeat('a', 68);
+        $key_invalid_length = str_repeat('b', 252);
+
+        $storage = $this->prophesize(StorageInterface::class);
+        $storage->getOptions()->will([$this->options, 'reveal']);
+        $this->mockCapabilities($storage, null, false, 60, 251);
+        $storage->setItem($key_valid_length, 'value')->shouldBeCalledTimes(1)->willReturn(true);
+        $storage->setItem($key_invalid_length, 'value')->shouldNotBeCalled();
+
+        $cache = new SimpleCacheDecorator($storage->reveal());
+
+        $this->assertTrue($cache->set($key_valid_length, 'value'));
+
+        $this->expectException(SimpleCacheInvalidArgumentException::class);
+        $this->expectExceptionMessage('too long');
+
+        $cache->set($key_invalid_length, 'value');
     }
 
     public function testSetShouldReRaiseExceptionThrownByStorage()
@@ -814,5 +850,21 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->storage->setItems(['foo' => 'bar', 'boo' => 'baz'])->willReturn([]);
 
         self::assertTrue($this->cache->setMultiple(['foo' => 'bar', 'boo' => 'baz']));
+    }
+
+    /**
+     * @dataProvider unsupportedCapabilities
+     */
+    public function testWillThrowExceptionWhenStorageDoesNotFulfillMinimumRequirements(Capabilities $capabilities): void
+    {
+        $storage = $this->createMock(StorageInterface::class);
+        $storage
+            ->method('getCapabilities')
+            ->willReturn($capabilities);
+
+        $this->expectException(SimpleCacheInvalidArgumentException::class);
+        $this->expectExceptionMessage('does not fulfill the minimum requirements for PSR-16');
+
+        new SimpleCacheDecorator($storage);
     }
 }
