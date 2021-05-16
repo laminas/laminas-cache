@@ -5,7 +5,6 @@ namespace Laminas\Cache\Psr\SimpleCache;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
-use Exception;
 use Laminas\Cache\Exception\InvalidArgumentException as LaminasCacheInvalidArgumentException;
 use Laminas\Cache\Psr\SerializationTrait;
 use Laminas\Cache\Storage\Capabilities;
@@ -88,10 +87,8 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         $this->success = null;
         try {
             $result = $this->storage->getItem($key, $this->success);
-        } catch (Throwable $e) {
-            throw static::translateException($e);
-        } catch (Exception $e) {
-            throw static::translateException($e);
+        } catch (Throwable $throwable) {
+            throw static::translateThrowable($throwable);
         }
 
         $result = $result === null ? $default : $result;
@@ -127,10 +124,8 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
         try {
             $result = $this->storage->setItem($key, $value);
-        } catch (Throwable $e) {
-            throw static::translateException($e);
-        } catch (Exception $e) {
-            throw static::translateException($e);
+        } catch (Throwable $throwable) {
+            throw static::translateThrowable($throwable);
         } finally {
             $options->setTtl($previousTtl);
         }
@@ -147,9 +142,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
         try {
             return null !== $this->storage->removeItem($key);
-        } catch (Throwable $e) {
-            return false;
-        } catch (Exception $e) {
+        } catch (Throwable $throwable) {
             return false;
         }
     }
@@ -182,10 +175,8 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
         try {
             $results = $this->storage->getItems($keys);
-        } catch (Throwable $e) {
-            throw static::translateException($e);
-        } catch (Exception $e) {
-            throw static::translateException($e);
+        } catch (Throwable $throwable) {
+            throw static::translateThrowable($throwable);
         }
 
         foreach ($keys as $key) {
@@ -230,10 +221,8 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
         try {
             $result = $this->storage->setItems($values);
-        } catch (Throwable $e) {
-            throw static::translateException($e);
-        } catch (Exception $e) {
-            throw static::translateException($e);
+        } catch (Throwable $throwable) {
+            throw static::translateThrowable($throwable);
         } finally {
             $options->setTtl($previousTtl);
         }
@@ -265,9 +254,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
         try {
             $result = $this->storage->removeItems($keys);
-        } catch (Throwable $e) {
-            return false;
-        } catch (Exception $e) {
+        } catch (Throwable $throwable) {
             return false;
         }
 
@@ -293,24 +280,18 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
         try {
             return $this->storage->hasItem($key);
-        } catch (Throwable $e) {
-            throw static::translateException($e);
-        } catch (Exception $e) {
-            throw static::translateException($e);
+        } catch (Throwable $throwable) {
+            throw static::translateThrowable($throwable);
         }
     }
 
-    /**
-     * @param Throwable|Exception $e
-     * @return SimpleCacheException
-     */
-    private static function translateException($e)
+    private static function translateThrowable(Throwable $throwable): SimpleCacheException
     {
-        $exceptionClass = $e instanceof LaminasCacheInvalidArgumentException
+        $exceptionClass = $throwable instanceof LaminasCacheInvalidArgumentException
             ? SimpleCacheInvalidArgumentException::class
             : SimpleCacheException::class;
 
-        return new $exceptionClass($e->getMessage(), $e->getCode(), $e);
+        return new $exceptionClass($throwable->getMessage(), $throwable->getCode(), $throwable);
     }
 
     /**
