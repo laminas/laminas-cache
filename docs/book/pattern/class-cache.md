@@ -10,10 +10,6 @@ class being cached, and caches static properties.
 ```php
 use Laminas\Cache\Pattern\ClassCache;
 use Laminas\Cache\Pattern\PatternOptions;
-use Laminas\Cache\Storage\StorageInterface;
-
-/** @var StorageInterface $storage */
-$storage = null; // Can be any instance of StorageInterface
 
 $classCache = new ClassCache(
     $storage,
@@ -22,6 +18,10 @@ $classCache = new ClassCache(
     ])
 );
 ```
+
+> ### Storage Adapter
+>
+> The `$storage` adapter can be any adapter which implements the `StorageInterface`. Check out the [Pattern Quick Start](./intro.md#quick-start)-Section for a standard adapter which can be used here.
 
 ## Configuration Options
 
@@ -33,6 +33,31 @@ Option | Data Type | Default Value | Description
 `cache_by_default` | `bool` | `true` | Cache all method calls by default.
 `class_cache_methods` | `array` | `[]` | List of methods to cache (if `cache_by_default` is disabled).
 `class_non_cache_methods` | `array` | `[]` | List of methods to omit from caching (if `cache_by_default` is enabled).
+
+## Examples
+
+### Caching of Import Feeds
+
+```php
+use Laminas\Cache\Pattern\ClassCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$cachedFeedReader = new ClassCache(
+    $storage,
+    new PatternOptions([
+        'class' => \Laminas\Feed\Reader\Reader::class,
+        
+        // The feed reader doesn't output anything,
+        // so the output doesn't need to be caught and cached:
+        'cache_output' => false,
+    ])
+);
+
+$feed = $cachedFeedReader->call("import", array('http://www.planet-php.net/rdf/'));
+
+// OR
+$feed = $cachedFeedReader->import('http://www.planet-php.net/rdf/');
+```
 
 ## Available Methods
 
@@ -133,33 +158,4 @@ class ClassCache extends CallbackCache
         unset($class::$name);
     }
 }
-```
-
-## Examples
-
-### Caching of Import Feeds
-
-```php
-use Laminas\Cache\Pattern\ClassCache;
-use Laminas\Cache\Pattern\PatternOptions;
-use Laminas\Cache\Storage\StorageInterface;
-
-/** @var StorageInterface $storage */
-$storage = null; // Can be any instance of StorageInterface
-
-$cachedFeedReader = new ClassCache(
-    $storage,
-    new PatternOptions([
-        'class' => \Laminas\Feed\Reader\Reader::class,
-        
-        // The feed reader doesn't output anything,
-        // so the output doesn't need to be caught and cached:
-        'cache_output' => false,
-    ])
-);
-
-$feed = $cachedFeedReader->call("import", array('http://www.planet-php.net/rdf/'));
-
-// OR
-$feed = $cachedFeedReader->import('http://www.planet-php.net/rdf/');
 ```
