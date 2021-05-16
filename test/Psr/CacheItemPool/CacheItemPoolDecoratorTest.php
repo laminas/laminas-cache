@@ -920,4 +920,48 @@ final class CacheItemPoolDecoratorTest extends TestCase
         }
         parent::tearDown();
     }
+
+    public function testCanHandleRemoveItemsReturningNonArray(): void
+    {
+        $this->storage
+            ->expects(self::once())
+            ->method('removeItems')
+            ->with(['foo'])
+            ->willReturn(null);
+
+        self::assertFalse($this->adapter->deleteItems(['foo']));
+    }
+
+    /**
+     * @dataProvider deletionVerificationProvider
+     */
+    public function testWillVerifyKeyExistenceByUsingHasItemsWhenDeletionWasNotSuccessful(
+        bool $exists,
+        bool $successful
+    ): void {
+        $this->storage
+            ->expects(self::once())
+            ->method('removeItems')
+            ->with(['foo'])
+            ->willReturn(['foo']);
+
+        $this->storage
+            ->expects(self::once())
+            ->method('hasItems')
+            ->with(['foo'])
+            ->willReturn(['foo' => $exists]);
+
+        self::assertEquals($successful, $this->adapter->deleteItems(['foo']));
+    }
+
+    /**
+     * @return array<non-empty-string,array{0:bool,1:bool}>
+     */
+    public function deletionVerificationProvider(): array
+    {
+        return [
+            'deletion failed due to hasItems states the key still exists'       => [true, false],
+            'deletion successful due to hasItems states the key does not exist' => [false, true],
+        ];
+    }
 }
