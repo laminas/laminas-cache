@@ -40,7 +40,6 @@ class ClassCache extends CallbackCache
         $options   = $this->getOptions();
         $classname = $options->getClass();
         $method    = strtolower($method);
-        $callback  = $classname . '::' . $method;
 
         $cache = $options->getCacheByDefault();
         if ($cache) {
@@ -50,14 +49,11 @@ class ClassCache extends CallbackCache
         }
 
         if (! $cache) {
-            if ($args) {
-                return call_user_func_array($callback, $args);
-            } else {
-                return $classname::$method();
-            }
+            return $classname::$method(...$args);
         }
 
-        return parent::call($callback, $args);
+        $callable = $classname . '::' . $method;
+        return parent::call($callable, $args);
     }
 
     /**
