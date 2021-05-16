@@ -338,12 +338,12 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->expectExceptionMessage($expectedMessage);
         $this->cache->set($key, 'value');
     }
-    
+
     public function testSetShouldAcknowledgeStorageAdapterMaxKeyLengthWithPsrDecorator()
     {
         $key_valid_length = str_repeat('a', 68);
         $key_invalid_length = str_repeat('b', 252);
-        
+
         $storage = $this->prophesize(StorageInterface::class);
         $storage->getOptions()->will([$this->options, 'reveal']);
         $this->mockCapabilities($storage, null, false, 60, 251);
@@ -353,10 +353,10 @@ class SimpleCacheDecoratorTest extends TestCase
         $cache = new SimpleCacheDecorator($storage->reveal());
 
         $this->assertTrue($cache->set($key_valid_length, 'value'));
-        
+
         $this->expectException(SimpleCacheInvalidArgumentException::class);
         $this->expectExceptionMessage('too long');
-        
+
         $cache->set($key_invalid_length, 'value');
     }
 

@@ -342,19 +342,19 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
 
         // get storage adapter capability value
-        $max_key_length = $this->storage->getCapabilities()->getMaxKeyLength();
-        
-        if ($max_key_length === -1) {
+        $maximumKeyLength = $this->storage->getCapabilities()->getMaxKeyLength();
+
+        if ($maximumKeyLength === -1) {
             // default to <= 64 characters as per PSR-16
-            $max_key_length = 64;
+            $maximumKeyLength = 64;
         }
 
         //skip length check, if adapter capability reports unlimited key length
-        if ($max_key_length > 0 && preg_match('/^.{'.($max_key_length+1).',}/u', $key)) {
+        if ($maximumKeyLength > 0 && preg_match('/^.{'.($maximumKeyLength + 1).',}/u', $key)) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'Invalid key "%s" provided; key is too long. Must be no more than %d characters',
                 $key,
-                $max_key_length
+                $maximumKeyLength
             ));
         }
     }
