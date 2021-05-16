@@ -18,7 +18,11 @@ use function trigger_error;
 use const E_USER_DEPRECATED;
 
 /**
- * @phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+ * @deprecated Please do not use static factories anymore.
+ *             Inject {@see StorageAdapterFactoryInterface} if you want to create a storage instance.
+ *             Inject {@see StoragePluginFactoryInterface} if you want to create a plugin instance.
+ *
+ * phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
  */
 abstract class StorageFactory
 {
