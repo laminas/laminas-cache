@@ -418,7 +418,7 @@ class SimpleCacheDecoratorTest extends TestCase
 
         $cache = new SimpleCacheDecorator($storage);
 
-        $this->assertTrue($cache->set($validKeyLength, 'value'));
+        self::assertTrue($cache->set($validKeyLength, 'value'));
 
         $this->expectException(SimpleCacheInvalidArgumentException::class);
         $this->expectExceptionMessage('too long');
