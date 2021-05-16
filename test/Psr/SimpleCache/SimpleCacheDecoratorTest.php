@@ -3,6 +3,7 @@
 namespace LaminasTest\Cache\Psr\SimpleCache;
 
 use ArrayIterator;
+use Generator;
 use Laminas\Cache\Exception;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 use Laminas\Cache\Psr\SimpleCache\SimpleCacheException;
@@ -56,7 +57,17 @@ class SimpleCacheDecoratorTest extends TestCase
     /** @var SimpleCacheDecorator */
     private $cache;
 
-    public function setUp(): void
+    /**
+     * @psalm-return Generator<non-empty-string,array{0:Capabilities}>
+     */
+    public function unsupportedCapabilities(): Generator
+    {
+        yield 'minimum key length <64 characters' => [
+            $this->getMockCapabilities(null, true, 60, 63),
+        ];
+    }
+
+    protected function setUp(): void
     {
         $this->options = $this->createMock(AdapterOptions::class);
         $this->storage = $this->createMock(StorageInterface::class);
@@ -1099,5 +1110,21 @@ class SimpleCacheDecoratorTest extends TestCase
             ->willReturn([]);
 
         self::assertTrue($this->cache->setMultiple(['foo' => 'bar', 'boo' => 'baz']));
+    }
+
+    /**
+     * @dataProvider unsupportedCapabilities
+     */
+    public function testWillThrowExceptionWhenStorageDoesNotFulfillMinimumRequirements(Capabilities $capabilities): void
+    {
+        $storage = $this->createMock(StorageInterface::class);
+        $storage
+            ->method('getCapabilities')
+            ->willReturn($capabilities);
+
+        $this->expectException(SimpleCacheInvalidArgumentException::class);
+        $this->expectExceptionMessage('does not fulfill the minimum requirements for PSR-16');
+
+        new SimpleCacheDecorator($storage);
     }
 }

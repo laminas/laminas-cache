@@ -8,6 +8,7 @@ use DateTimeZone;
 use Exception;
 use Laminas\Cache\Exception\InvalidArgumentException as LaminasCacheInvalidArgumentException;
 use Laminas\Cache\Psr\SerializationTrait;
+use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
@@ -59,6 +60,12 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /** @var DateTimeZone */
     private $utc;
 
+    /**
+     * @var int
+     * @psalm-var 0|positive-int
+     */
+    private $maximumKeyLength;
+
     public function __construct(StorageInterface $storage)
     {
         if ($this->isSerializationRequired($storage)) {
@@ -70,7 +77,10 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             ));
         }
 
-        $this->memoizeTtlCapabilities($storage);
+        $capabilities = $storage->getCapabilities();
+        $this->memoizeTtlCapabilities($capabilities);
+        $this->memoizeMaximumKeyLengthCapability($storage, $capabilities);
+
         $this->storage = $storage;
         $this->utc     = new DateTimeZone('UTC');
     }
@@ -336,32 +346,23 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             ));
         }
 
-        // get storage adapter capability value
-        $maximumKeyLength = $this->storage->getCapabilities()->getMaxKeyLength();
-
-        if ($maximumKeyLength === -1) {
-            // default to <= 64 characters as per PSR-16
-            $maximumKeyLength = 64;
-        }
-
-        //skip length check, if adapter capability reports unlimited key length
-        if ($maximumKeyLength > 0 && preg_match('/^.{' . ($maximumKeyLength + 1) . ',}/u', $key)) {
+        if (
+            $this->maximumKeyLength !== Capabilities::UNLIMITED_KEY_LENGTH
+            && preg_match('/^.{' . ($this->maximumKeyLength + 1) . ',}/u', $key)
+        ) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'Invalid key "%s" provided; key is too long. Must be no more than %d characters',
                 $key,
-                $maximumKeyLength
+                $this->maximumKeyLength
             ));
         }
     }
 
     /**
      * Determine if the storage adapter provides per-item TTL capabilities
-     *
-     * @return void
      */
-    private function memoizeTtlCapabilities(StorageInterface $storage)
+    private function memoizeTtlCapabilities(Capabilities $capabilities): void
     {
-        $capabilities             = $storage->getCapabilities();
         $this->providesPerItemTtl = $capabilities->getStaticTtl() && (0 < $capabilities->getMinTtl());
     }
 
@@ -445,5 +446,30 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             $array[$key] = $value;
         }
         return $array;
+    }
+
+    private function memoizeMaximumKeyLengthCapability(StorageInterface $storage, Capabilities $capabilities): void
+    {
+        $maximumKeyLength = $capabilities->getMaxKeyLength();
+
+        if ($maximumKeyLength === Capabilities::UNLIMITED_KEY_LENGTH) {
+            $this->maximumKeyLength = Capabilities::UNLIMITED_KEY_LENGTH;
+            return;
+        }
+
+        if ($maximumKeyLength === Capabilities::UNKNOWN_KEY_LENGTH) {
+            // For backward compatibility, assume adapters which do not provide a maximum key length do support 64 chars
+            $maximumKeyLength = 64;
+        }
+
+        if ($maximumKeyLength < 64) {
+            throw new SimpleCacheInvalidArgumentException(sprintf(
+                'The storage adapter "%s" does not fulfill the minimum requirements for PSR-16:'
+                . ' The maximum key length capability must allow at least 64 characters.',
+                get_class($storage)
+            ));
+        }
+
+        $this->maximumKeyLength = $maximumKeyLength;
     }
 }
