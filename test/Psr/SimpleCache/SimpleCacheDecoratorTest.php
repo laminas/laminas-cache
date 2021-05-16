@@ -339,13 +339,10 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->cache->set($key, 'value');
     }
     
-    /**
-     * @depends testSetShouldRaisePsrInvalidArgumentExceptionForInvalidKeys
-     */
     public function testSetShouldAcknowledgeStorageAdapterMaxKeyLengthWithPsrDecorator()
     {
-        $key_valid_length = str_repeat('abcd', 17); // length 68
-        $key_invalid_length = str_repeat('abcd', 63); // length 252
+        $key_valid_length = str_repeat('a', 68);
+        $key_invalid_length = str_repeat('b', 252);
         
         $storage = $this->prophesize(StorageInterface::class);
         $storage->getOptions()->will([$this->options, 'reveal']);
