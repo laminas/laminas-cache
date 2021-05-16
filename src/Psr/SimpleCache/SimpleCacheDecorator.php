@@ -5,7 +5,6 @@ namespace Laminas\Cache\Psr\SimpleCache;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
-use Exception;
 use Laminas\Cache\Exception\InvalidArgumentException as LaminasCacheInvalidArgumentException;
 use Laminas\Cache\Psr\SerializationTrait;
 use Laminas\Cache\Storage\Capabilities;
@@ -96,7 +95,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $result = $this->storage->getItem($key, $this->success);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            throw static::translateThrowable($e);
         }
 
         $result = $result ?? $default;
@@ -133,7 +132,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $result = $this->storage->setItem($key, $value);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            throw static::translateThrowable($e);
         } finally {
             $options->setTtl($previousTtl);
         }
@@ -184,7 +183,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $results = $this->storage->getItems($keys);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            throw static::translateThrowable($e);
         }
 
         foreach ($keys as $key) {
@@ -230,7 +229,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $result = $this->storage->setItems($values);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            throw static::translateThrowable($e);
         } finally {
             $options->setTtl($previousTtl);
         }
@@ -289,21 +288,17 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             return $this->storage->hasItem($key);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            throw static::translateThrowable($e);
         }
     }
 
-    /**
-     * @param Throwable|Exception $e
-     * @return SimpleCacheException
-     */
-    private static function translateException($e)
+    private static function translateThrowable(Throwable $throwable): SimpleCacheException
     {
-        $exceptionClass = $e instanceof LaminasCacheInvalidArgumentException
+        $exceptionClass = $throwable instanceof LaminasCacheInvalidArgumentException
             ? SimpleCacheInvalidArgumentException::class
             : SimpleCacheException::class;
 
-        return new $exceptionClass($e->getMessage(), $e->getCode(), $e);
+        return new $exceptionClass($throwable->getMessage(), $throwable->getCode(), $throwable);
     }
 
     /**
