@@ -8,6 +8,9 @@ use function in_array;
 use function md5;
 use function strtolower;
 
+/**
+ * @deprecated This pattern will be removed in 3.0.0.
+ */
 class ClassCache extends CallbackCache
 {
     public function setOptions(PatternOptions $options)
