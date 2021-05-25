@@ -7,36 +7,35 @@ use Laminas\Cache;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use LaminasTest\Cache\Storage\TestAsset\ClearExpiredMockAdapter;
+use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
-/**
- * @covers Laminas\Cache\Storage\Plugin\ClearExpiredByFactor
- */
-class ClearExpiredByFactorTest extends CommonPluginTest
+final class ClearExpiredByFactorTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    // @codingStandardsIgnoreStart
     /**
-     * The storage adapter
-     *
-     * @var LaminasTest\Cache\Storage\TestAsset\MockAdapter
+     * @var MockAdapter
      */
-    protected $_adapter;
-    // @codingStandardsIgnoreEnd
+    protected $adapter;
+
+    /**
+     * @var Cache\Storage\Plugin\PluginOptions
+     */
+    private $options;
 
     protected function setUp(): void
     {
-        $this->_adapter = new ClearExpiredMockAdapter();
-        $this->_options = new Cache\Storage\Plugin\PluginOptions([
+        $this->adapter = new ClearExpiredMockAdapter();
+        $this->options = new Cache\Storage\Plugin\PluginOptions([
             'clearing_factor' => 1,
         ]);
-        $this->_plugin  = new Cache\Storage\Plugin\ClearExpiredByFactor();
-        $this->_plugin->setOptions($this->_options);
+        $this->plugin  = new Cache\Storage\Plugin\ClearExpiredByFactor();
+        $this->plugin->setOptions($this->options);
 
         parent::setUp();
     }
 
-    public function getCommonPluginNamesProvider()
+    public function getCommonPluginNamesProvider(): array
     {
         return [
             ['clear_expired_by_factor'],
@@ -46,9 +45,9 @@ class ClearExpiredByFactorTest extends CommonPluginTest
         ];
     }
 
-    public function testAddPlugin()
+    public function testAddPlugin(): void
     {
-        $this->_adapter->addPlugin($this->_plugin);
+        $this->adapter->addPlugin($this->plugin);
 
         // check attached callbacks
         $expectedListeners = [
@@ -58,49 +57,49 @@ class ClearExpiredByFactorTest extends CommonPluginTest
             'addItems.post' => 'clearExpiredByFactor',
         ];
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
-            $listeners = $this->getArrayOfListenersForEvent($eventName, $this->_adapter->getEventManager());
+            $listeners = $this->getArrayOfListenersForEvent($eventName, $this->adapter->getEventManager());
 
             // event should attached only once
-            $this->assertSame(1, count($listeners));
+            self::assertCount(1, $listeners);
 
             // check expected callback method
             $cb = array_shift($listeners);
-            $this->assertArrayHasKey(0, $cb);
-            $this->assertSame($this->_plugin, $cb[0]);
-            $this->assertArrayHasKey(1, $cb);
-            $this->assertSame($expectedCallbackMethod, $cb[1]);
+            self::assertArrayHasKey(0, $cb);
+            self::assertSame($this->plugin, $cb[0]);
+            self::assertArrayHasKey(1, $cb);
+            self::assertSame($expectedCallbackMethod, $cb[1]);
         }
     }
 
-    public function testRemovePlugin()
+    public function testRemovePlugin(): void
     {
-        $this->_adapter->addPlugin($this->_plugin);
-        $this->_adapter->removePlugin($this->_plugin);
+        $this->adapter->addPlugin($this->plugin);
+        $this->adapter->removePlugin($this->plugin);
 
         // no events should be attached
-        $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
+        self::assertCount(0, $this->getEventsFromEventManager($this->adapter->getEventManager()));
     }
 
-    public function testClearExpiredByFactor()
+    public function testClearExpiredByFactor(): void
     {
-        $adapter = $this->getMockBuilder(get_class($this->_adapter))
+        $adapter = $this->getMockBuilder(get_class($this->adapter))
             ->setMethods(['clearExpired'])
             ->getMock();
-        $this->_options->setClearingFactor(1);
+        $this->options->setClearingFactor(1);
 
         // test clearByNamespace will be called
         $adapter
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('clearExpired')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // call event callback
         $result = true;
         $event = new PostEvent('setItem.post', $adapter, new ArrayObject([
             'options' => [],
         ]), $result);
-        $this->_plugin->clearExpiredByFactor($event);
+        $this->plugin->clearExpiredByFactor($event);
 
-        $this->assertTrue($event->getResult());
+        self::assertTrue($event->getResult());
     }
 }

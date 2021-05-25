@@ -3,35 +3,32 @@
 namespace LaminasTest\Cache\Storage\Plugin;
 
 use Laminas\Cache;
-use Laminas\Cache\Storage\Event;
+use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 
-/**
- * @group      Laminas_Cache
- * @covers Laminas\Cache\Storage\Plugin\IgnoreUserAbort<extended>
- */
-class IgnoreUserAbortTest extends CommonPluginTest
+final class IgnoreUserAbortTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    // @codingStandardsIgnoreStart
     /**
-     * The storage adapter
-     *
-     * @var \Laminas\Cache\Storage\Adapter\AbstractAdapter
+     * @var AbstractAdapter
      */
-    protected $_adapter;
-    // @codingStandardsIgnoreEnd
+    protected $adapter;
+
+    /**
+     * @var Cache\Storage\Plugin\PluginOptions
+     */
+    private $options;
 
     protected function setUp(): void
     {
-        $this->_adapter = $this->getMockForAbstractClass('Laminas\Cache\Storage\Adapter\AbstractAdapter');
-        $this->_options = new Cache\Storage\Plugin\PluginOptions();
-        $this->_plugin  = new Cache\Storage\Plugin\IgnoreUserAbort();
-        $this->_plugin->setOptions($this->_options);
+        $this->adapter = $this->getMockForAbstractClass(AbstractAdapter::class);
+        $this->options = new Cache\Storage\Plugin\PluginOptions();
+        $this->plugin  = new Cache\Storage\Plugin\IgnoreUserAbort();
+        $this->plugin->setOptions($this->options);
     }
 
-    public function getCommonPluginNamesProvider()
+    public function getCommonPluginNamesProvider(): array
     {
         return [
             ['ignore_user_abort'],
@@ -41,9 +38,9 @@ class IgnoreUserAbortTest extends CommonPluginTest
         ];
     }
 
-    public function testAddPlugin()
+    public function testAddPlugin(): void
     {
-        $this->_adapter->addPlugin($this->_plugin);
+        $this->adapter->addPlugin($this->plugin);
 
         // check attached callbacks
         $expectedListeners = [
@@ -92,26 +89,26 @@ class IgnoreUserAbortTest extends CommonPluginTest
             'decrementItems.exception' => 'onAfter',
         ];
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
-            $listeners = $this->getArrayOfListenersForEvent($eventName, $this->_adapter->getEventManager());
+            $listeners = $this->getArrayOfListenersForEvent($eventName, $this->adapter->getEventManager());
 
             // event should attached only once
-            $this->assertSame(1, count($listeners));
+            self::assertCount(1, $listeners);
 
             // check expected callback method
             $cb = array_shift($listeners);
-            $this->assertArrayHasKey(0, $cb);
-            $this->assertSame($this->_plugin, $cb[0]);
-            $this->assertArrayHasKey(1, $cb);
-            $this->assertSame($expectedCallbackMethod, $cb[1]);
+            self::assertArrayHasKey(0, $cb);
+            self::assertSame($this->plugin, $cb[0]);
+            self::assertArrayHasKey(1, $cb);
+            self::assertSame($expectedCallbackMethod, $cb[1]);
         }
     }
 
-    public function testRemovePlugin()
+    public function testRemovePlugin(): void
     {
-        $this->_adapter->addPlugin($this->_plugin);
-        $this->_adapter->removePlugin($this->_plugin);
+        $this->adapter->addPlugin($this->plugin);
+        $this->adapter->removePlugin($this->plugin);
 
         // no events should be attached
-        $this->assertEquals(0, count($this->getEventsFromEventManager($this->_adapter->getEventManager())));
+        self::assertCount(0, $this->getEventsFromEventManager($this->adapter->getEventManager()));
     }
 }
