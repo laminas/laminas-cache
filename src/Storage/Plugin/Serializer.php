@@ -11,6 +11,7 @@ namespace Laminas\Cache\Storage\Plugin;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\Event;
 use Laminas\Cache\Storage\PostEvent;
+use Laminas\Cache\Storage\StorageInterface;
 use Laminas\EventManager\EventManagerInterface;
 use stdClass;
 
@@ -180,6 +181,7 @@ class Serializer extends AbstractPlugin
      */
     public function onDecrementItemPre(Event $event)
     {
+        /** @var StorageInterface $storage */
         $storage  = $event->getTarget();
         $params   = $event->getParams();
         $success  = null;
@@ -188,7 +190,7 @@ class Serializer extends AbstractPlugin
         $newValue = $oldValue - $params['value'];
 
         if ($success) {
-            $storage->checkAndSetItem($casToken, $params['key'], $oldValue + $params['value']);
+            $storage->checkAndSetItem($casToken, $params['key'], $newValue);
             $result = $newValue;
         } else {
             $result = false;
