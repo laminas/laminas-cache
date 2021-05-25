@@ -2,28 +2,26 @@
 
 namespace LaminasTest\Cache\Storage\Plugin;
 
+use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\PluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
+use Laminas\Cache\Storage\Plugin\PluginOptions;
 
-/**
- * PHPUnit test case
- */
-
-/**
- * @group      Laminas_Cache
- * @covers Laminas\Cache\Storage\Plugin\PluginOptions<extended>
- */
-abstract class CommonPluginTest extends TestCase
+abstract class AbstractCommonPluginTest extends TestCase
 {
-    // @codingStandardsIgnoreStart
     /**
-     * The storage plugin
-     *
-     * @var \Laminas\Cache\Storage\Plugin\PluginInterface
+     * @var PluginInterface
      */
-    protected $_plugin;
-    // @codingStandardsIgnoreEnd
+    protected $plugin;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        if (! $this->plugin instanceof PluginInterface) {
+            self::fail('Cannot detect plugin instance.');
+        }
+    }
 
     /**
      * A data provider for common storage plugin names
@@ -36,7 +34,7 @@ abstract class CommonPluginTest extends TestCase
     public function testPluginManagerWithCommonNames($commonPluginName)
     {
         $pluginManager = new PluginManager(new ServiceManager);
-        $this->assertTrue(
+        self::assertTrue(
             $pluginManager->has($commonPluginName),
             "Storage plugin name '{$commonPluginName}' not found in storage plugin manager"
         );
@@ -44,14 +42,14 @@ abstract class CommonPluginTest extends TestCase
 
     public function testOptionObjectAvailable()
     {
-        $options = $this->_plugin->getOptions();
-        $this->assertInstanceOf('Laminas\Cache\Storage\Plugin\PluginOptions', $options);
+        $options = $this->plugin->getOptions();
+        self::assertInstanceOf(PluginOptions::class, $options);
     }
 
     public function testOptionsGetAndSetDefault()
     {
-        $options = $this->_plugin->getOptions();
-        $this->_plugin->setOptions($options);
-        $this->assertSame($options, $this->_plugin->getOptions());
+        $options = $this->plugin->getOptions();
+        $this->plugin->setOptions($options);
+        self::assertSame($options, $this->plugin->getOptions());
     }
 }
