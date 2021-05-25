@@ -4,46 +4,34 @@ namespace LaminasTest\Cache\Storage\Plugin;
 
 use ArrayObject;
 use Laminas\Cache;
-use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
+use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
 use function array_keys;
 use function array_shift;
-use function count;
 use function serialize;
 use function substr;
 
-/**
- * @group      Laminas_Cache
- * @covers \Laminas\Cache\Storage\Plugin\Serializer<extended>
- */
-class SerializerTestAbstract extends AbstractCommonPluginTest
+final class SerializerTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    /**
-     * The storage adapter
-     *
-     * @var AbstractAdapter
-     */
+    /** @var MockAdapter */
     protected $adapter;
 
     /** @var Cache\Storage\Plugin\PluginOptions */
     private $options;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->adapter = $this->getMockForAbstractClass(AbstractAdapter::class);
+        $this->adapter = new MockAdapter();
         $this->options = new Cache\Storage\Plugin\PluginOptions();
         $this->plugin  = new Cache\Storage\Plugin\Serializer();
         $this->plugin->setOptions($this->options);
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
-     */
-    public function getCommonPluginNamesProvider()
+    public function getCommonPluginNamesProvider(): array
     {
         return [
             'lowercase' => ['serializer'],
@@ -78,7 +66,7 @@ class SerializerTestAbstract extends AbstractCommonPluginTest
             $listeners = $this->getArrayOfListenersForEvent($eventName, $events);
 
             // event should attached only once
-            self::assertSame(1, count($listeners));
+            self::assertCount(1, $listeners);
 
             // check expected callback method
             $cb = array_shift($listeners);
@@ -87,19 +75,12 @@ class SerializerTestAbstract extends AbstractCommonPluginTest
             self::assertArrayHasKey(1, $cb);
             self::assertSame($expectedCallbackMethod, $cb[1]);
 
-            $expectedPriority = -100;
-
             // check expected priority
             if (substr($eventName, -4) === '.pre') {
-                $expectedPriority = 100;
+                self::assertListenerAtPriority($cb, 100, $eventName, $events);
+            } else {
+                self::assertListenerAtPriority($cb, -100, $eventName, $events);
             }
-
-            $this->assertListenerAtPriority(
-                $cb,
-                $expectedPriority,
-                $eventName,
-                $events
-            );
         }
     }
 
@@ -109,7 +90,7 @@ class SerializerTestAbstract extends AbstractCommonPluginTest
         $this->adapter->removePlugin($this->plugin);
 
         // no events should be attached
-        self::assertEquals(0, count($this->getEventsFromEventManager($this->adapter->getEventManager())));
+        self::assertCount(0, $this->getEventsFromEventManager($this->adapter->getEventManager()));
     }
 
     public function testUnserializeOnReadItem(): void

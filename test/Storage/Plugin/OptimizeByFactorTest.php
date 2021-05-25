@@ -4,54 +4,41 @@ namespace LaminasTest\Cache\Storage\Plugin;
 
 use ArrayObject;
 use Laminas\Cache;
+use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
-use LaminasTest\Cache\Storage\TestAsset\ClearExpiredMockAdapter;
-use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
+use LaminasTest\Cache\Storage\TestAsset\OptimizableMockAdapter;
 
 use function array_shift;
-use function count;
 use function get_class;
 
-/**
- * @covers \Laminas\Cache\Storage\Plugin\ClearExpiredByFactor
- */
-class ClearExpiredByFactorTestAbstract extends AbstractCommonPluginTest
+final class OptimizeByFactorTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    /**
-     * The storage adapter
-     *
-     * @var MockAdapter
-     */
+    /** @var AbstractAdapter */
     protected $adapter;
 
     /** @var Cache\Storage\Plugin\PluginOptions */
     private $options;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->adapter = new ClearExpiredMockAdapter();
+        $this->adapter = new OptimizableMockAdapter();
         $this->options = new Cache\Storage\Plugin\PluginOptions([
-            'clearing_factor' => 1,
+            'optimizing_factor' => 1,
         ]);
-        $this->plugin  = new Cache\Storage\Plugin\ClearExpiredByFactor();
+        $this->plugin  = new Cache\Storage\Plugin\OptimizeByFactor();
         $this->plugin->setOptions($this->options);
-
-        parent::setUp();
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
-     */
-    public function getCommonPluginNamesProvider()
+    public function getCommonPluginNamesProvider(): array
     {
         return [
-            ['clear_expired_by_factor'],
-            ['clearexpiredbyfactor'],
-            ['ClearExpiredByFactor'],
-            ['clearExpiredByFactor'],
+            'lowercase with underscore' => ['optimize_by_factor'],
+            'lowercase'                 => ['optimizebyfactor'],
+            'UpperCamelCase'            => ['OptimizeByFactor'],
+            'camelCase'                 => ['optimizeByFactor'],
         ];
     }
 
@@ -61,16 +48,14 @@ class ClearExpiredByFactorTestAbstract extends AbstractCommonPluginTest
 
         // check attached callbacks
         $expectedListeners = [
-            'setItem.post'  => 'clearExpiredByFactor',
-            'setItems.post' => 'clearExpiredByFactor',
-            'addItem.post'  => 'clearExpiredByFactor',
-            'addItems.post' => 'clearExpiredByFactor',
+            'removeItem.post'  => 'optimizeByFactor',
+            'removeItems.post' => 'optimizeByFactor',
         ];
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
             $listeners = $this->getArrayOfListenersForEvent($eventName, $this->adapter->getEventManager());
 
             // event should attached only once
-            self::assertSame(1, count($listeners));
+            self::assertCount(1, $listeners);
 
             // check expected callback method
             $cb = array_shift($listeners);
@@ -87,28 +72,27 @@ class ClearExpiredByFactorTestAbstract extends AbstractCommonPluginTest
         $this->adapter->removePlugin($this->plugin);
 
         // no events should be attached
-        self::assertEquals(0, count($this->getEventsFromEventManager($this->adapter->getEventManager())));
+        self::assertCount(0, $this->getEventsFromEventManager($this->adapter->getEventManager()));
     }
 
-    public function testClearExpiredByFactor(): void
+    public function testOptimizeByFactor(): void
     {
         $adapter = $this->getMockBuilder(get_class($this->adapter))
-            ->setMethods(['clearExpired'])
+            ->setMethods(['optimize'])
             ->getMock();
-        $this->options->setClearingFactor(1);
 
-        // test clearByNamespace will be called
+        // test optimize will be called
         $adapter
             ->expects($this->once())
-            ->method('clearExpired')
-            ->will($this->returnValue(true));
+            ->method('optimize');
 
         // call event callback
         $result = true;
-        $event  = new PostEvent('setItem.post', $adapter, new ArrayObject([
+        $event  = new PostEvent('removeItem.post', $adapter, new ArrayObject([
             'options' => [],
         ]), $result);
-        $this->plugin->clearExpiredByFactor($event);
+
+        $this->plugin->optimizeByFactor($event);
 
         self::assertTrue($event->getResult());
     }

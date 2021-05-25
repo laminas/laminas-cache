@@ -11,26 +11,18 @@ use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
 use function array_shift;
-use function count;
 
-/**
- * @covers \Laminas\Cache\Storage\Plugin\ExceptionHandler<extended>
- */
-class ExceptionHandlerTestAbstract extends AbstractCommonPluginTest
+final class ExceptionHandlerTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    /**
-     * The storage adapter
-     *
-     * @var AbstractAdapter
-     */
+    /** @var AbstractAdapter */
     protected $adapter;
 
     /** @var Cache\Storage\Plugin\PluginOptions */
     private $options;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->adapter = new MockAdapter();
         $this->options = new Cache\Storage\Plugin\PluginOptions();
@@ -40,10 +32,7 @@ class ExceptionHandlerTestAbstract extends AbstractCommonPluginTest
         parent::setUp();
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
-     */
-    public function getCommonPluginNamesProvider()
+    public function getCommonPluginNamesProvider(): array
     {
         return [
             'lowercase with underscore' => ['exception_handler'],
@@ -86,7 +75,7 @@ class ExceptionHandlerTestAbstract extends AbstractCommonPluginTest
             $listeners = $this->getArrayOfListenersForEvent($eventName, $this->adapter->getEventManager());
 
             // event should attached only once
-            self::assertSame(1, count($listeners));
+            self::assertCount(1, $listeners);
 
             // check expected callback method
             $cb = array_shift($listeners);
@@ -103,7 +92,7 @@ class ExceptionHandlerTestAbstract extends AbstractCommonPluginTest
         $this->adapter->removePlugin($this->plugin);
 
         // no events should be attached
-        self::assertEquals(0, count($this->getEventsFromEventManager($this->adapter->getEventManager())));
+        self::assertCount(0, $this->getEventsFromEventManager($this->adapter->getEventManager()));
     }
 
     public function testOnExceptionCallCallback(): void
