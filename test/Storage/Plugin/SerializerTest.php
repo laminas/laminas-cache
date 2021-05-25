@@ -134,4 +134,31 @@ final class SerializerTest extends AbstractCommonPluginTest
         self::assertSame(456, $values['key2'], "Item 'key2' was not unserialized");
         self::assertArrayNotHasKey('missing', $values, 'Missing item should not be present in the result');
     }
+
+    public function testOnDecrementItemPreWillDecrementValue(): void
+    {
+        $adapter = $this->createMock(Cache\Storage\StorageInterface::class);
+        $adapter
+            ->expects(self::once())
+            ->method('getItem')
+            ->willReturnCallback(static function (string $key, &$success, &$casToken): int {
+                $success = true;
+                $casToken = 10;
+
+                return $casToken;
+            });
+
+        $adapter
+            ->expects(self::once())
+            ->method('checkAndSetItem')
+            ->with(10, 'foo', 5)
+            ->willReturn(true);
+
+        $event = new Event('', $adapter, new ArrayObject([
+            'key' => 'foo',
+            'value' => 5,
+        ]));
+
+        $this->_plugin->onDecrementItemPre($event);
+    }
 }
