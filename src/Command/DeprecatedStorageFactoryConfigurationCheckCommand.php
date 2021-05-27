@@ -64,7 +64,7 @@ final class DeprecatedStorageFactoryConfigurationCheckCommand extends Command
             ->setDescription(self::DESCRIPTION);
     }
 
-    public function run(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (! $this->projectConfigurationContainsAnyCacheConfiguration()) {
             $output->writeln(self::MESSAGE_PROJECT_DOES_NOT_CONTAIN_CACHE_CONFIGURATIONS);
