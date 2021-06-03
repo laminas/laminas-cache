@@ -743,11 +743,13 @@ Name | Data Type | Default Value | Description
 
 ## Redis Adapter
 
-`Laminas\Cache\Storage\Adapter\Redis` stores cache items over the redis protocol
-using the PHP extension [redis](https://github.com/nicolasff/phpredis).
+`Laminas\Cache\Storage\Adapter\Redis` stores cache items over the [Redis](https://redis.io) protocol
+using the PHP extension [PhpRedis](https://github.com/phpredis/phpredis).
 
 This adapter implements the following interfaces:
 
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
 - `Laminas\Cache\Storage\FlushableInterface`
 - `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
@@ -756,14 +758,14 @@ This adapter implements the following interfaces:
 Capability | Value
 ---------- | -----
 `supportedDatatypes` | `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | none
+`supportedMetadata` | ttl (Redis v2+)
 `minTtl` | 1
 `maxTtl` | 0
 `staticTtl` | `true`
 `ttlPrecision` | 1
 `useRequestTime` | `false`
 `lockOnExpire` | 0
-`maxKeyLength` | 255
+`maxKeyLength` | 512000000 (in Redis v3+, 255 otherwise)
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
 
@@ -772,18 +774,59 @@ Capability | Value
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
 `database` | `integer` | 0 | Set database identifier.
-`lib_options` | `array` | `[]` | Associative array of redis options where the array key is the option name.
+`lib_options` | `array` | `[]` | Associative array of Redis options where the array key is the option name.
 `namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
 `password` | `string` | "" | Set password.
 `persistent_id` | `string` | | Set persistent id (name of the connection, leave blank to not use a persistent connection).
-`resource_manager` | `string` | | Set the redis resource manager to use
-`server` | | | See below.
+`resource_manager` | `string` | "" | Set the Redis resource manager to use
+`server` | `string\|array` | "" | See below.
 
 `server` can be described as any of the following:
 
 - URI: `/path/to/sock.sock`
 - Associative array: `['host' => <host>[, 'port' => <port>[, 'timeout' => <timeout>]]]`
 - List: `[<host>[, <port>, [, <timeout>]]]`
+
+## RedisCluster Adapter
+
+`Laminas\Cache\Storage\Adapter\RedisCluster` stores cache items over the [Redis cluster](https://github.com/phpredis/phpredis#redis-cluster-support) protocol
+using the PHP extension [PhpRedis](https://github.com/phpredis/phpredis).
+
+This adapter implements the following interfaces:
+
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+
+### Capabilities
+
+Capability | Value
+---------- | -----
+`supportedDatatypes` | `string`, `array` (serialized), `object` (serialized)
+`supportedMetadata` | ttl (Redis v2+)
+`minTtl` | 1
+`maxTtl` | 0
+`staticTtl` | `true`
+`ttlPrecision` | 1
+`useRequestTime` | `false`
+`lockOnExpire` | 0
+`maxKeyLength` | 512000000 (in Redis v3+, 255 otherwise)
+`namespaceIsPrefix` | `true`
+`namespaceSeparator` | none
+
+### Adapter Specific Options
+
+Name | Data Type | Default Value | Description
+---- | --------- | ------------- | -----------
+`lib_options` | `array` | `[]` | Associative array of Redis options where the array key is the options constant value (see `RedisCluster::OPT_*` [constants](https://github.com/JetBrains/phpstorm-stubs/blob/master/redis/RedisCluster.php) for details).
+`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
+`password` | `string` | "" | Password to authenticate with Redis server
+`name` | `string` | "" | Name to determine configuration from [php.ini](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#loading-a-cluster-configuration-by-name) (**MUST NOT** be combined with `seeds`)
+`seeds` | `array` | `[]` | List of strings containing `<hostname>:<port>` (**MUST NOT** be combined with `name`)
+`timeout` | `float` | `1.0` | Timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.
+`read_timeout` | `float` | `2.0` | Read timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.
+`persistent` | `bool` | `false` | Flag to specify whether to create a persistent connection or not
+`version` | `string` | "" | The Redis server version. **MUST** be specified in a [Semantic Versioning 2.0.0](https://semver.org/#semantic-versioning-200) format. This information is used to determine some features/capabilities without opening a connection to the server.
 
 ## Memory Adapter
 
