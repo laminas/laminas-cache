@@ -395,6 +395,10 @@
                     </li>
                 
                     <li class="toc__entry">
+                        <a href="#rediscluster-adapter" class="toc__link nav-link">RedisCluster Adapter</a>
+                    </li>
+                
+                    <li class="toc__entry">
                         <a href="#memory-adapter" class="toc__link nav-link">Memory Adapter</a>
                     </li>
                 
@@ -1494,10 +1498,12 @@ based on <a href="http://libmemcached.org/">Libmemcached</a>.</p>
 </tbody>
 </table></div>
 <h2 id="redis-adapter">Redis Adapter</h2>
-<p><code>Laminas\Cache\Storage\Adapter\Redis</code> stores cache items over the redis protocol
-using the PHP extension <a href="https://github.com/nicolasff/phpredis">redis</a>.</p>
+<p><code>Laminas\Cache\Storage\Adapter\Redis</code> stores cache items over the <a href="https://redis.io">Redis</a> protocol
+using the PHP extension <a href="https://github.com/phpredis/phpredis">PhpRedis</a>.</p>
 <p>This adapter implements the following interfaces:</p>
 <ul>
+<li><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByPrefixInterface</code></li>
 <li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
 <li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
 </ul>
@@ -1516,7 +1522,7 @@ using the PHP extension <a href="https://github.com/nicolasff/phpredis">redis</a
 </tr>
 <tr>
 <td><code>supportedMetadata</code></td>
-<td>none</td>
+<td>ttl (Redis v2+)</td>
 </tr>
 <tr>
 <td><code>minTtl</code></td>
@@ -1544,7 +1550,7 @@ using the PHP extension <a href="https://github.com/nicolasff/phpredis">redis</a
 </tr>
 <tr>
 <td><code>maxKeyLength</code></td>
-<td>255</td>
+<td>512000000 (in Redis v3+, 255 otherwise)</td>
 </tr>
 <tr>
 <td><code>namespaceIsPrefix</code></td>
@@ -1577,7 +1583,7 @@ using the PHP extension <a href="https://github.com/nicolasff/phpredis">redis</a
 <td><code>lib_options</code></td>
 <td><code>array</code></td>
 <td><code>[]</code></td>
-<td>Associative array of redis options where the array key is the option name.</td>
+<td>Associative array of Redis options where the array key is the option name.</td>
 </tr>
 <tr>
 <td><code>namespace_separator</code></td>
@@ -1600,13 +1606,13 @@ using the PHP extension <a href="https://github.com/nicolasff/phpredis">redis</a
 <tr>
 <td><code>resource_manager</code></td>
 <td><code>string</code></td>
-<td></td>
-<td>Set the redis resource manager to use</td>
+<td>""</td>
+<td>Set the Redis resource manager to use</td>
 </tr>
 <tr>
 <td><code>server</code></td>
-<td></td>
-<td></td>
+<td><code>string|array</code></td>
+<td>""</td>
 <td>See below.</td>
 </tr>
 </tbody>
@@ -1617,6 +1623,137 @@ using the PHP extension <a href="https://github.com/nicolasff/phpredis">redis</a
 <li>Associative array: <code>['host' =&gt; &lt;host&gt;[, 'port' =&gt; &lt;port&gt;[, 'timeout' =&gt; &lt;timeout&gt;]]]</code></li>
 <li>List: <code>[&lt;host&gt;[, &lt;port&gt;, [, &lt;timeout&gt;]]]</code></li>
 </ul>
+<h2 id="rediscluster-adapter">RedisCluster Adapter</h2>
+<p><code>Laminas\Cache\Storage\Adapter\RedisCluster</code> stores cache items over the <a href="https://github.com/phpredis/phpredis#redis-cluster-support">Redis cluster</a> protocol
+using the PHP extension <a href="https://github.com/phpredis/phpredis">PhpRedis</a>.</p>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\ClearByNamespaceInterface</code></li>
+<li><code>Laminas\Cache\Storage\ClearByPrefixInterface</code></li>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+</ul>
+<h3 id="capabilities_6">Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>string</code>, <code>array</code> (serialized), <code>object</code> (serialized)</td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>ttl (Redis v2+)</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>512000000 (in Redis v3+, 255 otherwise)</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td>none</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="adapter-specific-options_6">Adapter Specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lib_options</code></td>
+<td><code>array</code></td>
+<td><code>[]</code></td>
+<td>Associative array of Redis options where the array key is the options constant value (see <code>RedisCluster::OPT_*</code> <a href="https://github.com/JetBrains/phpstorm-stubs/blob/master/redis/RedisCluster.php">constants</a> for details).</td>
+</tr>
+<tr>
+<td><code>namespace_separator</code></td>
+<td><code>string</code></td>
+<td>":"</td>
+<td>A separator for the namespace and prefix.</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td><code>string</code></td>
+<td>""</td>
+<td>Password to authenticate with Redis server</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>""</td>
+<td>Name to determine configuration from <a href="https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#loading-a-cluster-configuration-by-name">php.ini</a> (<strong>MUST NOT</strong> be combined with <code>seeds</code>)</td>
+</tr>
+<tr>
+<td><code>seeds</code></td>
+<td><code>array</code></td>
+<td><code>[]</code></td>
+<td>List of strings containing <code>&lt;hostname&gt;:&lt;port&gt;</code> (<strong>MUST NOT</strong> be combined with <code>name</code>)</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td><code>float</code></td>
+<td><code>1.0</code></td>
+<td>Timeout for commands, see <a href="https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts">PhpRedis</a> timeouts documentation for more background.</td>
+</tr>
+<tr>
+<td><code>read_timeout</code></td>
+<td><code>float</code></td>
+<td><code>2.0</code></td>
+<td>Read timeout for commands, see <a href="https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts">PhpRedis</a> timeouts documentation for more background.</td>
+</tr>
+<tr>
+<td><code>persistent</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Flag to specify whether to create a persistent connection or not</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td><code>string</code></td>
+<td>""</td>
+<td>The Redis server version. <strong>MUST</strong> be specified in a <a href="https://semver.org/#semantic-versioning-200">Semantic Versioning 2.0.0</a> format. This information is used to determine some features/capabilities without opening a connection to the server.</td>
+</tr>
+</tbody>
+</table></div>
 <h2 id="memory-adapter">Memory Adapter</h2>
 <p>The <code>Laminas\Cache\Storage\Adapter\Memory</code> stores items in-memory in the current
 process only.</p>
@@ -1631,7 +1768,7 @@ process only.</p>
 <li><code>Laminas\Cache\Storage\TaggableInterface</code></li>
 <li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
 </ul>
-<h3 id="capabilities_6">Capabilities</h3>
+<h3 id="capabilities_7">Capabilities</h3>
 <div class="table-responsive"><table>
 <thead>
 <tr>
@@ -1682,7 +1819,7 @@ process only.</p>
 </tr>
 </tbody>
 </table></div>
-<h3 id="adapter-specific-options_6">Adapter Specific Options</h3>
+<h3 id="adapter-specific-options_7">Adapter Specific Options</h3>
 <div class="table-responsive"><table>
 <thead>
 <tr>
@@ -1723,140 +1860,6 @@ PHP extension <a href="http://php.net/mongo">mongo</a>, or a MongoDB polyfill li
 <h3 id="ext-mongodb">ext-mongodb</h3>
 <p>If you are using the mongodb extension (vs the mongo extension), you will need
 to use the <a href="#the-extmongodb-adapter">ExtMongoDb adapter</a> instead.</p>
-</blockquote>
-<p>This adapter implements the following interfaces:</p>
-<ul>
-<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
-</ul>
-<h3 id="capabilities_7">Capabilities</h3>
-<div class="table-responsive"><table>
-<thead>
-<tr>
-<th>Capability</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>supportedDatatypes</code></td>
-<td><code>string</code>, <code>null</code>, <code>boolean</code>, <code>integer</code>, <code>double</code>, <code>array</code></td>
-</tr>
-<tr>
-<td><code>supportedMetadata</code></td>
-<td>_id</td>
-</tr>
-<tr>
-<td><code>minTtl</code></td>
-<td>0</td>
-</tr>
-<tr>
-<td><code>maxTtl</code></td>
-<td>0</td>
-</tr>
-<tr>
-<td><code>staticTtl</code></td>
-<td><code>true</code></td>
-</tr>
-<tr>
-<td><code>ttlPrecision</code></td>
-<td>1</td>
-</tr>
-<tr>
-<td><code>useRequestTime</code></td>
-<td><code>false</code></td>
-</tr>
-<tr>
-<td><code>lockOnExpire</code></td>
-<td>0</td>
-</tr>
-<tr>
-<td><code>maxKeyLength</code></td>
-<td>255</td>
-</tr>
-<tr>
-<td><code>namespaceIsPrefix</code></td>
-<td><code>true</code></td>
-</tr>
-<tr>
-<td><code>namespaceSeparator</code></td>
-<td><em>Option value of <code>namespace_separator</code></em></td>
-</tr>
-</tbody>
-</table></div>
-<h3 id="adapter-specific-options_7">Adapter Specific Options</h3>
-<div class="table-responsive"><table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Data Type</th>
-<th>Default Value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>lib_option</code></td>
-<td><code>array</code></td>
-<td></td>
-<td>Associative array of options where the array key is the option name.</td>
-</tr>
-<tr>
-<td><code>namespace_separator</code></td>
-<td><code>string</code></td>
-<td>":"</td>
-<td>A separator for the namespace and prefix.</td>
-</tr>
-</tbody>
-</table></div>
-<p>Available keys for <code>lib_option</code> include:</p>
-<div class="table-responsive"><table>
-<thead>
-<tr>
-<th>Key</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>server</code></td>
-<td><code>mongodb://localhost:27017</code></td>
-<td>The MongoDB server connection string (see the <a href="http://php.net/MongoClient">MongoClient docs</a>).</td>
-</tr>
-<tr>
-<td><code>database</code></td>
-<td><code>laminas</code></td>
-<td>Name of the database to use; MongoDB will create this database if it does not exist.</td>
-</tr>
-<tr>
-<td><code>collection</code></td>
-<td><code>cache</code></td>
-<td>Name of the collection to use; MongoDB will create this collection if it does not exist.</td>
-</tr>
-<tr>
-<td><code>connectionOptions</code></td>
-<td><code>['fsync' =&gt; false, 'journal' =&gt; true]</code></td>
-<td>Associative array of options to pass to <code>MongoClient</code> (see the <a href="http://php.net/MongoClient">MongoClient docs</a>).</td>
-</tr>
-<tr>
-<td><code>driverOptions</code></td>
-<td><code>[]</code></td>
-<td>Associative array of driver options to pass to <code>MongoClient</code> (see the <a href="http://php.net/MongoClient">MongoClient docs</a>).</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="extmongodb-adapter">ExtMongoDB Adapter</h2>
-<blockquote>
-<p>Available since version 2.8.0</p>
-</blockquote>
-<p><code>Laminas\Cache\Storage\Adapter\ExtMongoDB</code> stores cache items using the mongodb extension, and
-requires that the MongoDB PHP Client library is also installed. You can install the client
-library using the following:</p>
-<pre class="highlight"><code class="language-bash">$ composer require mongodb/mongodb</code></pre>
-<blockquote>
-<h3 id="ext-mongo">ext-mongo</h3>
-<p>If you are using the mongo extension (vs the mongodb extension), you will need
-to use the <a href="#the-mongodb-adapter">MongoDb adapter</a> instead.</p>
 </blockquote>
 <p>This adapter implements the following interfaces:</p>
 <ul>
@@ -1955,6 +1958,140 @@ to use the <a href="#the-mongodb-adapter">MongoDb adapter</a> instead.</p>
 <tr>
 <td><code>server</code></td>
 <td><code>mongodb://localhost:27017</code></td>
+<td>The MongoDB server connection string (see the <a href="http://php.net/MongoClient">MongoClient docs</a>).</td>
+</tr>
+<tr>
+<td><code>database</code></td>
+<td><code>laminas</code></td>
+<td>Name of the database to use; MongoDB will create this database if it does not exist.</td>
+</tr>
+<tr>
+<td><code>collection</code></td>
+<td><code>cache</code></td>
+<td>Name of the collection to use; MongoDB will create this collection if it does not exist.</td>
+</tr>
+<tr>
+<td><code>connectionOptions</code></td>
+<td><code>['fsync' =&gt; false, 'journal' =&gt; true]</code></td>
+<td>Associative array of options to pass to <code>MongoClient</code> (see the <a href="http://php.net/MongoClient">MongoClient docs</a>).</td>
+</tr>
+<tr>
+<td><code>driverOptions</code></td>
+<td><code>[]</code></td>
+<td>Associative array of driver options to pass to <code>MongoClient</code> (see the <a href="http://php.net/MongoClient">MongoClient docs</a>).</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="extmongodb-adapter">ExtMongoDB Adapter</h2>
+<blockquote>
+<p>Available since version 2.8.0</p>
+</blockquote>
+<p><code>Laminas\Cache\Storage\Adapter\ExtMongoDB</code> stores cache items using the mongodb extension, and
+requires that the MongoDB PHP Client library is also installed. You can install the client
+library using the following:</p>
+<pre class="highlight"><code class="language-bash">$ composer require mongodb/mongodb</code></pre>
+<blockquote>
+<h3 id="ext-mongo">ext-mongo</h3>
+<p>If you are using the mongo extension (vs the mongodb extension), you will need
+to use the <a href="#the-mongodb-adapter">MongoDb adapter</a> instead.</p>
+</blockquote>
+<p>This adapter implements the following interfaces:</p>
+<ul>
+<li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
+</ul>
+<h3 id="capabilities_9">Capabilities</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>supportedDatatypes</code></td>
+<td><code>string</code>, <code>null</code>, <code>boolean</code>, <code>integer</code>, <code>double</code>, <code>array</code></td>
+</tr>
+<tr>
+<td><code>supportedMetadata</code></td>
+<td>_id</td>
+</tr>
+<tr>
+<td><code>minTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxTtl</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>staticTtl</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>ttlPrecision</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>useRequestTime</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>lockOnExpire</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>maxKeyLength</code></td>
+<td>255</td>
+</tr>
+<tr>
+<td><code>namespaceIsPrefix</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>namespaceSeparator</code></td>
+<td><em>Option value of <code>namespace_separator</code></em></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="adapter-specific-options_9">Adapter Specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lib_option</code></td>
+<td><code>array</code></td>
+<td></td>
+<td>Associative array of options where the array key is the option name.</td>
+</tr>
+<tr>
+<td><code>namespace_separator</code></td>
+<td><code>string</code></td>
+<td>":"</td>
+<td>A separator for the namespace and prefix.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Available keys for <code>lib_option</code> include:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>server</code></td>
+<td><code>mongodb://localhost:27017</code></td>
 <td>The MongoDB server connection string (see the <a href="https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/">MongoDB\Client docs</a>).</td>
 </tr>
 <tr>
@@ -1989,7 +2126,7 @@ through the PHP extension <a href="http://pecl.php.net/package/WinCache">WinCach
 <li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
 <li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
 </ul>
-<h3 id="capabilities_9">Capabilities</h3>
+<h3 id="capabilities_10">Capabilities</h3>
 <div class="table-responsive"><table>
 <thead>
 <tr>
@@ -2040,7 +2177,7 @@ through the PHP extension <a href="http://pecl.php.net/package/WinCache">WinCach
 </tr>
 </tbody>
 </table></div>
-<h3 id="adapter-specific-options_9">Adapter Specific Options</h3>
+<h3 id="adapter-specific-options_10">Adapter Specific Options</h3>
 <div class="table-responsive"><table>
 <thead>
 <tr>
@@ -2072,7 +2209,7 @@ PHP extension <a href="http://xcache.lighttpd.net/">XCache</a>.</p>
 <li><code>Laminas\Cache\Storage\IterableInterface</code></li>
 <li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
 </ul>
-<h3 id="capabilities_10">Capabilities</h3>
+<h3 id="capabilities_11">Capabilities</h3>
 <div class="table-responsive"><table>
 <thead>
 <tr>
@@ -2127,7 +2264,7 @@ PHP extension <a href="http://xcache.lighttpd.net/">XCache</a>.</p>
 </tr>
 </tbody>
 </table></div>
-<h3 id="adapter-specific-options_10">Adapter Specific Options</h3>
+<h3 id="adapter-specific-options_11">Adapter Specific Options</h3>
 <div class="table-responsive"><table>
 <thead>
 <tr>
@@ -2175,7 +2312,7 @@ using the <a href="https://www.zend.com/en/products/server/">Zend Server Data Ca
 <li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
 <li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
 </ul>
-<h3 id="capabilities_11">Capabilities</h3>
+<h3 id="capabilities_12">Capabilities</h3>
 <div class="table-responsive"><table>
 <thead>
 <tr>
@@ -2240,7 +2377,7 @@ through the <a href="https://www.zend.com/en/products/server/">Zend Server Data 
 <li><code>Laminas\Cache\Storage\FlushableInterface</code></li>
 <li><code>Laminas\Cache\Storage\TotalSpaceCapableInterface</code></li>
 </ul>
-<h3 id="capabilities_12">Capabilities</h3>
+<h3 id="capabilities_13">Capabilities</h3>
 <div class="table-responsive"><table>
 <thead>
 <tr>
