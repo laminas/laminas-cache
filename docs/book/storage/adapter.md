@@ -741,7 +741,7 @@ Name | Data Type | Default Value | Description
 ## Redis Adapter
 
 `Laminas\Cache\Storage\Adapter\Redis` stores cache items over the redis protocol
-using the PHP extension [redis](https://github.com/phpredis/phpredis).
+using the PHP extension [PhpRedis](https://github.com/phpredis/phpredis).
 
 This adapter implements the following interfaces:
 
@@ -787,7 +787,7 @@ Name | Data Type | Default Value | Description
 ## RedisCluster Adapter
 
 `Laminas\Cache\Storage\Adapter\RedisCluster` stores cache items over the redis cluster protocol
-using the PHP extension [redis](https://github.com/phpredis/phpredis).
+using the PHP extension [PhpRedis](https://github.com/phpredis/phpredis).
 
 This adapter implements the following interfaces:
 
