@@ -744,10 +744,12 @@ Name | Data Type | Default Value | Description
 ## Redis Adapter
 
 `Laminas\Cache\Storage\Adapter\Redis` stores cache items over the redis protocol
-using the PHP extension [redis](https://github.com/nicolasff/phpredis).
+using the PHP extension [redis](https://github.com/phpredis/phpredis).
 
 This adapter implements the following interfaces:
 
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
 - `Laminas\Cache\Storage\FlushableInterface`
 - `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
@@ -756,7 +758,7 @@ This adapter implements the following interfaces:
 Capability | Value
 ---------- | -----
 `supportedDatatypes` | `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | none
+`supportedMetadata` | ttl (redis v2+)
 `minTtl` | 1
 `maxTtl` | 0
 `staticTtl` | `true`
