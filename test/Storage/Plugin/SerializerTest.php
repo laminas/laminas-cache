@@ -4,6 +4,7 @@ namespace LaminasTest\Cache\Storage\Plugin;
 
 use ArrayObject;
 use Laminas\Cache;
+use Laminas\Cache\Storage\Event;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
@@ -161,6 +162,6 @@ final class SerializerTest extends AbstractCommonPluginTest
             'value' => 5,
         ]));
 
-        $this->_plugin->onDecrementItemPre($event);
+        $this->plugin->onDecrementItemPre($event);
     }
 }
