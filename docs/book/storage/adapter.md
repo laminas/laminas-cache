@@ -763,7 +763,7 @@ Capability | Value
 `ttlPrecision` | 1
 `useRequestTime` | `false`
 `lockOnExpire` | 0
-`maxKeyLength` | 255
+`maxKeyLength` | 512000000 (in redis v3+, 255 otherwise)
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
 
