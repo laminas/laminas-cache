@@ -73,8 +73,6 @@ $capture = new CaptureCache(
         'public_dir' => __DIR__,
     ])
 );
-
-// TODO
 ```
 
 ## Available Methods
