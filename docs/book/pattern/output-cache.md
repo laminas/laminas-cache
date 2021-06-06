@@ -26,7 +26,7 @@ Option | Data Type | Default Value | Description
 
 ## Examples
 
-### Caching simple View Scripts
+### Caching a View Script
 
 ```php
 use Laminas\Cache\Pattern\OutputCache;
