@@ -25,13 +25,14 @@ It's also possible to use a single instance of
 Pattern objects can be created
 by instantiating one of the `Laminas\Cache\Pattern\*Cache` classes.
 
-> ### Standard Storage Adapter
+> ### Standard Storage Adapter for Documentation
 >
-> A standard storage adapter which can be used with the pattern caches might be the APCu adapter.
+> A cache adapter needs a storage adapter. To be able to follow the examples in the documentation, the [adapter for the filesystem](https://docs.laminas.dev/laminas-cache/storage/adapter/#filesystem-adapter) or the [BlackHole adapter](https://docs.laminas.dev/laminas-cache/storage/adapter/#blackhole-adapter) can be used, for example.
 >
 > ```php
-> use Laminas\Cache\Storage\Adapter\Apcu;
-> $storage = new Apcu();
+> $storage = new Laminas\Cache\Storage\Adapter\Filesystem();
+> // or
+> $storage = new Laminas\Cache\Storage\Adapter\BlackHole();
 > ```
 
 ```php
