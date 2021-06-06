@@ -41,11 +41,12 @@ Option | Data Type | Default Value | Description
 ```php
 use Laminas\Cache\Pattern\ClassCache;
 use Laminas\Cache\Pattern\PatternOptions;
+use \Laminas\Feed\Reader\Reader;
 
 $cachedFeedReader = new ClassCache(
     $storage,
     new PatternOptions([
-        'class' => \Laminas\Feed\Reader\Reader::class,
+        'class' => Reader::class,
         
         // The feed reader doesn't output anything,
         // so the output doesn't need to be caught and cached:
@@ -53,10 +54,9 @@ $cachedFeedReader = new ClassCache(
     ])
 );
 
-$feed = $cachedFeedReader->call("import", array('http://www.planet-php.net/rdf/'));
-
-// OR
-$feed = $cachedFeedReader->import('http://www.planet-php.net/rdf/');
+$feed = $cachedFeedReader->call("import", ['https://github.com/laminas/laminas-cache/releases.atom']);
+// or
+$feed = $cachedFeedReader->import('https://github.com/laminas/laminas-cache/releases.atom');
 ```
 
 ## Available Methods
