@@ -43,7 +43,7 @@ In case, there is no need for several adapters in your project, you can use comp
     "type": "project",
     "require": {
         "laminas/laminas-cache": "^2.10",
-        "laminas/laminas-cache-adapter-storage-memory": "^1.0"
+        "laminas/laminas-cache-storage-adapter-memory": "^1.0"
     },
     "replace": {
         "laminas/laminas-cache-storage-adapter-apc": "*",
