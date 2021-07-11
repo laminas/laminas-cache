@@ -2,12 +2,19 @@
 
 namespace Laminas\Cache;
 
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Laminas\Cache\Service\StoragePluginFactoryInterface;
 use Laminas\Cache\Storage\PluginAwareInterface;
 use Laminas\EventManager\EventsCapableInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
 
+/**
+ * @deprecated Please do not use static factories anymore.
+ *             Inject {@see StorageAdapterFactoryInterface} if you want to create a storage instance.
+ *             Inject {@see StoragePluginFactoryInterface} if you want to create a plugin instance.
+ */
 abstract class StorageFactory
 {
     /**
