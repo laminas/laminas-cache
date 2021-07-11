@@ -1,9 +1,10 @@
 # ClassCache
 
-The `ClassCache` pattern is an extension to the
-[`CallbackCache`](callback-cache.md) pattern. It has the same methods, but
-instead generates the callbacks for any public static method invoked on the
-class being cached, and caches static properties.
+## Deprecation
+
+> ### Deprecated
+>
+> The `ClassCache` pattern is deprecated as of v2.12 and will be removed in v3.0.
 
 ## Quick Start
 

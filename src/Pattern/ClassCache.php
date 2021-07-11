@@ -2,9 +2,11 @@
 
 namespace Laminas\Cache\Pattern;
 
-use Laminas\Cache;
 use Laminas\Cache\Exception;
 
+/**
+ * @deprecated This pattern will be removed in 3.0.0.
+ */
 class ClassCache extends CallbackCache
 {
 
