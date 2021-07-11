@@ -3,24 +3,20 @@
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Stdlib\ErrorHandler;
 
-class CallbackCache extends AbstractPattern
+class CallbackCache extends AbstractStorageCapablePattern
 {
-    /**
-     * Set options
-     *
-     * @param  PatternOptions $options
-     * @return CallbackCache Provides a fluent interface
-     * @throws Exception\InvalidArgumentException if missing storage option
-     */
     public function setOptions(PatternOptions $options)
     {
         parent::setOptions($options);
+        $storage = $this->getStorage();
 
-        if (! $options->getStorage()) {
+        if (! $storage instanceof StorageInterface) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
+
         return $this;
     }
 
@@ -36,7 +32,7 @@ class CallbackCache extends AbstractPattern
     public function call($callback, array $args = [])
     {
         $options = $this->getOptions();
-        $storage = $options->getStorage();
+        $storage = $this->getStorage();
         $success = null;
         $key     = $this->generateCallbackKey($callback, $args);
         $result  = $storage->getItem($key, $success);

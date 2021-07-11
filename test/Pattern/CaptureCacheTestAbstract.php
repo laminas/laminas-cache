@@ -3,63 +3,60 @@
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
+use Laminas\Cache\Exception\LogicException;
 
 /**
  * @group      Laminas_Cache
  * @covers Laminas\Cache\Pattern\CaptureCache<extended>
  */
-class CaptureCacheTest extends CommonPatternTest
+class CaptureCacheTestAbstract extends AbstractCommonPatternTest
 {
-    // @codingStandardsIgnoreStart
-    protected $_tmpCacheDir;
-    protected $_umask;
-    protected $_bufferedServerSuperGlobal;
-    // @codingStandardsIgnoreEnd
+    protected $tmpCacheDir;
+    protected $umask;
+    protected $bufferedServerSuperGlobal;
 
     protected function setUp(): void
     {
-        $this->_bufferedServerSuperGlobal = $_SERVER;
-        $this->_umask = umask();
+        $this->bufferedServerSuperGlobal = $_SERVER;
+        $this->umask = umask();
 
-        $this->_tmpCacheDir = @tempnam(sys_get_temp_dir(), 'laminas_cache_test_');
-        if (! $this->_tmpCacheDir) {
+        $this->tmpCacheDir = @tempnam(sys_get_temp_dir(), 'laminas_cache_test_');
+        if (! $this->tmpCacheDir) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory-file: {$err['message']}");
-        } elseif (! @unlink($this->_tmpCacheDir)) {
+        } elseif (! @unlink($this->tmpCacheDir)) {
             $err = error_get_last();
             $this->fail("Can't remove temporary cache directory-file: {$err['message']}");
-        } elseif (! @mkdir($this->_tmpCacheDir, 0777)) {
+        } elseif (! @mkdir($this->tmpCacheDir, 0777)) {
             $err = error_get_last();
             $this->fail("Can't create temporary cache directory: {$err['message']}");
         }
 
-        $this->_options = new Cache\Pattern\PatternOptions([
-            'public_dir' => $this->_tmpCacheDir
+        $this->options = new Cache\Pattern\PatternOptions([
+            'public_dir' => $this->tmpCacheDir
         ]);
-        $this->_pattern = new Cache\Pattern\CaptureCache();
-        $this->_pattern->setOptions($this->_options);
+        $this->pattern = new Cache\Pattern\CaptureCache();
+        $this->pattern->setOptions($this->options);
 
         parent::setUp();
     }
 
     public function tearDown(): void
     {
-        $_SERVER = $this->_bufferedServerSuperGlobal;
+        $_SERVER = $this->bufferedServerSuperGlobal;
 
-        $this->_removeRecursive($this->_tmpCacheDir);
+        $this->removeRecursive($this->tmpCacheDir);
 
-        if ($this->_umask != umask()) {
-            umask($this->_umask);
+        if ($this->umask != umask()) {
+            umask($this->umask);
             $this->fail("Umask wasn't reset");
         }
 
         parent::tearDown();
     }
 
-    // @codingStandardsIgnoreStart
-    protected function _removeRecursive($dir)
+    protected function removeRecursive($dir)
     {
-        // @codingStandardsIgnoreEnd
         if (file_exists($dir)) {
             $dirIt = new \DirectoryIterator($dir);
             foreach ($dirIt as $entry) {
@@ -71,7 +68,7 @@ class CaptureCacheTest extends CommonPatternTest
                 if ($entry->isFile()) {
                     unlink($entry->getPathname());
                 } else {
-                    $this->_removeRecursive($entry->getPathname());
+                    $this->removeRecursive($entry->getPathname());
                 }
             }
 
@@ -97,25 +94,25 @@ class CaptureCacheTest extends CommonPatternTest
 
     public function testSetWithNormalPageId()
     {
-        $this->_pattern->set('content', '/dir1/dir2/file');
-        $this->assertFileExists($this->_tmpCacheDir . '/dir1/dir2/file');
-        $this->assertSame(file_get_contents($this->_tmpCacheDir . '/dir1/dir2/file'), 'content');
+        $this->pattern->set('content', '/dir1/dir2/file');
+        $this->assertFileExists($this->tmpCacheDir . '/dir1/dir2/file');
+        $this->assertSame(file_get_contents($this->tmpCacheDir . '/dir1/dir2/file'), 'content');
     }
 
     public function testSetWithIndexFilename()
     {
-        $this->_options->setIndexFilename('test.html');
+        $this->options->setIndexFilename('test.html');
 
-        $this->_pattern->set('content', '/dir1/dir2/');
-        $this->assertFileExists($this->_tmpCacheDir . '/dir1/dir2/test.html');
-        $this->assertSame(file_get_contents($this->_tmpCacheDir . '/dir1/dir2/test.html'), 'content');
+        $this->pattern->set('content', '/dir1/dir2/');
+        $this->assertFileExists($this->tmpCacheDir . '/dir1/dir2/test.html');
+        $this->assertSame(file_get_contents($this->tmpCacheDir . '/dir1/dir2/test.html'), 'content');
     }
 
     public function testGetThrowsLogicExceptionOnMissingPublicDir()
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->expectException('Laminas\Cache\Exception\LogicException');
+        $this->expectException(LogicException::class);
         $captureCache->get('/pageId');
     }
 
@@ -123,7 +120,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->expectException('Laminas\Cache\Exception\LogicException');
+        $this->expectException(LogicException::class);
         $captureCache->has('/pageId');
     }
 
@@ -131,7 +128,7 @@ class CaptureCacheTest extends CommonPatternTest
     {
         $captureCache = new Cache\Pattern\CaptureCache();
 
-        $this->expectException('Laminas\Cache\Exception\LogicException');
+        $this->expectException(LogicException::class);
         $captureCache->remove('/pageId');
     }
 
@@ -166,26 +163,26 @@ class CaptureCacheTest extends CommonPatternTest
     public function testGetFilenameWithPublicDir()
     {
         $options = new Cache\Pattern\PatternOptions([
-            'public_dir' => $this->_tmpCacheDir
+            'public_dir' => $this->tmpCacheDir
         ]);
 
         $captureCache = new Cache\Pattern\CaptureCache();
         $captureCache->setOptions($options);
 
         $this->assertEquals(
-            $this->_tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/index.html'),
+            $this->tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/index.html'),
             $captureCache->getFilename('/')
         );
         $this->assertEquals(
-            $this->_tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/dir1/test'),
+            $this->tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/dir1/test'),
             $captureCache->getFilename('/dir1/test')
         );
         $this->assertEquals(
-            $this->_tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/dir1/test.html'),
+            $this->tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/dir1/test.html'),
             $captureCache->getFilename('/dir1/test.html')
         );
         $this->assertEquals(
-            $this->_tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/dir1/dir2/test.html'),
+            $this->tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/dir1/dir2/test.html'),
             $captureCache->getFilename('/dir1/dir2/test.html')
         );
     }
@@ -195,13 +192,13 @@ class CaptureCacheTest extends CommonPatternTest
         $_SERVER['REQUEST_URI'] = '/dir1/test.html';
 
         $options = new Cache\Pattern\PatternOptions([
-            'public_dir' => $this->_tmpCacheDir
+            'public_dir' => $this->tmpCacheDir
         ]);
         $captureCache = new Cache\Pattern\CaptureCache();
         $captureCache->setOptions($options);
 
         $this->assertEquals(
-            $this->_tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/dir1/test.html'),
+            $this->tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/dir1/test.html'),
             $captureCache->getFilename()
         );
     }

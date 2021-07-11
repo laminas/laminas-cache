@@ -8,34 +8,65 @@ class being cached, and caches static properties.
 ## Quick Start
 
 ```php
-use Laminas\Cache\PatternFactory;
+use Laminas\Cache\Pattern\ClassCache;
+use Laminas\Cache\Pattern\PatternOptions;
 
-$classCache = PatternFactory::factory('class', [
-    'class'   => 'MyClass',
-    'storage' => 'apc',
-]);
+$classCache = new ClassCache(
+    $storage,
+    new PatternOptions([
+        'class' => 'MyClass',
+    ])
+);
 ```
+
+> ### Storage Adapter
+>
+> The `$storage` adapter can be any adapter which implements the `StorageInterface`. Check out the [Pattern Quick Start](./intro.md#quick-start)-Section for a standard adapter which can be used here.
 
 ## Configuration Options
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
+`storage` | `string\|array\|Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
 `class` | `string` | none | Name of the class for which to cache method output.
-`cache_output` | `boolean` | `true` | Whether or not to cache method output.
-`cache_by_default` | `boolean` | `true` | Cache all method calls by default.
+`cache_output` | `bool` | `true` | Whether or not to cache method output.
+`cache_by_default` | `bool` | `true` | Cache all method calls by default.
 `class_cache_methods` | `array` | `[]` | List of methods to cache (if `cache_by_default` is disabled).
 `class_non_cache_methods` | `array` | `[]` | List of methods to omit from caching (if `cache_by_default` is enabled).
 
+## Examples
+
+### Caching of Import Feeds
+
+```php
+use Laminas\Cache\Pattern\ClassCache;
+use Laminas\Cache\Pattern\PatternOptions;
+use \Laminas\Feed\Reader\Reader;
+
+$cachedFeedReader = new ClassCache(
+    $storage,
+    new PatternOptions([
+        'class' => Reader::class,
+        
+        // The feed reader doesn't output anything,
+        // so the output doesn't need to be caught and cached:
+        'cache_output' => false,
+    ])
+);
+
+$feed = $cachedFeedReader->call("import", ['https://github.com/laminas/laminas-cache/releases.atom']);
+// or
+$feed = $cachedFeedReader->import('https://github.com/laminas/laminas-cache/releases.atom');
+```
+
 ## Available Methods
 
-In addition to the methods defined in `PatternInterface`, this implementation
+In addition to the methods defined in `PatternInterface` and the `StorageCapableInterface`, this implementation
 exposes the following methods.
 
 ```php
 namespace Laminas\Cache\Pattern;
 
-use Laminas\Cache;
 use Laminas\Cache\Exception;
 
 class ClassCache extends CallbackCache
@@ -127,24 +158,4 @@ class ClassCache extends CallbackCache
         unset($class::$name);
     }
 }
-```
-
-## Examples
-
-### Caching of Import Feeds
-
-```php
-$cachedFeedReader = Laminas\Cache\PatternFactory::factory('class', [
-    'class'   => 'Laminas\Feed\Reader\Reader',
-    'storage' => 'apc',
-
-    // The feed reader doesn't output anything,
-    // so the output doesn't need to be caught and cached:
-    'cache_output' => false,
-]);
-
-$feed = $cachedFeedReader->call("import", array('http://www.planet-php.net/rdf/'));
-
-// OR
-$feed = $cachedFeedReader->import('http://www.planet-php.net/rdf/');
 ```

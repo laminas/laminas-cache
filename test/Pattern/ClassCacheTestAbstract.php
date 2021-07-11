@@ -9,26 +9,19 @@ use LaminasTest\Cache\Pattern\TestAsset\TestClassCache;
  * @group      Laminas_Cache
  * @covers Laminas\Cache\Pattern\ClassCache<extended>
  */
-class ClassCacheTest extends CommonPatternTest
+class ClassCacheTestAbstract extends AbstractCommonStoragePatternTest
 {
-    // @codingStandardsIgnoreStart
-    /**
-     * @var \Laminas\Cache\Storage\StorageInterface
-     */
-    protected $_storage;
-    // @codingStandardsIgnoreEnd
 
     protected function setUp(): void
     {
-        $this->_storage = new Cache\Storage\Adapter\Memory([
+        $this->storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0
         ]);
-        $this->_options = new Cache\Pattern\PatternOptions([
-            'class'   => __NAMESPACE__ . '\TestAsset\TestClassCache',
-            'storage' => $this->_storage,
+        $this->options = new Cache\Pattern\PatternOptions([
+            'class'   => TestClassCache::class,
+            'storage' => $this->storage,
         ]);
-        $this->_pattern = new Cache\Pattern\ClassCache();
-        $this->_pattern->setOptions($this->_options);
+        $this->pattern = new Cache\Pattern\ClassCache($this->storage, $this->options);
 
         parent::setUp();
     }
@@ -48,7 +41,7 @@ class ClassCacheTest extends CommonPatternTest
 
     public function testCallEnabledCacheOutputByDefault()
     {
-        $this->_testCall(
+        $this->doTestCall(
             'bar',
             ['testCallEnabledCacheOutputByDefault', 'arg2']
         );
@@ -56,8 +49,8 @@ class ClassCacheTest extends CommonPatternTest
 
     public function testCallDisabledCacheOutput()
     {
-        $this->_options->setCacheOutput(false);
-        $this->_testCall(
+        $this->options->setCacheOutput(false);
+        $this->doTestCall(
             'bar',
             ['testCallDisabledCacheOutput', 'arg2']
         );
@@ -67,21 +60,19 @@ class ClassCacheTest extends CommonPatternTest
     {
         $args = ['arg1', 2, 3.33, null];
 
-        $generatedKey = $this->_pattern->generateKey('emptyMethod', $args);
+        $generatedKey = $this->pattern->generateKey('emptyMethod', $args);
         $usedKey      = null;
-        $this->_options->getStorage()->getEventManager()->attach('setItem.pre', function ($event) use (&$usedKey) {
+        $this->options->getStorage()->getEventManager()->attach('setItem.pre', function ($event) use (&$usedKey) {
             $params = $event->getParams();
             $usedKey = $params['key'];
         });
 
-        $this->_pattern->call('emptyMethod', $args);
+        $this->pattern->call('emptyMethod', $args);
         $this->assertEquals($generatedKey, $usedKey);
     }
 
-    // @codingStandardsIgnoreStart
-    protected function _testCall($method, array $args)
+    protected function doTestCall($method, array $args)
     {
-        // @codingStandardsIgnoreEnd
         $returnSpec = 'foobar_return(' . implode(', ', $args) . ') : ';
         $outputSpec = 'foobar_output(' . implode(', ', $args) . ') : ';
 
@@ -90,7 +81,7 @@ class ClassCacheTest extends CommonPatternTest
 
         ob_start();
         ob_implicit_flush(0);
-        $return = call_user_func_array([$this->_pattern, $method], $args);
+        $return = call_user_func_array([$this->pattern, $method], $args);
         $data = ob_get_clean();
 
         $this->assertEquals($returnSpec . $firstCounter, $return);
@@ -99,11 +90,11 @@ class ClassCacheTest extends CommonPatternTest
         // second call - cached
         ob_start();
         ob_implicit_flush(0);
-        $return = call_user_func_array([$this->_pattern, $method], $args);
+        $return = call_user_func_array([$this->pattern, $method], $args);
         $data = ob_get_clean();
 
         $this->assertEquals($returnSpec . $firstCounter, $return);
-        if ($this->_options->getCacheOutput()) {
+        if ($this->options->getCacheOutput()) {
             $this->assertEquals($outputSpec . $firstCounter, $data);
         } else {
             $this->assertEquals('', $data);

@@ -9,6 +9,7 @@ interface PatternInterface
      *
      * @param  PatternOptions $options
      * @return PatternInterface
+     * @deprecated This method will be removed with v3.0. Options should be passed via instantiation.
      */
     public function setOptions(PatternOptions $options);
 

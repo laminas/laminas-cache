@@ -5,22 +5,46 @@ The `OutputCache` pattern caches output between calls to `start()` and `end()`.
 ## Quick Start
 
 ```php
-use Laminas\Cache\PatternFactory;
+use Laminas\Cache\Pattern\OutputCache;
+use Laminas\Cache\Pattern\PatternOptions;
 
-$outputCache = PatternFactory::factory('output', [
-    'storage' => 'apc'
-]);
+$outputCache = new OutputCache(
+    $storage,
+    new PatternOptions()
+);
 ```
+
+> ### Storage Adapter
+>
+> The `$storage` adapter can be any adapter which implements the `StorageInterface`. Check out the [Pattern Quick Start](./intro.md#quick-start)-Section for a standard adapter which can be used here.
 
 ## Configuration Options
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
+`storage` | `string\|array\|Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
+
+## Examples
+
+### Caching a View Script
+
+```php
+use Laminas\Cache\Pattern\OutputCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$outputCache = new OutputCache(
+    $storage,
+    new PatternOptions()
+);
+
+$outputCache->start('mySimpleViewScript');
+include '/path/to/view/script.phtml';
+$outputCache->end();
+```
 
 ## Available Methods
 
-In addition to the methods defined in `PatternInterface`, this implementation
+In addition to the methods defined in `PatternInterface` and `StorageCapableInterface`, this implementation
 defines the following methods.
 
 ```php
@@ -28,7 +52,7 @@ namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 
-class OutputCache extends AbstractPattern
+class OutputCache extends AbstractStorageCapablePattern
 {
     /**
      * If there is a cached item with the given key, display its data, and
@@ -50,18 +74,4 @@ class OutputCache extends AbstractPattern
      */
     public function end();
 }
-```
-
-## Examples
-
-### Caching simple View Scripts
-
-```php
-$outputCache = Laminas\Cache\PatternFactory::factory('output', [
-    'storage' => 'apc',
-]);
-
-$outputCache->start('mySimpleViewScript');
-include '/path/to/view/script.phtml';
-$outputCache->end();
 ```

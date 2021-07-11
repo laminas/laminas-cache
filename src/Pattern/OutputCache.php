@@ -4,7 +4,7 @@ namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 
-class OutputCache extends AbstractPattern
+class OutputCache extends AbstractStorageCapablePattern
 {
     /**
      * The key stack
@@ -13,18 +13,12 @@ class OutputCache extends AbstractPattern
      */
     protected $keyStack = [];
 
-    /**
-     * Set options
-     *
-     * @param  PatternOptions $options
-     * @return OutputCache Provides a fluent interface
-     * @throws Exception\InvalidArgumentException
-     */
+
     public function setOptions(PatternOptions $options)
     {
         parent::setOptions($options);
 
-        if (! $options->getStorage()) {
+        if (! $this->getStorage()) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
 
@@ -46,7 +40,8 @@ class OutputCache extends AbstractPattern
         }
 
         $success = null;
-        $data    = $this->getOptions()->getStorage()->getItem($key, $success);
+        $storage = $this->getStorage();
+        $data    = $storage->getItem($key, $success);
         if ($success) {
             echo $data;
             return true;
@@ -77,6 +72,7 @@ class OutputCache extends AbstractPattern
             throw new Exception\RuntimeException('Output buffering not active');
         }
 
-        return $this->getOptions()->getStorage()->setItem($key, $output);
+        $storage = $this->getStorage();
+        return $storage->setItem($key, $output);
     }
 }

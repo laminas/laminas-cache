@@ -8,26 +8,18 @@ use LaminasTest\Cache\Pattern\TestAsset\TestObjectCache;
 /**
  * @group      Laminas_Cache
  */
-class ObjectCacheTest extends CommonPatternTest
+class ObjectCacheTestAbstract extends AbstractCommonStoragePatternTest
 {
-    // @codingStandardsIgnoreStart
-    /**
-     * @var \Laminas\Cache\Storage\StorageInterface
-     */
-    protected $_storage;
-    // @codingStandardsIgnoreEnd
-
     protected function setUp(): void
     {
-        $this->_storage = new Cache\Storage\Adapter\Memory([
+        $this->storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0
         ]);
-        $this->_options = new Cache\Pattern\PatternOptions([
+        $this->options = new Cache\Pattern\PatternOptions([
             'object'  => new TestObjectCache(),
-            'storage' => $this->_storage,
+            'storage' => $this->storage,
         ]);
-        $this->_pattern = new Cache\Pattern\ObjectCache();
-        $this->_pattern->setOptions($this->_options);
+        $this->pattern = new Cache\Pattern\ObjectCache($this->storage, $this->options);
 
         parent::setUp();
     }
@@ -47,7 +39,7 @@ class ObjectCacheTest extends CommonPatternTest
 
     public function testCallEnabledCacheOutputByDefault()
     {
-        $this->_testCall(
+        $this->doTestCall(
             'bar',
             ['testCallEnabledCacheOutputByDefault', 'arg2']
         );
@@ -55,8 +47,8 @@ class ObjectCacheTest extends CommonPatternTest
 
     public function testCallDisabledCacheOutput()
     {
-        $this->_options->setCacheOutput(false);
-        $this->_testCall(
+        $this->options->setCacheOutput(false);
+        $this->doTestCall(
             'bar',
             ['testCallDisabledCacheOutput', 'arg2']
         );
@@ -64,46 +56,46 @@ class ObjectCacheTest extends CommonPatternTest
 
     public function testCallInvoke()
     {
-        $this->_options->setCacheOutput(false);
-        $this->_testCall('__invoke', ['arg1', 'arg2']);
+        $this->options->setCacheOutput(false);
+        $this->doTestCall('__invoke', ['arg1', 'arg2']);
     }
 
     public function testGenerateKey()
     {
         $args = ['arg1', 2, 3.33, null];
 
-        $generatedKey = $this->_pattern->generateKey('emptyMethod', $args);
+        $generatedKey = $this->pattern->generateKey('emptyMethod', $args);
         $usedKey      = null;
-        $this->_options->getStorage()->getEventManager()->attach('setItem.pre', function ($event) use (&$usedKey) {
+        $this->options->getStorage()->getEventManager()->attach('setItem.pre', function ($event) use (&$usedKey) {
             $params = $event->getParams();
             $usedKey = $params['key'];
         });
 
-        $this->_pattern->call('emptyMethod', $args);
+        $this->pattern->call('emptyMethod', $args);
         $this->assertEquals($generatedKey, $usedKey);
     }
 
     public function testSetProperty()
     {
-        $this->_pattern->property = 'testSetProperty';
-        $this->assertEquals('testSetProperty', $this->_options->getObject()->property);
+        $this->pattern->property = 'testSetProperty';
+        $this->assertEquals('testSetProperty', $this->options->getObject()->property);
     }
 
     public function testGetProperty()
     {
-        $this->assertEquals($this->_options->getObject()->property, $this->_pattern->property);
+        $this->assertEquals($this->options->getObject()->property, $this->pattern->property);
     }
 
     public function testIssetProperty()
     {
-        $this->assertTrue(isset($this->_pattern->property));
-        $this->assertFalse(isset($this->_pattern->unknownProperty));
+        $this->assertTrue(isset($this->pattern->property));
+        $this->assertFalse(isset($this->pattern->unknownProperty));
     }
 
     public function testUnsetProperty()
     {
-        unset($this->_pattern->property);
-        $this->assertFalse(isset($this->_pattern->property));
+        unset($this->pattern->property);
+        $this->assertFalse(isset($this->pattern->property));
     }
 
     /**
@@ -111,23 +103,21 @@ class ObjectCacheTest extends CommonPatternTest
      */
     public function testEmptyObjectKeys()
     {
-        $this->_options->setObjectKey('0');
-        $this->assertSame('0', $this->_options->getObjectKey(), "Can't set string '0' as object key");
+        $this->options->setObjectKey('0');
+        $this->assertSame('0', $this->options->getObjectKey(), "Can't set string '0' as object key");
 
-        $this->_options->setObjectKey('');
-        $this->assertSame('', $this->_options->getObjectKey(), "Can't set an empty string as object key");
+        $this->options->setObjectKey('');
+        $this->assertSame('', $this->options->getObjectKey(), "Can't set an empty string as object key");
 
-        $this->_options->setObjectKey(null);
-        $this->assertSame(get_class($this->_options->getObject()), $this->_options->getObjectKey());
+        $this->options->setObjectKey(null);
+        $this->assertSame(get_class($this->options->getObject()), $this->options->getObjectKey());
     }
 
-    // @codingStandardsIgnoreStart
-    protected function _testCall($method, array $args)
+    protected function doTestCall($method, array $args)
     {
-        // @codingStandardsIgnoreEnd
         $returnSpec = 'foobar_return(' . implode(', ', $args) . ') : ';
         $outputSpec = 'foobar_output(' . implode(', ', $args) . ') : ';
-        $callback   = [$this->_pattern, $method];
+        $callback   = [$this->pattern, $method];
 
         // first call - not cached
         $firstCounter = TestObjectCache::$fooCounter + 1;
@@ -149,7 +139,7 @@ class ObjectCacheTest extends CommonPatternTest
         ob_end_clean();
 
         $this->assertEquals($returnSpec . $firstCounter, $return);
-        if ($this->_options->getCacheOutput()) {
+        if ($this->options->getCacheOutput()) {
             $this->assertEquals($outputSpec . $firstCounter, $data);
         } else {
             $this->assertEquals('', $data);

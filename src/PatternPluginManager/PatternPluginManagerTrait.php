@@ -22,7 +22,9 @@ trait PatternPluginManagerTrait
      */
     public function build($plugin, array $options = null)
     {
-        if (empty($options)) {
+        $options = $options ?? [];
+
+        if ($options === []) {
             return parent::build($plugin);
         }
 
