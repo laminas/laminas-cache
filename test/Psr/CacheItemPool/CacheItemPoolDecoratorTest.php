@@ -2,13 +2,16 @@
 
 namespace LaminasTest\Cache\Psr\CacheItemPool;
 
+use DateTimeImmutable;
 use Laminas\Cache\Exception;
 use Laminas\Cache\Psr\CacheItemPool\CacheException;
+use Laminas\Cache\Psr\CacheItemPool\CacheItem;
 use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\StorageInterface;
+use LaminasTest\Cache\Psr\CacheItemPool\TestAsset\FlushableStorageAdapterInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -558,6 +561,37 @@ class CacheItemPoolDecoratorTest extends TestCase
         $cache = new CacheItemPoolDecorator($adapter->reveal());
 
         self::assertEquals($sucsessful, $cache->deleteItems(['foo']));
+    }
+
+    public function testWontSaveAlreadyExpiredCacheItemAsDeferredItem(): void
+    {
+        $adapter = $this->createMock(FlushableStorageAdapterInterface::class);
+        $adapter
+            ->expects(self::exactly(2))
+            ->method('getCapabilities')
+            ->willReturn(new Capabilities($adapter, new stdClass(), $this->defaultCapabilities));
+
+        $adapter
+            ->expects(self::never())
+            ->method('removeItems');
+        $adapter
+            ->expects(self::never())
+            ->method('setItem');
+
+        $adapter
+            ->expects(self::once())
+            ->method('hasItem')
+            ->with('foo')
+            ->willReturn(false);
+
+        $item = new CacheItem('foo', 'bar', false);
+        $item->expiresAt(DateTimeImmutable::createFromFormat('U', time() - 1));
+
+        $cache = new CacheItemPoolDecorator($adapter);
+        $cache->saveDeferred($item);
+
+        self::assertFalse($item->isHit());
+        self::assertFalse($cache->hasItem($item->getKey()));
     }
 
     public function deletionVerificationProvider()
