@@ -26,8 +26,8 @@ final class DeprecatedSchemaDetector implements DeprecatedSchemaDetectorInterfac
             return true;
         }
 
-        foreach ($configuration as $index => $plugin) {
-            if (! is_string($index) || ! is_array($plugin)) {
+        foreach ($configuration['plugins'] as $index => $plugin) {
+            if (is_string($index) || ! is_array($plugin)) {
                 return true;
             }
 
