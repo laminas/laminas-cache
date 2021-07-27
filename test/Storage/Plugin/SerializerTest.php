@@ -5,7 +5,9 @@ namespace LaminasTest\Cache\Storage\Plugin;
 use ArrayObject;
 use Laminas\Cache;
 use Laminas\Cache\Storage\Event;
+use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\PostEvent;
+use Laminas\Cache\Storage\StorageInterface;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
@@ -27,7 +29,7 @@ final class SerializerTest extends AbstractCommonPluginTest
     {
         $this->adapter = new MockAdapter();
         $this->options = new Cache\Storage\Plugin\PluginOptions();
-        $this->plugin  = new Cache\Storage\Plugin\Serializer();
+        $this->plugin  = new Serializer();
         $this->plugin->setOptions($this->options);
     }
 
@@ -140,7 +142,7 @@ final class SerializerTest extends AbstractCommonPluginTest
 
     public function testOnDecrementItemPreWillDecrementValue(): void
     {
-        $adapter = $this->createMock(Cache\Storage\StorageInterface::class);
+        $adapter = $this->createMock(StorageInterface::class);
         $adapter
             ->expects(self::once())
             ->method('getItem')
@@ -163,5 +165,47 @@ final class SerializerTest extends AbstractCommonPluginTest
         ]));
 
         $this->plugin->onDecrementItemPre($event);
+    }
+
+    public function testOnDecrementItemWillAssumeZeroForNonExistingCacheItem(): void
+    {
+        $adapter = $this->createMock(StorageInterface::class);
+        $plugin = new Serializer();
+        $event = new Event('foo', $adapter, new ArrayObject([
+            'key' => 'foo',
+            'value' => 10,
+        ]));
+        $adapter
+            ->expects(self::once())
+            ->method('getItem')
+            ->willReturnCallback(static function (string $key, &$success, &$casToken): ?int {
+                self::assertEquals('foo', $key);
+                $success = false;
+                $casToken = null;
+                return $casToken;
+            });
+
+        self::assertEquals(-10, $plugin->onDecrementItemPre($event));
+    }
+
+    public function testOnIncrementItemWillAssumeZeroForNonExistingCacheItem(): void
+    {
+        $adapter = $this->createMock(StorageInterface::class);
+        $plugin = new Serializer();
+        $event = new Event('foo', $adapter, new ArrayObject([
+            'key' => 'foo',
+            'value' => 10,
+        ]));
+        $adapter
+            ->expects(self::once())
+            ->method('getItem')
+            ->willReturnCallback(static function (string $key, &$success, &$casToken): ?int {
+                self::assertEquals('foo', $key);
+                $success = false;
+                $casToken = null;
+                return $casToken;
+            });
+
+        self::assertEquals(10, $plugin->onIncrementItemPre($event));
     }
 }
