@@ -50,6 +50,20 @@ $cache = $storageFactory->create(
     ]
 );
 
+// Via array configuration:
+$cache = $storageFactory->createFromArrayConfiguration([
+    'adapter' => 'apc',
+    'options' => ['ttl' => 3600],
+    'plugins' => [
+        [
+            'name' => 'exception_handler',
+            'options' => [
+                'throw_exceptions' => false,
+             ], 
+        ],
+    ],
+]);
+
 // Alternately, create the adapter and plugin separately:
 $cache  = $storageFactory->create('apc', ['ttl' => 3600]);
 $pluginFactory = $container->get(StoragePluginFactoryInterface::class);
