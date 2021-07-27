@@ -41,7 +41,7 @@ final class DeprecatedSchemaDetectorTest extends TestCase
                 'adapter' => 'foo',
                 'plugins' => [
                     [
-                        'name' => 'bar',
+                        'name'    => 'bar',
                         'options' => [
                             'baz' => 'bat',
                         ],
