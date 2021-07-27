@@ -183,6 +183,12 @@ final class SerializerTest extends AbstractCommonPluginTest
                 return $casToken;
             });
 
+        $adapter
+            ->expects(self::once())
+            ->method('checkAndSetItem')
+            ->with(null, 'foo', -10)
+            ->willReturn(true);
+
         self::assertEquals(-10, $plugin->onDecrementItemPre($event));
     }
 
@@ -203,6 +209,12 @@ final class SerializerTest extends AbstractCommonPluginTest
                 $casToken = null;
                 return $casToken;
             });
+
+        $adapter
+            ->expects(self::once())
+            ->method('checkAndSetItem')
+            ->with(null, 'foo', 10)
+            ->willReturn(true);
 
         self::assertEquals(10, $plugin->onIncrementItemPre($event));
     }
