@@ -121,22 +121,21 @@ class Serializer extends AbstractPlugin
      */
     public function onIncrementItemPre(Event $event)
     {
+        /** @var StorageInterface $storage */
         $storage  = $event->getTarget();
         $params   = $event->getParams();
         $casToken = null;
         $success  = null;
-        $oldValue = $storage->getItem($params['key'], $success, $casToken);
+        $oldValue = $storage->getItem($params['key'], $success, $casToken) ?? null;
         $newValue = $oldValue + $params['value'];
 
-        if ($success) {
-            $storage->checkAndSetItem($casToken, $params['key'], $oldValue + $params['value']);
-            $result = $newValue;
-        } else {
-            $result = false;
+        $event->stopPropagation(true);
+
+        if ($storage->checkAndSetItem($casToken, $params['key'], $oldValue + $params['value'])) {
+            return $newValue;
         }
 
-        $event->stopPropagation(true);
-        return $result;
+        return false;
     }
 
     /**
@@ -180,18 +179,15 @@ class Serializer extends AbstractPlugin
         $params   = $event->getParams();
         $success  = null;
         $casToken = null;
-        $oldValue = $storage->getItem($params['key'], $success, $casToken);
+        $oldValue = $storage->getItem($params['key'], $success, $casToken) ?? 0;
         $newValue = $oldValue - $params['value'];
 
-        if ($success) {
-            $storage->checkAndSetItem($casToken, $params['key'], $newValue);
-            $result = $newValue;
-        } else {
-            $result = false;
+        $event->stopPropagation(true);
+        if ($storage->checkAndSetItem($casToken, $params['key'], $newValue)) {
+            return $newValue;
         }
 
-        $event->stopPropagation(true);
-        return $result;
+        return false;
     }
 
     /**
