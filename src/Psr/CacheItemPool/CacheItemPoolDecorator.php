@@ -241,6 +241,11 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             throw new InvalidArgumentException('$item must be an instance of ' . CacheItem::class);
         }
 
+        $ttl = $item->getTtl();
+        if ($ttl !== null && $ttl <= 0) {
+            return false;
+        }
+
         // deferred items should always be a 'hit' until they expire
         $item->setIsHit(true);
         $this->deferred[$item->getKey()] = $item;
