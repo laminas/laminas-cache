@@ -41,7 +41,7 @@ abstract class AbstractCommonPatternTest extends TestCase
     /**
      * @dataProvider getCommonPatternNamesProvider
      */
-    public function testPatternPluginManagerWithCommonNames($commonPatternName)
+    public function testPatternPluginManagerWithCommonNames(string $commonPatternName): void
     {
         $pluginManager = new PatternPluginManager(new ServiceManager());
         $this->assertTrue(

@@ -12,12 +12,18 @@ abstract class AbstractPattern implements PatternInterface
         $this->options = $options;
     }
 
+    /**
+     * @return AbstractPattern
+     */
     public function setOptions(PatternOptions $options)
     {
         $this->options = $options;
         return $this;
     }
 
+    /**
+     * @return PatternOptions
+     */
     public function getOptions()
     {
         if (null === $this->options) {

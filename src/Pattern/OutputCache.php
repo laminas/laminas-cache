@@ -18,6 +18,9 @@ class OutputCache extends AbstractStorageCapablePattern
      */
     protected $keyStack = [];
 
+    /**
+     * @return OutputCache
+     */
     public function setOptions(PatternOptions $options)
     {
         parent::setOptions($options);

@@ -168,9 +168,9 @@ final class SerializerTest extends AbstractCommonPluginTest
     public function testOnDecrementItemWillAssumeZeroForNonExistingCacheItem(): void
     {
         $adapter = $this->createMock(StorageInterface::class);
-        $plugin = new Serializer();
-        $event = new Event('foo', $adapter, new ArrayObject([
-            'key' => 'foo',
+        $plugin  = new Serializer();
+        $event   = new Event('foo', $adapter, new ArrayObject([
+            'key'   => 'foo',
             'value' => 10,
         ]));
         $adapter
@@ -178,7 +178,7 @@ final class SerializerTest extends AbstractCommonPluginTest
             ->method('getItem')
             ->willReturnCallback(static function (string $key, &$success, &$casToken): ?int {
                 self::assertEquals('foo', $key);
-                $success = false;
+                $success  = false;
                 $casToken = null;
                 return $casToken;
             });
@@ -195,9 +195,9 @@ final class SerializerTest extends AbstractCommonPluginTest
     public function testOnIncrementItemWillAssumeZeroForNonExistingCacheItem(): void
     {
         $adapter = $this->createMock(StorageInterface::class);
-        $plugin = new Serializer();
-        $event = new Event('foo', $adapter, new ArrayObject([
-            'key' => 'foo',
+        $plugin  = new Serializer();
+        $event   = new Event('foo', $adapter, new ArrayObject([
+            'key'   => 'foo',
             'value' => 10,
         ]));
         $adapter
@@ -205,7 +205,7 @@ final class SerializerTest extends AbstractCommonPluginTest
             ->method('getItem')
             ->willReturnCallback(static function (string $key, &$success, &$casToken): ?int {
                 self::assertEquals('foo', $key);
-                $success = false;
+                $success  = false;
                 $casToken = null;
                 return $casToken;
             });

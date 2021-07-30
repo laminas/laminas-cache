@@ -13,6 +13,9 @@ use function strtolower;
  */
 class ClassCache extends CallbackCache
 {
+    /**
+     * @return ClassCache
+     */
     public function setOptions(PatternOptions $options)
     {
         parent::setOptions($options);

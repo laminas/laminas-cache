@@ -47,10 +47,14 @@ abstract class AbstractStorageCapablePattern extends AbstractPattern implements 
         ));
     }
 
+    /**
+     * @return AbstractStorageCapablePattern
+     */
     public function setOptions(PatternOptions $options)
     {
         $this->assertStorageMatchesStorageFromOptions($this->storage, $options);
-        return parent::setOptions($options);
+        parent::setOptions($options);
+        return $this;
     }
 
     public function getStorage(): ?StorageInterface
