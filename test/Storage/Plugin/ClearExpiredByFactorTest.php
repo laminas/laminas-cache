@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace LaminasTest\Cache\Storage\Plugin;
 
 use ArrayObject;
@@ -16,27 +10,19 @@ use LaminasTest\Cache\Storage\TestAsset\ClearExpiredMockAdapter;
 use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
 use function array_shift;
-use function count;
 use function get_class;
 
-/**
- * @covers \Laminas\Cache\Storage\Plugin\ClearExpiredByFactor
- */
-class ClearExpiredByFactorTestAbstract extends AbstractCommonPluginTest
+final class ClearExpiredByFactorTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    /**
-     * The storage adapter
-     *
-     * @var MockAdapter
-     */
+    /** @var MockAdapter */
     protected $adapter;
 
     /** @var Cache\Storage\Plugin\PluginOptions */
     private $options;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->adapter = new ClearExpiredMockAdapter();
         $this->options = new Cache\Storage\Plugin\PluginOptions([
@@ -48,10 +34,7 @@ class ClearExpiredByFactorTestAbstract extends AbstractCommonPluginTest
         parent::setUp();
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
-     */
-    public function getCommonPluginNamesProvider()
+    public function getCommonPluginNamesProvider(): array
     {
         return [
             ['clear_expired_by_factor'],
@@ -76,7 +59,7 @@ class ClearExpiredByFactorTestAbstract extends AbstractCommonPluginTest
             $listeners = $this->getArrayOfListenersForEvent($eventName, $this->adapter->getEventManager());
 
             // event should attached only once
-            self::assertSame(1, count($listeners));
+            self::assertCount(1, $listeners);
 
             // check expected callback method
             $cb = array_shift($listeners);
@@ -93,7 +76,7 @@ class ClearExpiredByFactorTestAbstract extends AbstractCommonPluginTest
         $this->adapter->removePlugin($this->plugin);
 
         // no events should be attached
-        self::assertEquals(0, count($this->getEventsFromEventManager($this->adapter->getEventManager())));
+        self::assertCount(0, $this->getEventsFromEventManager($this->adapter->getEventManager()));
     }
 
     public function testClearExpiredByFactor(): void
@@ -105,9 +88,9 @@ class ClearExpiredByFactorTestAbstract extends AbstractCommonPluginTest
 
         // test clearByNamespace will be called
         $adapter
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('clearExpired')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // call event callback
         $result = true;

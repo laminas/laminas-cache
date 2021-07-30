@@ -266,9 +266,16 @@ class Capabilities
 ### Get Storage Capabilities and do specific Stuff based on them
 
 ```php
-use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
 
-$cache = StorageFactory::adapterFactory('filesystem');
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container->get(StorageAdapterFactoryInterface::class);
+
+$cache = $storageFactory->create('filesystem');
 $supportedDatatypes = $cache->getCapabilities()->getSupportedDatatypes();
 
 // now you can run specific stuff in base of supported feature
@@ -282,9 +289,16 @@ if ($supportedDatatypes['object']) {
 ### Listen to the change Event
 
 ```php
-use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
 
-$cache = StorageFactory::adapterFactory('filesystem', [
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container->get(StorageAdapterFactoryInterface::class);
+
+$cache = $storageFactory->create('filesystem', [
     'no_atime' => false,
 ]);
 

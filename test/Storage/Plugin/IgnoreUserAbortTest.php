@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace LaminasTest\Cache\Storage\Plugin;
 
 use Laminas\Cache;
@@ -13,27 +7,18 @@ use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 
 use function array_shift;
-use function count;
 
-/**
- * @group      Laminas_Cache
- * @covers \Laminas\Cache\Storage\Plugin\IgnoreUserAbort<extended>
- */
-class IgnoreUserAbortTestAbstract extends AbstractCommonPluginTest
+final class IgnoreUserAbortTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    /**
-     * The storage adapter
-     *
-     * @var AbstractAdapter
-     */
+    /** @var AbstractAdapter */
     protected $adapter;
 
     /** @var Cache\Storage\Plugin\PluginOptions */
     private $options;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->adapter = $this->getMockForAbstractClass(AbstractAdapter::class);
         $this->options = new Cache\Storage\Plugin\PluginOptions();
@@ -41,10 +26,7 @@ class IgnoreUserAbortTestAbstract extends AbstractCommonPluginTest
         $this->plugin->setOptions($this->options);
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
-     */
-    public function getCommonPluginNamesProvider()
+    public function getCommonPluginNamesProvider(): array
     {
         return [
             'lowercase with underscore' => ['ignore_user_abort'],
@@ -98,7 +80,7 @@ class IgnoreUserAbortTestAbstract extends AbstractCommonPluginTest
             $listeners = $this->getArrayOfListenersForEvent($eventName, $this->adapter->getEventManager());
 
             // event should attached only once
-            self::assertSame(1, count($listeners));
+            self::assertCount(1, $listeners);
 
             // check expected callback method
             $cb = array_shift($listeners);
@@ -115,6 +97,6 @@ class IgnoreUserAbortTestAbstract extends AbstractCommonPluginTest
         $this->adapter->removePlugin($this->plugin);
 
         // no events should be attached
-        self::assertEquals(0, count($this->getEventsFromEventManager($this->adapter->getEventManager())));
+        self::assertCount(0, $this->getEventsFromEventManager($this->adapter->getEventManager()));
     }
 }

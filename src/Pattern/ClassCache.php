@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
@@ -14,13 +8,13 @@ use function in_array;
 use function md5;
 use function strtolower;
 
+/**
+ * @deprecated This pattern will be removed in 3.0.0.
+ */
 class ClassCache extends CallbackCache
 {
     /**
-     * Set options
-     *
-     * @return ClassCache Provides a fluent interface
-     * @throws Exception\InvalidArgumentException If missing 'class' or 'storage' options.
+     * @return ClassCache
      */
     public function setOptions(PatternOptions $options)
     {
@@ -28,9 +22,12 @@ class ClassCache extends CallbackCache
 
         if (! $options->getClass()) {
             throw new Exception\InvalidArgumentException("Missing option 'class'");
-        } elseif (! $options->getStorage()) {
+        }
+
+        if (! $this->getStorage()) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
+
         return $this;
     }
 
@@ -48,7 +45,6 @@ class ClassCache extends CallbackCache
         $options   = $this->getOptions();
         $classname = $options->getClass();
         $method    = strtolower($method);
-        $callback  = $classname . '::' . $method;
 
         $cache = $options->getCacheByDefault();
         if ($cache) {
@@ -58,14 +54,11 @@ class ClassCache extends CallbackCache
         }
 
         if (! $cache) {
-            if ($args) {
-                return $callback(...$args);
-            }
-
-            return $classname::$method();
+            return $classname::$method(...$args);
         }
 
-        return parent::call($callback, $args);
+        $callable = $classname . '::' . $method;
+        return parent::call($callable, $args);
     }
 
     /**

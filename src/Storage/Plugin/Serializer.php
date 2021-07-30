@@ -1,16 +1,11 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Cache\Storage\Plugin;
 
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\Event;
 use Laminas\Cache\Storage\PostEvent;
+use Laminas\Cache\Storage\StorageInterface;
 use Laminas\EventManager\EventManagerInterface;
 use stdClass;
 
@@ -122,22 +117,21 @@ class Serializer extends AbstractPlugin
      */
     public function onIncrementItemPre(Event $event)
     {
+        /** @var StorageInterface $storage */
         $storage  = $event->getTarget();
         $params   = $event->getParams();
         $casToken = null;
         $success  = null;
-        $oldValue = $storage->getItem($params['key'], $success, $casToken);
+        $oldValue = $storage->getItem($params['key'], $success, $casToken) ?? null;
         $newValue = $oldValue + $params['value'];
 
-        if ($success) {
-            $storage->checkAndSetItem($casToken, $params['key'], $oldValue + $params['value']);
-            $result = $newValue;
-        } else {
-            $result = false;
+        $event->stopPropagation(true);
+
+        if ($storage->checkAndSetItem($casToken, $params['key'], $oldValue + $params['value'])) {
+            return $newValue;
         }
 
-        $event->stopPropagation(true);
-        return $result;
+        return false;
     }
 
     /**
@@ -174,22 +168,20 @@ class Serializer extends AbstractPlugin
      */
     public function onDecrementItemPre(Event $event)
     {
+        /** @var StorageInterface $storage */
         $storage  = $event->getTarget();
         $params   = $event->getParams();
         $success  = null;
         $casToken = null;
-        $oldValue = $storage->getItem($params['key'], $success, $casToken);
+        $oldValue = $storage->getItem($params['key'], $success, $casToken) ?? 0;
         $newValue = $oldValue - $params['value'];
 
-        if ($success) {
-            $storage->checkAndSetItem($casToken, $params['key'], $oldValue + $params['value']);
-            $result = $newValue;
-        } else {
-            $result = false;
+        $event->stopPropagation(true);
+        if ($storage->checkAndSetItem($casToken, $params['key'], $newValue)) {
+            return $newValue;
         }
 
-        $event->stopPropagation(true);
-        return $result;
+        return false;
     }
 
     /**

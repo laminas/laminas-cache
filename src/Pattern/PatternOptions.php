@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
@@ -726,6 +720,9 @@ class PatternOptions extends AbstractOptions
      * - ObjectCache
      * - OutputCache
      *
+     * @deprecated This method will be removed with v3.0.0.
+     *             The underlying storage will be a dependency of the cache pattern instead.
+     *
      * @param  string|array|Storage $storage
      * @return PatternOptions Provides a fluent interface
      */
@@ -743,6 +740,9 @@ class PatternOptions extends AbstractOptions
      * - ClassCache
      * - ObjectCache
      * - OutputCache
+     *
+     * @deprecated This method will be removed with v3.0.0.
+     *             The underlying storage will be a dependency of the cache pattern instead.
      *
      * @return null|Storage
      */

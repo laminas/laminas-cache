@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Cache\Service;
 
 use Interop\Container\ContainerInterface;
@@ -21,6 +15,8 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
 {
     use PluginManagerLookupTrait;
 
+    public const CACHES_CONFIGURATION_KEY = 'caches';
+
     /** @var array */
     protected $config;
 
@@ -29,7 +25,7 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
      *
      * @var string
      */
-    protected $configKey = 'caches';
+    protected $configKey = self::CACHES_CONFIGURATION_KEY;
 
     /**
      * @param string $requestedName

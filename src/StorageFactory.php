@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Cache;
 
 use Laminas\Cache\Storage\PluginAwareInterface;
@@ -24,7 +18,11 @@ use function trigger_error;
 use const E_USER_DEPRECATED;
 
 /**
- * @phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
+ * @deprecated Please do not use static factories anymore.
+ *             Inject {@see StorageAdapterFactoryInterface} if you want to create a storage instance.
+ *             Inject {@see StoragePluginFactoryInterface} if you want to create a plugin instance.
+ *
+ * phpcs:disable WebimpressCodingStandard.NamingConventions.AbstractClass.Prefix
  */
 abstract class StorageFactory
 {

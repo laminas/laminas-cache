@@ -20,10 +20,14 @@ ErrorDocument 404 /index.php
 And add the cache to the related application script, e.g. `index.php`:
 
 ```php
-use Laminas\Cache\PatternFactory;
-$capture = Laminas\Cache\PatternFactory::factory('capture', [
-    'public_dir' => __DIR__,
-]);
+use Laminas\Cache\Pattern\CaptureCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$capture = new CaptureCache(
+    new PatternOptions([
+        'public_dir' => __DIR__,
+    ])
+);
 
 // Start capturing all output, excluding headers, and write to the public
 // directory:
@@ -42,9 +46,34 @@ Option | Data Type | Default Value | Description
 `public_dir` | `string` | none | Location of the public web root directory in which to write output.
 `index_filename` | `string` | "index.html" | The name of the index file if only a directory was requested.
 `file_locking` | `bool` | `true` | Whether or not to lock output files when writing.
-`file_permission` | `int | bool` | `0600` (`false` on Windows) | Default permissions for generated output files.
-`dir_permission` | `int | bool` | `0700` (`false` on Windows) | Default permissions for generated output directories.
-`umask` | `int` | `bool` | `false` | Whether or not to umask generated output files / directories.
+`file_permission` | `int\|false` | `0600` (`false` on Windows) | Default permissions for generated output files.
+`dir_permission` | `int\|false` | `0700` (`false` on Windows) | Default permissions for generated output directories.
+`umask` | `int\|false` | `false` | Whether or not to umask generated output files / directories.
+
+## Examples
+
+### Scaling Images in the Web Root
+
+Using the following Apache 404 configuration:
+
+```apacheconf
+# .htdocs
+ErrorDocument 404 /index.php
+```
+
+Use the following script:
+
+```php
+// index.php
+use Laminas\Cache\Pattern\CaptureCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$capture = new CaptureCache(
+    new PatternOptions([
+        'public_dir' => __DIR__,
+    ])
+);
+```
 
 ## Available Methods
 
@@ -55,7 +84,6 @@ exposes the following methods.
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
-use Laminas\Stdlib\ErrorHandler;
 
 class CaptureCache extends AbstractPattern
 {
@@ -121,26 +149,4 @@ class CaptureCache extends AbstractPattern
      */
     public function getFilename($pageId = null);
 }
-```
-
-## Examples
-
-### Scaling Images in the Web Root
-
-Using the following Apache 404 configuration:
-
-```apacheconf
-# .htdocs
-ErrorDocument 404 /index.php
-```
-
-Use the following script:
-
-```php
-// index.php
-$captureCache = Laminas\Cache\PatternFactory::factory('capture', [
-    'public_dir' => __DIR__,
-]);
-
-// TODO
 ```

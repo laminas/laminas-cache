@@ -14,35 +14,60 @@ Configuration is handled by either `Laminas\Cache\Storage\Adapter\AdapterOptions
 or an adapter-specific options class if it exists. You may pass the options
 instance to the class at instantiation, via the `setOptions()` method, or,
 alternately, pass an associative array of options in either place (internally,
-these are then passed to an options class instance). Alternately, you can pass
-either the options instance or associative array to the
-`Laminas\Cache\StorageFactory::factory` method.
+these are then passed to an options class instance). Alternately, you can pass associative array to the
+`Laminas\Cache\Service\StorageAdapterFactoryInterface::create` method.
 
 ## Quick Start
 
 Caching adapters can either be created from the provided
-`Laminas\Cache\StorageFactory`, or by instantiating one of the
+`Laminas\Cache\Service\StorageAdapterFactoryInterface`, or by instantiating one of the
 `Laminas\Cache\Storage\Adapter\*` classes.  To make life easier, the
-`Laminas\Cache\StorageFactory` comes with a `factory()` method to create an adapter
+`Laminas\Cache\Service\StorageAdapterFactoryInterface` comes with a `create()` method to create an adapter
 and all requested plugins at once.
 
 ```php
-use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Laminas\Cache\Service\StoragePluginFactoryInterface;
+use Psr\Container\ContainerInterface;
+
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container->get(StorageAdapterFactoryInterface::class);
 
 // Via factory:
-$cache = StorageFactory::factory([
-    'adapter' => [
-        'name'    => 'apc',
-        'options' => ['ttl' => 3600],
-    ],
+$cache = $storageFactory->create(
+    'apc',
+    ['ttl' => 3600],
+    [
+        [
+            'name' => 'exception_handler',
+            'options' => [
+                'throw_exceptions' => false,
+             ], 
+        ],
+    ]
+);
+
+// Via array configuration:
+$cache = $storageFactory->createFromArrayConfiguration([
+    'adapter' => 'apc',
+    'options' => ['ttl' => 3600],
     'plugins' => [
-        'exception_handler' => ['throw_exceptions' => false],
+        [
+            'name' => 'exception_handler',
+            'options' => [
+                'throw_exceptions' => false,
+             ], 
+        ],
     ],
 ]);
 
 // Alternately, create the adapter and plugin separately:
-$cache  = StorageFactory::adapterFactory('apc', ['ttl' => 3600]);
-$plugin = StorageFactory::pluginFactory('exception_handler', [
+$cache  = $storageFactory->create('apc', ['ttl' => 3600]);
+$pluginFactory = $container->get(StoragePluginFactoryInterface::class);
+$plugin = $pluginFactory->create('exception_handler', [
     'throw_exceptions' => false,
 ]);
 $cache->addPlugin($plugin);
@@ -740,11 +765,13 @@ Name | Data Type | Default Value | Description
 
 ## Redis Adapter
 
-`Laminas\Cache\Storage\Adapter\Redis` stores cache items over the redis protocol
-using the PHP extension [redis](https://github.com/nicolasff/phpredis).
+`Laminas\Cache\Storage\Adapter\Redis` stores cache items over the [Redis](https://redis.io) protocol
+using the PHP extension [PhpRedis](https://github.com/phpredis/phpredis).
 
 This adapter implements the following interfaces:
 
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
 - `Laminas\Cache\Storage\FlushableInterface`
 - `Laminas\Cache\Storage\TotalSpaceCapableInterface`
 
@@ -753,14 +780,14 @@ This adapter implements the following interfaces:
 Capability | Value
 ---------- | -----
 `supportedDatatypes` | `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | none
+`supportedMetadata` | ttl (Redis v2+)
 `minTtl` | 1
 `maxTtl` | 0
 `staticTtl` | `true`
 `ttlPrecision` | 1
 `useRequestTime` | `false`
 `lockOnExpire` | 0
-`maxKeyLength` | 255
+`maxKeyLength` | 512000000 (in Redis v3+, 255 otherwise)
 `namespaceIsPrefix` | `true`
 `namespaceSeparator` | none
 
@@ -769,18 +796,59 @@ Capability | Value
 Name | Data Type | Default Value | Description
 ---- | --------- | ------------- | -----------
 `database` | `integer` | 0 | Set database identifier.
-`lib_options` | `array` | `[]` | Associative array of redis options where the array key is the option name.
+`lib_options` | `array` | `[]` | Associative array of Redis options where the array key is the option name.
 `namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
 `password` | `string` | "" | Set password.
 `persistent_id` | `string` | | Set persistent id (name of the connection, leave blank to not use a persistent connection).
-`resource_manager` | `string` | | Set the redis resource manager to use
-`server` | | | See below.
+`resource_manager` | `string` | "" | Set the Redis resource manager to use
+`server` | `string\|array` | "" | See below.
 
 `server` can be described as any of the following:
 
 - URI: `/path/to/sock.sock`
 - Associative array: `['host' => <host>[, 'port' => <port>[, 'timeout' => <timeout>]]]`
 - List: `[<host>[, <port>, [, <timeout>]]]`
+
+## RedisCluster Adapter
+
+`Laminas\Cache\Storage\Adapter\RedisCluster` stores cache items over the [Redis cluster](https://github.com/phpredis/phpredis#redis-cluster-support) protocol
+using the PHP extension [PhpRedis](https://github.com/phpredis/phpredis).
+
+This adapter implements the following interfaces:
+
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+
+### Capabilities
+
+Capability | Value
+---------- | -----
+`supportedDatatypes` | `string`, `array` (serialized), `object` (serialized)
+`supportedMetadata` | ttl (Redis v2+)
+`minTtl` | 1
+`maxTtl` | 0
+`staticTtl` | `true`
+`ttlPrecision` | 1
+`useRequestTime` | `false`
+`lockOnExpire` | 0
+`maxKeyLength` | 512000000 (in Redis v3+, 255 otherwise)
+`namespaceIsPrefix` | `true`
+`namespaceSeparator` | none
+
+### Adapter Specific Options
+
+Name | Data Type | Default Value | Description
+---- | --------- | ------------- | -----------
+`lib_options` | `array` | `[]` | Associative array of Redis options where the array key is the options constant value (see `RedisCluster::OPT_*` [constants](https://github.com/JetBrains/phpstorm-stubs/blob/master/redis/RedisCluster.php) for details).
+`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
+`password` | `string` | "" | Password to authenticate with Redis server
+`name` | `string` | "" | Name to determine configuration from [php.ini](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#loading-a-cluster-configuration-by-name) (**MUST NOT** be combined with `seeds`)
+`seeds` | `array` | `[]` | List of strings containing `<hostname>:<port>` (**MUST NOT** be combined with `name`)
+`timeout` | `float` | `1.0` | Timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.
+`read_timeout` | `float` | `2.0` | Read timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.
+`persistent` | `bool` | `false` | Flag to specify whether to create a persistent connection or not
+`version` | `string` | "" | The Redis server version. **MUST** be specified in a [Semantic Versioning 2.0.0](https://semver.org/#semantic-versioning-200) format. This information is used to determine some features/capabilities without opening a connection to the server.
 
 ## Memory Adapter
 
@@ -1071,19 +1139,28 @@ Capability | Value
 ### Basic Usage
 
 ```php
-use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
 
-$cache = StorageFactory::factory([
-    'adapter' => [
-        'name' => 'filesystem'
-    ],
-    'plugins' => [
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container->get(StorageAdapterFactoryInterface::class);
+
+$cache = $storageFactory->create(
+    'filesystem', 
+    [], 
+    [
         // Don't throw exceptions on cache errors
-        'exception_handler' => [
-            'throw_exceptions' => false
+        [
+            'name' => 'exception_handler',
+            'options' => [
+                'throw_exceptions' => false
+            ],
         ],
-    ],
-]);
+    ]
+);
 
 $key    = 'unique-cache-key';
 $result = $cache->getItem($key, $success);
@@ -1096,27 +1173,37 @@ if (! $success) {
 ### Get multiple Rows from a Database
 
 ```php
-use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
+
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container->get(StorageAdapterFactoryInterface::class);
 
 // Instantiate the cache instance using a namespace for the same type of items
-$cache = StorageFactory::factory([
-    'adapter' => [
-        'name' => 'filesystem',
-        // With a namespace, we can indicate the same type of items,
+$cache = $storageFactory->create(
+    'filesystem',
+    // With a namespace, we can indicate the same type of items,
         // so we can simply use the database id as the cache key
-        'options' => [
-            'namespace' => 'dbtable',
-        ],
+    [
+        'namespace' => 'dbtable',
     ],
-    'plugins' => [
+    [
         // Don't throw exceptions on cache errors
-        'exception_handler' => [
-            'throw_exceptions' => false,
+        [
+            'name' => 'exception_handler',
+            'options' => [
+                'throw_exceptions' => false,
+            ],
         ],
         // We store database rows on filesystem so we need to serialize them
-        'Serializer',
-    ],
-]);
+        [
+            'name' => 'Serializer',
+        ],
+    ]
+);
 
 // Load two rows from cache if possible
 $ids     = [1, 2];

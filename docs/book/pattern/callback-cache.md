@@ -5,42 +5,50 @@ The callback cache pattern caches the results of arbitrary PHP callables.
 ## Quick Start
 
 ```php
-use Laminas\Cache\PatternFactory;
+use Laminas\Cache\Pattern\CallbackCache;
 use Laminas\Cache\Pattern\PatternOptions;
 
-// Via the factory:
-$callbackCache = PatternFactory::factory('callback', [
-    'storage'      => 'apc',
-    'cache_output' => true,
-]);
-
 // Or the equivalent manual instantiation:
-$callbackCache = new \Laminas\Cache\Pattern\CallbackCache();
-$callbackCache->setOptions(new PatternOptions([
-    'storage'      => 'apc',
-    'cache_output' => true,
-]));
+$callbackCache = new CallbackCache(
+    $storage,
+    new PatternOptions([
+        'cache_output' => true,
+    ])
+);
 ```
+
+> ### Storage Adapter
+>
+> The `$storage` adapter can be any adapter which implements the `StorageInterface`. Check out the [Pattern Quick Start](./intro.md#quick-start)-Section for a standard adapter which can be used here.
 
 ## Configuration Options
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
-`cache_output` | `boolean` | `true` | Whether or not to cache callback output.
+`storage` | `string\|array\|Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
+`cache_output` | `bool` | `true` | Whether or not to cache callback output.
+
+## Examples
+
+### Instantiating the Callback Cache Pattern
+
+```php
+use Laminas\Cache\Pattern\CallbackCache;
+
+$callbackCache = new CallbackCache($storage);
+```
 
 ## Available Methods
 
-In addition to the methods defined in the `PatternInterface`, this
+In addition to the methods defined in the `PatternInterface` and the `StorageCapableInterface`, this
 implementation provides the following methods.
 
 ```php
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
-use Laminas\Stdlib\ErrorHandler;
 
-class CallbackCache extends AbstractPattern
+class CallbackCache extends AbstractStorageCapablePattern
 {
     /**
      * Call the specified callback or get the result from cache
@@ -76,16 +84,4 @@ class CallbackCache extends AbstractPattern
      */
     public function generateKey($callback, array $args = []);
 }
-```
-
-## Examples
-
-### Instantiating the Callback Cache Pattern
-
-```php
-use Laminas\Cache\PatternFactory;
-
-$callbackCache = PatternFactory::factory('callback', [
-    'storage' => 'apc'
-]);
 ```

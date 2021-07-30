@@ -10,22 +10,20 @@ compliant wrapper for supported storage adapters.
 PSR-6 specifies a common interface to cache storage, enabling developers to switch between implementations without
 having to worry about any behind-the-scenes differences between them.
 
-
 ## Quick Start
 
 To use the pool, instantiate your storage as normal, then pass it to the
 `CacheItemPoolDecorator`.
 
 ```php
-use Laminas\Cache\StorageFactory;
-use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;use Laminas\Cache\Service\StorageAdapterFactoryInterface;use Psr\Container\ContainerInterface;
 
-$storage = StorageFactory::factory([
-    'adapter' => [
-        'name'    => 'apc',
-        'options' => [],
-    ],
-]);
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+$storageFactory = $container->get(StorageAdapterFactoryInterface::class);
+
+$storage = $storageFactory->create('apc');
 
 $pool = new CacheItemPoolDecorator($storage);
 
@@ -49,7 +47,6 @@ echo $item->get();
 Note that you will always get back a `CacheItem` object, whether it was found in cache or not: this is so `false`-y
 values like an empty string, `null`, or `false` can be stored. Always check `isHit()` to determine if the item was
 found.
-
 
 ## Supported Adapters
 
@@ -76,7 +73,6 @@ actually saved to storage. If this is set when you instantiate the pool it will 
 `Psr\Cache\CacheException`. Changing the setting after you have instantiated the pool will result in non-standard
 behaviour.
 
-
 ## Logging Errors
 
 The specification [states](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-6-cache.md#error-handling):
@@ -94,8 +90,11 @@ way. Doing so is as simple as adding an [`ExceptionHandler` plugin](storage/plug
 [PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md) compliant logger
 called `$logger`:
 
-
 ```php
+use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
+
 $cacheLogger = function (\Exception $e) use ($logger) {
     $message = sprintf(
         '[CACHE] %s:%s %s "%s"',
@@ -107,24 +106,30 @@ $cacheLogger = function (\Exception $e) use ($logger) {
     $logger->error($message);
 };
 
-$storage = StorageFactory::factory([
-    'adapter' => [
-        'name'    => 'apc',
-    ],
-    'plugins' => [
-        'exceptionhandler' => [
-            'exception_callback' => $cacheLogger,
-            'throw_exceptions' => true,
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+$storageFactory = $container->get(StorageAdapterFactoryInterface::class);              
+
+$storage = $storageFactory->create(
+    'apc', 
+    [], 
+    [
+        [
+            'name' => 'exceptionhandler',
+            'options' => [
+                'exception_callback' => $cacheLogger,
+                'throw_exceptions' => true,
+            ],
         ],
-    ],
-]);
+    ]
+);
 
 $pool = new CacheItemPoolDecorator($storage);
 ```
 
 Note that `throw_exceptions` should always be `true` (the default) or you will not get the correct return values from
 calls on the pool such as `save()`.
-
 
 ## Supported Data Types
 
@@ -135,4 +140,3 @@ returned as a value with exactly the same type.
 Not all adapters can natively store all these types. For instance, Redis stores booleans and integers as a string. Where
 this is the case *all* values will be automatically run through `serialize()` on save and `unserialize()` on get: you
 do not need to use a `Laminas\Cache\Storage\Plugin\Serializer` plugin.
-

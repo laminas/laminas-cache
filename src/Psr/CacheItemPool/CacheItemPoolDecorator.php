@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Cache\Psr\CacheItemPool;
 
 use Laminas\Cache\Exception;
@@ -245,6 +239,11 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     {
         if (! $item instanceof CacheItem) {
             throw new InvalidArgumentException('$item must be an instance of ' . CacheItem::class);
+        }
+
+        $ttl = $item->getTtl();
+        if ($ttl !== null && $ttl <= 0) {
+            return false;
         }
 
         // deferred items should always be a 'hit' until they expire

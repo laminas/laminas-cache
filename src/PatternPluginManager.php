@@ -1,18 +1,11 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 declare(strict_types=1);
 
 namespace Laminas\Cache;
 
 use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\AbstractPluginManager;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 use Webmozart\Assert\Assert;
 
 use function assert;
@@ -38,11 +31,11 @@ class PatternPluginManager extends AbstractPluginManager
 
     /** @var array<string,string> */
     protected $factories = [
-        Pattern\CallbackCache::class => InvokableFactory::class,
-        Pattern\CaptureCache::class  => InvokableFactory::class,
-        Pattern\ClassCache::class    => InvokableFactory::class,
-        Pattern\ObjectCache::class   => InvokableFactory::class,
-        Pattern\OutputCache::class   => InvokableFactory::class,
+        Pattern\CallbackCache::class => Pattern\StoragePatternCacheFactory::class,
+        Pattern\CaptureCache::class  => Pattern\PatternCacheFactory::class,
+        Pattern\ClassCache::class    => Pattern\StoragePatternCacheFactory::class,
+        Pattern\ObjectCache::class   => Pattern\StoragePatternCacheFactory::class,
+        Pattern\OutputCache::class   => Pattern\StoragePatternCacheFactory::class,
     ];
 
     /** @var string */

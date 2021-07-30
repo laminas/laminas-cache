@@ -1,19 +1,16 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace LaminasTest\Cache;
 
+use Laminas\Cache\Pattern;
 use Laminas\Cache\Pattern\PatternInterface;
 use Laminas\Cache\PatternPluginManager;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\ServiceManager\Test\CommonPluginManagerTrait;
+use LaminasTest\Cache\Pattern\TestAsset\TestCachePattern;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class PatternPluginManagerTest extends TestCase
 {
@@ -64,5 +61,38 @@ class PatternPluginManagerTest extends TestCase
     protected function getV2InvalidPluginException()
     {
         self::fail('Somehow, servicemanager v2 compatibility is being tested.');
+    }
+
+    public function testHasPatternCacheFactoriesConfigured(): void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $instance  = new class ($container) extends PatternPluginManager {
+            public function getFactories(): array
+            {
+                return $this->factories;
+            }
+        };
+
+        self::assertEquals([
+            Pattern\CallbackCache::class => Pattern\StoragePatternCacheFactory::class,
+            Pattern\CaptureCache::class  => Pattern\PatternCacheFactory::class,
+            Pattern\ClassCache::class    => Pattern\StoragePatternCacheFactory::class,
+            Pattern\ObjectCache::class   => Pattern\StoragePatternCacheFactory::class,
+            Pattern\OutputCache::class   => Pattern\StoragePatternCacheFactory::class,
+        ], $instance->getFactories());
+    }
+
+    public function testWillPassOptionsToCachePattern(): void
+    {
+        $this->markTestIncomplete(
+            'Will re-enable this when bugfix of https://github.com/laminas/laminas-cache/issues/138 is available.'
+        );
+        $patternPluginManager = $this->getPluginManager();
+        $patternPluginManager->setInvokableClass(TestCachePattern::class);
+        $options = ['cache_output' => false];
+
+        $instance = $patternPluginManager->build(TestCachePattern::class, $options);
+        self::assertInstanceOf(TestCachePattern::class, $instance);
+        self::assertFalse($instance->getOptions()->getCacheOutput());
     }
 }

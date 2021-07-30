@@ -1,16 +1,8 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
-use Laminas\Cache\Pattern\PatternOptions;
-use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\TestObjectCache;
 
 use function get_class;
@@ -23,25 +15,18 @@ use function ob_start;
 /**
  * @group      Laminas_Cache
  */
-class ObjectCacheTest extends AbstractCommonPatternTest
+class ObjectCacheTest extends AbstractCommonStoragePatternTest
 {
-    /** @var StorageInterface */
-    protected $storage;
-
-    /** @var PatternOptions */
-    private $options;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0,
         ]);
-        $this->options = new PatternOptions([
+        $this->options = new Cache\Pattern\PatternOptions([
             'object'  => new TestObjectCache(),
             'storage' => $this->storage,
         ]);
-        $this->pattern = new Cache\Pattern\ObjectCache();
-        $this->pattern->setOptions($this->options);
+        $this->pattern = new Cache\Pattern\ObjectCache($this->storage, $this->options);
 
         parent::setUp();
     }

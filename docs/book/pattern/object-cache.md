@@ -7,32 +7,66 @@ public properties.
 ## Quick Start
 
 ```php
+use Laminas\Cache\Pattern\ObjectCache;
+use Laminas\Cache\Pattern\PatternOptions;
 use stdClass;
-use Laminas\Cache\PatternFactory;
 
 $object      = new stdClass();
-$objectCache = PatternFactory::factory('object', [
-    'object'  => $object,
-    'storage' => 'apc'
-]);
+$objectCache = new ObjectCache(
+    $storage,
+    new PatternOptions([
+      'object'  => $object,
+    ])
+);
 ```
+
+> ### Storage Adapter
+>
+> The `$storage` adapter can be any adapter which implements the `StorageInterface`. Check out the [Pattern Quick Start](./intro.md#quick-start)-Section for a standard adapter which can be used here.
 
 ## Configuration Options
 
 Option | Data Type | Default Value | Description
 ------ | --------- | ------------- | -----------
-`storage` | `string | array | Laminas\Cache\Storage\StorageInterface` | none | Adapter used for reading and writing cached data.
+`storage` | `string\|array\|Laminas\Cache\Storage\StorageInterface` | none | **deprecated** Adapter used for reading and writing cached data.
 `object` | `object` | none | The object for which to cache method calls.
-`object_key` | `null | string` | Class name of object | Hopefully unique!
-`cache_output` | `boolean` | `true` | Whether or not to cache method output.
-`cache_by_default` | `boolean` | `true` | Cache all method calls by default.
+`object_key` | `null\|string` | Class name of object | Hopefully unique!
+`cache_output` | `bool` | `true` | Whether or not to cache method output.
+`cache_by_default` | `bool` | `true` | Cache all method calls by default.
 `object_cache_methods` | `array` | `[]` | List of methods to cache (if `cache_by_default` is disabled).
 `object_non_cache_methods` | `array` | `[]` | List of methods to blacklist (if `cache_by_default` is enabled).
-`object_cache_magic_properties` | `boolean` | `false` | Whether or not to cache properties exposed by method overloading.
+`object_cache_magic_properties` | `bool` | `false` | Whether or not to cache properties exposed by method overloading.
+
+## Examples
+
+### Caching a Filter
+
+```php
+use Laminas\Cache\Pattern\ObjectCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$filter       = new \Laminas\Filter\RealPath();
+$cachedFilter = new ObjectCache(
+    $storage,
+    new PatternOptions([
+        'object'     => $filter,
+        'object_key' => 'RealpathFilter',
+        
+        // The realpath filter doesn't output anything
+        // so the output don't need to be caught and cached
+        'cache_output' => false,
+    ])
+);
+
+$path = $cachedFilter->call("filter", ['/www/var/path/../../mypath']);
+
+// OR
+$path = $cachedFilter->filter('/www/var/path/../../mypath');
+```
 
 ## Available Methods
 
-In addition to the methods defined in `PatternInterface`, this implementation
+In addition to the methods defined in `PatternInterface` and the `StorageCapableInterface`, this implementation
 defines the following methods.
 
 ```php
@@ -146,26 +180,4 @@ class ObjectCache extends CallbackCache
      */
     public function __invoke();
 }
-```
-
-## Examples
-
-### Caching a Filter
-
-```php
-$filter       = new Laminas\Filter\RealPath();
-$cachedFilter = Laminas\Cache\PatternFactory::factory('object', [
-    'object'     => $filter,
-    'object_key' => 'RealpathFilter',
-    'storage'    => 'apc',
-
-    // The realpath filter doesn't output anything
-    // so the output don't need to be caught and cached
-    'cache_output' => false,
-]);
-
-$path = $cachedFilter->call("filter", ['/www/var/path/../../mypath']);
-
-// OR
-$path = $cachedFilter->filter('/www/var/path/../../mypath');
 ```

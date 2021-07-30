@@ -1,15 +1,8 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
-use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\TestClassCache;
 
 use function implode;
@@ -21,14 +14,8 @@ use function ob_start;
  * @group      Laminas_Cache
  * @covers \Laminas\Cache\Pattern\ClassCache<extended>
  */
-class ClassCacheTest extends AbstractCommonPatternTest
+class ClassCacheTest extends AbstractCommonStoragePatternTest
 {
-    /** @var StorageInterface */
-    protected $storage;
-
-    /** @var Cache\Pattern\PatternOptions */
-    private $options;
-
     public function setUp(): void
     {
         $this->storage = new Cache\Storage\Adapter\Memory([
@@ -51,7 +38,7 @@ class ClassCacheTest extends AbstractCommonPatternTest
     {
         return [
             'lowercase' => ['class'],
-            'lcfirst'   => ['Class'],
+            'ucfirst'   => ['Class'],
         ];
     }
 

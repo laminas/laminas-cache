@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace LaminasTest\Cache\Storage\Plugin;
 
 use Laminas\Cache\Storage\Plugin\PluginInterface;
@@ -14,34 +8,28 @@ use Laminas\Cache\Storage\PluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 
-/**
- * PHPUnit test case
- */
-
-/**
- * @group      Laminas_Cache
- * @covers \Laminas\Cache\Storage\Plugin\PluginOptions<extended>
- */
 abstract class AbstractCommonPluginTest extends TestCase
 {
-    /**
-     * The storage plugin
-     *
-     * @var PluginInterface
-     */
+    /** @var PluginInterface */
     protected $plugin;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        if (! $this->plugin instanceof PluginInterface) {
+            self::fail('Cannot detect plugin instance.');
+        }
+    }
 
     /**
      * A data provider for common storage plugin names
-     *
-     * @return iterable<string,array{0:string}>
      */
     abstract public function getCommonPluginNamesProvider();
 
     /**
      * @dataProvider getCommonPluginNamesProvider
      */
-    public function testPluginManagerWithCommonNames(string $commonPluginName)
+    public function testPluginManagerWithCommonNames(string $commonPluginName): void
     {
         $pluginManager = new PluginManager(new ServiceManager());
         self::assertTrue(
@@ -50,13 +38,13 @@ abstract class AbstractCommonPluginTest extends TestCase
         );
     }
 
-    public function testOptionObjectAvailable(): void
+    public function testOptionObjectAvailable()
     {
         $options = $this->plugin->getOptions();
         self::assertInstanceOf(PluginOptions::class, $options);
     }
 
-    public function testOptionsGetAndSetDefault(): void
+    public function testOptionsGetAndSetDefault()
     {
         $options = $this->plugin->getOptions();
         $this->plugin->setOptions($options);

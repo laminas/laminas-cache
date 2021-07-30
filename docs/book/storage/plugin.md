@@ -13,24 +13,36 @@ The plugins listen to events the adapter triggers, and can:
 ## Quick Start
 
 Storage plugins can either be created from
-`Laminas\Cache\StorageFactory::pluginFactory()`, or by instantiating one of the
+`Laminas\Cache\Service\StoragePluginFactoryInterface::create()`, or by instantiating one of the
 `Laminas\Cache\Storage\Plugin\*` classes.
 
-To make life easier, `Laminas\Cache\StorageFactory::factory()` can create both the
+To make life easier, `Laminas\Cache\Service\StoragePluginFactoryInterface::create()` can create both the
 requested adapter and all specified plugins at once.
 
 ```php
-use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Service\StoragePluginFactoryInterface;
+use Psr\Container\ContainerInterface;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+$storageFactory = $container->get(StorageAdapterFactoryInterface::class);
 
 // All at once:
-$cache = StorageFactory::factory([
-    'adapter' => 'filesystem',
-    'plugins' => ['serializer'],
-]);
+$cache = $storageFactory->create(
+    'filesystem', 
+    [], 
+    [
+        ['name' => 'serializer'],
+    ]
+);
 
 // Alternately, via discrete factory methods:
-$cache  = StorageFactory::adapterFactory('filesystem');
-$plugin = StorageFactory::pluginFactory('serializer');
+$cache  = $storageFactory->create('filesystem');
+
+$pluginFactory = $container->get(StoragePluginFactoryInterface::class);
+$plugin = $pluginFactory->create('serializer');
 $cache->addPlugin($plugin);
 
 // Or manually:

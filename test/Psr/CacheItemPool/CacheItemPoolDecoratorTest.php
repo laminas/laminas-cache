@@ -1,15 +1,11 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace LaminasTest\Cache\Psr\CacheItemPool;
 
+use DateTimeImmutable;
 use Laminas\Cache\Exception;
 use Laminas\Cache\Psr\CacheItemPool\CacheException;
+use Laminas\Cache\Psr\CacheItemPool\CacheItem;
 use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
@@ -18,6 +14,7 @@ use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\EventManager\EventManager;
+use LaminasTest\Cache\Psr\CacheItemPool\TestAsset\FlushableStorageAdapterInterface;
 use LaminasTest\Cache\Psr\TestAsset\FlushableNamespaceStorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +25,7 @@ use Throwable;
 use function array_keys;
 use function array_map;
 use function assert;
+use function time;
 
 final class CacheItemPoolDecoratorTest extends TestCase
 {
@@ -952,6 +950,37 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willReturn(['foo' => $exists]);
 
         self::assertEquals($successful, $this->adapter->deleteItems(['foo']));
+    }
+
+    public function testWontSaveAlreadyExpiredCacheItemAsDeferredItem(): void
+    {
+        $adapter = $this->createMock(FlushableStorageAdapterInterface::class);
+        $adapter
+            ->expects(self::exactly(2))
+            ->method('getCapabilities')
+            ->willReturn(new Capabilities($adapter, new stdClass(), $this->defaultCapabilities));
+
+        $adapter
+            ->expects(self::never())
+            ->method('removeItems');
+        $adapter
+            ->expects(self::never())
+            ->method('setItem');
+
+        $adapter
+            ->expects(self::once())
+            ->method('hasItem')
+            ->with('foo')
+            ->willReturn(false);
+
+        $item = new CacheItem('foo', 'bar', false);
+        $item->expiresAt(DateTimeImmutable::createFromFormat('U', time() - 1));
+
+        $cache = new CacheItemPoolDecorator($adapter);
+        $cache->saveDeferred($item);
+
+        self::assertFalse($item->isHit());
+        self::assertFalse($cache->hasItem($item->getKey()));
     }
 
     /**

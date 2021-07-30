@@ -1,16 +1,9 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
 use Laminas\Cache\Exception\InvalidArgumentException;
-use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\FailableCallback;
 use LaminasTest\Cache\Pattern\TestAsset\TestCallbackCache;
 
@@ -32,15 +25,9 @@ function bar(): string
 /**
  * @group      Laminas_Cache
  */
-class CallbackCacheTest extends AbstractCommonPatternTest
+class CallbackCacheTest extends AbstractCommonStoragePatternTest
 {
-    /** @var StorageInterface */
-    protected $storage;
-
-    /** @var Cache\Pattern\PatternOptions */
-    private $options;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0,

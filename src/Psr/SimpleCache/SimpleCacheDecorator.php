@@ -1,19 +1,13 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Cache\Psr\SimpleCache;
 
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
-use Exception;
 use Laminas\Cache\Exception\InvalidArgumentException as LaminasCacheInvalidArgumentException;
 use Laminas\Cache\Psr\SerializationTrait;
+use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
@@ -65,6 +59,12 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /** @var DateTimeZone */
     private $utc;
 
+    /**
+     * @var int
+     * @psalm-var 0|positive-int
+     */
+    private $maximumKeyLength;
+
     public function __construct(StorageInterface $storage)
     {
         if ($this->isSerializationRequired($storage)) {
@@ -76,7 +76,10 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             ));
         }
 
-        $this->memoizeTtlCapabilities($storage);
+        $capabilities = $storage->getCapabilities();
+        $this->memoizeTtlCapabilities($capabilities);
+        $this->memoizeMaximumKeyLengthCapability($storage, $capabilities);
+
         $this->storage = $storage;
         $this->utc     = new DateTimeZone('UTC');
     }
@@ -92,7 +95,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $result = $this->storage->getItem($key, $this->success);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            throw static::translateThrowable($e);
         }
 
         $result = $result ?? $default;
@@ -129,7 +132,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $result = $this->storage->setItem($key, $value);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            throw static::translateThrowable($e);
         } finally {
             $options->setTtl($previousTtl);
         }
@@ -180,7 +183,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $results = $this->storage->getItems($keys);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            throw static::translateThrowable($e);
         }
 
         foreach ($keys as $key) {
@@ -226,7 +229,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             $result = $this->storage->setItems($values);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            throw static::translateThrowable($e);
         } finally {
             $options->setTtl($previousTtl);
         }
@@ -285,21 +288,17 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         try {
             return $this->storage->hasItem($key);
         } catch (Throwable $e) {
-            throw static::translateException($e);
+            throw static::translateThrowable($e);
         }
     }
 
-    /**
-     * @param Throwable|Exception $e
-     * @return SimpleCacheException
-     */
-    private static function translateException($e)
+    private static function translateThrowable(Throwable $throwable): SimpleCacheException
     {
-        $exceptionClass = $e instanceof LaminasCacheInvalidArgumentException
+        $exceptionClass = $throwable instanceof LaminasCacheInvalidArgumentException
             ? SimpleCacheInvalidArgumentException::class
             : SimpleCacheException::class;
 
-        return new $exceptionClass($e->getMessage(), $e->getCode(), $e);
+        return new $exceptionClass($throwable->getMessage(), $throwable->getCode(), $throwable);
     }
 
     /**
@@ -342,22 +341,23 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             ));
         }
 
-        if (preg_match('/^.{65,}/u', $key)) {
+        if (
+            $this->maximumKeyLength !== Capabilities::UNLIMITED_KEY_LENGTH
+            && preg_match('/^.{' . ($this->maximumKeyLength + 1) . ',}/u', $key)
+        ) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
-                'Invalid key "%s" provided; key is too long. Must be no more than 64 characters',
-                $key
+                'Invalid key "%s" provided; key is too long. Must be no more than %d characters',
+                $key,
+                $this->maximumKeyLength
             ));
         }
     }
 
     /**
      * Determine if the storage adapter provides per-item TTL capabilities
-     *
-     * @return void
      */
-    private function memoizeTtlCapabilities(StorageInterface $storage)
+    private function memoizeTtlCapabilities(Capabilities $capabilities): void
     {
-        $capabilities             = $storage->getCapabilities();
         $this->providesPerItemTtl = $capabilities->getStaticTtl() && (0 < $capabilities->getMinTtl());
     }
 
@@ -441,5 +441,30 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             $array[$key] = $value;
         }
         return $array;
+    }
+
+    private function memoizeMaximumKeyLengthCapability(StorageInterface $storage, Capabilities $capabilities): void
+    {
+        $maximumKeyLength = $capabilities->getMaxKeyLength();
+
+        if ($maximumKeyLength === Capabilities::UNLIMITED_KEY_LENGTH) {
+            $this->maximumKeyLength = Capabilities::UNLIMITED_KEY_LENGTH;
+            return;
+        }
+
+        if ($maximumKeyLength === Capabilities::UNKNOWN_KEY_LENGTH) {
+            // For backward compatibility, assume adapters which do not provide a maximum key length do support 64 chars
+            $maximumKeyLength = 64;
+        }
+
+        if ($maximumKeyLength < 64) {
+            throw new SimpleCacheInvalidArgumentException(sprintf(
+                'The storage adapter "%s" does not fulfill the minimum requirements for PSR-16:'
+                . ' The maximum key length capability must allow at least 64 characters.',
+                get_class($storage)
+            ));
+        }
+
+        $this->maximumKeyLength = $maximumKeyLength;
     }
 }

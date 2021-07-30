@@ -1,14 +1,9 @@
 <?php
 
-/**
- * @see       https://github.com/laminas/laminas-cache for the canonical source repository
- * @copyright https://github.com/laminas/laminas-cache/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas/laminas-cache/blob/master/LICENSE.md New BSD License
- */
-
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Stdlib\ErrorHandler;
 
 use function array_key_exists;
@@ -24,7 +19,7 @@ use function serialize;
 use function sprintf;
 use function strtolower;
 
-class CallbackCache extends AbstractPattern
+class CallbackCache extends AbstractStorageCapablePattern
 {
     /**
      * @return CallbackCache Provides a fluent interface
@@ -33,10 +28,12 @@ class CallbackCache extends AbstractPattern
     public function setOptions(PatternOptions $options)
     {
         parent::setOptions($options);
+        $storage = $this->getStorage();
 
-        if (! $options->getStorage()) {
+        if (! $storage instanceof StorageInterface) {
             throw new Exception\InvalidArgumentException("Missing option 'storage'");
         }
+
         return $this;
     }
 
@@ -52,7 +49,7 @@ class CallbackCache extends AbstractPattern
     public function call($callback, array $args = [])
     {
         $options = $this->getOptions();
-        $storage = $options->getStorage();
+        $storage = $this->getStorage();
         $success = null;
         $key     = $this->generateCallbackKey($callback, $args);
         $result  = $storage->getItem($key, $success);
@@ -74,7 +71,7 @@ class CallbackCache extends AbstractPattern
         // TODO: do not cache on errors using [set|restore]_error_handler
 
         try {
-            $ret = $args ? $callback(...$args) : $callback();
+            $ret = $callback(...$args);
         } catch (\Exception $e) {
             if ($cacheOutput) {
                 ob_end_flush();
