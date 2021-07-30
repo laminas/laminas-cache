@@ -627,9 +627,16 @@ class Capabilities
 }</code></pre>
 <h2 id="examples">Examples</h2>
 <h3 id="get-storage-capabilities-and-do-specific-stuff-based-on-them">Get Storage Capabilities and do specific Stuff based on them</h3>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
 
-$cache = StorageFactory::adapterFactory('filesystem');
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
+
+$cache = $storageFactory-&gt;create('filesystem');
 $supportedDatatypes = $cache-&gt;getCapabilities()-&gt;getSupportedDatatypes();
 
 // now you can run specific stuff in base of supported feature
@@ -639,9 +646,16 @@ if ($supportedDatatypes['object']) {
     $cache-&gt;set($key, serialize($object));
 }</code></pre>
 <h3 id="listen-to-the-change-event">Listen to the change Event</h3>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
 
-$cache = StorageFactory::adapterFactory('filesystem', [
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
+
+$cache = $storageFactory-&gt;create('filesystem', [
     'no_atime' =&gt; false,
 ]);
 

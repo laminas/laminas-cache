@@ -331,11 +331,11 @@
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
+                        <a href="#examples" class="toc__link nav-link">Examples</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#examples" class="toc__link nav-link">Examples</a>
+                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
                     </li>
                 
             </ul>
@@ -382,21 +382,20 @@
     <h1 id="callbackcache">CallbackCache</h1>
 <p>The callback cache pattern caches the results of arbitrary PHP callables.</p>
 <h2 id="quick-start">Quick Start</h2>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\PatternFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\CallbackCache;
 use Laminas\Cache\Pattern\PatternOptions;
 
-// Via the factory:
-$callbackCache = PatternFactory::factory('callback', [
-    'storage'      =&gt; 'apc',
-    'cache_output' =&gt; true,
-]);
-
 // Or the equivalent manual instantiation:
-$callbackCache = new \Laminas\Cache\Pattern\CallbackCache();
-$callbackCache-&gt;setOptions(new PatternOptions([
-    'storage'      =&gt; 'apc',
-    'cache_output' =&gt; true,
-]));</code></pre>
+$callbackCache = new CallbackCache(
+    $storage,
+    new PatternOptions([
+        'cache_output' =&gt; true,
+    ])
+);</code></pre>
+<blockquote>
+<h3 id="storage-adapter">Storage Adapter</h3>
+<p>The <code>$storage</code> adapter can be any adapter which implements the <code>StorageInterface</code>. Check out the <a href="../intro/#quick-start">Pattern Quick Start</a>-Section for a standard adapter which can be used here.</p>
+</blockquote>
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -410,27 +409,31 @@ $callbackCache-&gt;setOptions(new PatternOptions([
 <tbody>
 <tr>
 <td><code>storage</code></td>
-<td><code>string | array | Laminas\Cache\Storage\StorageInterface</code></td>
+<td><code>string|array|Laminas\Cache\Storage\StorageInterface</code></td>
 <td>none</td>
-<td>Adapter used for reading and writing cached data.</td>
+<td><strong>deprecated</strong> Adapter used for reading and writing cached data.</td>
 </tr>
 <tr>
 <td><code>cache_output</code></td>
-<td><code>boolean</code></td>
+<td><code>bool</code></td>
 <td><code>true</code></td>
 <td>Whether or not to cache callback output.</td>
 </tr>
 </tbody>
 </table></div>
+<h2 id="examples">Examples</h2>
+<h3 id="instantiating-the-callback-cache-pattern">Instantiating the Callback Cache Pattern</h3>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\CallbackCache;
+
+$callbackCache = new CallbackCache($storage);</code></pre>
 <h2 id="available-methods">Available Methods</h2>
-<p>In addition to the methods defined in the <code>PatternInterface</code>, this
+<p>In addition to the methods defined in the <code>PatternInterface</code> and the <code>StorageCapableInterface</code>, this
 implementation provides the following methods.</p>
 <pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
-use Laminas\Stdlib\ErrorHandler;
 
-class CallbackCache extends AbstractPattern
+class CallbackCache extends AbstractStorageCapablePattern
 {
     /**
      * Call the specified callback or get the result from cache
@@ -466,13 +469,6 @@ class CallbackCache extends AbstractPattern
      */
     public function generateKey($callback, array $args = []);
 }</code></pre>
-<h2 id="examples">Examples</h2>
-<h3 id="instantiating-the-callback-cache-pattern">Instantiating the Callback Cache Pattern</h3>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\PatternFactory;
-
-$callbackCache = PatternFactory::factory('callback', [
-    'storage' =&gt; 'apc'
-]);</code></pre>
 
 
 

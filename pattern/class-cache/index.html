@@ -323,6 +323,10 @@
             <ul class="toc__list">
                 
                     <li class="toc__entry">
+                        <a href="#deprecation" class="toc__link nav-link">Deprecation</a>
+                    </li>
+                
+                    <li class="toc__entry">
                         <a href="#quick-start" class="toc__link nav-link">Quick Start</a>
                     </li>
                 
@@ -331,11 +335,11 @@
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
+                        <a href="#examples" class="toc__link nav-link">Examples</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#examples" class="toc__link nav-link">Examples</a>
+                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
                     </li>
                 
             </ul>
@@ -380,17 +384,25 @@
     
 
     <h1 id="classcache">ClassCache</h1>
-<p>The <code>ClassCache</code> pattern is an extension to the
-<a href="../callback-cache/"><code>CallbackCache</code></a> pattern. It has the same methods, but
-instead generates the callbacks for any public static method invoked on the
-class being cached, and caches static properties.</p>
+<h2 id="deprecation">Deprecation</h2>
+<blockquote>
+<h3 id="deprecated">Deprecated</h3>
+<p>The <code>ClassCache</code> pattern is deprecated as of v2.12 and will be removed in v3.0.</p>
+</blockquote>
 <h2 id="quick-start">Quick Start</h2>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\PatternFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\ClassCache;
+use Laminas\Cache\Pattern\PatternOptions;
 
-$classCache = PatternFactory::factory('class', [
-    'class'   =&gt; 'MyClass',
-    'storage' =&gt; 'apc',
-]);</code></pre>
+$classCache = new ClassCache(
+    $storage,
+    new PatternOptions([
+        'class' =&gt; 'MyClass',
+    ])
+);</code></pre>
+<blockquote>
+<h3 id="storage-adapter">Storage Adapter</h3>
+<p>The <code>$storage</code> adapter can be any adapter which implements the <code>StorageInterface</code>. Check out the <a href="../intro/#quick-start">Pattern Quick Start</a>-Section for a standard adapter which can be used here.</p>
+</blockquote>
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -404,9 +416,9 @@ $classCache = PatternFactory::factory('class', [
 <tbody>
 <tr>
 <td><code>storage</code></td>
-<td><code>string | array | Laminas\Cache\Storage\StorageInterface</code></td>
+<td><code>string|array|Laminas\Cache\Storage\StorageInterface</code></td>
 <td>none</td>
-<td>Adapter used for reading and writing cached data.</td>
+<td><strong>deprecated</strong> Adapter used for reading and writing cached data.</td>
 </tr>
 <tr>
 <td><code>class</code></td>
@@ -416,13 +428,13 @@ $classCache = PatternFactory::factory('class', [
 </tr>
 <tr>
 <td><code>cache_output</code></td>
-<td><code>boolean</code></td>
+<td><code>bool</code></td>
 <td><code>true</code></td>
 <td>Whether or not to cache method output.</td>
 </tr>
 <tr>
 <td><code>cache_by_default</code></td>
-<td><code>boolean</code></td>
+<td><code>bool</code></td>
 <td><code>true</code></td>
 <td>Cache all method calls by default.</td>
 </tr>
@@ -440,12 +452,31 @@ $classCache = PatternFactory::factory('class', [
 </tr>
 </tbody>
 </table></div>
+<h2 id="examples">Examples</h2>
+<h3 id="caching-of-import-feeds">Caching of Import Feeds</h3>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\ClassCache;
+use Laminas\Cache\Pattern\PatternOptions;
+use \Laminas\Feed\Reader\Reader;
+
+$cachedFeedReader = new ClassCache(
+    $storage,
+    new PatternOptions([
+        'class' =&gt; Reader::class,
+
+        // The feed reader doesn't output anything,
+        // so the output doesn't need to be caught and cached:
+        'cache_output' =&gt; false,
+    ])
+);
+
+$feed = $cachedFeedReader-&gt;call("import", ['https://github.com/laminas/laminas-cache/releases.atom']);
+// or
+$feed = $cachedFeedReader-&gt;import('https://github.com/laminas/laminas-cache/releases.atom');</code></pre>
 <h2 id="available-methods">Available Methods</h2>
-<p>In addition to the methods defined in <code>PatternInterface</code>, this implementation
+<p>In addition to the methods defined in <code>PatternInterface</code> and the <code>StorageCapableInterface</code>, this implementation
 exposes the following methods.</p>
 <pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
 
-use Laminas\Cache;
 use Laminas\Cache\Exception;
 
 class ClassCache extends CallbackCache
@@ -537,21 +568,6 @@ class ClassCache extends CallbackCache
         unset($class::$name);
     }
 }</code></pre>
-<h2 id="examples">Examples</h2>
-<h3 id="caching-of-import-feeds">Caching of Import Feeds</h3>
-<pre class="highlight"><code class="language-php">$cachedFeedReader = Laminas\Cache\PatternFactory::factory('class', [
-    'class'   =&gt; 'Laminas\Feed\Reader\Reader',
-    'storage' =&gt; 'apc',
-
-    // The feed reader doesn't output anything,
-    // so the output doesn't need to be caught and cached:
-    'cache_output' =&gt; false,
-]);
-
-$feed = $cachedFeedReader-&gt;call("import", array('http://www.planet-php.net/rdf/'));
-
-// OR
-$feed = $cachedFeedReader-&gt;import('http://www.planet-php.net/rdf/');</code></pre>
 
 
 

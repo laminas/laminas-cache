@@ -389,32 +389,29 @@ instance) to the second argument of the factory.</p>
 <p>It's also possible to use a single instance of
 <code>Laminas\Cache\Pattern\PatternOptions</code> and pass it to multiple pattern objects.</p>
 <h2 id="quick-start">Quick Start</h2>
-<p>Pattern objects can either be created from the provided <code>Laminas\Cache\PatternFactory</code>, or
+<p>Pattern objects can be created
 by instantiating one of the <code>Laminas\Cache\Pattern\*Cache</code> classes.</p>
-<pre class="highlight"><code class="language-php">// Via the factory:
-$callbackCache = Laminas\Cache\PatternFactory::factory('callback', [
-    'storage' =&gt; 'apc',
-]);
+<blockquote>
+<h3 id="standard-storage-adapter-for-documentation">Standard Storage Adapter for Documentation</h3>
+<p>A cache adapter needs a storage adapter. To be able to follow the examples in the documentation, the <a href="https://docs.laminas.dev/laminas-cache/storage/adapter/#filesystem-adapter">adapter for the filesystem</a> or the <a href="https://docs.laminas.dev/laminas-cache/storage/adapter/#blackhole-adapter">BlackHole adapter</a> can be used, for example.</p>
+<pre class="highlight"><code class="language-php">$storage = new Laminas\Cache\Storage\Adapter\Filesystem();
+// or
+$storage = new Laminas\Cache\Storage\Adapter\BlackHole();</code></pre>
+</blockquote>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\CallbackCache;
+use Laminas\Cache\Pattern\PatternOptions;
 
-// Or the equivalent manual instantiation:
-$callbackCache = new Laminas\Cache\Pattern\CallbackCache();
-$callbackCache-&gt;setOptions(new Laminas\Cache\Pattern\PatternOptions([
-    'storage' =&gt; 'apc',
-]));</code></pre>
+$callbackCache = new CallbackCache(
+    $storage,
+    new PatternOptions()
+);</code></pre>
 <h2 id="available-methods">Available Methods</h2>
-<p>The following methods are implemented by <code>Laminas\Cache\Pattern\AbstractPattern</code>.
+<p>The following methods are implemented by every cache pattern.
 Please read documentation of specific patterns to get more information.</p>
 <pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
 
 interface PatternInterface
 {
-    /**
-     * Set pattern options
-     *
-     * @param  PatternOptions $options
-     * @return PatternInterface
-     */
-    public function setOptions(PatternOptions $options);
 
     /**
      * Get all pattern options
@@ -422,6 +419,15 @@ interface PatternInterface
      * @return PatternOptions
      */
     public function getOptions();
+}</code></pre>
+<p>There are cache patterns which depend on a storage. In this case, these adapters implement the <code>StorageCapableInterface</code>:</p>
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
+
+use Laminas\Cache\Storage\StorageInterface;
+
+interface StorageCapableInterface extends PatternInterface
+{
+    public function getStorage(): ?StorageInterface;
 }</code></pre>
 
 

@@ -384,15 +384,15 @@ can be thought of as a key/value storage approach to caching.</p>
 <code>Laminas\Cache\Storage\StorageInterface</code> instance to which it proxies all
 operations.</p>
 <p>Instantiation is as follows:</p>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
-use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
 
-$storage = StorageFactory::factory([
-    'adapter' =&gt; [
-        'name'    =&gt; 'apc',
-        'options' =&gt; [],
-    ],
-]);
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
+$storage = $storageFactory-&gt;create('apc');
 
 $cache = new SimpleCacheDecorator($storage);</code></pre>
 <p>Once you have a <code>SimpleCacheDecorator</code> instance, you can perform operations per
@@ -442,16 +442,25 @@ require this plugin in order to work with the <code>SimpleCacheDecorator</code>:
 </ul>
 <p>We provide a number of examples of <a href="../storage/plugin/">attaching plugins to storage adapters in the
 plugins chapter</a>. Generally, it will be one of:</p>
-<pre class="highlight"><code class="language-php">// Manual attachment after you have an instance:
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Laminas\Cache\Storage\Plugin\Serializer;
+use Psr\Container\ContainerInterface;
+
+// Manual attachment after you have an instance:
 $cache-&gt;addPlugin(new Serializer());
 
 // Via configuration:
-$cache = StorageFactory::factory([
-    'adapter' =&gt; 'filesystem',
-    'plugins' =&gt; [
-        'serializer',
-    ],
-]);</code></pre>
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
+$cache = $storageFactory-&gt;create(
+    'filesystem', 
+    [], 
+    [
+        ['name' =&gt; 'serializer'],
+    ]
+);</code></pre>
 <h2 id="deleting-items-and-exceptions">Deleting Items and Exceptions</h2>
 <p>PSR-16 states that the <code>delete()</code> and <code>deleteMultiple()</code> methods should return
 <code>false</code> if an <em>error</em> occured when deleting the key(s) provided, but <code>true</code>
@@ -459,20 +468,9 @@ otherwise.</p>
 <p>Generally, laminas-cache storage adapters comply with this. However, it is possible
 to configure your adapter such that you may get a false positive result from
 these methods.</p>
-<p>When an exception is raised and caught during key removal by an adapter, the
-adapter triggers an event with a <code>Laminas\Cache\Storage\ExceptionEvent</code>. Plugins 
-can react to these, and even manipulate the event instance. One such plugin,
-<code>Laminas\Cache\Storage\Plugin\ExceptionHandler</code>, has a configuration option,
-<code>throw_exceptions</code> that, when boolean <code>false</code>, will prevent raising the
-exception. In such cases, adapters will typically return a boolean <code>false</code>
-anyways, but custom, third-party adapters may not.</p>
-<p>Additionally, if you add a custom plugin that listens to removal event
-exceptions and modifies the return value and/or disables throwing the exception,
-a false positive return value could occur.</p>
-<p>As such, we recommend that if you wish to use laminas-cache to provide a PSR-16
-adapter, you audit the plugins you use with your adapter to ensure that you will
-get consistent, correct behavior for <code>delete()</code> and <code>deleteMultiple()</code>
-operations.</p>
+<p>When an exception is raised and caught during key removal by an adapter, the adapter triggers an event with a <code>Laminas\Cache\Storage\ExceptionEvent</code>. Plugins can react to these, and even manipulate the event instance. One such plugin, <code>Laminas\Cache\Storage\Plugin\ExceptionHandler</code>, has a configuration option, <code>throw_exceptions</code> that, when boolean <code>false</code>, will prevent raising the exception. In such cases, adapters will typically return a boolean <code>false</code> anyways, but custom, third-party adapters may not.</p>
+<p>Additionally, if you add a custom plugin that listens to removal event exceptions and modifies the return value and/or disables throwing the exception, a false positive return value could occur.</p>
+<p>As such, we recommend that if you wish to use laminas-cache to provide a PSR-16 adapter, you audit the plugins you use with your adapter to ensure that you will get consistent, correct behavior for <code>delete()</code> and <code>deleteMultiple()</code> operations.</p>
 
 
 

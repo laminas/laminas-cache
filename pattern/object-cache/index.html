@@ -331,11 +331,11 @@
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
+                        <a href="#examples" class="toc__link nav-link">Examples</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#examples" class="toc__link nav-link">Examples</a>
+                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
                     </li>
                 
             </ul>
@@ -384,14 +384,21 @@
 the same methods, but instead caches output from any instance method calls or
 public properties.</p>
 <h2 id="quick-start">Quick Start</h2>
-<pre class="highlight"><code class="language-php">use stdClass;
-use Laminas\Cache\PatternFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\ObjectCache;
+use Laminas\Cache\Pattern\PatternOptions;
+use stdClass;
 
 $object      = new stdClass();
-$objectCache = PatternFactory::factory('object', [
-    'object'  =&gt; $object,
-    'storage' =&gt; 'apc'
-]);</code></pre>
+$objectCache = new ObjectCache(
+    $storage,
+    new PatternOptions([
+      'object'  =&gt; $object,
+    ])
+);</code></pre>
+<blockquote>
+<h3 id="storage-adapter">Storage Adapter</h3>
+<p>The <code>$storage</code> adapter can be any adapter which implements the <code>StorageInterface</code>. Check out the <a href="../intro/#quick-start">Pattern Quick Start</a>-Section for a standard adapter which can be used here.</p>
+</blockquote>
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -405,9 +412,9 @@ $objectCache = PatternFactory::factory('object', [
 <tbody>
 <tr>
 <td><code>storage</code></td>
-<td><code>string | array | Laminas\Cache\Storage\StorageInterface</code></td>
+<td><code>string|array|Laminas\Cache\Storage\StorageInterface</code></td>
 <td>none</td>
-<td>Adapter used for reading and writing cached data.</td>
+<td><strong>deprecated</strong> Adapter used for reading and writing cached data.</td>
 </tr>
 <tr>
 <td><code>object</code></td>
@@ -417,19 +424,19 @@ $objectCache = PatternFactory::factory('object', [
 </tr>
 <tr>
 <td><code>object_key</code></td>
-<td><code>null | string</code></td>
+<td><code>null|string</code></td>
 <td>Class name of object</td>
 <td>Hopefully unique!</td>
 </tr>
 <tr>
 <td><code>cache_output</code></td>
-<td><code>boolean</code></td>
+<td><code>bool</code></td>
 <td><code>true</code></td>
 <td>Whether or not to cache method output.</td>
 </tr>
 <tr>
 <td><code>cache_by_default</code></td>
-<td><code>boolean</code></td>
+<td><code>bool</code></td>
 <td><code>true</code></td>
 <td>Cache all method calls by default.</td>
 </tr>
@@ -447,14 +454,36 @@ $objectCache = PatternFactory::factory('object', [
 </tr>
 <tr>
 <td><code>object_cache_magic_properties</code></td>
-<td><code>boolean</code></td>
+<td><code>bool</code></td>
 <td><code>false</code></td>
 <td>Whether or not to cache properties exposed by method overloading.</td>
 </tr>
 </tbody>
 </table></div>
+<h2 id="examples">Examples</h2>
+<h3 id="caching-a-filter">Caching a Filter</h3>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\ObjectCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$filter       = new \Laminas\Filter\RealPath();
+$cachedFilter = new ObjectCache(
+    $storage,
+    new PatternOptions([
+        'object'     =&gt; $filter,
+        'object_key' =&gt; 'RealpathFilter',
+
+        // The realpath filter doesn't output anything
+        // so the output don't need to be caught and cached
+        'cache_output' =&gt; false,
+    ])
+);
+
+$path = $cachedFilter-&gt;call("filter", ['/www/var/path/../../mypath']);
+
+// OR
+$path = $cachedFilter-&gt;filter('/www/var/path/../../mypath');</code></pre>
 <h2 id="available-methods">Available Methods</h2>
-<p>In addition to the methods defined in <code>PatternInterface</code>, this implementation
+<p>In addition to the methods defined in <code>PatternInterface</code> and the <code>StorageCapableInterface</code>, this implementation
 defines the following methods.</p>
 <pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
 
@@ -566,23 +595,6 @@ class ObjectCache extends CallbackCache
      */
     public function __invoke();
 }</code></pre>
-<h2 id="examples">Examples</h2>
-<h3 id="caching-a-filter">Caching a Filter</h3>
-<pre class="highlight"><code class="language-php">$filter       = new Laminas\Filter\RealPath();
-$cachedFilter = Laminas\Cache\PatternFactory::factory('object', [
-    'object'     =&gt; $filter,
-    'object_key' =&gt; 'RealpathFilter',
-    'storage'    =&gt; 'apc',
-
-    // The realpath filter doesn't output anything
-    // so the output don't need to be caught and cached
-    'cache_output' =&gt; false,
-]);
-
-$path = $cachedFilter-&gt;call("filter", ['/www/var/path/../../mypath']);
-
-// OR
-$path = $cachedFilter-&gt;filter('/www/var/path/../../mypath');</code></pre>
 
 
 

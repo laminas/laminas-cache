@@ -331,11 +331,11 @@
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
+                        <a href="#examples" class="toc__link nav-link">Examples</a>
                     </li>
                 
                     <li class="toc__entry">
-                        <a href="#examples" class="toc__link nav-link">Examples</a>
+                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
                     </li>
                 
             </ul>
@@ -382,11 +382,17 @@
     <h1 id="outputcache">OutputCache</h1>
 <p>The <code>OutputCache</code> pattern caches output between calls to <code>start()</code> and <code>end()</code>.</p>
 <h2 id="quick-start">Quick Start</h2>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\PatternFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\OutputCache;
+use Laminas\Cache\Pattern\PatternOptions;
 
-$outputCache = PatternFactory::factory('output', [
-    'storage' =&gt; 'apc'
-]);</code></pre>
+$outputCache = new OutputCache(
+    $storage,
+    new PatternOptions()
+);</code></pre>
+<blockquote>
+<h3 id="storage-adapter">Storage Adapter</h3>
+<p>The <code>$storage</code> adapter can be any adapter which implements the <code>StorageInterface</code>. Check out the <a href="../intro/#quick-start">Pattern Quick Start</a>-Section for a standard adapter which can be used here.</p>
+</blockquote>
 <h2 id="configuration-options">Configuration Options</h2>
 <div class="table-responsive"><table>
 <thead>
@@ -400,20 +406,33 @@ $outputCache = PatternFactory::factory('output', [
 <tbody>
 <tr>
 <td><code>storage</code></td>
-<td><code>string | array | Laminas\Cache\Storage\StorageInterface</code></td>
+<td><code>string|array|Laminas\Cache\Storage\StorageInterface</code></td>
 <td>none</td>
-<td>Adapter used for reading and writing cached data.</td>
+<td><strong>deprecated</strong> Adapter used for reading and writing cached data.</td>
 </tr>
 </tbody>
 </table></div>
+<h2 id="examples">Examples</h2>
+<h3 id="caching-a-view-script">Caching a View Script</h3>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\OutputCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$outputCache = new OutputCache(
+    $storage,
+    new PatternOptions()
+);
+
+$outputCache-&gt;start('mySimpleViewScript');
+include '/path/to/view/script.phtml';
+$outputCache-&gt;end();</code></pre>
 <h2 id="available-methods">Available Methods</h2>
-<p>In addition to the methods defined in <code>PatternInterface</code>, this implementation
+<p>In addition to the methods defined in <code>PatternInterface</code> and <code>StorageCapableInterface</code>, this implementation
 defines the following methods.</p>
 <pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 
-class OutputCache extends AbstractPattern
+class OutputCache extends AbstractStorageCapablePattern
 {
     /**
      * If there is a cached item with the given key, display its data, and
@@ -435,15 +454,6 @@ class OutputCache extends AbstractPattern
      */
     public function end();
 }</code></pre>
-<h2 id="examples">Examples</h2>
-<h3 id="caching-simple-view-scripts">Caching simple View Scripts</h3>
-<pre class="highlight"><code class="language-php">$outputCache = Laminas\Cache\PatternFactory::factory('output', [
-    'storage' =&gt; 'apc',
-]);
-
-$outputCache-&gt;start('mySimpleViewScript');
-include '/path/to/view/script.phtml';
-$outputCache-&gt;end();</code></pre>
 
 
 

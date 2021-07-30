@@ -395,15 +395,14 @@ having to worry about any behind-the-scenes differences between them.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>To use the pool, instantiate your storage as normal, then pass it to the
 <code>CacheItemPoolDecorator</code>.</p>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
-use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;use Laminas\Cache\Service\StorageAdapterFactoryInterface;use Psr\Container\ContainerInterface;
 
-$storage = StorageFactory::factory([
-    'adapter' =&gt; [
-        'name'    =&gt; 'apc',
-        'options' =&gt; [],
-    ],
-]);
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
+
+$storage = $storageFactory-&gt;create('apc');
 
 $pool = new CacheItemPoolDecorator($storage);
 
@@ -456,7 +455,11 @@ storage adapters may have further restrictions. Check the documentation for your
 way. Doing so is as simple as adding an <a href="../storage/plugin/#the-exceptionhandler-plugin"><code>ExceptionHandler</code> plugin</a>. Say you have a
 <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md">PSR-3</a> compliant logger
 called <code>$logger</code>:</p>
-<pre class="highlight"><code class="language-php">$cacheLogger = function (\Exception $e) use ($logger) {
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
+
+$cacheLogger = function (\Exception $e) use ($logger) {
     $message = sprintf(
         '[CACHE] %s:%s %s "%s"',
         $exception-&gt;getFile(),
@@ -466,18 +469,25 @@ called <code>$logger</code>:</p>
     );
     $logger-&gt;error($message);
 };
-                                }
-$storage = StorageFactory::factory([
-    'adapter' =&gt; [
-        'name'    =&gt; 'apc',
-    ],
-    'plugins' =&gt; [
-        'exceptionhandler' =&gt; [
-            'exception_callback' =&gt; $cacheLogger,
-            'throw_exceptions' =&gt; true,
+
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);              
+
+$storage = $storageFactory-&gt;create(
+    'apc', 
+    [], 
+    [
+        [
+            'name' =&gt; 'exceptionhandler',
+            'options' =&gt; [
+                'exception_callback' =&gt; $cacheLogger,
+                'throw_exceptions' =&gt; true,
+            ],
         ],
-    ],
-]);
+    ]
+);
 
 $pool = new CacheItemPoolDecorator($storage);</code></pre>
 <p>Note that <code>throw_exceptions</code> should always be <code>true</code> (the default) or you will not get the correct return values from

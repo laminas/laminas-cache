@@ -483,31 +483,56 @@ common logic.</p>
 or an adapter-specific options class if it exists. You may pass the options
 instance to the class at instantiation, via the <code>setOptions()</code> method, or,
 alternately, pass an associative array of options in either place (internally,
-these are then passed to an options class instance). Alternately, you can pass
-either the options instance or associative array to the
-<code>Laminas\Cache\StorageFactory::factory</code> method.</p>
+these are then passed to an options class instance). Alternately, you can pass associative array to the
+<code>Laminas\Cache\Service\StorageAdapterFactoryInterface::create</code> method.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>Caching adapters can either be created from the provided
-<code>Laminas\Cache\StorageFactory</code>, or by instantiating one of the
+<code>Laminas\Cache\Service\StorageAdapterFactoryInterface</code>, or by instantiating one of the
 <code>Laminas\Cache\Storage\Adapter\*</code> classes.  To make life easier, the
-<code>Laminas\Cache\StorageFactory</code> comes with a <code>factory()</code> method to create an adapter
+<code>Laminas\Cache\Service\StorageAdapterFactoryInterface</code> comes with a <code>create()</code> method to create an adapter
 and all requested plugins at once.</p>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Laminas\Cache\Service\StoragePluginFactoryInterface;
+use Psr\Container\ContainerInterface;
+
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
 
 // Via factory:
-$cache = StorageFactory::factory([
-    'adapter' =&gt; [
-        'name'    =&gt; 'apc',
-        'options' =&gt; ['ttl' =&gt; 3600],
-    ],
+$cache = $storageFactory-&gt;create(
+    'apc',
+    ['ttl' =&gt; 3600],
+    [
+        [
+            'name' =&gt; 'exception_handler',
+            'options' =&gt; [
+                'throw_exceptions' =&gt; false,
+             ], 
+        ],
+    ]
+);
+
+// Via array configuration:
+$cache = $storageFactory-&gt;createFromArrayConfiguration([
+    'adapter' =&gt; 'apc',
+    'options' =&gt; ['ttl' =&gt; 3600],
     'plugins' =&gt; [
-        'exception_handler' =&gt; ['throw_exceptions' =&gt; false],
+        [
+            'name' =&gt; 'exception_handler',
+            'options' =&gt; [
+                'throw_exceptions' =&gt; false,
+             ], 
+        ],
     ],
 ]);
 
 // Alternately, create the adapter and plugin separately:
-$cache  = StorageFactory::adapterFactory('apc', ['ttl' =&gt; 3600]);
-$plugin = StorageFactory::pluginFactory('exception_handler', [
+$cache  = $storageFactory-&gt;create('apc', ['ttl' =&gt; 3600]);
+$pluginFactory = $container-&gt;get(StoragePluginFactoryInterface::class);
+$plugin = $pluginFactory-&gt;create('exception_handler', [
     'throw_exceptions' =&gt; false,
 ]);
 $cache-&gt;addPlugin($plugin);
@@ -2434,19 +2459,28 @@ through the <a href="https://www.zend.com/en/products/server/">Zend Server Data 
 </table></div>
 <h2 id="examples">Examples</h2>
 <h3 id="basic-usage">Basic Usage</h3>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
 
-$cache = StorageFactory::factory([
-    'adapter' =&gt; [
-        'name' =&gt; 'filesystem'
-    ],
-    'plugins' =&gt; [
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
+
+$cache = $storageFactory-&gt;create(
+    'filesystem', 
+    [], 
+    [
         // Don't throw exceptions on cache errors
-        'exception_handler' =&gt; [
-            'throw_exceptions' =&gt; false
+        [
+            'name' =&gt; 'exception_handler',
+            'options' =&gt; [
+                'throw_exceptions' =&gt; false
+            ],
         ],
-    ],
-]);
+    ]
+);
 
 $key    = 'unique-cache-key';
 $result = $cache-&gt;getItem($key, $success);
@@ -2455,27 +2489,37 @@ if (! $success) {
     $cache-&gt;setItem($key, $result);
 }</code></pre>
 <h3 id="get-multiple-rows-from-a-database">Get multiple Rows from a Database</h3>
-<pre class="highlight"><code class="language-php">use Laminas\Cache\StorageFactory;
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
+
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
 
 // Instantiate the cache instance using a namespace for the same type of items
-$cache = StorageFactory::factory([
-    'adapter' =&gt; [
-        'name' =&gt; 'filesystem',
-        // With a namespace, we can indicate the same type of items,
+$cache = $storageFactory-&gt;create(
+    'filesystem',
+    // With a namespace, we can indicate the same type of items,
         // so we can simply use the database id as the cache key
-        'options' =&gt; [
-            'namespace' =&gt; 'dbtable',
-        ],
+    [
+        'namespace' =&gt; 'dbtable',
     ],
-    'plugins' =&gt; [
+    [
         // Don't throw exceptions on cache errors
-        'exception_handler' =&gt; [
-            'throw_exceptions' =&gt; false,
+        [
+            'name' =&gt; 'exception_handler',
+            'options' =&gt; [
+                'throw_exceptions' =&gt; false,
+            ],
         ],
         // We store database rows on filesystem so we need to serialize them
-        'Serializer',
-    ],
-]);
+        [
+            'name' =&gt; 'Serializer',
+        ],
+    ]
+);
 
 // Load two rows from cache if possible
 $ids     = [1, 2];
