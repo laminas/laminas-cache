@@ -952,8 +952,6 @@ Key | Default | Description
 
 ## ExtMongoDB Adapter
 
-> Available since version 2.8.0
-
 `Laminas\Cache\Storage\Adapter\ExtMongoDB` stores cache items using the mongodb extension, and
 requires that the MongoDB PHP Client library is also installed. You can install the client
 library using the following:

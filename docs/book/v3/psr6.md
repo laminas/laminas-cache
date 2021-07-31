@@ -1,7 +1,5 @@
 # PSR-6
 
-> Available since version 2.8.0
-
 ## Overview
 
 The `Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator` provides a [PSR-6](https://www.php-fig.org/psr/psr-6/)
