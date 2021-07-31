@@ -38,7 +38,7 @@ $storageFactory = $container->get(StorageAdapterFactoryInterface::class);
 
 // Via factory:
 $cache = $storageFactory->create(
-    'apc',
+    'apcu',
     ['ttl' => 3600],
     [
         [
@@ -52,7 +52,7 @@ $cache = $storageFactory->create(
 
 // Via array configuration:
 $cache = $storageFactory->createFromArrayConfiguration([
-    'adapter' => 'apc',
+    'adapter' => 'apcu',
     'options' => ['ttl' => 3600],
     'plugins' => [
         [
@@ -65,7 +65,7 @@ $cache = $storageFactory->createFromArrayConfiguration([
 ]);
 
 // Alternately, create the adapter and plugin separately:
-$cache  = $storageFactory->create('apc', ['ttl' => 3600]);
+$cache  = $storageFactory->create('apcu', ['ttl' => 3600]);
 $pluginFactory = $container->get(StoragePluginFactoryInterface::class);
 $plugin = $pluginFactory->create('exception_handler', [
     'throw_exceptions' => false,
@@ -73,7 +73,7 @@ $plugin = $pluginFactory->create('exception_handler', [
 $cache->addPlugin($plugin);
 
 // Or do it completely manually:
-$cache  = new Laminas\Cache\Storage\Adapter\Apc();
+$cache  = new Laminas\Cache\Storage\Adapter\Apcu();
 $cache->getOptions()->setTtl(3600);
 
 $plugin = new Laminas\Cache\Storage\Plugin\ExceptionHandler();
@@ -550,6 +550,43 @@ interface TaggableInterface
     public function clearByTags(array $tags, $disjunction = false);
 }
 ```
+
+## APCu Adapter
+
+`Laminas\Cache\Storage\Adapter\Apcu` stores cache items in shared memory through the
+PHP extension [APCu](http://pecl.php.net/package/APCu) (Alternative PHP Cache).
+
+This adapter implements the following interfaces:
+
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\ClearByNamespaceInterface`
+- `Laminas\Cache\Storage\ClearByPrefixInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\IterableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
+
+### Capabilities
+
+Capability | Value
+---------- | -----
+`supportedDatatypes` | `null`, `bool`, `int`, `float`, `string`, `array` (serialized), `object` (serialized)
+`supportedMetadata` | internal_key, atime, ctime, mtime, rtime, size, hits, ttl
+`minTtl` | 1
+`maxTtl` | 0
+`staticTtl` | `true`
+`ttlPrecision` | 1
+`useRequestTime` | value of `apc.use_request_time` from `php.ini`
+`lockOnExpire` | 0
+`maxKeyLength` | 5182
+`namespaceIsPrefix` | `true`
+`namespaceSeparator` | Option value of `namespace_separator`
+
+### Adapter Specific Options
+
+Name | Data Type | Default Value | Description
+---- | --------- | ------------- | -----------
+`namespace_separator` | `string` |  ":" | A separator for the namespace and prefix.
 
 ## BlackHole Adapter
 
