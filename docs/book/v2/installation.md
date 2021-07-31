@@ -2,7 +2,9 @@
 show_file_content: true
 ---
 
+<!-- markdownlint-disable -->
 ## Avoid Unused Cache Adapters Are Being Installed
+<!-- markdownlint-restore -->
 
 > ### Only necessary in 2.10+
 >
