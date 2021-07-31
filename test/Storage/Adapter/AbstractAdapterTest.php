@@ -283,8 +283,8 @@ final class AbstractAdapterTest extends TestCase
         $result = ['key1' => 'value1', 'key2' => 'value2'];
 
         $consecutiveReturnCallbacks = [];
-        foreach ($items as $k => $v) {
-            $consecutiveReturnCallbacks[] = $this->returnCallback(function ($k, &$success) use ($items) {
+        for ($i = 0, $iMax = count($items); $i < $iMax; $i++) {
+            $consecutiveReturnCallbacks[] = $this->returnCallback(function (string $k, ?bool &$success) use ($items) {
                 if ($items[$k]) {
                     $success = true;
                     return $items[$k];

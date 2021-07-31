@@ -120,8 +120,10 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
 
     protected function executeMethodAndMakeAssertions(string $method, array $args): void
     {
-        $returnSpec = 'foobar_return(' . implode(', ', $args) . ') : ';
-        $outputSpec = 'foobar_output(' . implode(', ', $args) . ') : ';
+        /** @psalm-suppress MixedArgumentTypeCoercion */
+        $imploded   = implode(', ', $args);
+        $returnSpec = 'foobar_return(' . $imploded . ') : ';
+        $outputSpec = 'foobar_output(' . $imploded . ') : ';
         $callback   = [$this->pattern, $method];
 
         // first call - not cached

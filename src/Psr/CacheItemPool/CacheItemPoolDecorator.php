@@ -409,7 +409,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
         $options->setTtl($itemTtl ?? 0);
 
-        $notSavedKeys = [];
         try {
             $notSavedKeys = $this->storage->setItems($keyValuePair);
         } catch (Exception\InvalidArgumentException $e) {

@@ -108,8 +108,10 @@ class CallbackCacheTest extends AbstractCommonStoragePatternTest
      */
     protected function executeCallbackAndMakeAssertions($callback, array $args): void
     {
-        $returnSpec = 'foobar_return(' . implode(', ', $args) . ') : ';
-        $outputSpec = 'foobar_output(' . implode(', ', $args) . ') : ';
+        /** @psalm-suppress MixedArgumentTypeCoercion */
+        $imploded   = implode(', ', $args);
+        $returnSpec = 'foobar_return(' . $imploded . ') : ';
+        $outputSpec = 'foobar_output(' . $imploded . ') : ';
 
         // first call - not cached
         $firstCounter = TestCallbackCache::$fooCounter + 1;

@@ -9,6 +9,9 @@ use Laminas\Cache\Storage\StorageInterface;
 
 use function sprintf;
 
+/**
+ * @psalm-suppress MissingConstructor
+ */
 abstract class AbstractCommonStoragePatternTest extends AbstractCommonPatternTest
 {
     /** @var StorageInterface */

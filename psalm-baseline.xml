@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.6.1@e93e532e4eaad6d68c4d7b606853800eaceccc72">
+<files psalm-version="4.9.0@c62adf965241f65aa4f899a050a94b70bbce19fd">
   <file src="src/Command/DeprecatedStorageFactoryConfigurationCheckCommand.php">
     <MixedArgument occurrences="2">
       <code>$cacheConfiguration</code>
@@ -549,7 +549,6 @@
       <code>(bool) $flag</code>
       <code>(bool) $flag</code>
       <code>(bool) $flag</code>
-      <code>(bool) $flag</code>
       <code>(float) $ttlPrecision</code>
       <code>(int) $maxKeyLength</code>
       <code>(int) $maxTtl</code>
@@ -653,7 +652,7 @@
       <code>$keyValuePairs[$key]</code>
       <code>$keyValuePairs[$key]</code>
     </MixedArrayOffset>
-    <MixedAssignment occurrences="23">
+    <MixedAssignment occurrences="25">
       <code>$baseCapabilities</code>
       <code>$failedKey</code>
       <code>$failedKey</code>
@@ -663,6 +662,8 @@
       <code>$key</code>
       <code>$keyValuePairs</code>
       <code>$keyValuePairs</code>
+      <code>$keyValuePairs[$key]</code>
+      <code>$keyValuePairs[$key]</code>
       <code>$keyValuePairs[$key]</code>
       <code>$keyValuePairs[$key]</code>
       <code>$newValue</code>
@@ -732,13 +733,6 @@
   <file src="test/Command/DeprecatedStorageFactoryConfigurationCheckCommandTest.php">
     <InternalClass occurrences="7"/>
   </file>
-  <file src="test/Pattern/AbstractCommonPatternTest.php">
-    <MissingReturnType occurrences="3">
-      <code>getCommonPatternNamesProvider</code>
-      <code>testOptionNamesValid</code>
-      <code>testOptionsGetAndSetDefault</code>
-    </MissingReturnType>
-  </file>
   <file src="test/Pattern/AbstractCommonStoragePatternTest.php">
     <NonInvariantDocblockPropertyType occurrences="1">
       <code>$pattern</code>
@@ -748,9 +742,6 @@
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>
-    <MissingReturnType occurrences="1">
-      <code>getCommonPatternNamesProvider</code>
-    </MissingReturnType>
     <MixedArgument occurrences="1">
       <code>$key</code>
     </MixedArgument>
@@ -782,9 +773,6 @@
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Pattern/CaptureCacheTest.php">
-    <MissingReturnType occurrences="1">
-      <code>getCommonPatternNamesProvider</code>
-    </MissingReturnType>
     <MixedMethodCall occurrences="1">
       <code>setIndexFilename</code>
     </MixedMethodCall>
@@ -811,9 +799,6 @@
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>
-    <MissingReturnType occurrences="1">
-      <code>getCommonPatternNamesProvider</code>
-    </MissingReturnType>
     <MixedArrayAccess occurrences="1">
       <code>$params['key']</code>
     </MixedArrayAccess>
@@ -850,9 +835,6 @@
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Pattern/OutputCacheTest.php">
-    <MissingReturnType occurrences="1">
-      <code>getCommonPatternNamesProvider</code>
-    </MissingReturnType>
     <PossiblyNullReference occurrences="2">
       <code>getItem</code>
       <code>setItem</code>
