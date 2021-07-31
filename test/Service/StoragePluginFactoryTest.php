@@ -8,13 +8,13 @@ use Generator;
 use Laminas\Cache\Exception\InvalidArgumentException;
 use Laminas\Cache\Service\StoragePluginFactory;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
-use Laminas\Cache\Storage\PluginManager;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class StoragePluginFactoryTest extends TestCase
 {
-    /** @var PluginManager&MockObject */
+    /** @var ServiceLocatorInterface&MockObject */
     private $plugins;
 
     /** @var StoragePluginFactory */
@@ -23,7 +23,7 @@ final class StoragePluginFactoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->plugins = $this->createMock(PluginManager::class);
+        $this->plugins = $this->createMock(ServiceLocatorInterface::class);
         $this->factory = new StoragePluginFactory($this->plugins);
     }
 

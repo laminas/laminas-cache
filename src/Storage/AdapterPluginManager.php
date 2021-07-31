@@ -11,7 +11,7 @@ use Laminas\ServiceManager\AbstractPluginManager;
  * StorageInterface. Additionally, it registers a number of default
  * adapters available.
  */
-class AdapterPluginManager extends AbstractPluginManager
+final class AdapterPluginManager extends AbstractPluginManager
 {
     /**
      * Do not share by default
