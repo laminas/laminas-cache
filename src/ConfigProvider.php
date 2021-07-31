@@ -36,7 +36,6 @@ class ConfigProvider
                 Service\StorageCacheAbstractServiceFactory::class,
             ],
             'factories'          => [
-                PatternPluginManager::class         => Service\PatternPluginManagerFactory::class,
                 Storage\AdapterPluginManager::class => Service\StorageAdapterPluginManagerFactory::class,
                 Storage\PluginManager::class        => Service\StoragePluginManagerFactory::class,
                 DeprecatedStorageFactoryConfigurationCheckCommand::class

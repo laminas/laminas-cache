@@ -14,6 +14,13 @@
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
+    <issueHandlers>
+        <InternalMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Laminas\Cache\Command\DeprecatedStorageFactoryConfigurationCheckCommand::__construct"/>
+            </errorLevel>
+        </InternalMethod>
+    </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
     </plugins>

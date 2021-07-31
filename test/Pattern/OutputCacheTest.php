@@ -28,11 +28,8 @@ class OutputCacheTest extends AbstractCommonStoragePatternTest
         $this->storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0,
         ]);
-        $this->options = new Cache\Pattern\PatternOptions([
-            'storage' => $this->storage,
-        ]);
-        $this->pattern = new Cache\Pattern\OutputCache();
-        $this->pattern->setOptions($this->options);
+
+        $this->pattern = new Cache\Pattern\OutputCache($this->storage);
 
         // used to reset the level on tearDown
         $this->obLevel = ob_get_level();
@@ -57,10 +54,7 @@ class OutputCacheTest extends AbstractCommonStoragePatternTest
         parent::tearDown();
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
-     */
-    public function getCommonPatternNamesProvider()
+    public function getCommonPatternNamesProvider(): array
     {
         return [
             'lowercase' => ['output'],
@@ -80,7 +74,7 @@ class OutputCacheTest extends AbstractCommonStoragePatternTest
         $data = ob_get_clean();
 
         self::assertEquals($output, $data);
-        self::assertEquals($output, $this->pattern->getOptions()->getStorage()->getItem($key));
+        self::assertEquals($output, $this->pattern->getStorage()->getItem($key));
     }
 
     public function testStartEndCacheHit(): void
@@ -89,7 +83,7 @@ class OutputCacheTest extends AbstractCommonStoragePatternTest
         $key    = 'testStartEndCacheHit';
 
         // fill cache
-        $this->pattern->getOptions()->getStorage()->setItem($key, $output);
+        $this->pattern->getStorage()->setItem($key, $output);
 
         ob_start();
         self::assertTrue($this->pattern->start($key));

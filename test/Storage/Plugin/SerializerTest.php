@@ -144,7 +144,8 @@ final class SerializerTest extends AbstractCommonPluginTest
         $adapter
             ->expects(self::once())
             ->method('getItem')
-            ->willReturnCallback(static function (string $key, &$success, &$casToken): int {
+            // phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCaps
+            ->willReturnCallback(static function (string $_, &$success, &$casToken): int {
                 $success  = true;
                 $casToken = 10;
 

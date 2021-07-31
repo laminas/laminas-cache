@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.6.1@e93e532e4eaad6d68c4d7b606853800eaceccc72">
+<files psalm-version="4.9.0@c62adf965241f65aa4f899a050a94b70bbce19fd">
   <file src="src/Command/DeprecatedStorageFactoryConfigurationCheckCommand.php">
     <MixedArgument occurrences="2">
       <code>$cacheConfiguration</code>
@@ -24,12 +24,6 @@
       <code>$this-&gt;options</code>
     </NullableReturnStatement>
   </file>
-  <file src="src/Pattern/AbstractStorageCapablePattern.php">
-    <DeprecatedMethod occurrences="2">
-      <code>getStorage</code>
-      <code>getStorage</code>
-    </DeprecatedMethod>
-  </file>
   <file src="src/Pattern/CallbackCache.php">
     <InvalidArgument occurrences="1">
       <code>$function</code>
@@ -47,9 +41,6 @@
       <code>$result</code>
       <code>$ret</code>
     </MixedAssignment>
-    <PossiblyNullReference occurrences="1">
-      <code>getItem</code>
-    </PossiblyNullReference>
   </file>
   <file src="src/Pattern/CaptureCache.php">
     <DocblockTypeContradiction occurrences="2">
@@ -95,44 +86,6 @@
       <code>$perm !== false</code>
       <code>decoct($perm)</code>
     </TypeDoesNotContainType>
-  </file>
-  <file src="src/Pattern/ClassCache.php">
-    <ImplementedParamTypeMismatch occurrences="2">
-      <code>$method</code>
-      <code>$method</code>
-    </ImplementedParamTypeMismatch>
-    <InvalidArgument occurrences="3">
-      <code>$callable</code>
-      <code>$callback</code>
-      <code>$this-&gt;getOptions()-&gt;getClass() . '::' . $method</code>
-    </InvalidArgument>
-    <InvalidPropertyFetch occurrences="3">
-      <code>$class::$name</code>
-      <code>$class::$name</code>
-      <code>$class::$name</code>
-    </InvalidPropertyFetch>
-    <InvalidStringClass occurrences="1">
-      <code>$classname::$method(...$args)</code>
-    </InvalidStringClass>
-    <MixedAssignment occurrences="1">
-      <code>$class::$name</code>
-    </MixedAssignment>
-    <NullPropertyFetch occurrences="3">
-      <code>$class::$name</code>
-      <code>$class::$name</code>
-      <code>$class::$name</code>
-    </NullPropertyFetch>
-    <ParamNameMismatch occurrences="2">
-      <code>$method</code>
-      <code>$method</code>
-    </ParamNameMismatch>
-    <PossiblyNullOperand occurrences="2">
-      <code>$classname</code>
-      <code>$this-&gt;getOptions()-&gt;getClass()</code>
-    </PossiblyNullOperand>
-    <UndefinedClass occurrences="1">
-      <code>$classname::$method(...$args)</code>
-    </UndefinedClass>
   </file>
   <file src="src/Pattern/ObjectCache.php">
     <ImplementedParamTypeMismatch occurrences="2">
@@ -186,10 +139,6 @@
       <code>$object</code>
       <code>$object</code>
     </PossiblyNullArgument>
-    <PossiblyNullReference occurrences="2">
-      <code>removeItems</code>
-      <code>removeItems</code>
-    </PossiblyNullReference>
   </file>
   <file src="src/Pattern/OutputCache.php">
     <MixedArgument occurrences="2">
@@ -200,21 +149,12 @@
       <code>$data</code>
       <code>$key</code>
     </MixedAssignment>
-    <PossiblyNullReference occurrences="2">
-      <code>getItem</code>
-      <code>setItem</code>
-    </PossiblyNullReference>
     <RedundantCastGivenDocblockType occurrences="1">
       <code>(string) $key</code>
     </RedundantCastGivenDocblockType>
   </file>
   <file src="src/Pattern/PatternOptions.php">
-    <DeprecatedClass occurrences="2">
-      <code>StorageFactory::adapterFactory($storage)</code>
-      <code>StorageFactory::factory($storage)</code>
-    </DeprecatedClass>
-    <DocblockTypeContradiction occurrences="2">
-      <code>$storage instanceof Storage</code>
+    <DocblockTypeContradiction occurrences="1">
       <code>is_string($class)</code>
     </DocblockTypeContradiction>
     <MixedArgument occurrences="1">
@@ -236,79 +176,6 @@
       <code>(string) $objectKey</code>
       <code>(string) $publicDir</code>
     </RedundantCastGivenDocblockType>
-  </file>
-  <file src="src/Pattern/StoragePatternCacheFactory.php">
-    <DeprecatedClass occurrences="1">
-      <code>StorageFactory::factory($storageOption)</code>
-    </DeprecatedClass>
-    <MissingClosureParamType occurrences="2">
-      <code>$container</code>
-      <code>$storageOption</code>
-    </MissingClosureParamType>
-    <MixedArgument occurrences="1">
-      <code>$storageOption</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="2">
-      <code>$adapterPluginManager</code>
-      <code>$storageOption</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>StorageInterface</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="2">
-      <code>get</code>
-      <code>get</code>
-    </MixedMethodCall>
-    <MixedReturnStatement occurrences="1">
-      <code>$adapterPluginManager-&gt;get($storageOption)</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/PatternFactory.php">
-    <DeprecatedMethod occurrences="1">
-      <code>setOptions</code>
-    </DeprecatedMethod>
-    <DocblockTypeContradiction occurrences="1">
-      <code>is_array($options)</code>
-    </DocblockTypeContradiction>
-    <MixedInferredReturnType occurrences="1">
-      <code>Pattern\PatternInterface</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="1">
-      <code>static::getPluginManager()-&gt;get($patternName, $options)</code>
-    </MixedReturnStatement>
-  </file>
-  <file src="src/PatternPluginManager.php">
-    <DeprecatedClass occurrences="3">
-      <code>Pattern\ClassCache::class</code>
-      <code>Pattern\ClassCache::class</code>
-      <code>Pattern\ClassCache::class</code>
-    </DeprecatedClass>
-    <DeprecatedMethod occurrences="1">
-      <code>setOptions</code>
-    </DeprecatedMethod>
-    <InvalidThrow occurrences="1">
-      <code>ContainerException</code>
-    </InvalidThrow>
-    <MixedArgument occurrences="1">
-      <code>$pluginInstance</code>
-    </MixedArgument>
-    <MixedInferredReturnType occurrences="1">
-      <code>Pattern\PatternInterface</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="1">
-      <code>$pluginInstance</code>
-    </MixedReturnStatement>
-    <MoreSpecificImplementedParamType occurrences="1">
-      <code>$options</code>
-    </MoreSpecificImplementedParamType>
-    <NonInvariantDocblockPropertyType occurrences="3">
-      <code>$aliases</code>
-      <code>$factories</code>
-      <code>$instanceOf</code>
-    </NonInvariantDocblockPropertyType>
-    <ParamNameMismatch occurrences="1">
-      <code>$plugin</code>
-    </ParamNameMismatch>
   </file>
   <file src="src/Psr/CacheItemPool/CacheItem.php">
     <DocblockTypeContradiction occurrences="2">
@@ -396,53 +263,11 @@
       <code>var_export($ttl, true)</code>
     </RedundantConditionGivenDocblockType>
   </file>
-  <file src="src/Service/PluginManagerLookupTrait.php">
-    <DeprecatedClass occurrences="2">
-      <code>StorageFactory::setAdapterPluginManager($this-&gt;lookupStorageAdapterPluginManager($container))</code>
-      <code>StorageFactory::setPluginManager($this-&gt;lookupStoragePluginManager($container))</code>
-    </DeprecatedClass>
-    <MixedInferredReturnType occurrences="2">
-      <code>AdapterPluginManager</code>
-      <code>PluginManager</code>
-    </MixedInferredReturnType>
-  </file>
   <file src="src/Service/StorageAdapterFactoryFactory.php">
     <MixedArgument occurrences="2">
       <code>$container-&gt;get(AdapterPluginManager::class)</code>
       <code>$container-&gt;get(StoragePluginFactoryInterface::class)</code>
     </MixedArgument>
-  </file>
-  <file src="src/Service/StorageCacheAbstractServiceFactory.php">
-    <DeprecatedClass occurrences="1">
-      <code>StorageFactory::factory($config[$requestedName])</code>
-    </DeprecatedClass>
-    <MissingConstructor occurrences="1">
-      <code>$config</code>
-    </MissingConstructor>
-    <MixedArgument occurrences="1">
-      <code>$config[$requestedName]</code>
-    </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>$config[$this-&gt;configKey]</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="2">
-      <code>$config</code>
-      <code>$this-&gt;config</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
-      <code>array</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="1">
-      <code>$this-&gt;config</code>
-    </MixedReturnStatement>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>$this-&gt;config !== null</code>
-    </RedundantConditionGivenDocblockType>
-  </file>
-  <file src="src/Service/StorageCacheFactory.php">
-    <DeprecatedClass occurrences="1">
-      <code>StorageFactory::factory($cacheConfig)</code>
-    </DeprecatedClass>
   </file>
   <file src="src/Service/StoragePluginFactoryFactory.php">
     <MixedArgument occurrences="1">
@@ -720,8 +545,7 @@
       <code>$this-&gt;getCapability('ttlPrecision', 1)</code>
       <code>$this-&gt;getCapability('useRequestTime', false)</code>
     </MixedReturnStatement>
-    <RedundantCastGivenDocblockType occurrences="10">
-      <code>(bool) $flag</code>
+    <RedundantCastGivenDocblockType occurrences="9">
       <code>(bool) $flag</code>
       <code>(bool) $flag</code>
       <code>(bool) $flag</code>
@@ -828,7 +652,7 @@
       <code>$keyValuePairs[$key]</code>
       <code>$keyValuePairs[$key]</code>
     </MixedArrayOffset>
-    <MixedAssignment occurrences="23">
+    <MixedAssignment occurrences="25">
       <code>$baseCapabilities</code>
       <code>$failedKey</code>
       <code>$failedKey</code>
@@ -838,6 +662,8 @@
       <code>$key</code>
       <code>$keyValuePairs</code>
       <code>$keyValuePairs</code>
+      <code>$keyValuePairs[$key]</code>
+      <code>$keyValuePairs[$key]</code>
       <code>$keyValuePairs[$key]</code>
       <code>$keyValuePairs[$key]</code>
       <code>$newValue</code>
@@ -904,57 +730,8 @@
       <code>PostEvent</code>
     </PropertyNotSetInConstructor>
   </file>
-  <file src="src/StorageFactory.php">
-    <DocblockTypeContradiction occurrences="1">
-      <code>is_array($cfg)</code>
-    </DocblockTypeContradiction>
-    <MixedArgument occurrences="6">
-      <code>$adapterOptions</code>
-      <code>$adapterOptions</code>
-      <code>$cfg['options']</code>
-      <code>$pluginName</code>
-      <code>$pluginOptions</code>
-      <code>$pluginPrio</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="8">
-      <code>$adapter</code>
-      <code>$adapterName</code>
-      <code>$adapterName</code>
-      <code>$adapterOptions</code>
-      <code>$plugin</code>
-      <code>$pluginName</code>
-      <code>$pluginOptions</code>
-      <code>$pluginPrio</code>
-    </MixedAssignment>
-    <MixedInferredReturnType occurrences="2">
-      <code>Storage\Plugin\PluginInterface</code>
-      <code>Storage\StorageInterface</code>
-    </MixedInferredReturnType>
-    <MixedMethodCall occurrences="2">
-      <code>setOptions</code>
-      <code>setOptions</code>
-    </MixedMethodCall>
-    <MixedReturnStatement occurrences="2">
-      <code>$adapter</code>
-      <code>$plugin</code>
-    </MixedReturnStatement>
-    <PossiblyUndefinedMethod occurrences="2">
-      <code>addPlugin</code>
-      <code>hasPlugin</code>
-    </PossiblyUndefinedMethod>
-  </file>
   <file src="test/Command/DeprecatedStorageFactoryConfigurationCheckCommandTest.php">
     <InternalClass occurrences="7"/>
-  </file>
-  <file src="test/Pattern/AbstractCommonPatternTest.php">
-    <DeprecatedMethod occurrences="1">
-      <code>setOptions</code>
-    </DeprecatedMethod>
-    <MissingReturnType occurrences="3">
-      <code>getCommonPatternNamesProvider</code>
-      <code>testOptionNamesValid</code>
-      <code>testOptionsGetAndSetDefault</code>
-    </MissingReturnType>
   </file>
   <file src="test/Pattern/AbstractCommonStoragePatternTest.php">
     <NonInvariantDocblockPropertyType occurrences="1">
@@ -962,15 +739,9 @@
     </NonInvariantDocblockPropertyType>
   </file>
   <file src="test/Pattern/CallbackCacheTest.php">
-    <DeprecatedMethod occurrences="1">
-      <code>getStorage</code>
-    </DeprecatedMethod>
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>
-    <MissingReturnType occurrences="1">
-      <code>getCommonPatternNamesProvider</code>
-    </MissingReturnType>
     <MixedArgument occurrences="1">
       <code>$key</code>
     </MixedArgument>
@@ -989,9 +760,6 @@
       <code>attach</code>
       <code>getParams</code>
     </MixedMethodCall>
-    <PossiblyNullReference occurrences="1">
-      <code>getEventManager</code>
-    </PossiblyNullReference>
     <UndefinedInterfaceMethod occurrences="9">
       <code>call</code>
       <code>call</code>
@@ -1005,9 +773,6 @@
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Pattern/CaptureCacheTest.php">
-    <MissingReturnType occurrences="1">
-      <code>getCommonPatternNamesProvider</code>
-    </MissingReturnType>
     <MixedMethodCall occurrences="1">
       <code>setIndexFilename</code>
     </MixedMethodCall>
@@ -1030,52 +795,10 @@
       <code>$this-&gt;options</code>
     </UndefinedThisPropertyFetch>
   </file>
-  <file src="test/Pattern/ClassCacheTest.php">
-    <DeprecatedClass occurrences="1">
-      <code>new Cache\Pattern\ClassCache()</code>
-    </DeprecatedClass>
-    <DeprecatedMethod occurrences="1">
-      <code>getStorage</code>
-    </DeprecatedMethod>
-    <MissingClosureParamType occurrences="1">
-      <code>$event</code>
-    </MissingClosureParamType>
-    <MissingReturnType occurrences="1">
-      <code>getCommonPatternNamesProvider</code>
-    </MissingReturnType>
-    <MixedArrayAccess occurrences="1">
-      <code>$params['key']</code>
-    </MixedArrayAccess>
-    <MixedAssignment occurrences="5">
-      <code>$generatedKey</code>
-      <code>$params</code>
-      <code>$return</code>
-      <code>$return</code>
-      <code>$usedKey</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="2">
-      <code>attach</code>
-      <code>getParams</code>
-    </MixedMethodCall>
-    <PossiblyNullReference occurrences="1">
-      <code>getEventManager</code>
-    </PossiblyNullReference>
-    <UndefinedInterfaceMethod occurrences="3">
-      <code>call</code>
-      <code>generateKey</code>
-      <code>getEventManager</code>
-    </UndefinedInterfaceMethod>
-  </file>
   <file src="test/Pattern/ObjectCacheTest.php">
-    <DeprecatedMethod occurrences="1">
-      <code>getStorage</code>
-    </DeprecatedMethod>
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>
-    <MissingReturnType occurrences="1">
-      <code>getCommonPatternNamesProvider</code>
-    </MissingReturnType>
     <MixedArrayAccess occurrences="1">
       <code>$params['key']</code>
     </MixedArrayAccess>
@@ -1105,9 +828,6 @@
       <code>$this-&gt;options-&gt;getObject()-&gt;property</code>
       <code>$this-&gt;options-&gt;getObject()-&gt;property</code>
     </PossiblyNullPropertyFetch>
-    <PossiblyNullReference occurrences="1">
-      <code>getEventManager</code>
-    </PossiblyNullReference>
     <UndefinedInterfaceMethod occurrences="3">
       <code>call</code>
       <code>generateKey</code>
@@ -1115,13 +835,6 @@
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Pattern/OutputCacheTest.php">
-    <DeprecatedMethod occurrences="2">
-      <code>getStorage</code>
-      <code>getStorage</code>
-    </DeprecatedMethod>
-    <MissingReturnType occurrences="1">
-      <code>getCommonPatternNamesProvider</code>
-    </MissingReturnType>
     <PossiblyNullReference occurrences="2">
       <code>getItem</code>
       <code>setItem</code>
@@ -1133,81 +846,10 @@
       <code>start</code>
     </UndefinedInterfaceMethod>
   </file>
-  <file src="test/Pattern/PatternCacheFactoryTest.php">
-    <ArgumentTypeCoercion occurrences="5">
-      <code>$className</code>
-      <code>$className</code>
-      <code>$className</code>
-      <code>$className</code>
-      <code>'foo'</code>
-    </ArgumentTypeCoercion>
-    <MixedInferredReturnType occurrences="1">
-      <code>array</code>
-    </MixedInferredReturnType>
-    <UndefinedClass occurrences="1">
-      <code>'foo'</code>
-    </UndefinedClass>
-  </file>
-  <file src="test/Pattern/StoragePatternCacheFactoryTest.php">
-    <ArgumentTypeCoercion occurrences="9">
-      <code>$className</code>
-      <code>$className</code>
-      <code>$className</code>
-      <code>$className</code>
-      <code>$className</code>
-      <code>$className</code>
-      <code>$className</code>
-      <code>$className</code>
-      <code>'foo'</code>
-    </ArgumentTypeCoercion>
-    <DeprecatedClass occurrences="1">
-      <code>ClassCache::class</code>
-    </DeprecatedClass>
-    <InvalidArgument occurrences="1">
-      <code>$callback</code>
-    </InvalidArgument>
-    <MixedInferredReturnType occurrences="1">
-      <code>array</code>
-    </MixedInferredReturnType>
-    <UndefinedClass occurrences="1">
-      <code>'foo'</code>
-    </UndefinedClass>
-  </file>
   <file src="test/Pattern/TestAsset/TestCallbackCache.php">
     <MissingReturnType occurrences="1">
       <code>emptyMethod</code>
     </MissingReturnType>
-  </file>
-  <file src="test/PatternFactoryTest.php">
-    <DeprecatedClass occurrences="7">
-      <code>Cache\PatternFactory::factory('capture')</code>
-      <code>Cache\PatternFactory::factory('capture')</code>
-      <code>Cache\PatternFactory::getPluginManager()</code>
-      <code>Cache\PatternFactory::getPluginManager()</code>
-      <code>Cache\PatternFactory::resetPluginManager()</code>
-      <code>Cache\PatternFactory::resetPluginManager()</code>
-      <code>Cache\PatternFactory::setPluginManager($plugins)</code>
-    </DeprecatedClass>
-  </file>
-  <file src="test/PatternPluginManagerTest.php">
-    <DeprecatedClass occurrences="1">
-      <code>Pattern\ClassCache::class</code>
-    </DeprecatedClass>
-    <DeprecatedMethod occurrences="1">
-      <code>getStorage</code>
-    </DeprecatedMethod>
-    <MissingReturnType occurrences="1">
-      <code>testShareByDefaultAndSharedByDefault</code>
-    </MissingReturnType>
-    <MixedAssignment occurrences="2">
-      <code>$options</code>
-      <code>$plugin</code>
-    </MixedAssignment>
-    <MixedMethodCall occurrences="3">
-      <code>getCacheOutput</code>
-      <code>getOptions</code>
-      <code>getStorage</code>
-    </MixedMethodCall>
   </file>
   <file src="test/Psr/CacheItemPool/CacheItemPoolDecoratorTest.php">
     <InvalidArgument occurrences="2">
@@ -1320,36 +962,6 @@
       <code>Generator</code>
       <code>Generator</code>
     </MixedInferredReturnType>
-  </file>
-  <file src="test/Service/StorageCacheAbstractServiceFactoryTest.php">
-    <DeprecatedClass occurrences="6">
-      <code>StorageFactory::getAdapterPluginManager()</code>
-      <code>StorageFactory::getPluginManager()</code>
-      <code>StorageFactory::resetAdapterPluginManager()</code>
-      <code>StorageFactory::resetAdapterPluginManager()</code>
-      <code>StorageFactory::resetPluginManager()</code>
-      <code>StorageFactory::resetPluginManager()</code>
-    </DeprecatedClass>
-  </file>
-  <file src="test/Service/StorageCacheFactoryTest.php">
-    <DeprecatedClass occurrences="6">
-      <code>StorageFactory::getAdapterPluginManager()</code>
-      <code>StorageFactory::getPluginManager()</code>
-      <code>StorageFactory::resetAdapterPluginManager()</code>
-      <code>StorageFactory::resetAdapterPluginManager()</code>
-      <code>StorageFactory::resetPluginManager()</code>
-      <code>StorageFactory::resetPluginManager()</code>
-    </DeprecatedClass>
-    <MixedArgument occurrences="1">
-      <code>$cache</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$cache</code>
-    </MixedAssignment>
-    <TooManyArguments occurrences="2">
-      <code>$factory</code>
-      <code>$factory</code>
-    </TooManyArguments>
   </file>
   <file src="test/Storage/Adapter/AbstractAdapterTest.php">
     <InvalidReturnStatement occurrences="1">
@@ -1661,36 +1273,5 @@
     <PropertyNotSetInConstructor occurrences="1">
       <code>OptimizableMockAdapter</code>
     </PropertyNotSetInConstructor>
-  </file>
-  <file src="test/StorageFactoryTest.php">
-    <ArgumentTypeCoercion occurrences="2"/>
-    <DeprecatedClass occurrences="22">
-      <code>Cache\StorageFactory::adapterFactory('Memory')</code>
-      <code>Cache\StorageFactory::adapterFactory('Memory')</code>
-      <code>Cache\StorageFactory::factory($factory)</code>
-      <code>Cache\StorageFactory::factory(['adapter' =&gt; 'Foo', 'plugins' =&gt; ['IgnoreUserAbort']])</code>
-      <code>Cache\StorageFactory::getAdapterPluginManager()</code>
-      <code>Cache\StorageFactory::getAdapterPluginManager()</code>
-      <code>Cache\StorageFactory::getPluginManager()</code>
-      <code>Cache\StorageFactory::getPluginManager()</code>
-      <code>Cache\StorageFactory::pluginFactory('Serializer')</code>
-      <code>Cache\StorageFactory::pluginFactory('Serializer')</code>
-      <code>Cache\StorageFactory::resetAdapterPluginManager()</code>
-      <code>Cache\StorageFactory::resetAdapterPluginManager()</code>
-      <code>Cache\StorageFactory::resetPluginManager()</code>
-      <code>Cache\StorageFactory::resetPluginManager()</code>
-      <code>Cache\StorageFactory::setAdapterPluginManager($adapters)</code>
-      <code>Cache\StorageFactory::setAdapterPluginManager($adapters)</code>
-      <code>Cache\StorageFactory::setPluginManager($manager)</code>
-    </DeprecatedClass>
-    <MixedArgument occurrences="1">
-      <code>$plugin</code>
-    </MixedArgument>
-    <MixedAssignment occurrences="1">
-      <code>$plugin</code>
-    </MixedAssignment>
-    <UndefinedInterfaceMethod occurrences="1">
-      <code>getPluginRegistry</code>
-    </UndefinedInterfaceMethod>
   </file>
 </files>

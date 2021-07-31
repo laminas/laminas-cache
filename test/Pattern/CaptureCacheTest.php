@@ -53,8 +53,7 @@ class CaptureCacheTest extends AbstractCommonPatternTest
         $this->options = new Cache\Pattern\PatternOptions([
             'public_dir' => $this->tmpCacheDir,
         ]);
-        $this->pattern = new Cache\Pattern\CaptureCache();
-        $this->pattern->setOptions($this->options);
+        $this->pattern = new Cache\Pattern\CaptureCache($this->options);
 
         parent::setUp();
     }
@@ -94,10 +93,7 @@ class CaptureCacheTest extends AbstractCommonPatternTest
         }
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
-     */
-    public function getCommonPatternNamesProvider()
+    public function getCommonPatternNamesProvider(): array
     {
         return [
             'lowercase' => ['capture'],
@@ -190,8 +186,7 @@ class CaptureCacheTest extends AbstractCommonPatternTest
             'public_dir' => $this->tmpCacheDir,
         ]);
 
-        $captureCache = new Cache\Pattern\CaptureCache();
-        $captureCache->setOptions($options);
+        $captureCache = new Cache\Pattern\CaptureCache($options);
 
         self::assertEquals(
             $this->tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/index.html'),
@@ -218,8 +213,7 @@ class CaptureCacheTest extends AbstractCommonPatternTest
         $options      = new Cache\Pattern\PatternOptions([
             'public_dir' => $this->tmpCacheDir,
         ]);
-        $captureCache = new Cache\Pattern\CaptureCache();
-        $captureCache->setOptions($options);
+        $captureCache = new Cache\Pattern\CaptureCache($options);
 
         self::assertEquals(
             $this->tmpCacheDir . str_replace('/', DIRECTORY_SEPARATOR, '/dir1/test.html'),

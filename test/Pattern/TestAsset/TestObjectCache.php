@@ -25,8 +25,10 @@ final class TestObjectCache
         ++static::$fooCounter;
         $args = func_get_args();
 
-        echo 'foobar_output(' . implode(', ', $args) . ') : ' . static::$fooCounter;
-        return 'foobar_return(' . implode(', ', $args) . ') : ' . static::$fooCounter;
+        /** @psalm-suppress MixedArgumentTypeCoercion */
+        $imploded = implode(', ', $args);
+        echo 'foobar_output(' . $imploded . ') : ' . static::$fooCounter;
+        return 'foobar_return(' . $imploded . ') : ' . static::$fooCounter;
     }
 
     public function __invoke(): string

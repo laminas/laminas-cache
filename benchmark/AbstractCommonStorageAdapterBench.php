@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCaps
 
 namespace LaminasBench\Cache;
 
@@ -57,7 +57,7 @@ abstract class AbstractCommonStorageAdapterBench
      */
     public function benchHasMissingItemsSingle()
     {
-        foreach ($this->coldItems as $k => $v) {
+        foreach ($this->coldItems as $k => $_) {
             $this->storage->hasItem($k);
         }
     }
@@ -75,7 +75,7 @@ abstract class AbstractCommonStorageAdapterBench
      */
     public function benchHasExistingItemsSingle()
     {
-        foreach ($this->warmItems as $k => $v) {
+        foreach ($this->warmItems as $k => $_) {
             $this->storage->hasItem($k);
         }
     }
@@ -176,7 +176,7 @@ abstract class AbstractCommonStorageAdapterBench
      */
     public function benchTouchMissingItemsSingle()
     {
-        foreach ($this->coldItems as $k => $v) {
+        foreach ($this->coldItems as $k => $_) {
             $this->storage->touchItem($k);
         }
     }
@@ -194,7 +194,7 @@ abstract class AbstractCommonStorageAdapterBench
      */
     public function benchTouchExistingItemsSingle()
     {
-        foreach ($this->warmItems as $k => $v) {
+        foreach ($this->warmItems as $k => $_) {
             $this->storage->touchItem($k);
         }
     }
@@ -212,7 +212,7 @@ abstract class AbstractCommonStorageAdapterBench
      */
     public function benchGetMissingItemsSingle()
     {
-        foreach ($this->coldItems as $k => $v) {
+        foreach ($this->coldItems as $k => $_) {
             $this->storage->getItem($k);
         }
     }
@@ -230,7 +230,7 @@ abstract class AbstractCommonStorageAdapterBench
      */
     public function benchGetExistingItemsSingle()
     {
-        foreach ($this->warmItems as $k => $v) {
+        foreach ($this->warmItems as $k => $_) {
             $this->storage->getItem($k);
         }
     }
@@ -248,7 +248,7 @@ abstract class AbstractCommonStorageAdapterBench
      */
     public function benchRemoveMissingItemsSingle()
     {
-        foreach ($this->coldItems as $k => $v) {
+        foreach ($this->coldItems as $k => $_) {
             $this->storage->removeItem($k);
         }
     }
@@ -266,7 +266,7 @@ abstract class AbstractCommonStorageAdapterBench
      */
     public function benchRemoveExistingItemsSingle()
     {
-        foreach ($this->warmItems as $k => $v) {
+        foreach ($this->warmItems as $k => $_) {
             $this->storage->removeItem($k);
         }
     }

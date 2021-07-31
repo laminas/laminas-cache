@@ -32,19 +32,13 @@ class CallbackCacheTest extends AbstractCommonStoragePatternTest
         $this->storage = new Cache\Storage\Adapter\Memory([
             'memory_limit' => 0,
         ]);
-        $this->options = new Cache\Pattern\PatternOptions([
-            'storage' => $this->storage,
-        ]);
-        $this->pattern = new Cache\Pattern\CallbackCache();
-        $this->pattern->setOptions($this->options);
+
+        $this->pattern = new Cache\Pattern\CallbackCache($this->storage);
 
         parent::setUp();
     }
 
-    /**
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
-     */
-    public function getCommonPatternNamesProvider()
+    public function getCommonPatternNamesProvider(): array
     {
         return [
             'lowercase' => ['callback'],
@@ -85,7 +79,7 @@ class CallbackCacheTest extends AbstractCommonStoragePatternTest
 
         $generatedKey = $this->pattern->generateKey($callback, $args);
         $usedKey      = null;
-        $this->options->getStorage()->getEventManager()->attach('setItem.pre', function ($event) use (&$usedKey) {
+        $this->storage->getEventManager()->attach('setItem.pre', function ($event) use (&$usedKey) {
             $params  = $event->getParams();
             $usedKey = $params['key'];
         });
@@ -114,8 +108,10 @@ class CallbackCacheTest extends AbstractCommonStoragePatternTest
      */
     protected function executeCallbackAndMakeAssertions($callback, array $args): void
     {
-        $returnSpec = 'foobar_return(' . implode(', ', $args) . ') : ';
-        $outputSpec = 'foobar_output(' . implode(', ', $args) . ') : ';
+        /** @psalm-suppress MixedArgumentTypeCoercion */
+        $imploded   = implode(', ', $args);
+        $returnSpec = 'foobar_return(' . $imploded . ') : ';
+        $outputSpec = 'foobar_output(' . $imploded . ') : ';
 
         // first call - not cached
         $firstCounter = TestCallbackCache::$fooCounter + 1;

@@ -3,9 +3,10 @@
 namespace Laminas\Cache\Service;
 
 use Interop\Container\ContainerInterface;
-use Laminas\Cache\StorageFactory;
 use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
+use Webmozart\Assert\Assert;
 
+use function assert;
 use function is_array;
 
 /**
@@ -13,11 +14,9 @@ use function is_array;
  */
 class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
 {
-    use PluginManagerLookupTrait;
-
     public const CACHES_CONFIGURATION_KEY = 'caches';
 
-    /** @var array */
+    /** @var array<string,mixed>|null */
     protected $config;
 
     /**
@@ -49,10 +48,13 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $this->prepareStorageFactory($container);
-
-        $config = $this->getConfig($container);
-        return StorageFactory::factory($config[$requestedName]);
+        $config  = $this->getConfig($container);
+        $factory = $container->get(StorageAdapterFactoryInterface::class);
+        assert($factory instanceof StorageAdapterFactoryInterface);
+        $configForRequestedName = $config[$requestedName] ?? [];
+        Assert::isMap($configForRequestedName);
+        $factory->assertValidConfigurationStructure($configForRequestedName);
+        return $factory->createFromArrayConfiguration($configForRequestedName);
     }
 
     /**
@@ -72,12 +74,15 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
         }
 
         $config = $container->get('config');
+        Assert::isArrayAccessible($config);
         if (! isset($config[$this->configKey])) {
             $this->config = [];
             return $this->config;
         }
 
-        $this->config = $config[$this->configKey];
-        return $this->config;
+        $cacheConfigurations = $config[$this->configKey];
+        Assert::isMap($cacheConfigurations);
+
+        return $this->config = $cacheConfigurations;
     }
 }

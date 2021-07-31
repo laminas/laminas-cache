@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Pattern;
 
-use Laminas\Cache\Pattern\PatternOptions;
 use Laminas\Cache\Pattern\StorageCapableInterface;
 use Laminas\Cache\Storage\StorageInterface;
 
 use function sprintf;
 
+/**
+ * @psalm-suppress MissingConstructor
+ */
 abstract class AbstractCommonStoragePatternTest extends AbstractCommonPatternTest
 {
     /** @var StorageInterface */
@@ -17,9 +19,6 @@ abstract class AbstractCommonStoragePatternTest extends AbstractCommonPatternTes
 
     /** @var StorageCapableInterface */
     protected $pattern;
-
-    /** @var PatternOptions */
-    protected $options;
 
     protected function setUp(): void
     {
@@ -32,17 +31,6 @@ abstract class AbstractCommonStoragePatternTest extends AbstractCommonPatternTes
             )
         );
 
-        self::assertInstanceOf(
-            PatternOptions::class,
-            $this->options,
-            'Pattern options are missing'
-        );
-
         parent::setUp();
-    }
-
-    public function testGetStorageReturnsStorage(): void
-    {
-        self::assertSame($this->storage, $this->pattern->getStorage());
     }
 }

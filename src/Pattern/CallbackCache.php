@@ -3,7 +3,6 @@
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
-use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Stdlib\ErrorHandler;
 
 use function array_key_exists;
@@ -21,22 +20,6 @@ use function strtolower;
 
 class CallbackCache extends AbstractStorageCapablePattern
 {
-    /**
-     * @return CallbackCache Provides a fluent interface
-     * @throws Exception\InvalidArgumentException If missing storage option.
-     */
-    public function setOptions(PatternOptions $options)
-    {
-        parent::setOptions($options);
-        $storage = $this->getStorage();
-
-        if (! $storage instanceof StorageInterface) {
-            throw new Exception\InvalidArgumentException("Missing option 'storage'");
-        }
-
-        return $this;
-    }
-
     /**
      * Call the specified callback or get the result from cache
      *
