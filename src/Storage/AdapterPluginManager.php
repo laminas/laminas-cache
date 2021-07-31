@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\InvokableFactory;
  * StorageInterface. Additionally, it registers a number of default
  * adapters available.
  */
-class AdapterPluginManager extends AbstractPluginManager
+final class AdapterPluginManager extends AbstractPluginManager
 {
     /** @var array<string,string> */
     protected $aliases = [

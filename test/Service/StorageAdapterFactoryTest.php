@@ -11,10 +11,10 @@ use Laminas\Cache\Service\StorageAdapterFactory;
 use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use Laminas\Cache\Service\StoragePluginFactoryInterface;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
-use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\PluginAwareInterface;
 use Laminas\Cache\Storage\StorageInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,7 +31,7 @@ final class StorageAdapterFactoryTest extends TestCase
     /** @var StorageAdapterFactory */
     private $factory;
 
-    /** @var AdapterPluginManager&MockObject */
+    /** @var ServiceLocatorInterface&MockObject */
     private $adapters;
 
     /** @var StoragePluginFactoryInterface&MockObject */
@@ -109,7 +109,7 @@ final class StorageAdapterFactoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->adapters = $this->createMock(AdapterPluginManager::class);
+        $this->adapters = $this->createMock(ServiceLocatorInterface::class);
         $this->plugins  = $this->createMock(StoragePluginFactoryInterface::class);
         $this->factory  = new StorageAdapterFactory($this->adapters, $this->plugins);
     }

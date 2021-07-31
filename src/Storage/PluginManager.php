@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\InvokableFactory;
  * Plugin\PluginInterface. Additionally, it registers a number of default
  * plugins available.
  */
-class PluginManager extends AbstractPluginManager
+final class PluginManager extends AbstractPluginManager
 {
     /** @var array<string,string> */
     protected $aliases = [
