@@ -12,6 +12,8 @@ use Laminas\ServiceManager\Factory\InvokableFactory;
  * Enforces that retrieved adapters are instances of
  * Pattern\PatternInterface. Additionally, it registers a number of default
  * patterns available.
+ * @deprecated This will be removed in v3.0.0. Cache pattern will require dependency injection and thus, a generic
+ *             plugin manager makes no sense anymore.
  */
 class PatternPluginManagerV2Polyfill extends AbstractPluginManager
 {

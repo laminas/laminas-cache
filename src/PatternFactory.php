@@ -7,8 +7,9 @@ use Laminas\Stdlib\ArrayUtils;
 use Traversable;
 
 /**
- * @deprecated Please do not use static factories anymore.
- *             Inject {@see PatternPluginManager} instead.
+ * @deprecated Please do not use static factories anymore. Please create your own instances by creating a
+ *             dedicated factory for each of the patterns with your project specific needs or just instantiate
+ *             the pattern manually instead of calling this factory.
  */
 abstract class PatternFactory
 {

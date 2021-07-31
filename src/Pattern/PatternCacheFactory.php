@@ -8,6 +8,10 @@ use Laminas\Cache\Exception\InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use function class_exists;
 
+/**
+ * @deprecated This will be removed with v3.0.0 as providing generic factories for cache patterns wont be suitable for
+ *             all possible combinations of implemented upstream patterns.
+ */
 final class PatternCacheFactory
 {
     /**
