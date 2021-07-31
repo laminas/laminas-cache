@@ -2,21 +2,37 @@ docs_dir: docs/book
 site_dir: docs/html
 nav:
     - Home: index.md
-    - Installation: installation.md
-    - Storage:
-        - Adapters: storage/adapter.md
-        - Capabilities: storage/capabilities.md
-        - Plugins: storage/plugin.md
-    - "Cache Patterns":
-        - Introduction: pattern/intro.md
-        - CallbackCache: pattern/callback-cache.md
-        - ClassCache: pattern/class-cache.md
-        - ObjectCache: pattern/object-cache.md
-        - OutputCache: pattern/output-cache.md
-        - CaptureCache: pattern/capture-cache.md
-    - "Standards Support":
-        - PSR-6: psr6.md
-        - PSR-16: psr16.md
+    - v3:
+        - Installation: v3/installation.md
+        - Storage:
+            - Adapters: v3/storage/adapter.md
+            - Capabilities: v3/storage/capabilities.md
+            - Plugins: v3/storage/plugin.md
+        - "Cache Patterns":
+            - Introduction: v3/pattern/intro.md
+            - CallbackCache: v3/pattern/callback-cache.md
+            - ObjectCache: v3/pattern/object-cache.md
+            - OutputCache: v3/pattern/output-cache.md
+            - CaptureCache: v3/pattern/capture-cache.md
+        - "Standards Support":
+            - PSR-6: v3/psr6.md
+            - PSR-16: v3/psr16.md
+    - v2:
+        - Installation: v2/installation.md
+        - Storage:
+            - Adapters: v2/storage/adapter.md
+            - Capabilities: v2/storage/capabilities.md
+            - Plugins: v2/storage/plugin.md
+        - "Cache Patterns":
+            - Introduction: v2/pattern/intro.md
+            - CallbackCache: v2/pattern/callback-cache.md
+            - ClassCache: v2/pattern/class-cache.md
+            - ObjectCache: v2/pattern/object-cache.md
+            - OutputCache: v2/pattern/output-cache.md
+            - CaptureCache: v2/pattern/capture-cache.md
+        - "Standards Support":
+            - PSR-6: v2/psr6.md
+            - PSR-16: v2/psr16.md
 site_name: laminas-cache
 site_description: 'Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.'
 repo_url: 'https://github.com/laminas/laminas-cache'
@@ -25,3 +41,23 @@ extra:
     installation:
         config_provider_class: 'Laminas\Cache\ConfigProvider'
         module_class: 'Laminas\Cache\Module'
+    current_version: v3
+    versions:
+        - v3
+        - v2
+plugins:
+  - search
+  - redirects:
+        redirect_maps:
+            installation.md: v3/installation.md
+            storage/adapter.md: v3/storage/adapter.md
+            storage/capabilities.md: v3/storage/capabilities.md
+            storage/plugin.md: v3/storage/plugin.md
+            pattern/intro.md: v3/pattern/intro.md
+            pattern/callback-cache.md: v3/pattern/callback-cache.md
+            pattern/class-cache.md: v2/pattern/callback-cache.md
+            pattern/object-cache.md: v3/pattern/object-cache.md
+            pattern/output-cache.md: v3/pattern/output-cache.md
+            pattern/capture-cache.md: v3/pattern/capture-cache.md
+            psr6.md: v3/psr6.md
+            psr16.md: v3/psr16.md
