@@ -3,7 +3,7 @@
 namespace LaminasBench\Cache;
 
 use DirectoryIterator;
-use Laminas\Cache\StorageFactory;
+use Laminas\Cache\Storage\Adapter\Filesystem;
 
 use function error_get_last;
 use function file_exists;
@@ -18,7 +18,7 @@ use function unlink;
  * @Iterations(10)
  * @Warmup(1)
  */
-class FilesystemStorageAdapterBenchAbstract extends AbstractCommonStorageAdapterBench
+class FilesystemStorageAdapterBench extends AbstractCommonStorageAdapterBench
 {
     /** @var string */
     private $tmpCacheDir;
@@ -37,7 +37,7 @@ class FilesystemStorageAdapterBenchAbstract extends AbstractCommonStorageAdapter
             $this->fail("Can't create temporary cache directory: {$err['message']}");
         }
 
-        $this->storage = StorageFactory::adapterFactory('filesystem', [
+        $this->storage = new Filesystem([
             'cache_dir' => $this->tmpCacheDir,
         ]);
 

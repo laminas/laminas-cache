@@ -57,7 +57,7 @@
         "laminas/laminas-config-aggregator": "^1.5",
         "laminas/laminas-feed": "^2.14",
         "laminas/laminas-serializer": "^2.6",
-        "phpbench/phpbench": "^1.0.0-beta2",
+        "phpbench/phpbench": "^1.0",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.15.1",
         "vimeo/psalm": "^4.5.2"
