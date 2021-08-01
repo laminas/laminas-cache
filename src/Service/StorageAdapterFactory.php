@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use Laminas\Cache\Exception;
 use Laminas\Cache\Storage\PluginAwareInterface;
 use Laminas\Cache\Storage\StorageInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\PluginManagerInterface;
 use Webmozart\Assert\Assert;
 
 use function assert;
@@ -22,13 +22,13 @@ final class StorageAdapterFactory implements StorageAdapterFactoryInterface
 {
     public const DEFAULT_PLUGIN_PRIORITY = 1;
 
-    /** @var ServiceLocatorInterface */
+    /** @var PluginManagerInterface */
     private $adapters;
 
     /** @var StoragePluginFactoryInterface */
     private $pluginFactory;
 
-    public function __construct(ServiceLocatorInterface $adapters, StoragePluginFactoryInterface $pluginFactory)
+    public function __construct(PluginManagerInterface $adapters, StoragePluginFactoryInterface $pluginFactory)
     {
         $this->adapters      = $adapters;
         $this->pluginFactory = $pluginFactory;
