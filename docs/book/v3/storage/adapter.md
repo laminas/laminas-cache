@@ -631,48 +631,6 @@ Name | Data Type | Default Value | Description
 >
 > The `psr` option was introduce to provide non-BC compatible way to use the `BlackHole` adapter with the PSR-6 and PSR-16 decorator. Ignore this option if this adapter is not used in combination with these decorators. This option is already flagged as internal and thus will be removed in `laminas/laminas-cache-storage-adapter-blackhole` 2.0.
 
-## Dba Adapter
-
-`Laminas\Cache\Storage\Adapter\Dba` stores cache items into
-[dbm](http://en.wikipedia.org/wiki/Dbm)-like databases using the PHP extension
-[dba](http://php.net/manual/book.dba.php).
-
-This adapter implements the following interfaces:
-
-- `Laminas\Cache\Storage\StorageInterface`
-- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
-- `Laminas\Cache\Storage\ClearByNamespaceInterface`
-- `Laminas\Cache\Storage\ClearByPrefixInterface`
-- `Laminas\Cache\Storage\FlushableInterface`
-- `Laminas\Cache\Storage\IterableInterface`
-- `Laminas\Cache\Storage\OptimizableInterface`
-- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
-
-### Capabilities
-
-Capability | Value
----------- | -----
-`supportedDatatypes` | `string`, `null` => `string`, `boolean` => `string`, `integer` => `string`, `double` => `string`
-`supportedMetadata` | none
-`minTtl` | 0
-`maxKeyLength` | 0
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | Option value of `namespace_separator`
-
-### Adapter Specific Options
-
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
-`pathname` | `string` | "" | Pathname to the database file.
-`mode` | `string` | "c" | The mode with which to open the database; please read [dba_open](http://php.net/manual/function.dba-open.php) for more information.
-`handler` | `string` | "flatfile" | The name of the handler which shall be used for accessing the database.
-
-> ### This adapter doesn't support automatic expiry
->
-> Because this adapter doesn't support automatic expiry, it's very important to clean
-> outdated items periodically!
-
 ## Filesystem Adapter
 
 `Laminas\Cache\Storage\Adapter\Filesystem` stores cache items on the filesystem.
@@ -726,6 +684,42 @@ Name | Data Type | Default Value | Description
 
 Note: the `suffix` and `tag_suffix` options will be escaped in order to be safe
 for glob operations.
+
+## Memcached Adapter
+
+`Laminas\Cache\Storage\Adapter\Memcached` stores cache items over the memcached
+protocol, using the PHP extension [memcached](http://pecl.php.net/package/memcached),
+based on [Libmemcached](http://libmemcached.org/).
+
+This adapter implements the following interfaces:
+
+- `Laminas\Cache\Storage\StorageInterface`
+- `Laminas\Cache\Storage\AvailableSpaceCapableInterface`
+- `Laminas\Cache\Storage\FlushableInterface`
+- `Laminas\Cache\Storage\TotalSpaceCapableInterface`
+
+### Capabilities
+
+Capability | Value
+---------- | -----
+`supportedDatatypes` | `null`, `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized)
+`supportedMetadata` | none
+`minTtl` | 1
+`maxTtl` | 0
+`staticTtl` | `true`
+`ttlPrecision` | 1
+`useRequestTime` | `false`
+`lockOnExpire` | 0
+`maxKeyLength` | 255
+`namespaceIsPrefix` | `true`
+`namespaceSeparator` | none
+
+### Adapter Specific Options
+
+Name | Data Type | Default Value | Description
+---- | --------- | ------------- | -----------
+`servers` | `array` | `[]` | List of servers in the format `[] = [string host, integer port]`
+`lib_options` | `array` | `[]` | Associative array of Libmemcached options where the array key is the option name (without the prefix `OPT_`) or the constant value. The array value is the option value. Please read [the memcached setOption() page](http://php.net/manual/memcached.setoption.php) for more information
 
 ## Redis Adapter
 
@@ -866,16 +860,17 @@ Name | Data Type | Default Value | Description
 > All stored items will be lost on termination of the script. For web-facing
 > requests, this typically means the cache is volatile.
 
-## MongoDB Adapter
+## ExtMongoDB Adapter
 
-`Laminas\Cache\Storage\Adapter\MongoDB` stores cache items using MongoDB, via either the
-PHP extension [mongo](http://php.net/mongo), or a MongoDB polyfill library, such as
-[Mongofill](https://github.com/mongofill/mongofill).
+> Available since version 2.8.0
 
-> ### ext-mongodb
->
-> If you are using the mongodb extension (vs the mongo extension), you will need
-> to use the [ExtMongoDb adapter](#the-extmongodb-adapter) instead.
+`Laminas\Cache\Storage\Adapter\ExtMongoDB` stores cache items using the mongodb extension, and
+requires that the MongoDB PHP Client library is also installed. You can install the client
+library using the following:
+
+```bash
+$ composer require mongodb/mongodb
+```
 
 This adapter implements the following interfaces:
 
@@ -908,11 +903,11 @@ Available keys for `lib_option` include:
 
 Key | Default | Description
 --- | ------- | -----------
-`server` | `mongodb://localhost:27017` | The MongoDB server connection string (see the [MongoClient docs](http://php.net/MongoClient)).
+`server` | `mongodb://localhost:27017` | The MongoDB server connection string (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
 `database` | `laminas` | Name of the database to use; MongoDB will create this database if it does not exist.
 `collection` | `cache` | Name of the collection to use; MongoDB will create this collection if it does not exist.
-`connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).
-`driverOptions` | `[]` | Associative array of driver options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).
+`connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of URI options (such as authentication credentials or query string parameters) to pass to `MongoDB\\Client` (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
+`driverOptions` | `[]` | Associative array of driver options to pass to `MongoDB\\Client` (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
 
 ## Examples
 
