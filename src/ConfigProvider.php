@@ -10,6 +10,8 @@ use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use Laminas\Cache\Service\StoragePluginFactory;
 use Laminas\Cache\Service\StoragePluginFactoryFactory;
 use Laminas\Cache\Service\StoragePluginFactoryInterface;
+use Symfony\Component\Console\Command\Command;
+use function class_exists;
 
 class ConfigProvider
 {
@@ -33,7 +35,7 @@ class ConfigProvider
      */
     public function getDependencyConfig()
     {
-        return [
+        $dependencies = [
             // Legacy Zend Framework aliases
             'aliases' => [
                 \Zend\Cache\PatternPluginManager::class => PatternPluginManager::class,
@@ -49,12 +51,19 @@ class ConfigProvider
                 PatternPluginManager::class => Service\PatternPluginManagerFactory::class,
                 Storage\AdapterPluginManager::class => Service\StorageAdapterPluginManagerFactory::class,
                 Storage\PluginManager::class => Service\StoragePluginManagerFactory::class,
-                DeprecatedStorageFactoryConfigurationCheckCommand::class =>
-                    DeprecatedStorageFactoryConfigurationCheckCommandFactory::class,
                 StoragePluginFactory::class  => StoragePluginFactoryFactory::class,
                 StorageAdapterFactory::class => StorageAdapterFactoryFactory::class,
             ],
         ];
+
+        if (class_exists(Command::class)) {
+            $dependencies['factories'] += [
+                DeprecatedStorageFactoryConfigurationCheckCommand::class =>
+                    DeprecatedStorageFactoryConfigurationCheckCommandFactory::class,
+            ];
+        }
+
+        return $dependencies;
     }
 
     /**
@@ -62,6 +71,10 @@ class ConfigProvider
      */
     public function getCliConfig(): array
     {
+        if (! class_exists(Command::class)) {
+            return [];
+        }
+
         return [
             'commands' => [
                 DeprecatedStorageFactoryConfigurationCheckCommand::NAME =>
