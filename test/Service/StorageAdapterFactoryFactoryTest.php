@@ -7,7 +7,7 @@ namespace LaminasTest\Cache\Service;
 use Laminas\Cache\Service\StorageAdapterFactoryFactory;
 use Laminas\Cache\Service\StoragePluginFactoryInterface;
 use Laminas\Cache\Storage\AdapterPluginManager;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\PluginManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -24,7 +24,7 @@ final class StorageAdapterFactoryFactoryTest extends TestCase
 
     public function testWillRetrieveDependenciesFromContainer(): void
     {
-        $adapters      = $this->createMock(ServiceLocatorInterface::class);
+        $adapters      = $this->createMock(PluginManagerInterface::class);
         $pluginFactory = $this->createMock(StoragePluginFactoryInterface::class);
         $container     = $this->createMock(ContainerInterface::class);
         $container

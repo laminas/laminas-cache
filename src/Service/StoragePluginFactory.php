@@ -7,17 +7,17 @@ namespace Laminas\Cache\Service;
 use InvalidArgumentException as PhpInvalidArgumentException;
 use Laminas\Cache\Exception\InvalidArgumentException;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\PluginManagerInterface;
 use Webmozart\Assert\Assert;
 
 use function assert;
 
 final class StoragePluginFactory implements StoragePluginFactoryInterface
 {
-    /** @var ServiceLocatorInterface */
+    /** @var PluginManagerInterface */
     private $plugins;
 
-    public function __construct(ServiceLocatorInterface $plugins)
+    public function __construct(PluginManagerInterface $plugins)
     {
         $this->plugins = $plugins;
     }
