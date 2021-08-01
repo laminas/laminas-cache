@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Cache\Storage\Adapter;
 
 use ArrayObject;
+use Laminas\Cache;
 use Laminas\Cache\Exception;
+use Laminas\Cache\Exception\InvalidArgumentException;
+use Laminas\Cache\Exception\RuntimeException;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\Event;
-use Laminas\Cache\Storage\ExceptionEvent;
-use Laminas\Cache\Storage\Plugin\ExceptionHandler;
 use Laminas\Cache\Storage\Plugin\PluginOptions;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\ResponseCollection;
@@ -22,28 +25,18 @@ use stdClass;
 
 use function array_keys;
 use function array_map;
+use function array_merge;
 use function array_unique;
 use function assert;
 use function call_user_func_array;
 use function count;
 use function current;
 use function get_class;
-use function is_array;
-use function is_callable;
-use function sprintf;
 use function ucfirst;
 
-/**
- * @group      \Laminas_Cache
- * @covers \Laminas\Cache\Storage\Adapter\AdapterOptions<extended>
- */
 final class AbstractAdapterTest extends TestCase
 {
-    /**
-     * Adapter options
-     *
-     * @var AdapterOptions|null
-     */
+    /** @var AdapterOptions|null */
     protected $options;
 
     public function setUp(): void
@@ -56,77 +49,77 @@ final class AbstractAdapterTest extends TestCase
         $storage = $this->getMockForAbstractAdapter();
 
         $options = $storage->getOptions();
-        $this->assertInstanceOf(AdapterOptions::class, $options);
-        $this->assertIsBool($options->getWritable());
-        $this->assertIsBool($options->getReadable());
-        $this->assertIsInt($options->getTtl());
-        $this->assertIsString($options->getNamespace());
-        $this->assertIsString($options->getKeyPattern());
+        self::assertInstanceOf(AdapterOptions::class, $options);
+        self::assertIsBool($options->getWritable());
+        self::assertIsBool($options->getReadable());
+        self::assertIsInt($options->getTtl());
+        self::assertIsString($options->getNamespace());
+        self::assertIsString($options->getKeyPattern());
     }
 
     public function testSetWritable(): void
     {
         $this->options->setWritable(true);
-        $this->assertTrue($this->options->getWritable());
+        self::assertTrue($this->options->getWritable());
 
         $this->options->setWritable(false);
-        $this->assertFalse($this->options->getWritable());
+        self::assertFalse($this->options->getWritable());
     }
 
     public function testSetReadable(): void
     {
         $this->options->setReadable(true);
-        $this->assertTrue($this->options->getReadable());
+        self::assertTrue($this->options->getReadable());
 
         $this->options->setReadable(false);
-        $this->assertFalse($this->options->getReadable());
+        self::assertFalse($this->options->getReadable());
     }
 
     public function testSetTtl(): void
     {
         $this->options->setTtl('123');
-        $this->assertSame(123, $this->options->getTtl());
+        self::assertSame(123, $this->options->getTtl());
     }
 
     public function testSetTtlThrowsInvalidArgumentException(): void
     {
-        $this->expectException(Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->options->setTtl(-1);
     }
 
     public function testGetDefaultNamespaceNotEmpty(): void
     {
         $ns = $this->options->getNamespace();
-        $this->assertNotEmpty($ns);
+        self::assertNotEmpty($ns);
     }
 
     public function testSetNamespace(): void
     {
         $this->options->setNamespace('new_namespace');
-        $this->assertSame('new_namespace', $this->options->getNamespace());
+        self::assertSame('new_namespace', $this->options->getNamespace());
     }
 
     public function testSetNamespace0(): void
     {
         $this->options->setNamespace('0');
-        $this->assertSame('0', $this->options->getNamespace());
+        self::assertSame('0', $this->options->getNamespace());
     }
 
     public function testSetKeyPattern(): void
     {
         $this->options->setKeyPattern('/^[key]+$/Di');
-        $this->assertEquals('/^[key]+$/Di', $this->options->getKeyPattern());
+        self::assertEquals('/^[key]+$/Di', $this->options->getKeyPattern());
     }
 
     public function testUnsetKeyPattern(): void
     {
         $this->options->setKeyPattern(null);
-        $this->assertSame('', $this->options->getKeyPattern());
+        self::assertSame('', $this->options->getKeyPattern());
     }
 
     public function testSetKeyPatternThrowsExceptionOnInvalidPattern(): void
     {
-        $this->expectException(Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->options->setKeyPattern('#');
     }
 
@@ -137,24 +130,24 @@ final class AbstractAdapterTest extends TestCase
         $plugin = new MockPlugin();
 
         // no plugin registered
-        $this->assertFalse($storage->hasPlugin($plugin));
-        $this->assertEquals(0, count($storage->getPluginRegistry()));
-        $this->assertEquals(0, count($plugin->getHandles()));
+        self::assertFalse($storage->hasPlugin($plugin));
+        self::assertCount(0, $storage->getPluginRegistry());
+        self::assertCount(0, $plugin->getHandles());
 
         // register a plugin
-        $this->assertSame($storage, $storage->addPlugin($plugin));
-        $this->assertTrue($storage->hasPlugin($plugin));
-        $this->assertEquals(1, count($storage->getPluginRegistry()));
+        self::assertSame($storage, $storage->addPlugin($plugin));
+        self::assertTrue($storage->hasPlugin($plugin));
+        self::assertCount(1, $storage->getPluginRegistry());
 
         // test registered callback handles
         $handles = $plugin->getHandles();
-        $this->assertCount(2, $handles);
+        self::assertCount(2, $handles);
 
         // test unregister a plugin
-        $this->assertSame($storage, $storage->removePlugin($plugin));
-        $this->assertFalse($storage->hasPlugin($plugin));
-        $this->assertEquals(0, count($storage->getPluginRegistry()));
-        $this->assertEquals(0, count($plugin->getHandles()));
+        self::assertSame($storage, $storage->removePlugin($plugin));
+        self::assertFalse($storage->hasPlugin($plugin));
+        self::assertCount(0, $storage->getPluginRegistry());
+        self::assertCount(0, $plugin->getHandles());
     }
 
     public function testInternalTriggerPre(): void
@@ -173,17 +166,17 @@ final class AbstractAdapterTest extends TestCase
         $method = new ReflectionMethod(get_class($storage), 'triggerPre');
         $method->setAccessible(true);
         $rsCollection = $method->invoke($storage, 'setItem', $params);
-        $this->assertInstanceOf(ResponseCollection::class, $rsCollection);
+        self::assertInstanceOf(ResponseCollection::class, $rsCollection);
 
         // test called event
         $calledEvents = $plugin->getCalledEvents();
-        $this->assertEquals(1, count($calledEvents));
+        self::assertCount(1, $calledEvents);
 
         $event = current($calledEvents);
-        $this->assertInstanceOf(Event::class, $event);
-        $this->assertEquals('setItem.pre', $event->getName());
-        $this->assertSame($storage, $event->getTarget());
-        $this->assertSame($params, $event->getParams());
+        self::assertInstanceOf(Event::class, $event);
+        self::assertEquals('setItem.pre', $event->getName());
+        self::assertSame($storage, $event->getTarget());
+        self::assertSame($params, $event->getParams());
     }
 
     public function testInternalTriggerPost(): void
@@ -206,17 +199,17 @@ final class AbstractAdapterTest extends TestCase
 
         // test called event
         $calledEvents = $plugin->getCalledEvents();
-        $this->assertEquals(1, count($calledEvents));
+        self::assertCount(1, $calledEvents);
         $event = current($calledEvents);
 
         // return value of triggerPost and the called event should be the same
-        $this->assertSame($result, $event->getResult());
+        self::assertSame($result, $event->getResult());
 
-        $this->assertInstanceOf(PostEvent::class, $event);
-        $this->assertEquals('setItem.post', $event->getName());
-        $this->assertSame($storage, $event->getTarget());
-        $this->assertSame($params, $event->getParams());
-        $this->assertSame($result, $event->getResult());
+        self::assertInstanceOf(PostEvent::class, $event);
+        self::assertEquals('setItem.post', $event->getName());
+        self::assertSame($storage, $event->getTarget());
+        self::assertSame($params, $event->getParams());
+        self::assertSame($result, $event->getResult());
     }
 
     public function testInternalTriggerExceptionThrowRuntimeException(): void
@@ -236,7 +229,7 @@ final class AbstractAdapterTest extends TestCase
         $method = new ReflectionMethod(get_class($storage), 'triggerException');
         $method->setAccessible(true);
 
-        $this->expectException(Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('test');
         $method->invokeArgs($storage, ['setItem', $params, &$result, new Exception\RuntimeException('test')]);
     }
@@ -252,10 +245,10 @@ final class AbstractAdapterTest extends TestCase
             ->expects($this->once())
             ->method('internalGetItem')
             ->with($this->equalTo($key))
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $rs = $storage->getItem($key);
-        $this->assertEquals($result, $rs);
+        self::assertEquals($result, $rs);
     }
 
     public function testGetItemsCallsInternalGetItems(): void
@@ -269,10 +262,10 @@ final class AbstractAdapterTest extends TestCase
             ->expects($this->once())
             ->method('internalGetItems')
             ->with($this->equalTo($keys))
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $rs = $storage->getItems($keys);
-        $this->assertEquals($result, $rs);
+        self::assertEquals($result, $rs);
     }
 
     public function testInternalGetItemsCallsInternalGetItemForEachKey(): void
@@ -282,29 +275,27 @@ final class AbstractAdapterTest extends TestCase
         $items  = ['key1' => 'value1', 'keyNotFound' => false, 'key2' => 'value2'];
         $result = ['key1' => 'value1', 'key2' => 'value2'];
 
-        $consecutiveReturnCallbacks = [];
-        for ($i = 0, $iMax = count($items); $i < $iMax; $i++) {
-            $consecutiveReturnCallbacks[] = $this->returnCallback(function (string $k, ?bool &$success) use ($items) {
-                if ($items[$k]) {
-                    $success = true;
-                    return $items[$k];
-                }
+        for ($i = 0, $iMax = count($items); $i <= $iMax; $i++) {
+            $storage
+                ->method('internalGetItem')
+                ->with(
+                    $this->stringContains('key'),
+                    $this->anything()
+                )
+                ->willReturnCallback(function (string $key, ?bool &$success) use ($items) {
+                    if ($items[$key]) {
+                        $success = true;
 
-                $success = false;
-                return null;
-            });
+                        return $items[$key];
+                    }
+
+                    $success = false;
+
+                    return null;
+                });
         }
 
-        $storage
-            ->method('internalGetItem')
-            ->with(
-                $this->stringContains('key'),
-                $this->anything()
-            )
-            ->willReturnOnConsecutiveCalls(...$consecutiveReturnCallbacks);
-
-        $rs = $storage->getItems(array_keys($items));
-        $this->assertEquals($result, $rs);
+        self::assertSame($result, $storage->getItems(array_keys($items)));
     }
 
     public function testHasItemCallsInternalHasItem(): void
@@ -321,7 +312,7 @@ final class AbstractAdapterTest extends TestCase
             ->will($this->returnValue($result));
 
         $rs = $storage->hasItem($key);
-        $this->assertSame($result, $rs);
+        self::assertSame($result, $rs);
     }
 
     public function testHasItemsCallsInternalHasItems(): void
@@ -338,7 +329,7 @@ final class AbstractAdapterTest extends TestCase
             ->will($this->returnValue($result));
 
         $rs = $storage->hasItems($keys);
-        $this->assertEquals($result, $rs);
+        self::assertEquals($result, $rs);
     }
 
     public function testInternalHasItemsCallsInternalHasItem(): void
@@ -351,10 +342,10 @@ final class AbstractAdapterTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('internalHasItem')
             ->with($this->equalTo('key1'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $rs = $storage->hasItems(array_keys($items));
-        $this->assertEquals(['key1'], $rs);
+        self::assertEquals(['key1'], $rs);
     }
 
     public function testGetItemReturnsNullIfFailed(): void
@@ -367,7 +358,7 @@ final class AbstractAdapterTest extends TestCase
         $pluginOptions = new PluginOptions(
             ['throw_exceptions' => false]
         );
-        $plugin        = new ExceptionHandler();
+        $plugin        = new Cache\Storage\Plugin\ExceptionHandler();
         $plugin->setOptions($pluginOptions);
         $storage->addPlugin($plugin);
 
@@ -376,11 +367,11 @@ final class AbstractAdapterTest extends TestCase
             ->expects($this->once())
             ->method('internalGetItem')
             ->with($this->equalTo($key))
-            ->will($this->throwException(new \Exception('internalGetItem failed')));
+            ->willThrowException(new \Exception('internalGetItem failed'));
 
         $result = $storage->getItem($key, $success);
-        $this->assertNull($result, 'GetItem should return null the item cannot be retrieved');
-        $this->assertFalse($success, '$success should be false if the item cannot be retrieved');
+        self::assertNull($result, 'GetItem should return null the item cannot be retrieved');
+        self::assertFalse($success, '$success should be false if the item cannot be retrieved');
     }
 
     public function simpleEventHandlingMethodDefinitions(): array
@@ -415,8 +406,10 @@ final class AbstractAdapterTest extends TestCase
     }
 
     /**
-     * @param mixed $retVal
+     * @psalm-param non-empty-string $methodName
+     * @psalm-param non-empty-string $internalMethodName
      * @dataProvider simpleEventHandlingMethodDefinitions
+     * @param mixed $retVal
      */
     public function testEventHandlingSimple(
         string $methodName,
@@ -427,20 +420,19 @@ final class AbstractAdapterTest extends TestCase
         $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
 
         $eventList    = [];
-        $eventHandler = function ($event) use (&$eventList) {
+        $eventHandler = static function (Event $event) use (&$eventList): void {
             $eventList[] = $event->getName();
         };
-        $this->attachEventListeners($storage, $methodName, [
-            'pre'       => $eventHandler,
-            'post'      => $eventHandler,
-            'exception' => $eventHandler,
-        ]);
+        $eventManager = $storage->getEventManager();
+        $eventManager->attach($methodName . '.pre', $eventHandler);
+        $eventManager->attach($methodName . '.post', $eventHandler);
+        $eventManager->attach($methodName . '.exception', $eventHandler);
 
-        $mock = $storage
+        $storage
             ->expects($this->once())
-            ->method($internalMethodName);
-        $mock = call_user_func_array([$mock, 'with'], array_map([$this, 'equalTo'], $methodArgs));
-        $mock->will($this->returnValue($retVal));
+            ->method($internalMethodName)
+            ->with(...array_map([$this, 'equalTo'], $methodArgs))
+            ->willReturn($retVal);
 
         call_user_func_array([$storage, $methodName], $methodArgs);
 
@@ -448,10 +440,13 @@ final class AbstractAdapterTest extends TestCase
             $methodName . '.pre',
             $methodName . '.post',
         ];
-        $this->assertSame($expectedEventList, $eventList);
+
+        self::assertSame($expectedEventList, $eventList);
     }
 
     /**
+     * @psalm-param non-empty-string $methodName
+     * @psalm-param non-empty-string $internalMethodName
      * @dataProvider simpleEventHandlingMethodDefinitions
      */
     public function testEventHandlingCatchException(
@@ -462,24 +457,22 @@ final class AbstractAdapterTest extends TestCase
         $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
 
         $eventList    = [];
-        $eventHandler = function ($event) use (&$eventList) {
+        $eventHandler = static function (Event $event) use (&$eventList): void {
             $eventList[] = $event->getName();
-            if ($event instanceof ExceptionEvent) {
+            if ($event instanceof Cache\Storage\ExceptionEvent) {
                 $event->setThrowException(false);
             }
         };
+        $eventManager = $storage->getEventManager();
+        $eventManager->attach($methodName . '.pre', $eventHandler);
+        $eventManager->attach($methodName . '.post', $eventHandler);
+        $eventManager->attach($methodName . '.exception', $eventHandler);
 
-        $this->attachEventListeners($storage, $methodName, [
-            'pre'       => $eventHandler,
-            'post'      => $eventHandler,
-            'exception' => $eventHandler,
-        ]);
-
-        $mock = $storage
+        $storage
             ->expects($this->once())
-            ->method($internalMethodName);
-        $mock = call_user_func_array([$mock, 'with'], array_map([$this, 'equalTo'], $methodArgs));
-        $mock->will($this->throwException(new \Exception('test')));
+            ->method($internalMethodName)
+            ->with(...array_map([$this, 'equalTo'], $methodArgs))
+            ->willThrowException(new \Exception('test'));
 
         call_user_func_array([$storage, $methodName], $methodArgs);
 
@@ -487,12 +480,14 @@ final class AbstractAdapterTest extends TestCase
             $methodName . '.pre',
             $methodName . '.exception',
         ];
-        $this->assertSame($expectedEventList, $eventList);
+        self::assertSame($expectedEventList, $eventList);
     }
 
     /**
-     * @param mixed $retVal
+     * @psalm-param non-empty-string $methodName
+     * @psalm-param non-empty-string $internalMethodName
      * @dataProvider simpleEventHandlingMethodDefinitions
+     * @param mixed $retVal
      */
     public function testEventHandlingStopInPre(
         string $methodName,
@@ -503,34 +498,32 @@ final class AbstractAdapterTest extends TestCase
         $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
 
         $eventList    = [];
-        $eventHandler = function ($event) use (&$eventList) {
+        $eventHandler = static function (Event $event) use (&$eventList): void {
             $eventList[] = $event->getName();
         };
-        $this->attachEventListeners($storage, $methodName, [
-            'pre'       => [
-                $eventHandler,
-                function ($event) use ($retVal) {
-                    $event->stopPropagation();
-                    return $retVal;
-                },
-            ],
-            'post'      => $eventHandler,
-            'exception' => $eventHandler,
-        ]);
+        $eventManager = $storage->getEventManager();
+        $eventManager->attach($methodName . '.pre', $eventHandler);
+        $eventManager->attach($methodName . '.post', $eventHandler);
+        $eventManager->attach($methodName . '.exception', $eventHandler);
+
+        $eventManager->attach($methodName . '.pre', function ($event) use ($retVal) {
+            $event->stopPropagation();
+            return $retVal;
+        });
 
         // the internal method should never be called
         $storage->expects($this->never())->method($internalMethodName);
 
         // the return vaue should be available by pre-event
         $result = call_user_func_array([$storage, $methodName], $methodArgs);
-        $this->assertSame($retVal, $result);
+        self::assertSame($retVal, $result);
 
         // after the triggered pre-event the post-event should be triggered as well
         $expectedEventList = [
             $methodName . '.pre',
             $methodName . '.post',
         ];
-        $this->assertSame($expectedEventList, $eventList);
+        self::assertSame($expectedEventList, $eventList);
     }
 
     public function testGetMetadatas(): void
@@ -548,9 +541,9 @@ final class AbstractAdapterTest extends TestCase
         $storage->expects($this->exactly(count($items)))
             ->method('internalGetMetadata')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue($meta));
+            ->willReturn($meta);
 
-        $this->assertSame($items, $storage->getMetadatas(array_keys($items)));
+        self::assertSame($items, $storage->getMetadatas(array_keys($items)));
     }
 
     public function testGetMetadatasFail(): void
@@ -560,12 +553,13 @@ final class AbstractAdapterTest extends TestCase
         $items = ['key1', 'key2'];
 
         // return false to indicate that the operation failed
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalGetMetadata')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->assertSame([], $storage->getMetadatas($items));
+        self::assertSame([], $storage->getMetadatas($items));
     }
 
     public function testSetItems(): void
@@ -579,12 +573,13 @@ final class AbstractAdapterTest extends TestCase
 
         // foreach item call 'internalSetItem' instead of 'setItem'
         $storage->expects($this->never())->method('setItem');
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalSetItem')
             ->with($this->stringContains('key'), $this->stringContains('value'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $this->assertSame([], $storage->setItems($items));
+        self::assertSame([], $storage->setItems($items));
     }
 
     public function testSetItemsFail(): void
@@ -597,12 +592,13 @@ final class AbstractAdapterTest extends TestCase
         ];
 
         // return false to indicate that the operation failed
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalSetItem')
             ->with($this->stringContains('key'), $this->stringContains('value'))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->assertSame(array_keys($items), $storage->setItems($items));
+        self::assertSame(array_keys($items), $storage->setItems($items));
     }
 
     public function testAddItems(): void
@@ -626,20 +622,22 @@ final class AbstractAdapterTest extends TestCase
         $storage->expects($this->never())->method('hasItem');
         $storage->expects($this->never())->method('getItem');
         $storage->expects($this->never())->method('internalGetItem');
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalHasItem')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // If not create the items using set
         // call 'internalSetItem' instead of 'setItem'
         $storage->expects($this->never())->method('setItem');
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalSetItem')
             ->with($this->stringContains('key'), $this->stringContains('value'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $this->assertSame([], $storage->addItems($items));
+        self::assertSame([], $storage->addItems($items));
     }
 
     public function testAddItemsExists(): void
@@ -654,15 +652,16 @@ final class AbstractAdapterTest extends TestCase
 
         // first check if items already exists
         // -> return true to indicate that the item already exist
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalHasItem')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // set item should never be called
         $storage->expects($this->never())->method('internalSetItem');
 
-        $this->assertSame(array_keys($items), $storage->addItems($items));
+        self::assertSame(array_keys($items), $storage->addItems($items));
     }
 
     public function testAddItemsFail(): void
@@ -676,19 +675,21 @@ final class AbstractAdapterTest extends TestCase
         ];
 
         // first check if items already exists
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalHasItem')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // if not create the items
         // -> return false to indicate creation failed
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalSetItem')
             ->with($this->stringContains('key'), $this->stringContains('value'))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->assertSame(array_keys($items), $storage->addItems($items));
+        self::assertSame(array_keys($items), $storage->addItems($items));
     }
 
     public function testReplaceItems(): void
@@ -712,20 +713,22 @@ final class AbstractAdapterTest extends TestCase
         $storage->expects($this->never())->method('hasItem');
         $storage->expects($this->never())->method('getItem');
         $storage->expects($this->never())->method('internalGetItem');
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalHasItem')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // if yes overwrite the items
         // call 'internalSetItem' instead of 'setItem'
         $storage->expects($this->never())->method('setItem');
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalSetItem')
             ->with($this->stringContains('key'), $this->stringContains('value'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $this->assertSame([], $storage->replaceItems($items));
+        self::assertSame([], $storage->replaceItems($items));
     }
 
     public function testReplaceItemsMissing(): void
@@ -740,15 +743,16 @@ final class AbstractAdapterTest extends TestCase
 
         // First check if the items already exists
         // -> return false to indicate the items doesn't exists
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalHasItem')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // writing items should never be called
         $storage->expects($this->never())->method('internalSetItem');
 
-        $this->assertSame(array_keys($items), $storage->replaceItems($items));
+        self::assertSame(array_keys($items), $storage->replaceItems($items));
     }
 
     public function testReplaceItemsFail(): void
@@ -763,19 +767,21 @@ final class AbstractAdapterTest extends TestCase
 
         // First check if the items already exists
         // -> return true to indicate the items exists
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalHasItem')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // if yes overwrite the items
         // -> return false to indicate that overwriting failed
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalSetItem')
             ->with($this->stringContains('key'), $this->stringContains('value'))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->assertSame(array_keys($items), $storage->replaceItems($items));
+        self::assertSame(array_keys($items), $storage->replaceItems($items));
     }
 
     public function testRemoveItems(): void
@@ -786,12 +792,13 @@ final class AbstractAdapterTest extends TestCase
 
         // call 'internalRemoveItem' instaed of 'removeItem'
         $storage->expects($this->never())->method('removeItem');
-        $storage->expects($this->exactly(count($keys)))
+        $storage
+            ->expects($this->exactly(count($keys)))
             ->method('internalRemoveItem')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $this->assertSame([], $storage->removeItems($keys));
+        self::assertSame([], $storage->removeItems($keys));
     }
 
     public function testRemoveItemsFail(): void
@@ -802,12 +809,13 @@ final class AbstractAdapterTest extends TestCase
 
         // call 'internalRemoveItem'
         // -> return false to indicate that no item was removed
-        $storage->expects($this->exactly(count($keys)))
+        $storage
+            ->expects($this->exactly(count($keys)))
             ->method('internalRemoveItem')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->assertSame($keys, $storage->removeItems($keys));
+        self::assertSame($keys, $storage->removeItems($keys));
     }
 
     public function testIncrementItems(): void
@@ -821,12 +829,13 @@ final class AbstractAdapterTest extends TestCase
 
         // foreach item call 'internalIncrementItem' instead of 'incrementItem'
         $storage->expects($this->never())->method('incrementItem');
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalIncrementItem')
             ->with($this->stringContains('key'), $this->equalTo(2))
-            ->will($this->returnValue(4));
+            ->willReturn(4);
 
-        $this->assertSame([
+        self::assertSame([
             'key1' => 4,
             'key2' => 4,
         ], $storage->incrementItems($items));
@@ -842,12 +851,13 @@ final class AbstractAdapterTest extends TestCase
         ];
 
         // return false to indicate that the operation failed
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalIncrementItem')
             ->with($this->stringContains('key'), $this->equalTo(2))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->assertSame([], $storage->incrementItems($items));
+        self::assertSame([], $storage->incrementItems($items));
     }
 
     public function testDecrementItems(): void
@@ -861,12 +871,13 @@ final class AbstractAdapterTest extends TestCase
 
         // foreach item call 'internalDecrementItem' instead of 'decrementItem'
         $storage->expects($this->never())->method('decrementItem');
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalDecrementItem')
             ->with($this->stringContains('key'), $this->equalTo(2))
-            ->will($this->returnValue(4));
+            ->willReturn(4);
 
-        $this->assertSame([
+        self::assertSame([
             'key1' => 4,
             'key2' => 4,
         ], $storage->decrementItems($items));
@@ -882,12 +893,13 @@ final class AbstractAdapterTest extends TestCase
         ];
 
         // return false to indicate that the operation failed
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalDecrementItem')
             ->with($this->stringContains('key'), $this->equalTo(2))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->assertSame([], $storage->decrementItems($items));
+        self::assertSame([], $storage->decrementItems($items));
     }
 
     public function testTouchItems(): void
@@ -898,12 +910,13 @@ final class AbstractAdapterTest extends TestCase
 
         // foreach item call 'internalTouchItem' instead of 'touchItem'
         $storage->expects($this->never())->method('touchItem');
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalTouchItem')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        $this->assertSame([], $storage->touchItems($items));
+        self::assertSame([], $storage->touchItems($items));
     }
 
     public function testTouchItemsFail(): void
@@ -913,12 +926,13 @@ final class AbstractAdapterTest extends TestCase
         $items = ['key1', 'key2'];
 
         // return false to indicate that the operation failed
-        $storage->expects($this->exactly(count($items)))
+        $storage
+            ->expects($this->exactly(count($items)))
             ->method('internalTouchItem')
             ->with($this->stringContains('key'))
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
-        $this->assertSame($items, $storage->touchItems($items));
+        self::assertSame($items, $storage->touchItems($items));
     }
 
     public function testPreEventsCanChangeArguments(): void
@@ -1082,11 +1096,10 @@ final class AbstractAdapterTest extends TestCase
 
         // init mock
         $storage = $this->getMockForAbstractAdapter([$internalMethod]);
-        $storage->getEventManager()->attach($eventName, function ($event) use ($expectedArgs) {
+        $storage->getEventManager()->attach($eventName, function (Event $event) use ($expectedArgs) {
             $params = $event->getParams();
-            foreach ($expectedArgs as $k => $v) {
-                $params[$k] = $v;
-            }
+            assert($params instanceof ArrayObject);
+            $params->exchangeArray(array_merge($params->getArrayCopy(), $expectedArgs));
         });
 
         // set expected arguments of internal method call
@@ -1105,57 +1118,30 @@ final class AbstractAdapterTest extends TestCase
      * Generates a mock of the abstract storage adapter by mocking all abstract and the given methods
      * Also sets the adapter options
      *
-     * @param array<int,string> $methods
+     * @psalm-param list<non-empty-string> $methods
      * @return AbstractAdapter&MockObject
      */
     protected function getMockForAbstractAdapter(array $methods = []): AbstractAdapter
     {
-        $adapter = $this->createMockForAbstractAdapter($methods);
+        $class = AbstractAdapter::class;
 
-        assert($adapter instanceof AbstractAdapter);
-
-        $this->options = $this->options ?? new AdapterOptions();
-        $adapter->setOptions($this->options);
-        return $adapter;
-    }
-
-    /**
-     * @param array<int,string> $methods
-     */
-    private function createMockForAbstractAdapter(array $methods): AbstractAdapter
-    {
         if (! $methods) {
-            return $this->getMockForAbstractClass(AbstractAdapter::class);
+            $adapter = $this->getMockForAbstractClass($class);
+        } else {
+            $reflection = new ReflectionClass(AbstractAdapter::class);
+            foreach ($reflection->getMethods() as $method) {
+                if ($method->isAbstract()) {
+                    $methods[] = $method->getName();
+                }
+            }
+            $adapter = $this->getMockBuilder($class)
+                ->onlyMethods(array_unique($methods))
+                ->disableArgumentCloning()
+                ->getMock();
         }
 
-        $reflection = new ReflectionClass(AbstractAdapter::class);
-        foreach ($reflection->getMethods() as $method) {
-            if ($method->isAbstract()) {
-                $methods[] = $method->getName();
-            }
-        }
+        $adapter->setOptions($this->options ?? new AdapterOptions());
 
-        return $this->getMockBuilder(AbstractAdapter::class)
-            ->onlyMethods(array_unique($methods))
-            ->disableArgumentCloning()
-            ->getMock();
-    }
-
-    protected function attachEventListeners(
-        AbstractAdapter $adapter,
-        string $methodName,
-        array $listenersByEventName
-    ): void {
-        $eventManager = $adapter->getEventManager();
-        foreach ($listenersByEventName as $eventName => $listenersOrListener) {
-            if (! is_array($listenersOrListener)) {
-                $listenersOrListener = [$listenersOrListener];
-            }
-
-            foreach ($listenersOrListener as $listener) {
-                assert(is_callable($listener));
-                $eventManager->attach(sprintf('%s.%s', $methodName, $eventName), $listener);
-            }
-        }
+        return $adapter;
     }
 }

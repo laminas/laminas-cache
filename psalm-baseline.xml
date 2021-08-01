@@ -503,9 +503,7 @@
     </RedundantCastGivenDocblockType>
   </file>
   <file src="src/Storage/AdapterPluginManager.php">
-    <NonInvariantDocblockPropertyType occurrences="3">
-      <code>$aliases</code>
-      <code>$factories</code>
+    <NonInvariantDocblockPropertyType occurrences="1">
       <code>$instanceOf</code>
     </NonInvariantDocblockPropertyType>
   </file>
@@ -964,52 +962,28 @@
     </MixedInferredReturnType>
   </file>
   <file src="test/Storage/Adapter/AbstractAdapterTest.php">
-    <InvalidReturnStatement occurrences="1">
-      <code>$adapter</code>
-    </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
-      <code>AbstractAdapter&amp;MockObject</code>
-    </InvalidReturnType>
     <InvalidScalarArgument occurrences="1">
       <code>'123'</code>
     </InvalidScalarArgument>
-    <MissingClosureParamType occurrences="7">
+    <MissingClosureParamType occurrences="1">
       <code>$event</code>
       <code>$event</code>
       <code>$event</code>
       <code>$event</code>
       <code>$event</code>
-      <code>$k</code>
-      <code>$success</code>
     </MissingClosureParamType>
-    <MissingClosureReturnType occurrences="4">
+    <MissingClosureReturnType occurrences="1">
       <code>function ($event) use ($retVal) {</code>
-      <code>function ($event) use (&amp;$eventList) {</code>
-      <code>function ($event) use (&amp;$eventList) {</code>
-      <code>function ($event) use (&amp;$eventList) {</code>
     </MissingClosureReturnType>
     <MixedArgument occurrences="1">
       <code>$success</code>
     </MixedArgument>
-    <MixedArrayAssignment occurrences="4">
+    <MixedArrayAssignment occurrences="3">
       <code>$eventList[]</code>
       <code>$eventList[]</code>
       <code>$eventList[]</code>
-      <code>$params[$k]</code>
     </MixedArrayAssignment>
-    <MixedArrayOffset occurrences="1">
-      <code>$items[$k]</code>
-    </MixedArrayOffset>
-    <MixedAssignment occurrences="14">
-      <code>$eventList[]</code>
-      <code>$eventList[]</code>
-      <code>$eventList[]</code>
-      <code>$listener</code>
-      <code>$listenersOrListener</code>
-      <code>$mock</code>
-      <code>$mock</code>
-      <code>$params</code>
-      <code>$params[$k]</code>
+    <MixedAssignment occurrences="4">
       <code>$result</code>
       <code>$result</code>
       <code>$rs</code>
@@ -1019,15 +993,9 @@
     <MixedInferredReturnType occurrences="1">
       <code>array</code>
     </MixedInferredReturnType>
-    <MixedMethodCall occurrences="8">
-      <code>getName</code>
-      <code>getName</code>
-      <code>getName</code>
-      <code>getParams</code>
+    <MixedMethodCall occurrences="2">
       <code>getResult</code>
       <code>stopPropagation</code>
-      <code>will</code>
-      <code>will</code>
     </MixedMethodCall>
     <NullArgument occurrences="1">
       <code>null</code>
@@ -1047,9 +1015,6 @@
     <PossiblyUndefinedVariable occurrences="1">
       <code>$success</code>
     </PossiblyUndefinedVariable>
-    <RedundantCondition occurrences="1">
-      <code>assert($adapter instanceof AbstractAdapter)</code>
-    </RedundantCondition>
   </file>
   <file src="test/Storage/Adapter/AdapterOptionsTest.php">
     <MixedArgument occurrences="1">
