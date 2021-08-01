@@ -2,8 +2,8 @@
 
 Cache patterns are configurable objects that solve known performance
 bottlenecks. Each should be used only in the specific situations they are
-designed to address. For example, you can use the `CallbackCache`,
-`ObjectCache`, or `ClassCache` patterns to cache method and function calls; to
+designed to address. For example, you can use the `CallbackCache` or
+`ObjectCache` patterns to cache method and function calls; to
 cache output generation, the `OutputCache` pattern could assist.
 
 All cache patterns implement `Laminas\Cache\Pattern\PatternInterface`, and most
