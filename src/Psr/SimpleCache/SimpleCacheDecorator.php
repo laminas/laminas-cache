@@ -448,14 +448,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             $maximumKeyLength = 64;
         }
 
-        if ($maximumKeyLength < 64) {
-            throw new SimpleCacheInvalidArgumentException(sprintf(
-                'The storage adapter "%s" does not fulfill the minimum requirements for PSR-16:'
-                .' The maximum key length capability must allow at least 64 characters.',
-                get_class($storage)
-            ));
-        }
-
-        $this->maximumKeyLength = $maximumKeyLength;
+        // PSR-16 does not allow more then 64 bytes for the key and should not be more than the capabilities of the storage
+        $this->maximumKeyLength = min($maximumKeyLength, 64);
     }
 }
