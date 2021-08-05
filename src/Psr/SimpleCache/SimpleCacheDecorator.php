@@ -448,7 +448,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             $maximumKeyLength = 64;
         }
 
-        // PSR-16 does not allow more then 64 bytes for the key and should not be more than the capabilities of the storage
+        // PSR-16 does not allow more than 64 bytes for the key and should not be more than the capabilities of the storage
         $this->maximumKeyLength = min($maximumKeyLength, 64);
     }
 }
