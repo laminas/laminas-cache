@@ -20,6 +20,7 @@ use ReflectionProperty;
 
 use function array_keys;
 use function iterator_to_array;
+use function preg_match;
 use function sprintf;
 use function str_repeat;
 
@@ -1151,5 +1152,19 @@ class SimpleCacheDecoratorTest extends TestCase
             SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1
         ));
         $decorator->has($key);
+    }
+
+    public function testPcreMaximumQuantifierLengthWontResultInCompilationError(): void
+    {
+        self::assertEquals(
+            0,
+            preg_match(
+                sprintf(
+                    '/^.{%d,}$/',
+                    SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH
+                ),
+                ''
+            )
+        );
     }
 }

@@ -25,6 +25,7 @@ use function is_int;
 use function is_object;
 use function is_scalar;
 use function is_string;
+use function min;
 use function preg_match;
 use function preg_quote;
 use function sprintf;
@@ -472,6 +473,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             ));
         }
 
-        $this->maximumKeyLength = $maximumKeyLength;
+        $this->maximumKeyLength = min($maximumKeyLength, self::PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1);
     }
 }
