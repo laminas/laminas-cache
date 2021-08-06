@@ -42,6 +42,13 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public const INVALID_KEY_CHARS = ':@{}()/\\';
 
+    /**
+     * PCRE runs into a compilation error if the quantifier exceeds this limit
+     *
+     * @internal
+     */
+    public const PCRE_MAXIMUM_QUANTIFIER_LENGTH = 65535;
+
     /** @var bool */
     private $providesPerItemTtl = true;
 
