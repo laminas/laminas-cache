@@ -30,6 +30,12 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     const INVALID_KEY_CHARS = ':@{}()/\\';
 
     /**
+     * PCRE runs into a compilation error if the quantifier exceeds this limit
+     * @internal
+     */
+    public const PCRE_MAXIMUM_QUANTIFIER_LENGTH = 65535;
+
+    /**
      * @var bool
      */
     private $providesPerItemTtl = true;
@@ -456,6 +462,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             ));
         }
 
-        $this->maximumKeyLength = $maximumKeyLength;
+        $this->maximumKeyLength = min($maximumKeyLength, self::PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1);
     }
 }
