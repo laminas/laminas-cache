@@ -19,7 +19,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use ReflectionProperty;
-use stdClass;
+use function preg_match;
 use function str_repeat;
 
 /**
@@ -891,5 +891,19 @@ class SimpleCacheDecoratorTest extends TestCase
             SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1
         ));
         $decorator->has($key);
+    }
+
+    public function testPcreMaximumQuantifierLengthWontResultInCompilationError(): void
+    {
+        self::assertEquals(
+            0,
+            preg_match(
+                sprintf(
+                    '/^.{%d,}$/',
+                    SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH
+                ),
+                ''
+            )
+        );
     }
 }
