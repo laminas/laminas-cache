@@ -20,6 +20,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use ReflectionProperty;
 use stdClass;
+use function str_repeat;
 
 /**
  * Test the PSR-16 decorator.
@@ -866,5 +867,29 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->expectExceptionMessage('does not fulfill the minimum requirements for PSR-16');
 
         new SimpleCacheDecorator($storage);
+    }
+
+    public function testWillUsePcreMaximumQuantifierLengthIfAdapterAllowsMoreThanThat(): void
+    {
+        $storage = $this->createMock(StorageInterface::class);
+        $capabilities = $this->getMockCapabilities(
+            null,
+            true,
+            60,
+            SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH
+        );
+
+        $storage
+            ->method('getCapabilities')
+            ->willReturn($capabilities->reveal());
+
+        $decorator = new SimpleCacheDecorator($storage);
+        $key = str_repeat('a', SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH);
+        $this->expectException(SimpleCacheInvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(
+            'key is too long. Must be no more than %d characters',
+            SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1
+        ));
+        $decorator->has($key);
     }
 }
