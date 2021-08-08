@@ -473,6 +473,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             ));
         }
 
+        /** @psalm-suppress PropertyTypeCoercion The result of this will always be > 0 */
         $this->maximumKeyLength = min($maximumKeyLength, self::PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1);
     }
 }
