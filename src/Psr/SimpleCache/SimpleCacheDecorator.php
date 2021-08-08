@@ -25,6 +25,7 @@ use function is_int;
 use function is_object;
 use function is_scalar;
 use function is_string;
+use function min;
 use function preg_match;
 use function preg_quote;
 use function sprintf;
@@ -41,6 +42,13 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      * Characters reserved by PSR-16 that are not valid in cache keys.
      */
     public const INVALID_KEY_CHARS = ':@{}()/\\';
+
+    /**
+     * PCRE runs into a compilation error if the quantifier exceeds this limit
+     *
+     * @internal
+     */
+    public const PCRE_MAXIMUM_QUANTIFIER_LENGTH = 65535;
 
     /** @var bool */
     private $providesPerItemTtl = true;
@@ -465,6 +473,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             ));
         }
 
-        $this->maximumKeyLength = $maximumKeyLength;
+        /** @psalm-suppress PropertyTypeCoercion The result of this will always be > 0 */
+        $this->maximumKeyLength = min($maximumKeyLength, self::PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1);
     }
 }

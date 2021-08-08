@@ -6,8 +6,11 @@ use Laminas\Cache\Command\DeprecatedStorageFactoryConfigurationCheckCommand;
 use Laminas\Cache\Command\DeprecatedStorageFactoryConfigurationCheckCommandFactory;
 use Laminas\Cache\Service\StorageAdapterFactory;
 use Laminas\Cache\Service\StorageAdapterFactoryFactory;
-use Laminas\Cache\Service\StoragePluginFactory;
 use Laminas\Cache\Service\StoragePluginFactoryFactory;
+use Laminas\Cache\Service\StoragePluginFactoryInterface;
+use Symfony\Component\Console\Command\Command;
+
+use function class_exists;
 
 class ConfigProvider
 {
@@ -31,19 +34,26 @@ class ConfigProvider
      */
     public function getDependencyConfig()
     {
-        return [
+        $dependencies = [
             'abstract_factories' => [
                 Service\StorageCacheAbstractServiceFactory::class,
             ],
             'factories'          => [
-                Storage\AdapterPluginManager::class => Service\StorageAdapterPluginManagerFactory::class,
-                Storage\PluginManager::class        => Service\StoragePluginManagerFactory::class,
-                DeprecatedStorageFactoryConfigurationCheckCommand::class
-                    => DeprecatedStorageFactoryConfigurationCheckCommandFactory::class,
-                StoragePluginFactory::class  => StoragePluginFactoryFactory::class,
-                StorageAdapterFactory::class => StorageAdapterFactoryFactory::class,
+                Storage\AdapterPluginManager::class  => Service\StorageAdapterPluginManagerFactory::class,
+                Storage\PluginManager::class         => Service\StoragePluginManagerFactory::class,
+                StoragePluginFactoryInterface::class => StoragePluginFactoryFactory::class,
+                StorageAdapterFactory::class         => StorageAdapterFactoryFactory::class,
             ],
         ];
+
+        if (class_exists(Command::class)) {
+            $dependencies['factories'] += [
+                DeprecatedStorageFactoryConfigurationCheckCommand::class
+                    => DeprecatedStorageFactoryConfigurationCheckCommandFactory::class,
+            ];
+        }
+
+        return $dependencies;
     }
 
     /**
@@ -51,6 +61,10 @@ class ConfigProvider
      */
     public function getCliConfig(): array
     {
+        if (! class_exists(Command::class)) {
+            return [];
+        }
+
         return [
             'commands' => [
                 DeprecatedStorageFactoryConfigurationCheckCommand::NAME
