@@ -12,6 +12,8 @@ use Laminas\ServiceManager\Exception\InvalidServiceException;
  * Trait does not define properties, as the properties common between the
  * two versions are originally defined in their parent class, causing a
  * resolution conflict.
+ *
+ * @deprecated This will be removed in v3.0.0 and should never have been used in upstream projects anyways.
  */
 trait PatternPluginManagerTrait
 {

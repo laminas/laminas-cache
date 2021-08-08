@@ -12,6 +12,10 @@ use Psr\Container\ContainerInterface;
 use function class_exists;
 use function is_string;
 
+/**
+ * @deprecated This will be removed with v3.0.0 as providing generic factories for cache patterns wont be suitable for
+ *             all possible combinations of implemented upstream patterns.
+ */
 final class StoragePatternCacheFactory
 {
     /**
