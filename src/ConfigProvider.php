@@ -6,6 +6,8 @@ use Laminas\Cache\Command\DeprecatedStorageFactoryConfigurationCheckCommand;
 use Laminas\Cache\Command\DeprecatedStorageFactoryConfigurationCheckCommandFactory;
 use Laminas\Cache\Service\StorageAdapterFactory;
 use Laminas\Cache\Service\StorageAdapterFactoryFactory;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Laminas\Cache\Service\StoragePluginFactory;
 use Laminas\Cache\Service\StoragePluginFactoryFactory;
 use Laminas\Cache\Service\StoragePluginFactoryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -39,10 +41,12 @@ class ConfigProvider
                 Service\StorageCacheAbstractServiceFactory::class,
             ],
             'factories'          => [
-                Storage\AdapterPluginManager::class  => Service\StorageAdapterPluginManagerFactory::class,
-                Storage\PluginManager::class         => Service\StoragePluginManagerFactory::class,
-                StoragePluginFactoryInterface::class => StoragePluginFactoryFactory::class,
-                StorageAdapterFactory::class         => StorageAdapterFactoryFactory::class,
+                Storage\AdapterPluginManager::class   => Service\StorageAdapterPluginManagerFactory::class,
+                Storage\PluginManager::class          => Service\StoragePluginManagerFactory::class,
+                StoragePluginFactory::class           => StoragePluginFactoryFactory::class,
+                StoragePluginFactoryInterface::class  => StoragePluginFactoryFactory::class,
+                StorageAdapterFactory::class          => StorageAdapterFactoryFactory::class,
+                StorageAdapterFactoryInterface::class => StorageAdapterFactoryFactory::class,
             ],
         ];
 
