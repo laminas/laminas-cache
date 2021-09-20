@@ -13,14 +13,10 @@ use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use Throwable;
-use Traversable;
 
 use function array_keys;
-use function array_walk;
 use function get_class;
 use function gettype;
-use function is_array;
-use function is_float;
 use function is_int;
 use function is_object;
 use function is_scalar;
@@ -185,8 +181,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function getMultiple($keys, $default = null)
     {
-        $keys = $this->convertIterableToArray($keys, false, __FUNCTION__);
-        array_walk($keys, [$this, 'validateKey']);
+        $keys = $this->convertIterableKeysToList($keys);
 
         try {
             $results = $this->storage->getItems($keys);
@@ -195,10 +190,10 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
 
         foreach ($keys as $key) {
-            if (! isset($results[$key])) {
-                $results[$key] = $default;
+            if (isset($results[$key])) {
                 continue;
             }
+            $results[$key] = $default;
         }
 
         return $results;
@@ -209,7 +204,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function setMultiple($values, $ttl = null)
     {
-        $values = $this->convertIterableToArray($values, true, __FUNCTION__);
+        $values = $this->convertIterableToKeyValueMap($values);
         $keys   = array_keys($values);
         $ttl    = $this->convertTtlToInteger($ttl);
 
@@ -218,8 +213,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         if (null !== $ttl && 1 > $ttl) {
             return $this->deleteMultiple($keys);
         }
-
-        array_walk($keys, [$this, 'validateKey']);
 
         // If a positive TTL is set, but the adapter does not support per-item
         // TTL, we return false -- but not until after we validate keys.
@@ -260,12 +253,10 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function deleteMultiple($keys)
     {
-        $keys = $this->convertIterableToArray($keys, false, __FUNCTION__);
+        $keys = $this->convertIterableKeysToList($keys);
         if (empty($keys)) {
             return true;
         }
-
-        array_walk($keys, [$this, 'validateKey']);
 
         try {
             $result = $this->storage->removeItems($keys);
@@ -310,11 +301,13 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
+     * @template TKey of array-key
      * @param string|int $key
-     * @return void
+     * @psalm-param TKey $key
+     * @psalm-assert 0|non-empty-string $key
      * @throws SimpleCacheInvalidArgumentException If key is invalid.
      */
-    private function validateKey($key)
+    private function validateKey($key): void
     {
         if ('' === $key) {
             throw new SimpleCacheInvalidArgumentException(
@@ -412,42 +405,25 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * @param array|iterable $iterable
-     * @param bool $useKeys Whether or not to preserve keys during conversion
-     * @param string $forMethod Method that called this one; used for reporting
-     *     invalid values.
-     * @return array
+     * @param iterable $keys
+     * @psalm-return list<non-empty-string|0>
      * @throws SimpleCacheInvalidArgumentException For invalid $iterable values.
      */
-    private function convertIterableToArray($iterable, $useKeys, $forMethod)
+    private function convertIterableKeysToList(iterable $keys): array
     {
-        if (is_array($iterable)) {
-            return $iterable;
-        }
-
-        if (! $iterable instanceof Traversable) {
-            throw new SimpleCacheInvalidArgumentException(sprintf(
-                'Invalid value provided to %s::%s; must be an array or Traversable',
-                self::class,
-                $forMethod
-            ));
-        }
-
         $array = [];
-        foreach ($iterable as $key => $value) {
-            if (! $useKeys) {
-                $array[] = $value;
-                continue;
-            }
-
-            if (! is_string($key) && ! is_int($key) && ! is_float($key)) {
+        foreach ($keys as $key) {
+            if (! is_string($key) && ! is_int($key)) {
                 throw new SimpleCacheInvalidArgumentException(sprintf(
                     'Invalid key detected of type "%s"; must be a scalar',
                     is_object($key) ? get_class($key) : gettype($key)
                 ));
             }
-            $array[$key] = $value;
+
+            $this->validateKey($key);
+            $array[] = $key;
         }
+
         return $array;
     }
 
@@ -475,5 +451,28 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
         /** @psalm-suppress PropertyTypeCoercion The result of this will always be > 0 */
         $this->maximumKeyLength = min($maximumKeyLength, self::PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1);
+    }
+
+    /**
+     * @param iterable $values
+     * @psalm-return array<0|non-empty-string,mixed>
+     */
+    private function convertIterableToKeyValueMap(iterable $values): array
+    {
+        $keyValueMap = [];
+        foreach ($values as $key => $value) {
+            if (! is_string($key) && ! is_int($key)) {
+                throw new SimpleCacheInvalidArgumentException(sprintf(
+                    'Invalid key detected of type "%s"; must be a scalar',
+                    is_object($key) ? get_class($key) : gettype($key)
+                ));
+            }
+
+            $this->validateKey($key);
+
+            $keyValueMap[$key] = $value;
+        }
+
+        return $keyValueMap;
     }
 }

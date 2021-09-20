@@ -1167,4 +1167,27 @@ class SimpleCacheDecoratorTest extends TestCase
             )
         );
     }
+
+    public function testGeneratorFloatKeyIsDetectedAsInvalidKey(): void
+    {
+        $storage = $this->createMock(StorageInterface::class);
+
+        $capabilities = $this->getMockCapabilities();
+
+        $storage
+            ->method('getCapabilities')
+            ->willReturn($capabilities);
+
+        $decorator = new SimpleCacheDecorator($storage);
+        $storage
+            ->expects(self::never())
+            ->method('setItems');
+
+        $iterable = (static function (): iterable {
+            yield 2.5 => 'value';
+        })();
+
+        $this->expectException(SimpleCacheInvalidArgumentException::class);
+        self::assertTrue($decorator->setMultiple($iterable));
+    }
 }
