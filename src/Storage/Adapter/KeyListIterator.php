@@ -5,9 +5,13 @@ namespace Laminas\Cache\Storage\Adapter;
 use Countable;
 use Laminas\Cache\Storage\IteratorInterface;
 use Laminas\Cache\Storage\StorageInterface;
+use ReturnTypeWillChange;
 
 use function count;
 
+/**
+ * @see ReturnTypeWillChange
+ */
 class KeyListIterator implements IteratorInterface, Countable
 {
     /**
@@ -94,6 +98,7 @@ class KeyListIterator implements IteratorInterface, Countable
      *
      * @return mixed
      */
+    #[ReturnTypeWillChange]
     public function current()
     {
         if ($this->mode === IteratorInterface::CURRENT_AS_SELF) {
@@ -118,6 +123,7 @@ class KeyListIterator implements IteratorInterface, Countable
      *
      * @return string
      */
+    #[ReturnTypeWillChange]
     public function key()
     {
         return $this->keys[$this->position];
@@ -128,6 +134,7 @@ class KeyListIterator implements IteratorInterface, Countable
      *
      * @return bool
      */
+    #[ReturnTypeWillChange]
     public function valid()
     {
         return $this->position < $this->count;
@@ -138,6 +145,7 @@ class KeyListIterator implements IteratorInterface, Countable
      *
      * @return void
      */
+    #[ReturnTypeWillChange]
     public function next()
     {
         $this->position++;
@@ -148,6 +156,7 @@ class KeyListIterator implements IteratorInterface, Countable
      *
      * @return void
      */
+    #[ReturnTypeWillChange]
     public function rewind()
     {
         $this->position = 0;
@@ -158,6 +167,7 @@ class KeyListIterator implements IteratorInterface, Countable
      *
      * @return int
      */
+    #[ReturnTypeWillChange]
     public function count()
     {
         return $this->count;
