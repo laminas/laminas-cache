@@ -1530,6 +1530,9 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
         }
 
         array_walk($keys, [$this, 'normalizeKey']);
+        /**
+         * @psalm-suppress PossiblyInvalidArgument False positive, psalm somehow infers array<array-key, mixed>|object
+         */
         $keys = array_values(array_unique($keys));
     }
 

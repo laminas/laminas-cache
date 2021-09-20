@@ -28,20 +28,20 @@
         }
     },
     "require": {
-        "php": "^7.3 || ~8.0.0",
+        "php": "^7.3 || ~8.0.0 || ~8.1.0",
         "laminas/laminas-cache-storage-implementation": "1.0",
-        "laminas/laminas-eventmanager": "^3.3",
-        "laminas/laminas-servicemanager": "^3.6",
-        "laminas/laminas-stdlib": "^3.3",
+        "laminas/laminas-eventmanager": "^3.4",
+        "laminas/laminas-servicemanager": "^3.7",
+        "laminas/laminas-stdlib": "^3.6",
         "psr/cache": "^1.0",
         "psr/simple-cache": "^1.0",
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
-        "laminas/laminas-cache-storage-adapter-apcu": "^1.0",
-        "laminas/laminas-cache-storage-adapter-blackhole": "^1.0",
-        "laminas/laminas-cache-storage-adapter-filesystem": "^1.1",
-        "laminas/laminas-cache-storage-adapter-memory": "^1.0",
+        "laminas/laminas-cache-storage-adapter-apcu": "2.0.x-dev",
+        "laminas/laminas-cache-storage-adapter-blackhole": "2.0.x-dev",
+        "laminas/laminas-cache-storage-adapter-filesystem": "2.0.x-dev",
+        "laminas/laminas-cache-storage-adapter-memory": "2.0.x-dev",
         "laminas/laminas-cli": "^1.0",
         "laminas/laminas-coding-standard": "~2.2.0",
         "laminas/laminas-config-aggregator": "^1.5",

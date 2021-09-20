@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.9.0@c62adf965241f65aa4f899a050a94b70bbce19fd">
+<files psalm-version="4.10.0@916b098b008f6de4543892b1e0651c1c3b92cbfa">
   <file src="src/Command/DeprecatedStorageFactoryConfigurationCheckCommand.php">
     <MixedArgument occurrences="2">
       <code>$cacheConfiguration</code>
@@ -213,34 +213,23 @@
     </UndefinedInterfaceMethod>
   </file>
   <file src="src/Psr/SimpleCache/SimpleCacheDecorator.php">
-    <DocblockTypeContradiction occurrences="5">
-      <code>$iterable instanceof Traversable</code>
-      <code>''</code>
-      <code>is_object($key)</code>
+    <DocblockTypeContradiction occurrences="2">
       <code>is_object($ttl)</code>
       <code>null === $ttl</code>
     </DocblockTypeContradiction>
-    <InvalidReturnStatement occurrences="2">
-      <code>$array</code>
+    <InvalidReturnStatement occurrences="1">
       <code>new $exceptionClass($throwable-&gt;getMessage(), $throwable-&gt;getCode(), $throwable)</code>
     </InvalidReturnStatement>
-    <InvalidReturnType occurrences="2">
+    <InvalidReturnType occurrences="1">
       <code>SimpleCacheException</code>
-      <code>array</code>
     </InvalidReturnType>
-    <MixedArgument occurrences="4">
+    <MixedArgument occurrences="3">
       <code>$key</code>
       <code>$key</code>
       <code>$key</code>
       <code>$ttl</code>
     </MixedArgument>
-    <MixedArrayOffset occurrences="2">
-      <code>$results[$key]</code>
-      <code>$results[$key]</code>
-    </MixedArrayOffset>
-    <MixedAssignment occurrences="9">
-      <code>$array[$key]</code>
-      <code>$array[]</code>
+    <MixedAssignment occurrences="6">
       <code>$key</code>
       <code>$key</code>
       <code>$key</code>
@@ -253,12 +242,7 @@
       <code>$ttl</code>
       <code>$ttl</code>
     </PossiblyNullArgument>
-    <PropertyTypeCoercion occurrences="1">
-      <code>$maximumKeyLength</code>
-    </PropertyTypeCoercion>
-    <RedundantConditionGivenDocblockType occurrences="4">
-      <code>gettype($key)</code>
-      <code>is_scalar($key)</code>
+    <RedundantConditionGivenDocblockType occurrences="2">
       <code>null !== $this-&gt;storage-&gt;removeItem($key)</code>
       <code>var_export($ttl, true)</code>
     </RedundantConditionGivenDocblockType>
