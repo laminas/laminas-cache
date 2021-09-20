@@ -6,7 +6,7 @@
         "apcu"
     ],
     "ini": [
-        "apcu.enabled=1",
-        "apcu.enable_cli=1"
+        "apc.enabled=1",
+        "apc.enable_cli=1"
     ]
 }
