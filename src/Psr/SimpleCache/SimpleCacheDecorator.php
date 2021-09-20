@@ -19,7 +19,6 @@ use function get_class;
 use function gettype;
 use function is_int;
 use function is_object;
-use function is_scalar;
 use function is_string;
 use function min;
 use function preg_match;
@@ -301,10 +300,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * @template TKey of array-key
      * @param string|int $key
-     * @psalm-param TKey $key
-     * @psalm-assert 0|non-empty-string $key
      * @throws SimpleCacheInvalidArgumentException If key is invalid.
      */
     private function validateKey($key): void
@@ -328,8 +324,8 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         if (! is_string($key)) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'Invalid key provided of type "%s"%s; must be a string',
-                is_object($key) ? get_class($key) : gettype($key),
-                is_scalar($key) ? sprintf(' (%s)', var_export($key, true)) : ''
+                gettype($key),
+                sprintf(' (%s)', var_export($key, true))
             ));
         }
 
@@ -406,7 +402,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
     /**
      * @param iterable $keys
-     * @psalm-return list<non-empty-string|0>
+     * @psalm-return list<string|int>
      * @throws SimpleCacheInvalidArgumentException For invalid $iterable values.
      */
     private function convertIterableKeysToList(iterable $keys): array
@@ -455,7 +451,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
     /**
      * @param iterable $values
-     * @psalm-return array<0|non-empty-string,mixed>
+     * @psalm-return array<int|string,mixed>
      */
     private function convertIterableToKeyValueMap(iterable $values): array
     {
@@ -470,6 +466,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
             $this->validateKey($key);
 
+            /** @psalm-suppress MixedAssignment */
             $keyValueMap[$key] = $value;
         }
 
