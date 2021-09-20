@@ -4,5 +4,9 @@
     },
     "extensions": [
         "apcu"
+    ],
+    "ini": [
+        "apcu.enabled=1",
+        "apcu.enable_cli=1"
     ]
 }
