@@ -13,7 +13,7 @@ final class SimpleCacheIntegrationTest extends AbstractSimpleCacheIntegrationTes
 {
     protected function createStorage(): StorageInterface
     {
-        $storage = new Apcu();
+        $storage    = new Apcu();
         $serializer = new Serializer();
         $storage->addPlugin($serializer);
 

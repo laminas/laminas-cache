@@ -13,10 +13,12 @@ use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use Throwable;
+use Traversable;
 
 use function array_keys;
 use function get_class;
 use function gettype;
+use function is_array;
 use function is_int;
 use function is_object;
 use function is_string;
@@ -180,6 +182,16 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function getMultiple($keys, $default = null)
     {
+        /**
+         * @psalm-suppress DocblockTypeContradiction Since we do not have native type-hints, we should verify iterable.
+         */
+        if (! is_array($keys) && ! $keys instanceof Traversable) {
+            throw new SimpleCacheInvalidArgumentException(sprintf(
+                'Invalid value provided to %s; must be iterable',
+                __METHOD__
+            ));
+        }
+
         $keys = $this->convertIterableKeysToList($keys);
 
         try {
@@ -203,6 +215,16 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function setMultiple($values, $ttl = null)
     {
+        /**
+         * @psalm-suppress DocblockTypeContradiction Since we do not have native type-hints, we should verify iterable.
+         */
+        if (! is_array($values) && ! $values instanceof Traversable) {
+            throw new SimpleCacheInvalidArgumentException(sprintf(
+                'Invalid value provided to %s; must be iterable',
+                __METHOD__
+            ));
+        }
+
         $values = $this->convertIterableToKeyValueMap($values);
         $keys   = array_keys($values);
         $ttl    = $this->convertTtlToInteger($ttl);
@@ -252,6 +274,16 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function deleteMultiple($keys)
     {
+        /**
+         * @psalm-suppress DocblockTypeContradiction Since we do not have native type-hints, we should verify iterable.
+         */
+        if (! is_array($keys) && ! $keys instanceof Traversable) {
+            throw new SimpleCacheInvalidArgumentException(sprintf(
+                'Invalid value provided to %s; must be iterable',
+                __METHOD__
+            ));
+        }
+
         $keys = $this->convertIterableKeysToList($keys);
         if (empty($keys)) {
             return true;
