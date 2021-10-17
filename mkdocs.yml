@@ -26,7 +26,6 @@ nav:
         - "Cache Patterns":
             - Introduction: v2/pattern/intro.md
             - CallbackCache: v2/pattern/callback-cache.md
-            - ClassCache: v2/pattern/class-cache.md
             - ObjectCache: v2/pattern/object-cache.md
             - OutputCache: v2/pattern/output-cache.md
             - CaptureCache: v2/pattern/capture-cache.md
@@ -55,7 +54,6 @@ plugins:
             storage/plugin.md: v3/storage/plugin.md
             pattern/intro.md: v3/pattern/intro.md
             pattern/callback-cache.md: v3/pattern/callback-cache.md
-            pattern/class-cache.md: v2/pattern/callback-cache.md
             pattern/object-cache.md: v3/pattern/object-cache.md
             pattern/output-cache.md: v3/pattern/output-cache.md
             pattern/capture-cache.md: v3/pattern/capture-cache.md

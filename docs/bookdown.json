@@ -7,7 +7,6 @@
         "book/laminas.cache.storage.plugin.md",
         "book/laminas.cache.pattern.md",
         "book/laminas.cache.pattern.callback-cache.md",
-        "book/laminas.cache.pattern.class-cache.md",
         "book/laminas.cache.pattern.object-cache.md",
         "book/laminas.cache.pattern.output-cache.md",
         "book/laminas.cache.pattern.capture-cache.md",

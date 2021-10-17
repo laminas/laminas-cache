@@ -3,7 +3,6 @@
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
-use Laminas\Cache\Storage\StorageInterface as Storage;
 use Laminas\Stdlib\AbstractOptions;
 use Traversable;
 
@@ -31,7 +30,6 @@ class PatternOptions extends AbstractOptions
 {
     /**
      * Used by:
-     * - ClassCache
      * - ObjectCache
      *
      * @var bool
@@ -41,36 +39,11 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - CallbackCache
-     * - ClassCache
      * - ObjectCache
      *
      * @var bool
      */
     protected $cacheOutput = true;
-
-    /**
-     * Used by:
-     * - ClassCache
-     *
-     * @var null|string
-     */
-    protected $class;
-
-    /**
-     * Used by:
-     * - ClassCache
-     *
-     * @var array
-     */
-    protected $classCacheMethods = [];
-
-    /**
-     * Used by:
-     * - ClassCache
-     *
-     * @var array
-     */
-    protected $classNonCacheMethods = [];
 
     /**
      * Used by:
@@ -161,17 +134,6 @@ class PatternOptions extends AbstractOptions
     protected $publicDir;
 
     /**
-     * Used by:
-     * - CallbackCache
-     * - ClassCache
-     * - ObjectCache
-     * - OutputCache
-     *
-     * @var null|Storage
-     */
-    protected $storage;
-
-    /**
      * Constructor
      *
      * @param  array|Traversable|null $options
@@ -192,7 +154,6 @@ class PatternOptions extends AbstractOptions
      * Set flag indicating whether or not to cache by default
      *
      * Used by:
-     * - ClassCache
      * - ObjectCache
      *
      * @param  bool $cacheByDefault
@@ -208,7 +169,6 @@ class PatternOptions extends AbstractOptions
      * Do we cache by default?
      *
      * Used by:
-     * - ClassCache
      * - ObjectCache
      *
      * @return bool
@@ -223,7 +183,6 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - CallbackCache
-     * - ClassCache
      * - ObjectCache
      *
      * @param  bool $cacheOutput
@@ -240,7 +199,6 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - CallbackCache
-     * - ClassCache
      * - ObjectCache
      *
      * @return bool
@@ -248,94 +206,6 @@ class PatternOptions extends AbstractOptions
     public function getCacheOutput()
     {
         return $this->cacheOutput;
-    }
-
-    /**
-     * Set class name
-     *
-     * Used by:
-     * - ClassCache
-     *
-     * @param  string $class
-     * @throws Exception\InvalidArgumentException
-     * @return PatternOptions Provides a fluent interface
-     */
-    public function setClass($class)
-    {
-        if (! is_string($class)) {
-            throw new Exception\InvalidArgumentException('Invalid classname provided; must be a string');
-        }
-        $this->class = $class;
-        return $this;
-    }
-
-    /**
-     * Get class name
-     *
-     * Used by:
-     * - ClassCache
-     *
-     * @return null|string
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    /**
-     * Set list of method return values to cache
-     *
-     * Used by:
-     * - ClassCache
-     *
-     * @param  array $classCacheMethods
-     * @return PatternOptions Provides a fluent interface
-     */
-    public function setClassCacheMethods(array $classCacheMethods)
-    {
-        $this->classCacheMethods = $this->recursiveStrtolower($classCacheMethods);
-        return $this;
-    }
-
-    /**
-     * Get list of methods from which to cache return values
-     *
-     * Used by:
-     * - ClassCache
-     *
-     * @return array
-     */
-    public function getClassCacheMethods()
-    {
-        return $this->classCacheMethods;
-    }
-
-    /**
-     * Set list of method return values NOT to cache
-     *
-     * Used by:
-     * - ClassCache
-     *
-     * @param  array $classNonCacheMethods
-     * @return PatternOptions Provides a fluent interface
-     */
-    public function setClassNonCacheMethods(array $classNonCacheMethods)
-    {
-        $this->classNonCacheMethods = $this->recursiveStrtolower($classNonCacheMethods);
-        return $this;
-    }
-
-    /**
-     * Get list of methods from which NOT to cache return values
-     *
-     * Used by:
-     * - ClassCache
-     *
-     * @return array
-     */
-    public function getClassNonCacheMethods()
-    {
-        return $this->classNonCacheMethods;
     }
 
     /**
