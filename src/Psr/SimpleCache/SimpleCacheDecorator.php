@@ -291,7 +291,11 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
     }
 
-    private static function translateThrowable(Throwable $throwable): SimpleCacheException
+    /**
+     * @param Throwable $throwable
+     * @return SimpleCacheException|SimpleCacheInvalidArgumentException
+     */
+    private static function translateThrowable(Throwable $throwable)
     {
         $exceptionClass = $throwable instanceof LaminasCacheInvalidArgumentException
             ? SimpleCacheInvalidArgumentException::class
