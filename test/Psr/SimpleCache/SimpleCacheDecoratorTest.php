@@ -13,14 +13,18 @@ use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
+use Laminas\Cache\StorageFactory;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\SimpleCache\CacheException;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionProperty;
 use function preg_match;
 use function str_repeat;
+use Laminas\Cache\Storage\Adapter\Filesystem;
 
 /**
  * Test the PSR-16 decorator.
@@ -905,5 +909,32 @@ class SimpleCacheDecoratorTest extends TestCase
                 ''
             )
         );
+    }
+
+    public function testWillThrowExceptionWhenUsingFilesystemAdapterAndUseInvalidCacheKey(): void
+    {
+        $storage = StorageFactory::factory([
+            'adapter' => 'filesystem',
+            'plugins' => ['Serializer'],
+        ]);
+
+        $this->assertInstanceOf(Filesystem::class, $storage);
+
+        $decorator = new SimpleCacheDecorator($storage);
+
+        $this->expectException(InvalidArgumentException::class);
+        $decorator->get('127.0.0.1');
+    }
+
+    public function testWillThrowExceptionWhenUsingFilesystemAdapterAndAGenericErrorOccurs(): void
+    {
+        $storage = $this->prophesize(Filesystem::class);
+        $this->mockCapabilities($storage);
+        $storage->getItem(Argument::is('127-0-0-1'), Argument::any())->willThrow(new SimpleCacheException());
+
+        $decorator = new SimpleCacheDecorator($storage->reveal());
+
+        $this->expectException(SimpleCacheException::class);
+        $decorator->get('127-0-0-1');
     }
 }
