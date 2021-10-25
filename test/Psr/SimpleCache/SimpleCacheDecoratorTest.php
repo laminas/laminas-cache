@@ -12,6 +12,7 @@ use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\FlushableInterface;
+use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\Cache\StorageFactory;
 use PHPUnit\Framework\TestCase;
@@ -913,10 +914,8 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testWillThrowExceptionWhenUsingFilesystemAdapterAndUseInvalidCacheKey(): void
     {
-        $storage = StorageFactory::factory([
-            'adapter' => 'filesystem',
-            'plugins' => ['Serializer'],
-        ]);
+        $storage = new Filesystem();
+        $storage->addPlugin(new Serializer());
 
         $this->assertInstanceOf(Filesystem::class, $storage);
 
