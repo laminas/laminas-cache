@@ -12,7 +12,6 @@ use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\FlushableInterface;
-use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\StorageInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -23,7 +22,6 @@ use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionProperty;
 use function preg_match;
 use function str_repeat;
-use Laminas\Cache\Storage\Adapter\Filesystem;
 
 /**
  * Test the PSR-16 decorator.
@@ -912,12 +910,12 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testWillThrowExceptionWhenUsingFilesystemAdapterAndUseInvalidCacheKey(): void
     {
-        $storage = new Filesystem();
-        $storage->addPlugin(new Serializer());
-
-        $this->assertInstanceOf(Filesystem::class, $storage);
-
-        $decorator = new SimpleCacheDecorator($storage);
+        $storage = $this->prophesize(StorageInterface::class);
+        $storage
+            ->getItem(Argument::any(), Argument::any(), Argument::any())
+            ->willThrow(new Exception\InvalidArgumentException('Invalid argument provided.'));
+        $this->mockCapabilities($storage);
+        $decorator = new SimpleCacheDecorator($storage->reveal());
 
         $this->expectException(InvalidArgumentException::class);
         $decorator->get('127.0.0.1');
@@ -925,9 +923,11 @@ class SimpleCacheDecoratorTest extends TestCase
 
     public function testWillThrowExceptionWhenUsingFilesystemAdapterAndAGenericErrorOccurs(): void
     {
-        $storage = $this->prophesize(Filesystem::class);
+        $storage = $this->prophesize(StorageInterface::class);
         $this->mockCapabilities($storage);
-        $storage->getItem(Argument::is('127-0-0-1'), Argument::any())->willThrow(new SimpleCacheException());
+        $storage
+            ->getItem(Argument::any(), Argument::any(), Argument::any())
+            ->willThrow(new SimpleCacheException('Some generic cache exception.'));
 
         $decorator = new SimpleCacheDecorator($storage->reveal());
 
