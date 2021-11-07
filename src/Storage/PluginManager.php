@@ -2,6 +2,8 @@
 
 namespace Laminas\Cache\Storage;
 
+use Laminas\Cache\Storage\Plugin\PluginInterface;
+use Laminas\Cache\Storage\Plugin\PluginOptions;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
@@ -53,5 +55,22 @@ final class PluginManager extends AbstractPluginManager
     protected $sharedByDefault = false;
 
     /** @var string */
-    protected $instanceOf = Plugin\PluginInterface::class;
+    protected $instanceOf = PluginInterface::class;
+
+    /**
+     * @param  string $name
+     * @param  null|array  $options
+     * @return mixed
+     */
+    public function build($name, ?array $options = null)
+    {
+        $options = $options ?? [];
+        /** @psalm-suppress MixedAssignment */
+        $plugin = parent::build($name);
+        if ($options !== [] && $plugin instanceof PluginInterface) {
+            $plugin->setOptions(new PluginOptions($options));
+        }
+
+        return $plugin;
+    }
 }
