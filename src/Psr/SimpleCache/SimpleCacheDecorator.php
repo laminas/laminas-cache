@@ -11,6 +11,7 @@ use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
+use Psr\SimpleCache\CacheException as PsrCacheException;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use Throwable;
 use Traversable;
@@ -322,7 +323,10 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
     }
 
-    private static function translateThrowable(Throwable $throwable): SimpleCacheException
+    /**
+     * @return SimpleCacheInvalidArgumentException|SimpleCacheException
+     */
+    private static function translateThrowable(Throwable $throwable): PsrCacheException
     {
         $exceptionClass = $throwable instanceof LaminasCacheInvalidArgumentException
             ? SimpleCacheInvalidArgumentException::class

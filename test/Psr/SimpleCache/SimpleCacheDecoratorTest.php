@@ -15,7 +15,9 @@ use LaminasTest\Cache\Psr\TestAsset\FlushableNamespaceStorageInterface;
 use LaminasTest\Cache\Psr\TestAsset\FlushableStorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\CacheException as PsrSimpleCacheException;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
+use Psr\SimpleCache\InvalidArgumentException as PsrSimpleCacheInvalidArgumentException;
 use ReflectionProperty;
 
 use function array_keys;
@@ -1189,5 +1191,35 @@ class SimpleCacheDecoratorTest extends TestCase
 
         $this->expectException(SimpleCacheInvalidArgumentException::class);
         self::assertTrue($decorator->setMultiple($iterable));
+    }
+
+    public function testWillThrowExceptionWhenUsingFilesystemAdapterAndUseInvalidCacheKey(): void
+    {
+        $storage = $this->storage;
+        $this->storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->willThrowException(new Exception\InvalidArgumentException());
+
+        $decorator = new SimpleCacheDecorator($storage);
+
+        /** @psalm-suppress InvalidArgument PSR-16 exception interfaces does not extend Throwable in v1 */
+        $this->expectException(PsrSimpleCacheInvalidArgumentException::class);
+        $decorator->get('127.0.0.1');
+    }
+
+    public function testWillThrowExceptionWhenUsingFilesystemAdapterAndAGenericErrorOccurs(): void
+    {
+        $storage = $this->storage;
+        $storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->willThrowException(new SimpleCacheException());
+
+        $decorator = new SimpleCacheDecorator($storage);
+
+        /** @psalm-suppress InvalidArgument PSR-16 exception interfaces does not extend Throwable in v1 */
+        $this->expectException(PsrSimpleCacheException::class);
+        $decorator->get('127-0-0-1');
     }
 }
