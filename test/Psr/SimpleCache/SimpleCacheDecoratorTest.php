@@ -18,6 +18,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionProperty;
 use function preg_match;
 use function str_repeat;
@@ -905,5 +906,32 @@ class SimpleCacheDecoratorTest extends TestCase
                 ''
             )
         );
+    }
+
+    public function testWillThrowExceptionWhenUsingFilesystemAdapterAndUseInvalidCacheKey(): void
+    {
+        $storage = $this->prophesize(StorageInterface::class);
+        $storage
+            ->getItem(Argument::any(), Argument::any(), Argument::any())
+            ->willThrow(new Exception\InvalidArgumentException('Invalid argument provided.'));
+        $this->mockCapabilities($storage);
+        $decorator = new SimpleCacheDecorator($storage->reveal());
+
+        $this->expectException(InvalidArgumentException::class);
+        $decorator->get('127.0.0.1');
+    }
+
+    public function testWillThrowExceptionWhenUsingFilesystemAdapterAndAGenericErrorOccurs(): void
+    {
+        $storage = $this->prophesize(StorageInterface::class);
+        $this->mockCapabilities($storage);
+        $storage
+            ->getItem(Argument::any(), Argument::any(), Argument::any())
+            ->willThrow(new SimpleCacheException('Some generic cache exception.'));
+
+        $decorator = new SimpleCacheDecorator($storage->reveal());
+
+        $this->expectException(SimpleCacheException::class);
+        $decorator->get('127-0-0-1');
     }
 }
