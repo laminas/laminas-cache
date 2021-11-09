@@ -1,28 +1,28 @@
-# Migration to laminas-cache 3.0
+# Migration to Version 3.0
 
-Upgrading to `laminas-cache` will require a few code-changes, depending on how the storage adapters were used. Please note that the migration guide assumes that `laminas-cache` is installed via composer.
+Upgrading to `laminas-cache` will require a few code-changes, depending on how the storage adapters were used. Please note that the migration guide assumes that `laminas-cache` is [installed via Composer](installation.md).
 
-Please checkout the [checklist](#checklist) to see what changes need to be done.
+Please check out the [checklist](#checklist) to see what changes need to be done.
 
 The biggest change with `laminas-cache` v3.0 is that this component will be shipped without a specific cache adapter. The idea behind this is, that projects can freely choose those cache adapters they really use.
 
-In the past, most of the adapters laminas does officially support were not properly tested, blocked PHP version upgrades (due to extensions lacking compatibility) and had to be maintained due to backwards compatibility. Starting with v3.0, all adapters can be maintained and evolve independently.
+In the past, most of the adapters Laminas does officially support were not properly tested, blocked PHP version upgrades (due to extensions lacking compatibility) and had to be maintained due to backwards compatibility. Starting with v3.0, all adapters can be maintained and evolve independently.
 
 ## Checklist
 
-- [ ] `laminas-cache` is updated to the latest version from within `2.x` (currently `2.13.2`)
-- [ ] `laminas-cli` is installed to verify the configuration integrity (`vendor/bin/laminas laminas-cache:deprecation:check-storage-factory-config`); _in case you don't want to use `laminas-cli`, please check out the [normalized array configuration](https://github.com/laminas/laminas-cache/releases/tag/2.12.0) example in the release notes of `2.12.0)[https://github.com/laminas-cli` is installed to verify the configuration integrity (`vendor/bin/laminas laminas-cache:deprecation:check-storage-factory-config`); _in case you don't want to use `laminas-cli`, please check out the [normalized array configuration](https://github.com/laminas/laminas-cache/releases/tag/2.12.0` to manually verify your configuration_ 
-- [ ] `laminas-cache` is required with `^3.0` within `composer.json`
-- [ ] Cache adapters which are used within the project needs to be required in at least `^2.0`; in case you don't know which adapters are in use, either check your project configuration or search for the `Laminas\Cache\Storage\Adapter` namespace in your projects source code. Every adapter has to be listed in either your `module.config.php` (laminas-mvc) or `config.php` (mezzio) configuration.
-- [ ] Project does not use any of the [Removed classes and traits](#removed-classes-and-traits)
-- [ ] Storage adapters are not extended in any way as [all adapters are `final`](#breaking-changes) starting with v2.0 of the individual adapter component
+1. `laminas-cache` is updated to the latest version from within `2.x` (currently `2.13.2`)
+2. [`laminas-cli` is installed](https://docs.laminas.dev/laminas-cli/) to verify the configuration integrity (`vendor/bin/laminas laminas-cache:deprecation:check-storage-factory-config`); in case you don't want to use `laminas-cli`, please check out the [normalized array configuration](https://github.com/laminas/laminas-cache/releases/tag/2.12.0) example in the release notes of 2.12.0
+3. `laminas-cache` is required with `^3.0` within `composer.json`
+4. Cache adapters which are used within the project needs to be required in at least `^2.0`; in case you don't know which adapters are in use, either check your project configuration or search for the `Laminas\Cache\Storage\Adapter` namespace in your projects source code. Every adapter has to be listed in either your `module.config.php` (laminas-mvc) or `config.php` (mezzio) configuration. 
+5. Project does not use any of the [removed classes and traits](#removed-classes-and-traits)
+6. Storage adapters are not extended in any way as [all adapters are `final`](#breaking-changes) starting with v2.0 of the individual adapter component
 
 ## New Features
 
 - Each cache adapter has its [own package](#satellite-packages).
 - Support for PHP 8.1
 
-# Removed Classes and Traits
+## Removed Classes and Traits
 
 With `laminas-cache` v3, some classes/traits were removed as well:
 
@@ -35,11 +35,12 @@ With `laminas-cache` v3, some classes/traits were removed as well:
 
 ## Breaking Changes
 
-- `CallbackCache`, `OutputCache` and `ObjectCache` now require the underlying cache adapter (`StorageInterface`) as 1st `__construct` dependency. The options can be passed via 2nd `__construct)[https://github.com/CallbackCache`, `OutputCache` and `ObjectCache` now require the underlying cache adapter (`StorageInterface`` arguments but are optional. **Please note that it is not possible to inject the pattern configuration as an array anymore**
+- `CallbackCache`, `OutputCache` and `ObjectCache` now require the underlying cache adapter (`StorageInterface`) as 1st `__construct` dependency. The options can be passed via 2nd `__construct)[https://github.com/CallbackCache`, `OutputCache` and `ObjectCache` now require the underlying cache adapter (`StorageInterface` arguments but are optional.  
+**Please note that it is not possible to inject the pattern configuration as an array anymore**
 - Storage configurations must be in a specific shape. For more details, head to the release notes of [2.12.0](https://github.com/laminas/laminas-cache/releases/tag/2.12.0)
 - All cache adapters are now marked as `final` and are not extensible anymore. In case that you are extending one of the cache adapters, please switch change your code as `composition` should be preferred over inheritance. For an example, please check out the [composition over inheritance](#composition-over-inheritance) section.
 
-## Satellite packages
+## Satellite Packages
 
 Starting with laminas-cache v3, we are introducing satellite packages for each cache backend.
 
@@ -57,7 +58,7 @@ A list of available cache adapters can be found here (starting with their v2 rel
 - [laminas/laminas-cache-storage-adapter-redis](https://github.com/laminas/laminas-cache-storage-adapter-redis) 
 - [laminas/laminas-cache-storage-adapter-session](https://github.com/laminas/laminas-cache-storage-adapter-session)
 
-# Composition Over Inheritance
+## Composition Over Inheritance
 
 In case you are extending one of the cache implementations, your code might look as follows:
 
@@ -127,9 +128,9 @@ final class MyFilesytemStorage extends AbstractAdapter
 
 Even tho, that this is more code to add/change than the previous solution, this gives the maintainers of the cache adapters more freedom to provide more stable adapter implementations.
 
-If this does not fit your requirements, please let us know via the `laminas-cache` [discussions on github](https://github.com/laminas/laminas-cache/discussions) and tell us more about your implementations. Maybe your addition should be part of our official adapter or could be provided as a dedicated Plugin instead.
+If this does not fit your requirements, please let us know via the `laminas-cache` [repository on GitHub](https://github.com/laminas/laminas-cache) and tell us more about your implementations. Maybe your addition should be part of our official adapter or could be provided as a dedicated Plugin instead.
 
-# StorageFactory dependency
+# StorageFactory Dependency
 
-In case your code heavily depends on `StorageFactory` (or if you are using not yet compatible laminas components (e.g. `laminas-i18n`, ...), laminas got your back.
+In case your code heavily depends on `StorageFactory` (or if you are using not yet compatible laminas components (e.g. `laminas-i18n`, ...), Laminas got your back.
 With `laminas/laminas-cache-storage-deprecated-factory`, the `StorageFactory` is retained to create a temporary backwards compatibility layer.
