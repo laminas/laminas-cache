@@ -884,11 +884,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
         return new CacheItemPoolDecorator($storage);
     }
 
-    private function createAdapterOptions(?array $options = null): AdapterOptions
-    {
-        return new AdapterOptions($options);
-    }
-
     protected function tearDown(): void
     {
         try {
