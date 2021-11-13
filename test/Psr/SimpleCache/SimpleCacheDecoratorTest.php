@@ -1139,7 +1139,7 @@ class SimpleCacheDecoratorTest extends TestCase
             null,
             true,
             60,
-            SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH
+            SimpleCacheDecorator::$PCRE_MAXIMUM_QUANTIFIER_LENGTH
         );
 
         $storage
@@ -1147,11 +1147,11 @@ class SimpleCacheDecoratorTest extends TestCase
             ->willReturn($capabilities);
 
         $decorator = new SimpleCacheDecorator($storage);
-        $key       = str_repeat('a', SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH);
+        $key       = str_repeat('a', SimpleCacheDecorator::$PCRE_MAXIMUM_QUANTIFIER_LENGTH);
         $this->expectException(SimpleCacheInvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
             'key is too long. Must be no more than %d characters',
-            SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1
+            SimpleCacheDecorator::$PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1
         ));
         $decorator->has($key);
     }
@@ -1163,7 +1163,7 @@ class SimpleCacheDecoratorTest extends TestCase
             preg_match(
                 sprintf(
                     '/^.{%d,}$/',
-                    SimpleCacheDecorator::PCRE_MAXIMUM_QUANTIFIER_LENGTH
+                    SimpleCacheDecorator::$PCRE_MAXIMUM_QUANTIFIER_LENGTH
                 ),
                 ''
             )
