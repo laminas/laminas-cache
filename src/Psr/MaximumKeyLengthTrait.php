@@ -28,7 +28,7 @@ trait MaximumKeyLengthTrait
      * @readonly
      * @var positive-int
      */
-    public static $PCRE_MAXIMUM_QUANTIFIER_LENGTH = 65535;
+    public static $pcreMaximumQuantifierLength = 65535;
 
     /**
      * @var int
@@ -59,7 +59,7 @@ trait MaximumKeyLengthTrait
         }
 
         /** @psalm-suppress PropertyTypeCoercion The result of this will always be > 0 */
-        $this->maximumKeyLength = min($maximumKeyLength, self::$PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1);
+        $this->maximumKeyLength = min($maximumKeyLength, self::$pcreMaximumQuantifierLength - 1);
     }
 
     private function exceedsMaximumKeyLength(string $key): bool

@@ -984,7 +984,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             null,
             true,
             60,
-            SimpleCacheDecorator::$PCRE_MAXIMUM_QUANTIFIER_LENGTH
+            SimpleCacheDecorator::$pcreMaximumQuantifierLength
         );
 
         $storage
@@ -992,11 +992,11 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willReturn($capabilities);
 
         $decorator = new CacheItemPoolDecorator($storage);
-        $key       = str_repeat('a', CacheItemPoolDecorator::$PCRE_MAXIMUM_QUANTIFIER_LENGTH);
+        $key       = str_repeat('a', CacheItemPoolDecorator::$pcreMaximumQuantifierLength);
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
             'key is too long. Must be no more than %d characters',
-            CacheItemPoolDecorator::$PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1
+            CacheItemPoolDecorator::$pcreMaximumQuantifierLength - 1
         ));
         $decorator->getItem($key);
     }
@@ -1008,7 +1008,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             preg_match(
                 sprintf(
                     '/^.{%d,}$/',
-                    CacheItemPoolDecorator::$PCRE_MAXIMUM_QUANTIFIER_LENGTH
+                    CacheItemPoolDecorator::$pcreMaximumQuantifierLength
                 ),
                 ''
             )
