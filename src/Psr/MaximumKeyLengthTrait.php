@@ -26,6 +26,7 @@ trait MaximumKeyLengthTrait
      * @internal
      *
      * @readonly
+     * @var positive-int
      */
     public static $PCRE_MAXIMUM_QUANTIFIER_LENGTH = 65535;
 

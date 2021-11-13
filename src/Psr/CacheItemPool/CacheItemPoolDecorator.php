@@ -3,6 +3,7 @@
 namespace Laminas\Cache\Psr\CacheItemPool;
 
 use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\MaximumKeyLengthTrait;
 use Laminas\Cache\Psr\SerializationTrait;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\FlushableInterface;
@@ -37,6 +38,7 @@ use function var_export;
  */
 class CacheItemPoolDecorator implements CacheItemPoolInterface
 {
+    use MaximumKeyLengthTrait;
     use SerializationTrait;
 
     /** @var StorageInterface */
@@ -55,6 +57,8 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     public function __construct(StorageInterface $storage)
     {
         $this->validateStorage($storage);
+        $capabilities = $storage->getCapabilities();
+        $this->memoizeMaximumKeyLengthCapability($storage, $capabilities);
         $this->storage = $storage;
     }
 
@@ -360,6 +364,10 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
                 "Key must be a string and not contain '{}()/\\@:'; '%s' given",
                 is_string($key) ? $key : gettype($key)
             ));
+        }
+
+        if ($this->exceedsMaximumKeyLength($key)) {
+            throw InvalidArgumentException::maximumKeyLengthExceeded($key, $this->maximumKeyLength);
         }
     }
 

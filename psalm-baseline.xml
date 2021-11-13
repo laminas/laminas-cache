@@ -214,12 +214,6 @@
       <code>is_object($ttl)</code>
       <code>null === $ttl</code>
     </DocblockTypeContradiction>
-    <InvalidReturnStatement occurrences="1">
-      <code>new $exceptionClass($throwable-&gt;getMessage(), $throwable-&gt;getCode(), $throwable)</code>
-    </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
-      <code>SimpleCacheException</code>
-    </InvalidReturnType>
     <MixedArgument occurrences="3">
       <code>$key</code>
       <code>$key</code>
@@ -849,9 +843,6 @@
       <code>$key</code>
       <code>$key</code>
     </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$capabilities ?? $this-&gt;defaultCapabilities</code>
-    </MixedArgumentTypeCoercion>
     <MixedAssignment occurrences="3">
       <code>$item</code>
       <code>$item</code>
