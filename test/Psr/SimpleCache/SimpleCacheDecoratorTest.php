@@ -1127,7 +1127,7 @@ class SimpleCacheDecoratorTest extends TestCase
             ->willReturn($capabilities);
 
         $this->expectException(SimpleCacheInvalidArgumentException::class);
-        $this->expectExceptionMessage('does not fulfill the minimum requirements for PSR-16');
+        $this->expectExceptionMessage('does not fulfill the minimum requirements');
 
         new SimpleCacheDecorator($storage);
     }

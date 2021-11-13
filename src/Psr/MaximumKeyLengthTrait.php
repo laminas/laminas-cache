@@ -52,7 +52,7 @@ trait MaximumKeyLengthTrait
 
         if ($maximumKeyLength < 64) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
-                'The storage adapter "%s" does not fulfill the minimum requirements for PSR-16:'
+                'The storage adapter "%s" does not fulfill the minimum requirements for PSR-6/PSR-16:'
                 . ' The maximum key length capability must allow at least 64 characters.',
                 get_class($storage)
             ));
