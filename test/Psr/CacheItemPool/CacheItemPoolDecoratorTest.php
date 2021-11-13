@@ -8,6 +8,7 @@ use Laminas\Cache\Psr\CacheItemPool\CacheException;
 use Laminas\Cache\Psr\CacheItemPool\CacheItem;
 use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
 use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
+use Laminas\Cache\Psr\SimpleCache\SimpleCacheDecorator;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
@@ -24,49 +25,53 @@ use Throwable;
 
 use function array_keys;
 use function array_map;
-use function assert;
+use function preg_match;
+use function sprintf;
+use function str_repeat;
 use function time;
 
 final class CacheItemPoolDecoratorTest extends TestCase
 {
-    /** @var array<string,mixed> */
-    protected $defaultCapabilities = [
-        'staticTtl'          => true,
-        'minTtl'             => 1,
-        'supportedDatatypes' => [
-            'NULL'     => true,
-            'boolean'  => true,
-            'integer'  => true,
-            'double'   => true,
-            'string'   => true,
-            'array'    => true,
-            'object'   => 'object',
-            'resource' => false,
-        ],
-    ];
-
     /** @var StorageInterface&FlushableInterface&MockObject */
     private $storage;
 
     /** @var CacheItemPoolDecorator */
     private $adapter;
 
+    /** @var array<string,bool|string> */
+    private $requiredTypes = [
+        'NULL'     => true,
+        'boolean'  => true,
+        'integer'  => true,
+        'double'   => true,
+        'string'   => true,
+        'array'    => true,
+        'object'   => 'object',
+        'resource' => false,
+    ];
+
+    /** @var AdapterOptions&MockObject */
+    private $options;
+
     protected function setUp(): void
     {
         parent::setUp();
+        $this->options = $this->createMock(AdapterOptions::class);
         $this->storage = $this->createMockedStorage();
         $this->adapter = $this->getAdapter($this->storage);
     }
-
-    /** @var (AdapterOptions&MockObject)|null */
-    private $optionsMock;
 
     /**
      * @return StorageInterface&FlushableInterface&ClearByNamespaceInterface&MockObject
      */
     private function createMockedStorage(
-        ?array $capabilities = null,
-        ?array $options = null
+        ?AdapterOptions $options = null,
+        ?array $supportedDataTypes = null,
+        bool $staticTtl = true,
+        int $minTtl = 1,
+        int $maxKeyLength = -1,
+        bool $useRequestTime = false,
+        bool $lockOnExpire = false
     ): StorageInterface {
         $storage = $this->createMock(FlushableNamespaceStorageInterface::class);
 
@@ -74,9 +79,14 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->method('getEventManager')
             ->willReturn(new EventManager());
 
-        $capabilities = $this->createCapabilitiesMock(
+        $capabilities = $this->createCapabilities(
             $storage,
-            $capabilities ?? $this->defaultCapabilities
+            $supportedDataTypes,
+            $staticTtl,
+            $minTtl,
+            $maxKeyLength,
+            $useRequestTime,
+            $lockOnExpire
         );
 
         $storage
@@ -85,7 +95,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
         $storage
             ->method('getOptions')
-            ->willReturn($this->createOptionsMock($options));
+            ->willReturn($options ?? $this->options);
 
         return $storage;
     }
@@ -95,7 +105,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $this->expectException(CacheException::class);
         $storage = $this->createMock(StorageInterface::class);
 
-        $capabilities = new Capabilities($storage, new stdClass(), $this->defaultCapabilities);
+        $capabilities = $this->createCapabilities($storage);
 
         $storage
             ->expects(self::once())
@@ -110,21 +120,16 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $this->expectException(CacheException::class);
         $storage = $this->createMock(StorageInterface::class);
 
-        $dataTypes    = [
-            'staticTtl'          => true,
-            'minTtl'             => 1,
-            'supportedDatatypes' => [
-                'NULL'     => true,
-                'boolean'  => true,
-                'integer'  => true,
-                'double'   => false,
-                'string'   => true,
-                'array'    => true,
-                'object'   => 'object',
-                'resource' => false,
-            ],
-        ];
-        $capabilities = new Capabilities($storage, new stdClass(), $dataTypes);
+        $capabilities = $this->createCapabilities($storage, [
+            'NULL'     => true,
+            'boolean'  => true,
+            'integer'  => true,
+            'double'   => false,
+            'string'   => true,
+            'array'    => true,
+            'object'   => 'object',
+            'resource' => false,
+        ]);
 
         $storage
             ->expects(self::once())
@@ -137,14 +142,14 @@ final class CacheItemPoolDecoratorTest extends TestCase
     public function testStorageFalseStaticTtlThrowsException(): void
     {
         $this->expectException(CacheException::class);
-        $storage = $this->createMockedStorage(['staticTtl' => false]);
+        $storage = $this->createMockedStorage(null, null, false);
         $this->getAdapter($storage);
     }
 
     public function testStorageZeroMinTtlThrowsException(): void
     {
         $this->expectException(CacheException::class);
-        $storage = $this->createMockedStorage(['staticTtl' => true, 'minTtl' => 0]);
+        $storage = $this->createMockedStorage(null, null, true, 0);
         $this->getAdapter($storage);
     }
 
@@ -342,8 +347,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with('foo')
             ->willReturn(null);
 
-        assert($this->optionsMock instanceof MockObject);
-        $this->optionsMock
+        $this->options
             ->expects(self::exactly(2))
             ->method('setTtl')
             ->withConsecutive([3600], [0])
@@ -390,8 +394,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with(['foo' => 'bar'])
             ->willReturn(['foo' => true]);
 
-        assert($this->optionsMock instanceof MockObject);
-        $this->optionsMock
+        $this->options
             ->expects(self::exactly(2))
             ->method('setTtl')
             ->with(0)
@@ -556,6 +559,11 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with(['foo' => 'bar'])
             ->willReturn(['foo' => true]);
 
+        $this->options
+            ->expects(self::once())
+            ->method('getNamespace')
+            ->willReturn('laminascache');
+
         $adapter = $this->getAdapter($storage);
         $storage
             ->expects(self::once())
@@ -571,7 +579,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testClearWithoutNamespaceReturnsTrue(): void
     {
-        $storage = $this->createMockedStorage(null, ['namespace' => '']);
+        $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => '']));
         $adapter = $this->getAdapter($storage);
         $storage
             ->expects(self::once())
@@ -592,7 +600,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testClearEmptyReturnsTrue(): void
     {
-        $storage = $this->createMockedStorage(null, ['namespace' => '']);
+        $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => '']));
         $storage
             ->expects(self::once())
             ->method('flush')
@@ -611,11 +619,17 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->method('hasItem')
             ->willReturn(false);
 
+        $this->options
+            ->expects(self::once())
+            ->method('getNamespace')
+            ->willReturn('bar');
+
         $item = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
         $this->storage
             ->expects(self::once())
             ->method('clearByNamespace')
+            ->with('bar')
             ->willReturn(true);
 
         $adapter->clear();
@@ -624,7 +638,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testClearRuntimeExceptionReturnsFalse(): void
     {
-        $storage = $this->createMockedStorage(null, ['namespace' => '']);
+        $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => '']));
         $storage
             ->expects(self::once())
             ->method('flush')
@@ -634,7 +648,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testClearByNamespaceReturnsTrue(): void
     {
-        $storage = $this->createMockedStorage(null, ['namespace' => 'laminascache']);
+        $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => 'laminascache']));
         $storage
             ->expects(self::once())
             ->method('clearByNamespace')
@@ -646,7 +660,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testClearByEmptyNamespaceCallsFlush(): void
     {
-        $storage = $this->createMockedStorage(null, ['namespace' => '']);
+        $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => '']));
         $storage
             ->expects(self::once())
             ->method('flush')
@@ -657,7 +671,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testClearByNamespaceRuntimeExceptionReturnsFalse(): void
     {
-        $storage = $this->createMockedStorage(null, ['namespace' => 'laminascache']);
+        $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => 'laminascache']));
         $storage
             ->expects(self::once())
             ->method('clearByNamespace')
@@ -870,38 +884,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
         return new CacheItemPoolDecorator($storage);
     }
 
-    /**
-     * @param array<string,mixed> $capabilities
-     * @return Capabilities&MockObject
-     */
-    private function createCapabilitiesMock(StorageInterface $storage, array $capabilities): Capabilities
-    {
-        return $this
-            ->getMockBuilder(Capabilities::class)
-            ->enableProxyingToOriginalMethods()
-            ->enableOriginalConstructor()
-            ->setConstructorArgs([
-                $storage,
-                new stdClass(),
-                $capabilities,
-            ])->getMock();
-    }
-
-    private function createOptionsMock(?array $options): AdapterOptions
-    {
-        $mock = $this->optionsMock = $this
-            ->getMockBuilder(AdapterOptions::class)
-            ->enableProxyingToOriginalMethods()
-            ->enableOriginalConstructor()
-            ->getMock();
-
-        if ($options) {
-            $mock->setFromArray($options);
-        }
-
-        return $mock;
-    }
-
     protected function tearDown(): void
     {
         try {
@@ -956,9 +938,9 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $adapter = $this->createMock(FlushableStorageAdapterInterface::class);
         $adapter
-            ->expects(self::exactly(2))
+            ->expects(self::atLeast(3))
             ->method('getCapabilities')
-            ->willReturn(new Capabilities($adapter, new stdClass(), $this->defaultCapabilities));
+            ->willReturn($this->createCapabilities($adapter));
 
         $adapter
             ->expects(self::never())
@@ -992,5 +974,63 @@ final class CacheItemPoolDecoratorTest extends TestCase
             'deletion failed due to hasItems states the key still exists'       => [true, false],
             'deletion successful due to hasItems states the key does not exist' => [false, true],
         ];
+    }
+
+    public function testWillUsePcreMaximumQuantifierLengthIfAdapterAllowsMoreThanThat(): void
+    {
+        $storage      = $this->createMock(FlushableStorageAdapterInterface::class);
+        $capabilities = $this->createCapabilities(
+            $storage,
+            null,
+            true,
+            60,
+            SimpleCacheDecorator::$pcreMaximumQuantifierLength
+        );
+
+        $storage
+            ->method('getCapabilities')
+            ->willReturn($capabilities);
+
+        $decorator = new CacheItemPoolDecorator($storage);
+        $key       = str_repeat('a', CacheItemPoolDecorator::$pcreMaximumQuantifierLength);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(
+            'key is too long. Must be no more than %d characters',
+            CacheItemPoolDecorator::$pcreMaximumQuantifierLength - 1
+        ));
+        $decorator->getItem($key);
+    }
+
+    public function testPcreMaximumQuantifierLengthWontResultInCompilationError(): void
+    {
+        self::assertEquals(
+            0,
+            preg_match(
+                sprintf(
+                    '/^.{%d,}$/',
+                    CacheItemPoolDecorator::$pcreMaximumQuantifierLength
+                ),
+                ''
+            )
+        );
+    }
+
+    private function createCapabilities(
+        StorageInterface $storage,
+        ?array $supportedDataTypes = null,
+        bool $staticTtl = true,
+        int $minTtl = 1,
+        int $maxKeyLength = -1,
+        bool $useRequestTime = false,
+        bool $lockOnExpire = false
+    ): Capabilities {
+        return new Capabilities($storage, new stdClass(), [
+            'supportedDatatypes' => $supportedDataTypes ?? $this->requiredTypes,
+            'staticTtl'          => $staticTtl,
+            'minTtl'             => $minTtl,
+            'maxKeyLength'       => $maxKeyLength,
+            'useRequestTime'     => $useRequestTime,
+            'lockOnExpire'       => $lockOnExpire,
+        ]);
     }
 }

@@ -6,6 +6,7 @@ use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
 use Laminas\Cache\Exception\InvalidArgumentException as LaminasCacheInvalidArgumentException;
+use Laminas\Cache\Psr\MaximumKeyLengthTrait;
 use Laminas\Cache\Psr\SerializationTrait;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
@@ -23,7 +24,6 @@ use function is_array;
 use function is_int;
 use function is_object;
 use function is_string;
-use function min;
 use function preg_match;
 use function preg_quote;
 use function sprintf;
@@ -34,19 +34,13 @@ use function var_export;
  */
 class SimpleCacheDecorator implements SimpleCacheInterface
 {
+    use MaximumKeyLengthTrait;
     use SerializationTrait;
 
     /**
      * Characters reserved by PSR-16 that are not valid in cache keys.
      */
     public const INVALID_KEY_CHARS = ':@{}()/\\';
-
-    /**
-     * PCRE runs into a compilation error if the quantifier exceeds this limit
-     *
-     * @internal
-     */
-    public const PCRE_MAXIMUM_QUANTIFIER_LENGTH = 65535;
 
     /** @var bool */
     private $providesPerItemTtl = true;
@@ -64,12 +58,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
     /** @var DateTimeZone */
     private $utc;
-
-    /**
-     * @var int
-     * @psalm-var 0|positive-int
-     */
-    private $maximumKeyLength;
 
     public function __construct(StorageInterface $storage)
     {
@@ -374,15 +362,8 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             ));
         }
 
-        if (
-            $this->maximumKeyLength !== Capabilities::UNLIMITED_KEY_LENGTH
-            && preg_match('/^.{' . ($this->maximumKeyLength + 1) . ',}/u', $key)
-        ) {
-            throw new SimpleCacheInvalidArgumentException(sprintf(
-                'Invalid key "%s" provided; key is too long. Must be no more than %d characters',
-                $key,
-                $this->maximumKeyLength
-            ));
+        if ($this->exceedsMaximumKeyLength($key)) {
+            throw SimpleCacheInvalidArgumentException::maximumKeyLengthExceeded($key, $this->maximumKeyLength);
         }
     }
 
@@ -457,32 +438,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
 
         return $array;
-    }
-
-    private function memoizeMaximumKeyLengthCapability(StorageInterface $storage, Capabilities $capabilities): void
-    {
-        $maximumKeyLength = $capabilities->getMaxKeyLength();
-
-        if ($maximumKeyLength === Capabilities::UNLIMITED_KEY_LENGTH) {
-            $this->maximumKeyLength = Capabilities::UNLIMITED_KEY_LENGTH;
-            return;
-        }
-
-        if ($maximumKeyLength === Capabilities::UNKNOWN_KEY_LENGTH) {
-            // For backward compatibility, assume adapters which do not provide a maximum key length do support 64 chars
-            $maximumKeyLength = 64;
-        }
-
-        if ($maximumKeyLength < 64) {
-            throw new SimpleCacheInvalidArgumentException(sprintf(
-                'The storage adapter "%s" does not fulfill the minimum requirements for PSR-16:'
-                . ' The maximum key length capability must allow at least 64 characters.',
-                get_class($storage)
-            ));
-        }
-
-        /** @psalm-suppress PropertyTypeCoercion The result of this will always be > 0 */
-        $this->maximumKeyLength = min($maximumKeyLength, self::PCRE_MAXIMUM_QUANTIFIER_LENGTH - 1);
     }
 
     /**

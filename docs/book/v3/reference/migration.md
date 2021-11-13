@@ -16,11 +16,13 @@ In the past, most of the adapters Laminas does officially support were not prope
 4. Cache adapters which are used within the project needs to be required in at least `^2.0`; in case you don't know which adapters are in use, either check your project configuration or search for the `Laminas\Cache\Storage\Adapter` namespace in your projects source code. Every adapter has to be listed in either your `module.config.php` (laminas-mvc) or `config.php` (mezzio) configuration. 
 5. Project does not use any of the [removed classes and traits](#removed-classes-and-traits)
 6. Storage adapters are not extended in any way as [all adapters are `final`](#breaking-changes) starting with v2.0 of the individual adapter component
+7. PSR-6 `CacheItemPoolDecorator` does now validate the maximum key length the same way as PSR-6 `SimpleCacheDecorator` and therefore fulfills the requirements by the underlying PSR.
 
 ## New Features
 
 - Each cache adapter has its [own package](#satellite-packages).
 - Support for PHP 8.1
+- PSR-6 `CacheItemPoolDecorator` validates the maximum key length.
 
 ## Removed Classes and Traits
 
@@ -39,6 +41,9 @@ With `laminas-cache` v3, some classes/traits were removed as well:
 **Please note that it is not possible to inject the pattern configuration as an array anymore**
 - Storage configurations must be in a specific shape. For more details, head to the release notes of [2.12.0](https://github.com/laminas/laminas-cache/releases/tag/2.12.0)
 - All cache adapters are now marked as `final` and are not extensible anymore. In case that you are extending one of the cache adapters, please switch change your code as `composition` should be preferred over inheritance. For an example, please check out the [composition over inheritance](#composition-over-inheritance) section.
+- Due to the enhancement of `CacheItemPoolDecorator`, the maximum key length for the underlying cache adapter is validated before it is passed to the adapter.
+- The `SerializationTrait` which was meant to be used by both `PSR-6` and `PSR-16` decorators is now marked as `internal`.
+- The `PCRE_MAXIMUM_QUANTIFIER_LENGTH` constant of the `SimpleCacheDecorator` (which was marked as `internal`) has now been moved to the new (also `internal`) `MaximumKeyLengthTrait` and thus had to become a public static property (as traits do not support constants).
 
 ## Satellite Packages
 

@@ -9,6 +9,8 @@ use function in_array;
 /**
  * Provides common functionality surrounding value de/serialization as required
  * by both PSR-6 and PSR-16
+ *
+ * @internal
  */
 trait SerializationTrait
 {
