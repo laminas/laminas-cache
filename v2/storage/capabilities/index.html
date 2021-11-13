@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.">  
-    <link rel="canonical" href="https://docs.laminas.dev/laminas-cache/">
+    <link rel="canonical" href="https://docs.laminas.dev/laminas-cache/v2/storage/capabilities/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
-    <title>laminas-cache - Laminas Docs</title>
+    <title>Capabilities - laminas-cache - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
     
@@ -115,7 +115,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href=".">laminas-cache</a>
+            <a href="../../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -125,10 +125,18 @@
 
                 
                 
+
+                    
+                    
+                
+            
+
+                
+                
                     
                         
     <li class="subnavigation__list-item ">
-        <a href="v3/installation/" class="subnavigation__link">Installation</a>
+        <a href="../../installation/" class="subnavigation__link">Installation</a>
     </li>
 
                     
@@ -139,19 +147,19 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/storage/adapter/" class="subnavigation__link">Adapters</a>
+        <a href="../adapter/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Capabilities</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/storage/capabilities/" class="subnavigation__link">Capabilities</a>
-    </li>
-
-            
-                
-    <li class="subnavigation__list-item ">
-        <a href="v3/storage/plugin/" class="subnavigation__link">Plugins</a>
+        <a href="../plugin/" class="subnavigation__link">Plugins</a>
     </li>
 
             
@@ -166,31 +174,31 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/intro/" class="subnavigation__link">Introduction</a>
+        <a href="../../pattern/intro/" class="subnavigation__link">Introduction</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
+        <a href="../../pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
+        <a href="../../pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/output-cache/" class="subnavigation__link">OutputCache</a>
+        <a href="../../pattern/output-cache/" class="subnavigation__link">OutputCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
+        <a href="../../pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
     </li>
 
             
@@ -205,27 +213,19 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/psr6/" class="subnavigation__link">PSR-6</a>
+        <a href="../../psr6/" class="subnavigation__link">PSR-6</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/psr16/" class="subnavigation__link">PSR-16</a>
+        <a href="../../psr16/" class="subnavigation__link">PSR-16</a>
     </li>
 
             
         </ul>
     </li>
 
-                    
-                
-            
-
-                
-                
-
-                    
                     
                 
             
@@ -274,13 +274,13 @@
     <div class="btn-group">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
-                v3
+                v2
             
         </button>
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="v3/installation/" class="dropdown-item">
+                    <a href="../../../v3/installation/" class="dropdown-item">
                         
                             v3 (latest)
                         
@@ -288,7 +288,7 @@
                 
             
                 
-                    <a href="v2/installation/" class="dropdown-item">
+                    <a href="../../installation/" class="dropdown-item active">
                         
                             v2
                         
@@ -318,6 +318,28 @@
             <div class="col-md-9 col-sm-12 content" role="main">
                 
                 
+                    
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+                
+                    <li class="toc__entry">
+                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#examples" class="toc__link nav-link">Examples</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
+
+                
 
                 
                     <nav aria-label="breadcrumb">
@@ -327,7 +349,23 @@
             <li class="breadcrumb-item"><a href="https://docs.laminas.dev/components/">Components</a></li>
 
             
-                <li class="breadcrumb-item">laminas-cache</li>
+                <li class="breadcrumb-item"><a href="../../..">laminas-cache</a></li>
+
+                
+                    
+                        
+                        
+                    
+                
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Storage</li>
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">Capabilities</li>
             
         
     </ol>
@@ -335,24 +373,298 @@
 
 
 
+    <div class="alert alert-danger" role="alert">
+        <h4>Caution</h4>
+        <p>
+            The documentation you are viewing is for an older version of this component.<br>
+            <a href="../../..">Switch to the latest (v3) version.</a>
+        </p>
+    </div>
 
 
-    <h1>laminas-cache</h1>
-<p>Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.</p>
 
 
-    <h2>Installation</h2>
-    <h3>Using Composer</h3>
-    <pre><code class="language-bash">$ composer require laminas/laminas-cache</code></pre>
+    
+    
+        <h2 class="chapter__headline">Storage</h2>
+    
+
+    <h1 id="storage-capabilities">Storage Capabilities</h1>
+<p>Storage capabilities describe how a storage adapter works, and which features it
+supports.</p>
+<p>To get capabilities of a storage adapter, you can use the method
+<code>getCapabilities()</code>, but only the storage adapter and its plugins have
+permissions to change them.</p>
+<p>Because capabilities are mutable, you can subscribe to the "change" event to get
+notifications; see the examples for details.</p>
+<p>If you are writing your own plugin or adapter, you can also change capabilities
+because you have access to the marker object and can create your own marker to
+instantiate a new instance of <code>Laminas\Cache\Storage\Capabilities</code>.</p>
+<h2 id="available-methods">Available Methods</h2>
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage;
+
+use ArrayObject;
+use stdClass;
+use Laminas\Cache\Exception;
+use Laminas\EventManager\EventsCapableInterface;
+
+class Capabilities
+{
+    /**
+     * Constructor
+     *
+     * @param StorageInterface  $storage
+     * @param stdClass          $marker
+     * @param array             $capabilities
+     * @param null|Capabilities $baseCapabilities
+     */
+    public function __construct(
+        StorageInterface $storage,
+        stdClass $marker,
+        array $capabilities = [],
+        Capabilities $baseCapabilities = null
+    );
+
+    /**
+     * Get the storage adapter
+     *
+     * @return StorageInterface
+     */
+    public function getAdapter();
+
+    /**
+     * Get supported datatypes
+     *
+     * @return array
+     */
+    public function getSupportedDatatypes();
+
+    /**
+     * Set supported datatypes
+     *
+     * @param  stdClass $marker
+     * @param  array $datatypes
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setSupportedDatatypes(stdClass $marker, array $datatypes);
+
+    /**
+     * Get supported metadata
+     *
+     * @return array
+     */
+    public function getSupportedMetadata();
+
+    /**
+     * Set supported metadata
+     *
+     * @param  stdClass $marker
+     * @param  string[] $metadata
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setSupportedMetadata(stdClass $marker, array $metadata);
+
+    /**
+     * Get minimum supported time-to-live
+     *
+     * @return int 0 means items never expire
+     */
+    public function getMinTtl();
+
+    /**
+     * Set minimum supported time-to-live
+     *
+     * @param  stdClass $marker
+     * @param  int $minTtl
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setMinTtl(stdClass $marker, $minTtl);
+
+    /**
+     * Get maximum supported time-to-live
+     *
+     * @return int 0 means infinite
+     */
+    public function getMaxTtl();
+
+    /**
+     * Set maximum supported time-to-live
+     *
+     * @param  stdClass $marker
+     * @param  int $maxTtl
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setMaxTtl(stdClass $marker, $maxTtl);
+
+    /**
+     * Is the time-to-live handled static (on write)
+     * or dynamic (on read)
+     *
+     * @return bool
+     */
+    public function getStaticTtl();
+
+    /**
+     * Set if the time-to-live handled static (on write) or dynamic (on read)
+     *
+     * @param  stdClass $marker
+     * @param  bool $flag
+     * @return Capabilities Fluent interface
+     */
+    public function setStaticTtl(stdClass $marker, $flag);
+
+    /**
+     * Get time-to-live precision
+     *
+     * @return float
+     */
+    public function getTtlPrecision();
+
+    /**
+     * Set time-to-live precision
+     *
+     * @param  stdClass $marker
+     * @param  float $ttlPrecision
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setTtlPrecision(stdClass $marker, $ttlPrecision);
+
+    /**
+     * Get use request time
+     *
+     * @return bool
+     */
+    public function getUseRequestTime();
+
+    /**
+     * Set use request time
+     *
+     * @param  stdClass $marker
+     * @param  bool $flag
+     * @return Capabilities Fluent interface
+     */
+    public function setUseRequestTime(stdClass $marker, $flag);
 
 
-<h2>Support</h2>
-<ul>
-    <li>Issues: <a href="https://github.com/laminas/laminas-cache/issues">github.com/laminas/laminas-cache/issues</a></li>
-    <li>Source: <a href="https://github.com/laminas/laminas-cache/">github.com/laminas/laminas-cache/</a></li>
-    <li>Chat: <a href="https://laminas.dev/chat">laminas.dev/chat</a></li>
-    <li>Forum: <a href="https://discourse.laminas.dev/">discourse.laminas.dev</a></li>
-</ul>
+    /**
+     * Get "lock-on-expire" support in seconds.
+     *
+     * @return int  0 = Expired items will never be retrieved
+     *             &gt;0 = Time in seconds an expired item could be retrieved
+     *             -1 = Expired items could be retrieved forever
+     */
+    public function getLockOnExpire()
+    {
+        return $this-&gt;getCapability('lockOnExpire', 0);
+    }
+
+    /**
+     * Set "lock-on-expire" support in seconds.
+     *
+     * @param  stdClass $marker
+     * @param  int      $timeout
+     * @return Capabilities Fluent interface
+     */
+    public function setLockOnExpire(stdClass $marker, $timeout)
+    {
+        return $this-&gt;setCapability($marker, 'lockOnExpire', (int) $timeout);
+    }
+
+    /**
+     * Get maximum key length
+     *
+     * @return int -1 means unknown, 0 means infinite
+     */
+    public function getMaxKeyLength();
+
+    /**
+     * Set maximum key length
+     *
+     * @param  stdClass $marker
+     * @param  int $maxKeyLength
+     * @throws Exception\InvalidArgumentException
+     * @return Capabilities Fluent interface
+     */
+    public function setMaxKeyLength(stdClass $marker, $maxKeyLength);
+
+    /**
+     * Get if namespace support is implemented as prefix
+     *
+     * @return bool
+     */
+    public function getNamespaceIsPrefix();
+
+    /**
+     * Set if namespace support is implemented as prefix
+     *
+     * @param  stdClass $marker
+     * @param  bool $flag
+     * @return Capabilities Fluent interface
+     */
+    public function setNamespaceIsPrefix(stdClass $marker, $flag);
+
+    /**
+     * Get namespace separator if namespace is implemented as prefix
+     *
+     * @return string
+     */
+    public function getNamespaceSeparator();
+
+    /**
+     * Set the namespace separator if namespace is implemented as prefix
+     *
+     * @param  stdClass $marker
+     * @param  string $separator
+     * @return Capabilities Fluent interface
+     */
+    public function setNamespaceSeparator(stdClass $marker, $separator);
+}</code></pre>
+<h2 id="examples">Examples</h2>
+<h3 id="get-storage-capabilities-and-do-specific-stuff-based-on-them">Get Storage Capabilities and do specific Stuff based on them</h3>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
+
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
+
+$cache = $storageFactory-&gt;create('filesystem');
+$supportedDatatypes = $cache-&gt;getCapabilities()-&gt;getSupportedDatatypes();
+
+// now you can run specific stuff in base of supported feature
+if ($supportedDatatypes['object']) {
+    $cache-&gt;set($key, $object);
+} else {
+    $cache-&gt;set($key, serialize($object));
+}</code></pre>
+<h3 id="listen-to-the-change-event">Listen to the change Event</h3>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
+
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+/** @var StorageAdapterFactoryInterface $storageFactory */
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
+
+$cache = $storageFactory-&gt;create('filesystem', [
+    'no_atime' =&gt; false,
+]);
+
+// Catching capability changes
+$cache-&gt;getEventManager()-&gt;attach('capability', function($event) {
+    echo count($event-&gt;getParams()) . ' capabilities changed';
+});
+
+// change option which changes capabilities
+$cache-&gt;getOptions()-&gt;setNoATime(true);</code></pre>
 
 
 
@@ -363,12 +675,16 @@
         
         <li class="page-nav__item">
             
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../adapter/">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
         </li>
 
         
         <li class="page-nav__item">
             
-                <a rel="next" class="page-nav__link page-nav__link--next" href="v3/installation/">
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../plugin/">
                     Next <i class="fa fa-chevron-right"></i>
                 </a>
             
@@ -401,7 +717,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href=".">laminas-cache</a>
+            <a href="../../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -411,10 +727,18 @@
 
                 
                 
+
+                    
+                    
+                
+            
+
+                
+                
                     
                         
     <li class="subnavigation__list-item ">
-        <a href="v3/installation/" class="subnavigation__link">Installation</a>
+        <a href="../../installation/" class="subnavigation__link">Installation</a>
     </li>
 
                     
@@ -425,19 +749,19 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/storage/adapter/" class="subnavigation__link">Adapters</a>
+        <a href="../adapter/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Capabilities</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/storage/capabilities/" class="subnavigation__link">Capabilities</a>
-    </li>
-
-            
-                
-    <li class="subnavigation__list-item ">
-        <a href="v3/storage/plugin/" class="subnavigation__link">Plugins</a>
+        <a href="../plugin/" class="subnavigation__link">Plugins</a>
     </li>
 
             
@@ -452,31 +776,31 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/intro/" class="subnavigation__link">Introduction</a>
+        <a href="../../pattern/intro/" class="subnavigation__link">Introduction</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
+        <a href="../../pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
+        <a href="../../pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/output-cache/" class="subnavigation__link">OutputCache</a>
+        <a href="../../pattern/output-cache/" class="subnavigation__link">OutputCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
+        <a href="../../pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
     </li>
 
             
@@ -491,27 +815,19 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/psr6/" class="subnavigation__link">PSR-6</a>
+        <a href="../../psr6/" class="subnavigation__link">PSR-6</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/psr16/" class="subnavigation__link">PSR-16</a>
+        <a href="../../psr16/" class="subnavigation__link">PSR-16</a>
     </li>
 
             
         </ul>
     </li>
 
-                    
-                
-            
-
-                
-                
-
-                    
                     
                 
             
@@ -601,13 +917,13 @@
 </footer>
 
     <script>
-        let base_url = '.',
+        let base_url = '../../..',
             project  = "components",
             siteName = 'laminas-cache';
     </script>
     <script src="https://docs.laminas.dev/js/scripts.js"></script>
     
-        <script src="search/main.js"></script>
+        <script src="../../../search/main.js"></script>
     
 
     
@@ -636,8 +952,3 @@
 
 
 </html>
-
-<!--
-MkDocs version : 1.2.3
-Build Date UTC : 2021-11-13 15:10:22.212775+00:00
--->

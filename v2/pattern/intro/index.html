@@ -6,9 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.">  
+    <link rel="canonical" href="https://docs.laminas.dev/laminas-cache/v2/pattern/intro/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
-    <title>laminas-cache - Laminas Docs</title>
+    <title>Introduction - laminas-cache - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
     
@@ -114,7 +115,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../.">laminas-cache</a>
+            <a href="../../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -132,8 +133,99 @@
 
                 
                 
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../../installation/" class="subnavigation__link">Installation</a>
+    </li>
 
                     
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Storage</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/adapter/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/capabilities/" class="subnavigation__link">Capabilities</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/plugin/" class="subnavigation__link">Plugins</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cache Patterns</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Introduction</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../callback-cache/" class="subnavigation__link">CallbackCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../object-cache/" class="subnavigation__link">ObjectCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../output-cache/" class="subnavigation__link">OutputCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../capture-cache/" class="subnavigation__link">CaptureCache</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Standards Support</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../psr6/" class="subnavigation__link">PSR-6</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../psr16/" class="subnavigation__link">PSR-16</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
                     
                 
             
@@ -182,13 +274,13 @@
     <div class="btn-group">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
-                v3
+                v2
             
         </button>
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../v3/installation/" class="dropdown-item">
+                    <a href="../../../v3/installation/" class="dropdown-item">
                         
                             v3 (latest)
                         
@@ -196,7 +288,7 @@
                 
             
                 
-                    <a href="../v2/installation/" class="dropdown-item">
+                    <a href="../../installation/" class="dropdown-item active">
                         
                             v2
                         
@@ -227,21 +319,164 @@
                 
                 
                     
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
                 
+                    <li class="toc__entry">
+                        <a href="#quick-start" class="toc__link nav-link">Quick Start</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
 
                 
 
-<h1 class="content__title">404</h1>
+                
+                    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        
+            <li class="breadcrumb-item"><a href="https://docs.laminas.dev/">Overview</a></li>
+            <li class="breadcrumb-item"><a href="https://docs.laminas.dev/components/">Components</a></li>
+
+            
+                <li class="breadcrumb-item"><a href="../../..">laminas-cache</a></li>
+
+                
+                    
+                        
+                        
+                    
+                
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Cache Patterns</li>
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">Introduction</li>
+            
+        
+    </ol>
+</nav>
+
+
+
+    <div class="alert alert-danger" role="alert">
+        <h4>Caution</h4>
+        <p>
+            The documentation you are viewing is for an older version of this component.<br>
+            <a href="../../..">Switch to the latest (v3) version.</a>
+        </p>
+    </div>
+
+
+
+
+    
+    
+        <h2 class="chapter__headline">Cache Patterns</h2>
+    
+
+    <h1 id="introduction">Introduction</h1>
+<p>Cache patterns are configurable objects that solve known performance
+bottlenecks. Each should be used only in the specific situations they are
+designed to address. For example, you can use the <code>CallbackCache</code>,
+<code>ObjectCache</code>, or <code>ClassCache</code> patterns to cache method and function calls; to
+cache output generation, the <code>OutputCache</code> pattern could assist.</p>
+<p>All cache patterns implement <code>Laminas\Cache\Pattern\PatternInterface</code>, and most
+extend the abstract class <code>Laminas\Cache\Pattern\AbstractPattern</code>, which provides
+common logic.</p>
+<p>Configuration is provided via the <code>Laminas\Cache\Pattern\PatternOptions</code> class,
+which can be instantiated with an associative array of options passed to the
+constructor. To configure a pattern object, you can provide a
+<code>Laminas\Cache\Pattern\PatternOptions</code> instance to the <code>setOptions()</code> method, or
+provide your options (either as an associative array or <code>PatternOptions</code>
+instance) to the second argument of the factory.</p>
+<p>It's also possible to use a single instance of
+<code>Laminas\Cache\Pattern\PatternOptions</code> and pass it to multiple pattern objects.</p>
+<h2 id="quick-start">Quick Start</h2>
+<p>Pattern objects can be created
+by instantiating one of the <code>Laminas\Cache\Pattern\*Cache</code> classes.</p>
 <blockquote>
-    <h3>Something went wrong!</h3>
-    <p>
-        We're sorry, but the page you are looking for does not exist.
-    </p>
+<h3 id="standard-storage-adapter-for-documentation">Standard Storage Adapter for Documentation</h3>
+<p>A cache adapter needs a storage adapter. To be able to follow the examples in the documentation, the <a href="https://docs.laminas.dev/laminas-cache/storage/adapter/#filesystem-adapter">adapter for the filesystem</a> or the <a href="https://docs.laminas.dev/laminas-cache/storage/adapter/#blackhole-adapter">BlackHole adapter</a> can be used, for example.</p>
+<pre class="highlight"><code class="language-php">$storage = new Laminas\Cache\Storage\Adapter\Filesystem();
+// or
+$storage = new Laminas\Cache\Storage\Adapter\BlackHole();</code></pre>
 </blockquote>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\CallbackCache;
+use Laminas\Cache\Pattern\PatternOptions;
 
-<a href="../." class="btn btn-default" role="button">Go to homepage</a>
+$callbackCache = new CallbackCache(
+    $storage,
+    new PatternOptions()
+);</code></pre>
+<h2 id="available-methods">Available Methods</h2>
+<p>The following methods are implemented by every cache pattern.
+Please read documentation of specific patterns to get more information.</p>
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
+
+interface PatternInterface
+{
+
+    /**
+     * Get all pattern options
+     *
+     * @return PatternOptions
+     */
+    public function getOptions();
+}</code></pre>
+<p>There are cache patterns which depend on a storage. In this case, these adapters implement the <code>StorageCapableInterface</code>:</p>
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
+
+use Laminas\Cache\Storage\StorageInterface;
+
+interface StorageCapableInterface extends PatternInterface
+{
+    public function getStorage(): ?StorageInterface;
+}</code></pre>
 
 
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../../storage/plugin/">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../callback-cache/">
+                    Next <i class="fa fa-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+                
             </div>
             <div class="col-md-3 col-sm-12 sidebar">
                 <div class="donation-banner">
@@ -264,7 +499,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../.">laminas-cache</a>
+            <a href="../../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -282,8 +517,99 @@
 
                 
                 
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../../installation/" class="subnavigation__link">Installation</a>
+    </li>
 
                     
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Storage</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/adapter/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/capabilities/" class="subnavigation__link">Capabilities</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/plugin/" class="subnavigation__link">Plugins</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cache Patterns</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Introduction</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../callback-cache/" class="subnavigation__link">CallbackCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../object-cache/" class="subnavigation__link">ObjectCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../output-cache/" class="subnavigation__link">OutputCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../capture-cache/" class="subnavigation__link">CaptureCache</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Standards Support</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../psr6/" class="subnavigation__link">PSR-6</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../psr16/" class="subnavigation__link">PSR-16</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
                     
                 
             
@@ -373,13 +699,13 @@
 </footer>
 
     <script>
-        let base_url = '..',
+        let base_url = '../../..',
             project  = "components",
             siteName = 'laminas-cache';
     </script>
     <script src="https://docs.laminas.dev/js/scripts.js"></script>
     
-        <script src="../search/main.js"></script>
+        <script src="../../../search/main.js"></script>
     
 
     

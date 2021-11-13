@@ -6,9 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.">  
+    <link rel="canonical" href="https://docs.laminas.dev/laminas-cache/v3/pattern/capture-cache/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
-    <title>laminas-cache - Laminas Docs</title>
+    <title>CaptureCache - laminas-cache - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
     
@@ -114,7 +115,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../.">laminas-cache</a>
+            <a href="../../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -124,8 +125,99 @@
 
                 
                 
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../../installation/" class="subnavigation__link">Installation</a>
+    </li>
 
                     
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Storage</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/adapter/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/capabilities/" class="subnavigation__link">Capabilities</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/plugin/" class="subnavigation__link">Plugins</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cache Patterns</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../callback-cache/" class="subnavigation__link">CallbackCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../object-cache/" class="subnavigation__link">ObjectCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../output-cache/" class="subnavigation__link">OutputCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">CaptureCache</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Standards Support</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../psr6/" class="subnavigation__link">PSR-6</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../psr16/" class="subnavigation__link">PSR-16</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
                     
                 
             
@@ -188,7 +280,7 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../v3/installation/" class="dropdown-item">
+                    <a href="../../installation/" class="dropdown-item active">
                         
                             v3 (latest)
                         
@@ -196,7 +288,7 @@
                 
             
                 
-                    <a href="../v2/installation/" class="dropdown-item">
+                    <a href="../../../v2/installation/" class="dropdown-item">
                         
                             v2
                         
@@ -227,21 +319,270 @@
                 
                 
                     
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+                
+                    <li class="toc__entry">
+                        <a href="#quick-start" class="toc__link nav-link">Quick Start</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#configuration-options" class="toc__link nav-link">Configuration Options</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#examples" class="toc__link nav-link">Examples</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
+
                 
 
                 
+                    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        
+            <li class="breadcrumb-item"><a href="https://docs.laminas.dev/">Overview</a></li>
+            <li class="breadcrumb-item"><a href="https://docs.laminas.dev/components/">Components</a></li>
 
-<h1 class="content__title">404</h1>
-<blockquote>
-    <h3>Something went wrong!</h3>
-    <p>
-        We're sorry, but the page you are looking for does not exist.
-    </p>
-</blockquote>
+            
+                <li class="breadcrumb-item"><a href="../../..">laminas-cache</a></li>
 
-<a href="../." class="btn btn-default" role="button">Go to homepage</a>
+                
+                    
+                        
+                        
+                    
+                
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Cache Patterns</li>
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">CaptureCache</li>
+            
+        
+    </ol>
+</nav>
 
 
+
+
+
+
+    
+    
+        <h2 class="chapter__headline">Cache Patterns</h2>
+    
+
+    <h1 id="capturecache">CaptureCache</h1>
+<p>The <code>CaptureCache</code> pattern is useful for generating static resources to return
+via HTTP request. When used in such a fashion, the web server needs to be
+configured to run a PHP script generating the requested resource so that
+subsequent requests for the same resource can be shipped without calling PHP
+again.</p>
+<p>This pattern comes with basic logic for managing generated resources.</p>
+<h2 id="quick-start">Quick Start</h2>
+<p>For use with an Apache 404 handler extend the Apache configuration, e.g.
+<code>.htdocs</code>:</p>
+<pre class="highlight"><code class="language-apacheconf">ErrorDocument 404 /index.php</code></pre>
+<p>And add the cache to the related application script, e.g. <code>index.php</code>:</p>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Pattern\CaptureCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$capture = new CaptureCache(
+    new PatternOptions([
+        'public_dir' =&gt; __DIR__,
+    ])
+);
+
+// Start capturing all output, excluding headers, and write to the public
+// directory:
+$capture-&gt;start();
+
+// Don't forget to change the HTTP response code
+header('Status: 200', true, 200);
+
+// do stuff to dynamically generate output</code></pre>
+<h2 id="configuration-options">Configuration Options</h2>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>public_dir</code></td>
+<td><code>string</code></td>
+<td>none</td>
+<td>Location of the public web root directory in which to write output.</td>
+</tr>
+<tr>
+<td><code>index_filename</code></td>
+<td><code>string</code></td>
+<td>"index.html"</td>
+<td>The name of the index file if only a directory was requested.</td>
+</tr>
+<tr>
+<td><code>file_locking</code></td>
+<td><code>bool</code></td>
+<td><code>true</code></td>
+<td>Whether or not to lock output files when writing.</td>
+</tr>
+<tr>
+<td><code>file_permission</code></td>
+<td><code>int|false</code></td>
+<td><code>0600</code> (<code>false</code> on Windows)</td>
+<td>Default permissions for generated output files.</td>
+</tr>
+<tr>
+<td><code>dir_permission</code></td>
+<td><code>int|false</code></td>
+<td><code>0700</code> (<code>false</code> on Windows)</td>
+<td>Default permissions for generated output directories.</td>
+</tr>
+<tr>
+<td><code>umask</code></td>
+<td><code>int|false</code></td>
+<td><code>false</code></td>
+<td>Whether or not to umask generated output files / directories.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="examples">Examples</h2>
+<h3 id="scaling-images-in-the-web-root">Scaling Images in the Web Root</h3>
+<p>Using the following Apache 404 configuration:</p>
+<pre class="highlight"><code class="language-apacheconf"># .htdocs
+ErrorDocument 404 /index.php</code></pre>
+<p>Use the following script:</p>
+<pre class="highlight"><code class="language-php">// index.php
+use Laminas\Cache\Pattern\CaptureCache;
+use Laminas\Cache\Pattern\PatternOptions;
+
+$capture = new CaptureCache(
+    new PatternOptions([
+        'public_dir' =&gt; __DIR__,
+    ])
+);</code></pre>
+<h2 id="available-methods">Available Methods</h2>
+<p>In addition to the methods exposed in <code>PatternInterface</code>, this implementation
+exposes the following methods.</p>
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Pattern;
+
+use Laminas\Cache\Exception;
+
+class CaptureCache extends AbstractPattern
+{
+    /**
+     * Start the cache.
+     *
+     * @param  string $pageId  Page identifier
+     * @return void
+     */
+    public function start($pageId = null);
+
+    /**
+     * Write a page to the requested path.
+     *
+     * @param string      $content
+     * @param null|string $pageId
+     * @throws Exception\LogicException
+     */
+    public function set($content, $pageId = null);
+
+    /**
+     * Retrieve a generated page from the cache.
+     *
+     * @param  null|string $pageId
+     * @return string|null
+     * @throws Exception\LogicException
+     * @throws Exception\RuntimeException
+     */
+    public function get($pageId = null);
+
+    /**
+     * Check if a cache exists for the given page.
+     *
+     * @param  null|string $pageId
+     * @throws Exception\LogicException
+     * @return bool
+     */
+    public function has($pageId = null);
+
+    /**
+     * Remove a page from the cache.
+     *
+     * @param  null|string $pageId
+     * @throws Exception\LogicException
+     * @throws Exception\RuntimeException
+     * @return bool
+     */
+    public function remove($pageId = null);
+
+    /**
+     * Clear cached pages that match the specified glob pattern.
+     *
+     * @param string $pattern
+     * @throws Exception\LogicException
+     */
+    public function clearByGlob($pattern = '**');
+
+    /**
+     * Returns the generated file name.
+     *
+     * @param null|string $pageId
+     * @return string
+     */
+    public function getFilename($pageId = null);
+}</code></pre>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../output-cache/">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../../psr6/">
+                    Next <i class="fa fa-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+                
             </div>
             <div class="col-md-3 col-sm-12 sidebar">
                 <div class="donation-banner">
@@ -264,7 +605,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../.">laminas-cache</a>
+            <a href="../../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -274,8 +615,99 @@
 
                 
                 
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../../installation/" class="subnavigation__link">Installation</a>
+    </li>
 
                     
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Storage</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/adapter/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/capabilities/" class="subnavigation__link">Capabilities</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../storage/plugin/" class="subnavigation__link">Plugins</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cache Patterns</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../callback-cache/" class="subnavigation__link">CallbackCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../object-cache/" class="subnavigation__link">ObjectCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../output-cache/" class="subnavigation__link">OutputCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">CaptureCache</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Standards Support</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../psr6/" class="subnavigation__link">PSR-6</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../../psr16/" class="subnavigation__link">PSR-16</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
                     
                 
             
@@ -373,13 +805,13 @@
 </footer>
 
     <script>
-        let base_url = '..',
+        let base_url = '../../..',
             project  = "components",
             siteName = 'laminas-cache';
     </script>
     <script src="https://docs.laminas.dev/js/scripts.js"></script>
     
-        <script src="../search/main.js"></script>
+        <script src="../../../search/main.js"></script>
     
 
     

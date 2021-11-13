@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.">  
-    <link rel="canonical" href="https://docs.laminas.dev/laminas-cache/">
+    <link rel="canonical" href="https://docs.laminas.dev/laminas-cache/v3/storage/plugin/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
-    <title>laminas-cache - Laminas Docs</title>
+    <title>Plugins - laminas-cache - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
     
@@ -115,7 +115,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href=".">laminas-cache</a>
+            <a href="../../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -128,7 +128,7 @@
                     
                         
     <li class="subnavigation__list-item ">
-        <a href="v3/installation/" class="subnavigation__link">Installation</a>
+        <a href="../../installation/" class="subnavigation__link">Installation</a>
     </li>
 
                     
@@ -139,19 +139,19 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/storage/adapter/" class="subnavigation__link">Adapters</a>
+        <a href="../adapter/" class="subnavigation__link">Adapters</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/storage/capabilities/" class="subnavigation__link">Capabilities</a>
+        <a href="../capabilities/" class="subnavigation__link">Capabilities</a>
     </li>
 
             
                 
-    <li class="subnavigation__list-item ">
-        <a href="v3/storage/plugin/" class="subnavigation__link">Plugins</a>
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Plugins</a>
     </li>
 
             
@@ -166,31 +166,31 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/intro/" class="subnavigation__link">Introduction</a>
+        <a href="../../pattern/intro/" class="subnavigation__link">Introduction</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
+        <a href="../../pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
+        <a href="../../pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/output-cache/" class="subnavigation__link">OutputCache</a>
+        <a href="../../pattern/output-cache/" class="subnavigation__link">OutputCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
+        <a href="../../pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
     </li>
 
             
@@ -205,13 +205,13 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/psr6/" class="subnavigation__link">PSR-6</a>
+        <a href="../../psr6/" class="subnavigation__link">PSR-6</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/psr16/" class="subnavigation__link">PSR-16</a>
+        <a href="../../psr16/" class="subnavigation__link">PSR-16</a>
     </li>
 
             
@@ -280,7 +280,7 @@
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="v3/installation/" class="dropdown-item">
+                    <a href="../../installation/" class="dropdown-item active">
                         
                             v3 (latest)
                         
@@ -288,7 +288,7 @@
                 
             
                 
-                    <a href="v2/installation/" class="dropdown-item">
+                    <a href="../../../v2/installation/" class="dropdown-item">
                         
                             v2
                         
@@ -318,6 +318,52 @@
             <div class="col-md-9 col-sm-12 content" role="main">
                 
                 
+                    
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
+                
+                    <li class="toc__entry">
+                        <a href="#quick-start" class="toc__link nav-link">Quick Start</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-clearexpiredbyfactor-plugin" class="toc__link nav-link">The ClearExpiredByFactor Plugin</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-exceptionhandler-plugin" class="toc__link nav-link">The ExceptionHandler Plugin</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-ignoreuserabort-plugin" class="toc__link nav-link">The IgnoreUserAbort Plugin</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-optimizebyfactor-plugin" class="toc__link nav-link">The OptimizeByFactor Plugin</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#the-serializer-plugin" class="toc__link nav-link">The Serializer Plugin</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#available-methods" class="toc__link nav-link">Available Methods</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#examples" class="toc__link nav-link">Examples</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
+
+                
 
                 
                     <nav aria-label="breadcrumb">
@@ -327,7 +373,23 @@
             <li class="breadcrumb-item"><a href="https://docs.laminas.dev/components/">Components</a></li>
 
             
-                <li class="breadcrumb-item">laminas-cache</li>
+                <li class="breadcrumb-item"><a href="../../..">laminas-cache</a></li>
+
+                
+                    
+                        
+                        
+                    
+                
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Storage</li>
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">Plugins</li>
             
         
     </ol>
@@ -337,22 +399,291 @@
 
 
 
-    <h1>laminas-cache</h1>
-<p>Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.</p>
 
+    
+    
+        <h2 class="chapter__headline">Storage</h2>
+    
 
-    <h2>Installation</h2>
-    <h3>Using Composer</h3>
-    <pre><code class="language-bash">$ composer require laminas/laminas-cache</code></pre>
-
-
-<h2>Support</h2>
+    <h1 id="plugins">Plugins</h1>
+<p>Cache storage plugins are objects that provide additional functionality to or
+influence behavior of a storage adapter.</p>
+<p>The plugins listen to events the adapter triggers, and can:</p>
 <ul>
-    <li>Issues: <a href="https://github.com/laminas/laminas-cache/issues">github.com/laminas/laminas-cache/issues</a></li>
-    <li>Source: <a href="https://github.com/laminas/laminas-cache/">github.com/laminas/laminas-cache/</a></li>
-    <li>Chat: <a href="https://laminas.dev/chat">laminas.dev/chat</a></li>
-    <li>Forum: <a href="https://discourse.laminas.dev/">discourse.laminas.dev</a></li>
+<li>change the arguments provided to the method triggering the event (via <code>*.post</code> events)</li>
+<li>skip and directly return a result (by calling <code>stopPropagation</code>)</li>
+<li>change the result (by calling <code>setResult</code> on the provided <code>Laminas\Cache\Storage\PostEvent</code>)</li>
+<li>catch exceptions (by reacting to <code>Laminas\Cache\Storage\ExceptionEvent</code>)</li>
 </ul>
+<h2 id="quick-start">Quick Start</h2>
+<p>Storage plugins can either be created from
+<code>Laminas\Cache\Service\StoragePluginFactoryInterface::create()</code>, or by instantiating one of the
+<code>Laminas\Cache\Storage\Plugin\*</code> classes.</p>
+<p>To make life easier, <code>Laminas\Cache\Service\StoragePluginFactoryInterface::create()</code> can create both the
+requested adapter and all specified plugins at once.</p>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Service\StoragePluginFactoryInterface;
+use Psr\Container\ContainerInterface;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
+
+// All at once:
+$cache = $storageFactory-&gt;create(
+    'filesystem', 
+    [], 
+    [
+        ['name' =&gt; 'serializer'],
+    ]
+);
+
+// Alternately, via discrete factory methods:
+$cache  = $storageFactory-&gt;create('filesystem');
+
+$pluginFactory = $container-&gt;get(StoragePluginFactoryInterface::class);
+$plugin = $pluginFactory-&gt;create('serializer');
+$cache-&gt;addPlugin($plugin);
+
+// Or manually:
+$cache  = new Laminas\Cache\Storage\Adapter\Filesystem();
+$plugin = new Laminas\Cache\Storage\Plugin\Serializer();
+$cache-&gt;addPlugin($plugin);</code></pre>
+<h2 id="the-clearexpiredbyfactor-plugin">The ClearExpiredByFactor Plugin</h2>
+<p><code>Laminas\Cache\Storage\Plugin\ClearExpiredByFactor</code> calls the storage method
+<code>clearExpired()</code> randomly (by factor) after every call of <code>setItem()</code>,
+<code>setItems()</code>, <code>addItem()</code>, and <code>addItems()</code>.</p>
+<h3 id="plugin-specific-options">Plugin specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clearing_factor</code></td>
+<td><code>integer</code></td>
+<td><code>0</code></td>
+<td>The automatic clearing factor.</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<h3 id="adapter-must-implement-clearexpiredinterface">Adapter must implement ClearExpiredInterface</h3>
+<p>The storage adapter must implement <code>Laminas\Cache\Storage\ClearExpiredInterface</code>
+to work with this plugin.</p>
+</blockquote>
+<h2 id="the-exceptionhandler-plugin">The ExceptionHandler Plugin</h2>
+<p><code>Laminas\Cache\Storage\Plugin\ExceptionHandler</code> catches all exceptions thrown on
+reading from or writing to the cache, and sends the exception to a defined callback function.
+You may also configure the plugin to re-throw exceptions.</p>
+<h3 id="plugin-specific-options_1">Plugin specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>exception_callback</code></td>
+<td><code>callable|null</code></td>
+<td>null</td>
+<td>Callback to invoke on exception; receives the exception as the sole argument.</td>
+</tr>
+<tr>
+<td><code>throw_exceptions</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Re-throw caught exceptions.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-ignoreuserabort-plugin">The IgnoreUserAbort Plugin</h2>
+<p><code>Laminas\Cache\Storage\Plugin\IgnoreUserAbort</code> ignores user-invoked script
+termination when, allowing cache write operations to complete first.</p>
+<h3 id="plugin-specific-options_2">Plugin specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>exit_on_abort</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Terminate script execution on user abort.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="the-optimizebyfactor-plugin">The OptimizeByFactor Plugin</h2>
+<p><code>Laminas\Cache\Storage\Plugin\OptimizeByFactor</code> calls the storage method <code>optimize()</code>
+randomly (by factor) after removing items from the cache.</p>
+<h3 id="plugin-specific-options_3">Plugin specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>optimizing_factor</code></td>
+<td><code>integer</code></td>
+<td><code>0</code></td>
+<td>The automatic optimization factor.</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<h3 id="adapter-must-implement-optimizableinterface">Adapter must implement OptimizableInterface</h3>
+<p>The storage adapter must implement <code>Laminas\Cache\Storage\OptimizableInterface</code>
+to work with this plugin.</p>
+</blockquote>
+<h2 id="the-serializer-plugin">The Serializer Plugin</h2>
+<p><code>Laminas\Cache\Storage\Plugin\Serializer</code> will serialize data when writing to
+cache, and deserialize when reading. This allows storing datatypes not supported
+by the underlying storage adapter.</p>
+<h3 id="plugin-specific-options_4">Plugin specific Options</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Data Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>serializer</code></td>
+<td><code>null|string|Laminas\Serializer\Adapter\AdapterInterface</code></td>
+<td><code>null</code></td>
+<td>The serializer to use; see below.</td>
+</tr>
+<tr>
+<td><code>serializer_options</code></td>
+<td><code>array</code></td>
+<td><code>[]</code></td>
+<td>Array of options to use when instantiating the specified serializer.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The <code>serializer</code> value has two special cases:</p>
+<ul>
+<li>When <code>null</code>, the default serializer is used (JSON).</li>
+<li>When a <code>string</code>, the value will be pulled via
+  <code>Laminas\Serializer\AdapterPluginManager</code>, with the provided
+  <code>serializer_options</code>.</li>
+</ul>
+<h2 id="available-methods">Available Methods</h2>
+<p>The following methods are available to all <code>Laminas\Cache\Storage\Plugin\PluginInterface</code> implementations:</p>
+<pre class="highlight"><code class="language-php">namespace Laminas\Cache\Storage\Plugin;
+
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+
+interface PluginInterface extends ListenerAggregateInterface
+{
+    /**
+     * Set options
+     *
+     * @param  PluginOptions $options
+     * @return PluginInterface
+     */
+    public function setOptions(PluginOptions $options);
+
+    /**
+     * Get options
+     *
+     * @return PluginOptions
+     */
+    public function getOptions();
+
+    /**
+     * Attach listeners; inherited from ListenerAggregateInterface.
+     *
+     * @param EventManagerInterface $events
+     * @return void
+     */
+    public function attach(EventManagerInterface $events);
+
+    /**
+     * Detach listeners; inherited from ListenerAggregateInterface.
+     *
+     * @param EventManagerInterface $events
+     * @return void
+     */
+    public function attach(EventManagerInterface $events);
+}</code></pre>
+<h2 id="examples">Examples</h2>
+<h3 id="basic-plugin-implementation">Basic Plugin Implementation</h3>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Storage\Event;
+use Laminas\Cache\Storage\Plugin\AbstractPlugin;
+use Laminas\EventManager\EventManagerInterface;
+
+class MyPlugin extends AbstractPlugin
+{
+    protected $handles = [];
+
+    /**
+     * Attach to all events this plugin is interested in.
+     */
+    public function attach(EventManagerInterface $events)
+    {
+        $this-&gt;handles[] = $events-&gt;attach('getItem.pre', array($this, 'onGetItemPre'));
+        $this-&gt;handles[] = $events-&gt;attach('getItem.post', array($this, 'onGetItemPost'));
+    }
+
+    /**
+     * Detach all handlers this plugin previously attached.
+     */
+    public function detach(EventManagerInterface $events)
+    {
+        foreach ($this-&gt;handles as $handle) {
+           $events-&gt;detach($handle);
+        }
+        $this-&gt;handles = [];
+    }
+
+    public function onGetItemPre(Event $event)
+    {
+        $params = $event-&gt;getParams();
+        echo sprintf("Method 'getItem' with key '%s' started\n", $params['key']);
+    }
+
+    public function onGetItemPost(Event $event)
+    {
+        $params = $event-&gt;getParams();
+        echo sprintf("Method 'getItem' with key '%s' finished\n", $params['key']);
+    }
+}
+
+// After defining this plugin, we can instantiate and add it to an adapter
+// instance:
+$plugin = new MyPlugin();
+$cache-&gt;addPlugin($plugin);
+
+// Now when calling getItem(), our plugin should print the expected output:
+$cache-&gt;getItem('cache-key');
+// Method 'getItem' with key 'cache-key' started
+// Method 'getItem' with key 'cache-key' finished</code></pre>
 
 
 
@@ -363,12 +694,16 @@
         
         <li class="page-nav__item">
             
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../capabilities/">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
         </li>
 
         
         <li class="page-nav__item">
             
-                <a rel="next" class="page-nav__link page-nav__link--next" href="v3/installation/">
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../../pattern/intro/">
                     Next <i class="fa fa-chevron-right"></i>
                 </a>
             
@@ -401,7 +736,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href=".">laminas-cache</a>
+            <a href="../../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -414,7 +749,7 @@
                     
                         
     <li class="subnavigation__list-item ">
-        <a href="v3/installation/" class="subnavigation__link">Installation</a>
+        <a href="../../installation/" class="subnavigation__link">Installation</a>
     </li>
 
                     
@@ -425,19 +760,19 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/storage/adapter/" class="subnavigation__link">Adapters</a>
+        <a href="../adapter/" class="subnavigation__link">Adapters</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/storage/capabilities/" class="subnavigation__link">Capabilities</a>
+        <a href="../capabilities/" class="subnavigation__link">Capabilities</a>
     </li>
 
             
                 
-    <li class="subnavigation__list-item ">
-        <a href="v3/storage/plugin/" class="subnavigation__link">Plugins</a>
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Plugins</a>
     </li>
 
             
@@ -452,31 +787,31 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/intro/" class="subnavigation__link">Introduction</a>
+        <a href="../../pattern/intro/" class="subnavigation__link">Introduction</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
+        <a href="../../pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
+        <a href="../../pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/output-cache/" class="subnavigation__link">OutputCache</a>
+        <a href="../../pattern/output-cache/" class="subnavigation__link">OutputCache</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
+        <a href="../../pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
     </li>
 
             
@@ -491,13 +826,13 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/psr6/" class="subnavigation__link">PSR-6</a>
+        <a href="../../psr6/" class="subnavigation__link">PSR-6</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="v3/psr16/" class="subnavigation__link">PSR-16</a>
+        <a href="../../psr16/" class="subnavigation__link">PSR-16</a>
     </li>
 
             
@@ -601,13 +936,13 @@
 </footer>
 
     <script>
-        let base_url = '.',
+        let base_url = '../../..',
             project  = "components",
             siteName = 'laminas-cache';
     </script>
     <script src="https://docs.laminas.dev/js/scripts.js"></script>
     
-        <script src="search/main.js"></script>
+        <script src="../../../search/main.js"></script>
     
 
     
@@ -636,8 +971,3 @@
 
 
 </html>
-
-<!--
-MkDocs version : 1.2.3
-Build Date UTC : 2021-11-13 15:10:22.212775+00:00
--->

@@ -6,9 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.">  
+    <link rel="canonical" href="https://docs.laminas.dev/laminas-cache/v2/psr6/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
-    <title>laminas-cache - Laminas Docs</title>
+    <title>PSR-6 - laminas-cache - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
     
@@ -114,7 +115,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../.">laminas-cache</a>
+            <a href="../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -132,8 +133,99 @@
 
                 
                 
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../installation/" class="subnavigation__link">Installation</a>
+    </li>
 
                     
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Storage</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/adapter/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/capabilities/" class="subnavigation__link">Capabilities</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/plugin/" class="subnavigation__link">Plugins</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cache Patterns</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/output-cache/" class="subnavigation__link">OutputCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Standards Support</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">PSR-6</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../psr16/" class="subnavigation__link">PSR-16</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
                     
                 
             
@@ -182,13 +274,13 @@
     <div class="btn-group">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
-                v3
+                v2
             
         </button>
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../v3/installation/" class="dropdown-item">
+                    <a href="../../v3/installation/" class="dropdown-item">
                         
                             v3 (latest)
                         
@@ -196,7 +288,7 @@
                 
             
                 
-                    <a href="../v2/installation/" class="dropdown-item">
+                    <a href="../installation/" class="dropdown-item active">
                         
                             v2
                         
@@ -227,21 +319,234 @@
                 
                 
                     
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">On this page</h6>
+            <ul class="toc__list">
                 
+                    <li class="toc__entry">
+                        <a href="#overview" class="toc__link nav-link">Overview</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#quick-start" class="toc__link nav-link">Quick Start</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#supported-adapters" class="toc__link nav-link">Supported Adapters</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#logging-errors" class="toc__link nav-link">Logging Errors</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#supported-data-types" class="toc__link nav-link">Supported Data Types</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
 
                 
 
-<h1 class="content__title">404</h1>
+                
+                    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        
+            <li class="breadcrumb-item"><a href="https://docs.laminas.dev/">Overview</a></li>
+            <li class="breadcrumb-item"><a href="https://docs.laminas.dev/components/">Components</a></li>
+
+            
+                <li class="breadcrumb-item"><a href="../..">laminas-cache</a></li>
+
+                
+                    
+                        
+                        
+                    
+                
+                    
+                        
+                        
+                            <li class="breadcrumb-item">Standards Support</li>
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">PSR-6</li>
+            
+        
+    </ol>
+</nav>
+
+
+
+    <div class="alert alert-danger" role="alert">
+        <h4>Caution</h4>
+        <p>
+            The documentation you are viewing is for an older version of this component.<br>
+            <a href="../..">Switch to the latest (v3) version.</a>
+        </p>
+    </div>
+
+
+
+
+    
+    
+        <h2 class="chapter__headline">Standards Support</h2>
+    
+
+    <h1 id="psr-6">PSR-6</h1>
 <blockquote>
-    <h3>Something went wrong!</h3>
-    <p>
-        We're sorry, but the page you are looking for does not exist.
-    </p>
+<p>Available since version 2.8.0</p>
 </blockquote>
+<h2 id="overview">Overview</h2>
+<p>The <code>Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator</code> provides a <a href="https://www.php-fig.org/psr/psr-6/">PSR-6</a>
+compliant wrapper for supported storage adapters.</p>
+<p>PSR-6 specifies a common interface to cache storage, enabling developers to switch between implementations without
+having to worry about any behind-the-scenes differences between them.</p>
+<h2 id="quick-start">Quick Start</h2>
+<p>To use the pool, instantiate your storage as normal, then pass it to the
+<code>CacheItemPoolDecorator</code>.</p>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;use Laminas\Cache\Service\StorageAdapterFactoryInterface;use Psr\Container\ContainerInterface;
 
-<a href="../." class="btn btn-default" role="button">Go to homepage</a>
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);
+
+$storage = $storageFactory-&gt;create('apc');
+
+$pool = new CacheItemPoolDecorator($storage);
+
+// attempt to get an item from cache
+$item = $pool-&gt;getItem('foo');
+
+// check whether item was found
+if (! $item-&gt;isHit()) {
+    // ...
+    // perform expensive operation to calculate $value for 'foo'
+    // ...
+
+    $item-&gt;set($value);
+    $pool-&gt;save($item);
+}
+
+// use the value of the item
+echo $item-&gt;get();</code></pre>
+<p>Note that you will always get back a <code>CacheItem</code> object, whether it was found in cache or not: this is so <code>false</code>-y
+values like an empty string, <code>null</code>, or <code>false</code> can be stored. Always check <code>isHit()</code> to determine if the item was
+found.</p>
+<h2 id="supported-adapters">Supported Adapters</h2>
+<p>The PSR-6 specification requires that the underlying storage support time-to-live (TTL), which is set when the
+item is saved. For this reason the following adapters cannot be used: <code>Dba</code>, <code>Filesystem</code>, <code>Memory</code> and <code>Session</code>. The
+<code>XCache</code> adapter calculates TTLs based on the request time, not the time the item is actually persisted, which means
+that it also cannot be used.</p>
+<p>In addition adapters must support the <code>Laminas\Cache\FlushableInterface</code>. All the current <code>Laminas\Cache\Storage\Adapter</code>s
+fulfil this requirement.</p>
+<p>Attempting to use an unsupported adapter will throw an exception implementing <code>Psr\Cache\CacheException</code>.</p>
+<p>The <code>Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator</code> adapter doesn't support driver deferred saves, so cache items are saved
+on destruct or on explicit <code>commit()</code> call.</p>
+<h3 id="quirks">Quirks</h3>
+<h4 id="apc">APC</h4>
+<p>You cannot set the <a href="http://php.net/manual/en/apc.configuration.php#ini.apc.use-request-time"><code>apc.use_request_time</code></a>
+ini setting with the APC adapter: the specification requires that all TTL values are calculated from when the item is
+actually saved to storage. If this is set when you instantiate the pool it will throw an exception implementing
+<code>Psr\Cache\CacheException</code>. Changing the setting after you have instantiated the pool will result in non-standard
+behaviour.</p>
+<h2 id="logging-errors">Logging Errors</h2>
+<p>The specification <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-6-cache.md#error-handling">states</a>:</p>
+<blockquote>
+<p>While caching is often an important part of application performance, it should never be a critical part of application
+functionality. Thus, an error in a cache system SHOULD NOT result in application failure.</p>
+</blockquote>
+<p>Once you've got your pool instance, almost all exceptions thrown by the storage will be caught and ignored. The only
+storage exceptions that bubble up implement <code>Psr\Cache\InvalidArgumentException</code> and are typically caused by invalid
+key errors. To be PSR-6 compliant, cache keys must not contain the following characters: <code>{}()/\@:</code>. However different
+storage adapters may have further restrictions. Check the documentation for your particular adapter to be sure.</p>
+<p>We strongly recommend tracking exceptions caught from storage, either by logging them or recording them in some other
+way. Doing so is as simple as adding an <a href="../storage/plugin/#the-exceptionhandler-plugin"><code>ExceptionHandler</code> plugin</a>. Say you have a
+<a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md">PSR-3</a> compliant logger
+called <code>$logger</code>:</p>
+<pre class="highlight"><code class="language-php">use Laminas\Cache\Psr\CacheItemPool\CacheItemPoolDecorator;
+use Laminas\Cache\Service\StorageAdapterFactoryInterface;
+use Psr\Container\ContainerInterface;
+
+$cacheLogger = function (\Exception $e) use ($logger) {
+    $message = sprintf(
+        '[CACHE] %s:%s %s "%s"',
+        $exception-&gt;getFile(),
+        $exception-&gt;getLine(),
+        $exception-&gt;getCode(),
+        $exception-&gt;getMessage()
+    );
+    $logger-&gt;error($message);
+};
+
+/** @var ContainerInterface $container */
+$container = null; // can be any configured PSR-11 container
+
+$storageFactory = $container-&gt;get(StorageAdapterFactoryInterface::class);              
+
+$storage = $storageFactory-&gt;create(
+    'apc', 
+    [], 
+    [
+        [
+            'name' =&gt; 'exceptionhandler',
+            'options' =&gt; [
+                'exception_callback' =&gt; $cacheLogger,
+                'throw_exceptions' =&gt; true,
+            ],
+        ],
+    ]
+);
+
+$pool = new CacheItemPoolDecorator($storage);</code></pre>
+<p>Note that <code>throw_exceptions</code> should always be <code>true</code> (the default) or you will not get the correct return values from
+calls on the pool such as <code>save()</code>.</p>
+<h2 id="supported-data-types">Supported Data Types</h2>
+<p>As per <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-6-cache.md#data">the specification</a>, the
+following data types can be stored in cache: <code>string</code>, <code>integer</code>, <code>float</code>, <code>boolean</code>, <code>null</code>, <code>array</code>, <code>object</code> and be
+returned as a value with exactly the same type.</p>
+<p>Not all adapters can natively store all these types. For instance, Redis stores booleans and integers as a string. Where
+this is the case <em>all</em> values will be automatically run through <code>serialize()</code> on save and <code>unserialize()</code> on get: you
+do not need to use a <code>Laminas\Cache\Storage\Plugin\Serializer</code> plugin.</p>
 
 
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../pattern/capture-cache/">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../psr16/">
+                    Next <i class="fa fa-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+                
             </div>
             <div class="col-md-3 col-sm-12 sidebar">
                 <div class="donation-banner">
@@ -264,7 +569,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../.">laminas-cache</a>
+            <a href="../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -282,8 +587,99 @@
 
                 
                 
+                    
+                        
+    <li class="subnavigation__list-item ">
+        <a href="../installation/" class="subnavigation__link">Installation</a>
+    </li>
 
                     
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Storage</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/adapter/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/capabilities/" class="subnavigation__link">Capabilities</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/plugin/" class="subnavigation__link">Plugins</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cache Patterns</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/output-cache/" class="subnavigation__link">OutputCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Standards Support</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">PSR-6</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../psr16/" class="subnavigation__link">PSR-16</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
                     
                 
             
@@ -373,13 +769,13 @@
 </footer>
 
     <script>
-        let base_url = '..',
+        let base_url = '../..',
             project  = "components",
             siteName = 'laminas-cache';
     </script>
     <script src="https://docs.laminas.dev/js/scripts.js"></script>
     
-        <script src="../search/main.js"></script>
+        <script src="../../search/main.js"></script>
     
 
     

@@ -6,9 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.">  
+    <link rel="canonical" href="https://docs.laminas.dev/laminas-cache/v2/installation/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
-    <title>laminas-cache - Laminas Docs</title>
+    <title>Installation - laminas-cache - Laminas Docs</title>
 
     <link rel="stylesheet" href="https://docs.laminas.dev/css/styles.css">
     
@@ -114,7 +115,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../.">laminas-cache</a>
+            <a href="../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -132,8 +133,99 @@
 
                 
                 
+                    
+                        
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Installation</a>
+    </li>
 
                     
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Storage</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/adapter/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/capabilities/" class="subnavigation__link">Capabilities</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/plugin/" class="subnavigation__link">Plugins</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cache Patterns</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/output-cache/" class="subnavigation__link">OutputCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Standards Support</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../psr6/" class="subnavigation__link">PSR-6</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../psr16/" class="subnavigation__link">PSR-16</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
                     
                 
             
@@ -182,13 +274,13 @@
     <div class="btn-group">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false" id="version-selector-dropdown">
             
-                v3
+                v2
             
         </button>
         <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="version-selector-dropdown">
             
                 
-                    <a href="../v3/installation/" class="dropdown-item">
+                    <a href="../../v3/installation/" class="dropdown-item">
                         
                             v3 (latest)
                         
@@ -196,7 +288,7 @@
                 
             
                 
-                    <a href="../v2/installation/" class="dropdown-item">
+                    <a href="./" class="dropdown-item active">
                         
                             v2
                         
@@ -227,21 +319,272 @@
                 
                 
                     
-                
+    
+
+    
+    
 
                 
 
-<h1 class="content__title">404</h1>
+                
+                    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        
+            <li class="breadcrumb-item"><a href="https://docs.laminas.dev/">Overview</a></li>
+            <li class="breadcrumb-item"><a href="https://docs.laminas.dev/components/">Components</a></li>
+
+            
+                <li class="breadcrumb-item"><a href="../..">laminas-cache</a></li>
+
+                
+                    
+                        
+                        
+                    
+                
+
+                <li class="breadcrumb-item active" aria-current="page">Installation</li>
+            
+        
+    </ol>
+</nav>
+
+
+
+    <div class="alert alert-danger" role="alert">
+        <h4>Caution</h4>
+        <p>
+            The documentation you are viewing is for an older version of this component.<br>
+            <a href="../..">Switch to the latest (v3) version.</a>
+        </p>
+    </div>
+
+
+
+    <h1>Installation</h1>
+<div class="toc">
+    <h6 class="toc__headline">On this page</h6>
+    <ul class="toc__list">
+        <li class="toc__entry">
+            <a href="#standard-installation" class="toc__link nav-link">Standard Installation</a>
+        </li>
+
+        
+        <li class="toc__entry">
+            <a href="#installation-for-mezzio-and-laminas-mvc-application" class="toc__link nav-link">
+                Installation for a
+                Mezzio
+                or
+                laminas-mvc
+                Application
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+<h2 id="standard-installation">Standard Installation</h2>
+<p>To install the library use <a href="https://getcomposer.org/">Composer</a>:</p>
+<pre><code class="language-bash">$ composer require laminas/laminas-cache</code></pre>
+
+
+
+<h2 id="installation-for-mezzio-and-laminas-mvc-application">
+    Installation for a
+    Mezzio
+    or
+    laminas-mvc
+    Application
+</h2>
+
+<h3>Installation and Automated Configuration</h3>
+<p>
+    The <a href="https://docs.laminas.dev/laminas-component-installer/">laminas-component-installer</a>
+    is the recommended installation method when using in
+    a Mezzio-based
+    or
+    a laminas-mvc-based application.
+    It will automatically inject
+    the config-provider
+    or
+    the module
+    in the configuration during the installation process.
+</p>
+
 <blockquote>
-    <h3>Something went wrong!</h3>
+    <h3>Installation Requirements</h3>
     <p>
-        We're sorry, but the page you are looking for does not exist.
+        The following descriptions depends on the laminas-component-installer component,
+         so be sure to have it installed before getting started.
     </p>
+
+    <h4>Global Installation</h4>
+    <p>
+        With a <a href="https://docs.laminas.dev/laminas-component-installer/#global-installation">global installation</a>
+        of laminas-component-installer it can be used for all projects without a
+        reinstallation.
+    </p>
+    <pre><code class="language-bash">$ composer global require laminas/laminas-component-installer</code></pre>
+    <h4>As Development Dependency</h4>
+    <pre><code class="language-bash">$ composer require --dev laminas/laminas-component-installer</code></pre>
 </blockquote>
 
-<a href="../." class="btn btn-default" role="button">Go to homepage</a>
+<h4>Install laminas-cache and Inject Configuration</h4>
+<p>To install the library use Composer:</p>
+<pre><code class="language-bash">$ composer require laminas/laminas-cache</code></pre>
+<p>
+    This will install an initial set of dependencies and it will also prompt to
+    inject the component configuration.
+</p>
+<ul>
+    
+    <li>For a Mezzio application, choose <code>config/config.php</code>.</li>
+    
+    
+    <li>For a laminas-mvc application, choose either <code>modules.config.php</code> or <code>application.config.php</code>.</li>
+    
+</ul>
+<p>
+    If additional dependencies are to be installed, the option for other packages
+    can be remembered.
+</p>
+
+<details><summary>Installation and Manual Configuration</summary>
+<p>
+    If the installer is not used, the manual configuration is needed to add the
+    component to the application.
+</p>
+
+<h4>Install laminas-cache</h4>
+<p>To install the library use Composer:</p>
+<pre><code class="language-bash">$ composer require laminas/laminas-cache</code></pre>
 
 
+    <h4>Manual Configuration for a Mezzio-based Application</h4>
+    <p>
+        Add the configuration provider of laminas-cache to the configuration file,
+        e.g. <code>config/config.php</code>:
+    </p>
+
+<pre data-line="5"><code class="language-php">
+$aggregator = new Laminas\ConfigAggregator\ConfigAggregator([
+    // …
+    Mezzio\ConfigProvider::class,
+    Mezzio\Router\ConfigProvider::class,
+    Laminas\Cache\ConfigProvider, // Add this line
+    // …
+]);
+</code></pre>
+
+
+
+    <h4>Manual Configuration for a laminas-mvc-based Application</h4>
+    <p>
+        Add laminas-cache as component at the top of the configuration file for
+        modules, e.g. <code>config/modules.config.php</code>:
+    </p>
+
+<pre data-line="2"><code class="language-php">
+return [
+    'Laminas\Cache\Module', // Add this line
+    'Laminas\Router',
+    'Laminas\Session',
+    'Laminas\Validator',
+    'Application',
+];
+</code></pre>
+
+</details>
+
+
+    
+        <!-- markdownlint-disable -->
+<h2 id="avoid-unused-cache-adapters-are-being-installed">Avoid Unused Cache Adapters Are Being Installed</h2>
+<!-- markdownlint-restore -->
+
+<blockquote>
+<h3 id="only-necessary-in-210">Only necessary in 2.10+</h3>
+<p>Starting with 3.0.0, no storage adapter is required by this component and thus, each project has to specify the storage adapters which are required by the project.
+When migrated to 3.0.0, the <code>replace</code> section is not needed anymore.</p>
+</blockquote>
+<p>With <code>laminas-cache</code> v2.10.0, we introduced satellite packages for all cache adapters.</p>
+<p>In case, there is no need for several adapters in your project, you can use composer to ensure these adapters are not being installed. To make this happen, you have to specify a <code>replace</code> property within the <code>composer.json</code> of your project.</p>
+<h3 id="example-composerjson-with-only-memory-adapter-being-installed">Example <code>composer.json</code> with Only Memory Adapter Being Installed</h3>
+<pre class="highlight"><code class="language-json">{
+    "name": "vendor/project",
+    "description": "",
+    "type": "project",
+    "require": {
+        "laminas/laminas-cache": "^2.10",
+        "laminas/laminas-cache-storage-adapter-memory": "^1.0"
+    },
+    "replace": {
+        "laminas/laminas-cache-storage-adapter-apc": "*",
+        "laminas/laminas-cache-storage-adapter-apcu": "*",
+        "laminas/laminas-cache-storage-adapter-blackhole": "*",
+        "laminas/laminas-cache-storage-adapter-dba": "*",
+        "laminas/laminas-cache-storage-adapter-ext-mongodb": "*",
+        "laminas/laminas-cache-storage-adapter-filesystem": "*",
+        "laminas/laminas-cache-storage-adapter-memcache": "*",
+        "laminas/laminas-cache-storage-adapter-memcached": "*",
+        "laminas/laminas-cache-storage-adapter-mongodb": "*",
+        "laminas/laminas-cache-storage-adapter-redis": "*",
+        "laminas/laminas-cache-storage-adapter-session": "*",
+        "laminas/laminas-cache-storage-adapter-wincache": "*",
+        "laminas/laminas-cache-storage-adapter-xcache": "*",
+        "laminas/laminas-cache-storage-adapter-zend-server": "*"
+    }
+}</code></pre>
+<p>When using <code>composer install</code> on this, only the <code>laminas/laminas-cache-storage-adapter-memory</code> is being installed.</p>
+<pre class="highlight"><code class="language-bash">Loading composer repositories with package information
+Installing dependencies (including require-dev) from lock file
+Package operations: 10 installs, 0 updates, 0 removals
+  - Installing psr/simple-cache (1.0.1): Loading from cache
+  - Installing psr/cache (1.0.1): Loading from cache
+  - Installing laminas/laminas-zendframework-bridge (1.2.0): Loading from cache
+  - Installing laminas/laminas-stdlib (3.3.1): Loading from cache
+  - Installing psr/container (1.1.1): Loading from cache
+  - Installing container-interop/container-interop (1.2.0): Loading from cache
+  - Installing laminas/laminas-servicemanager (3.6.4): Loading from cache
+  - Installing laminas/laminas-eventmanager (3.3.1): Loading from cache
+  - Installing laminas/laminas-cache-storage-adapter-memory (1.0.1): Loading from cache
+  - Installing laminas/laminas-cache (2.10.1): Loading from cache
+Package container-interop/container-interop is abandoned, you should avoid using it. Use psr/container instead.
+Generating autoload files
+6 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!</code></pre>
+    
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../../v3/psr16/">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../storage/adapter/">
+                    Next <i class="fa fa-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+                
             </div>
             <div class="col-md-3 col-sm-12 sidebar">
                 <div class="donation-banner">
@@ -264,7 +607,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../.">laminas-cache</a>
+            <a href="../..">laminas-cache</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -282,8 +625,99 @@
 
                 
                 
+                    
+                        
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Installation</a>
+    </li>
 
                     
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Storage</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/adapter/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/capabilities/" class="subnavigation__link">Capabilities</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../storage/plugin/" class="subnavigation__link">Plugins</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Cache Patterns</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/intro/" class="subnavigation__link">Introduction</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/callback-cache/" class="subnavigation__link">CallbackCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/object-cache/" class="subnavigation__link">ObjectCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/output-cache/" class="subnavigation__link">OutputCache</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../pattern/capture-cache/" class="subnavigation__link">CaptureCache</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                    
+                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Standards Support</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../psr6/" class="subnavigation__link">PSR-6</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../psr16/" class="subnavigation__link">PSR-16</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
                     
                 
             
@@ -373,13 +807,13 @@
 </footer>
 
     <script>
-        let base_url = '..',
+        let base_url = '../..',
             project  = "components",
             siteName = 'laminas-cache';
     </script>
     <script src="https://docs.laminas.dev/js/scripts.js"></script>
     
-        <script src="../search/main.js"></script>
+        <script src="../../search/main.js"></script>
     
 
     
