@@ -52,7 +52,7 @@ $cache = $storageFactory->create(
 
 // Via array configuration:
 $cache = $storageFactory->createFromArrayConfiguration([
-    'adapter' => 'apcu',
+    'name' => 'apcu',
     'options' => ['ttl' => 3600],
     'plugins' => [
         [
