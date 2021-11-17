@@ -8,7 +8,7 @@ use Laminas\Cache\Exception\InvalidArgumentException;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
 
 /**
- * @psalm-type PluginArrayConfigurationType = array{name:non-empty-string,options?:array<string,mixed>}
+ * @psalm-type PluginArrayConfigurationType = array{name:non-empty-string,options?:array<string,mixed>}|array{adapter:non-empty-string,options?:array<string,mixed>}
  */
 interface StoragePluginFactoryInterface
 {

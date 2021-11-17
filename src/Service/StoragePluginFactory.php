@@ -24,7 +24,8 @@ final class StoragePluginFactory implements StoragePluginFactoryInterface
 
     public function createFromArrayConfiguration(array $configuration): PluginInterface
     {
-        $name    = $configuration['name'];
+        $name = $configuration['adapter'] ?? $configuration['name'] ?? null;
+        Assert::stringNotEmpty($name, 'Configuration must contain a "adapter" key.');
         $options = $configuration['options'] ?? [];
 
         return $this->create($name, $options);
@@ -41,8 +42,15 @@ final class StoragePluginFactory implements StoragePluginFactoryInterface
     {
         try {
             Assert::isNonEmptyMap($configuration, 'Configuration must be a non-empty array.');
-            Assert::keyExists($configuration, 'name', 'Configuration must contain a "name" key.');
-            Assert::stringNotEmpty($configuration['name'], 'Plugin "name" has to be a non-empty string.');
+            if (! isset($configuration['name']) && ! isset($configuration['adapter'])) {
+                throw new PhpInvalidArgumentException('Configuration must contain a "adapter" key.');
+            }
+
+            Assert::stringNotEmpty(
+                $configuration['adapter'] ?? $configuration['name'],
+                'Plugin "adapter" has to be a non-empty string.'
+            );
+
             Assert::nullOrIsMap(
                 $configuration['options'] ?? null,
                 'Plugin "options" must be an array with string keys.'
