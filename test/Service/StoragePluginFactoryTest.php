@@ -37,37 +37,23 @@ final class StoragePluginFactoryTest extends TestCase
             'Configuration must be a non-empty array',
         ];
 
-        yield 'missing adapter' => [
+        yield 'missing name' => [
             ['options' => []],
-            'Configuration must contain a "adapter" key',
+            'Configuration must contain a "name" key',
         ];
 
-        yield 'empty adapter name' => [
-            ['adapter' => ''],
-            'Plugin "adapter" has to be a non-empty string',
+        yield 'empty name' => [
+            ['name' => ''],
+            'Plugin "name" has to be a non-empty string',
         ];
 
         yield 'invalid options' => [
-            ['adapter' => 'foo', 'options' => 'bar'],
+            ['name' => 'foo', 'options' => 'bar'],
             'Plugin "options" must be an array with string keys',
         ];
     }
 
     public function testWillCreatePluginFromArrayConfiguration(): void
-    {
-        $plugin = $this->createMock(PluginInterface::class);
-
-        $this->plugins
-            ->expects(self::once())
-            ->method('build')
-            ->with('foo')
-            ->willReturn($plugin);
-
-        $createdPlugin = $this->factory->createFromArrayConfiguration(['adapter' => 'foo']);
-        self::assertSame($plugin, $createdPlugin);
-    }
-
-    public function testWillCreatePluginFromDeprecatedArrayConfiguration(): void
     {
         $plugin = $this->createMock(PluginInterface::class);
 
@@ -92,7 +78,7 @@ final class StoragePluginFactoryTest extends TestCase
             ->willReturn($plugin);
 
         $createdPlugin = $this->factory->createFromArrayConfiguration(
-            ['adapter' => 'foo', 'options' => ['bar' => 'baz']]
+            ['name' => 'foo', 'options' => ['bar' => 'baz']]
         );
 
         self::assertSame($plugin, $createdPlugin);
@@ -145,7 +131,7 @@ final class StoragePluginFactoryTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
         $this->factory->assertValidConfigurationStructure([
-            'adapter' => 'foo',
+            'name'    => 'foo',
             'options' => ['bar' => 'baz'],
         ]);
     }

@@ -36,7 +36,8 @@ final class StorageAdapterFactory implements StorageAdapterFactoryInterface
 
     public function createFromArrayConfiguration(array $configuration): StorageInterface
     {
-        $adapterName    = $configuration['name'];
+        $adapterName = $configuration['adapter'] ?? $configuration['name'] ?? null;
+        Assert::stringNotEmpty($adapterName, 'Configuration must contain a "adapter" key.');
         $adapterOptions = $configuration['options'] ?? [];
         $plugins        = $configuration['plugins'] ?? [];
 
