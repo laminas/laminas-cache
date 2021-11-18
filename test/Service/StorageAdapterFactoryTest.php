@@ -87,21 +87,21 @@ final class StorageAdapterFactoryTest extends TestCase
 
         yield 'missing name' => [
             ['options' => []],
-            'Configuration must contain a "name" key',
+            'Configuration must contain a "adapter" key',
         ];
 
         yield 'empty name' => [
-            ['name' => ''],
-            'Storage "name" has to be a non-empty string',
+            ['adapter' => ''],
+            'Storage "adapter" has to be a non-empty string',
         ];
 
         yield 'invalid options' => [
-            ['name' => 'foo', 'options' => 'bar'],
+            ['adapter' => 'foo', 'options' => 'bar'],
             'Storage "options" must be an array with string keys',
         ];
 
         yield 'invalid plugin configuration' => [
-            ['name' => 'foo', 'plugins' => ['bar']],
+            ['adapter' => 'foo', 'plugins' => ['bar']],
             'All plugin configurations are expected to be an array',
         ];
     }
@@ -119,7 +119,7 @@ final class StorageAdapterFactoryTest extends TestCase
      * @param array<string,mixed> $adapterConfiguration
      * @dataProvider storageConfigurations
      */
-    public function testWillCreateStorageFromArrayConfiguration(
+    public function testWillCreateStorageFromArrayConfigurationWithDeprecatedNameKey(
         string $adapterName,
         array $adapterConfiguration
     ): void {
@@ -143,7 +143,7 @@ final class StorageAdapterFactoryTest extends TestCase
      * @param array<string,mixed> $adapterConfiguration
      * @dataProvider storageConfigurations
      */
-    public function testWillCreateStorageFromArrayConfigurationAndAdapterKey(
+    public function testWillCreateStorageFromArrayConfiguration(
         string $adapterName,
         array $adapterConfiguration
     ): void {
@@ -250,7 +250,7 @@ final class StorageAdapterFactoryTest extends TestCase
             ->willThrowException(new InvalidArgumentException('ERROR FROM PLUGIN CONFIGURATION ASSERTION'));
 
         $this->factory->assertValidConfigurationStructure([
-            'name'    => 'foo',
+            'adapter' => 'foo',
             'plugins' => [
                 ['name' => ''],
             ],
@@ -269,7 +269,7 @@ final class StorageAdapterFactoryTest extends TestCase
             ->method('assertValidConfigurationStructure');
 
         $this->factory->assertValidConfigurationStructure([
-            'name'    => 'bar',
+            'adapter' => 'bar',
             'plugins' => [
                 ['name' => 'baz', 'priority' => true],
             ],
@@ -280,7 +280,7 @@ final class StorageAdapterFactoryTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
         $this->factory->assertValidConfigurationStructure([
-            'name'    => 'foo',
+            'adapter' => 'foo',
             'options' => ['bar' => 'baz'],
         ]);
     }
