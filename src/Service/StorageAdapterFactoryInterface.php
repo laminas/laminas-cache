@@ -17,6 +17,10 @@ use Laminas\Cache\Storage\StorageInterface;
  *     name:non-empty-string,
  *     options?:array<string,mixed>,
  *     plugins?: list<PluginArrayConfigurationWithPriorityType>
+ * }|array{
+ *     adapter:non-empty-string,
+ *     options?:array<string,mixed>,
+ *     plugins?: list<PluginArrayConfigurationWithPriorityType>
  * }
  */
 interface StorageAdapterFactoryInterface
