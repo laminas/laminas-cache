@@ -143,19 +143,17 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
         $this->validateKey($key);
 
         // check deferred items first
-        $hasItem = $this->hasDeferredItem($key);
-
-        if (! $hasItem) {
-            try {
-                $hasItem = $this->storage->hasItem($key);
-            } catch (Exception\InvalidArgumentException $e) {
-                throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-            } catch (Exception\ExceptionInterface $e) {
-                $hasItem = false;
-            }
+        if ($this->hasDeferredItem($key)) {
+            return true;
         }
 
-        return $hasItem;
+        try {
+            return $this->storage->hasItem($key);
+        } catch (Exception\InvalidArgumentException $e) {
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+        } catch (Exception\ExceptionInterface $e) {
+            return false;
+        }
     }
 
     /**
