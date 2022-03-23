@@ -279,7 +279,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             $notSavedItems[] = $this->saveMultipleItems($keyValuePairs, $itemTtl);
         }
 
-        $this->deferred = array_unique(array_merge([], ...$notSavedItems));
+        $this->deferred = array_merge([], ...$notSavedItems);
 
         return empty($this->deferred);
     }

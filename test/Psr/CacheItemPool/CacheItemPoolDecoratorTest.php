@@ -1036,8 +1036,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testKeepsDeferredItemsWhenCommitFails(): void
     {
-        $failedItem1    = new CacheItem('keyOfFailedItem1', 'foo', false);
-        $failedItem2    = new CacheItem('keyOfFailedItem2', 'foo', false);
+        $failedItem1   = new CacheItem('keyOfFailedItem1', 'foo', false);
+        $failedItem2   = new CacheItem('keyOfFailedItem2', 'foo', false);
         $succeededItem = new CacheItem('keyOfSucceededItem', 'foo', false);
         $this->adapter->saveDeferred($failedItem1);
         $this->adapter->saveDeferred($failedItem2);
