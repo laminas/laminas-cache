@@ -38,11 +38,11 @@
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
-        "laminas/laminas-cache-storage-adapter-apcu": "2.0.x-dev",
-        "laminas/laminas-cache-storage-adapter-blackhole": "2.0.x-dev",
-        "laminas/laminas-cache-storage-adapter-filesystem": "2.0.x-dev",
-        "laminas/laminas-cache-storage-adapter-memory": "2.0.x-dev",
-        "laminas/laminas-cache-storage-adapter-test": "2.0.x-dev",
+        "laminas/laminas-cache-storage-adapter-apcu": "^2.0",
+        "laminas/laminas-cache-storage-adapter-blackhole": "^2.0",
+        "laminas/laminas-cache-storage-adapter-filesystem": "^2.0",
+        "laminas/laminas-cache-storage-adapter-memory": "^2.0",
+        "laminas/laminas-cache-storage-adapter-test": "^2.0",
         "laminas/laminas-cli": "^1.0",
         "laminas/laminas-coding-standard": "~2.2.0",
         "laminas/laminas-config-aggregator": "^1.5",

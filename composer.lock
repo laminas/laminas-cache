@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cab85862cd4674222b526633f5fd5654",
+    "content-hash": "3e82203e83cbdddd70d4e3ab6405f2af",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -43,17 +43,17 @@
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
-            "name": "laminas/laminas-cache-storage-adapter-memory",
-            "version": "2.0.x-dev",
+            "name": "laminas/laminas-cache-storage-adapter-filesystem",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laminas/laminas-cache-storage-adapter-memory.git",
-                "reference": "2b4df31e5fbbb3de99f4cc90473108864865e5e9"
+                "url": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem.git",
+                "reference": "7603eec055525176649aa62d62db2db915ce8ea8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-memory/zipball/2b4df31e5fbbb3de99f4cc90473108864865e5e9",
-                "reference": "2b4df31e5fbbb3de99f4cc90473108864865e5e9",
+                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-filesystem/zipball/7603eec055525176649aa62d62db2db915ce8ea8",
+                "reference": "7603eec055525176649aa62d62db2db915ce8ea8",
                 "shasum": ""
             },
             "require": {
@@ -64,19 +64,21 @@
                 "laminas/laminas-cache-storage-implementation": "1.0"
             },
             "require-dev": {
-                "laminas/laminas-cache": "3.0.x-dev",
+                "ext-pcntl": "*",
+                "ext-posix": "*",
                 "laminas/laminas-cache-storage-adapter-benchmark": "^1.0",
-                "laminas/laminas-cache-storage-adapter-test": "2.0.x-dev",
-                "laminas/laminas-coding-standard": "~2.3.0",
+                "laminas/laminas-cache-storage-adapter-test": "^2.0 || 2.0.x-dev",
+                "laminas/laminas-coding-standard": "^2.3",
+                "laminas/laminas-serializer": "^2.10",
+                "phpunit/phpunit": "^9.5",
                 "psalm/plugin-phpunit": "^0.16.1",
-                "vimeo/psalm": "^4.9"
+                "vimeo/psalm": "^4.10"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laminas": {
-                    "config-provider": "Laminas\\Cache\\Storage\\Adapter\\Memory\\ConfigProvider",
-                    "module": "Laminas\\Cache\\Storage\\Adapter\\Memory"
+                    "config-provider": "Laminas\\Cache\\Storage\\Adapter\\Filesystem\\ConfigProvider",
+                    "module": "Laminas\\Cache\\Storage\\Adapter\\Filesystem"
                 }
             },
             "autoload": {
@@ -88,17 +90,17 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "Laminas cache adapter for memory",
+            "description": "Laminas cache adapter for filesystem",
             "keywords": [
                 "cache",
                 "laminas"
             ],
             "support": {
-                "docs": "https://docs.laminas.dev/laminas-cache-storage-adapter-memory/",
+                "docs": "https://docs.laminas.dev/laminas-cache-storage-adapter-filesystem/",
                 "forum": "https://discourse.laminas.dev/",
-                "issues": "https://github.com/laminas/laminas-cache-storage-adapter-memory/issues",
-                "rss": "https://github.com/laminas/laminas-cache-storage-adapter-memory/releases.atom",
-                "source": "https://github.com/laminas/laminas-cache-storage-adapter-memory"
+                "issues": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem/issues",
+                "rss": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem/releases.atom",
+                "source": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem"
             },
             "funding": [
                 {
@@ -106,7 +108,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-09-14T22:14:02+00:00"
+            "time": "2021-12-01T10:01:46+00:00"
         },
         {
             "name": "laminas/laminas-eventmanager",
@@ -948,21 +950,21 @@
         },
         {
             "name": "cache/tag-interop",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-cache/tag-interop.git",
-                "reference": "909a5df87e698f1665724a9e84851c11c45fbfb9"
+                "reference": "b062b1d735357da50edf8387f7a8696f3027d328"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-cache/tag-interop/zipball/909a5df87e698f1665724a9e84851c11c45fbfb9",
-                "reference": "909a5df87e698f1665724a9e84851c11c45fbfb9",
+                "url": "https://api.github.com/repos/php-cache/tag-interop/zipball/b062b1d735357da50edf8387f7a8696f3027d328",
+                "reference": "b062b1d735357da50edf8387f7a8696f3027d328",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.5 || ^7.0 || ^8.0",
-                "psr/cache": "^1.0"
+                "psr/cache": "^1.0 || ^2.0"
             },
             "type": "library",
             "extra": {
@@ -1001,9 +1003,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-cache/tag-interop/issues",
-                "source": "https://github.com/php-cache/tag-interop/tree/1.0.1"
+                "source": "https://github.com/php-cache/tag-interop/tree/1.1.0"
             },
-            "time": "2020-12-04T14:11:04+00:00"
+            "time": "2021-12-31T10:03:23+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -1654,16 +1656,16 @@
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-apcu",
-            "version": "2.0.x-dev",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache-storage-adapter-apcu.git",
-                "reference": "edcbceff10b169137317ee88f119aeed62ca14d5"
+                "reference": "ff74fdd80222df7f486eaf830b7d58e4983dd926"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-apcu/zipball/edcbceff10b169137317ee88f119aeed62ca14d5",
-                "reference": "edcbceff10b169137317ee88f119aeed62ca14d5",
+                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-apcu/zipball/ff74fdd80222df7f486eaf830b7d58e4983dd926",
+                "reference": "ff74fdd80222df7f486eaf830b7d58e4983dd926",
                 "shasum": ""
             },
             "require": {
@@ -1681,7 +1683,6 @@
                 "psalm/plugin-phpunit": "^0.16.1",
                 "vimeo/psalm": "^4.9"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laminas": {
@@ -1716,20 +1717,20 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-09-20T08:49:19+00:00"
+            "time": "2021-11-08T06:06:13+00:00"
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-blackhole",
-            "version": "2.0.x-dev",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache-storage-adapter-blackhole.git",
-                "reference": "e2e8651cbad058060e376d31fa8d82fc22e72792"
+                "reference": "fdb6c4b9813cc7365d72c002b09dc808e34b7002"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-blackhole/zipball/e2e8651cbad058060e376d31fa8d82fc22e72792",
-                "reference": "e2e8651cbad058060e376d31fa8d82fc22e72792",
+                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-blackhole/zipball/fdb6c4b9813cc7365d72c002b09dc808e34b7002",
+                "reference": "fdb6c4b9813cc7365d72c002b09dc808e34b7002",
                 "shasum": ""
             },
             "require": {
@@ -1746,7 +1747,6 @@
                 "psalm/plugin-phpunit": "^0.16.1",
                 "vimeo/psalm": "^4.9"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laminas": {
@@ -1781,49 +1781,42 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-09-14T22:32:54+00:00"
+            "time": "2021-11-08T06:06:27+00:00"
         },
         {
-            "name": "laminas/laminas-cache-storage-adapter-filesystem",
-            "version": "2.0.x-dev",
+            "name": "laminas/laminas-cache-storage-adapter-memory",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem.git",
-                "reference": "7137e61a5c8596643073f4bdd43f5252af6721dd"
+                "url": "https://github.com/laminas/laminas-cache-storage-adapter-memory.git",
+                "reference": "f47aed9d5f6f3eac5970693ea5898d67d3f33dcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-filesystem/zipball/7137e61a5c8596643073f4bdd43f5252af6721dd",
-                "reference": "7137e61a5c8596643073f4bdd43f5252af6721dd",
+                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-memory/zipball/f47aed9d5f6f3eac5970693ea5898d67d3f33dcf",
+                "reference": "f47aed9d5f6f3eac5970693ea5898d67d3f33dcf",
                 "shasum": ""
             },
             "require": {
+                "laminas/laminas-cache": "^3.0",
                 "php": "^7.3 || ~8.0.0 || ~8.1.0"
-            },
-            "conflict": {
-                "laminas/laminas-cache": "<2.10"
             },
             "provide": {
                 "laminas/laminas-cache-storage-implementation": "1.0"
             },
             "require-dev": {
-                "ext-pcntl": "*",
-                "ext-posix": "*",
-                "laminas/laminas-cache": "^3.0 || 3.0.x-dev",
+                "laminas/laminas-cache": "3.0.x-dev",
                 "laminas/laminas-cache-storage-adapter-benchmark": "^1.0",
-                "laminas/laminas-cache-storage-adapter-test": "^2.0 || 2.0.x-dev",
-                "laminas/laminas-coding-standard": "^2.3",
-                "laminas/laminas-serializer": "^2.10",
-                "phpunit/phpunit": "^9.5",
+                "laminas/laminas-cache-storage-adapter-test": "2.0.x-dev",
+                "laminas/laminas-coding-standard": "~2.3.0",
                 "psalm/plugin-phpunit": "^0.16.1",
-                "vimeo/psalm": "^4.10"
+                "vimeo/psalm": "^4.9"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laminas": {
-                    "config-provider": "Laminas\\Cache\\Storage\\Adapter\\Filesystem\\ConfigProvider",
-                    "module": "Laminas\\Cache\\Storage\\Adapter\\Filesystem"
+                    "config-provider": "Laminas\\Cache\\Storage\\Adapter\\Memory\\ConfigProvider",
+                    "module": "Laminas\\Cache\\Storage\\Adapter\\Memory"
                 }
             },
             "autoload": {
@@ -1835,17 +1828,17 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "Laminas cache adapter for filesystem",
+            "description": "Laminas cache adapter for memory",
             "keywords": [
                 "cache",
                 "laminas"
             ],
             "support": {
-                "docs": "https://docs.laminas.dev/laminas-cache-storage-adapter-filesystem/",
+                "docs": "https://docs.laminas.dev/laminas-cache-storage-adapter-memory/",
                 "forum": "https://discourse.laminas.dev/",
-                "issues": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem/issues",
-                "rss": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem/releases.atom",
-                "source": "https://github.com/laminas/laminas-cache-storage-adapter-filesystem"
+                "issues": "https://github.com/laminas/laminas-cache-storage-adapter-memory/issues",
+                "rss": "https://github.com/laminas/laminas-cache-storage-adapter-memory/releases.atom",
+                "source": "https://github.com/laminas/laminas-cache-storage-adapter-memory"
             },
             "funding": [
                 {
@@ -1853,20 +1846,20 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-09-14T22:19:43+00:00"
+            "time": "2021-11-08T22:17:24+00:00"
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-test",
-            "version": "2.0.x-dev",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache-storage-adapter-test.git",
-                "reference": "12f4c2f4a5d1fb5f963a30ab0be76f2ea76f89b5"
+                "reference": "a58ecac3df4c180b74d017c8ba9341151e47a854"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-test/zipball/12f4c2f4a5d1fb5f963a30ab0be76f2ea76f89b5",
-                "reference": "12f4c2f4a5d1fb5f963a30ab0be76f2ea76f89b5",
+                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-test/zipball/a58ecac3df4c180b74d017c8ba9341151e47a854",
+                "reference": "a58ecac3df4c180b74d017c8ba9341151e47a854",
                 "shasum": ""
             },
             "require": {
@@ -1882,15 +1875,14 @@
                 "psalm/plugin-phpunit": "^0.16.1",
                 "vimeo/psalm": "^4.7"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "LaminasTest\\Cache\\Storage\\Adapter\\": "src/"
-                },
                 "files": [
                     "autoload/phpunit-backward-compatibility.php"
-                ]
+                ],
+                "psr-4": {
+                    "LaminasTest\\Cache\\Storage\\Adapter\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1914,7 +1906,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-09-14T23:07:54+00:00"
+            "time": "2022-03-01T00:54:09+00:00"
         },
         {
             "name": "laminas/laminas-cli",
@@ -6390,18 +6382,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "laminas/laminas-cache-storage-adapter-apcu": 20,
-        "laminas/laminas-cache-storage-adapter-blackhole": 20,
-        "laminas/laminas-cache-storage-adapter-filesystem": 20,
-        "laminas/laminas-cache-storage-adapter-memory": 20,
-        "laminas/laminas-cache-storage-adapter-test": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.3 || ~8.0.0 || ~8.1.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
