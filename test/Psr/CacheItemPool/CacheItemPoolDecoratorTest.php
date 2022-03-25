@@ -1033,4 +1033,23 @@ final class CacheItemPoolDecoratorTest extends TestCase
             'lockOnExpire'       => $lockOnExpire,
         ]);
     }
+
+    public function testKeepsDeferredItemsWhenCommitFails(): void
+    {
+        $failedItem1   = new CacheItem('keyOfFailedItem1', 'foo', false);
+        $failedItem2   = new CacheItem('keyOfFailedItem2', 'foo', false);
+        $succeededItem = new CacheItem('keyOfSucceededItem', 'foo', false);
+        $this->adapter->saveDeferred($failedItem1);
+        $this->adapter->saveDeferred($failedItem2);
+        $this->adapter->saveDeferred($succeededItem);
+
+        $this->storage
+            ->expects(self::once())
+            ->method('setItems')
+            ->willReturn(['keyOfFailedItem1', 'keyOfFailedItem2']);
+
+        self::assertFalse($this->adapter->commit());
+        self::assertTrue($this->adapter->hasItem('keyOfFailedItem1'));
+        self::assertTrue($this->adapter->hasItem('keyOfFailedItem2'));
+    }
 }
