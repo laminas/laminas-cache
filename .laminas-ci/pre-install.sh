@@ -13,6 +13,7 @@ if [ ! -z "$GITHUB_BASE_REF" ] && [[ "$GITHUB_BASE_REF" =~ ^[0-9]+\.[0-9] ]]; th
   MINOR_OF_TARGET_BRANCH=${TARGET_BRANCH_VERSION_PARTS[1]}
 
   export COMPOSER_ROOT_VERISON="${MAJOR_OF_TARGET_BRANCH}.${MINOR_OF_TARGET_BRANCH}.99"
+  echo "Exported COMPOSER_ROOT_VERISON as ${COMPOSER_ROOT_VERISON}"
 fi
 
 ${WORKING_DIRECTORY}/.laminas-ci/install-apcu-extension-from-source.sh "${PHP_VERSION}" || exit 1
