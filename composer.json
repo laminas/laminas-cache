@@ -22,6 +22,9 @@
         "sort-packages": true,
         "platform": {
             "php": "7.3.99"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "extra": {
@@ -45,7 +48,8 @@
         "laminas/laminas-cache-storage-adapter-blackhole": "^2.0",
         "laminas/laminas-cache-storage-adapter-filesystem": "^2.0",
         "laminas/laminas-cache-storage-adapter-memory": "^2.0",
-        "laminas/laminas-cache-storage-adapter-test": "^2.0",
+        "laminas/laminas-cache-storage-adapter-test": "^2.1",
+        "cache/integration-tests": "dev-master",
         "laminas/laminas-cli": "^1.0",
         "laminas/laminas-coding-standard": "~2.2.0",
         "laminas/laminas-config-aggregator": "^1.5",
