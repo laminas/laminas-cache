@@ -17,5 +17,8 @@
     <file>benchmark</file>
 
     <!-- Include all rules from the Laminas Coding Standard -->
-    <rule ref="LaminasCodingStandard"/>
+    <rule ref="LaminasCodingStandard">
+        <!-- Exclude declare(strict_types=1) until the next major release. This component heavily depends on type-magic and thus should avoid adding strict_types as of now v3 -->
+        <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing"/>
+    </rule>
 </ruleset>
