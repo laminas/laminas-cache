@@ -195,6 +195,10 @@ class PluginOptions extends AbstractOptions
     public function setSerializer($serializer)
     {
         if (! is_string($serializer) && ! $serializer instanceof SerializerAdapter) {
+            /**
+             * @psalm-suppress RedundantConditionGivenDocblockType, DocblockTypeContradiction
+             * Until we do lack native type-hint we should check the `$serializer` twice.
+             */
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects either a string serializer name or Laminas\Serializer\Adapter\AdapterInterface instance; '
                 . 'received "%s"',
