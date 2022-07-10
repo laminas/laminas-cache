@@ -19,20 +19,6 @@ class OutputCache extends AbstractStorageCapablePattern
     protected $keyStack = [];
 
     /**
-     * @return OutputCache
-     */
-    public function setOptions(PatternOptions $options)
-    {
-        parent::setOptions($options);
-
-        if (! $this->getStorage()) {
-            throw new Exception\InvalidArgumentException("Missing option 'storage'");
-        }
-
-        return $this;
-    }
-
-    /**
      * if there is a cached item with the given key display it's data and return true
      * else start buffering output until end() is called or the script ends.
      *

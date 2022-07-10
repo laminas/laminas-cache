@@ -26,10 +26,6 @@ class ObjectCache extends CallbackCache
             throw new Exception\InvalidArgumentException("Missing option 'object'");
         }
 
-        if (! $this->getStorage()) {
-            throw new Exception\InvalidArgumentException("Missing option 'storage'");
-        }
-
         return $this;
     }
 
