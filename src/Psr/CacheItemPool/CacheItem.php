@@ -7,11 +7,18 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
 use function gettype;
 use function is_int;
 use function sprintf;
 
+/**
+ * @internal The cache item should only be used by this component. To create one or more new cache item, use
+ *           {@see \Psr\Cache\CacheItemPoolInterface::getItem()} or {@see \Psr\Cache\CacheItemPoolInterface::getItems()}
+ *           instead. These methods will provide one or more {@see CacheItemInterface} instances which can be modified
+ *           by using the methods declared in the interface.
+ */
 final class CacheItem implements CacheItemInterface
 {
     /**
