@@ -4,8 +4,11 @@ namespace LaminasTest\Cache\Psr\CacheItemPool;
 
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
 use Laminas\Cache\Psr\CacheItemPool\CacheItem;
 use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
+use Lcobucci\Clock\SystemClock;
 use PHPUnit\Framework\TestCase;
 
 use function date_default_timezone_get;
@@ -113,5 +116,25 @@ class CacheItemTest extends TestCase
         $item = $item->expiresAfter(10);
         sleep(1);
         self::assertEquals(9, $item->getTtl());
+    }
+
+    public function testClockProvidedDoesNotContainUTCTimeZone(): void
+    {
+        $item = new CacheItem(
+            'foo',
+            null,
+            false,
+            new SystemClock(new DateTimeZone('Europe/Berlin'))
+        );
+
+        $interval = DateInterval::createFromDateString('1 hour');
+        $item->expiresAfter($interval);
+
+        self::assertEquals(3600, $item->getTtl());
+
+        $inOneHour = (new DateTimeImmutable('now', new DateTimeZone('America/Vancouver')))->add($interval);
+        $item->expiresAt($inOneHour);
+
+        self::assertEquals(3600, $item->getTtl());
     }
 }

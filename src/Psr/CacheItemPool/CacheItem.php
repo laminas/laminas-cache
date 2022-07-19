@@ -3,9 +3,9 @@
 namespace Laminas\Cache\Psr\CacheItemPool;
 
 use DateInterval;
-use DateTimeImmutable;
 use DateTimeInterface;
-use DateTimeZone;
+use Lcobucci\Clock\Clock;
+use Lcobucci\Clock\SystemClock;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -43,19 +43,20 @@ final class CacheItem implements CacheItemInterface
      */
     private ?int $expiration = null;
 
-    private DateTimeZone $utc;
+    private Clock $clock;
 
     /**
      * @param string $key
      * @param mixed $value
      * @param bool $isHit
      */
-    public function __construct($key, $value, $isHit)
+    public function __construct($key, $value, $isHit, ?Clock $clock = null)
     {
         $this->key   = $key;
         $this->value = $isHit ? $value : null;
         $this->isHit = $isHit;
-        $this->utc   = new DateTimeZone('UTC');
+        $clock     ??= SystemClock::fromSystemTimezone();
+        $this->clock = $clock;
     }
 
     /**
@@ -146,7 +147,7 @@ final class CacheItem implements CacheItemInterface
 
         /** @psalm-suppress RedundantConditionGivenDocblockType Until we do have native type-hints we should keep verifying this. */
         if ($time instanceof DateInterval) {
-            $now = new DateTimeImmutable('now', $this->utc);
+            $now = $this->clock->now();
             return $this->expiresAt($now->add($time));
         }
 
@@ -166,7 +167,7 @@ final class CacheItem implements CacheItemInterface
             return null;
         }
 
-        $now = new DateTimeImmutable("now", $this->utc);
+        $now = $this->clock->now();
 
         return $this->expiration - $now->getTimestamp();
     }

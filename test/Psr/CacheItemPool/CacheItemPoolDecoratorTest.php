@@ -17,6 +17,7 @@ use Laminas\Cache\Storage\StorageInterface;
 use Laminas\EventManager\EventManager;
 use LaminasTest\Cache\Psr\CacheItemPool\TestAsset\FlushableStorageAdapterInterface;
 use LaminasTest\Cache\Psr\TestAsset\FlushableNamespaceStorageInterface;
+use Lcobucci\Clock\Clock;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
@@ -1078,5 +1079,22 @@ final class CacheItemPoolDecoratorTest extends TestCase
         self::assertFalse($this->adapter->commit());
         self::assertTrue($this->adapter->hasItem('keyOfFailedItem1'));
         self::assertTrue($this->adapter->hasItem('keyOfFailedItem2'));
+    }
+
+    public function testPassesClockToCacheItem(): void
+    {
+        $clock = $this->createMock(Clock::class);
+        $adapter = new CacheItemPoolDecorator($this->storage, $clock);
+        $item = $adapter->getItem('notExistingItem');
+        self::assertFalse($item->isHit());
+
+        $now = new DateTimeImmutable('now');
+        $clock
+            ->expects(self::once())
+            ->method('now')
+            ->willReturn($now);
+
+        $item->expiresAt($now);
+        self::assertEquals(0, $item->getTtl());
     }
 }
