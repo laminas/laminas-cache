@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70e43864b3d2e3a15e573fdd281d86d4",
+    "content-hash": "f3744fb2fe8b9670aa0e440606b90dea",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -434,20 +434,20 @@
         },
         {
             "name": "psr/container",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf"
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/8622567409010282b7aeebe4bb841fe98b58dcaf",
-                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.0"
+                "php": ">=7.4.0"
             },
             "type": "library",
             "autoload": {
@@ -476,9 +476,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/1.1.1"
+                "source": "https://github.com/php-fig/container/tree/1.1.2"
             },
-            "time": "2021-03-05T17:36:06+00:00"
+            "time": "2021-11-05T16:50:12+00:00"
         },
         {
             "name": "psr/simple-cache",
@@ -799,71 +799,6 @@
                 "source": "https://github.com/brick/varexporter/tree/0.3.5"
             },
             "time": "2021-02-10T13:53:07+00:00"
-        },
-        {
-            "name": "cache/integration-tests",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-cache/integration-tests.git",
-                "reference": "824633c9547dc3c7ac5faeca03dd82939cdeb73c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-cache/integration-tests/zipball/824633c9547dc3c7ac5faeca03dd82939cdeb73c",
-                "reference": "824633c9547dc3c7ac5faeca03dd82939cdeb73c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.9"
-            },
-            "conflict": {
-                "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0"
-            },
-            "require-dev": {
-                "cache/cache": "^1.0",
-                "illuminate/cache": "^5.4|^5.5|^5.6",
-                "mockery/mockery": "^1.0",
-                "symfony/cache": "^3.4.31|^4.3.4|^5.0",
-                "symfony/phpunit-bridge": "^5.1",
-                "tedivm/stash": "^0.14"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Cache\\IntegrationTests\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Aaron Scherer",
-                    "email": "aequasi@gmail.com",
-                    "homepage": "https://github.com/aequasi"
-                },
-                {
-                    "name": "Tobias Nyholm",
-                    "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/nyholm"
-                }
-            ],
-            "description": "Integration tests for PSR-6 and PSR-16 cache implementations",
-            "homepage": "https://github.com/php-cache/integration-tests",
-            "keywords": [
-                "cache",
-                "psr16",
-                "psr6",
-                "test"
-            ],
-            "support": {
-                "issues": "https://github.com/php-cache/integration-tests/issues",
-                "source": "https://github.com/php-cache/integration-tests/tree/master"
-            },
-            "time": "2021-02-04T19:17:10+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -1785,36 +1720,35 @@
         },
         {
             "name": "laminas/laminas-cache-storage-adapter-test",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache-storage-adapter-test.git",
-                "reference": "09de98397a1f54ffb9889d778131a293166bc951"
+                "reference": "d4346d8fdbc8a2b4c6656749f926c5c89a641109"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-test/zipball/09de98397a1f54ffb9889d778131a293166bc951",
-                "reference": "09de98397a1f54ffb9889d778131a293166bc951",
+                "url": "https://api.github.com/repos/laminas/laminas-cache-storage-adapter-test/zipball/d4346d8fdbc8a2b4c6656749f926c5c89a641109",
+                "reference": "d4346d8fdbc8a2b4c6656749f926c5c89a641109",
                 "shasum": ""
             },
             "require": {
-                "cache/integration-tests": "dev-master",
                 "container-interop/container-interop": "^1.2",
                 "laminas/laminas-cache": "^3.1",
-                "php": "^7.3 || ~8.0.0 || ~8.1.0",
-                "phpunit/phpunit": "^9.5.20"
+                "php": "^7.4 || ~8.0.0 || ~8.1.0",
+                "phpunit/phpunit": "^9.5.20",
+                "psr/cache": "^1.0 || ^2.0 || ^3.0",
+                "psr/simple-cache": "^1.0 || ^2.0 || ^3.0"
             },
             "require-dev": {
-                "laminas/laminas-cache-storage-adapter-memory": "^1.1",
+                "laminas/laminas-cache-storage-adapter-apcu": "^2.0",
+                "laminas/laminas-cache-storage-adapter-memory": "^2.0",
                 "laminas/laminas-coding-standard": "~2.3.0",
-                "psalm/plugin-phpunit": "^0.16.1",
+                "psalm/plugin-phpunit": "^0.17.0",
                 "vimeo/psalm": "^4.23.0"
             },
             "type": "library",
             "autoload": {
-                "files": [
-                    "autoload/phpunit-backward-compatibility.php"
-                ],
                 "psr-4": {
                     "LaminasTest\\Cache\\Storage\\Adapter\\": "src/"
                 }
@@ -1841,7 +1775,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-07-10T22:40:11+00:00"
+            "time": "2022-07-29T16:17:35+00:00"
         },
         {
             "name": "laminas/laminas-cli",
@@ -6413,17 +6347,15 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "cache/integration-tests": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.3 || ~8.0.0 || ~8.1.0"
+        "php": "^7.4 || ~8.0.0 || ~8.1.0"
     },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.3.99"
+        "php": "7.4.99"
     },
     "plugin-api-version": "2.3.0"
 }
