@@ -13,7 +13,7 @@ In the past, most of the adapters Laminas does officially support were not prope
 1. `laminas-cache` is updated to the latest version from within `2.x` (currently `2.13.2`)
 2. [`laminas-cli` is installed](https://docs.laminas.dev/laminas-cli/) to verify the configuration integrity (`vendor/bin/laminas laminas-cache:deprecation:check-storage-factory-config`); in case you don't want to use `laminas-cli`, please check out the [normalized array configuration](https://github.com/laminas/laminas-cache/releases/tag/2.12.0) example in the release notes of 2.12.0
 3. `laminas-cache` is required with `^3.0` within `composer.json`
-4. Cache adapters which are used within the project needs to be required in at least `^2.0`; in case you don't know which adapters are in use, either check your project configuration or search for the `Laminas\Cache\Storage\Adapter` namespace in your projects source code. Every adapter has to be listed in either your `module.config.php` (laminas-mvc) or `config.php` (mezzio) configuration. 
+4. Cache adapters which are used within the project needs to be required in at least `^2.0`; in case you don't know which adapters are in use, either check your project configuration or search for the `Laminas\Cache\Storage\Adapter` namespace in your projects source code. Every adapter has to be listed in either your `module.config.php` (laminas-mvc) or `config.php` (mezzio) configuration.
 5. Project does not use any of the [removed classes and traits](#removed-classes-and-traits)
 6. Storage adapters are not extended in any way as [all adapters are `final`](#breaking-changes) starting with v2.0 of the individual adapter component
 7. PSR-6 `CacheItemPoolDecorator` does now validate the maximum key length the same way as PSR-6 `SimpleCacheDecorator` and therefore fulfills the requirements by the underlying PSR.
@@ -53,20 +53,18 @@ In order to make this package work, you have to specify at least **one** satelli
 
 A list of available cache adapters can be found here (starting with their v2 release):
 
-
 - [laminas/laminas-cache-storage-adapter-apcu](https://github.com/laminas/laminas-cache-storage-adapter-apcu)
 - [laminas/laminas-cache-storage-adapter-blackhole](https://github.com/laminas/laminas-cache-storage-adapter-blackhole)
-- [laminas/laminas-cache-storage-adapter-ext-mongodb](https://github.com/laminas/laminas-cache-storage-adapter-ext-mongodb) 
-- [laminas/laminas-cache-storage-adapter-filesystem](https://github.com/laminas/laminas-cache-storage-adapter-filesystem) 
+- [laminas/laminas-cache-storage-adapter-ext-mongodb](https://github.com/laminas/laminas-cache-storage-adapter-ext-mongodb)
+- [laminas/laminas-cache-storage-adapter-filesystem](https://github.com/laminas/laminas-cache-storage-adapter-filesystem)
 - [laminas/laminas-cache-storage-adapter-memcached](https://github.com/laminas/laminas-cache-storage-adapter-memcached)
 - [laminas/laminas-cache-storage-adapter-memory](https://github.com/laminas/laminas-cache-storage-adapter-memory)
-- [laminas/laminas-cache-storage-adapter-redis](https://github.com/laminas/laminas-cache-storage-adapter-redis) 
+- [laminas/laminas-cache-storage-adapter-redis](https://github.com/laminas/laminas-cache-storage-adapter-redis)
 - [laminas/laminas-cache-storage-adapter-session](https://github.com/laminas/laminas-cache-storage-adapter-session)
 
 ## Composition Over Inheritance
 
 In case you are extending one of the cache implementations, your code might look as follows:
-
 
 ```php
 use Laminas\Cache\Storage\Adapter\Filesystem;
@@ -135,7 +133,7 @@ Even tho, that this is more code to add/change than the previous solution, this 
 
 If this does not fit your requirements, please let us know via the `laminas-cache` [repository on GitHub](https://github.com/laminas/laminas-cache) and tell us more about your implementations. Maybe your addition should be part of our official adapter or could be provided as a dedicated Plugin instead.
 
-# StorageFactory Dependency
+## StorageFactory Dependency
 
 In case your code heavily depends on `StorageFactory` (or if you are using not yet compatible laminas components (e.g. `laminas-i18n`, ...), Laminas got your back.
 With `laminas/laminas-cache-storage-deprecated-factory`, the `StorageFactory` is retained to create a temporary backwards compatibility layer.
