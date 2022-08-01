@@ -911,7 +911,7 @@ PHP extension [mongo](http://php.net/mongo), or a MongoDB polyfill library, such
 > ### ext-mongodb
 >
 > If you are using the mongodb extension (vs the mongo extension), you will need
-> to use the [ExtMongoDb adapter](#the-extmongodb-adapter) instead.
+> to use the [ExtMongoDb adapter](#extmongodb-adapter) instead.
 
 This adapter implements the following interfaces:
 
@@ -965,7 +965,7 @@ $ composer require mongodb/mongodb
 > ### ext-mongo
 >
 > If you are using the mongo extension (vs the mongodb extension), you will need
-> to use the [MongoDb adapter](#the-mongodb-adapter) instead.
+> to use the [MongoDb adapter](#mongodb-adapter) instead.
 
 This adapter implements the following interfaces:
 
