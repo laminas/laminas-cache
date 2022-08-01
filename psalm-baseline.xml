@@ -174,11 +174,6 @@
       <code>(string) $publicDir</code>
     </RedundantCastGivenDocblockType>
   </file>
-  <file src="src/Psr/CacheItemPool/CacheItem.php">
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>$time === null</code>
-    </RedundantConditionGivenDocblockType>
-  </file>
   <file src="src/Psr/CacheItemPool/CacheItemPoolDecorator.php">
     <DocblockTypeContradiction occurrences="1">
       <code>is_array($result)</code>
@@ -686,9 +681,6 @@
       <code>PostEvent</code>
     </PropertyNotSetInConstructor>
   </file>
-  <file src="test/Command/DeprecatedStorageFactoryConfigurationCheckCommandTest.php">
-    <InternalClass occurrences="7"/>
-  </file>
   <file src="test/Pattern/AbstractCommonStoragePatternTest.php">
     <NonInvariantDocblockPropertyType occurrences="1">
       <code>$pattern</code>
@@ -904,13 +896,6 @@
     </PropertyNotSetInConstructor>
   </file>
   <file src="test/Service/DeprecatedSchemaDetectorTest.php">
-    <InternalClass occurrences="1">
-      <code>new DeprecatedSchemaDetector()</code>
-    </InternalClass>
-    <InternalMethod occurrences="2">
-      <code>isDeprecatedStorageFactorySchema</code>
-      <code>isDeprecatedStorageFactorySchema</code>
-    </InternalMethod>
     <MixedInferredReturnType occurrences="2">
       <code>Generator</code>
       <code>Generator</code>
@@ -1004,9 +989,6 @@
     </MissingReturnType>
   </file>
   <file src="test/Storage/AdapterPluginManagerTest.php">
-    <InternalMethod occurrences="1">
-      <code>addToAssertionCount</code>
-    </InternalMethod>
     <MissingReturnType occurrences="2">
       <code>testPluginAliasesResolve</code>
       <code>testShareByDefaultAndSharedByDefault</code>
