@@ -138,3 +138,24 @@ returned as a value with exactly the same type.
 Not all adapters can natively store all these types. For instance, Redis stores booleans and integers as a string. Where
 this is the case *all* values will be automatically run through `serialize()` on save and `unserialize()` on get: you
 do not need to use a `Laminas\Cache\Storage\Plugin\Serializer` plugin.
+
+## Time-Related Operations
+
+By default, the PSR-6 cache decorator uses the systems timezone to determine cache expirations. This can be changed by 
+passing an `lcobucci/clock` `Clock` implementation to the `CacheItemPoolDecorator#__construct`.
+By doing so, the method `CacheItemInterface#expiresAfter` uses that `Clock` to calculate the cache items TTL when passing 
+a `DateInterval` instance.
+
+```php
+use Lcobucci\Clock\SystemClock;
+$clock = new SystemClock('Antarctica/Troll');
+$pool = new CacheItemPoolDecorator($storage, $clock);
+
+$item = $pool->getItem('non-existent-key');
+$item
+    ->set('foo')
+    ->expiresAfter(DateInterval::createFromDateString('24 hours'));
+
+// Saves the item which expires in 24h
+$pool->save($item);
+```
