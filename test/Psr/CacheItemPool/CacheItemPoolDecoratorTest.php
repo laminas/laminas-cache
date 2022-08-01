@@ -1083,9 +1083,10 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testPassesClockToCacheItem(): void
     {
-        $clock = $this->createMock(Clock::class);
+        $clock   = $this->createMock(Clock::class);
         $adapter = new CacheItemPoolDecorator($this->storage, $clock);
-        $item = $adapter->getItem('notExistingItem');
+        $item    = $adapter->getItem('notExistingItem');
+        self::assertInstanceOf(CacheItem::class, $item);
         self::assertFalse($item->isHit());
 
         $now = new DateTimeImmutable('now');
