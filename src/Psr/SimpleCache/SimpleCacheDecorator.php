@@ -168,9 +168,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function getMultiple($keys, $default = null)
     {
-        /**
-         * @psalm-suppress DocblockTypeContradiction Since we do not have native type-hints, we should verify iterable.
-         */
         if (! is_array($keys) && ! $keys instanceof Traversable) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'Invalid value provided to %s; must be iterable',
@@ -201,9 +198,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function setMultiple($values, $ttl = null)
     {
-        /**
-         * @psalm-suppress DocblockTypeContradiction Since we do not have native type-hints, we should verify iterable.
-         */
         if (! is_array($values) && ! $values instanceof Traversable) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'Invalid value provided to %s; must be iterable',
@@ -260,9 +254,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function deleteMultiple($keys)
     {
-        /**
-         * @psalm-suppress DocblockTypeContradiction Since we do not have native type-hints, we should verify iterable.
-         */
         if (! is_array($keys) && ! $keys instanceof Traversable) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'Invalid value provided to %s; must be iterable',
