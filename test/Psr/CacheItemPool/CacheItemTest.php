@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 use function date_default_timezone_get;
 use function date_default_timezone_set;
+use function sleep;
 
 class CacheItemTest extends TestCase
 {
@@ -105,5 +106,13 @@ class CacheItemTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $item = new CacheItem('key', 'value', true);
         $item->expiresAfter([]);
+    }
+
+    public function testExpiresAfterStartsExpiringAfterMethodCall(): void
+    {
+        $item = new CacheItem('key', 'value', false);
+        $item = $item->expiresAfter(10);
+        sleep(1);
+        self::assertEquals(9, $item->getTtl());
     }
 }

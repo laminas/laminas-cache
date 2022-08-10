@@ -11,7 +11,6 @@ use Psr\Cache\CacheItemInterface;
 use function gettype;
 use function is_int;
 use function sprintf;
-use function time;
 
 final class CacheItem implements CacheItemInterface
 {
@@ -42,13 +41,6 @@ final class CacheItem implements CacheItemInterface
      * @var int|null
      */
     private $expiration;
-
-    /**
-     * Seconds after item is stored it will expire at if expiresAfter() called, null otherwise
-     *
-     * @var int|null
-     */
-    private $ttl;
 
     /** @var DateTimeZone */
     private $utc;
@@ -130,7 +122,6 @@ final class CacheItem implements CacheItemInterface
         }
 
         $this->expiration = $expiration instanceof DateTimeInterface ? $expiration->getTimestamp() : null;
-        $this->ttl        = null;
 
         return $this;
     }
@@ -140,19 +131,26 @@ final class CacheItem implements CacheItemInterface
      */
     public function expiresAfter($time)
     {
-        if ($time instanceof DateInterval) {
-            $now       = new DateTimeImmutable('now', $this->utc);
-            $end       = $now->add($time);
-            $this->ttl = $end->getTimestamp() - $now->getTimestamp();
-        } elseif (is_int($time) || $time === null) {
-            $this->ttl = $time;
-        } else {
-            throw new InvalidArgumentException(sprintf('Invalid $time "%s"', gettype($time)));
+        if ($time === null) {
+            return $this->expiresAt(null);
         }
 
-        $this->expiration = null;
+        if (is_int($time)) {
+            $interval = DateInterval::createFromDateString(sprintf('%d seconds', $time));
+            if ($interval === false) {
+                throw new InvalidArgumentException(sprintf('Provided TTL "%d" is not supported.', $time));
+            }
 
-        return $this;
+            $time = $interval;
+        }
+
+        /** @psalm-suppress RedundantConditionGivenDocblockType Until we do have native type-hints we should keep verifying this. */
+        if ($time instanceof DateInterval) {
+            $now = new DateTimeImmutable('now', $this->utc);
+            return $this->expiresAt($now->add($time));
+        }
+
+        throw new InvalidArgumentException(sprintf('Invalid $time "%s"', gettype($time)));
     }
 
     /**
@@ -164,10 +162,12 @@ final class CacheItem implements CacheItemInterface
      */
     public function getTtl()
     {
-        $ttl = $this->ttl;
-        if ($this->expiration !== null) {
-            $ttl = $this->expiration - time();
+        if ($this->expiration === null) {
+            return null;
         }
-        return $ttl;
+
+        $now = new DateTimeImmutable("now", $this->utc);
+
+        return $this->expiration - $now->getTimestamp();
     }
 }
