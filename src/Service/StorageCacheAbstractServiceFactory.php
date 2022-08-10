@@ -2,8 +2,8 @@
 
 namespace Laminas\Cache\Service;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
-use Psr\Container\ContainerInterface;
 use Webmozart\Assert\Assert;
 
 use function assert;
