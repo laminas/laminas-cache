@@ -44,7 +44,7 @@ class PostEvent extends Event
      *
      * @return mixed
      */
-    public function & getResult()
+    public function &getResult()
     {
         return $this->result;
     }
