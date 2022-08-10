@@ -2,13 +2,13 @@
 
 namespace LaminasTest\Cache\Service;
 
-use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use Laminas\Cache\Service\StorageCacheAbstractServiceFactory;
 use Laminas\Cache\Storage\StorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 final class StorageCacheAbstractServiceFactoryTest extends TestCase
 {
