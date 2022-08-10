@@ -5,7 +5,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.">  
+    <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output."> 
+
+    
+    
+        
+    
+    <meta name="docsearch:version" content="3.0.0,latest">
+    <meta name="docsearch:language" content="en">
+    <meta name="docsearch:component" content="laminas-cache">
+
     <link rel="canonical" href="https://docs.laminas.dev/laminas-cache/v3/migration/to-version-3/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
@@ -318,7 +327,7 @@
                     <a href="#" class="header__link header__link--search" data-toggle="modal" data-target="#mkdocs_search_modal" title="Open search">
                         <i class="fa fa-search"></i> Search
                     </a>
-                    <a href="https://github.com/laminas/laminas-cache/" class="header__link header__link--github" title="Go to repository of laminas-cache">
+                    <a href="https://github.com/laminas/laminas-cache" class="header__link header__link--github" title="Go to repository of laminas-cache">
                         <i class="fa fa-github"></i> GitHub
                     </a>
                 
@@ -366,13 +375,12 @@
                         <a href="#composition-over-inheritance" class="toc__link nav-link">Composition Over Inheritance</a>
                     </li>
                 
+                    <li class="toc__entry">
+                        <a href="#storagefactory-dependency" class="toc__link nav-link">StorageFactory Dependency</a>
+                    </li>
+                
             </ul>
         </div>
-    
-
-    
-
-    
     
 
                 
@@ -427,7 +435,7 @@
 <li><code>laminas-cache</code> is updated to the latest version from within <code>2.x</code> (currently <code>2.13.2</code>)</li>
 <li><a href="https://docs.laminas.dev/laminas-cli/"><code>laminas-cli</code> is installed</a> to verify the configuration integrity (<code>vendor/bin/laminas laminas-cache:deprecation:check-storage-factory-config</code>); in case you don't want to use <code>laminas-cli</code>, please check out the <a href="https://github.com/laminas/laminas-cache/releases/tag/2.12.0">normalized array configuration</a> example in the release notes of 2.12.0</li>
 <li><code>laminas-cache</code> is required with <code>^3.0</code> within <code>composer.json</code></li>
-<li>Cache adapters which are used within the project needs to be required in at least <code>^2.0</code>; in case you don't know which adapters are in use, either check your project configuration or search for the <code>Laminas\Cache\Storage\Adapter</code> namespace in your projects source code. Every adapter has to be listed in either your <code>module.config.php</code> (laminas-mvc) or <code>config.php</code> (mezzio) configuration. </li>
+<li>Cache adapters which are used within the project needs to be required in at least <code>^2.0</code>; in case you don't know which adapters are in use, either check your project configuration or search for the <code>Laminas\Cache\Storage\Adapter</code> namespace in your projects source code. Every adapter has to be listed in either your <code>module.config.php</code> (laminas-mvc) or <code>config.php</code> (mezzio) configuration.</li>
 <li>Project does not use any of the <a href="#removed-classes-and-traits">removed classes and traits</a></li>
 <li>Storage adapters are not extended in any way as <a href="#breaking-changes">all adapters are <code>final</code></a> starting with v2.0 of the individual adapter component</li>
 <li>PSR-6 <code>CacheItemPoolDecorator</code> does now validate the maximum key length the same way as PSR-6 <code>SimpleCacheDecorator</code> and therefore fulfills the requirements by the underlying PSR.</li>
@@ -465,11 +473,11 @@
 <ul>
 <li><a href="https://github.com/laminas/laminas-cache-storage-adapter-apcu">laminas/laminas-cache-storage-adapter-apcu</a></li>
 <li><a href="https://github.com/laminas/laminas-cache-storage-adapter-blackhole">laminas/laminas-cache-storage-adapter-blackhole</a></li>
-<li><a href="https://github.com/laminas/laminas-cache-storage-adapter-ext-mongodb">laminas/laminas-cache-storage-adapter-ext-mongodb</a> </li>
-<li><a href="https://github.com/laminas/laminas-cache-storage-adapter-filesystem">laminas/laminas-cache-storage-adapter-filesystem</a> </li>
+<li><a href="https://github.com/laminas/laminas-cache-storage-adapter-ext-mongodb">laminas/laminas-cache-storage-adapter-ext-mongodb</a></li>
+<li><a href="https://github.com/laminas/laminas-cache-storage-adapter-filesystem">laminas/laminas-cache-storage-adapter-filesystem</a></li>
 <li><a href="https://github.com/laminas/laminas-cache-storage-adapter-memcached">laminas/laminas-cache-storage-adapter-memcached</a></li>
 <li><a href="https://github.com/laminas/laminas-cache-storage-adapter-memory">laminas/laminas-cache-storage-adapter-memory</a></li>
-<li><a href="https://github.com/laminas/laminas-cache-storage-adapter-redis">laminas/laminas-cache-storage-adapter-redis</a> </li>
+<li><a href="https://github.com/laminas/laminas-cache-storage-adapter-redis">laminas/laminas-cache-storage-adapter-redis</a></li>
 <li><a href="https://github.com/laminas/laminas-cache-storage-adapter-session">laminas/laminas-cache-storage-adapter-session</a></li>
 </ul>
 <h2 id="composition-over-inheritance">Composition Over Inheritance</h2>
@@ -532,7 +540,7 @@ final class MyFilesytemStorage extends AbstractAdapter
 }</code></pre>
 <p>Even tho, that this is more code to add/change than the previous solution, this gives the maintainers of the cache adapters more freedom to provide more stable adapter implementations.</p>
 <p>If this does not fit your requirements, please let us know via the <code>laminas-cache</code> <a href="https://github.com/laminas/laminas-cache">repository on GitHub</a> and tell us more about your implementations. Maybe your addition should be part of our official adapter or could be provided as a dedicated Plugin instead.</p>
-<h1 id="storagefactory-dependency">StorageFactory Dependency</h1>
+<h2 id="storagefactory-dependency">StorageFactory Dependency</h2>
 <p>In case your code heavily depends on <code>StorageFactory</code> (or if you are using not yet compatible laminas components (e.g. <code>laminas-i18n</code>, ...), Laminas got your back.
 With <code>laminas/laminas-cache-storage-deprecated-factory</code>, the <code>StorageFactory</code> is retained to create a temporary backwards compatibility layer.</p>
 
@@ -546,7 +554,9 @@ With <code>laminas/laminas-cache-storage-deprecated-factory</code>, the <code>St
         <li class="page-nav__item">
             
                 <a rel="prev" class="page-nav__link page-nav__link--prev" href="../../psr16/">
-                    <i class="fa fa-chevron-left"></i> Previous
+                    <small class="page-nav__label">Previous</small>
+                    <i class="fa fa-chevron-left"></i>
+                    PSR-16
                 </a>
             
         </li>
@@ -555,7 +565,9 @@ With <code>laminas/laminas-cache-storage-deprecated-factory</code>, the <code>St
         <li class="page-nav__item">
             
                 <a rel="next" class="page-nav__link page-nav__link--next" href="../../../v2/installation/">
-                    Next <i class="fa fa-chevron-right"></i>
+                    <small class="page-nav__label">Next</small>
+                    Installation
+                    <i class="fa fa-chevron-right"></i>
                 </a>
             
         </li>
@@ -782,7 +794,7 @@ With <code>laminas/laminas-cache-storage-deprecated-factory</code>, the <code>St
                         <h4 class="footer__headline">License</h4>
                         <p>
                             Code licensed under <a
-                                href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
+                                href="https://github.com/laminas/laminas-cache/blob/-/LICENSE.md">BSD 3-Clause</a>.
                         </p>
                     </div>
 
@@ -792,7 +804,7 @@ With <code>laminas/laminas-cache-storage-deprecated-factory</code>, the <code>St
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>

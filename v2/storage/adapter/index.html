@@ -5,7 +5,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output.">  
+    <meta name="description" content="Caching implementation with a variety of storage options, as well as codified caching strategies for callbacks, classes, and output."> 
+
+    
+    
+        
+    
+    <meta name="docsearch:version" content="3.0.0,latest">
+    <meta name="docsearch:language" content="en">
+    <meta name="docsearch:component" content="laminas-cache">
+
     <link rel="canonical" href="https://docs.laminas.dev/laminas-cache/v2/storage/adapter/">
     <link rel="shortcut icon" href="https://docs.laminas.dev/img/trademark-laminas-foundation-rgb.svg">
 
@@ -303,7 +312,7 @@
                     <a href="#" class="header__link header__link--search" data-toggle="modal" data-target="#mkdocs_search_modal" title="Open search">
                         <i class="fa fa-search"></i> Search
                     </a>
-                    <a href="https://github.com/laminas/laminas-cache/" class="header__link header__link--github" title="Go to repository of laminas-cache">
+                    <a href="https://github.com/laminas/laminas-cache" class="header__link header__link--github" title="Go to repository of laminas-cache">
                         <i class="fa fa-github"></i> GitHub
                     </a>
                 
@@ -1662,7 +1671,12 @@ using the PHP extension <a href="https://github.com/phpredis/phpredis">PhpRedis<
 </table></div>
 <p><code>server</code> can be described as any of the following:</p>
 <ul>
-<li>URI: <code>/path/to/sock.sock</code></li>
+<li>
+<div class="admonition uri">
+<p class="admonition-title">Uri</p>
+<p><code>/path/to/sock.sock</code></p>
+</div>
+</li>
 <li>Associative array: <code>['host' =&gt; &lt;host&gt;[, 'port' =&gt; &lt;port&gt;[, 'timeout' =&gt; &lt;timeout&gt;]]]</code></li>
 <li>List: <code>[&lt;host&gt;[, &lt;port&gt;, [, &lt;timeout&gt;]]]</code></li>
 </ul>
@@ -1902,7 +1916,7 @@ PHP extension <a href="http://php.net/mongo">mongo</a>, or a MongoDB polyfill li
 <blockquote>
 <h3 id="ext-mongodb">ext-mongodb</h3>
 <p>If you are using the mongodb extension (vs the mongo extension), you will need
-to use the <a href="#the-extmongodb-adapter">ExtMongoDb adapter</a> instead.</p>
+to use the <a href="#extmongodb-adapter">ExtMongoDb adapter</a> instead.</p>
 </blockquote>
 <p>This adapter implements the following interfaces:</p>
 <ul>
@@ -2036,7 +2050,7 @@ library using the following:</p>
 <blockquote>
 <h3 id="ext-mongo">ext-mongo</h3>
 <p>If you are using the mongo extension (vs the mongodb extension), you will need
-to use the <a href="#the-mongodb-adapter">MongoDb adapter</a> instead.</p>
+to use the <a href="#mongodb-adapter">MongoDb adapter</a> instead.</p>
 </blockquote>
 <p>This adapter implements the following interfaces:</p>
 <ul>
@@ -2568,7 +2582,9 @@ if (count($results) &lt; count($ids)) {
         <li class="page-nav__item">
             
                 <a rel="prev" class="page-nav__link page-nav__link--prev" href="../../installation/">
-                    <i class="fa fa-chevron-left"></i> Previous
+                    <small class="page-nav__label">Previous</small>
+                    <i class="fa fa-chevron-left"></i>
+                    Installation
                 </a>
             
         </li>
@@ -2577,7 +2593,9 @@ if (count($results) &lt; count($ids)) {
         <li class="page-nav__item">
             
                 <a rel="next" class="page-nav__link page-nav__link--next" href="../capabilities/">
-                    Next <i class="fa fa-chevron-right"></i>
+                    <small class="page-nav__label">Next</small>
+                    Capabilities
+                    <i class="fa fa-chevron-right"></i>
                 </a>
             
         </li>
@@ -2789,7 +2807,7 @@ if (count($results) &lt; count($ids)) {
                         <h4 class="footer__headline">License</h4>
                         <p>
                             Code licensed under <a
-                                href="https://github.com/laminas/laminas-cache/blob/master/LICENSE.md">BSD 3-Clause</a>.
+                                href="https://github.com/laminas/laminas-cache/blob/-/LICENSE.md">BSD 3-Clause</a>.
                         </p>
                     </div>
 
@@ -2799,7 +2817,7 @@ if (count($results) &lt; count($ids)) {
                         <p>
                             <!--Built with love by the Laminas team with the help of our
                             <a href="https://github.com/laminas/laminas-cache/graphs/contributors">contributors</a>.<br>-->
-                            &copy; 2021 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
+                            &copy; 2022 <a href="https://getlaminas.org/">Laminas Project</a> a Series of LF Projects, LLC.
                         </p>
                     </div>
                 </div>
