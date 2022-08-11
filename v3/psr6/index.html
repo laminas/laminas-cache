@@ -371,6 +371,10 @@
                         <a href="#supported-data-types" class="toc__link nav-link">Supported Data Types</a>
                     </li>
                 
+                    <li class="toc__entry">
+                        <a href="#time-related-operations" class="toc__link nav-link">Time-Related Operations</a>
+                    </li>
+                
             </ul>
         </div>
     
@@ -530,6 +534,22 @@ returned as a value with exactly the same type.</p>
 <p>Not all adapters can natively store all these types. For instance, Redis stores booleans and integers as a string. Where
 this is the case <em>all</em> values will be automatically run through <code>serialize()</code> on save and <code>unserialize()</code> on get: you
 do not need to use a <code>Laminas\Cache\Storage\Plugin\Serializer</code> plugin.</p>
+<h2 id="time-related-operations">Time-Related Operations</h2>
+<p>By default, the PSR-6 cache decorator uses the systems time to determine cache expirations. This can be changed by
+passing a <a href="https://packagist.org/packages/stella-maris/clock"><code>stella-maris/clock</code></a> <code>Clock</code> implementation to the <code>CacheItemPoolDecorator#__construct</code>.
+By doing so, the method <code>CacheItemInterface#expiresAfter</code> uses that <code>Clock</code> to calculate the cache items TTL when passing
+a <code>DateInterval</code> instance.</p>
+<pre class="highlight"><code class="language-php">use Lcobucci\Clock\SystemClock;
+$clock = new SystemClock('Antarctica/Troll');
+$pool = new CacheItemPoolDecorator($storage, $clock);
+
+$item = $pool-&gt;getItem('non-existent-key');
+$item
+    -&gt;set('foo')
+    -&gt;expiresAfter(DateInterval::createFromDateString('24 hours'));
+
+// Saves the item which expires in 24h
+$pool-&gt;save($item);</code></pre>
 
 
 
