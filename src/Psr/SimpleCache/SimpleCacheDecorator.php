@@ -51,8 +51,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      * operation.
      *
      * @var null|bool
-     *
-     * Use ?bool type make it unserialized, even with null initialized
      */
     private $success;
 
