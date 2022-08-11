@@ -21,6 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use stdClass;
+use StellaMaris\Clock\ClockInterface;
 use Throwable;
 
 use function array_keys;
@@ -913,11 +914,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
         } catch (Throwable $throwable) {
             /** Cleanup deferred items as {@see CacheItemPoolDecorator::__destruct} is gonna try to store them. */
         } finally {
-            /**
-             * Suppress this as we are safe in tear down
-             *
-             * @psalm-suppress PossiblyNullPropertyAssignmentValue
-             */
             $this->adapter = null;
         }
         parent::tearDown();
@@ -1078,5 +1074,23 @@ final class CacheItemPoolDecoratorTest extends TestCase
         self::assertFalse($this->adapter->commit());
         self::assertTrue($this->adapter->hasItem('keyOfFailedItem1'));
         self::assertTrue($this->adapter->hasItem('keyOfFailedItem2'));
+    }
+
+    public function testPassesClockToCacheItem(): void
+    {
+        $clock   = $this->createMock(ClockInterface::class);
+        $adapter = new CacheItemPoolDecorator($this->storage, $clock);
+        $item    = $adapter->getItem('notExistingItem');
+        self::assertInstanceOf(CacheItem::class, $item);
+        self::assertFalse($item->isHit());
+
+        $now = new DateTimeImmutable('now');
+        $clock
+            ->expects(self::once())
+            ->method('now')
+            ->willReturn($now);
+
+        $item->expiresAt($now);
+        self::assertEquals(0, $item->getTtl());
     }
 }

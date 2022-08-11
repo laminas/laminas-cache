@@ -6,6 +6,7 @@
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
         errorBaseline="psalm-baseline.xml"
+        findUnusedPsalmSuppress="true"
 >
     <projectFiles>
         <directory name="src"/>
@@ -17,9 +18,14 @@
     <issueHandlers>
         <InternalMethod>
             <errorLevel type="suppress">
-                <referencedMethod name="Laminas\Cache\Command\DeprecatedStorageFactoryConfigurationCheckCommand::__construct"/>
+                <directory name="test"/>
             </errorLevel>
         </InternalMethod>
+        <InternalClass>
+            <errorLevel type="suppress">
+                <directory name="test"/>
+            </errorLevel>
+        </InternalClass>
     </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>

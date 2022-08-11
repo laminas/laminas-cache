@@ -2,6 +2,7 @@
 
 namespace Laminas\Cache\Psr\CacheItemPool;
 
+use DateTimeImmutable;
 use Laminas\Cache\Exception;
 use Laminas\Cache\Psr\MaximumKeyLengthTrait;
 use Laminas\Cache\Psr\SerializationTrait;
@@ -10,6 +11,7 @@ use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use StellaMaris\Clock\ClockInterface;
 
 use function array_diff;
 use function array_diff_key;
@@ -46,6 +48,8 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /** @var array<string,CacheItem> */
     private array $deferred = [];
 
+    private ClockInterface $clock;
+
     /**
      * PSR-6 requires that all implementing libraries support TTL so the given storage adapter must also support static
      * TTL or an exception will be raised. Currently the following adapters do *not* support static TTL: Dba,
@@ -53,12 +57,20 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      *
      * @throws CacheException
      */
-    public function __construct(StorageInterface $storage)
+    public function __construct(StorageInterface $storage, ?ClockInterface $clock = null)
     {
         $this->validateStorage($storage);
         $capabilities = $storage->getCapabilities();
         $this->memoizeMaximumKeyLengthCapability($storage, $capabilities);
         $this->storage = $storage;
+        $clock       ??= new class implements ClockInterface
+        {
+            public function now(): DateTimeImmutable
+            {
+                return new DateTimeImmutable();
+            }
+        };
+        $this->clock   = $clock;
     }
 
     /**
@@ -87,7 +99,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
                 // ignore
             }
 
-            return new CacheItem($key, $value, $isHit ?? false);
+            return new CacheItem($key, $value, $isHit ?? false, $this->clock);
         }
 
         return clone $this->deferred[$key];
@@ -122,12 +134,12 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
             foreach ($cacheItems as $key => $value) {
                 assert(is_string($key));
-                $items[$key] = new CacheItem($key, $value, true);
+                $items[$key] = new CacheItem($key, $value, true, $this->clock);
             }
 
             // Return empty items for any keys that where not found
             foreach (array_diff($keys, array_keys($cacheItems)) as $key) {
-                $items[$key] = new CacheItem($key, null, false);
+                $items[$key] = new CacheItem($key, null, false, $this->clock);
             }
         }
 

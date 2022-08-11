@@ -4,13 +4,15 @@ namespace LaminasTest\Cache\Psr\CacheItemPool;
 
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
 use Laminas\Cache\Psr\CacheItemPool\CacheItem;
 use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use StellaMaris\Clock\ClockInterface;
 
 use function date_default_timezone_get;
 use function date_default_timezone_set;
-use function sleep;
 
 class CacheItemTest extends TestCase
 {
@@ -109,9 +111,43 @@ class CacheItemTest extends TestCase
 
     public function testExpiresAfterStartsExpiringAfterMethodCall(): void
     {
-        $item = new CacheItem('key', 'value', false);
+        $now              = new DateTimeImmutable();
+        $nowPlusOneSecond = $now->add(DateInterval::createFromDateString('1 second'));
+
+        $clock = $this->createMock(ClockInterface::class);
+        $clock
+            ->expects(self::exactly(2))
+            ->method('now')
+            ->willReturnOnConsecutiveCalls($now, $nowPlusOneSecond);
+
+        $item = new CacheItem('key', 'value', false, $clock);
         $item = $item->expiresAfter(10);
-        sleep(1);
         self::assertEquals(9, $item->getTtl());
+    }
+
+    public function testClockProvidedDoesNotContainUTCTimeZone(): void
+    {
+        $item = new CacheItem(
+            'foo',
+            null,
+            false,
+            new class implements ClockInterface
+            {
+                public function now(): DateTimeImmutable
+                {
+                    return new DateTimeImmutable('now', new DateTimeZone('Europe/Berlin'));
+                }
+            }
+        );
+
+        $interval = DateInterval::createFromDateString('1 hour');
+        $item->expiresAfter($interval);
+
+        self::assertEquals(3600, $item->getTtl());
+
+        $inOneHour = (new DateTimeImmutable('now', new DateTimeZone('America/Vancouver')))->add($interval);
+        $item->expiresAt($inOneHour);
+
+        self::assertEquals(3600, $item->getTtl());
     }
 }
