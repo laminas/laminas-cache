@@ -17,11 +17,11 @@ use Laminas\Cache\Storage\StorageInterface;
 use Laminas\EventManager\EventManager;
 use LaminasTest\Cache\Psr\CacheItemPool\TestAsset\FlushableStorageAdapterInterface;
 use LaminasTest\Cache\Psr\TestAsset\FlushableNamespaceStorageInterface;
-use Lcobucci\Clock\Clock;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use stdClass;
+use StellaMaris\Clock\ClockInterface;
 use Throwable;
 
 use function array_keys;
@@ -914,11 +914,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
         } catch (Throwable $throwable) {
             /** Cleanup deferred items as {@see CacheItemPoolDecorator::__destruct} is gonna try to store them. */
         } finally {
-            /**
-             * Suppress this as we are safe in tear down
-             *
-             * @psalm-suppress PossiblyNullPropertyAssignmentValue
-             */
             $this->adapter = null;
         }
         parent::tearDown();
@@ -1083,7 +1078,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testPassesClockToCacheItem(): void
     {
-        $clock   = $this->createMock(Clock::class);
+        $clock   = $this->createMock(ClockInterface::class);
         $adapter = new CacheItemPoolDecorator($this->storage, $clock);
         $item    = $adapter->getItem('notExistingItem');
         self::assertInstanceOf(CacheItem::class, $item);

@@ -2,16 +2,16 @@
 
 namespace Laminas\Cache\Psr\CacheItemPool;
 
+use DateTimeImmutable;
 use Laminas\Cache\Exception;
 use Laminas\Cache\Psr\MaximumKeyLengthTrait;
 use Laminas\Cache\Psr\SerializationTrait;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
-use Lcobucci\Clock\Clock;
-use Lcobucci\Clock\SystemClock;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use StellaMaris\Clock\ClockInterface;
 
 use function array_diff;
 use function array_diff_key;
@@ -48,7 +48,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /** @var array<string,CacheItem> */
     private array $deferred = [];
 
-    private Clock $clock;
+    private ClockInterface $clock;
 
     /**
      * PSR-6 requires that all implementing libraries support TTL so the given storage adapter must also support static
@@ -57,13 +57,19 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      *
      * @throws CacheException
      */
-    public function __construct(StorageInterface $storage, ?Clock $clock = null)
+    public function __construct(StorageInterface $storage, ?ClockInterface $clock = null)
     {
         $this->validateStorage($storage);
         $capabilities = $storage->getCapabilities();
         $this->memoizeMaximumKeyLengthCapability($storage, $capabilities);
         $this->storage = $storage;
-        $clock       ??= SystemClock::fromSystemTimezone();
+        $clock       ??= new class implements ClockInterface
+        {
+            public function now(): DateTimeImmutable
+            {
+                return new DateTimeImmutable();
+            }
+        };
         $this->clock   = $clock;
     }
 

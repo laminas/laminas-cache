@@ -3,10 +3,10 @@
 namespace Laminas\Cache\Psr\CacheItemPool;
 
 use DateInterval;
+use DateTimeImmutable;
 use DateTimeInterface;
-use Lcobucci\Clock\Clock;
-use Lcobucci\Clock\SystemClock;
 use Psr\Cache\CacheItemInterface;
+use StellaMaris\Clock\ClockInterface;
 
 use function gettype;
 use function is_int;
@@ -42,17 +42,23 @@ final class CacheItem implements CacheItemInterface
      */
     private ?int $expiration = null;
 
-    private Clock $clock;
+    private ClockInterface $clock;
 
     /**
      * @param mixed $value
      */
-    public function __construct(string $key, $value, bool $isHit, ?Clock $clock = null)
+    public function __construct(string $key, $value, bool $isHit, ?ClockInterface $clock = null)
     {
         $this->key   = $key;
         $this->value = $isHit ? $value : null;
         $this->isHit = $isHit;
-        $clock     ??= SystemClock::fromSystemTimezone();
+        $clock     ??= new class implements ClockInterface
+        {
+            public function now(): DateTimeImmutable
+            {
+                return new DateTimeImmutable();
+            }
+        };
         $this->clock = $clock;
     }
 

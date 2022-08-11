@@ -8,8 +8,8 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Laminas\Cache\Psr\CacheItemPool\CacheItem;
 use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
-use Lcobucci\Clock\SystemClock;
 use PHPUnit\Framework\TestCase;
+use StellaMaris\Clock\ClockInterface;
 
 use function date_default_timezone_get;
 use function date_default_timezone_set;
@@ -124,7 +124,13 @@ class CacheItemTest extends TestCase
             'foo',
             null,
             false,
-            new SystemClock(new DateTimeZone('Europe/Berlin'))
+            new class implements ClockInterface
+            {
+                public function now(): DateTimeImmutable
+                {
+                    return new DateTimeImmutable('now', new DateTimeZone('Europe/Berlin'));
+                }
+            }
         );
 
         $interval = DateInterval::createFromDateString('1 hour');

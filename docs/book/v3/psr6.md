@@ -141,8 +141,8 @@ do not need to use a `Laminas\Cache\Storage\Plugin\Serializer` plugin.
 
 ## Time-Related Operations
 
-By default, the PSR-6 cache decorator uses the systems timezone to determine cache expirations. This can be changed by
-passing an `lcobucci/clock` `Clock` implementation to the `CacheItemPoolDecorator#__construct`.
+By default, the PSR-6 cache decorator uses the systems time to determine cache expirations. This can be changed by
+passing a [`stella-maris/clock`](https://packagist.org/packages/stella-maris/clock) `Clock` implementation to the `CacheItemPoolDecorator#__construct`.
 By doing so, the method `CacheItemInterface#expiresAfter` uses that `Clock` to calculate the cache items TTL when passing
 a `DateInterval` instance.
 
