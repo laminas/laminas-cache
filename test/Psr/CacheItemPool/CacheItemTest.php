@@ -13,7 +13,6 @@ use StellaMaris\Clock\ClockInterface;
 
 use function date_default_timezone_get;
 use function date_default_timezone_set;
-use function sleep;
 
 class CacheItemTest extends TestCase
 {
@@ -112,9 +111,17 @@ class CacheItemTest extends TestCase
 
     public function testExpiresAfterStartsExpiringAfterMethodCall(): void
     {
-        $item = new CacheItem('key', 'value', false);
+        $now              = new DateTimeImmutable();
+        $nowPlusOneSecond = $now->add(DateInterval::createFromDateString('1 second'));
+
+        $clock = $this->createMock(ClockInterface::class);
+        $clock
+            ->expects(self::exactly(2))
+            ->method('now')
+            ->willReturnOnConsecutiveCalls($now, $nowPlusOneSecond);
+
+        $item = new CacheItem('key', 'value', false, $clock);
         $item = $item->expiresAfter(10);
-        sleep(1);
         self::assertEquals(9, $item->getTtl());
     }
 
