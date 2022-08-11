@@ -41,7 +41,7 @@ use function str_repeat;
 class SimpleCacheDecoratorTest extends TestCase
 {
     /** @var array<string,bool|string> */
-    private $requiredTypes = [
+    private array $requiredTypes = [
         'NULL'     => true,
         'boolean'  => true,
         'integer'  => true,
@@ -58,8 +58,7 @@ class SimpleCacheDecoratorTest extends TestCase
     /** @var StorageInterface&MockObject */
     private $storage;
 
-    /** @var SimpleCacheDecorator */
-    private $cache;
+    private SimpleCacheDecorator $cache;
 
     /**
      * @psalm-return Generator<non-empty-string,array{0:Capabilities}>
@@ -238,7 +237,7 @@ class SimpleCacheDecoratorTest extends TestCase
             ->expects(self::once())
             ->method('getItem')
             ->with('key')
-            ->willReturnCallback(static function () use ($testCase, $cache) {
+            ->willReturnCallback(static function () use ($testCase, $cache): bool {
                 // Indicating failure to lookup
                 $testCase->setSuccessReference($cache, false);
                 return false;
@@ -257,7 +256,7 @@ class SimpleCacheDecoratorTest extends TestCase
             ->expects(self::once())
             ->method('getItem')
             ->with('key')
-            ->willReturnCallback(static function () use ($testCase, $cache, $expected) {
+            ->willReturnCallback(static function () use ($testCase, $cache, $expected): string {
                 // Indicating lookup success
                 $testCase->setSuccessReference($cache, true);
                 return $expected;

@@ -4,10 +4,10 @@ namespace LaminasTest\Cache\Storage\Plugin;
 
 use ArrayObject;
 use Laminas\Cache;
+use Laminas\Cache\Storage\Plugin\PluginOptions;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use LaminasTest\Cache\Storage\TestAsset\ClearExpiredMockAdapter;
-use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
 use function array_shift;
 use function get_class;
@@ -16,11 +16,9 @@ final class ClearExpiredByFactorTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    /** @var MockAdapter */
-    protected $adapter;
+    protected ClearExpiredMockAdapter $adapter;
 
-    /** @var Cache\Storage\Plugin\PluginOptions */
-    private $options;
+    private PluginOptions $options;
 
     protected function setUp(): void
     {

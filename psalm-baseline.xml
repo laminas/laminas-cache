@@ -928,7 +928,7 @@
       <code>$event</code>
     </MissingClosureParamType>
     <MissingClosureReturnType occurrences="1">
-      <code>function ($event) use ($retVal) {</code>
+      <code>static function ($event) use ($retVal) {</code>
     </MissingClosureReturnType>
     <MixedArgument occurrences="1">
       <code>$success</code>

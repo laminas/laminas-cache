@@ -36,8 +36,7 @@ use function ucfirst;
 
 final class AbstractAdapterTest extends TestCase
 {
-    /** @var AdapterOptions|null */
-    protected $options;
+    protected ?AdapterOptions $options;
 
     public function setUp(): void
     {
@@ -282,15 +281,13 @@ final class AbstractAdapterTest extends TestCase
                     $this->stringContains('key'),
                     $this->anything()
                 )
-                ->willReturnCallback(function (string $key, ?bool &$success) use ($items) {
+                ->willReturnCallback(static function (string $key, ?bool &$success) use ($items): ?string {
                     if ($items[$key]) {
                         $success = true;
 
                         return $items[$key];
                     }
-
                     $success = false;
-
                     return null;
                 });
         }
@@ -506,7 +503,7 @@ final class AbstractAdapterTest extends TestCase
         $eventManager->attach($methodName . '.post', $eventHandler);
         $eventManager->attach($methodName . '.exception', $eventHandler);
 
-        $eventManager->attach($methodName . '.pre', function ($event) use ($retVal) {
+        $eventManager->attach($methodName . '.pre', static function ($event) use ($retVal) {
             $event->stopPropagation();
             return $retVal;
         });
@@ -1096,7 +1093,7 @@ final class AbstractAdapterTest extends TestCase
 
         // init mock
         $storage = $this->getMockForAbstractAdapter([$internalMethod]);
-        $storage->getEventManager()->attach($eventName, function (Event $event) use ($expectedArgs) {
+        $storage->getEventManager()->attach($eventName, static function (Event $event) use ($expectedArgs): void {
             $params = $event->getParams();
             assert($params instanceof ArrayObject);
             $params->exchangeArray(array_merge($params->getArrayCopy(), $expectedArgs));

@@ -64,7 +64,7 @@ final class PluginManager extends AbstractPluginManager
      */
     public function build($name, ?array $options = null)
     {
-        $options = $options ?? [];
+        $options ??= [];
         /** @psalm-suppress MixedAssignment */
         $plugin = parent::build($name);
         if ($options !== [] && $plugin instanceof PluginInterface) {

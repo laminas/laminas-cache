@@ -5,8 +5,8 @@ namespace LaminasTest\Cache\Storage\Plugin;
 use ArrayObject;
 use Exception;
 use Laminas\Cache;
-use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\Cache\Storage\ExceptionEvent;
+use Laminas\Cache\Storage\Plugin\PluginOptions;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
@@ -16,11 +16,9 @@ final class ExceptionHandlerTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    /** @var AbstractAdapter */
-    protected $adapter;
+    protected MockAdapter $adapter;
 
-    /** @var Cache\Storage\Plugin\PluginOptions */
-    private $options;
+    private PluginOptions $options;
 
     protected function setUp(): void
     {
@@ -100,9 +98,11 @@ final class ExceptionHandlerTest extends AbstractCommonPluginTest
         $expectedException = new Exception();
         $callbackCalled    = false;
 
-        $this->options->setExceptionCallback(function ($exception) use ($expectedException, &$callbackCalled) {
-            $callbackCalled = $exception === $expectedException;
-        });
+        $this->options->setExceptionCallback(
+            static function ($exception) use ($expectedException, &$callbackCalled): void {
+                $callbackCalled = $exception === $expectedException;
+            }
+        );
 
         // run onException
         $result = null;

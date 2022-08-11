@@ -14,8 +14,7 @@ use function sleep;
 
 class CacheItemTest extends TestCase
 {
-    /** @var string */
-    private $tz;
+    private string $tz;
 
     protected function setUp(): void
     {

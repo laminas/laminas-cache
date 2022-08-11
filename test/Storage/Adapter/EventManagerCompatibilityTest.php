@@ -9,8 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class EventManagerCompatibilityTest extends TestCase
 {
-    /** @var MockAdapter */
-    private $adapter;
+    private MockAdapter $adapter;
 
     public function setUp(): void
     {

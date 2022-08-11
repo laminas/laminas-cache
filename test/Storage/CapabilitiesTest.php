@@ -73,7 +73,7 @@ class CapabilitiesTest extends TestCase
     {
         $em    = $this->capabilities->getAdapter()->getEventManager();
         $event = null;
-        $em->attach('capability', function ($eventArg) use (&$event) {
+        $em->attach('capability', static function ($eventArg) use (&$event): void {
             $event = $eventArg;
         });
 

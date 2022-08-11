@@ -288,7 +288,7 @@ class AdapterOptions extends AbstractOptions
     public function toArray()
     {
         $array     = [];
-        $transform = function ($letters) {
+        $transform = static function ($letters): string {
             $letter = array_shift($letters);
             return '_' . strtolower($letter);
         };

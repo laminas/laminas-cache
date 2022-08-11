@@ -10,8 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 final class DeprecatedSchemaDetectorTest extends TestCase
 {
-    /** @var DeprecatedSchemaDetector */
-    private $detector;
+    private DeprecatedSchemaDetector $detector;
 
     protected function setUp(): void
     {

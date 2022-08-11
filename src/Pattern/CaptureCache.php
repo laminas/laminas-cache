@@ -40,7 +40,7 @@ class CaptureCache extends AbstractPattern
             $pageId = $this->detectPageId();
         }
 
-        ob_start(function ($content) use ($pageId) {
+        ob_start(function ($content) use ($pageId): bool {
             $this->set($content, $pageId);
 
             // http://php.net/manual/function.ob-start.php

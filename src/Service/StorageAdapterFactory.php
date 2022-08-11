@@ -6,6 +6,7 @@ namespace Laminas\Cache\Service;
 
 use InvalidArgumentException;
 use Laminas\Cache\Exception;
+use Laminas\Cache\Service\StoragePluginFactoryInterface;
 use Laminas\Cache\Storage\PluginAwareInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\PluginManagerInterface;
@@ -23,11 +24,9 @@ final class StorageAdapterFactory implements StorageAdapterFactoryInterface
 {
     public const DEFAULT_PLUGIN_PRIORITY = 1;
 
-    /** @var PluginManagerInterface */
-    private $adapters;
+    private PluginManagerInterface $adapters;
 
-    /** @var StoragePluginFactoryInterface */
-    private $pluginFactory;
+    private StoragePluginFactoryInterface $pluginFactory;
 
     public function __construct(PluginManagerInterface $adapters, StoragePluginFactoryInterface $pluginFactory)
     {

@@ -13,8 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 final class StoragePluginFactoryIntegrationTest extends TestCase
 {
-    /** @var StoragePluginFactory */
-    private $factory;
+    private StoragePluginFactory $factory;
 
     protected function setUp(): void
     {
