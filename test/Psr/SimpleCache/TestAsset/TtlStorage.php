@@ -7,8 +7,7 @@ use Laminas\Cache\Storage\Capabilities;
 
 class TtlStorage extends Adapter\AbstractAdapter
 {
-    /** @var array */
-    private $data = [];
+    private array $data = [];
 
     /** @var array */
     public $ttl = [];

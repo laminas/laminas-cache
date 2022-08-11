@@ -11,14 +11,13 @@ use Psr\Container\ContainerInterface;
 
 final class StorageCacheFactoryTest extends TestCase
 {
-    /** @var StorageCacheFactory */
-    private $factory;
+    private StorageCacheFactory $factory;
 
     /** @var MockObject&ContainerInterface */
     private $container;
 
     /** @var array<string,mixed> */
-    private $config;
+    private array $config;
 
     protected function setUp(): void
     {

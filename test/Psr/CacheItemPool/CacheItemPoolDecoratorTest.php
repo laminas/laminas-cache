@@ -25,6 +25,7 @@ use Throwable;
 
 use function array_keys;
 use function array_map;
+use function assert;
 use function preg_match;
 use function sprintf;
 use function str_repeat;
@@ -35,11 +36,10 @@ final class CacheItemPoolDecoratorTest extends TestCase
     /** @var StorageInterface&FlushableInterface&MockObject */
     private $storage;
 
-    /** @var CacheItemPoolDecorator */
-    private $adapter;
+    private ?CacheItemPoolDecorator $adapter;
 
     /** @var array<string,bool|string> */
-    private $requiredTypes = [
+    private array $requiredTypes = [
         'NULL'     => true,
         'boolean'  => true,
         'integer'  => true,
@@ -163,6 +163,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with('foo')
             ->willReturnOnConsecutiveCalls(null);
 
+        assert($this->adapter instanceof CacheItemPoolDecorator);
+
         $adapter = $this->adapter;
         $item    = $adapter->getItem('foo');
         $item->set('bar');
@@ -240,6 +242,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with($keys)
             ->willReturn([]);
 
+        assert($this->adapter instanceof CacheItemPoolDecorator);
+
         $adapter = $this->adapter;
         $items   = $adapter->getItems($keys);
         foreach ($items as $item) {
@@ -275,6 +279,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $keys = ['ok'] + $this->getInvalidKeys();
+
+        assert($this->adapter instanceof CacheItemPoolDecorator);
         $this->adapter->getItems($keys);
     }
 
@@ -412,6 +418,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $item = $this->createMock(CacheItemInterface::class);
+
+        assert($this->adapter instanceof CacheItemPoolDecorator);
         $this->adapter->save($item);
     }
 
@@ -490,6 +498,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with('foo')
             ->willReturn(null);
 
+        assert($this->adapter instanceof CacheItemPoolDecorator);
+
         $adapter = $this->adapter;
         $item    = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
@@ -511,6 +521,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with('foo')
             ->willReturn(false);
 
+        assert($this->adapter instanceof CacheItemPoolDecorator);
+
         $adapter = $this->adapter;
         $item    = $adapter->getItem('foo');
         $item->set('bar');
@@ -526,6 +538,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     public function testHasItemInvalidKeyThrowsException($key)
     {
         $this->expectException(InvalidArgumentException::class);
+        assert($this->adapter instanceof CacheItemPoolDecorator);
         $this->adapter->hasItem($key);
     }
 
@@ -714,6 +727,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     public function testDeleteItemInvalidKeyThrowsException($key)
     {
         $this->expectException(InvalidArgumentException::class);
+        assert($this->adapter instanceof CacheItemPoolDecorator);
         $this->adapter->deleteItem($key);
     }
 
@@ -760,6 +774,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->withConsecutive(['foo'], ['bar'])
             ->willReturn(false);
 
+        assert($this->adapter instanceof CacheItemPoolDecorator);
+
         $adapter = $this->adapter;
         foreach ($keys as $key) {
             $item = $adapter->getItem($key);
@@ -777,6 +793,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $keys = ['ok'] + $this->getInvalidKeys();
+        assert($this->adapter instanceof CacheItemPoolDecorator);
         $this->adapter->deleteItems($keys);
     }
 
@@ -803,6 +820,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testSaveDeferredReturnsTrue(): void
     {
+        assert($this->adapter instanceof CacheItemPoolDecorator);
+
         $adapter = $this->adapter;
         $item    = $adapter->getItem('foo');
         self::assertTrue($adapter->saveDeferred($item));
@@ -812,6 +831,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $item = $this->createMock(CacheItemInterface::class);
+        assert($this->adapter instanceof CacheItemPoolDecorator);
         $this->adapter->saveDeferred($item);
     }
 
@@ -832,6 +852,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     public function testCommitEmptyReturnsTrue(): void
     {
+        assert($this->adapter instanceof CacheItemPoolDecorator);
         self::assertTrue($this->adapter->commit());
     }
 
@@ -842,6 +863,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->expects(self::once())
             ->method('setItems')
             ->willThrowException(new Exception\RuntimeException());
+
+        assert($this->adapter instanceof CacheItemPoolDecorator);
 
         $adapter = $this->adapter;
         $item    = $adapter->getItem('foo');
@@ -855,9 +878,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
      */
     public function invalidKeyProvider(): array
     {
-        return array_map(function ($v) {
-            return [$v];
-        }, $this->getInvalidKeys());
+        return array_map(static fn($v) => [$v], $this->getInvalidKeys());
     }
 
     /**
@@ -887,6 +908,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     protected function tearDown(): void
     {
         try {
+            assert($this->adapter instanceof CacheItemPoolDecorator);
             $this->adapter->clear();
         } catch (Throwable $throwable) {
             /** Cleanup deferred items as {@see CacheItemPoolDecorator::__destruct} is gonna try to store them. */
@@ -909,6 +931,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with(['foo'])
             ->willReturn(null);
 
+        assert($this->adapter instanceof CacheItemPoolDecorator);
         self::assertFalse($this->adapter->deleteItems(['foo']));
     }
 
@@ -931,6 +954,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with(['foo'])
             ->willReturn(['foo' => $exists]);
 
+        assert($this->adapter instanceof CacheItemPoolDecorator);
         self::assertEquals($successful, $this->adapter->deleteItems(['foo']));
     }
 
@@ -1039,6 +1063,9 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $failedItem1   = new CacheItem('keyOfFailedItem1', 'foo', false);
         $failedItem2   = new CacheItem('keyOfFailedItem2', 'foo', false);
         $succeededItem = new CacheItem('keyOfSucceededItem', 'foo', false);
+
+        assert($this->adapter instanceof CacheItemPoolDecorator);
+
         $this->adapter->saveDeferred($failedItem1);
         $this->adapter->saveDeferred($failedItem2);
         $this->adapter->saveDeferred($succeededItem);

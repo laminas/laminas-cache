@@ -12,8 +12,7 @@ use Psr\Container\ContainerInterface;
 
 final class StoragePluginFactoryFactoryTest extends TestCase
 {
-    /** @var StoragePluginFactoryFactory */
-    private $factory;
+    private StoragePluginFactoryFactory $factory;
 
     protected function setUp(): void
     {

@@ -41,11 +41,10 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     use MaximumKeyLengthTrait;
     use SerializationTrait;
 
-    /** @var StorageInterface */
-    private $storage;
+    private StorageInterface $storage;
 
     /** @var array<string,CacheItem> */
-    private $deferred = [];
+    private array $deferred = [];
 
     /**
      * PSR-6 requires that all implementing libraries support TTL so the given storage adapter must also support static

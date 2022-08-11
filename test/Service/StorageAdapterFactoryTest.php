@@ -28,8 +28,7 @@ use function sprintf;
  */
 final class StorageAdapterFactoryTest extends TestCase
 {
-    /** @var StorageAdapterFactory */
-    private $factory;
+    private StorageAdapterFactory $factory;
 
     /** @var PluginManagerInterface&MockObject */
     private $adapters;

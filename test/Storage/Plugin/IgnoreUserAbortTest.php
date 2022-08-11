@@ -4,6 +4,7 @@ namespace LaminasTest\Cache\Storage\Plugin;
 
 use Laminas\Cache;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
+use Laminas\Cache\Storage\Plugin\PluginOptions;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 
 use function array_shift;
@@ -12,11 +13,9 @@ final class IgnoreUserAbortTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    /** @var AbstractAdapter */
-    protected $adapter;
+    protected AbstractAdapter $adapter;
 
-    /** @var Cache\Storage\Plugin\PluginOptions */
-    private $options;
+    private PluginOptions $options;
 
     protected function setUp(): void
     {

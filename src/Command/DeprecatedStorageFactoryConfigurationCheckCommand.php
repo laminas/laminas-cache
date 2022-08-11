@@ -44,10 +44,9 @@ final class DeprecatedStorageFactoryConfigurationCheckCommand extends Command
     . ' https://docs.laminas.dev/laminas-cache/storage/adapter/#quick-start';
 
     /** @var ArrayAccess<string,mixed> */
-    private $projectConfiguration;
+    private ArrayAccess $projectConfiguration;
 
-    /** @var DeprecatedSchemaDetectorInterface */
-    private $deprecatedSchemaDetector;
+    private DeprecatedSchemaDetectorInterface $deprecatedSchemaDetector;
 
     public function __construct(
         ArrayAccess $projectConfiguration,

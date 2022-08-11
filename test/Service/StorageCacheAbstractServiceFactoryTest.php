@@ -12,14 +12,13 @@ use Psr\Container\ContainerInterface;
 
 final class StorageCacheAbstractServiceFactoryTest extends TestCase
 {
-    /** @var StorageCacheAbstractServiceFactory */
-    private $factory;
+    private StorageCacheAbstractServiceFactory $factory;
 
     /** @var StorageAdapterFactoryInterface&MockObject */
     private $adapterFactory;
 
     /** @var array<string,array{Foo:array,Memory:array}> */
-    private $config = [
+    private array $config = [
         'caches' => [
             'Memory' => [
                 'adapter' => 'Memory',

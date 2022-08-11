@@ -16,10 +16,8 @@ final class CacheItem implements CacheItemInterface
 {
     /**
      * Cache key
-     *
-     * @var string
      */
-    private $key;
+    private string $key;
 
     /**
      * Cache value
@@ -30,20 +28,15 @@ final class CacheItem implements CacheItemInterface
 
     /**
      * True if the cache item lookup resulted in a cache hit or if they item is deferred or successfully saved
-     *
-     * @var bool
      */
-    private $isHit = false;
+    private bool $isHit = false;
 
     /**
      * Timestamp item will expire at if expiresAt() called, null otherwise
-     *
-     * @var int|null
      */
-    private $expiration;
+    private ?int $expiration = null;
 
-    /** @var DateTimeZone */
-    private $utc;
+    private DateTimeZone $utc;
 
     /**
      * @param string $key

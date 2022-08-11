@@ -42,22 +42,21 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public const INVALID_KEY_CHARS = ':@{}()/\\';
 
-    /** @var bool */
-    private $providesPerItemTtl = true;
+    private bool $providesPerItemTtl = true;
 
-    /** @var StorageInterface */
-    private $storage;
+    private StorageInterface $storage;
 
     /**
      * Reference used by storage when calling getItem() to indicate status of
      * operation.
      *
      * @var null|bool
+     *
+     * Use ?bool type make it unserialized, even with null initialized
      */
     private $success;
 
-    /** @var DateTimeZone */
-    private $utc;
+    private DateTimeZone $utc;
 
     public function __construct(StorageInterface $storage)
     {
@@ -92,7 +91,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             throw static::translateThrowable($e);
         }
 
-        $result = $result ?? $default;
+        $result ??= $default;
         return $this->success ? $result : $default;
     }
 

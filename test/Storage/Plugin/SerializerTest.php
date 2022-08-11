@@ -5,6 +5,7 @@ namespace LaminasTest\Cache\Storage\Plugin;
 use ArrayObject;
 use Laminas\Cache;
 use Laminas\Cache\Storage\Event;
+use Laminas\Cache\Storage\Plugin\PluginOptions;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\Cache\Storage\StorageInterface;
@@ -20,11 +21,9 @@ final class SerializerTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    /** @var MockAdapter */
-    protected $adapter;
+    protected MockAdapter $adapter;
 
-    /** @var Cache\Storage\Plugin\PluginOptions */
-    private $options;
+    private PluginOptions $options;
 
     protected function setUp(): void
     {
