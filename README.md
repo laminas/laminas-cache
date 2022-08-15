@@ -22,12 +22,19 @@
 is able to cache different patterns (class, object, output, etc) using different
 storage adapters (DB, File, Memcache, etc).
 
+## Documentation
+
+- [Quickstart and introduction  to laminas](https://docs.laminas.dev/laminas-cache/v3/pattern/intro/)
+
+- [Full Documentation](https://docs.laminas.dev/laminas-cache/)
+
+- [Adapters API and supported cache services (ex. Redis, memcached, APCu, FileSystem, etc.)](https://docs.laminas.dev/laminas-cache/v3/storage/adapter/)
+
 - File issues at https://github.com/laminas/laminas-cache/issues
-- Documentation is at https://docs.laminas.dev/laminas-cache/
 
 ## Standalone
 
-If this component is used without `laminas-mvc` or `mezzio`, a PSR-11 container to fetch services, adapters, plugins, etc. is needed.
+If this component is used without `laminas-mvc` or `mezzio`, a [PSR-11](https://www.php-fig.org/psr/psr-11/) container to fetch services, adapters, plugins, etc. is needed.
 
 The easiest way would be to use [laminas-config-aggregator](https://docs.laminas.dev/laminas-config-aggregator/) along with [laminas-servicemanager](https://docs.laminas.dev/laminas-servicemanager/).
 
