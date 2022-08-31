@@ -1,9 +1,44 @@
 {
     "ignore_php_platform_requirements": {
-        "8.1": true
+        "8.0": false,
+        "8.1": false
     },
     "extensions": [
         "apcu"
+    ],
+    "additional_checks": [
+        {
+            "name": "Unit tests with psr/cache v2",
+            "job": {
+                "php": "8.0",
+                "dependencies": "latest",
+                "command": "composer require psr/cache:^2.0 && vendor/bin/phpunit"
+            }
+        },
+        {
+            "name": "Unit tests with psr/cache v2",
+            "job": {
+                "php": "8.1",
+                "dependencies": "latest",
+                "command": "composer require psr/cache:^2.0 && vendor/bin/phpunit"
+            }
+        },
+        {
+            "name": "Unit tests with psr/cache v2",
+            "job": {
+                "php": "8.0",
+                "dependencies": "lowest",
+                "command": "composer require psr/cache:^2.0 && vendor/bin/phpunit"
+            }
+        },
+        {
+            "name": "Unit tests with psr/cache v2",
+            "job": {
+                "php": "8.1",
+                "dependencies": "lowest",
+                "command": "composer require psr/cache:^2.0 && vendor/bin/phpunit"
+            }
+        }
     ],
     "ini": [
         "apc.enabled=1",

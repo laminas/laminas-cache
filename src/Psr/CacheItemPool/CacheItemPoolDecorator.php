@@ -84,7 +84,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function getItem($key)
+    public function getItem($key): CacheItemInterface
     {
         $this->validateKey($key);
 
@@ -108,7 +108,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function getItems(array $keys = [])
+    public function getItems(array $keys = []): iterable
     {
         $this->validateKeys($keys);
         $items = [];
@@ -149,7 +149,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function hasItem($key)
+    public function hasItem($key): bool
     {
         $this->validateKey($key);
 
@@ -173,7 +173,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      * If the storage adapter supports namespaces and one has been set, only that namespace is cleared; otherwise
      * entire cache is flushed.
      */
-    public function clear()
+    public function clear(): bool
     {
         $this->deferred = [];
 
@@ -196,7 +196,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteItem($key)
+    public function deleteItem($key): bool
     {
         return $this->deleteItems([$key]);
     }
@@ -204,7 +204,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteItems(array $keys)
+    public function deleteItems(array $keys): bool
     {
         $this->validateKeys($keys);
 
@@ -236,7 +236,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function save(CacheItemInterface $item)
+    public function save(CacheItemInterface $item): bool
     {
         if (! $item instanceof CacheItem) {
             throw new InvalidArgumentException('$item must be an instance of ' . CacheItem::class);
@@ -248,7 +248,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function saveDeferred(CacheItemInterface $item)
+    public function saveDeferred(CacheItemInterface $item): bool
     {
         if (! $item instanceof CacheItem) {
             throw new InvalidArgumentException('$item must be an instance of ' . CacheItem::class);
@@ -269,7 +269,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function commit()
+    public function commit(): bool
     {
         $groupedByTtl = [];
         foreach ($this->deferred as $cacheKey => $item) {

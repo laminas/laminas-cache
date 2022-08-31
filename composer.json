@@ -20,9 +20,6 @@
     "config": {
         "process-timeout": 600,
         "sort-packages": true,
-        "platform": {
-            "php": "7.4.99"
-        },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
@@ -39,7 +36,7 @@
         "laminas/laminas-eventmanager": "^3.4",
         "laminas/laminas-servicemanager": "^3.11",
         "laminas/laminas-stdlib": "^3.6",
-        "psr/cache": "^1.0",
+        "psr/cache": "^1.0 || ^2.0 || ^3.0",
         "psr/simple-cache": "^1.0",
         "stella-maris/clock": "^0.1.5",
         "webmozart/assert": "^1.9"
@@ -51,7 +48,7 @@
         "laminas/laminas-cache-storage-adapter-memory": "^2.0",
         "laminas/laminas-cache-storage-adapter-test": "^2.3",
         "laminas/laminas-cli": "^1.0",
-        "laminas/laminas-coding-standard": "~2.2.0",
+        "laminas/laminas-coding-standard": "~2.3.0",
         "laminas/laminas-config-aggregator": "^1.5",
         "laminas/laminas-feed": "^2.14",
         "laminas/laminas-serializer": "^2.6",
