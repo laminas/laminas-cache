@@ -6,10 +6,10 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use InvalidArgumentException;
 use Laminas\Cache\Psr\CacheItemPool\CacheItem;
 use PHPUnit\Framework\TestCase;
 use StellaMaris\Clock\ClockInterface;
-use TypeError;
 
 use function date_default_timezone_get;
 use function date_default_timezone_set;
@@ -73,7 +73,7 @@ class CacheItemTest extends TestCase
 
     public function testExpireAtInvalidThrowsException(): void
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $item = new CacheItem('key', 'value', true);
         $item->expiresAt('foo');
     }
@@ -104,7 +104,7 @@ class CacheItemTest extends TestCase
 
     public function testExpiresAfterInvalidThrowsException(): void
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
         $item = new CacheItem('key', 'value', true);
         $item->expiresAfter([]);
     }

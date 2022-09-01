@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ff48cb0309317da8a2be2476f03a5ec",
+    "content-hash": "0a0e5de4729de972644f6a5359f62e70",
     "packages": [
         {
             "name": "laminas/laminas-cache-storage-adapter-filesystem",

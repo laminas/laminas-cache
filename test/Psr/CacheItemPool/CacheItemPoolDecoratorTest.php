@@ -899,8 +899,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @return array<int,string>
-     * @psalm-return list<string>
+     * @return array<int,string|object>
+     * @psalm-return list<string|object>
      */
     private function getInvalidKeys(): array
     {
@@ -913,6 +913,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             'key\\',
             'key@',
             'key:',
+            new stdClass(),
         ];
     }
 

@@ -116,7 +116,7 @@ final class CacheItem implements CacheItemInterface
     /**
      * {@inheritdoc}
      */
-    public function expiresAt(?DateTimeInterface $expiration): static
+    public function expiresAt($expiration): static
     {
         if (! ($expiration === null || $expiration instanceof DateTimeInterface)) {
             throw new InvalidArgumentException('$expiration must be null or an instance of DateTimeInterface');
@@ -130,7 +130,7 @@ final class CacheItem implements CacheItemInterface
     /**
      * {@inheritdoc}
      */
-    public function expiresAfter(int|DateInterval|null $time): static
+    public function expiresAfter($time): static
     {
         if ($time === null) {
             return $this->expiresAt(null);

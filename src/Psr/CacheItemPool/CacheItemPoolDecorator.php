@@ -83,7 +83,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function getItem(string $key): CacheItemInterface
+    public function getItem($key): CacheItemInterface
     {
         $this->validateKey($key);
 
@@ -148,7 +148,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function hasItem(string $key): bool
+    public function hasItem($key): bool
     {
         $this->validateKey($key);
 
@@ -195,7 +195,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteItem(string $key): bool
+    public function deleteItem($key): bool
     {
         return $this->deleteItems([$key]);
     }

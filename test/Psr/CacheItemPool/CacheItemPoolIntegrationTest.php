@@ -11,27 +11,6 @@ use LaminasTest\Cache\Storage\Adapter\AbstractCacheItemPoolIntegrationTest;
 
 final class CacheItemPoolIntegrationTest extends AbstractCacheItemPoolIntegrationTest
 {
-    /**
-     * Data provider for invalid keys.
-     *
-     * @return list<array{0:mixed}>
-     */
-    public static function invalidKeys(): array
-    {
-        return [
-            ['{str'],
-            ['rand{'],
-            ['rand{str'],
-            ['rand}str'],
-            ['rand(str'],
-            ['rand)str'],
-            ['rand/str'],
-            ['rand\\str'],
-            ['rand@str'],
-            ['rand:str'],
-        ];
-    }
-
     protected function createStorage(): StorageInterface
     {
         $storage    = new Apcu();
