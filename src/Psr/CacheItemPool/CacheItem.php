@@ -145,7 +145,7 @@ final class CacheItem implements CacheItemInterface
             $time = $interval;
         }
 
-        /** @psalm-suppress RedundantConditionGivenDocblockType Until we do have native type-hints we should keep verifying this. */
+        /** @psalm-suppress RedundantCondition Until we do have native type-hints we should keep verifying this. */
         if ($time instanceof DateInterval) {
             $now = $this->clock->now();
             return $this->expiresAt($now->add($time));

@@ -41,7 +41,7 @@ class OutputCache extends AbstractStorageCapablePattern
         }
 
         ob_start();
-        ob_implicit_flush(0);
+        ob_implicit_flush(false);
         $this->keyStack[] = $key;
         return false;
     }

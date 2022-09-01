@@ -117,7 +117,7 @@ class CallbackCacheTest extends AbstractCommonStoragePatternTest
         $firstCounter = TestCallbackCache::$fooCounter + 1;
 
         ob_start();
-        ob_implicit_flush(0);
+        ob_implicit_flush(false);
         $return = $this->pattern->call($callback, $args);
         $data   = ob_get_clean();
 
@@ -126,7 +126,7 @@ class CallbackCacheTest extends AbstractCommonStoragePatternTest
 
         // second call - cached
         ob_start();
-        ob_implicit_flush(0);
+        ob_implicit_flush(false);
         $return = $this->pattern->call($callback, $args);
         $data   = ob_get_clean();
 

@@ -48,7 +48,7 @@ class CaptureCache extends AbstractPattern
             return false;
         });
 
-        ob_implicit_flush(0);
+        ob_implicit_flush(false);
     }
 
     /**

@@ -130,7 +130,7 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
         $firstCounter = TestObjectCache::$fooCounter + 1;
 
         ob_start();
-        ob_implicit_flush(0);
+        ob_implicit_flush(false);
         $return = $callback(...$args);
         $data   = ob_get_contents();
         ob_end_clean();
@@ -140,7 +140,7 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
 
         // second call - cached
         ob_start();
-        ob_implicit_flush(0);
+        ob_implicit_flush(false);
         $return = $callback(...$args);
         $data   = ob_get_contents();
         ob_end_clean();
