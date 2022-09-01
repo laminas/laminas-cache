@@ -271,9 +271,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with($keys)
             ->willReturn(['bar' => 'value']);
 
-        /**
-         * @var array<string, CacheItem> $items
-         */
         $items = $this->getAdapter($storage)->getItems($keys);
         self::assertCount(2, $items);
         self::assertNull($items['foo']->get());
@@ -301,9 +298,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with($keys)
             ->willThrowException(new Exception\RuntimeException());
 
-        /**
-         * @var array<string, CacheItem> $items
-         */
         $items = $this->getAdapter($storage)->getItems($keys);
         self::assertCount(2, $items);
         foreach ($keys as $key) {
@@ -347,9 +341,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $item    = $adapter->getItem('foo');
         $item->set('bar');
         self::assertTrue($adapter->save($item));
-        /**
-         * @var array<string, CacheItem> $saved
-         */
         $saved = $adapter->getItems(['foo']);
         self::assertEquals('bar', $saved['foo']->get());
         self::assertTrue($saved['foo']->isHit());
@@ -388,9 +379,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $item->set('bar');
         $item->expiresAfter(3600);
         self::assertTrue($adapter->save($item));
-        /**
-         * @var array<string, CacheItem> $saved
-         */
         $saved = $adapter->getItems(['foo']);
         self::assertEquals('bar', $saved['foo']->get());
         self::assertTrue($saved['foo']->isHit());
