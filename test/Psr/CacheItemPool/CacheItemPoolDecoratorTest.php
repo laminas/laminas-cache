@@ -24,8 +24,6 @@ use stdClass;
 use StellaMaris\Clock\ClockInterface;
 use Throwable;
 
-use TypeError;
-
 use function array_keys;
 use function array_map;
 use function assert;
