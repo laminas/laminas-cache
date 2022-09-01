@@ -106,7 +106,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
     /**
      * {@inheritdoc}
-     * @psalm-return array<string,CacheItem>
      */
     public function getItems(array $keys = []): iterable
     {

@@ -24,6 +24,8 @@ use stdClass;
 use StellaMaris\Clock\ClockInterface;
 use Throwable;
 
+use TypeError;
+
 use function array_keys;
 use function array_map;
 use function assert;
@@ -179,6 +181,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     /**
      * @param mixed $key
      * @dataProvider invalidKeyProvider
+     * @throws InvalidArgumentException
      */
     public function testGetItemInvalidKeyThrowsException($key)
     {
@@ -271,6 +274,9 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with($keys)
             ->willReturn(['bar' => 'value']);
 
+        /**
+         * @var array<string, CacheItem> $items
+         */
         $items = $this->getAdapter($storage)->getItems($keys);
         self::assertCount(2, $items);
         self::assertNull($items['foo']->get());
@@ -298,6 +304,9 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with($keys)
             ->willThrowException(new Exception\RuntimeException());
 
+        /**
+         * @var array<string, CacheItem> $items
+         */
         $items = $this->getAdapter($storage)->getItems($keys);
         self::assertCount(2, $items);
         foreach ($keys as $key) {
@@ -341,6 +350,9 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $item    = $adapter->getItem('foo');
         $item->set('bar');
         self::assertTrue($adapter->save($item));
+        /**
+         * @var array<string, CacheItem> $saved
+         */
         $saved = $adapter->getItems(['foo']);
         self::assertEquals('bar', $saved['foo']->get());
         self::assertTrue($saved['foo']->isHit());
@@ -379,6 +391,9 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $item->set('bar');
         $item->expiresAfter(3600);
         self::assertTrue($adapter->save($item));
+        /**
+         * @var array<string, CacheItem> $saved
+         */
         $saved = $adapter->getItems(['foo']);
         self::assertEquals('bar', $saved['foo']->get());
         self::assertTrue($saved['foo']->isHit());
@@ -886,8 +901,8 @@ final class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @return array<int,string|object>
-     * @psalm-return list<string|object>
+     * @return array<int,string>
+     * @psalm-return list<string>
      */
     private function getInvalidKeys(): array
     {
@@ -900,7 +915,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
             'key\\',
             'key@',
             'key:',
-            new stdClass(),
         ];
     }
 
