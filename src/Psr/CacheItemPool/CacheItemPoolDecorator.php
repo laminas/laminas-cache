@@ -83,7 +83,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function getItem($key): CacheItemInterface
+    public function getItem(string $key): CacheItemInterface
     {
         $this->validateKey($key);
 
