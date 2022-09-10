@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasBench\Cache;
 
 use Laminas\Cache\Storage\Adapter\Memory;

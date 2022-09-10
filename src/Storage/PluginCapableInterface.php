@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Cache\Storage;
 
 use Laminas\EventManager\EventsCapableInterface;
