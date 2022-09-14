@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
@@ -12,6 +14,8 @@ use function implode;
 use function ob_get_clean;
 use function ob_implicit_flush;
 use function ob_start;
+
+use const PHP_MAJOR_VERSION;
 
 /**
  * @see \LaminasTest\Cache\Pattern\Foo::bar
@@ -117,7 +121,12 @@ class CallbackCacheTest extends AbstractCommonStoragePatternTest
         $firstCounter = TestCallbackCache::$fooCounter + 1;
 
         ob_start();
-        ob_implicit_flush(0);
+        /**
+         * TODO: remove when PHP 7.4 support is dropped
+         *
+         * @psalm-suppress PossiblyFalseArgument
+         */
+        ob_implicit_flush(PHP_MAJOR_VERSION >= 8 ? false : 0);
         $return = $this->pattern->call($callback, $args);
         $data   = ob_get_clean();
 
@@ -126,7 +135,12 @@ class CallbackCacheTest extends AbstractCommonStoragePatternTest
 
         // second call - cached
         ob_start();
-        ob_implicit_flush(0);
+        /**
+         * TODO: remove when PHP 7.4 support is dropped
+         *
+         * @psalm-suppress PossiblyFalseArgument
+         */
+        ob_implicit_flush(PHP_MAJOR_VERSION >= 8 ? false : 0);
         $return = $this->pattern->call($callback, $args);
         $data   = ob_get_clean();
 

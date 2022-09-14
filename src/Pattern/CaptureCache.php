@@ -25,6 +25,7 @@ use function unlink;
 
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
+use const PHP_MAJOR_VERSION;
 
 class CaptureCache extends AbstractPattern
 {
@@ -48,7 +49,12 @@ class CaptureCache extends AbstractPattern
             return false;
         });
 
-        ob_implicit_flush(0);
+        /**
+         * TODO: remove when PHP 7.4 support is dropped
+         *
+         * @psalm-suppress PossiblyFalseArgument
+         */
+        ob_implicit_flush(PHP_MAJOR_VERSION >= 8 ? false : 0);
     }
 
     /**

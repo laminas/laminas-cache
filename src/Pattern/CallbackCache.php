@@ -18,6 +18,8 @@ use function serialize;
 use function sprintf;
 use function strtolower;
 
+use const PHP_MAJOR_VERSION;
+
 class CallbackCache extends AbstractStorageCapablePattern
 {
     /**
@@ -48,7 +50,12 @@ class CallbackCache extends AbstractStorageCapablePattern
         $cacheOutput = $options->getCacheOutput();
         if ($cacheOutput) {
             ob_start();
-            ob_implicit_flush(0);
+            /**
+             * TODO: remove when PHP 7.4 support is dropped
+             *
+             * @psalm-suppress PossiblyFalseArgument
+             */
+            ob_implicit_flush(PHP_MAJOR_VERSION >= 8 ? false : 0);
         }
 
         // TODO: do not cache on errors using [set|restore]_error_handler

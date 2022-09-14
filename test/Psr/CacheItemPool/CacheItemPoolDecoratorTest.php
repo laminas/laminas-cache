@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Cache\Psr\CacheItemPool;
 
 use DateTimeImmutable;
@@ -975,8 +977,11 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->with('foo')
             ->willReturn(false);
 
+        $expiryTime = DateTimeImmutable::createFromFormat('U', (string) (time() - 1));
+        self::assertNotFalse($expiryTime);
+
         $item = new CacheItem('foo', 'bar', false);
-        $item->expiresAt(DateTimeImmutable::createFromFormat('U', time() - 1));
+        $item->expiresAt($expiryTime);
 
         $cache = new CacheItemPoolDecorator($adapter);
         $cache->saveDeferred($item);

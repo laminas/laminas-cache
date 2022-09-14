@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaminasTest\Cache\Storage\Adapter\TestAsset;
 
 use Laminas\Cache\Storage\Plugin\PluginInterface;
