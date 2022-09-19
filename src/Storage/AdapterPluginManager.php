@@ -10,6 +10,9 @@ use Laminas\ServiceManager\AbstractPluginManager;
  * Enforces that adapters retrieved are instances of
  * StorageInterface. Additionally, it registers a number of default
  * adapters available.
+ *
+ * @extends AbstractPluginManager<StorageInterface>
+ * @final
  */
 final class AdapterPluginManager extends AbstractPluginManager
 {
@@ -20,6 +23,6 @@ final class AdapterPluginManager extends AbstractPluginManager
      */
     protected $sharedByDefault = false;
 
-    /** @var string */
+    /** @var class-string */
     protected $instanceOf = StorageInterface::class;
 }

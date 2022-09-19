@@ -13,6 +13,9 @@ use Laminas\ServiceManager\Factory\InvokableFactory;
  * Enforces that plugins retrieved are instances of
  * Plugin\PluginInterface. Additionally, it registers a number of default
  * plugins available.
+ *
+ * @extends AbstractPluginManager<PluginInterface>
+ * @final
  */
 final class PluginManager extends AbstractPluginManager
 {
@@ -54,14 +57,10 @@ final class PluginManager extends AbstractPluginManager
      */
     protected $sharedByDefault = false;
 
-    /** @var string */
+    /** @var class-string */
     protected $instanceOf = PluginInterface::class;
 
-    /**
-     * @param  string $name
-     * @param  null|array  $options
-     * @return mixed
-     */
+    /** @inheritDoc */
     public function build($name, ?array $options = null)
     {
         $options ??= [];
