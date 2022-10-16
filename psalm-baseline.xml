@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.27.0@faf106e717c37b8c81721845dba9de3d8deed8ff">
+<files psalm-version="4.30.0@d0bc6e25d89f649e4f36a534f330f8bb4643dd69">
   <file src="src/Command/DeprecatedStorageFactoryConfigurationCheckCommand.php">
     <MixedArgument occurrences="2">
       <code>$cacheConfiguration</code>
@@ -28,6 +28,9 @@
     <InvalidArgument occurrences="1">
       <code>$function</code>
     </InvalidArgument>
+    <InvalidScalarArgument occurrences="1">
+      <code>PHP_MAJOR_VERSION &gt;= 8 ? false : 0</code>
+    </InvalidScalarArgument>
     <MixedArgument occurrences="2">
       <code>$result</code>
       <code>$result[1] ?? ''</code>
@@ -41,12 +44,18 @@
       <code>$result</code>
       <code>$ret</code>
     </MixedAssignment>
+    <UnusedPsalmSuppress occurrences="1">
+      <code>PossiblyFalseArgument</code>
+    </UnusedPsalmSuppress>
   </file>
   <file src="src/Pattern/CaptureCache.php">
     <DocblockTypeContradiction occurrences="2">
       <code>$perm === false</code>
       <code>$perm === false</code>
     </DocblockTypeContradiction>
+    <InvalidScalarArgument occurrences="1">
+      <code>PHP_MAJOR_VERSION &gt;= 8 ? false : 0</code>
+    </InvalidScalarArgument>
     <MissingClosureParamType occurrences="1">
       <code>$content</code>
     </MissingClosureParamType>
@@ -60,12 +69,6 @@
       <code>$perm</code>
       <code>$perm</code>
     </MixedArgument>
-    <MixedInferredReturnType occurrences="1">
-      <code>string</code>
-    </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="1">
-      <code>$_SERVER['REQUEST_URI']</code>
-    </MixedReturnStatement>
     <PossiblyInvalidMethodCall occurrences="1">
       <code>isFile</code>
     </PossiblyInvalidMethodCall>
@@ -86,6 +89,9 @@
       <code>$perm !== false</code>
       <code>decoct($perm)</code>
     </TypeDoesNotContainType>
+    <UnusedPsalmSuppress occurrences="1">
+      <code>PossiblyFalseArgument</code>
+    </UnusedPsalmSuppress>
   </file>
   <file src="src/Pattern/ObjectCache.php">
     <ImplementedParamTypeMismatch occurrences="2">
@@ -141,6 +147,9 @@
     </PossiblyNullArgument>
   </file>
   <file src="src/Pattern/OutputCache.php">
+    <InvalidScalarArgument occurrences="1">
+      <code>PHP_MAJOR_VERSION &gt;= 8 ? false : 0</code>
+    </InvalidScalarArgument>
     <MixedArgument occurrences="2">
       <code>$data</code>
       <code>$key</code>
@@ -152,6 +161,9 @@
     <RedundantCastGivenDocblockType occurrences="1">
       <code>(string) $key</code>
     </RedundantCastGivenDocblockType>
+    <UnusedPsalmSuppress occurrences="1">
+      <code>PossiblyFalseArgument</code>
+    </UnusedPsalmSuppress>
   </file>
   <file src="src/Pattern/PatternOptions.php">
     <MixedArgument occurrences="1">
@@ -198,10 +210,9 @@
       <code>is_object($ttl)</code>
       <code>null === $ttl</code>
     </DocblockTypeContradiction>
-    <MixedArgument occurrences="3">
+    <MixedArgument occurrences="2">
       <code>$key</code>
       <code>$key</code>
-      <code>$ttl</code>
     </MixedArgument>
     <MixedAssignment occurrences="6">
       <code>$key</code>
@@ -706,6 +717,10 @@
       <code>attach</code>
       <code>getParams</code>
     </MixedMethodCall>
+    <PossiblyInvalidArgument occurrences="2">
+      <code>PHP_MAJOR_VERSION &gt;= 8 ? false : 0</code>
+      <code>PHP_MAJOR_VERSION &gt;= 8 ? false : 0</code>
+    </PossiblyInvalidArgument>
     <UndefinedInterfaceMethod occurrences="9">
       <code>call</code>
       <code>call</code>
@@ -717,14 +732,15 @@
       <code>generateKey</code>
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
+    <UnusedPsalmSuppress occurrences="2">
+      <code>PossiblyFalseArgument</code>
+      <code>PossiblyFalseArgument</code>
+    </UnusedPsalmSuppress>
   </file>
   <file src="test/Pattern/CaptureCacheTest.php">
     <MixedMethodCall occurrences="1">
       <code>setIndexFilename</code>
     </MixedMethodCall>
-    <MixedPropertyTypeCoercion occurrences="1">
-      <code>$_SERVER</code>
-    </MixedPropertyTypeCoercion>
     <PossiblyNullArrayAccess occurrences="3">
       <code>$err['message']</code>
       <code>$err['message']</code>
@@ -767,6 +783,10 @@
       <code>$this-&gt;pattern-&gt;property</code>
       <code>$this-&gt;pattern-&gt;unknownProperty</code>
     </NoInterfaceProperties>
+    <PossiblyInvalidArgument occurrences="2">
+      <code>PHP_MAJOR_VERSION &gt;= 8 ? false : 0</code>
+      <code>PHP_MAJOR_VERSION &gt;= 8 ? false : 0</code>
+    </PossiblyInvalidArgument>
     <PossiblyNullArgument occurrences="1">
       <code>$this-&gt;options-&gt;getObject()</code>
     </PossiblyNullArgument>
@@ -779,6 +799,10 @@
       <code>generateKey</code>
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
+    <UnusedPsalmSuppress occurrences="2">
+      <code>PossiblyFalseArgument</code>
+      <code>PossiblyFalseArgument</code>
+    </UnusedPsalmSuppress>
   </file>
   <file src="test/Pattern/OutputCacheTest.php">
     <PossiblyNullReference occurrences="2">

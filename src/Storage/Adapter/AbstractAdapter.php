@@ -23,7 +23,6 @@ use function array_unique;
 use function array_values;
 use function array_walk;
 use function func_num_args;
-use function get_class;
 use function preg_match;
 use function sprintf;
 
@@ -274,7 +273,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
         if ($registry->contains($plugin)) {
             throw new Exception\LogicException(sprintf(
                 'Plugin of type "%s" already registered',
-                get_class($plugin)
+                $plugin::class
             ));
         }
 
