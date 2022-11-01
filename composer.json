@@ -57,7 +57,7 @@
         "laminas/laminas-serializer": "^2.6.1",
         "phpbench/phpbench": "^1.0",
         "phpunit/phpunit": "^9.5.23",
-        "psalm/plugin-phpunit": "^0.17.0",
+        "psalm/plugin-phpunit": "^0.18.0",
         "vimeo/psalm": "^4.24"
     },
     "conflict": {
