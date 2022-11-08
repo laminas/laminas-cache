@@ -38,16 +38,10 @@ class KeyListIterator implements IteratorInterface, Countable
     /**
      * Constructor
      *
-     * @param string[] $keys
+     * @param string[] $keys Keys to iterate over
      */
     public function __construct(
-        /**
-         * The storage instance
-         */
         protected StorageInterface $storage,
-        /**
-         * Keys to iterate over
-         */
         protected array $keys
     ) {
         $this->count = count($keys);
