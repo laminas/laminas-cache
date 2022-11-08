@@ -362,9 +362,10 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * Throws exception if given key is invalid
      *
+     * @param mixed $key
      * @throws InvalidArgumentException
      */
-    private function validateKey(mixed $key)
+    private function validateKey($key)
     {
         if (! is_string($key) || preg_match('#[{}()/\\\\@:]#', $key)) {
             throw new InvalidArgumentException(sprintf(

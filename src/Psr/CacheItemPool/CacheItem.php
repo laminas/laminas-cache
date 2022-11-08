@@ -39,12 +39,15 @@ final class CacheItem implements CacheItemInterface
 
     private ClockInterface $clock;
 
+    /**
+     * @param mixed $value
+     */
     public function __construct(
         /**
          * Cache key
          */
         private string $key,
-        mixed $value,
+        $value,
         bool $isHit,
         ?ClockInterface $clock = null
     ) {
