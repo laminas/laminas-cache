@@ -15,25 +15,11 @@ use function count;
 class KeyListIterator implements IteratorInterface, Countable
 {
     /**
-     * The storage instance
-     *
-     * @var StorageInterface
-     */
-    protected $storage;
-
-    /**
      * The iterator mode
      *
      * @var int
      */
     protected $mode = IteratorInterface::CURRENT_AS_KEY;
-
-    /**
-     * Keys to iterate over
-     *
-     * @var string[]
-     */
-    protected $keys;
 
     /**
      * Number of keys
@@ -52,13 +38,19 @@ class KeyListIterator implements IteratorInterface, Countable
     /**
      * Constructor
      *
-     * @param array            $keys
+     * @param string[] $keys
      */
-    public function __construct(StorageInterface $storage, array $keys)
-    {
-        $this->storage = $storage;
-        $this->keys    = $keys;
-        $this->count   = count($keys);
+    public function __construct(
+        /**
+         * The storage instance
+         */
+        protected StorageInterface $storage,
+        /**
+         * Keys to iterate over
+         */
+        protected array $keys
+    ) {
+        $this->count = count($keys);
     }
 
     /**

@@ -17,13 +17,13 @@ use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 use function array_keys;
 use function array_shift;
 use function serialize;
-use function substr;
+use function str_ends_with;
 
 final class SerializerTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    protected MockAdapter $adapter;
+    private MockAdapter $adapter;
 
     private PluginOptions $options;
 
@@ -80,7 +80,7 @@ final class SerializerTest extends AbstractCommonPluginTest
             self::assertSame($expectedCallbackMethod, $cb[1]);
 
             // check expected priority
-            if (substr($eventName, -4) === '.pre') {
+            if (str_ends_with($eventName, '.pre')) {
                 self::assertListenerAtPriority($cb, 100, $eventName, $events);
             } else {
                 self::assertListenerAtPriority($cb, -100, $eventName, $events);

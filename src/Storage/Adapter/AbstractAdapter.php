@@ -217,10 +217,9 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      * Triggers the PostEvent and return the result value.
      *
      * @param  string      $eventName
-     * @param  mixed       $result
      * @return mixed
      */
-    protected function triggerPost($eventName, ArrayObject $args, &$result)
+    protected function triggerPost($eventName, ArrayObject $args, mixed &$result)
     {
         $postEvent = new PostEvent($eventName . '.post', $this, $args, $result);
         $eventRs   = $this->getEventManager()->triggerEvent($postEvent);
@@ -237,11 +236,10 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      * exception after trigger else return the result.
      *
      * @param  string      $eventName
-     * @param  mixed       $result
      * @throws Exception\ExceptionInterface
      * @return mixed
      */
-    protected function triggerException($eventName, ArrayObject $args, &$result, \Exception $exception)
+    protected function triggerException($eventName, ArrayObject $args, mixed &$result, \Exception $exception)
     {
         $exceptionEvent = new ExceptionEvent($eventName . '.exception', $this, $args, $result, $exception);
         $eventRs        = $this->getEventManager()->triggerEvent($exceptionEvent);
@@ -368,11 +366,10 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      *
      * @param  string  $normalizedKey
      * @param  bool $success
-     * @param  mixed   $casToken
      * @return mixed Data on success, null on failure
      * @throws Exception\ExceptionInterface
      */
-    abstract protected function internalGetItem(&$normalizedKey, &$success = null, &$casToken = null);
+    abstract protected function internalGetItem(&$normalizedKey, &$success = null, mixed &$casToken = null);
 
     /**
      * Get multiple items.
@@ -412,7 +409,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Internal method to get multiple items.
      *
-     * @param  array $normalizedKeys
      * @return array Associative array of keys and values
      * @throws Exception\ExceptionInterface
      */
@@ -517,7 +513,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Internal method to test multiple items.
      *
-     * @param  array $normalizedKeys
      * @return array Array of found keys
      * @throws Exception\ExceptionInterface
      */
@@ -621,7 +616,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Internal method to get multiple metadata
      *
-     * @param  array $normalizedKeys
      * @return array Associative array of keys and metadata
      * @throws Exception\ExceptionInterface
      */
@@ -680,11 +674,10 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      * Internal method to store an item.
      *
      * @param  string $normalizedKey
-     * @param  mixed  $value
      * @return bool
      * @throws Exception\ExceptionInterface
      */
-    abstract protected function internalSetItem(&$normalizedKey, &$value);
+    abstract protected function internalSetItem(&$normalizedKey, mixed &$value);
 
     /**
      * Store multiple items.
@@ -724,7 +717,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Internal method to store multiple items.
      *
-     * @param  array $normalizedKeyValuePairs
      * @return array Array of not stored keys
      * @throws Exception\ExceptionInterface
      */
@@ -780,11 +772,10 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      * Internal method to add an item.
      *
      * @param  string $normalizedKey
-     * @param  mixed  $value
      * @return bool
      * @throws Exception\ExceptionInterface
      */
-    protected function internalAddItem(&$normalizedKey, &$value)
+    protected function internalAddItem(&$normalizedKey, mixed &$value)
     {
         if ($this->internalHasItem($normalizedKey)) {
             return false;
@@ -830,7 +821,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Internal method to add multiple items.
      *
-     * @param  array $normalizedKeyValuePairs
      * @return array Array of not stored keys
      * @throws Exception\ExceptionInterface
      */
@@ -886,11 +876,10 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      * Internal method to replace an existing item.
      *
      * @param  string $normalizedKey
-     * @param  mixed  $value
      * @return bool
      * @throws Exception\ExceptionInterface
      */
-    protected function internalReplaceItem(&$normalizedKey, &$value)
+    protected function internalReplaceItem(&$normalizedKey, mixed &$value)
     {
         if (! $this->internalhasItem($normalizedKey)) {
             return false;
@@ -937,7 +926,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Internal method to replace multiple existing items.
      *
-     * @param  array $normalizedKeyValuePairs
      * @return array Array of not stored keys
      * @throws Exception\ExceptionInterface
      */
@@ -1000,13 +988,11 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      * @see    getItem()
      * @see    setItem()
      *
-     * @param  mixed  $token
      * @param  string $normalizedKey
-     * @param  mixed  $value
      * @return bool
      * @throws Exception\ExceptionInterface
      */
-    protected function internalCheckAndSetItem(&$token, &$normalizedKey, &$value)
+    protected function internalCheckAndSetItem(mixed &$token, &$normalizedKey, mixed &$value)
     {
         $oldValue = $this->internalGetItem($normalizedKey);
         if ($oldValue !== $token) {
@@ -1106,7 +1092,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Internal method to reset lifetime of multiple items.
      *
-     * @param  array $normalizedKeys
      * @return array Array of not updated keys
      * @throws Exception\ExceptionInterface
      */
@@ -1202,7 +1187,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Internal method to remove multiple items.
      *
-     * @param  array $normalizedKeys
      * @return array Array of not removed keys
      * @throws Exception\ExceptionInterface
      */
@@ -1316,7 +1300,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Internal method to increment multiple items.
      *
-     * @param  array $normalizedKeyValuePairs
      * @return array Associative array of keys and new values
      * @throws Exception\ExceptionInterface
      */
@@ -1431,7 +1414,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Internal method to decrement multiple items.
      *
-     * @param  array $normalizedKeyValuePairs
      * @return array Associative array of keys and new values
      * @throws Exception\ExceptionInterface
      */
@@ -1516,7 +1498,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Validates and normalizes multiple keys
      *
-     * @param  array $keys
      * @return void
      * @throws Exception\InvalidArgumentException On an invalid key.
      */
@@ -1535,7 +1516,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Validates and normalizes an array of key-value pairs
      *
-     * @param  array $keyValuePairs
      * @return void
      * @throws Exception\InvalidArgumentException On an invalid key.
      */

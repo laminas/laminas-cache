@@ -23,14 +23,10 @@ final class StorageAdapterFactory implements StorageAdapterFactoryInterface
 {
     public const DEFAULT_PLUGIN_PRIORITY = 1;
 
-    private PluginManagerInterface $adapters;
-
-    private StoragePluginFactoryInterface $pluginFactory;
-
-    public function __construct(PluginManagerInterface $adapters, StoragePluginFactoryInterface $pluginFactory)
-    {
-        $this->adapters      = $adapters;
-        $this->pluginFactory = $pluginFactory;
+    public function __construct(
+        private PluginManagerInterface $adapters,
+        private StoragePluginFactoryInterface $pluginFactory
+    ) {
     }
 
     public function createFromArrayConfiguration(array $configuration): StorageInterface

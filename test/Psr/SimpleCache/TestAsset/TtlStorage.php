@@ -18,7 +18,7 @@ class TtlStorage extends Adapter\AbstractAdapter
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
      */
-    protected function internalGetItem(&$normalizedKey, &$success = null, &$casToken = null)
+    protected function internalGetItem(&$normalizedKey, &$success = null, mixed &$casToken = null)
     {
         $success = isset($this->data[$normalizedKey]);
 
@@ -29,7 +29,7 @@ class TtlStorage extends Adapter\AbstractAdapter
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint
      */
-    protected function internalSetItem(&$normalizedKey, &$value)
+    protected function internalSetItem(&$normalizedKey, mixed &$value)
     {
         $this->ttl[$normalizedKey] = $this->getOptions()->getTtl();
 

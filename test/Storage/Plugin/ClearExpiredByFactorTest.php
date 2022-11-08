@@ -12,13 +12,12 @@ use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
 use LaminasTest\Cache\Storage\TestAsset\ClearExpiredMockAdapter;
 
 use function array_shift;
-use function get_class;
 
 final class ClearExpiredByFactorTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    protected ClearExpiredMockAdapter $adapter;
+    private ClearExpiredMockAdapter $adapter;
 
     private PluginOptions $options;
 
@@ -81,7 +80,7 @@ final class ClearExpiredByFactorTest extends AbstractCommonPluginTest
 
     public function testClearExpiredByFactor(): void
     {
-        $adapter = $this->getMockBuilder(get_class($this->adapter))
+        $adapter = $this->getMockBuilder($this->adapter::class)
             ->setMethods(['clearExpired'])
             ->getMock();
         $this->options->setClearingFactor(1);

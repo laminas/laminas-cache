@@ -94,7 +94,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
                 $value = $this->storage->getItem($key, $isHit);
             } catch (Exception\InvalidArgumentException $e) {
                 throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-            } catch (Exception\ExceptionInterface $e) {
+            } catch (Exception\ExceptionInterface) {
                 // ignore
             }
 
@@ -127,7 +127,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
                 $cacheItems = $this->storage->getItems($keys);
             } catch (Exception\InvalidArgumentException $e) {
                 throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-            } catch (Exception\ExceptionInterface $e) {
+            } catch (Exception\ExceptionInterface) {
                 $cacheItems = [];
             }
 
@@ -161,7 +161,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             return $this->storage->hasItem($key);
         } catch (Exception\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-        } catch (Exception\ExceptionInterface $e) {
+        } catch (Exception\ExceptionInterface) {
             return false;
         }
     }
@@ -184,7 +184,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             } else {
                 $cleared = $this->storage->flush();
             }
-        } catch (Exception\ExceptionInterface $e) {
+        } catch (Exception\ExceptionInterface) {
             $cleared = false;
         }
 
@@ -214,7 +214,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             $result = $this->storage->removeItems($keys);
         } catch (Exception\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-        } catch (Exception\ExceptionInterface $e) {
+        } catch (Exception\ExceptionInterface) {
             return false;
         }
 
@@ -362,10 +362,9 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * Throws exception if given key is invalid
      *
-     * @param mixed $key
      * @throws InvalidArgumentException
      */
-    private function validateKey($key)
+    private function validateKey(mixed $key)
     {
         if (! is_string($key) || preg_match('#[{}()/\\\\@:]#', $key)) {
             throw new InvalidArgumentException(sprintf(
@@ -429,7 +428,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             $notSavedKeys = $this->storage->setItems($keyValuePair);
         } catch (Exception\InvalidArgumentException $e) {
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-        } catch (Exception\ExceptionInterface $e) {
+        } catch (Exception\ExceptionInterface) {
             $notSavedKeys = array_keys($keyValuePair);
         } finally {
             $options->setTtl($ttl);

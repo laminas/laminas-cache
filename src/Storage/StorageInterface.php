@@ -23,22 +23,19 @@ interface StorageInterface
     public function getOptions();
 
     /* reading */
-
     /**
      * Get an item.
      *
      * @param  string  $key
      * @param  bool $success
-     * @param  mixed   $casToken
      * @return mixed Data on success, null on failure
      * @throws ExceptionInterface
      */
-    public function getItem($key, &$success = null, &$casToken = null);
+    public function getItem($key, &$success = null, mixed &$casToken = null);
 
     /**
      * Get multiple items.
      *
-     * @param  array $keys
      * @return array Associative array of keys and values
      * @throws ExceptionInterface
      */
@@ -56,7 +53,6 @@ interface StorageInterface
     /**
      * Test multiple items.
      *
-     * @param  array $keys
      * @return array Array of found keys
      * @throws ExceptionInterface
      */
@@ -74,28 +70,24 @@ interface StorageInterface
     /**
      * Get multiple metadata
      *
-     * @param  array $keys
      * @return array Associative array of keys and metadata
      * @throws ExceptionInterface
      */
     public function getMetadatas(array $keys);
 
     /* writing */
-
     /**
      * Store an item.
      *
      * @param  string $key
-     * @param  mixed  $value
      * @return bool
      * @throws ExceptionInterface
      */
-    public function setItem($key, $value);
+    public function setItem($key, mixed $value);
 
     /**
      * Store multiple items.
      *
-     * @param  array $keyValuePairs
      * @return array Array of not stored keys
      * @throws ExceptionInterface
      */
@@ -105,16 +97,14 @@ interface StorageInterface
      * Add an item.
      *
      * @param  string $key
-     * @param  mixed  $value
      * @return bool
      * @throws ExceptionInterface
      */
-    public function addItem($key, $value);
+    public function addItem($key, mixed $value);
 
     /**
      * Add multiple items.
      *
-     * @param  array $keyValuePairs
      * @return array Array of not stored keys
      * @throws ExceptionInterface
      */
@@ -124,16 +114,14 @@ interface StorageInterface
      * Replace an existing item.
      *
      * @param  string $key
-     * @param  mixed  $value
      * @return bool
      * @throws ExceptionInterface
      */
-    public function replaceItem($key, $value);
+    public function replaceItem($key, mixed $value);
 
     /**
      * Replace multiple existing items.
      *
-     * @param  array $keyValuePairs
      * @return array Array of not stored keys
      * @throws ExceptionInterface
      */
@@ -148,13 +136,11 @@ interface StorageInterface
      * @see    getItem()
      * @see    setItem()
      *
-     * @param  mixed  $token
      * @param  string $key
-     * @param  mixed  $value
      * @return bool
      * @throws ExceptionInterface
      */
-    public function checkAndSetItem($token, $key, $value);
+    public function checkAndSetItem(mixed $token, $key, mixed $value);
 
     /**
      * Reset lifetime of an item
@@ -168,7 +154,6 @@ interface StorageInterface
     /**
      * Reset lifetime of multiple items.
      *
-     * @param  array $keys
      * @return array Array of not updated keys
      * @throws ExceptionInterface
      */
@@ -186,7 +171,6 @@ interface StorageInterface
     /**
      * Remove multiple items.
      *
-     * @param  array $keys
      * @return array Array of not removed keys
      * @throws ExceptionInterface
      */
@@ -205,7 +189,6 @@ interface StorageInterface
     /**
      * Increment multiple items.
      *
-     * @param  array $keyValuePairs
      * @return array Associative array of keys and new values
      * @throws ExceptionInterface
      */
@@ -224,7 +207,6 @@ interface StorageInterface
     /**
      * Decrement multiple items.
      *
-     * @param  array $keyValuePairs
      * @return array Associative array of keys and new values
      * @throws ExceptionInterface
      */

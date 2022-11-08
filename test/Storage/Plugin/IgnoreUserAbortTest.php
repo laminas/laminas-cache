@@ -15,7 +15,7 @@ final class IgnoreUserAbortTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    protected AbstractAdapter $adapter;
+    private AbstractAdapter $adapter;
 
     private PluginOptions $options;
 
