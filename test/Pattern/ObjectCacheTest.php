@@ -15,8 +15,6 @@ use function ob_get_contents;
 use function ob_implicit_flush;
 use function ob_start;
 
-use const PHP_MAJOR_VERSION;
-
 /**
  * @group      Laminas_Cache
  */
@@ -134,12 +132,8 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
         $firstCounter = TestObjectCache::$fooCounter + 1;
 
         ob_start();
-        /**
-         * TODO: remove when PHP 7.4 support is dropped
-         *
-         * @psalm-suppress PossiblyFalseArgument
-         */
-        ob_implicit_flush(PHP_MAJOR_VERSION >= 8 ? false : 0);
+        ob_implicit_flush(false);
+
         $return = $callback(...$args);
         $data   = ob_get_contents();
         ob_end_clean();
@@ -149,12 +143,8 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
 
         // second call - cached
         ob_start();
-        /**
-         * TODO: remove when PHP 7.4 support is dropped
-         *
-         * @psalm-suppress PossiblyFalseArgument
-         */
-        ob_implicit_flush(PHP_MAJOR_VERSION >= 8 ? false : 0);
+        ob_implicit_flush(false);
+
         $return = $callback(...$args);
         $data   = ob_get_contents();
         ob_end_clean();
