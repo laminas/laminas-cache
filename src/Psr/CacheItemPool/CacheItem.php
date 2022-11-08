@@ -28,11 +28,6 @@ final class CacheItem implements CacheItemInterface
     private $value;
 
     /**
-     * True if the cache item lookup resulted in a cache hit or if they item is deferred or successfully saved
-     */
-    private bool $isHit;
-
-    /**
      * Timestamp item will expire at if expiresAt() called, null otherwise
      */
     private ?int $expiration = null;
@@ -45,7 +40,10 @@ final class CacheItem implements CacheItemInterface
          */
         private string $key,
         mixed $value,
-        bool $isHit,
+        /**
+         * True if the cache item lookup resulted in a cache hit or if they item is deferred or successfully saved
+         */
+        private bool $isHit,
         ?ClockInterface $clock = null
     ) {
         $this->value = $isHit ? $value : null;

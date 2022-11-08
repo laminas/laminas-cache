@@ -136,18 +136,12 @@ class Capabilities
      * Constructor
      */
     public function __construct(
-        /**
-         * The storage instance
-         */
         protected StorageInterface $storage,
         /**
          * A marker to set/change capabilities
          */
         protected stdClass $marker,
         array $capabilities = [],
-        /**
-         * Base capabilities
-         */
         protected ?Capabilities $baseCapabilities = null
     ) {
         foreach ($capabilities as $name => $value) {
