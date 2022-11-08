@@ -18,7 +18,6 @@ use Throwable;
 use Traversable;
 
 use function array_keys;
-use function get_class;
 use function gettype;
 use function is_array;
 use function is_int;
@@ -63,7 +62,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
                 'The storage adapter "%s" requires a serializer plugin; please see'
                 . ' https://docs.laminas.dev/laminas-cache/storage/plugin/#quick-start'
                 . ' for details on how to attach the plugin to your adapter.',
-                get_class($storage)
+                $storage::class
             ));
         }
 
@@ -400,7 +399,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         // All others are invalid
         throw new SimpleCacheInvalidArgumentException(sprintf(
             'Invalid TTL "%s" provided; must be null, an integer, or a %s instance',
-            is_object($ttl) ? get_class($ttl) : var_export($ttl, true),
+            is_object($ttl) ? $ttl::class : var_export($ttl, true),
             DateInterval::class
         ));
     }
@@ -417,7 +416,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             if (! is_string($key) && ! is_int($key)) {
                 throw new SimpleCacheInvalidArgumentException(sprintf(
                     'Invalid key detected of type "%s"; must be a scalar',
-                    is_object($key) ? get_class($key) : gettype($key)
+                    is_object($key) ? $key::class : gettype($key)
                 ));
             }
 
@@ -439,7 +438,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             if (! is_string($key) && ! is_int($key)) {
                 throw new SimpleCacheInvalidArgumentException(sprintf(
                     'Invalid key detected of type "%s"; must be a scalar',
-                    is_object($key) ? get_class($key) : gettype($key)
+                    is_object($key) ? $key::class : gettype($key)
                 ));
             }
 

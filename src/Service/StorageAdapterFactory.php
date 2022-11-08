@@ -13,7 +13,6 @@ use Laminas\ServiceManager\PluginManagerInterface;
 use Webmozart\Assert\Assert;
 
 use function assert;
-use function get_class;
 use function is_string;
 use function sprintf;
 
@@ -56,7 +55,7 @@ final class StorageAdapterFactory implements StorageAdapterFactoryInterface
         if (! $adapter instanceof PluginAwareInterface) {
             throw new Exception\RuntimeException(sprintf(
                 "The adapter '%s' doesn't implement '%s' and therefore can't handle plugins",
-                get_class($adapter),
+                $adapter::class,
                 PluginAwareInterface::class
             ));
         }
