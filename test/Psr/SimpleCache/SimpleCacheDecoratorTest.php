@@ -318,9 +318,8 @@ class SimpleCacheDecoratorTest extends TestCase
 
     /**
      * @dataProvider invalidTtls
-     * @param mixed $ttl
      */
-    public function testSetRaisesExceptionWhenTtlValueIsInvalid($ttl)
+    public function testSetRaisesExceptionWhenTtlValueIsInvalid(mixed $ttl)
     {
         $this->storage
             ->expects(self::never())
@@ -757,9 +756,8 @@ class SimpleCacheDecoratorTest extends TestCase
 
     /**
      * @dataProvider invalidTtls
-     * @param mixed $ttl
      */
-    public function testSetMultipleRaisesExceptionWhenTtlValueIsInvalid($ttl)
+    public function testSetMultipleRaisesExceptionWhenTtlValueIsInvalid(mixed $ttl)
     {
         $values = ['one' => 1, 'three' => 3];
         $this->storage

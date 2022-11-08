@@ -405,7 +405,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * @param iterable $keys
      * @psalm-return list<string|int>
      * @throws SimpleCacheInvalidArgumentException For invalid $iterable values.
      */
@@ -428,7 +427,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * @param iterable $values
      * @psalm-return array<int|string,mixed>
      */
     private function convertIterableToKeyValueMap(iterable $values): array
