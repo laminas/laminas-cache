@@ -31,7 +31,6 @@ use function assert;
 use function call_user_func_array;
 use function count;
 use function current;
-use function get_class;
 use function ucfirst;
 
 final class AbstractAdapterTest extends TestCase
@@ -162,7 +161,7 @@ final class AbstractAdapterTest extends TestCase
         ]);
 
         // call protected method
-        $method = new ReflectionMethod(get_class($storage), 'triggerPre');
+        $method = new ReflectionMethod($storage::class, 'triggerPre');
         $method->setAccessible(true);
         $rsCollection = $method->invoke($storage, 'setItem', $params);
         self::assertInstanceOf(ResponseCollection::class, $rsCollection);
@@ -192,7 +191,7 @@ final class AbstractAdapterTest extends TestCase
         $result = true;
 
         // call protected method
-        $method = new ReflectionMethod(get_class($storage), 'triggerPost');
+        $method = new ReflectionMethod($storage::class, 'triggerPost');
         $method->setAccessible(true);
         $result = $method->invokeArgs($storage, ['setItem', $params, &$result]);
 
@@ -225,7 +224,7 @@ final class AbstractAdapterTest extends TestCase
         ]);
 
         // call protected method
-        $method = new ReflectionMethod(get_class($storage), 'triggerException');
+        $method = new ReflectionMethod($storage::class, 'triggerException');
         $method->setAccessible(true);
 
         $this->expectException(RuntimeException::class);

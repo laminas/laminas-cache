@@ -9,8 +9,6 @@ use function ob_get_flush;
 use function ob_implicit_flush;
 use function ob_start;
 
-use const PHP_MAJOR_VERSION;
-
 class OutputCache extends AbstractStorageCapablePattern
 {
     /**
@@ -43,12 +41,8 @@ class OutputCache extends AbstractStorageCapablePattern
         }
 
         ob_start();
-        /**
-         * TODO: remove when PHP 7.4 support is dropped
-         *
-         * @psalm-suppress PossiblyFalseArgument
-         */
-        ob_implicit_flush(PHP_MAJOR_VERSION >= 8 ? false : 0);
+        ob_implicit_flush(false);
+
         $this->keyStack[] = $key;
         return false;
     }

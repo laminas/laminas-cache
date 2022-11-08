@@ -21,7 +21,7 @@
         "process-timeout": 600,
         "sort-packages": true,
         "platform": {
-            "php": "7.4.99"
+            "php": "8.0.99"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
@@ -34,7 +34,7 @@
         }
     },
     "require": {
-        "php": "~7.4.0 || ~8.0.0 || ~8.1.0",
+        "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
         "laminas/laminas-cache-storage-implementation": "1.0",
         "laminas/laminas-eventmanager": "^3.4",
         "laminas/laminas-servicemanager": "^3.11.1",
