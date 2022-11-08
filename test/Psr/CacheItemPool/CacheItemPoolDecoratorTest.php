@@ -179,10 +179,9 @@ final class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @param mixed $key
      * @dataProvider invalidKeyProvider
      */
-    public function testGetItemInvalidKeyThrowsException($key)
+    public function testGetItemInvalidKeyThrowsException(mixed $key)
     {
         $this->expectException(InvalidArgumentException::class);
         $storage = $this->storage;
@@ -535,10 +534,9 @@ final class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @param mixed $key
      * @dataProvider invalidKeyProvider
      */
-    public function testHasItemInvalidKeyThrowsException($key)
+    public function testHasItemInvalidKeyThrowsException(mixed $key)
     {
         $this->expectException(InvalidArgumentException::class);
         assert($this->adapter instanceof CacheItemPoolDecorator);
@@ -724,10 +722,9 @@ final class CacheItemPoolDecoratorTest extends TestCase
     }
 
     /**
-     * @param mixed $key
      * @dataProvider invalidKeyProvider
      */
-    public function testDeleteItemInvalidKeyThrowsException($key)
+    public function testDeleteItemInvalidKeyThrowsException(mixed $key)
     {
         $this->expectException(InvalidArgumentException::class);
         assert($this->adapter instanceof CacheItemPoolDecorator);
@@ -881,7 +878,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
      */
     public function invalidKeyProvider(): array
     {
-        return array_map(static fn($v) => [$v], $this->getInvalidKeys());
+        return array_map(static fn($v): array => [$v], $this->getInvalidKeys());
     }
 
     /**
@@ -913,7 +910,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         try {
             assert($this->adapter instanceof CacheItemPoolDecorator);
             $this->adapter->clear();
-        } catch (Throwable $throwable) {
+        } catch (Throwable) {
             /** Cleanup deferred items as {@see CacheItemPoolDecorator::__destruct} is gonna try to store them. */
         } finally {
             $this->adapter = null;

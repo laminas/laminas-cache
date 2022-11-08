@@ -18,7 +18,7 @@ final class ExceptionHandlerTest extends AbstractCommonPluginTest
 {
     use EventListenerIntrospectionTrait;
 
-    protected MockAdapter $adapter;
+    private MockAdapter $adapter;
 
     private PluginOptions $options;
 

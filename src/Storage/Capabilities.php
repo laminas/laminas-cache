@@ -19,27 +19,6 @@ class Capabilities
     public const UNLIMITED_KEY_LENGTH = 0;
 
     /**
-     * The storage instance
-     *
-     * @var StorageInterface
-     */
-    protected $storage;
-
-    /**
-     * A marker to set/change capabilities
-     *
-     * @var stdClass
-     */
-    protected $marker;
-
-    /**
-     * Base capabilities
-     *
-     * @var null|Capabilities
-     */
-    protected $baseCapabilities;
-
-    /**
      * "lock-on-expire" support in seconds.
      *
      *      0 = Expired items will never be retrieved
@@ -155,19 +134,16 @@ class Capabilities
 
     /**
      * Constructor
-     *
-     * @param array             $capabilities
      */
     public function __construct(
-        StorageInterface $storage,
-        stdClass $marker,
+        protected StorageInterface $storage,
+        /**
+         * A marker to set/change capabilities
+         */
+        protected stdClass $marker,
         array $capabilities = [],
-        ?Capabilities $baseCapabilities = null
+        protected ?Capabilities $baseCapabilities = null
     ) {
-        $this->storage          = $storage;
-        $this->marker           = $marker;
-        $this->baseCapabilities = $baseCapabilities;
-
         foreach ($capabilities as $name => $value) {
             $this->setCapability($marker, $name, $value);
         }
@@ -205,7 +181,6 @@ class Capabilities
     /**
      * Set supported datatypes
      *
-     * @param  array $datatypes
      * @throws Exception\InvalidArgumentException
      * @return Capabilities Fluent interface
      */
@@ -490,10 +465,9 @@ class Capabilities
      * Get a capability
      *
      * @param  string $property
-     * @param  mixed $default
      * @return mixed
      */
-    protected function getCapability($property, $default = null)
+    protected function getCapability($property, mixed $default = null)
     {
         if ($this->$property !== null) {
             return $this->$property;
@@ -508,11 +482,10 @@ class Capabilities
      * Change a capability
      *
      * @param  string $property
-     * @param  mixed $value
      * @return Capabilities Fluent interface
      * @throws Exception\InvalidArgumentException
      */
-    protected function setCapability(stdClass $marker, $property, $value)
+    protected function setCapability(stdClass $marker, $property, mixed $value)
     {
         if ($this->marker !== $marker) {
             throw new Exception\InvalidArgumentException('Invalid marker');

@@ -8,7 +8,6 @@ use Laminas\Cache;
 use Laminas\Cache\Pattern\PatternOptions;
 use LaminasTest\Cache\Pattern\TestAsset\TestObjectCache;
 
-use function get_class;
 use function implode;
 use function ob_end_clean;
 use function ob_get_contents;
@@ -117,7 +116,7 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
         self::assertSame('', $this->options->getObjectKey(), "Can't set an empty string as object key");
 
         $this->options->setObjectKey(null);
-        self::assertSame(get_class($this->options->getObject()), $this->options->getObjectKey());
+        self::assertSame($this->options->getObject()::class, $this->options->getObjectKey());
     }
 
     protected function executeMethodAndMakeAssertions(string $method, array $args): void

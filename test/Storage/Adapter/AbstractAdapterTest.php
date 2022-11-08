@@ -35,7 +35,7 @@ use function ucfirst;
 
 final class AbstractAdapterTest extends TestCase
 {
-    protected ?AdapterOptions $options;
+    private ?AdapterOptions $options;
 
     public function setUp(): void
     {
@@ -405,13 +405,12 @@ final class AbstractAdapterTest extends TestCase
      * @psalm-param non-empty-string $methodName
      * @psalm-param non-empty-string $internalMethodName
      * @dataProvider simpleEventHandlingMethodDefinitions
-     * @param mixed $retVal
      */
     public function testEventHandlingSimple(
         string $methodName,
         string $internalMethodName,
         array $methodArgs,
-        $retVal
+        mixed $retVal
     ): void {
         $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
 
@@ -483,13 +482,12 @@ final class AbstractAdapterTest extends TestCase
      * @psalm-param non-empty-string $methodName
      * @psalm-param non-empty-string $internalMethodName
      * @dataProvider simpleEventHandlingMethodDefinitions
-     * @param mixed $retVal
      */
     public function testEventHandlingStopInPre(
         string $methodName,
         string $internalMethodName,
         array $methodArgs,
-        $retVal
+        mixed $retVal
     ): void {
         $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
 

@@ -18,8 +18,8 @@ use function mkdir;
 use function ob_implicit_flush;
 use function ob_start;
 use function rtrim;
+use function str_ends_with;
 use function str_replace;
-use function substr;
 use function umask;
 use function unlink;
 
@@ -218,7 +218,7 @@ class CaptureCache extends AbstractPattern
      */
     protected function pageId2Filename($pageId)
     {
-        if (substr($pageId, -1) === '/') {
+        if (str_ends_with($pageId, '/')) {
             return $this->getOptions()->getIndexFilename();
         }
 
@@ -233,7 +233,7 @@ class CaptureCache extends AbstractPattern
      */
     protected function pageId2Path($pageId)
     {
-        if (substr($pageId, -1) === '/') {
+        if (str_ends_with($pageId, '/')) {
             $path = rtrim($pageId, '/');
         } else {
             $path = dirname($pageId);

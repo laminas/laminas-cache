@@ -14,11 +14,8 @@ use function assert;
 
 final class StoragePluginFactory implements StoragePluginFactoryInterface
 {
-    private PluginManagerInterface $plugins;
-
-    public function __construct(PluginManagerInterface $plugins)
+    public function __construct(private PluginManagerInterface $plugins)
     {
-        $this->plugins = $plugins;
     }
 
     public function createFromArrayConfiguration(array $configuration): PluginInterface

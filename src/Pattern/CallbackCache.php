@@ -155,7 +155,6 @@ class CallbackCache extends AbstractStorageCapablePattern
     /**
      * Generate a unique key of the argument part.
      *
-     * @param  array $args
      * @throws Exception\RuntimeException
      * @return string
      */

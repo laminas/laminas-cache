@@ -10,7 +10,6 @@ use function array_intersect;
 use function array_map;
 use function array_unique;
 use function array_values;
-use function get_class;
 use function gettype;
 use function is_dir;
 use function is_object;
@@ -398,11 +397,10 @@ class PatternOptions extends AbstractOptions
     /**
      * Set object to cache
      *
-     * @param  mixed $object
      * @throws Exception\InvalidArgumentException
      * @return PatternOptions Provides a fluent interface
      */
-    public function setObject($object)
+    public function setObject(mixed $object)
     {
         if (! is_object($object)) {
             throw new Exception\InvalidArgumentException(
@@ -454,7 +452,6 @@ class PatternOptions extends AbstractOptions
     /**
      * Set list of object methods for which to cache return values
      *
-     * @param  array $objectCacheMethods
      * @return PatternOptions Provides a fluent interface
      * @throws Exception\InvalidArgumentException
      */
@@ -506,7 +503,7 @@ class PatternOptions extends AbstractOptions
     public function getObjectKey()
     {
         if ($this->objectKey === null) {
-            return get_class($this->getObject());
+            return $this->getObject()::class;
         }
         return $this->objectKey;
     }
@@ -514,7 +511,6 @@ class PatternOptions extends AbstractOptions
     /**
      * Set list of object methods for which NOT to cache return values
      *
-     * @param  array $objectNonCacheMethods
      * @return PatternOptions Provides a fluent interface
      * @throws Exception\InvalidArgumentException
      */
@@ -583,7 +579,6 @@ class PatternOptions extends AbstractOptions
      * Recursively apply strtolower on all values of an array, and return as a
      * list of unique values
      *
-     * @param  array $array
      * @return array
      */
     protected function recursiveStrtolower(array $array)

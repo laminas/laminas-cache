@@ -21,21 +21,11 @@ use function sprintf;
 final class CacheItem implements CacheItemInterface
 {
     /**
-     * Cache key
-     */
-    private string $key;
-
-    /**
      * Cache value
      *
      * @var mixed|null
      */
     private $value;
-
-    /**
-     * True if the cache item lookup resulted in a cache hit or if they item is deferred or successfully saved
-     */
-    private bool $isHit;
 
     /**
      * Timestamp item will expire at if expiresAt() called, null otherwise
@@ -44,12 +34,15 @@ final class CacheItem implements CacheItemInterface
 
     private ClockInterface $clock;
 
-    /**
-     * @param mixed $value
-     */
-    public function __construct(string $key, $value, bool $isHit, ?ClockInterface $clock = null)
-    {
-        $this->key   = $key;
+    public function __construct(
+        private string $key,
+        mixed $value,
+        /**
+         * True if the cache item lookup resulted in a cache hit or if they item is deferred or successfully saved
+         */
+        private bool $isHit,
+        ?ClockInterface $clock = null
+    ) {
         $this->value = $isHit ? $value : null;
         $this->isHit = $isHit;
         $clock     ??= new class implements ClockInterface

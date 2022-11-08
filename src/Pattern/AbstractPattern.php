@@ -2,14 +2,12 @@
 
 namespace Laminas\Cache\Pattern;
 
+use Laminas\Cache\Pattern\PatternOptions;
+
 abstract class AbstractPattern implements PatternInterface
 {
-    /** @var PatternOptions|null */
-    protected $options;
-
-    public function __construct(?PatternOptions $options = null)
+    public function __construct(protected ?PatternOptions $options = null)
     {
-        $this->options = $options;
     }
 
     /**

@@ -7,9 +7,8 @@ use Laminas\Serializer\Adapter\AdapterInterface as SerializerAdapter;
 use Laminas\Serializer\Serializer as SerializerFactory;
 use Laminas\Stdlib\AbstractOptions;
 
-use function gettype;
+use function get_debug_type;
 use function is_callable;
-use function is_object;
 use function is_string;
 use function sprintf;
 
@@ -195,14 +194,13 @@ class PluginOptions extends AbstractOptions
     {
         if (! is_string($serializer) && ! $serializer instanceof SerializerAdapter) {
             /**
-             * @psalm-suppress RedundantConditionGivenDocblockType, DocblockTypeContradiction
              * Until we do lack native type-hint we should check the `$serializer` twice.
              */
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects either a string serializer name or Laminas\Serializer\Adapter\AdapterInterface instance; '
                 . 'received "%s"',
                 __METHOD__,
-                is_object($serializer) ? $serializer::class : gettype($serializer)
+                get_debug_type($serializer)
             ));
         }
         $this->serializer = $serializer;
@@ -238,10 +236,9 @@ class PluginOptions extends AbstractOptions
      * Used by:
      * - Serializer
      *
-     * @param  mixed $serializerOptions
      * @return PluginOptions Provides a fluent interface
      */
-    public function setSerializerOptions($serializerOptions)
+    public function setSerializerOptions(mixed $serializerOptions)
     {
         $this->serializerOptions = $serializerOptions;
         return $this;

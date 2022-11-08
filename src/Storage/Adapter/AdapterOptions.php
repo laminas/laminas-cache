@@ -246,10 +246,9 @@ class AdapterOptions extends AbstractOptions
      * an adapter implements EventsCapableInterface.
      *
      * @param string $optionName
-     * @param mixed  $optionValue
      * @return void
      */
-    protected function triggerOptionEvent($optionName, $optionValue)
+    protected function triggerOptionEvent($optionName, mixed $optionValue)
     {
         if ($this->adapter instanceof EventsCapableInterface) {
             $event = new Event('option', $this->adapter, new ArrayObject([$optionName => $optionValue]));
