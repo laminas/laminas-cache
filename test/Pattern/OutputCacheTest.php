@@ -85,7 +85,8 @@ class OutputCacheTest extends AbstractCommonStoragePatternTest
         $key    = 'testStartEndCacheHit';
 
         // fill cache
-        $this->pattern->getStorage()->setItem($key, $output);
+        $storage = $this->pattern->getStorage();
+        $storage->setItem($key, $output);
 
         ob_start();
         self::assertTrue($this->pattern->start($key));

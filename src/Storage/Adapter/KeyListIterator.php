@@ -11,6 +11,9 @@ use function count;
 
 /**
  * @see ReturnTypeWillChange
+ *
+ * @template-covariant TValue
+ * @template-implements IteratorInterface<string, TValue>
  */
 class KeyListIterator implements IteratorInterface, Countable
 {
@@ -71,7 +74,7 @@ class KeyListIterator implements IteratorInterface, Countable
      * Set iterator mode
      *
      * @param int $mode
-     * @return KeyListIterator Provides a fluent interface
+     * @return $this
      */
     public function setMode($mode)
     {

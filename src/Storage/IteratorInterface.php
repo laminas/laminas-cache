@@ -4,6 +4,11 @@ namespace Laminas\Cache\Storage;
 
 use Iterator;
 
+/**
+ * @template-covariant TKey
+ * @template-covariant TValue
+ * @template-extends Iterator<TKey, TValue>
+ */
 interface IteratorInterface extends Iterator
 {
     public const CURRENT_AS_SELF     = 0;
