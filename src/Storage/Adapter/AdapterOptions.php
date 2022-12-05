@@ -192,8 +192,8 @@ class AdapterOptions extends AbstractOptions
     /**
      * Set time to live.
      *
-     * @param  int|float $ttl
-     * @return AdapterOptions Provides a fluent interface
+     * @param  numeric $ttl
+     * @return $this
      */
     public function setTtl($ttl)
     {
@@ -219,7 +219,7 @@ class AdapterOptions extends AbstractOptions
      * Enable/Disable writing data to cache.
      *
      * @param  bool $writable
-     * @return AdapterOptions Provides a fluent interface
+     * @return $this
      */
     public function setWritable($writable)
     {
@@ -259,7 +259,8 @@ class AdapterOptions extends AbstractOptions
     /**
      * Validates and normalize a TTL.
      *
-     * @param  int|float $ttl
+     * @param numeric $ttl
+     * @param-out int|float $ttl
      * @throws Exception\InvalidArgumentException
      * @return void
      */

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.29.0@7ec5ffbd5f68ae03782d7fd33fff0c45a69f95b3">
+<files psalm-version="5.1.0@4defa177c89397c5e14737a80fe4896584130674">
   <file src="src/Command/DeprecatedStorageFactoryConfigurationCheckCommand.php">
     <MixedArgument occurrences="2">
       <code>$cacheConfiguration</code>
@@ -43,9 +43,10 @@
     </MixedAssignment>
   </file>
   <file src="src/Pattern/CaptureCache.php">
-    <DocblockTypeContradiction occurrences="2">
-      <code>$perm === false</code>
-      <code>$perm === false</code>
+    <DocblockTypeContradiction occurrences="3">
+      <code>$perm !== false</code>
+      <code>$perm !== false</code>
+      <code>decoct($perm)</code>
     </DocblockTypeContradiction>
     <MissingClosureParamType occurrences="1">
       <code>$content</code>
@@ -66,19 +67,18 @@
     <PossiblyNullOperand occurrences="1">
       <code>$publicDir</code>
     </PossiblyNullOperand>
-    <RedundantCondition occurrences="2">
-      <code>$perm === false</code>
-      <code>0775</code>
-    </RedundantCondition>
-    <RedundantConditionGivenDocblockType occurrences="3">
+    <RedundantCondition occurrences="3">
       <code>$perm</code>
       <code>$perm !== false</code>
       <code>decoct($perm)</code>
+    </RedundantCondition>
+    <RedundantConditionGivenDocblockType occurrences="2">
+      <code>$perm === false</code>
+      <code>0775</code>
     </RedundantConditionGivenDocblockType>
-    <TypeDoesNotContainType occurrences="3">
-      <code>$perm !== false</code>
-      <code>$perm !== false</code>
-      <code>decoct($perm)</code>
+    <TypeDoesNotContainType occurrences="2">
+      <code>$perm === false</code>
+      <code>$perm === false</code>
     </TypeDoesNotContainType>
   </file>
   <file src="src/Pattern/ObjectCache.php">
@@ -115,9 +115,8 @@
     <MixedMethodCall occurrences="1">
       <code>$method</code>
     </MixedMethodCall>
-    <MixedReturnStatement occurrences="2">
+    <MixedReturnStatement occurrences="1">
       <code>$this-&gt;call('__isset', [$name])</code>
-      <code>$this-&gt;call('__toString')</code>
     </MixedReturnStatement>
     <ParamNameMismatch occurrences="2">
       <code>$method</code>
@@ -156,9 +155,6 @@
       <code>$filePermission</code>
       <code>$umask</code>
     </PossiblyInvalidPropertyAssignmentValue>
-    <PossiblyNullArgument occurrences="1">
-      <code>$this-&gt;getObject()</code>
-    </PossiblyNullArgument>
     <RedundantCastGivenDocblockType occurrences="6">
       <code>(bool) $cacheOutput</code>
       <code>(bool) $fileLocking</code>
@@ -188,8 +184,7 @@
     </UndefinedInterfaceMethod>
   </file>
   <file src="src/Psr/SimpleCache/SimpleCacheDecorator.php">
-    <DocblockTypeContradiction occurrences="2">
-      <code>is_object($ttl)</code>
+    <DocblockTypeContradiction occurrences="1">
       <code>null === $ttl</code>
     </DocblockTypeContradiction>
     <MixedArgument occurrences="2">
@@ -208,10 +203,17 @@
       <code>$ttl</code>
       <code>$ttl</code>
     </PossiblyNullArgument>
-    <RedundantConditionGivenDocblockType occurrences="2">
+    <RedundantConditionGivenDocblockType occurrences="1">
       <code>null !== $this-&gt;storage-&gt;removeItem($key)</code>
-      <code>var_export($ttl, true)</code>
     </RedundantConditionGivenDocblockType>
+  </file>
+  <file src="src/Service/StorageAdapterFactory.php">
+    <InvalidArgument occurrences="1">
+      <code>$pluginConfiguration</code>
+    </InvalidArgument>
+    <InvalidArrayOffset occurrences="1">
+      <code>$pluginConfiguration['priority']</code>
+    </InvalidArrayOffset>
   </file>
   <file src="src/Service/StorageAdapterFactoryFactory.php">
     <MixedArgument occurrences="2">
@@ -228,25 +230,24 @@
     <ArgumentTypeCoercion occurrences="1">
       <code>$plugin</code>
     </ArgumentTypeCoercion>
+    <InvalidArgument occurrences="8">
+      <code>$args['success']</code>
+      <code>$args['success']</code>
+      <code>'casToken'</code>
+      <code>'casToken'</code>
+      <code>'success'</code>
+      <code>'success'</code>
+      <code>'success'</code>
+      <code>'success'</code>
+    </InvalidArgument>
     <InvalidNullableReturnType occurrences="1">
       <code>bool</code>
     </InvalidNullableReturnType>
-    <InvalidScalarArgument occurrences="4">
-      <code>$args['key']</code>
-      <code>$args['key']</code>
-      <code>$args['value']</code>
-      <code>$args['value']</code>
-    </InvalidScalarArgument>
-    <MixedArgument occurrences="20">
+    <MixedArgument occurrences="15">
       <code>$args['key']</code>
       <code>$args['key']</code>
       <code>$args['key']</code>
       <code>$args['key']</code>
-      <code>$args['key']</code>
-      <code>$args['key']</code>
-      <code>$args['key']</code>
-      <code>$args['success']</code>
-      <code>$args['success']</code>
       <code>$handle</code>
       <code>$keyValuePairs</code>
       <code>$keyValuePairs</code>
@@ -267,8 +268,7 @@
       <code>$normalizedKey</code>
       <code>$normalizedKey</code>
     </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="43">
-      <code>$args['casToken']</code>
+    <MixedAssignment occurrences="42">
       <code>$handle</code>
       <code>$normalizedKey</code>
       <code>$normalizedKey</code>
@@ -391,11 +391,12 @@
     <NullableReturnStatement occurrences="1">
       <code>$success</code>
     </NullableReturnStatement>
-    <PossiblyNullArgument occurrences="3">
+    <PossiblyInvalidArgument occurrences="4">
       <code>$args['key']</code>
       <code>$args['key']</code>
-      <code>$args['key']</code>
-    </PossiblyNullArgument>
+      <code>$args['value']</code>
+      <code>$args['value']</code>
+    </PossiblyInvalidArgument>
     <PropertyNotSetInConstructor occurrences="1">
       <code>$pluginRegistry</code>
     </PropertyNotSetInConstructor>
@@ -424,24 +425,17 @@
       <code>$letter</code>
       <code>$value</code>
     </MixedAssignment>
-    <PossiblyInvalidArgument occurrences="1">
-      <code>$options</code>
-    </PossiblyInvalidArgument>
     <RawObjectIteration occurrences="1">
       <code>$this</code>
     </RawObjectIteration>
-    <RedundantCastGivenDocblockType occurrences="5">
+    <RedundantCastGivenDocblockType occurrences="4">
       <code>(bool) $readable</code>
       <code>(bool) $writable</code>
-      <code>(float) $ttl</code>
       <code>(string) $keyPattern</code>
       <code>(string) $namespace</code>
     </RedundantCastGivenDocblockType>
   </file>
   <file src="src/Storage/Adapter/KeyListIterator.php">
-    <MixedPropertyTypeCoercion occurrences="1">
-      <code>$keys</code>
-    </MixedPropertyTypeCoercion>
     <RedundantCastGivenDocblockType occurrences="1">
       <code>(int) $mode</code>
     </RedundantCastGivenDocblockType>
@@ -509,7 +503,8 @@
     <InvalidReturnType occurrences="1">
       <code>StorageInterface</code>
     </InvalidReturnType>
-    <MoreSpecificImplementedParamType occurrences="1">
+    <MoreSpecificImplementedParamType occurrences="2">
+      <code>$target</code>
       <code>$target</code>
     </MoreSpecificImplementedParamType>
     <PropertyNotSetInConstructor occurrences="2">
@@ -673,7 +668,10 @@
     </PropertyNotSetInConstructor>
   </file>
   <file src="test/Pattern/AbstractCommonStoragePatternTest.php">
-    <NonInvariantDocblockPropertyType occurrences="1">
+    <NonInvariantDocblockPropertyType occurrences="4">
+      <code>$pattern</code>
+      <code>$pattern</code>
+      <code>$pattern</code>
       <code>$pattern</code>
     </NonInvariantDocblockPropertyType>
   </file>
@@ -757,9 +755,6 @@
       <code>$this-&gt;pattern-&gt;property</code>
       <code>$this-&gt;pattern-&gt;unknownProperty</code>
     </NoInterfaceProperties>
-    <PossiblyNullArgument occurrences="1">
-      <code>$this-&gt;options-&gt;getObject()</code>
-    </PossiblyNullArgument>
     <PossiblyNullPropertyFetch occurrences="2">
       <code>$this-&gt;options-&gt;getObject()-&gt;property</code>
       <code>$this-&gt;options-&gt;getObject()-&gt;property</code>
@@ -824,21 +819,6 @@
       <code>isHit</code>
       <code>set</code>
     </MixedMethodCall>
-    <PossiblyInvalidArgument occurrences="1">
-      <code>$items</code>
-    </PossiblyInvalidArgument>
-    <UndefinedInterfaceMethod occurrences="10">
-      <code>$items</code>
-      <code>$items</code>
-      <code>$items</code>
-      <code>$items</code>
-      <code>$items</code>
-      <code>$items</code>
-      <code>$saved</code>
-      <code>$saved</code>
-      <code>$saved</code>
-      <code>$saved</code>
-    </UndefinedInterfaceMethod>
   </file>
   <file src="test/Psr/CacheItemPool/CacheItemTest.php">
     <InvalidArgument occurrences="2">
@@ -884,9 +864,6 @@
     </MixedInferredReturnType>
   </file>
   <file src="test/Storage/Adapter/AbstractAdapterTest.php">
-    <InvalidScalarArgument occurrences="1">
-      <code>'123'</code>
-    </InvalidScalarArgument>
     <MissingClosureParamType occurrences="1">
       <code>$event</code>
     </MissingClosureParamType>

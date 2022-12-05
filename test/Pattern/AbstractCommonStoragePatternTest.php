@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Pattern;
 
+use Laminas\Cache\Pattern\PatternInterface;
 use Laminas\Cache\Pattern\StorageCapableInterface;
 use Laminas\Cache\Storage\StorageInterface;
 
@@ -17,7 +18,7 @@ abstract class AbstractCommonStoragePatternTest extends AbstractCommonPatternTes
     /** @var StorageInterface */
     protected $storage;
 
-    /** @var StorageCapableInterface */
+    /** @var PatternInterface&StorageCapableInterface */
     protected $pattern;
 
     protected function setUp(): void

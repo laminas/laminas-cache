@@ -58,7 +58,7 @@
         "phpbench/phpbench": "^1.0",
         "phpunit/phpunit": "^9.5.23",
         "psalm/plugin-phpunit": "^0.18.0",
-        "vimeo/psalm": "^4.24"
+        "vimeo/psalm": "^5.0"
     },
     "conflict": {
         "symfony/console": "<5.1"

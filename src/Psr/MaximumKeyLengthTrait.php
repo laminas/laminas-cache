@@ -57,7 +57,6 @@ trait MaximumKeyLengthTrait
             ));
         }
 
-        /** @psalm-suppress PropertyTypeCoercion The result of this will always be > 0 */
         $this->maximumKeyLength = min($maximumKeyLength, self::$pcreMaximumQuantifierLength - 1);
     }
 
