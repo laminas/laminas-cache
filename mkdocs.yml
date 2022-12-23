@@ -17,6 +17,8 @@ nav:
         - "Standards Support":
             - PSR-6: v3/psr6.md
             - PSR-16: v3/psr16.md
+        - "Application Integration":
+            - "Usage in a laminas-mvc Application": v3/application-integration/usage-in-a-laminas-mvc-application.md
         - "Migration Guide":
             - "Migration to Version 3.0": v3/migration/to-version-3.md
     - v2:
@@ -46,6 +48,7 @@ extra:
     versions:
         - v3
         - v2
+    show_special_homepage: true
 plugins:
   - search
   - redirects:
