@@ -118,7 +118,7 @@ return [
 ];
 </code></pre>
 
-## Using Multipe Caches
+## Using Multiple Caches
 
 The use more than one cache backend, the factory `Laminas\Cache\Service\StorageCacheAbstractServiceFactory` allows to define multiple cache storages.
 
