@@ -6,13 +6,13 @@ namespace Laminas\Cache\Service;
 
 use InvalidArgumentException;
 use Laminas\Cache\Exception;
-use Laminas\Cache\Service\StoragePluginFactoryInterface;
 use Laminas\Cache\Storage\PluginAwareInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\PluginManagerInterface;
 use Webmozart\Assert\Assert;
 
 use function assert;
+use function is_array;
 use function is_string;
 use function sprintf;
 
@@ -68,6 +68,7 @@ final class StorageAdapterFactory implements StorageAdapterFactoryInterface
         return $adapter;
     }
 
+    /** @psalm-assert PluginArrayConfigurationWithPriorityType $configuration */
     public function assertValidConfigurationStructure(array $configuration): void
     {
         try {
@@ -102,6 +103,7 @@ final class StorageAdapterFactory implements StorageAdapterFactoryInterface
     {
         Assert::allIsArray($plugins, 'All plugin configurations are expected to be an array.');
         foreach ($plugins as $pluginConfiguration) {
+            assert(is_array($pluginConfiguration));
             try {
                 $this->pluginFactory->assertValidConfigurationStructure($pluginConfiguration);
                 if (isset($pluginConfiguration['priority'])) {

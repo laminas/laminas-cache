@@ -232,6 +232,7 @@ final class StorageAdapterFactoryTest extends TestCase
     ): void {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
+        /** @psalm-suppress TypeDoesNotContainType */
         $this->factory->assertValidConfigurationStructure($invalidConfiguration);
     }
 

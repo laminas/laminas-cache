@@ -1092,6 +1092,7 @@ final class AbstractAdapterTest extends TestCase
         $storage = $this->getMockForAbstractAdapter([$internalMethod]);
         $storage->getEventManager()->attach($eventName, static function (Event $event) use ($expectedArgs): void {
             $params = $event->getParams();
+            /** @psalm-suppress RedundantConditionGivenDocblockType */
             assert($params instanceof ArrayObject);
             $params->exchangeArray(array_merge($params->getArrayCopy(), $expectedArgs));
         });

@@ -5,6 +5,7 @@ namespace Laminas\Cache\Storage;
 use ArrayObject;
 use Laminas\EventManager\Event as BaseEvent;
 
+/** @extends BaseEvent<StorageInterface, ArrayObject> */
 class Event extends BaseEvent
 {
     /**
