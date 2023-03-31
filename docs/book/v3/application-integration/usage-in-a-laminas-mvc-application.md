@@ -138,7 +138,7 @@ return [
         'secondary-cache' => [
             'adapter' => Laminas\Cache\Storage\Adapter\Memory::class,
         ],
-        'blackhole' => [
+        'dummy-cache' => [
             'adapter' => Laminas\Cache\Storage\Adapter\BlackHole::class,
         ],
         // …
@@ -170,7 +170,7 @@ return [
     ],
     ConfigAbstractFactory::class => [
         Controller\IndexController::class => [
-            'blackhole',
+            'dummy-cache',
         ],
     ],
     // …
