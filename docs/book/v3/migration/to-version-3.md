@@ -1,6 +1,6 @@
 # Migration to Version 3.0
 
-Upgrading to `laminas-cache` will require a few code-changes, depending on how the storage adapters were used. Please note that the migration guide assumes that `laminas-cache` is [installed via Composer](installation.md).
+Upgrading to `laminas-cache` will require a few code-changes, depending on how the storage adapters were used. Please note that the migration guide assumes that `laminas-cache` is [installed via Composer](../installation.md).
 
 Please check out the [checklist](#checklist) to see what changes need to be done.
 
