@@ -3,11 +3,13 @@
 The following example shows _one_ potential use case of laminas-cache within a laminas-mvc based application.
 The example uses a module, a controller and shows the resolving of dependencies of the controller by configuration.
 
+## Preparation
+
 Before starting, make sure laminas-cache is [installed and configured](../installation.md).
 
 > MISSING: **Installation Requirements**
 > laminas-cache is shipped without a specific cache adapter to allow free choice of storage backends and their dependencies.
-> So make sure that the required adapter is installed.
+> So make sure that the required adapters are installed.
 >
 > The following example used the [filesystem adapter of laminas-cache](../storage/adapter.md#filesystem-adapter):
 >
@@ -146,7 +148,7 @@ return [
 </code></pre>
 
 MISSING: **Installation Requirements**
-Make sure that the used storage adapters are installed:
+Make sure that the [used storage adapters are installed](#preparation):
 ```bash
 $ composer require laminas/laminas-cache-storage-adapter-memory laminas/laminas-cache-storage-adapter-blackhole
 ```
