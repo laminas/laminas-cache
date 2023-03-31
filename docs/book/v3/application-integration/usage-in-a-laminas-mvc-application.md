@@ -19,9 +19,10 @@ Before starting, make sure laminas-cache is [installed and configured](../instal
 
 ## Configure Cache
 
-To configure the cache in a laminas-mvc based application, use either application or module configuration (such as `config/autoload/global.php` or `module/Application/config/module.config.php`, respectively), and define the configuration key `caches`.
+To configure the cache in a laminas-mvc based application, use either application or module configuration (such as `config/autoload/*.global.php` or `module/Application/config/module.config.php`, respectively), and define the configuration key `caches`.
 
-This example uses the global configuration, e.g. `config/autoload/global.php`:
+In this example, the global configuration is used and a separate file is created for the cache configuration.
+Create a configuration file with name like `config/autoload/cache.global.php` and it will [automatically be included](https://docs.laminas.dev/tutorials/advanced-config/#environment-specific-application-configuration):
 
 ```php
 return [
@@ -32,9 +33,7 @@ return [
                 'cache_dir' => __DIR__ . '/../../data/cache',
             ],
         ],
-        // …
     ],
-    // ...
 ];
 ```
 
@@ -124,7 +123,7 @@ return [
 
 The use more than one cache backend, the factory `Laminas\Cache\Service\StorageCacheAbstractServiceFactory` allows to define multiple cache storages.
 
-Extend the cache configuration in `config/autoload/global.php` and add more cache adapters:
+Extend the cache configuration in `config/autoload/cache.global.php` and add more cache adapters:
 
 <pre class="language-php" data-line="9-14"><code>
 return [
@@ -141,9 +140,7 @@ return [
         'dummy-cache' => [
             'adapter' => Laminas\Cache\Storage\Adapter\BlackHole::class,
         ],
-        // …
     ],
-    // ...
 ];
 </code></pre>
 
@@ -180,4 +177,5 @@ return [
 ## Learn More
 
 - [Storage Adapters](../storage/adapter.md)
+- [Environment-Specific Application Configuration](https://docs.laminas.dev/tutorials/advanced-config/#environment-specific-application-configuration)
 - [Configuration-based Abstract Factory](https://docs.laminas.dev/laminas-servicemanager/config-abstract-factory/)
