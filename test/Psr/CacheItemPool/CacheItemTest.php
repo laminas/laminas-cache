@@ -11,7 +11,7 @@ use DateTimeZone;
 use Laminas\Cache\Psr\CacheItemPool\CacheItem;
 use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use StellaMaris\Clock\ClockInterface;
+use Psr\Clock\ClockInterface;
 
 use function date_default_timezone_get;
 use function date_default_timezone_set;
