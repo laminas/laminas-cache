@@ -22,8 +22,8 @@ use LaminasTest\Cache\Psr\TestAsset\FlushableNamespaceStorageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
+use Psr\Clock\ClockInterface;
 use stdClass;
-use StellaMaris\Clock\ClockInterface;
 use Throwable;
 
 use function array_keys;
