@@ -1,12 +1,10 @@
 {
-    "ignore_php_platform_requirements": {
-        "8.2": true
-    },
     "extensions": [
         "apcu"
     ],
     "ini": [
         "apc.enabled=1",
         "apc.enable_cli=1"
-    ]
+    ],
+    "backwardCompatibilityCheck": true
 }
