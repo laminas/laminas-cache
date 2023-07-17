@@ -34,7 +34,7 @@ class AdapterPluginManagerTest extends TestCase
         $this->addToAssertionCount(1);
     }
 
-    protected function getPluginManager(): AdapterPluginManager
+    protected static function getPluginManager(): AdapterPluginManager
     {
         return new AdapterPluginManager(new ServiceManager());
     }

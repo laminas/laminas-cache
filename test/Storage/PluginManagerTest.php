@@ -14,7 +14,7 @@ class PluginManagerTest extends TestCase
 {
     use CommonPluginManagerTrait;
 
-    protected function getPluginManager(): PluginManager
+    protected static function getPluginManager(): PluginManager
     {
         return new PluginManager(new ServiceManager());
     }

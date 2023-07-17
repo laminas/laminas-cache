@@ -161,8 +161,7 @@ final class AbstractAdapterTest extends TestCase
         ]);
 
         // call protected method
-        $method = new ReflectionMethod($storage::class, 'triggerPre');
-        $method->setAccessible(true);
+        $method       = new ReflectionMethod($storage::class, 'triggerPre');
         $rsCollection = $method->invoke($storage, 'setItem', $params);
         self::assertInstanceOf(ResponseCollection::class, $rsCollection);
 
@@ -192,7 +191,6 @@ final class AbstractAdapterTest extends TestCase
 
         // call protected method
         $method = new ReflectionMethod($storage::class, 'triggerPost');
-        $method->setAccessible(true);
         $result = $method->invokeArgs($storage, ['setItem', $params, &$result]);
 
         // test called event
@@ -225,7 +223,6 @@ final class AbstractAdapterTest extends TestCase
 
         // call protected method
         $method = new ReflectionMethod($storage::class, 'triggerException');
-        $method->setAccessible(true);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('test');
