@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laminas\Cache\Service;
 
+use Laminas\Cache\ConfigProvider;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use Psr\Container\ContainerInterface;
@@ -27,13 +28,13 @@ final class StorageAdapterPluginManagerFactory
         $config = $container->get('config');
 
         // If we do not have a configuration, nothing more to do
-        if (! isset($config[AdapterPluginManager::CONFIGURATION_KEY]) || ! is_array($config[AdapterPluginManager::CONFIGURATION_KEY])) {
+        if (! isset($config[ConfigProvider::ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY]) || ! is_array($config[ConfigProvider::ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY])) {
             return $pluginManager;
         }
 
         // Wire service configuration
         /** @var ServiceManagerConfiguration $config */
-        $config = $config[AdapterPluginManager::CONFIGURATION_KEY];
+        $config = $config[ConfigProvider::ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY];
         $pluginManager->configure($config);
 
         return $pluginManager;

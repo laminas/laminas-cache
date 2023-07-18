@@ -16,8 +16,6 @@ use Laminas\ServiceManager\AbstractPluginManager;
  */
 final class AdapterPluginManager extends AbstractPluginManager
 {
-    public const CONFIGURATION_KEY = 'storage_adapters';
-
     /**
      * Do not share by default
      *
