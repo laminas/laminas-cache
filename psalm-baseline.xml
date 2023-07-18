@@ -1,128 +1,154 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.4.0@62db5d4f6a7ae0a20f7cc5a4952d730272fc0863">
+<files psalm-version="5.13.1@086b94371304750d1c673315321a55d15fc59015">
   <file src="src/Command/DeprecatedStorageFactoryConfigurationCheckCommand.php">
-    <MixedArgument occurrences="2">
+    <MixedArgument>
       <code>$cacheConfiguration</code>
       <code>$configuration</code>
     </MixedArgument>
-    <MixedAssignment occurrences="5">
+    <MixedAssignment>
       <code>$cache</code>
       <code>$cacheConfiguration</code>
       <code>$caches</code>
       <code>$caches</code>
       <code>$configuration</code>
     </MixedAssignment>
-    <MixedPropertyTypeCoercion occurrences="1">
+    <MixedPropertyTypeCoercion>
       <code>$projectConfiguration</code>
     </MixedPropertyTypeCoercion>
   </file>
+  <file src="src/Exception/BadMethodCallException.php">
+    <UnusedClass>
+      <code>BadMethodCallException</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Exception/MissingDependencyException.php">
+    <UnusedClass>
+      <code>MissingDependencyException</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Exception/OutOfSpaceException.php">
+    <UnusedClass>
+      <code>OutOfSpaceException</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Exception/UnexpectedValueException.php">
+    <UnusedClass>
+      <code>UnexpectedValueException</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Exception/UnsupportedMethodCallException.php">
+    <UnusedClass>
+      <code>UnsupportedMethodCallException</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Module.php">
+    <UnusedClass>
+      <code>Module</code>
+    </UnusedClass>
+  </file>
   <file src="src/Pattern/AbstractPattern.php">
-    <InvalidNullableReturnType occurrences="1">
+    <InvalidNullableReturnType>
       <code>PatternOptions</code>
     </InvalidNullableReturnType>
-    <NullableReturnStatement occurrences="1">
-      <code>$this-&gt;options</code>
+    <NullableReturnStatement>
+      <code><![CDATA[$this->options]]></code>
     </NullableReturnStatement>
   </file>
   <file src="src/Pattern/CallbackCache.php">
-    <InvalidArgument occurrences="1">
+    <InvalidArgument>
       <code>$function</code>
     </InvalidArgument>
-    <MixedArgument occurrences="2">
+    <MixedArgument>
       <code>$result</code>
-      <code>$result[1] ?? ''</code>
+      <code><![CDATA[$result[1] ?? '']]></code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="2">
+    <MixedArrayAccess>
       <code>$result[0]</code>
       <code>$result[1]</code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="3">
+    <MixedAssignment>
       <code>$object</code>
       <code>$result</code>
       <code>$ret</code>
     </MixedAssignment>
+    <PossiblyUnusedMethod>
+      <code>__call</code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="src/Pattern/CaptureCache.php">
-    <DocblockTypeContradiction occurrences="3">
+    <DocblockTypeContradiction>
       <code>$perm !== false</code>
-      <code>$perm !== false</code>
-      <code>decoct($perm)</code>
     </DocblockTypeContradiction>
-    <MissingClosureParamType occurrences="1">
+    <MissingClosureParamType>
       <code>$content</code>
     </MissingClosureParamType>
-    <MissingReturnType occurrences="2">
+    <MissingReturnType>
       <code>clearByGlob</code>
       <code>set</code>
     </MissingReturnType>
-    <MixedArgument occurrences="4">
+    <MixedArgument>
       <code>$content</code>
       <code>$perm</code>
       <code>$perm</code>
-      <code>$perm</code>
     </MixedArgument>
-    <PossiblyInvalidMethodCall occurrences="1">
+    <PossiblyInvalidMethodCall>
       <code>isFile</code>
     </PossiblyInvalidMethodCall>
-    <PossiblyNullOperand occurrences="1">
+    <PossiblyNullOperand>
       <code>$publicDir</code>
     </PossiblyNullOperand>
-    <RedundantCondition occurrences="3">
-      <code>$perm</code>
-      <code>$perm !== false</code>
-      <code>decoct($perm)</code>
-    </RedundantCondition>
-    <RedundantConditionGivenDocblockType occurrences="2">
-      <code>$perm === false</code>
-      <code>0775</code>
-    </RedundantConditionGivenDocblockType>
-    <TypeDoesNotContainType occurrences="2">
-      <code>$perm === false</code>
-      <code>$perm === false</code>
-    </TypeDoesNotContainType>
+    <PossiblyUnusedMethod>
+      <code>clearByGlob</code>
+      <code>start</code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedReturnValue>
+      <code>bool</code>
+      <code>bool</code>
+      <code>string|null</code>
+    </PossiblyUnusedReturnValue>
   </file>
   <file src="src/Pattern/ObjectCache.php">
-    <ImplementedParamTypeMismatch occurrences="2">
+    <ImplementedParamTypeMismatch>
       <code>$method</code>
       <code>$method</code>
     </ImplementedParamTypeMismatch>
-    <InvalidArrayAccess occurrences="1">
+    <InvalidArrayAccess>
       <code>$callback[1]</code>
     </InvalidArrayAccess>
-    <InvalidReturnStatement occurrences="2">
-      <code>$this-&gt;call('__set', [$name, $value])</code>
-      <code>$this-&gt;call('__unset', [$name])</code>
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->call('__set', [$name, $value])]]></code>
+      <code><![CDATA[$this->call('__unset', [$name])]]></code>
     </InvalidReturnStatement>
-    <MixedArgument occurrences="5">
+    <MixedArgument>
       <code>$callback[1]</code>
       <code>$property</code>
       <code>$property</code>
       <code>$property</code>
       <code>$property</code>
     </MixedArgument>
-    <MixedAssignment occurrences="5">
+    <MixedAssignment>
       <code>$property</code>
       <code>$property</code>
       <code>$property</code>
       <code>$property</code>
       <code>$value</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="3">
+    <MixedInferredReturnType>
       <code>bool</code>
       <code>void</code>
       <code>void</code>
     </MixedInferredReturnType>
-    <MixedMethodCall occurrences="1">
+    <MixedMethodCall>
       <code>$method</code>
     </MixedMethodCall>
-    <MixedReturnStatement occurrences="1">
-      <code>$this-&gt;call('__isset', [$name])</code>
+    <MixedReturnStatement>
+      <code><![CDATA[$this->call('__isset', [$name])]]></code>
     </MixedReturnStatement>
-    <ParamNameMismatch occurrences="2">
+    <ParamNameMismatch>
       <code>$method</code>
       <code>$method</code>
     </ParamNameMismatch>
-    <PossiblyNullArgument occurrences="8">
+    <PossiblyNullArgument>
       <code>$object</code>
       <code>$object</code>
       <code>$object</code>
@@ -132,30 +158,51 @@
       <code>$object</code>
       <code>$object</code>
     </PossiblyNullArgument>
+    <PossiblyUnusedMethod>
+      <code>__get</code>
+      <code>__set</code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="src/Pattern/OutputCache.php">
-    <MixedArgument occurrences="2">
+    <MixedArgument>
       <code>$data</code>
       <code>$key</code>
     </MixedArgument>
-    <MixedAssignment occurrences="2">
+    <MixedAssignment>
       <code>$data</code>
       <code>$key</code>
     </MixedAssignment>
-    <RedundantCastGivenDocblockType occurrences="1">
+    <PossiblyUnusedMethod>
+      <code>end</code>
+      <code>start</code>
+    </PossiblyUnusedMethod>
+    <RedundantCastGivenDocblockType>
       <code>(string) $key</code>
     </RedundantCastGivenDocblockType>
   </file>
   <file src="src/Pattern/PatternOptions.php">
-    <MixedArgument occurrences="1">
+    <MixedArgument>
       <code>$array</code>
     </MixedArgument>
-    <PossiblyInvalidPropertyAssignmentValue occurrences="3">
+    <PossiblyInvalidPropertyAssignmentValue>
       <code>$dirPermission</code>
       <code>$filePermission</code>
       <code>$umask</code>
     </PossiblyInvalidPropertyAssignmentValue>
-    <RedundantCastGivenDocblockType occurrences="6">
+    <PossiblyUnusedMethod>
+      <code>setCacheByDefault</code>
+      <code>setDirPermission</code>
+      <code>setFileLocking</code>
+      <code>setFilePermission</code>
+      <code>setIndexFilename</code>
+      <code>setObject</code>
+      <code>setObjectCacheMagicProperties</code>
+      <code>setObjectCacheMethods</code>
+      <code>setObjectNonCacheMethods</code>
+      <code>setPublicDir</code>
+      <code>setUmask</code>
+    </PossiblyUnusedMethod>
+    <RedundantCastGivenDocblockType>
       <code>(bool) $cacheOutput</code>
       <code>(bool) $fileLocking</code>
       <code>(bool) $objectCacheMagicProperties</code>
@@ -165,33 +212,33 @@
     </RedundantCastGivenDocblockType>
   </file>
   <file src="src/Psr/CacheItemPool/CacheItemPoolDecorator.php">
-    <DocblockTypeContradiction occurrences="1">
+    <DocblockTypeContradiction>
       <code>is_array($result)</code>
     </DocblockTypeContradiction>
-    <MissingReturnType occurrences="3">
+    <MissingReturnType>
       <code>validateKey</code>
       <code>validateKeys</code>
       <code>validateStorage</code>
     </MissingReturnType>
-    <MixedAssignment occurrences="4">
+    <MixedAssignment>
       <code>$cleared</code>
       <code>$key</code>
       <code>$value</code>
       <code>$value</code>
     </MixedAssignment>
-    <UndefinedInterfaceMethod occurrences="1">
+    <UndefinedInterfaceMethod>
       <code>flush</code>
     </UndefinedInterfaceMethod>
   </file>
   <file src="src/Psr/SimpleCache/SimpleCacheDecorator.php">
-    <DocblockTypeContradiction occurrences="1">
+    <DocblockTypeContradiction>
       <code>null === $ttl</code>
     </DocblockTypeContradiction>
-    <MixedArgument occurrences="2">
+    <MixedArgument>
       <code>$key</code>
       <code>$key</code>
     </MixedArgument>
-    <MixedAssignment occurrences="6">
+    <MixedAssignment>
       <code>$key</code>
       <code>$key</code>
       <code>$result</code>
@@ -199,55 +246,71 @@
       <code>$results[$key]</code>
       <code>$value</code>
     </MixedAssignment>
-    <PossiblyNullArgument occurrences="2">
+    <PossiblyNullArgument>
       <code>$ttl</code>
       <code>$ttl</code>
     </PossiblyNullArgument>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>null !== $this-&gt;storage-&gt;removeItem($key)</code>
+    <RedundantConditionGivenDocblockType>
+      <code><![CDATA[null !== $this->storage->removeItem($key)]]></code>
     </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/Service/StorageAdapterFactory.php">
-    <InvalidArgument occurrences="1">
+    <InvalidArgument>
       <code>$pluginConfiguration</code>
     </InvalidArgument>
-    <InvalidArrayOffset occurrences="1">
-      <code>$pluginConfiguration['priority']</code>
+    <InvalidArrayOffset>
+      <code><![CDATA[$pluginConfiguration['priority']]]></code>
     </InvalidArrayOffset>
   </file>
   <file src="src/Service/StorageAdapterFactoryFactory.php">
-    <MixedArgument occurrences="2">
-      <code>$container-&gt;get(AdapterPluginManager::class)</code>
-      <code>$container-&gt;get(StoragePluginFactoryInterface::class)</code>
+    <MixedArgument>
+      <code><![CDATA[$container->get(AdapterPluginManager::class)]]></code>
+      <code><![CDATA[$container->get(StoragePluginFactoryInterface::class)]]></code>
     </MixedArgument>
+    <PossiblyUnusedReturnValue>
+      <code>StorageAdapterFactory</code>
+    </PossiblyUnusedReturnValue>
+  </file>
+  <file src="src/Service/StorageCacheAbstractServiceFactory.php">
+    <PossiblyUnusedReturnValue>
+      <code>object</code>
+    </PossiblyUnusedReturnValue>
+  </file>
+  <file src="src/Service/StorageCacheFactory.php">
+    <PossiblyUnusedReturnValue>
+      <code>StorageInterface</code>
+    </PossiblyUnusedReturnValue>
   </file>
   <file src="src/Service/StoragePluginFactoryFactory.php">
-    <MixedArgument occurrences="1">
-      <code>$container-&gt;get(PluginManager::class)</code>
+    <MixedArgument>
+      <code><![CDATA[$container->get(PluginManager::class)]]></code>
     </MixedArgument>
+    <PossiblyUnusedReturnValue>
+      <code>StoragePluginFactory</code>
+    </PossiblyUnusedReturnValue>
   </file>
   <file src="src/Storage/Adapter/AbstractAdapter.php">
-    <ArgumentTypeCoercion occurrences="1">
+    <ArgumentTypeCoercion>
       <code>$plugin</code>
     </ArgumentTypeCoercion>
-    <InvalidArgument occurrences="8">
-      <code>$args['success']</code>
-      <code>$args['success']</code>
-      <code>'casToken'</code>
-      <code>'casToken'</code>
-      <code>'success'</code>
-      <code>'success'</code>
-      <code>'success'</code>
-      <code>'success'</code>
+    <InvalidArgument>
+      <code><![CDATA[$args['success']]]></code>
+      <code><![CDATA[$args['success']]]></code>
+      <code><![CDATA['casToken']]></code>
+      <code><![CDATA['casToken']]></code>
+      <code><![CDATA['success']]></code>
+      <code><![CDATA['success']]></code>
+      <code><![CDATA['success']]></code>
+      <code><![CDATA['success']]></code>
     </InvalidArgument>
-    <InvalidNullableReturnType occurrences="1">
+    <InvalidNullableReturnType>
       <code>bool</code>
     </InvalidNullableReturnType>
-    <MixedArgument occurrences="15">
-      <code>$args['key']</code>
-      <code>$args['key']</code>
-      <code>$args['key']</code>
-      <code>$args['key']</code>
+    <MixedArgument>
+      <code><![CDATA[$args['key']]]></code>
+      <code><![CDATA[$args['key']]]></code>
+      <code><![CDATA[$args['key']]]></code>
+      <code><![CDATA[$args['key']]]></code>
       <code>$handle</code>
       <code>$keyValuePairs</code>
       <code>$keyValuePairs</code>
@@ -260,7 +323,7 @@
       <code>$value</code>
       <code>$value</code>
     </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="6">
+    <MixedArgumentTypeCoercion>
       <code>$key</code>
       <code>$normalizedKey</code>
       <code>$normalizedKey</code>
@@ -268,7 +331,7 @@
       <code>$normalizedKey</code>
       <code>$normalizedKey</code>
     </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="42">
+    <MixedAssignment>
       <code>$handle</code>
       <code>$normalizedKey</code>
       <code>$normalizedKey</code>
@@ -312,7 +375,7 @@
       <code>$value</code>
       <code>$value</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="24">
+    <MixedInferredReturnType>
       <code>AdapterOptions</code>
       <code>Capabilities</code>
       <code>array</code>
@@ -338,69 +401,73 @@
       <code>int|bool</code>
       <code>int|bool</code>
     </MixedInferredReturnType>
-    <MixedMethodCall occurrences="1">
+    <MixedMethodCall>
       <code>setAdapter</code>
     </MixedMethodCall>
-    <MixedReturnStatement occurrences="45">
+    <MixedReturnStatement>
       <code>$newValue</code>
       <code>$newValue</code>
-      <code>$this-&gt;options</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $keys, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $keys, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerException(__FUNCTION__, $args, $result, $e)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
-      <code>$this-&gt;triggerPost(__FUNCTION__, $args, $result)</code>
+      <code><![CDATA[$this->options]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $keys, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $keys, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
+      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
     </MixedReturnStatement>
-    <NullableReturnStatement occurrences="1">
+    <NullableReturnStatement>
       <code>$success</code>
     </NullableReturnStatement>
-    <PossiblyInvalidArgument occurrences="4">
-      <code>$args['key']</code>
-      <code>$args['key']</code>
-      <code>$args['value']</code>
-      <code>$args['value']</code>
+    <PossiblyInvalidArgument>
+      <code><![CDATA[$args['key']]]></code>
+      <code><![CDATA[$args['key']]]></code>
+      <code><![CDATA[$args['value']]]></code>
+      <code><![CDATA[$args['value']]]></code>
     </PossiblyInvalidArgument>
-    <PropertyNotSetInConstructor occurrences="1">
+    <PossiblyUnusedMethod>
+      <code>getCaching</code>
+      <code>setCaching</code>
+    </PossiblyUnusedMethod>
+    <PropertyNotSetInConstructor>
       <code>$pluginRegistry</code>
     </PropertyNotSetInConstructor>
-    <RedundantCastGivenDocblockType occurrences="4">
+    <RedundantCastGivenDocblockType>
       <code>(bool) $flag</code>
       <code>(int) $value</code>
       <code>(int) $value</code>
@@ -408,27 +475,27 @@
     </RedundantCastGivenDocblockType>
   </file>
   <file src="src/Storage/Adapter/AdapterOptions.php">
-    <DocblockTypeContradiction occurrences="1">
+    <DocblockTypeContradiction>
       <code>is_array($options)</code>
     </DocblockTypeContradiction>
-    <MissingClosureParamType occurrences="1">
+    <MissingClosureParamType>
       <code>$letters</code>
     </MissingClosureParamType>
-    <MixedArgument occurrences="3">
+    <MixedArgument>
       <code>$key</code>
       <code>$letter</code>
       <code>$letters</code>
     </MixedArgument>
-    <MixedAssignment occurrences="4">
+    <MixedAssignment>
       <code>$array[$normalizedKey]</code>
       <code>$key</code>
       <code>$letter</code>
       <code>$value</code>
     </MixedAssignment>
-    <RawObjectIteration occurrences="1">
+    <RawObjectIteration>
       <code>$this</code>
     </RawObjectIteration>
-    <RedundantCastGivenDocblockType occurrences="4">
+    <RedundantCastGivenDocblockType>
       <code>(bool) $readable</code>
       <code>(bool) $writable</code>
       <code>(string) $keyPattern</code>
@@ -436,27 +503,32 @@
     </RedundantCastGivenDocblockType>
   </file>
   <file src="src/Storage/Adapter/KeyListIterator.php">
-    <RedundantCastGivenDocblockType occurrences="1">
+    <RedundantCastGivenDocblockType>
       <code>(int) $mode</code>
     </RedundantCastGivenDocblockType>
   </file>
   <file src="src/Storage/AdapterPluginManager.php">
-    <NonInvariantDocblockPropertyType occurrences="1">
+    <NonInvariantDocblockPropertyType>
       <code>$instanceOf</code>
     </NonInvariantDocblockPropertyType>
   </file>
+  <file src="src/Storage/AvailableSpaceCapableInterface.php">
+    <UnusedClass>
+      <code>AvailableSpaceCapableInterface</code>
+    </UnusedClass>
+  </file>
   <file src="src/Storage/Capabilities.php">
-    <DocblockTypeContradiction occurrences="1">
+    <DocblockTypeContradiction>
       <code>is_string($name)</code>
     </DocblockTypeContradiction>
-    <MixedArgumentTypeCoercion occurrences="1">
+    <MixedArgumentTypeCoercion>
       <code>$name</code>
     </MixedArgumentTypeCoercion>
-    <MixedAssignment occurrences="2">
+    <MixedAssignment>
       <code>$toType</code>
       <code>$value</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="11">
+    <MixedInferredReturnType>
       <code>array</code>
       <code>array</code>
       <code>bool</code>
@@ -469,19 +541,61 @@
       <code>int</code>
       <code>string</code>
     </MixedInferredReturnType>
-    <MixedReturnStatement occurrences="11">
-      <code>$this-&gt;getCapability('lockOnExpire', 0)</code>
-      <code>$this-&gt;getCapability('maxKeyLength', self::UNKNOWN_KEY_LENGTH)</code>
-      <code>$this-&gt;getCapability('maxTtl', 0)</code>
-      <code>$this-&gt;getCapability('minTtl', 0)</code>
-      <code>$this-&gt;getCapability('namespaceIsPrefix', true)</code>
-      <code>$this-&gt;getCapability('namespaceSeparator', '')</code>
-      <code>$this-&gt;getCapability('staticTtl', false)</code>
-      <code>$this-&gt;getCapability('supportedMetadata', [])</code>
-      <code>$this-&gt;getCapability('ttlPrecision', 1)</code>
-      <code>$this-&gt;getCapability('useRequestTime', false)</code>
+    <MixedReturnStatement>
+      <code><![CDATA[$this->getCapability('lockOnExpire', 0)]]></code>
+      <code><![CDATA[$this->getCapability('maxKeyLength', self::UNKNOWN_KEY_LENGTH)]]></code>
+      <code><![CDATA[$this->getCapability('maxTtl', 0)]]></code>
+      <code><![CDATA[$this->getCapability('minTtl', 0)]]></code>
+      <code><![CDATA[$this->getCapability('namespaceIsPrefix', true)]]></code>
+      <code><![CDATA[$this->getCapability('namespaceSeparator', '')]]></code>
+      <code><![CDATA[$this->getCapability('staticTtl', false)]]></code>
+      <code><![CDATA[$this->getCapability('supportedDatatypes', [
+            'NULL'     => false,
+            'boolean'  => false,
+            'integer'  => false,
+            'double'   => false,
+            'string'   => true,
+            'array'    => false,
+            'object'   => false,
+            'resource' => false,
+        ])]]></code>
+      <code><![CDATA[$this->getCapability('supportedMetadata', [])]]></code>
+      <code><![CDATA[$this->getCapability('ttlPrecision', 1)]]></code>
+      <code><![CDATA[$this->getCapability('useRequestTime', false)]]></code>
     </MixedReturnStatement>
-    <RedundantCastGivenDocblockType occurrences="9">
+    <PossiblyUnusedMethod>
+      <code>getNamespaceIsPrefix</code>
+      <code>getNamespaceSeparator</code>
+      <code>getSupportedMetadata</code>
+      <code>getTtlPrecision</code>
+      <code>setLockOnExpire</code>
+      <code>setMaxKeyLength</code>
+      <code>setMinTtl</code>
+      <code>setNamespaceIsPrefix</code>
+      <code>setNamespaceSeparator</code>
+      <code>setStaticTtl</code>
+      <code>setSupportedDatatypes</code>
+      <code>setSupportedMetadata</code>
+      <code>setTtlPrecision</code>
+      <code>setUseRequestTime</code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code>$lockOnExpire</code>
+      <code>$maxKeyLength</code>
+      <code>$maxTtl</code>
+      <code>$minTtl</code>
+      <code>$namespaceIsPrefix</code>
+      <code>$namespaceSeparator</code>
+      <code>$staticTtl</code>
+      <code>$supportedDatatypes</code>
+      <code>$supportedMetadata</code>
+      <code>$ttlPrecision</code>
+      <code>$useRequestTime</code>
+    </PossiblyUnusedProperty>
+    <PossiblyUnusedReturnValue>
+      <code>Capabilities</code>
+    </PossiblyUnusedReturnValue>
+    <RedundantCastGivenDocblockType>
       <code>(bool) $flag</code>
       <code>(bool) $flag</code>
       <code>(bool) $flag</code>
@@ -493,25 +607,55 @@
       <code>(string) $separator</code>
     </RedundantCastGivenDocblockType>
   </file>
+  <file src="src/Storage/ClearByPrefixInterface.php">
+    <UnusedClass>
+      <code>ClearByPrefixInterface</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Storage/ClearExpiredInterface.php">
+    <PossiblyUnusedReturnValue>
+      <code>bool</code>
+    </PossiblyUnusedReturnValue>
+  </file>
   <file src="src/Storage/Event.php">
-    <ImplementedReturnTypeMismatch occurrences="1">
+    <ImplementedReturnTypeMismatch>
       <code>Event</code>
     </ImplementedReturnTypeMismatch>
-    <MoreSpecificImplementedParamType occurrences="2">
+    <MoreSpecificImplementedParamType>
       <code>$target</code>
       <code>$target</code>
     </MoreSpecificImplementedParamType>
+    <PossiblyUnusedReturnValue>
+      <code>Event</code>
+    </PossiblyUnusedReturnValue>
   </file>
   <file src="src/Storage/ExceptionEvent.php">
-    <RedundantCastGivenDocblockType occurrences="1">
+    <RedundantCastGivenDocblockType>
       <code>(bool) $flag</code>
     </RedundantCastGivenDocblockType>
   </file>
+  <file src="src/Storage/IterableInterface.php">
+    <UnusedClass>
+      <code>IterableInterface</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Storage/IteratorInterface.php">
+    <PossiblyUnusedMethod>
+      <code>getMode</code>
+      <code>getStorage</code>
+      <code>setMode</code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Storage/OptimizableInterface.php">
+    <PossiblyUnusedReturnValue>
+      <code>bool</code>
+    </PossiblyUnusedReturnValue>
+  </file>
   <file src="src/Storage/Plugin/AbstractPlugin.php">
-    <DocblockTypeContradiction occurrences="1">
-      <code>null === $this-&gt;options</code>
+    <DocblockTypeContradiction>
+      <code><![CDATA[null === $this->options]]></code>
     </DocblockTypeContradiction>
-    <MissingConstructor occurrences="5">
+    <MissingConstructor>
       <code>$options</code>
       <code>$options</code>
       <code>$options</code>
@@ -519,40 +663,50 @@
       <code>$options</code>
     </MissingConstructor>
   </file>
+  <file src="src/Storage/Plugin/PluginInterface.php">
+    <PossiblyUnusedReturnValue>
+      <code>PluginInterface</code>
+    </PossiblyUnusedReturnValue>
+  </file>
   <file src="src/Storage/Plugin/PluginOptions.php">
-    <InvalidReturnStatement occurrences="1">
-      <code>$this-&gt;serializer</code>
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->serializer]]></code>
     </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
+    <InvalidReturnType>
       <code>SerializerAdapter</code>
     </InvalidReturnType>
-    <MixedAssignment occurrences="1">
-      <code>$this-&gt;serializerOptions</code>
+    <MixedAssignment>
+      <code><![CDATA[$this->serializerOptions]]></code>
     </MixedAssignment>
-    <PropertyNotSetInConstructor occurrences="1">
+    <PossiblyUnusedMethod>
+      <code>setExitOnAbort</code>
+      <code>setOptimizingFactor</code>
+      <code>setSerializerOptions</code>
+    </PossiblyUnusedMethod>
+    <PropertyNotSetInConstructor>
       <code>$serializer</code>
     </PropertyNotSetInConstructor>
-    <RedundantCastGivenDocblockType occurrences="3">
+    <RedundantCastGivenDocblockType>
       <code>(bool) $exitOnAbort</code>
       <code>(bool) $throwExceptions</code>
       <code>(int) $factor</code>
     </RedundantCastGivenDocblockType>
   </file>
   <file src="src/Storage/Plugin/Serializer.php">
-    <MixedArgument occurrences="11">
+    <MixedArgument>
       <code>$baseCapabilities</code>
       <code>$baseCapabilities</code>
-      <code>$baseCapabilities-&gt;getAdapter()</code>
-      <code>$params['key']</code>
-      <code>$params['key']</code>
-      <code>$params['key']</code>
-      <code>$params['key']</code>
-      <code>$params['keyValuePairs']</code>
-      <code>$params['keyValuePairs']</code>
+      <code><![CDATA[$baseCapabilities->getAdapter()]]></code>
+      <code><![CDATA[$params['key']]]></code>
+      <code><![CDATA[$params['key']]]></code>
+      <code><![CDATA[$params['key']]]></code>
+      <code><![CDATA[$params['key']]]></code>
+      <code><![CDATA[$params['keyValuePairs']]]></code>
+      <code><![CDATA[$params['keyValuePairs']]]></code>
       <code>$result</code>
       <code>$value</code>
     </MixedArgument>
-    <MixedArrayOffset occurrences="8">
+    <MixedArrayOffset>
       <code>$keyValuePairs[$failedKey]</code>
       <code>$keyValuePairs[$failedKey]</code>
       <code>$keyValuePairs[$key]</code>
@@ -562,7 +716,7 @@
       <code>$keyValuePairs[$key]</code>
       <code>$keyValuePairs[$key]</code>
     </MixedArrayOffset>
-    <MixedAssignment occurrences="21">
+    <MixedAssignment>
       <code>$baseCapabilities</code>
       <code>$failedKey</code>
       <code>$failedKey</code>
@@ -585,33 +739,74 @@
       <code>$value</code>
       <code>$value</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="1">
+    <MixedMethodCall>
       <code>getAdapter</code>
     </MixedMethodCall>
-    <MixedOperand occurrences="5">
+    <MixedOperand>
       <code>$keyValuePairs[$key]</code>
       <code>$keyValuePairs[$key]</code>
       <code>$oldValue</code>
       <code>$oldValue</code>
-      <code>$params['value']</code>
+      <code><![CDATA[$params['value']]]></code>
     </MixedOperand>
-    <PossiblyNullOperand occurrences="2">
+    <PossiblyNullOperand>
       <code>$oldValue</code>
       <code>$oldValue</code>
     </PossiblyNullOperand>
   </file>
   <file src="src/Storage/PluginManager.php">
-    <MixedReturnStatement occurrences="1">
+    <MixedReturnStatement>
       <code>$plugin</code>
     </MixedReturnStatement>
-    <NonInvariantDocblockPropertyType occurrences="3">
+    <NonInvariantDocblockPropertyType>
       <code>$aliases</code>
       <code>$factories</code>
       <code>$instanceOf</code>
     </NonInvariantDocblockPropertyType>
   </file>
+  <file src="src/Storage/PostEvent.php">
+    <PossiblyUnusedParam>
+      <code>$value</code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Storage/StorageInterface.php">
+    <PossiblyUnusedMethod>
+      <code>addItem</code>
+      <code>decrementItem</code>
+      <code>incrementItem</code>
+      <code>replaceItem</code>
+      <code>touchItem</code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedReturnValue>
+      <code>StorageInterface</code>
+    </PossiblyUnusedReturnValue>
+  </file>
+  <file src="src/Storage/TaggableInterface.php">
+    <UnusedClass>
+      <code>TaggableInterface</code>
+    </UnusedClass>
+  </file>
+  <file src="src/Storage/TotalSpaceCapableInterface.php">
+    <UnusedClass>
+      <code>TotalSpaceCapableInterface</code>
+    </UnusedClass>
+  </file>
+  <file src="test/Command/DeprecatedStorageFactoryConfigurationCheckCommandTest.php">
+    <DeprecatedMethod>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+    </DeprecatedMethod>
+  </file>
+  <file src="test/Pattern/AbstractCommonPatternTest.php">
+    <PossiblyUnusedMethod>
+      <code>getCommonPatternNamesProvider</code>
+    </PossiblyUnusedMethod>
+  </file>
   <file src="test/Pattern/AbstractCommonStoragePatternTest.php">
-    <NonInvariantDocblockPropertyType occurrences="4">
+    <NonInvariantDocblockPropertyType>
       <code>$pattern</code>
       <code>$pattern</code>
       <code>$pattern</code>
@@ -619,16 +814,16 @@
     </NonInvariantDocblockPropertyType>
   </file>
   <file src="test/Pattern/CallbackCacheTest.php">
-    <MissingClosureParamType occurrences="1">
+    <MissingClosureParamType>
       <code>$event</code>
     </MissingClosureParamType>
-    <MixedArgument occurrences="1">
+    <MixedArgument>
       <code>$key</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="1">
-      <code>$params['key']</code>
+    <MixedArrayAccess>
+      <code><![CDATA[$params['key']]]></code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="6">
+    <MixedAssignment>
       <code>$generatedKey</code>
       <code>$key</code>
       <code>$params</code>
@@ -636,11 +831,14 @@
       <code>$return</code>
       <code>$usedKey</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="2">
+    <MixedMethodCall>
       <code>attach</code>
       <code>getParams</code>
     </MixedMethodCall>
-    <UndefinedInterfaceMethod occurrences="9">
+    <PossiblyUnusedMethod>
+      <code>getCommonPatternNamesProvider</code>
+    </PossiblyUnusedMethod>
+    <UndefinedInterfaceMethod>
       <code>call</code>
       <code>call</code>
       <code>call</code>
@@ -653,100 +851,129 @@
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Pattern/CaptureCacheTest.php">
-    <MixedMethodCall occurrences="1">
+    <MixedMethodCall>
       <code>setIndexFilename</code>
     </MixedMethodCall>
-    <PossiblyNullArrayAccess occurrences="3">
-      <code>$err['message']</code>
-      <code>$err['message']</code>
-      <code>$err['message']</code>
+    <PossiblyNullArrayAccess>
+      <code><![CDATA[$err['message']]]></code>
+      <code><![CDATA[$err['message']]]></code>
+      <code><![CDATA[$err['message']]]></code>
     </PossiblyNullArrayAccess>
-    <UndefinedInterfaceMethod occurrences="2">
+    <PossiblyUnusedMethod>
+      <code>getCommonPatternNamesProvider</code>
+    </PossiblyUnusedMethod>
+    <UndefinedInterfaceMethod>
       <code>set</code>
       <code>set</code>
     </UndefinedInterfaceMethod>
-    <UndefinedThisPropertyAssignment occurrences="1">
-      <code>$this-&gt;options</code>
+    <UndefinedThisPropertyAssignment>
+      <code><![CDATA[$this->options]]></code>
     </UndefinedThisPropertyAssignment>
-    <UndefinedThisPropertyFetch occurrences="1">
-      <code>$this-&gt;options</code>
+    <UndefinedThisPropertyFetch>
+      <code><![CDATA[$this->options]]></code>
     </UndefinedThisPropertyFetch>
   </file>
   <file src="test/Pattern/ObjectCacheTest.php">
-    <MissingClosureParamType occurrences="1">
+    <MissingClosureParamType>
       <code>$event</code>
     </MissingClosureParamType>
-    <MixedArrayAccess occurrences="1">
-      <code>$params['key']</code>
+    <MixedArrayAccess>
+      <code><![CDATA[$params['key']]]></code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="5">
+    <MixedAssignment>
       <code>$generatedKey</code>
       <code>$params</code>
       <code>$return</code>
       <code>$return</code>
       <code>$usedKey</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="2">
+    <MixedMethodCall>
       <code>attach</code>
       <code>getParams</code>
     </MixedMethodCall>
-    <NoInterfaceProperties occurrences="6">
-      <code>$this-&gt;pattern-&gt;property</code>
-      <code>$this-&gt;pattern-&gt;property</code>
-      <code>$this-&gt;pattern-&gt;property</code>
-      <code>$this-&gt;pattern-&gt;property</code>
-      <code>$this-&gt;pattern-&gt;property</code>
-      <code>$this-&gt;pattern-&gt;unknownProperty</code>
+    <NoInterfaceProperties>
+      <code><![CDATA[$this->pattern->property]]></code>
+      <code><![CDATA[$this->pattern->property]]></code>
+      <code><![CDATA[$this->pattern->property]]></code>
+      <code><![CDATA[$this->pattern->property]]></code>
+      <code><![CDATA[$this->pattern->property]]></code>
+      <code><![CDATA[$this->pattern->unknownProperty]]></code>
     </NoInterfaceProperties>
-    <PossiblyNullPropertyFetch occurrences="2">
-      <code>$this-&gt;options-&gt;getObject()-&gt;property</code>
-      <code>$this-&gt;options-&gt;getObject()-&gt;property</code>
+    <PossiblyNullPropertyFetch>
+      <code><![CDATA[$this->options->getObject()->property]]></code>
+      <code><![CDATA[$this->options->getObject()->property]]></code>
     </PossiblyNullPropertyFetch>
-    <UndefinedInterfaceMethod occurrences="3">
+    <PossiblyUnusedMethod>
+      <code>getCommonPatternNamesProvider</code>
+    </PossiblyUnusedMethod>
+    <UndefinedInterfaceMethod>
       <code>call</code>
       <code>generateKey</code>
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Pattern/OutputCacheTest.php">
-    <PossiblyNullReference occurrences="2">
+    <PossiblyNullReference>
       <code>getItem</code>
       <code>setItem</code>
     </PossiblyNullReference>
-    <UndefinedInterfaceMethod occurrences="4">
+    <PossiblyUnusedMethod>
+      <code>getCommonPatternNamesProvider</code>
+    </PossiblyUnusedMethod>
+    <UndefinedInterfaceMethod>
       <code>end</code>
       <code>start</code>
       <code>start</code>
       <code>start</code>
     </UndefinedInterfaceMethod>
   </file>
+  <file src="test/Pattern/TestAsset/TestCachePattern.php">
+    <UnusedClass>
+      <code>TestCachePattern</code>
+    </UnusedClass>
+  </file>
   <file src="test/Pattern/TestAsset/TestCallbackCache.php">
-    <MissingReturnType occurrences="1">
+    <MissingReturnType>
       <code>emptyMethod</code>
     </MissingReturnType>
+    <PossiblyUnusedMethod>
+      <code>emptyMethod</code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="test/Pattern/TestAsset/TestObjectCache.php">
+    <PossiblyUnusedMethod>
+      <code>emptyMethod</code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code>$property</code>
+    </PossiblyUnusedProperty>
   </file>
   <file src="test/Psr/CacheItemPool/CacheItemPoolDecoratorTest.php">
-    <InvalidArgument occurrences="2">
+    <DeprecatedMethod>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+    </DeprecatedMethod>
+    <InvalidArgument>
       <code>$keys</code>
       <code>$keys</code>
     </InvalidArgument>
-    <MissingReturnType occurrences="3">
+    <MissingReturnType>
       <code>testDeleteItemInvalidKeyThrowsException</code>
       <code>testGetItemInvalidKeyThrowsException</code>
       <code>testHasItemInvalidKeyThrowsException</code>
     </MissingReturnType>
-    <MixedArgument occurrences="4">
+    <MixedArgument>
       <code>$item</code>
       <code>$key</code>
       <code>$key</code>
       <code>$key</code>
     </MixedArgument>
-    <MixedAssignment occurrences="3">
+    <MixedAssignment>
       <code>$item</code>
       <code>$item</code>
       <code>$item</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="14">
+    <MixedMethodCall>
       <code>get</code>
       <code>get</code>
       <code>get</code>
@@ -764,13 +991,20 @@
     </MixedMethodCall>
   </file>
   <file src="test/Psr/CacheItemPool/CacheItemTest.php">
-    <InvalidArgument occurrences="2">
-      <code>'foo'</code>
+    <InvalidArgument>
+      <code><![CDATA['foo']]></code>
       <code>[]</code>
     </InvalidArgument>
   </file>
   <file src="test/Psr/SimpleCache/SimpleCacheDecoratorTest.php">
-    <MissingReturnType occurrences="10">
+    <DeprecatedMethod>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+    </DeprecatedMethod>
+    <MissingReturnType>
       <code>testHasProxiesToStorage</code>
       <code>testSetMultipleRaisesExceptionWhenTtlValueIsInvalid</code>
       <code>testSetMultipleShouldRaisePsrInvalidArgumentExceptionForInvalidKeys</code>
@@ -782,62 +1016,89 @@
       <code>testSetShouldRemoveItemFromCacheIfTtlIsBelow1</code>
       <code>testSetShouldRemoveItemFromCacheIfTtlIsBelow1AndStorageDoesNotSupportPerItemTtl</code>
     </MissingReturnType>
-    <MixedArgument occurrences="2">
+    <MixedArgument>
       <code>$ttl</code>
       <code>$ttl</code>
     </MixedArgument>
-    <MixedInferredReturnType occurrences="3">
+    <MixedInferredReturnType>
       <code>array</code>
       <code>array</code>
       <code>array</code>
     </MixedInferredReturnType>
   </file>
   <file src="test/Psr/SimpleCache/TestAsset/TtlStorage.php">
-    <MissingReturnType occurrences="1">
+    <MissingReturnType>
       <code>setCapabilities</code>
     </MissingReturnType>
-    <PropertyNotSetInConstructor occurrences="1">
+    <PropertyNotSetInConstructor>
       <code>TtlStorage</code>
     </PropertyNotSetInConstructor>
   </file>
   <file src="test/Service/DeprecatedSchemaDetectorTest.php">
-    <MixedInferredReturnType occurrences="2">
+    <MixedInferredReturnType>
       <code>Generator</code>
       <code>Generator</code>
     </MixedInferredReturnType>
   </file>
+  <file src="test/Service/StorageAdapterFactoryFactoryTest.php">
+    <DeprecatedMethod>
+      <code>withConsecutive</code>
+    </DeprecatedMethod>
+  </file>
+  <file src="test/Service/StorageAdapterFactoryTest.php">
+    <DeprecatedMethod>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+    </DeprecatedMethod>
+  </file>
+  <file src="test/Service/StorageCacheFactoryTest.php">
+    <DeprecatedMethod>
+      <code>withConsecutive</code>
+      <code>withConsecutive</code>
+    </DeprecatedMethod>
+  </file>
+  <file src="test/StaticAnalysis/AdapterPluginManagerTypes.php">
+    <UnusedClass>
+      <code>AdapterPluginManagerTypes</code>
+    </UnusedClass>
+  </file>
+  <file src="test/StaticAnalysis/PluginManagerTypes.php">
+    <UnusedClass>
+      <code>PluginManagerTypes</code>
+    </UnusedClass>
+  </file>
   <file src="test/Storage/Adapter/AbstractAdapterTest.php">
-    <MissingClosureParamType occurrences="1">
+    <MissingClosureParamType>
       <code>$event</code>
     </MissingClosureParamType>
-    <MissingClosureReturnType occurrences="1">
+    <MissingClosureReturnType>
       <code>static function ($event) use ($retVal) {</code>
     </MissingClosureReturnType>
-    <MixedArgument occurrences="1">
+    <MixedArgument>
       <code>$success</code>
     </MixedArgument>
-    <MixedArrayAssignment occurrences="3">
+    <MixedArrayAssignment>
       <code>$eventList[]</code>
       <code>$eventList[]</code>
       <code>$eventList[]</code>
     </MixedArrayAssignment>
-    <MixedAssignment occurrences="4">
+    <MixedAssignment>
       <code>$result</code>
       <code>$result</code>
       <code>$rs</code>
       <code>$v</code>
     </MixedAssignment>
-    <MixedInferredReturnType occurrences="1">
+    <MixedInferredReturnType>
       <code>array</code>
     </MixedInferredReturnType>
-    <MixedMethodCall occurrences="2">
+    <MixedMethodCall>
       <code>getResult</code>
       <code>stopPropagation</code>
     </MixedMethodCall>
-    <NullArgument occurrences="1">
+    <NullArgument>
       <code>null</code>
     </NullArgument>
-    <PossiblyNullReference occurrences="10">
+    <PossiblyNullReference>
       <code>getNamespace</code>
       <code>setKeyPattern</code>
       <code>setKeyPattern</code>
@@ -849,18 +1110,18 @@
       <code>setTtl</code>
       <code>setWritable</code>
     </PossiblyNullReference>
-    <PossiblyUndefinedVariable occurrences="1">
+    <PossiblyUndefinedVariable>
       <code>$success</code>
     </PossiblyUndefinedVariable>
   </file>
   <file src="test/Storage/Adapter/AdapterOptionsTest.php">
-    <MixedArgument occurrences="1">
+    <MixedArgument>
       <code>$calledArgs</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="1">
+    <MixedArrayAccess>
       <code>$calledArgs[0]</code>
     </MixedArrayAccess>
-    <PossiblyNullReference occurrences="11">
+    <PossiblyNullReference>
       <code>getKeyPattern</code>
       <code>getTtl</code>
       <code>setAdapter</code>
@@ -873,134 +1134,140 @@
       <code>setTtl</code>
       <code>setWritable</code>
     </PossiblyNullReference>
+    <PossiblyUnusedProperty>
+      <code>$storage</code>
+    </PossiblyUnusedProperty>
   </file>
   <file src="test/Storage/Adapter/TestAsset/AdapterWithStorageAndEventsCapableInterface.php">
-    <MissingReturnType occurrences="1">
+    <MissingReturnType>
       <code>addPlugin</code>
     </MissingReturnType>
+    <UnusedClass>
+      <code>AdapterWithStorageAndEventsCapableInterface</code>
+    </UnusedClass>
   </file>
   <file src="test/Storage/AdapterPluginManagerTest.php">
-    <MissingReturnType occurrences="2">
+    <MissingReturnType>
       <code>testPluginAliasesResolve</code>
       <code>testShareByDefaultAndSharedByDefault</code>
     </MissingReturnType>
   </file>
   <file src="test/Storage/CapabilitiesTest.php">
-    <ArgumentTypeCoercion occurrences="1">
-      <code>'ArrayObject'</code>
+    <ArgumentTypeCoercion>
+      <code><![CDATA['ArrayObject']]></code>
     </ArgumentTypeCoercion>
-    <MissingClosureParamType occurrences="1">
+    <MissingClosureParamType>
       <code>$eventArg</code>
     </MissingClosureParamType>
-    <MixedAssignment occurrences="2">
+    <MixedAssignment>
       <code>$em</code>
       <code>$event</code>
     </MixedAssignment>
-    <MixedMethodCall occurrences="1">
+    <MixedMethodCall>
       <code>attach</code>
     </MixedMethodCall>
-    <UndefinedInterfaceMethod occurrences="1">
+    <UndefinedInterfaceMethod>
       <code>getEventManager</code>
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Storage/Plugin/AbstractCommonPluginTest.php">
-    <MissingReturnType occurrences="3">
+    <MissingReturnType>
       <code>getCommonPluginNamesProvider</code>
       <code>testOptionObjectAvailable</code>
       <code>testOptionsGetAndSetDefault</code>
     </MissingReturnType>
   </file>
   <file src="test/Storage/Plugin/ClearExpiredByFactorTest.php">
-    <ArgumentTypeCoercion occurrences="2">
-      <code>$this-&gt;adapter-&gt;getEventManager()</code>
-      <code>$this-&gt;adapter-&gt;getEventManager()</code>
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$this->adapter->getEventManager()]]></code>
+      <code><![CDATA[$this->adapter->getEventManager()]]></code>
     </ArgumentTypeCoercion>
-    <DeprecatedMethod occurrences="1">
+    <DeprecatedMethod>
       <code>setMethods</code>
     </DeprecatedMethod>
-    <InvalidArgument occurrences="2">
+    <InvalidArgument>
       <code>$cb</code>
       <code>$cb</code>
     </InvalidArgument>
-    <InvalidArrayAccess occurrences="2">
+    <InvalidArrayAccess>
       <code>$cb[0]</code>
       <code>$cb[1]</code>
     </InvalidArrayAccess>
-    <UndefinedInterfaceMethod occurrences="1">
+    <UndefinedInterfaceMethod>
       <code>clearExpiredByFactor</code>
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Storage/Plugin/ExceptionHandlerTest.php">
-    <ArgumentTypeCoercion occurrences="2">
-      <code>$this-&gt;adapter-&gt;getEventManager()</code>
-      <code>$this-&gt;adapter-&gt;getEventManager()</code>
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$this->adapter->getEventManager()]]></code>
+      <code><![CDATA[$this->adapter->getEventManager()]]></code>
     </ArgumentTypeCoercion>
-    <InvalidArgument occurrences="2">
+    <InvalidArgument>
       <code>$cb</code>
       <code>$cb</code>
     </InvalidArgument>
-    <InvalidArrayAccess occurrences="2">
+    <InvalidArrayAccess>
       <code>$cb[0]</code>
       <code>$cb[1]</code>
     </InvalidArrayAccess>
-    <MissingClosureParamType occurrences="1">
+    <MissingClosureParamType>
       <code>$exception</code>
     </MissingClosureParamType>
-    <UndefinedInterfaceMethod occurrences="2">
+    <UndefinedInterfaceMethod>
       <code>onException</code>
       <code>onException</code>
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Storage/Plugin/IgnoreUserAbortTest.php">
-    <ArgumentTypeCoercion occurrences="2">
-      <code>$this-&gt;adapter-&gt;getEventManager()</code>
-      <code>$this-&gt;adapter-&gt;getEventManager()</code>
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$this->adapter->getEventManager()]]></code>
+      <code><![CDATA[$this->adapter->getEventManager()]]></code>
     </ArgumentTypeCoercion>
-    <InvalidArgument occurrences="2">
+    <InvalidArgument>
       <code>$cb</code>
       <code>$cb</code>
     </InvalidArgument>
-    <InvalidArrayAccess occurrences="2">
+    <InvalidArrayAccess>
       <code>$cb[0]</code>
       <code>$cb[1]</code>
     </InvalidArrayAccess>
   </file>
   <file src="test/Storage/Plugin/OptimizeByFactorTest.php">
-    <ArgumentTypeCoercion occurrences="2">
-      <code>$this-&gt;adapter-&gt;getEventManager()</code>
-      <code>$this-&gt;adapter-&gt;getEventManager()</code>
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$this->adapter->getEventManager()]]></code>
+      <code><![CDATA[$this->adapter->getEventManager()]]></code>
     </ArgumentTypeCoercion>
-    <DeprecatedMethod occurrences="1">
+    <DeprecatedMethod>
       <code>setMethods</code>
     </DeprecatedMethod>
-    <InvalidArgument occurrences="2">
+    <InvalidArgument>
       <code>$cb</code>
       <code>$cb</code>
     </InvalidArgument>
-    <InvalidArrayAccess occurrences="2">
+    <InvalidArrayAccess>
       <code>$cb[0]</code>
       <code>$cb[1]</code>
     </InvalidArrayAccess>
-    <UndefinedInterfaceMethod occurrences="1">
+    <UndefinedInterfaceMethod>
       <code>optimizeByFactor</code>
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Storage/Plugin/SerializerTest.php">
-    <ArgumentTypeCoercion occurrences="4">
+    <ArgumentTypeCoercion>
       <code>$events</code>
       <code>$events</code>
       <code>$events</code>
-      <code>$this-&gt;adapter-&gt;getEventManager()</code>
+      <code><![CDATA[$this->adapter->getEventManager()]]></code>
     </ArgumentTypeCoercion>
-    <InvalidArgument occurrences="2">
+    <InvalidArgument>
       <code>$cb</code>
       <code>$cb</code>
     </InvalidArgument>
-    <InvalidArrayAccess occurrences="2">
+    <InvalidArrayAccess>
       <code>$cb[0]</code>
       <code>$cb[1]</code>
     </InvalidArrayAccess>
-    <MissingClosureParamType occurrences="6">
+    <MissingClosureParamType>
       <code>$casToken</code>
       <code>$casToken</code>
       <code>$casToken</code>
@@ -1008,17 +1275,17 @@
       <code>$success</code>
       <code>$success</code>
     </MissingClosureParamType>
-    <MixedArgument occurrences="1">
+    <MixedArgument>
       <code>$values</code>
     </MixedArgument>
-    <MixedArrayAccess occurrences="2">
-      <code>$values['key1']</code>
-      <code>$values['key2']</code>
+    <MixedArrayAccess>
+      <code><![CDATA[$values['key1']]]></code>
+      <code><![CDATA[$values['key2']]]></code>
     </MixedArrayAccess>
-    <MixedAssignment occurrences="1">
+    <MixedAssignment>
       <code>$values</code>
     </MixedAssignment>
-    <UndefinedInterfaceMethod occurrences="4">
+    <UndefinedInterfaceMethod>
       <code>onDecrementItemPre</code>
       <code>onReadItemPost</code>
       <code>onReadItemPost</code>
@@ -1026,41 +1293,49 @@
     </UndefinedInterfaceMethod>
   </file>
   <file src="test/Storage/PluginManagerTest.php">
-    <MissingReturnType occurrences="1">
+    <MissingReturnType>
       <code>testShareByDefaultAndSharedByDefault</code>
     </MissingReturnType>
   </file>
   <file src="test/Storage/TestAsset/ClearExpiredMockAdapter.php">
-    <InvalidReturnType occurrences="1">
+    <InvalidReturnType>
       <code>clearExpired</code>
     </InvalidReturnType>
-    <PropertyNotSetInConstructor occurrences="1">
+    <PropertyNotSetInConstructor>
       <code>ClearExpiredMockAdapter</code>
     </PropertyNotSetInConstructor>
   </file>
   <file src="test/Storage/TestAsset/MockAdapter.php">
-    <InvalidReturnType occurrences="3">
+    <InvalidReturnType>
       <code>internalGetItem</code>
       <code>internalRemoveItem</code>
       <code>internalSetItem</code>
     </InvalidReturnType>
-    <PropertyNotSetInConstructor occurrences="1">
+    <PropertyNotSetInConstructor>
       <code>MockAdapter</code>
     </PropertyNotSetInConstructor>
   </file>
   <file src="test/Storage/TestAsset/MockPlugin.php">
-    <PropertyNotSetInConstructor occurrences="1">
+    <PossiblyUnusedMethod>
+      <code>getEventCallbacks</code>
+      <code>onSetItemPost</code>
+      <code>onSetItemPre</code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code>$handles</code>
+    </PossiblyUnusedProperty>
+    <PropertyNotSetInConstructor>
       <code>$options</code>
     </PropertyNotSetInConstructor>
-    <RedundantCondition occurrences="1">
+    <RedundantCondition>
       <code>$options instanceof Plugin\PluginOptions</code>
     </RedundantCondition>
   </file>
   <file src="test/Storage/TestAsset/OptimizableMockAdapter.php">
-    <InvalidReturnType occurrences="1">
+    <InvalidReturnType>
       <code>optimize</code>
     </InvalidReturnType>
-    <PropertyNotSetInConstructor occurrences="1">
+    <PropertyNotSetInConstructor>
       <code>OptimizableMockAdapter</code>
     </PropertyNotSetInConstructor>
   </file>
