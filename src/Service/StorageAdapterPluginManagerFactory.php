@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\Cache\Service;
 
 use Laminas\Cache\Storage\AdapterPluginManager;
@@ -9,6 +11,23 @@ final class StorageAdapterPluginManagerFactory
 {
     public function __invoke(ContainerInterface $container): AdapterPluginManager
     {
-        return new AdapterPluginManager($container);
+        $pluginManager = new AdapterPluginManager($container);
+
+        // If we do not have a config service, nothing more to do
+        if (! $container->has('config')) {
+            return $pluginManager;
+        }
+
+        $config = $container->get('config');
+
+        // If we do not have a configuration, nothing more to do
+        if (! isset($config[AdapterPluginManager::CONFIGURATION_KEY]) || ! is_array($config[AdapterPluginManager::CONFIGURATION_KEY])) {
+            return $pluginManager;
+        }
+
+        // Wire service configuration
+        $pluginManager->configure($config[AdapterPluginManager::CONFIGURATION_KEY]);
+
+        return $pluginManager;
     }
 }

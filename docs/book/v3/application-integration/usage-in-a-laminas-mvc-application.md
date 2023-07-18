@@ -37,7 +37,22 @@ return [
 ];
 ```
 
-The factory `Laminas\Cache\Service\StorageCacheAbstractServiceFactory` uses the configuration, searches for the configuration key `caches` and creates the storage adapters using the discovered configuration.
+## Register a storage adapter
+
+To register additional storage adapters, use either application or module configuration (such as `config/autoload/*.global.php` or `module/Application/config/module.config.php`, respectively), and define the configuration key `storage_adapters`.
+
+In this example, the global configuration is used and a separate file is created for the storage adapters configuration.
+Create a configuration file with name like `config/autoload/storage_adapters.global.php` and it will [automatically be included](https://docs.laminas.dev/tutorials/advanced-config/#environment-specific-application-configuration):
+
+```php
+return [
+    'storage_adapters' => [
+        'factories' => [
+            \My\Custom\Adapter::class => \My\Custom\AdapterFactory::class,
+        ],
+    ],
+];
+```
 
 ## Create Controller
 
