@@ -28,7 +28,10 @@ final class StorageAdapterPluginManagerFactory
         $config = $container->get('config');
 
         // If we do not have a configuration, nothing more to do
-        if (! isset($config[ConfigProvider::ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY]) || ! is_array($config[ConfigProvider::ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY])) {
+        if (
+            ! isset($config[ConfigProvider::ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY])
+            || ! is_array($config[ConfigProvider::ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY])
+        ) {
             return $pluginManager;
         }
 
