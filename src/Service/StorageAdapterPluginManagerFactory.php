@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace Laminas\Cache\Service;
 
 use Laminas\Cache\Storage\AdapterPluginManager;
+use Laminas\ServiceManager\ServiceManager;
 use Psr\Container\ContainerInterface;
 
+/**
+ * @psalm-import-type ServiceManagerConfiguration from ServiceManager
+ */
 final class StorageAdapterPluginManagerFactory
 {
     public function __invoke(ContainerInterface $container): AdapterPluginManager
@@ -26,7 +30,9 @@ final class StorageAdapterPluginManagerFactory
         }
 
         // Wire service configuration
-        $pluginManager->configure($config[AdapterPluginManager::CONFIGURATION_KEY]);
+        /** @var ServiceManagerConfiguration $config */
+        $config = $config[AdapterPluginManager::CONFIGURATION_KEY];
+        $pluginManager->configure($config);
 
         return $pluginManager;
     }
