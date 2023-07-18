@@ -8,6 +8,8 @@ use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use Psr\Container\ContainerInterface;
 
+use function is_array;
+
 /**
  * @psalm-import-type ServiceManagerConfiguration from ServiceManager
  */
