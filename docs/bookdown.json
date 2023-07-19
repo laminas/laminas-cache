@@ -3,6 +3,7 @@
     "target": "html/",
     "content": [
         "book/laminas.cache.storage.adapter.md",
+        "book/laminas.cache.storage.adapter-plugin-manager.md",
         "book/laminas.cache.storage.capabilities.md",
         "book/laminas.cache.storage.plugin.md",
         "book/laminas.cache.pattern.md",
