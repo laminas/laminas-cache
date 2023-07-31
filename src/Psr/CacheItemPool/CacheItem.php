@@ -6,7 +6,7 @@ use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Psr\Cache\CacheItemInterface;
-use StellaMaris\Clock\ClockInterface;
+use Psr\Clock\ClockInterface;
 
 use function gettype;
 use function is_int;

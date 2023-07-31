@@ -128,7 +128,6 @@ class SimpleCacheDecoratorTest extends TestCase
     public function setSuccessReference(SimpleCacheDecorator $cache, bool $success): void
     {
         $r = new ReflectionProperty($cache, 'success');
-        $r->setAccessible(true);
         $r->setValue($cache, $success);
     }
 
