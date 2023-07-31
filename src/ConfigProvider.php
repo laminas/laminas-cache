@@ -16,6 +16,8 @@ use function class_exists;
 
 class ConfigProvider
 {
+    public const ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY = 'storage_adapters';
+
     /**
      * Return default configuration for laminas-cache.
      *
