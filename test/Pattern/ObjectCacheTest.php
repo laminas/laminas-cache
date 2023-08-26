@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
+use Laminas\Cache\Pattern\ObjectCache;
 use Laminas\Cache\Pattern\PatternOptions;
+use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\TestObjectCache;
 
 use function implode;
@@ -16,6 +18,7 @@ use function ob_start;
 
 /**
  * @group      Laminas_Cache
+ * @template-extends AbstractCommonStoragePatternTest<ObjectCache>
  */
 class ObjectCacheTest extends AbstractCommonStoragePatternTest
 {
@@ -24,13 +27,11 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
 
     protected function setUp(): void
     {
-        $this->storage = new Cache\Storage\Adapter\Memory([
-            'memory_limit' => 0,
-        ]);
+        $this->storage = $this->createMock(StorageInterface::class);
         $this->options = new Cache\Pattern\PatternOptions([
             'object' => new TestObjectCache(),
         ]);
-        $this->pattern = new Cache\Pattern\ObjectCache($this->storage, $this->options);
+        $this->pattern = new ObjectCache($this->storage, $this->options);
 
         parent::setUp();
     }
@@ -71,14 +72,20 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
         $args = ['arg1', 2, 3.33, null];
 
         $generatedKey = $this->pattern->generateKey('emptyMethod', $args);
-        $usedKey      = null;
-        $this->storage->getEventManager()->attach('setItem.pre', static function ($event) use (&$usedKey): void {
-            $params  = $event->getParams();
-            $usedKey = $params['key'];
-        });
+
+        $this->storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->with($generatedKey, null)
+            ->willReturn(null);
+
+        $this->storage
+            ->expects(self::once())
+            ->method('setItem')
+            ->with($generatedKey, self::anything())
+            ->willReturn(true);
 
         $this->pattern->call('emptyMethod', $args);
-        self::assertEquals($generatedKey, $usedKey);
     }
 
     public function testSetProperty(): void
@@ -119,16 +126,52 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
         self::assertSame($this->options->getObject()::class, $this->options->getObjectKey());
     }
 
+    /**
+     * @param array<array-key,string>  $args
+     */
     protected function executeMethodAndMakeAssertions(string $method, array $args): void
     {
-        /** @psalm-suppress MixedArgumentTypeCoercion */
-        $imploded   = implode(', ', $args);
-        $returnSpec = 'foobar_return(' . $imploded . ') : ';
-        $outputSpec = 'foobar_output(' . $imploded . ') : ';
-        $callback   = [$this->pattern, $method];
+        $options     = $this->pattern->getOptions();
+        $cacheOutput = $options->getCacheOutput();
+        $imploded    = implode(', ', $args);
+        $returnSpec  = 'foobar_return(' . $imploded . ') : ';
+        $outputSpec  = 'foobar_output(' . $imploded . ') : ';
+        $callback    = [$this->pattern, $method];
 
         // first call - not cached
         $firstCounter = TestObjectCache::$fooCounter + 1;
+
+        $expectedKey = $this->pattern->generateKey($method, $args);
+        $this->storage
+            ->expects(self::exactly(2))
+            ->method('getItem')
+            ->with($expectedKey, null)
+            ->willReturnCallback(
+                function (
+                    string $key,
+                    bool|null &$success = null
+                ) use (
+                    $returnSpec,
+                    $outputSpec,
+                    $firstCounter,
+                    $cacheOutput,
+                ): ?array {
+                    static $called = false;
+                    if ($called === true) {
+                        $success = true;
+
+                        $cached = [$returnSpec . $firstCounter];
+                        if ($cacheOutput) {
+                            $cached[] = $outputSpec . $firstCounter;
+                        }
+
+                        return $cached;
+                    }
+
+                    $called = true;
+                    return null;
+                }
+            );
 
         ob_start();
         ob_implicit_flush(false);
@@ -149,7 +192,7 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
         ob_end_clean();
 
         self::assertEquals($returnSpec . $firstCounter, $return);
-        if ($this->options->getCacheOutput()) {
+        if ($cacheOutput) {
             self::assertEquals($outputSpec . $firstCounter, $data);
         } else {
             self::assertEquals('', $data);
