@@ -19,6 +19,8 @@ nav:
             - PSR-16: v4/psr16.md
       - "Application Integration":
             - "Usage in a laminas-mvc Application": v4/application-integration/usage-in-a-laminas-mvc-application.md
+      - "Migration Guide":
+            - "Migration to Version 4.0": v4/migration/to-version-4.md
     - v3:
         - Installation: v3/installation.md
         - Storage:
