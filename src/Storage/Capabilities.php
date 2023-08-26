@@ -103,16 +103,6 @@ class Capabilities
     protected $supportedDatatypes;
 
     /**
-     * Supported metadata
-     *
-     * If it's NULL the capability isn't set and the getter
-     * returns the base capability or the default value.
-     *
-     * @var null|array
-     */
-    protected $supportedMetadata;
-
-    /**
      * TTL precision
      *
      * If it's NULL the capability isn't set and the getter
@@ -220,33 +210,6 @@ class Capabilities
         }
 
         return $this->setCapability($marker, 'supportedDatatypes', $datatypes);
-    }
-
-    /**
-     * Get supported metadata
-     *
-     * @return array
-     */
-    public function getSupportedMetadata()
-    {
-        return $this->getCapability('supportedMetadata', []);
-    }
-
-    /**
-     * Set supported metadata
-     *
-     * @param  string[] $metadata
-     * @throws Exception\InvalidArgumentException
-     * @return Capabilities Fluent interface
-     */
-    public function setSupportedMetadata(stdClass $marker, array $metadata)
-    {
-        foreach ($metadata as $name) {
-            if (! is_string($name)) {
-                throw new Exception\InvalidArgumentException('$metadata must be an array of strings');
-            }
-        }
-        return $this->setCapability($marker, 'supportedMetadata', $metadata);
     }
 
     /**

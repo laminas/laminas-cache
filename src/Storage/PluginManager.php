@@ -15,7 +15,6 @@ use Laminas\ServiceManager\Factory\InvokableFactory;
  * plugins available.
  *
  * @extends AbstractPluginManager<PluginInterface>
- * @final
  */
 final class PluginManager extends AbstractPluginManager
 {
@@ -64,8 +63,7 @@ final class PluginManager extends AbstractPluginManager
     public function build($name, ?array $options = null)
     {
         $options ??= [];
-        /** @psalm-suppress MixedAssignment */
-        $plugin = parent::build($name);
+        $plugin    = parent::build($name);
         if ($options !== [] && $plugin instanceof PluginInterface) {
             $plugin->setOptions(new PluginOptions($options));
         }

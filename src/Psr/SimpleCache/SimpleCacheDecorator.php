@@ -442,7 +442,6 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
             $this->validateKey($key);
 
-            /** @psalm-suppress MixedAssignment */
             $keyValueMap[$key] = $value;
         }
 

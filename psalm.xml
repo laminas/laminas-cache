@@ -19,6 +19,7 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
+        <MixedAssignment errorLevel="suppress"/>
         <InternalMethod>
             <errorLevel type="suppress">
                 <directory name="test"/>
