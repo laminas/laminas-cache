@@ -535,11 +535,6 @@
       <code>setMode</code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="src/Storage/MetadataCapableInterface.php">
-    <PossiblyUnusedMethod>
-      <code>getMetadata</code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="src/Storage/OptimizableInterface.php">
     <PossiblyUnusedReturnValue>
       <code>bool</code>

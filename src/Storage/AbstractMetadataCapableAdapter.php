@@ -1,5 +1,8 @@
 <?php
 
+// @phpcs:disable SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable
+
+
 declare(strict_types=1);
 
 namespace Laminas\Cache\Storage;
@@ -53,8 +56,14 @@ abstract class AbstractMetadataCapableAdapter extends AbstractAdapter implements
         } catch (Exception $exception) {
             $result = null;
             $result = $this->triggerException(__FUNCTION__, $args, $result, $exception);
-            Assert::null($result);
+            Assert::nullOrObject($result);
 
+            /**
+             * NOTE: We do trust the event handling here and assume that it will return an instance of Metadata
+             *       and thus does not modify the type.
+             *
+             * @var TMetadata|null $result
+             */
             return $result;
         }
     }
@@ -106,8 +115,14 @@ abstract class AbstractMetadataCapableAdapter extends AbstractAdapter implements
             $result = [];
             $result = $this->triggerException(__FUNCTION__, $args, $result, $exception);
             Assert::isArray($result);
-            Assert::isEmpty($result);
+            Assert::allObject($result);
 
+            /**
+             * NOTE: We do trust the event handling here and assume that it will return a map of instances of Metadata
+             *      and thus does not modify the type.
+             *
+             * @var array<string,TMetadata> $result
+             */
             return $result;
         }
     }

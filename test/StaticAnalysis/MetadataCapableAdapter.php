@@ -50,13 +50,19 @@ final class MetadataCapableAdapter extends AbstractMetadataCapableAdapter
     {
         return null;
     }
+
+    /**
+     * @psalm-api Mark method as API method to prevent psalm from detecting this method as unused.
+     */
+    public function whatever(): string
+    {
+        $adapter  = new MetadataCapableAdapter();
+        $metadata = $adapter->getMetadata('foo');
+
+        if ($metadata === null) {
+            return '';
+        }
+
+        return $metadata->meta;
+    }
 }
-
-$adapter  = new MetadataCapableAdapter();
-$metadata = $adapter->getMetadata('foo');
-
-if ($metadata === null) {
-    return;
-}
-
-echo $metadata->meta;
