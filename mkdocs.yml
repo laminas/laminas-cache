@@ -2,6 +2,23 @@ docs_dir: docs/book
 site_dir: docs/html
 nav:
     - Home: index.md
+    - v4:
+      - Installation: v4/installation.md
+      - Storage:
+            - Adapters: v4/storage/adapter.md
+            - Capabilities: v4/storage/capabilities.md
+            - Plugins: v4/storage/plugin.md
+      - "Cache Patterns":
+            - Introduction: v4/pattern/intro.md
+            - CallbackCache: v4/pattern/callback-cache.md
+            - ObjectCache: v4/pattern/object-cache.md
+            - OutputCache: v4/pattern/output-cache.md
+            - CaptureCache: v4/pattern/capture-cache.md
+      - "Standards Support":
+            - PSR-6: v4/psr6.md
+            - PSR-16: v4/psr16.md
+      - "Application Integration":
+            - "Usage in a laminas-mvc Application": v4/application-integration/usage-in-a-laminas-mvc-application.md
     - v3:
         - Installation: v3/installation.md
         - Storage:
