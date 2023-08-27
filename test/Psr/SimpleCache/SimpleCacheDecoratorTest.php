@@ -153,23 +153,6 @@ class SimpleCacheDecoratorTest extends TestCase
     }
 
     /**
-     * Set of TTL values that should be considered invalid.
-     *
-     * @return array
-     */
-    public function invalidTtls()
-    {
-        return [
-            'false'  => [false],
-            'true'   => [true],
-            'float'  => [2.75],
-            'string' => ['string'],
-            'array'  => [[1, 2, 3]],
-            'object' => [(object) ['ttl' => 1]],
-        ];
-    }
-
-    /**
      * TTL values less than 1 should result in immediate cache removal.
      *
      * @return array
@@ -313,22 +296,6 @@ class SimpleCacheDecoratorTest extends TestCase
             ->willReturn(true);
 
         self::assertTrue($this->cache->set('key', 'value', $ttl));
-    }
-
-    /**
-     * @dataProvider invalidTtls
-     */
-    public function testSetRaisesExceptionWhenTtlValueIsInvalid(mixed $ttl)
-    {
-        $this->storage
-            ->expects(self::never())
-            ->method('getOptions');
-        $this->storage
-            ->expects(self::never())
-            ->method('setItem');
-
-        $this->expectException(SimpleCacheInvalidArgumentException::class);
-        $this->cache->set('key', 'value', $ttl);
     }
 
     /**
@@ -751,24 +718,6 @@ class SimpleCacheDecoratorTest extends TestCase
             ->willReturn([]);
 
         self::assertTrue($this->cache->setMultiple($values, $ttl));
-    }
-
-    /**
-     * @dataProvider invalidTtls
-     */
-    public function testSetMultipleRaisesExceptionWhenTtlValueIsInvalid(mixed $ttl)
-    {
-        $values = ['one' => 1, 'three' => 3];
-        $this->storage
-            ->expects(self::never())
-            ->method('getOptions');
-
-        $this->storage
-            ->expects(self::never())
-            ->method('setItems');
-
-        $this->expectException(SimpleCacheInvalidArgumentException::class);
-        $this->cache->setMultiple($values, $ttl);
     }
 
     /**

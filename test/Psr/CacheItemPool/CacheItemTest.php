@@ -104,13 +104,6 @@ class CacheItemTest extends TestCase
         self::assertNull($item->getTtl());
     }
 
-    public function testExpiresAfterInvalidThrowsException(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $item = new CacheItem('key', 'value', true);
-        $item->expiresAfter([]);
-    }
-
     public function testExpiresAfterStartsExpiringAfterMethodCall(): void
     {
         $now              = new DateTimeImmutable();
