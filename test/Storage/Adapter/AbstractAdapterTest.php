@@ -14,6 +14,7 @@ use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\Event;
 use Laminas\Cache\Storage\Plugin\PluginOptions;
+use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\ResponseCollection;
 use LaminasTest\Cache\Storage\TestAsset\MockPlugin;
@@ -31,6 +32,7 @@ use function assert;
 use function call_user_func_array;
 use function count;
 use function current;
+use function serialize;
 use function ucfirst;
 
 final class AbstractAdapterTest extends TestCase
@@ -1135,5 +1137,25 @@ final class AbstractAdapterTest extends TestCase
         $adapter->setOptions($this->options ?? new AdapterOptions());
 
         return $adapter;
+    }
+
+    public function testCanCompareOldValueWithTokenWhenUsedWithSerializerPlugin(): void
+    {
+        $storage = $this->getMockForAbstractAdapter();
+        $storage
+            ->addPlugin(new Serializer());
+        $storage
+            ->expects(self::once())
+            ->method('internalSetItem')
+            ->with('foo', serialize('baz'))
+            ->willReturn(true);
+
+        $storage
+            ->expects(self::once())
+            ->method('internalGetItem')
+            ->with('foo')
+            ->willReturn(serialize('bar'));
+
+        self::assertTrue($storage->checkAndSetItem('bar', 'foo', 'baz'));
     }
 }
