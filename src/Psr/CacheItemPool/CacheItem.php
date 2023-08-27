@@ -8,7 +8,6 @@ use DateTimeInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Clock\ClockInterface;
 
-use function gettype;
 use function is_int;
 use function sprintf;
 
@@ -21,13 +20,6 @@ use function sprintf;
 final class CacheItem implements CacheItemInterface
 {
     /**
-     * Cache value
-     *
-     * @var mixed|null
-     */
-    private $value;
-
-    /**
      * Timestamp item will expire at if expiresAt() called, null otherwise
      */
     private ?int $expiration = null;
@@ -36,7 +28,7 @@ final class CacheItem implements CacheItemInterface
 
     public function __construct(
         private string $key,
-        mixed $value,
+        private mixed $value,
         /**
          * True if the cache item lookup resulted in a cache hit or if they item is deferred or successfully saved
          */
@@ -44,7 +36,6 @@ final class CacheItem implements CacheItemInterface
         ?ClockInterface $clock = null
     ) {
         $this->value = $isHit ? $value : null;
-        $this->isHit = $isHit;
         $clock     ??= new class implements ClockInterface
         {
             public function now(): DateTimeImmutable
@@ -66,7 +57,7 @@ final class CacheItem implements CacheItemInterface
     /**
      * {@inheritdoc}
      */
-    public function get()
+    public function get(): mixed
     {
         return $this->value;
     }
@@ -99,7 +90,7 @@ final class CacheItem implements CacheItemInterface
     /**
      * {@inheritdoc}
      */
-    public function set($value): CacheItemInterface
+    public function set($value): static
     {
         $this->value = $value;
 
@@ -109,7 +100,7 @@ final class CacheItem implements CacheItemInterface
     /**
      * {@inheritdoc}
      */
-    public function expiresAt($expiration): CacheItemInterface
+    public function expiresAt($expiration): static
     {
         if (! ($expiration === null || $expiration instanceof DateTimeInterface)) {
             throw new InvalidArgumentException('$expiration must be null or an instance of DateTimeInterface');
@@ -123,7 +114,7 @@ final class CacheItem implements CacheItemInterface
     /**
      * {@inheritdoc}
      */
-    public function expiresAfter($time): CacheItemInterface
+    public function expiresAfter($time): static
     {
         if ($time === null) {
             return $this->expiresAt(null);
@@ -138,13 +129,8 @@ final class CacheItem implements CacheItemInterface
             $time = $interval;
         }
 
-        /** @psalm-suppress RedundantConditionGivenDocblockType Until we do have native type-hints we should keep verifying this. */
-        if ($time instanceof DateInterval) {
-            $now = $this->clock->now();
-            return $this->expiresAt($now->add($time));
-        }
-
-        throw new InvalidArgumentException(sprintf('Invalid $time "%s"', gettype($time)));
+        $now = $this->clock->now();
+        return $this->expiresAt($now->add($time));
     }
 
     /**

@@ -103,25 +103,10 @@ final class CacheItemPoolDecoratorTest extends TestCase
         return $storage;
     }
 
-    public function testStorageNotFlushableThrowsException(): void
-    {
-        $this->expectException(CacheException::class);
-        $storage = $this->createMock(StorageInterface::class);
-
-        $capabilities = $this->createCapabilities($storage);
-
-        $storage
-            ->expects(self::once())
-            ->method('getCapabilities')
-            ->willReturn($capabilities);
-
-        $this->getAdapter($storage);
-    }
-
     public function testStorageNeedsSerializerWillThrowException(): void
     {
         $this->expectException(CacheException::class);
-        $storage = $this->createMock(StorageInterface::class);
+        $storage = $this->createMock(FlushableStorageAdapterInterface::class);
 
         $capabilities = $this->createCapabilities($storage, [
             'NULL'     => true,
@@ -224,7 +209,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
         $adapter = $this->getAdapter($storage);
         $items   = $adapter->getItems($keys);
-        self::assertIsArray($items);
         self::assertEquals($keys, array_keys($items));
         foreach ($keys as $key) {
             self::assertEquals($key, $items[$key]->getKey());
@@ -271,7 +255,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willReturn(['bar' => 'value']);
 
         $items = $this->getAdapter($storage)->getItems($keys);
-        self::assertIsArray($items);
         self::assertCount(2, $items);
         self::assertNull($items['foo']->get());
         self::assertFalse($items['foo']->isHit());
@@ -299,7 +282,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willThrowException(new Exception\RuntimeException());
 
         $items = $this->getAdapter($storage)->getItems($keys);
-        self::assertIsArray($items);
         self::assertCount(2, $items);
         foreach ($keys as $key) {
             self::assertFalse($items[$key]->isHit());
@@ -343,7 +325,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $item->set('bar');
         self::assertTrue($adapter->save($item));
         $saved = $adapter->getItems(['foo']);
-        self::assertIsArray($saved);
         self::assertEquals('bar', $saved['foo']->get());
         self::assertTrue($saved['foo']->isHit());
     }
@@ -382,7 +363,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $item->expiresAfter(3600);
         self::assertTrue($adapter->save($item));
         $saved = $adapter->getItems(['foo']);
-        self::assertIsArray($saved);
         self::assertEquals('bar', $saved['foo']->get());
         self::assertTrue($saved['foo']->isHit());
         // ensure original TTL not modified
@@ -905,7 +885,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         ];
     }
 
-    private function getAdapter(StorageInterface $storage): CacheItemPoolDecorator
+    private function getAdapter(StorageInterface&FlushableInterface $storage): CacheItemPoolDecorator
     {
         return new CacheItemPoolDecorator($storage);
     }

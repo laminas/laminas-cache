@@ -1,3 +1,13 @@
 {
-    "backwardCompatibilityCheck": true
+    "backwardCompatibilityCheck": true,
+    "additional_checks": [
+        {
+            "name": "Unit tests with psr/cache v2",
+            "job": {
+                "php": "*",
+                "dependencies": "latest",
+                "command": "composer require psr/cache:^2.0 && vendor/bin/phpunit"
+            }
+        }
+    ]
 }

@@ -1201,7 +1201,6 @@ class SimpleCacheDecoratorTest extends TestCase
 
         $decorator = new SimpleCacheDecorator($storage);
 
-        /** @psalm-suppress InvalidArgument PSR-16 exception interfaces does not extend Throwable in v1 */
         $this->expectException(PsrSimpleCacheInvalidArgumentException::class);
         $decorator->get('127.0.0.1');
     }
@@ -1216,7 +1215,6 @@ class SimpleCacheDecoratorTest extends TestCase
 
         $decorator = new SimpleCacheDecorator($storage);
 
-        /** @psalm-suppress InvalidArgument PSR-16 exception interfaces does not extend Throwable in v1 */
         $this->expectException(PsrSimpleCacheException::class);
         $decorator->get('127-0-0-1');
     }
