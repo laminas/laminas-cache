@@ -5,13 +5,6 @@
       <code>$cacheConfiguration</code>
       <code>$configuration</code>
     </MixedArgument>
-    <MixedAssignment>
-      <code>$cache</code>
-      <code>$cacheConfiguration</code>
-      <code>$caches</code>
-      <code>$caches</code>
-      <code>$configuration</code>
-    </MixedAssignment>
     <MixedPropertyTypeCoercion>
       <code>$projectConfiguration</code>
     </MixedPropertyTypeCoercion>
@@ -66,11 +59,6 @@
       <code>$result[0]</code>
       <code>$result[1]</code>
     </MixedArrayAccess>
-    <MixedAssignment>
-      <code>$object</code>
-      <code>$result</code>
-      <code>$ret</code>
-    </MixedAssignment>
     <PossiblyUnusedMethod>
       <code>__call</code>
     </PossiblyUnusedMethod>
@@ -126,13 +114,6 @@
       <code>$property</code>
       <code>$property</code>
     </MixedArgument>
-    <MixedAssignment>
-      <code>$property</code>
-      <code>$property</code>
-      <code>$property</code>
-      <code>$property</code>
-      <code>$value</code>
-    </MixedAssignment>
     <MixedInferredReturnType>
       <code>bool</code>
       <code>void</code>
@@ -164,10 +145,6 @@
       <code>$data</code>
       <code>$key</code>
     </MixedArgument>
-    <MixedAssignment>
-      <code>$data</code>
-      <code>$key</code>
-    </MixedAssignment>
     <RedundantCastGivenDocblockType>
       <code>(string) $key</code>
     </RedundantCastGivenDocblockType>
@@ -212,12 +189,6 @@
       <code>validateKeys</code>
       <code>validateStorage</code>
     </MissingReturnType>
-    <MixedAssignment>
-      <code>$cleared</code>
-      <code>$key</code>
-      <code>$value</code>
-      <code>$value</code>
-    </MixedAssignment>
     <UndefinedInterfaceMethod>
       <code>flush</code>
     </UndefinedInterfaceMethod>
@@ -230,14 +201,6 @@
       <code>$key</code>
       <code>$key</code>
     </MixedArgument>
-    <MixedAssignment>
-      <code>$key</code>
-      <code>$key</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$results[$key]</code>
-      <code>$value</code>
-    </MixedAssignment>
     <PossiblyNullArgument>
       <code>$ttl</code>
       <code>$ttl</code>
@@ -311,7 +274,6 @@
       <code>$normalizedKey</code>
       <code>$normalizedKey</code>
       <code>$normalizedKey</code>
-      <code>$normalizedKey</code>
       <code>$value</code>
       <code>$value</code>
     </MixedArgument>
@@ -323,50 +285,6 @@
       <code>$normalizedKey</code>
       <code>$normalizedKey</code>
     </MixedArgumentTypeCoercion>
-    <MixedAssignment>
-      <code>$handle</code>
-      <code>$normalizedKey</code>
-      <code>$normalizedKey</code>
-      <code>$normalizedKey</code>
-      <code>$normalizedKey</code>
-      <code>$normalizedKey</code>
-      <code>$normalizedKeyValuePairs[$key]</code>
-      <code>$oldValue</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result[$normalizedKey]</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-    </MixedAssignment>
     <MixedInferredReturnType>
       <code>AdapterOptions</code>
       <code>Capabilities</code>
@@ -379,8 +297,6 @@
       <code>array</code>
       <code>array</code>
       <code>array</code>
-      <code>array</code>
-      <code>array|bool</code>
       <code>bool</code>
       <code>bool</code>
       <code>bool</code>
@@ -419,10 +335,6 @@
       <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
       <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
       <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
-      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
-      <code><![CDATA[$this->triggerException(__FUNCTION__, $args, $result, $e)]]></code>
-      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
-      <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
       <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
       <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
       <code><![CDATA[$this->triggerPost(__FUNCTION__, $args, $result)]]></code>
@@ -481,12 +393,6 @@
       <code>$letter</code>
       <code>$letters</code>
     </MixedArgument>
-    <MixedAssignment>
-      <code>$array[$normalizedKey]</code>
-      <code>$key</code>
-      <code>$letter</code>
-      <code>$value</code>
-    </MixedAssignment>
     <RawObjectIteration>
       <code>$this</code>
     </RawObjectIteration>
@@ -513,18 +419,10 @@
     </UnusedClass>
   </file>
   <file src="src/Storage/Capabilities.php">
-    <DocblockTypeContradiction>
-      <code>is_string($name)</code>
-    </DocblockTypeContradiction>
     <MixedArgumentTypeCoercion>
       <code>$name</code>
     </MixedArgumentTypeCoercion>
-    <MixedAssignment>
-      <code>$toType</code>
-      <code>$value</code>
-    </MixedAssignment>
     <MixedInferredReturnType>
-      <code>array</code>
       <code>array</code>
       <code>bool</code>
       <code>bool</code>
@@ -554,14 +452,12 @@
             'object'   => false,
             'resource' => false,
         ])]]></code>
-      <code><![CDATA[$this->getCapability('supportedMetadata', [])]]></code>
       <code><![CDATA[$this->getCapability('ttlPrecision', 1)]]></code>
       <code><![CDATA[$this->getCapability('useRequestTime', false)]]></code>
     </MixedReturnStatement>
     <PossiblyUnusedMethod>
       <code>getNamespaceIsPrefix</code>
       <code>getNamespaceSeparator</code>
-      <code>getSupportedMetadata</code>
       <code>getTtlPrecision</code>
       <code>setLockOnExpire</code>
       <code>setMaxKeyLength</code>
@@ -570,7 +466,6 @@
       <code>setNamespaceSeparator</code>
       <code>setStaticTtl</code>
       <code>setSupportedDatatypes</code>
-      <code>setSupportedMetadata</code>
       <code>setTtlPrecision</code>
       <code>setUseRequestTime</code>
     </PossiblyUnusedMethod>
@@ -583,7 +478,6 @@
       <code>$namespaceSeparator</code>
       <code>$staticTtl</code>
       <code>$supportedDatatypes</code>
-      <code>$supportedMetadata</code>
       <code>$ttlPrecision</code>
       <code>$useRequestTime</code>
     </PossiblyUnusedProperty>
@@ -670,9 +564,6 @@
     <InvalidReturnType>
       <code>SerializerAdapter</code>
     </InvalidReturnType>
-    <MixedAssignment>
-      <code><![CDATA[$this->serializerOptions]]></code>
-    </MixedAssignment>
     <PossiblyUnusedMethod>
       <code>setExitOnAbort</code>
       <code>setOptimizingFactor</code>
@@ -711,29 +602,6 @@
       <code>$keyValuePairs[$key]</code>
       <code>$keyValuePairs[$key]</code>
     </MixedArrayOffset>
-    <MixedAssignment>
-      <code>$baseCapabilities</code>
-      <code>$failedKey</code>
-      <code>$failedKey</code>
-      <code>$key</code>
-      <code>$key</code>
-      <code>$keyValuePairs[$key]</code>
-      <code>$keyValuePairs[$key]</code>
-      <code>$keyValuePairs[$key]</code>
-      <code>$keyValuePairs[$key]</code>
-      <code>$newValue</code>
-      <code>$newValue</code>
-      <code>$oldValue</code>
-      <code>$oldValue</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-      <code>$value</code>
-    </MixedAssignment>
     <MixedMethodCall>
       <code>getAdapter</code>
     </MixedMethodCall>
@@ -809,10 +677,6 @@
     </NonInvariantDocblockPropertyType>
   </file>
   <file src="test/Pattern/CallbackCacheTest.php">
-    <MixedAssignment>
-      <code>$return</code>
-      <code>$return</code>
-    </MixedAssignment>
     <PossiblyUnusedMethod>
       <code>getCommonPatternNamesProvider</code>
     </PossiblyUnusedMethod>
@@ -841,10 +705,6 @@
     </UndefinedThisPropertyFetch>
   </file>
   <file src="test/Pattern/ObjectCacheTest.php">
-    <MixedAssignment>
-      <code>$return</code>
-      <code>$return</code>
-    </MixedAssignment>
     <PossiblyNullPropertyFetch>
       <code><![CDATA[$this->options->getObject()->property]]></code>
       <code><![CDATA[$this->options->getObject()->property]]></code>
@@ -891,11 +751,6 @@
       <code>$key</code>
       <code>$key</code>
     </MixedArgument>
-    <MixedAssignment>
-      <code>$item</code>
-      <code>$item</code>
-      <code>$item</code>
-    </MixedAssignment>
     <MixedMethodCall>
       <code>get</code>
       <code>get</code>
@@ -988,32 +843,11 @@
     </UnusedClass>
   </file>
   <file src="test/Storage/Adapter/AbstractAdapterTest.php">
-    <MissingClosureParamType>
-      <code>$event</code>
-    </MissingClosureParamType>
-    <MissingClosureReturnType>
-      <code>static function ($event) use ($retVal) {</code>
-    </MissingClosureReturnType>
     <MixedArgument>
       <code>$success</code>
     </MixedArgument>
-    <MixedArrayAssignment>
-      <code>$eventList[]</code>
-      <code>$eventList[]</code>
-      <code>$eventList[]</code>
-    </MixedArrayAssignment>
-    <MixedAssignment>
-      <code>$result</code>
-      <code>$result</code>
-      <code>$rs</code>
-      <code>$v</code>
-    </MixedAssignment>
-    <MixedInferredReturnType>
-      <code>array</code>
-    </MixedInferredReturnType>
     <MixedMethodCall>
       <code>getResult</code>
-      <code>stopPropagation</code>
     </MixedMethodCall>
     <NullArgument>
       <code>null</code>
@@ -1033,6 +867,9 @@
     <PossiblyUndefinedVariable>
       <code>$success</code>
     </PossiblyUndefinedVariable>
+    <PossiblyUnusedMethod>
+      <code>simpleEventHandlingMethodDefinitions</code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="test/Storage/Adapter/AdapterOptionsTest.php">
     <MixedArgument>
@@ -1079,10 +916,6 @@
     <MissingClosureParamType>
       <code>$eventArg</code>
     </MissingClosureParamType>
-    <MixedAssignment>
-      <code>$em</code>
-      <code>$event</code>
-    </MixedAssignment>
     <MixedMethodCall>
       <code>attach</code>
     </MixedMethodCall>
@@ -1202,9 +1035,6 @@
       <code><![CDATA[$values['key1']]]></code>
       <code><![CDATA[$values['key2']]]></code>
     </MixedArrayAccess>
-    <MixedAssignment>
-      <code>$values</code>
-    </MixedAssignment>
     <UndefinedInterfaceMethod>
       <code>onDecrementItemPre</code>
       <code>onReadItemPost</code>

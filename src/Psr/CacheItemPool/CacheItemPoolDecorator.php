@@ -417,8 +417,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
         $keyValuePair = [];
         foreach ($items as $item) {
-            $key = $item->getKey();
-            /** @psalm-suppress MixedAssignment */
+            $key                = $item->getKey();
             $keyValuePair[$key] = $item->get();
         }
 

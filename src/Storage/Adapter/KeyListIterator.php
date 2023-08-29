@@ -96,10 +96,6 @@ class KeyListIterator implements IteratorInterface, Countable
 
         $key = $this->key();
 
-        if ($this->mode === IteratorInterface::CURRENT_AS_METADATA) {
-            return $this->storage->getMetadata($key);
-        }
-
         if ($this->mode === IteratorInterface::CURRENT_AS_VALUE) {
             return $this->storage->getItem($key);
         }
