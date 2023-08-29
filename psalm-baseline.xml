@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.13.1@086b94371304750d1c673315321a55d15fc59015">
+<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
   <file src="src/Command/DeprecatedStorageFactoryConfigurationCheckCommand.php">
     <MixedArgument>
       <code>$cacheConfiguration</code>
@@ -158,10 +158,6 @@
       <code>$object</code>
       <code>$object</code>
     </PossiblyNullArgument>
-    <PossiblyUnusedMethod>
-      <code>__get</code>
-      <code>__set</code>
-    </PossiblyUnusedMethod>
   </file>
   <file src="src/Pattern/OutputCache.php">
     <MixedArgument>
@@ -172,10 +168,6 @@
       <code>$data</code>
       <code>$key</code>
     </MixedAssignment>
-    <PossiblyUnusedMethod>
-      <code>end</code>
-      <code>start</code>
-    </PossiblyUnusedMethod>
     <RedundantCastGivenDocblockType>
       <code>(string) $key</code>
     </RedundantCastGivenDocblockType>
@@ -464,9 +456,6 @@
       <code>getCaching</code>
       <code>setCaching</code>
     </PossiblyUnusedMethod>
-    <PropertyNotSetInConstructor>
-      <code>$pluginRegistry</code>
-    </PropertyNotSetInConstructor>
     <RedundantCastGivenDocblockType>
       <code>(bool) $flag</code>
       <code>(int) $value</code>
@@ -478,6 +467,12 @@
     <DocblockTypeContradiction>
       <code>is_array($options)</code>
     </DocblockTypeContradiction>
+    <InvalidReturnStatement>
+      <code>$array</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code>array</code>
+    </InvalidReturnType>
     <MissingClosureParamType>
       <code>$letters</code>
     </MissingClosureParamType>
@@ -814,41 +809,13 @@
     </NonInvariantDocblockPropertyType>
   </file>
   <file src="test/Pattern/CallbackCacheTest.php">
-    <MissingClosureParamType>
-      <code>$event</code>
-    </MissingClosureParamType>
-    <MixedArgument>
-      <code>$key</code>
-    </MixedArgument>
-    <MixedArrayAccess>
-      <code><![CDATA[$params['key']]]></code>
-    </MixedArrayAccess>
     <MixedAssignment>
-      <code>$generatedKey</code>
-      <code>$key</code>
-      <code>$params</code>
       <code>$return</code>
       <code>$return</code>
-      <code>$usedKey</code>
     </MixedAssignment>
-    <MixedMethodCall>
-      <code>attach</code>
-      <code>getParams</code>
-    </MixedMethodCall>
     <PossiblyUnusedMethod>
       <code>getCommonPatternNamesProvider</code>
     </PossiblyUnusedMethod>
-    <UndefinedInterfaceMethod>
-      <code>call</code>
-      <code>call</code>
-      <code>call</code>
-      <code>call</code>
-      <code>call</code>
-      <code>call</code>
-      <code>generateKey</code>
-      <code>generateKey</code>
-      <code>getEventManager</code>
-    </UndefinedInterfaceMethod>
   </file>
   <file src="test/Pattern/CaptureCacheTest.php">
     <MixedMethodCall>
@@ -874,31 +841,10 @@
     </UndefinedThisPropertyFetch>
   </file>
   <file src="test/Pattern/ObjectCacheTest.php">
-    <MissingClosureParamType>
-      <code>$event</code>
-    </MissingClosureParamType>
-    <MixedArrayAccess>
-      <code><![CDATA[$params['key']]]></code>
-    </MixedArrayAccess>
     <MixedAssignment>
-      <code>$generatedKey</code>
-      <code>$params</code>
       <code>$return</code>
       <code>$return</code>
-      <code>$usedKey</code>
     </MixedAssignment>
-    <MixedMethodCall>
-      <code>attach</code>
-      <code>getParams</code>
-    </MixedMethodCall>
-    <NoInterfaceProperties>
-      <code><![CDATA[$this->pattern->property]]></code>
-      <code><![CDATA[$this->pattern->property]]></code>
-      <code><![CDATA[$this->pattern->property]]></code>
-      <code><![CDATA[$this->pattern->property]]></code>
-      <code><![CDATA[$this->pattern->property]]></code>
-      <code><![CDATA[$this->pattern->unknownProperty]]></code>
-    </NoInterfaceProperties>
     <PossiblyNullPropertyFetch>
       <code><![CDATA[$this->options->getObject()->property]]></code>
       <code><![CDATA[$this->options->getObject()->property]]></code>
@@ -906,39 +852,16 @@
     <PossiblyUnusedMethod>
       <code>getCommonPatternNamesProvider</code>
     </PossiblyUnusedMethod>
-    <UndefinedInterfaceMethod>
-      <code>call</code>
-      <code>generateKey</code>
-      <code>getEventManager</code>
-    </UndefinedInterfaceMethod>
   </file>
   <file src="test/Pattern/OutputCacheTest.php">
-    <PossiblyNullReference>
-      <code>getItem</code>
-      <code>setItem</code>
-    </PossiblyNullReference>
     <PossiblyUnusedMethod>
       <code>getCommonPatternNamesProvider</code>
     </PossiblyUnusedMethod>
-    <UndefinedInterfaceMethod>
-      <code>end</code>
-      <code>start</code>
-      <code>start</code>
-      <code>start</code>
-    </UndefinedInterfaceMethod>
   </file>
   <file src="test/Pattern/TestAsset/TestCachePattern.php">
     <UnusedClass>
       <code>TestCachePattern</code>
     </UnusedClass>
-  </file>
-  <file src="test/Pattern/TestAsset/TestCallbackCache.php">
-    <MissingReturnType>
-      <code>emptyMethod</code>
-    </MissingReturnType>
-    <PossiblyUnusedMethod>
-      <code>emptyMethod</code>
-    </PossiblyUnusedMethod>
   </file>
   <file src="test/Pattern/TestAsset/TestObjectCache.php">
     <PossiblyUnusedMethod>
@@ -1030,9 +953,6 @@
     <MissingReturnType>
       <code>setCapabilities</code>
     </MissingReturnType>
-    <PropertyNotSetInConstructor>
-      <code>TtlStorage</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Service/DeprecatedSchemaDetectorTest.php">
     <MixedInferredReturnType>
@@ -1301,9 +1221,6 @@
     <InvalidReturnType>
       <code>clearExpired</code>
     </InvalidReturnType>
-    <PropertyNotSetInConstructor>
-      <code>ClearExpiredMockAdapter</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Storage/TestAsset/MockAdapter.php">
     <InvalidReturnType>
@@ -1311,9 +1228,6 @@
       <code>internalRemoveItem</code>
       <code>internalSetItem</code>
     </InvalidReturnType>
-    <PropertyNotSetInConstructor>
-      <code>MockAdapter</code>
-    </PropertyNotSetInConstructor>
   </file>
   <file src="test/Storage/TestAsset/MockPlugin.php">
     <PossiblyUnusedMethod>
@@ -1335,8 +1249,5 @@
     <InvalidReturnType>
       <code>optimize</code>
     </InvalidReturnType>
-    <PropertyNotSetInConstructor>
-      <code>OptimizableMockAdapter</code>
-    </PropertyNotSetInConstructor>
   </file>
 </files>

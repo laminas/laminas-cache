@@ -14,10 +14,8 @@ final class TestCallbackCache
 {
     /**
      * A counter how oftern the method "foo" was called
-     *
-     * @var int
      */
-    public static $fooCounter = 0;
+    public static int $fooCounter = 0;
 
     public static function bar(): string
     {
@@ -30,7 +28,7 @@ final class TestCallbackCache
         return 'foobar_return(' . $imploded . ') : ' . static::$fooCounter;
     }
 
-    public static function emptyMethod()
+    public static function emptyMethod(): void
     {
     }
 }

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Pattern;
 
-use Laminas\Cache;
 use Laminas\Cache\Exception\MissingKeyException;
+use Laminas\Cache\Pattern\OutputCache;
+use Laminas\Cache\Storage\StorageInterface;
 
 use function ob_end_clean;
 use function ob_get_clean;
@@ -15,6 +16,7 @@ use function ob_start;
 /**
  * @group      Laminas_Cache
  * @covers \Laminas\Cache\Pattern\OutputCache<extended>
+ * @template-extends AbstractCommonStoragePatternTest<OutputCache>
  */
 class OutputCacheTest extends AbstractCommonStoragePatternTest
 {
@@ -27,11 +29,9 @@ class OutputCacheTest extends AbstractCommonStoragePatternTest
 
     public function setUp(): void
     {
-        $this->storage = new Cache\Storage\Adapter\Memory([
-            'memory_limit' => 0,
-        ]);
+        $this->storage = $this->createMock(StorageInterface::class);
 
-        $this->pattern = new Cache\Pattern\OutputCache($this->storage);
+        $this->pattern = new OutputCache($this->storage);
 
         // used to reset the level on tearDown
         $this->obLevel = ob_get_level();
@@ -69,6 +69,12 @@ class OutputCacheTest extends AbstractCommonStoragePatternTest
         $output = 'foobar';
         $key    = 'testStartEndCacheMiss';
 
+        $this->storage
+            ->expects(self::once())
+            ->method('setItem')
+            ->with($key, $output)
+            ->willReturn(true);
+
         ob_start();
         self::assertFalse($this->pattern->start($key));
         echo $output;
@@ -76,7 +82,6 @@ class OutputCacheTest extends AbstractCommonStoragePatternTest
         $data = ob_get_clean();
 
         self::assertEquals($output, $data);
-        self::assertEquals($output, $this->pattern->getStorage()->getItem($key));
     }
 
     public function testStartEndCacheHit(): void
@@ -84,9 +89,18 @@ class OutputCacheTest extends AbstractCommonStoragePatternTest
         $output = 'foobar';
         $key    = 'testStartEndCacheHit';
 
-        // fill cache
-        $storage = $this->pattern->getStorage();
-        $storage->setItem($key, $output);
+        $this->storage
+            ->expects(self::never())
+            ->method('setItem');
+
+        $this->storage
+            ->expects(self::once())
+            ->method('getItem')
+            ->with($key, null)
+            ->willReturnCallback(function (string $key, ?bool &$success = null) use ($output): string {
+                 $success = true;
+                 return $output;
+            });
 
         ob_start();
         self::assertTrue($this->pattern->start($key));

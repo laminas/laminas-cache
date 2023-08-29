@@ -45,7 +45,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * The plugin registry
      *
-     * @var SplObjectStorage Registered plugins
+     * @var SplObjectStorage|null Registered plugins
      */
     protected $pluginRegistry;
 
