@@ -3,25 +3,27 @@
 namespace Laminas\Cache\Psr\SimpleCache;
 
 use DateInterval;
-use DateTimeImmutable;
 use DateTimeZone;
 use Laminas\Cache\Exception\InvalidArgumentException as LaminasCacheInvalidArgumentException;
+use Laminas\Cache\Psr\Clock;
 use Laminas\Cache\Psr\MaximumKeyLengthTrait;
 use Laminas\Cache\Psr\SerializationTrait;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
 use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
+use Psr\Clock\ClockInterface;
 use Psr\SimpleCache\CacheException as PsrCacheException;
 use Psr\SimpleCache\CacheInterface as SimpleCacheInterface;
 use Throwable;
-use Traversable;
 
 use function array_keys;
+use function array_map;
 use function get_debug_type;
 use function gettype;
 use function is_array;
 use function is_int;
+use function is_iterable;
 use function is_string;
 use function preg_match;
 use function preg_quote;
@@ -43,20 +45,18 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
     private bool $providesPerItemTtl = true;
 
-    private StorageInterface $storage;
-
     /**
      * Reference used by storage when calling getItem() to indicate status of
      * operation.
-     *
-     * @var null|bool
      */
-    private $success;
+    private ?bool $success = null;
 
-    private DateTimeZone $utc;
+    private ClockInterface $clock;
 
-    public function __construct(StorageInterface $storage)
-    {
+    public function __construct(
+        private readonly StorageInterface $storage,
+        ?ClockInterface $clock = null,
+    ) {
         if ($this->isSerializationRequired($storage)) {
             throw new SimpleCacheException(sprintf(
                 'The storage adapter "%s" requires a serializer plugin; please see'
@@ -69,15 +69,13 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         $capabilities = $storage->getCapabilities();
         $this->memoizeTtlCapabilities($capabilities);
         $this->memoizeMaximumKeyLengthCapability($storage, $capabilities);
-
-        $this->storage = $storage;
-        $this->utc     = new DateTimeZone('UTC');
+        $this->clock = $clock ?? new Clock(new DateTimeZone('UTC'));
     }
 
     /**
      * {@inheritDoc}
      */
-    public function get($key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
         $this->validateKey($key);
 
@@ -95,7 +93,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /**
      * {@inheritDoc}
      */
-    public function set($key, $value, $ttl = null)
+    public function set(string $key, mixed $value, int|DateInterval|null $ttl = null): bool
     {
         $this->validateKey($key);
         $ttl = $this->convertTtlToInteger($ttl);
@@ -133,7 +131,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /**
      * {@inheritDoc}
      */
-    public function delete($key)
+    public function delete(string $key): bool
     {
         $this->validateKey($key);
 
@@ -147,7 +145,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /**
      * {@inheritDoc}
      */
-    public function clear()
+    public function clear(): bool
     {
         $namespace = $this->storage->getOptions()->getNamespace();
 
@@ -165,9 +163,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /**
      * {@inheritDoc}
      */
-    public function getMultiple($keys, $default = null)
+    public function getMultiple(iterable $keys, mixed $default = null): array
     {
-        if (! is_array($keys) && ! $keys instanceof Traversable) {
+        if (! is_array($keys) && ! is_iterable($keys)) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'Invalid value provided to %s; must be iterable',
                 __METHOD__
@@ -195,9 +193,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /**
      * {@inheritDoc}
      */
-    public function setMultiple($values, $ttl = null)
+    public function setMultiple(iterable $values, int|DateInterval|null $ttl = null): bool
     {
-        if (! is_array($values) && ! $values instanceof Traversable) {
+        if (! is_array($values) && ! is_iterable($values)) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'Invalid value provided to %s; must be iterable',
                 __METHOD__
@@ -211,7 +209,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         // PSR-16 states that 0 or negative TTL values should result in cache
         // invalidation for the items.
         if (null !== $ttl && 1 > $ttl) {
-            return $this->deleteMultiple($keys);
+            return $this->deleteMultiple(array_map(fn (int|string $key) => (string) $key, $keys));
         }
 
         // If a positive TTL is set, but the adapter does not support per-item
@@ -251,9 +249,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /**
      * {@inheritDoc}
      */
-    public function deleteMultiple($keys)
+    public function deleteMultiple(iterable $keys): bool
     {
-        if (! is_array($keys) && ! $keys instanceof Traversable) {
+        if (! is_array($keys) && ! is_iterable($keys)) {
             throw new SimpleCacheInvalidArgumentException(sprintf(
                 'Invalid value provided to %s; must be iterable',
                 __METHOD__
@@ -287,7 +285,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     /**
      * {@inheritDoc}
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         $this->validateKey($key);
 
@@ -311,10 +309,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * @param string|int $key
      * @throws SimpleCacheInvalidArgumentException If key is invalid.
      */
-    private function validateKey($key): void
+    private function validateKey(string|int $key): void
     {
         if ('' === $key) {
             throw new SimpleCacheInvalidArgumentException(
@@ -363,11 +360,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * @param int|DateInterval|string $ttl
-     * @return null|int
      * @throws SimpleCacheInvalidArgumentException For invalid arguments.
      */
-    private function convertTtlToInteger($ttl)
+    private function convertTtlToInteger(int|DateInterval|null $ttl): int|null
     {
         // null === absence of a TTL
         if (null === $ttl) {
@@ -379,29 +374,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
             return $ttl;
         }
 
-        // Numeric strings evaluating to integers can be cast
-        if (
-            is_string($ttl)
-            && ('0' === $ttl
-                || preg_match('/^[1-9][0-9]+$/', $ttl)
-            )
-        ) {
-            return (int) $ttl;
-        }
-
-        // DateIntervals require conversion
-        if ($ttl instanceof DateInterval) {
-            $now = new DateTimeImmutable('now', $this->utc);
-            $end = $now->add($ttl);
-            return $end->getTimestamp() - $now->getTimestamp();
-        }
-
-        // All others are invalid
-        throw new SimpleCacheInvalidArgumentException(sprintf(
-            'Invalid TTL "%s" provided; must be null, an integer, or a %s instance',
-            get_debug_type($ttl),
-            DateInterval::class
-        ));
+        $now = $this->clock->now();
+        $end = $now->add($ttl);
+        return $end->getTimestamp() - $now->getTimestamp();
     }
 
     /**
@@ -427,7 +402,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * @psalm-return array<int|string,mixed>
+     * @return array<int|string,mixed>
      */
     private function convertIterableToKeyValueMap(iterable $values): array
     {
