@@ -1,6 +1,7 @@
 {
     "name": "laminas/laminas-cache-storage-adapter-dev",
     "type": "library",
+    "version": "1.0",
     "provide": {
         "laminas/laminas-cache-storage-implementation": "2.0"
     },
