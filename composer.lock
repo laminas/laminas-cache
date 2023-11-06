@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de3761c663bb75ca787a83fc4ab6e7c9",
+    "content-hash": "e2325357f0629bde99f646658f96c69c",
     "packages": [
         {
             "name": "laminas/laminas-cache-storage-adapter-dev",
-            "version": "4.0.x-dev",
+            "version": "1.0",
             "dist": {
                 "type": "path",
                 "url": "./dev-implementation",
-                "reference": "8b617656868665bd6cb5e9a99918126bdb015a89"
+                "reference": "4b24ab5251f0758c31e931a1201c27c8af257ced"
             },
             "provide": {
                 "laminas/laminas-cache-storage-implementation": "2.0"
@@ -5264,17 +5264,15 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "laminas/laminas-cache-storage-adapter-dev": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "~8.1.0 || ~8.2.0"
+        "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
     },
     "platform-dev": [],
     "platform-overrides": {
         "php": "8.1.99"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
