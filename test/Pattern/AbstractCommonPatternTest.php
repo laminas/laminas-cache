@@ -17,6 +17,9 @@ abstract class AbstractCommonPatternTest extends TestCase
     /** @var PatternInterface */
     protected $pattern;
 
+    /** @var PatternOptions */
+    protected $options;
+
     protected function setUp(): void
     {
         self::assertInstanceOf(

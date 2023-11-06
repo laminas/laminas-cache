@@ -163,7 +163,6 @@
       <code>setDirPermission</code>
       <code>setFileLocking</code>
       <code>setFilePermission</code>
-      <code>setIndexFilename</code>
       <code>setObject</code>
       <code>setObjectCacheMagicProperties</code>
       <code>setObjectCacheMethods</code>
@@ -667,9 +666,6 @@
     </PossiblyUnusedMethod>
   </file>
   <file src="test/Pattern/CaptureCacheTest.php">
-    <MixedMethodCall>
-      <code>setIndexFilename</code>
-    </MixedMethodCall>
     <PossiblyNullArrayAccess>
       <code><![CDATA[$err['message']]]></code>
       <code><![CDATA[$err['message']]]></code>
@@ -682,12 +678,6 @@
       <code>set</code>
       <code>set</code>
     </UndefinedInterfaceMethod>
-    <UndefinedThisPropertyAssignment>
-      <code><![CDATA[$this->options]]></code>
-    </UndefinedThisPropertyAssignment>
-    <UndefinedThisPropertyFetch>
-      <code><![CDATA[$this->options]]></code>
-    </UndefinedThisPropertyFetch>
   </file>
   <file src="test/Pattern/ObjectCacheTest.php">
     <PossiblyNullPropertyFetch>
