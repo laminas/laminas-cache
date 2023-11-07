@@ -210,6 +210,12 @@
       <code>(string) $objectKey</code>
       <code>(string) $publicDir</code>
     </RedundantCastGivenDocblockType>
+    <MissingTemplateParam>
+      <code>PatternOptions</code>
+    </MissingTemplateParam>
+    <MixedArgumentTypeCoercion>
+      <code>$options</code>
+    </MixedArgumentTypeCoercion>
   </file>
   <file src="src/Psr/CacheItemPool/CacheItemPoolDecorator.php">
     <DocblockTypeContradiction>
@@ -473,6 +479,9 @@
       <code>(int) $value</code>
       <code>(string) $key</code>
     </RedundantCastGivenDocblockType>
+    <MixedArgumentTypeCoercion occurrences="7">
+      <code>$options</code>
+    </MixedArgumentTypeCoercion>
   </file>
   <file src="src/Storage/Adapter/AdapterOptions.php">
     <DocblockTypeContradiction>
@@ -501,6 +510,21 @@
       <code>(string) $keyPattern</code>
       <code>(string) $namespace</code>
     </RedundantCastGivenDocblockType>
+    <MissingTemplateParam>
+      <code>AdapterOptions</code>
+    </MissingTemplateParam>
+    <InvalidReturnStatement>
+      <code>$array</code>
+    </InvalidReturnStatement>
+    <MixedArgumentTypeCoercion>
+      <code>$options</code>
+    </MixedArgumentTypeCoercion>
+    <LessSpecificImplementedReturnType occurrences="1">
+      <code>array</code>
+    </LessSpecificImplementedReturnType>
+    <InvalidReturnType occurrences="1">
+      <code>array</code>
+    </InvalidReturnType>
   </file>
   <file src="src/Storage/Adapter/KeyListIterator.php">
     <RedundantCastGivenDocblockType>
@@ -691,6 +715,12 @@
       <code>(bool) $throwExceptions</code>
       <code>(int) $factor</code>
     </RedundantCastGivenDocblockType>
+    <MissingTemplateParam>
+      <code>PluginOptions</code>
+    </MissingTemplateParam>
+    <DeprecatedClass occurrences="2">
+      <code>setSerializer</code>
+    </DeprecatedClass>
   </file>
   <file src="src/Storage/Plugin/Serializer.php">
     <MixedArgument>
@@ -763,6 +793,9 @@
       <code>$factories</code>
       <code>$instanceOf</code>
     </NonInvariantDocblockPropertyType>
+    <PossiblyInvalidArgument>
+      <code>$options</code>
+    </PossiblyInvalidArgument>
   </file>
   <file src="src/Storage/PostEvent.php">
     <PossiblyUnusedParam>
@@ -1330,6 +1363,9 @@
     <RedundantCondition>
       <code>$options instanceof Plugin\PluginOptions</code>
     </RedundantCondition>
+    <PossiblyInvalidArgument>
+      <code>$options</code>
+    </PossiblyInvalidArgument>
   </file>
   <file src="test/Storage/TestAsset/OptimizableMockAdapter.php">
     <InvalidReturnType>
