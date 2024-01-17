@@ -19,6 +19,21 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandFactory
 {
     public function __invoke(ContainerInterface $container): DeprecatedStorageFactoryConfigurationCheckCommand
     {
+        $config = $this->detectConfigFromContainer($container);
+
+        $schemaDetector = new DeprecatedSchemaDetector();
+        return new DeprecatedStorageFactoryConfigurationCheckCommand(
+            $config,
+            $schemaDetector
+        );
+    }
+
+    private function detectConfigFromContainer(ContainerInterface $container): ArrayAccess
+    {
+        if (! $container->has('config')) {
+            return new ArrayObject([]);
+        }
+
         $config = $container->get('config');
         if (is_array($config)) {
             $config = new ArrayObject($config);
@@ -28,10 +43,6 @@ final class DeprecatedStorageFactoryConfigurationCheckCommandFactory
             throw new RuntimeException('Configuration from container must be either `ArrayAccess` or an array.');
         }
 
-        $schemaDetector = new DeprecatedSchemaDetector();
-        return new DeprecatedStorageFactoryConfigurationCheckCommand(
-            $config,
-            $schemaDetector
-        );
+        return $config;
     }
 }
