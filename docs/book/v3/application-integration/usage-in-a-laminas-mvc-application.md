@@ -39,10 +39,9 @@ return [
 
 The factory `Laminas\Cache\Service\StorageCacheAbstractServiceFactory` uses the configuration, searches for the configuration key `caches` and creates the storage adapters using the discovered configuration. 
 
-> ### Cache named `config` is not possible
->
-> A cache named `config` is not possible due to internal service conflicts with MVC configuration.
-> The service named `config` is reserved for project configuration and thus cannot be used with the `caches` configuration.
+WARNING: **Cache Named `config` Is Not Possible**
+A cache named `config` is not possible due to internal service conflicts with MVC configuration.
+The service named `config` is reserved for project configuration and thus cannot be used with the `caches` configuration.
 
 ## Create Controller
 
