@@ -50,13 +50,13 @@ final class ConfigProviderIntegrationTest extends TestCase
         $dependencies = $provider->getDependencyConfig();
 
         $factories = $dependencies['factories'] ?? [];
-        self::assertMappedWithStrings($factories);
+        self::assertArrayIsMappedWithStrings($factories);
         $invokables = $dependencies['invokables'] ?? [];
-        self::assertMappedWithStrings($invokables);
+        self::assertArrayIsMappedWithStrings($invokables);
         $services = $dependencies['services'] ?? [];
-        self::assertMappedWithStrings($services);
+        self::assertArrayIsMappedWithStrings($services);
         $aliases = $dependencies['aliases'] ?? [];
-        self::assertMappedWithStrings($aliases);
+        self::assertArrayIsMappedWithStrings($aliases);
 
         $serviceNames = array_unique(
             array_merge(
@@ -73,15 +73,15 @@ final class ConfigProviderIntegrationTest extends TestCase
     }
 
     /**
-     * @psalm-assert array<string,mixed> $iterable
+     * @psalm-assert array<string,mixed> $array
      */
-    private static function assertMappedWithStrings(mixed $iterable): void
+    private static function assertArrayIsMappedWithStrings(mixed $array): void
     {
-        if (! is_array($iterable)) {
+        if (! is_array($array)) {
             throw new InvalidArgumentException('Expecting value to be an array.');
         }
 
-        foreach (array_keys($iterable) as $value) {
+        foreach (array_keys($array) as $value) {
             if (is_string($value)) {
                 continue;
             }
