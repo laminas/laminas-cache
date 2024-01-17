@@ -78,7 +78,7 @@ final class ConfigProviderIntegrationTest extends TestCase
     private static function assertMappedWithStrings(mixed $iterable): void
     {
         if (! is_array($iterable)) {
-            throw new InvalidArgumentException('Expecting value to be iterable.');
+            throw new InvalidArgumentException('Expecting value to be an array.');
         }
 
         foreach (array_keys($iterable) as $value) {
