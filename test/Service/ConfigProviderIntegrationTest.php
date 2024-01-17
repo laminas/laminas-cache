@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Service;
 
+use Generator;
+use InvalidArgumentException;
 use Laminas\Cache\ConfigProvider;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +14,7 @@ use Psr\Container\ContainerInterface;
 use function array_keys;
 use function array_merge;
 use function array_unique;
-use function assert;
+use function is_array;
 use function is_string;
 
 final class ConfigProviderIntegrationTest extends TestCase
@@ -31,7 +33,6 @@ final class ConfigProviderIntegrationTest extends TestCase
     }
 
     /**
-     * @param non-empty-string $serviceName
      * @dataProvider servicesProvidedByConfigProvider
      */
     public function testContainerCanProvideRegisteredServices(string $serviceName): void
@@ -41,25 +42,51 @@ final class ConfigProviderIntegrationTest extends TestCase
     }
 
     /**
-     * @return iterable<non-empty-string,array{non-empty-string}>
+     * @return Generator<string, array{string}>
      */
-    public function servicesProvidedByConfigProvider(): iterable
+    public function servicesProvidedByConfigProvider(): Generator
     {
         $provider     = new ConfigProvider();
         $dependencies = $provider->getDependencyConfig();
 
+        $factories = $dependencies['factories'] ?? [];
+        self::assertMappedWithStrings($factories);
+        $invokables = $dependencies['invokables'] ?? [];
+        self::assertMappedWithStrings($invokables);
+        $services = $dependencies['services'] ?? [];
+        self::assertMappedWithStrings($services);
+        $aliases = $dependencies['aliases'] ?? [];
+        self::assertMappedWithStrings($aliases);
+
         $serviceNames = array_unique(
             array_merge(
-                array_keys($dependencies['factories'] ?? []),
-                array_keys($dependencies['invokables'] ?? []),
-                array_keys($dependencies['services'] ?? []),
-                array_keys($dependencies['aliases'] ?? []),
+                array_keys($factories),
+                array_keys($invokables),
+                array_keys($services),
+                array_keys($aliases),
             ),
         );
 
         foreach ($serviceNames as $serviceName) {
-            assert(is_string($serviceName) && $serviceName !== '');
             yield $serviceName => [$serviceName];
+        }
+    }
+
+    /**
+     * @psalm-assert array<string,mixed> $iterable
+     */
+    private static function assertMappedWithStrings(mixed $iterable): void
+    {
+        if (! is_array($iterable)) {
+            throw new InvalidArgumentException('Expecting value to be iterable.');
+        }
+
+        foreach (array_keys($iterable) as $value) {
+            if (is_string($value)) {
+                continue;
+            }
+
+            throw new InvalidArgumentException('Expecting all values to are mapped with a string.');
         }
     }
 }
