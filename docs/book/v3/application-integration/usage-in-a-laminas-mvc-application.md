@@ -42,7 +42,7 @@ The factory `Laminas\Cache\Service\StorageCacheAbstractServiceFactory` uses the 
 > ### Cache named `config` is not possible
 >
 > A cache named `config` is not possible due to internal service conflicts with MVC configuration.
-> The service named `config` is reserved for he projects configuration and thus cannot be used with the `caches` configuration.
+> The service named `config` is reserved for project configuration and thus cannot be used with the `caches` configuration.
 
 ## Create Controller
 
