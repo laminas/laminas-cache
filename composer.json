@@ -56,7 +56,7 @@
         "laminas/laminas-feed": "^2.20",
         "laminas/laminas-serializer": "^2.14",
         "phpbench/phpbench": "^1.2.7",
-        "phpunit/phpunit": "^9.5.27",
+        "phpunit/phpunit": "^10.0.0",
         "psalm/plugin-phpunit": "^0.18.4",
         "vimeo/psalm": "^5.4"
     },
