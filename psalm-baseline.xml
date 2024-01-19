@@ -876,20 +876,6 @@
       <code>testShareByDefaultAndSharedByDefault</code>
     </MissingReturnType>
   </file>
-  <file src="test/Storage/CapabilitiesTest.php">
-    <ArgumentTypeCoercion>
-      <code><![CDATA['ArrayObject']]></code>
-    </ArgumentTypeCoercion>
-    <MissingClosureParamType>
-      <code>$eventArg</code>
-    </MissingClosureParamType>
-    <MixedMethodCall>
-      <code>attach</code>
-    </MixedMethodCall>
-    <UndefinedInterfaceMethod>
-      <code>getEventManager</code>
-    </UndefinedInterfaceMethod>
-  </file>
   <file src="test/Storage/Plugin/AbstractCommonPluginTest.php">
     <MissingReturnType>
       <code>getCommonPluginNamesProvider</code>

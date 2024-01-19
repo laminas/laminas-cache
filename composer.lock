@@ -4,29 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15e7e51ef0274a7fb351136e6e7f18c8",
+    "content-hash": "651d79d2dbba70a86ca7703cbab99304",
     "packages": [
-        {
-            "name": "laminas/laminas-cache-storage-adapter-dev",
-            "version": "1.0",
-            "dist": {
-                "type": "path",
-                "url": "./dev-implementation",
-                "reference": "4b24ab5251f0758c31e931a1201c27c8af257ced"
-            },
-            "provide": {
-                "laminas/laminas-cache-storage-implementation": "2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Cache\\Storage\\Adapter\\Dev\\": "."
-                }
-            },
-            "transport-options": {
-                "relative": true
-            }
-        },
         {
             "name": "laminas/laminas-eventmanager",
             "version": "3.10.0",
