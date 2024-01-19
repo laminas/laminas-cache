@@ -14,7 +14,8 @@ use function is_array;
  */
 class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
 {
-    public const CACHES_CONFIGURATION_KEY = 'caches';
+    public const CACHES_CONFIGURATION_KEY      = 'caches';
+    private const RESERVED_CONFIG_SERVICE_NAME = 'config';
 
     /** @var array<string,mixed>|null */
     protected $config;
@@ -32,6 +33,10 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
      */
     public function canCreate(ContainerInterface $container, $requestedName)
     {
+        if ($requestedName === self::RESERVED_CONFIG_SERVICE_NAME) {
+            return false;
+        }
+
         $config = $this->getConfig($container);
         if (empty($config)) {
             return false;

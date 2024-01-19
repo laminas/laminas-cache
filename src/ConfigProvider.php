@@ -10,10 +10,14 @@ use Laminas\Cache\Service\StorageAdapterFactoryInterface;
 use Laminas\Cache\Service\StoragePluginFactory;
 use Laminas\Cache\Service\StoragePluginFactoryFactory;
 use Laminas\Cache\Service\StoragePluginFactoryInterface;
+use Laminas\ServiceManager\ServiceManager;
 use Symfony\Component\Console\Command\Command;
 
 use function class_exists;
 
+/**
+ * @psalm-import-type ServiceManagerConfiguration from ServiceManager
+ */
 class ConfigProvider
 {
     public const ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY = 'storage_adapters';
@@ -34,7 +38,7 @@ class ConfigProvider
     /**
      * Return default service mappings for laminas-cache.
      *
-     * @return array
+     * @return ServiceManagerConfiguration
      */
     public function getDependencyConfig()
     {
