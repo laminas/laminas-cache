@@ -94,6 +94,14 @@ final class StorageCacheAbstractServiceFactoryTest extends TestCase
         ($this->factory)($this->container, 'Foo');
     }
 
+    public function testNeverCallsContainerWhenConfigServiceIsCheckedForCreation(): void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::never())->method(self::anything());
+
+        self::assertFalse($this->factory->canCreate($container, 'config'));
+    }
+
     public function testInvalidCacheServiceNameWillBeIgnored(): void
     {
         self::assertFalse(
