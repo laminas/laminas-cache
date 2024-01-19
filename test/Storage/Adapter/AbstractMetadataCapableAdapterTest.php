@@ -18,10 +18,8 @@ use function array_keys;
 use function array_map;
 use function array_merge;
 use function array_unique;
-use function assert;
 use function call_user_func_array;
 use function count;
-use function is_array;
 use function ucfirst;
 
 final class AbstractMetadataCapableAdapterTest extends TestCase
@@ -94,7 +92,6 @@ final class AbstractMetadataCapableAdapterTest extends TestCase
 
         $eventList    = [];
         $eventHandler = static function (Event $event) use (&$eventList): void {
-            assert(is_array($eventList));
             $eventList[] = $event->getName();
         };
         $eventManager = $storage->getEventManager();
@@ -132,7 +129,6 @@ final class AbstractMetadataCapableAdapterTest extends TestCase
 
         $eventList    = [];
         $eventHandler = static function (Event $event) use (&$eventList): void {
-            assert(is_array($eventList));
             $eventList[] = $event->getName();
             if ($event instanceof Cache\Storage\ExceptionEvent) {
                 $event->setThrowException(false);
@@ -173,7 +169,6 @@ final class AbstractMetadataCapableAdapterTest extends TestCase
 
         $eventList    = [];
         $eventHandler = static function (Event $event) use (&$eventList): void {
-            assert(is_array($eventList));
             $eventList[] = $event->getName();
         };
         $eventManager = $storage->getEventManager();

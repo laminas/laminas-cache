@@ -41,7 +41,7 @@ class CaptureCacheTest extends AbstractCommonPatternTest
         $this->umask                     = umask();
 
         $this->tmpCacheDir = @tempnam(sys_get_temp_dir(), 'laminas_cache_test_');
-        if (! $this->tmpCacheDir) {
+        if ($this->tmpCacheDir === false) {
             $err = error_get_last();
             self::fail("Can't create temporary cache directory-file: {$err['message']}");
         } elseif (! @unlink($this->tmpCacheDir)) {

@@ -18,6 +18,7 @@ use function date_default_timezone_set;
 
 class CacheItemTest extends TestCase
 {
+    /** @var non-empty-string */
     private string $tz;
 
     protected function setUp(): void
