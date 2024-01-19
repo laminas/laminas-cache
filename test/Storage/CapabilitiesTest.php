@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Storage;
 
-use Laminas\Cache\Storage\Adapter\Memory as MemoryAdapter;
+use Laminas\Cache\Storage\Adapter\Dev\VoidAdapter;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\EventManager\Event;
 use PHPUnit\Framework\TestCase;
@@ -40,14 +40,14 @@ class CapabilitiesTest extends TestCase
     /**
      * The storage adapter
      *
-     * @var MemoryAdapter
+     * @var VoidAdapter
      */
     protected $adapter;
 
     public function setUp(): void
     {
         $this->marker  = new stdClass();
-        $this->adapter = new MemoryAdapter();
+        $this->adapter = new VoidAdapter();
 
         $this->baseCapabilities = new Capabilities($this->adapter, $this->marker);
         $this->capabilities     = new Capabilities($this->adapter, $this->marker, [], $this->baseCapabilities);

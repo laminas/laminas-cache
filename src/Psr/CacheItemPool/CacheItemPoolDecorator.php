@@ -2,8 +2,9 @@
 
 namespace Laminas\Cache\Psr\CacheItemPool;
 
-use DateTimeImmutable;
+use DateTimeZone;
 use Laminas\Cache\Exception;
+use Laminas\Cache\Psr\Clock;
 use Laminas\Cache\Psr\MaximumKeyLengthTrait;
 use Laminas\Cache\Psr\SerializationTrait;
 use Laminas\Cache\Storage\ClearByNamespaceInterface;
@@ -22,10 +23,10 @@ use function array_unique;
 use function array_values;
 use function assert;
 use function current;
+use function date_default_timezone_get;
 use function gettype;
 use function in_array;
 use function is_array;
-use function is_bool;
 use function is_string;
 use function preg_match;
 use function sprintf;
@@ -42,8 +43,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     use MaximumKeyLengthTrait;
     use SerializationTrait;
 
-    private StorageInterface $storage;
-
     /** @var array<string,CacheItem> */
     private array $deferred = [];
 
@@ -56,20 +55,14 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      *
      * @throws CacheException
      */
-    public function __construct(StorageInterface $storage, ?ClockInterface $clock = null)
-    {
+    public function __construct(
+        private readonly StorageInterface&FlushableInterface $storage,
+        ?ClockInterface $clock = null,
+    ) {
         $this->validateStorage($storage);
         $capabilities = $storage->getCapabilities();
         $this->memoizeMaximumKeyLengthCapability($storage, $capabilities);
-        $this->storage = $storage;
-        $clock       ??= new class implements ClockInterface
-        {
-            public function now(): DateTimeImmutable
-            {
-                return new DateTimeImmutable();
-            }
-        };
-        $this->clock   = $clock;
+        $this->clock = $clock ?? new Clock(new DateTimeZone(date_default_timezone_get()));
     }
 
     /**
@@ -83,7 +76,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function getItem($key)
+    public function getItem(string $key): CacheItemInterface
     {
         $this->validateKey($key);
 
@@ -107,7 +100,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function getItems(array $keys = [])
+    public function getItems(array $keys = []): array
     {
         $this->validateKeys($keys);
         $items = [];
@@ -148,7 +141,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function hasItem($key)
+    public function hasItem(string $key): bool
     {
         $this->validateKey($key);
 
@@ -172,7 +165,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      * If the storage adapter supports namespaces and one has been set, only that namespace is cleared; otherwise
      * entire cache is flushed.
      */
-    public function clear()
+    public function clear(): bool
     {
         $this->deferred = [];
 
@@ -188,14 +181,13 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             $cleared = false;
         }
 
-        assert(is_bool($cleared));
         return $cleared;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function deleteItem($key)
+    public function deleteItem(string $key): bool
     {
         return $this->deleteItems([$key]);
     }
@@ -203,7 +195,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteItems(array $keys)
+    public function deleteItems(array $keys): bool
     {
         $this->validateKeys($keys);
 
@@ -235,7 +227,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function save(CacheItemInterface $item)
+    public function save(CacheItemInterface $item): bool
     {
         if (! $item instanceof CacheItem) {
             throw new InvalidArgumentException('$item must be an instance of ' . CacheItem::class);
@@ -247,7 +239,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function saveDeferred(CacheItemInterface $item)
+    public function saveDeferred(CacheItemInterface $item): bool
     {
         if (! $item instanceof CacheItem) {
             throw new InvalidArgumentException('$item must be an instance of ' . CacheItem::class);
@@ -268,7 +260,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * {@inheritdoc}
      */
-    public function commit()
+    public function commit(): bool
     {
         $groupedByTtl = [];
         foreach ($this->deferred as $cacheKey => $item) {
@@ -298,9 +290,8 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      * Throws exception is storage is not compatible with PSR-6
      *
      * @throws CacheException
-     * @psalm-assert-if-true StorageInterface&FlushableInterface $storage
      */
-    private function validateStorage(StorageInterface $storage)
+    private function validateStorage(StorageInterface $storage): void
     {
         if ($this->isSerializationRequired($storage)) {
             throw new CacheException(sprintf(
@@ -308,15 +299,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
                 . ' https://docs.laminas.dev/laminas-cache/storage/plugin/#quick-start'
                 . ' for details on how to attach the plugin to your adapter.',
                 $storage::class
-            ));
-        }
-
-        // all current adapters implement this
-        if (! $storage instanceof FlushableInterface) {
-            throw new CacheException(sprintf(
-                'Storage %s does not implement %s',
-                $storage::class,
-                FlushableInterface::class
             ));
         }
 
@@ -346,11 +328,8 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
     /**
      * Returns true if deferred item exists for given key and has not expired
-     *
-     * @param string $key
-     * @return bool
      */
-    private function hasDeferredItem($key)
+    private function hasDeferredItem(string $key): bool
     {
         if (isset($this->deferred[$key])) {
             $ttl = $this->deferred[$key]->getTtl();
@@ -364,7 +343,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      *
      * @throws InvalidArgumentException
      */
-    private function validateKey(mixed $key)
+    private function validateKey(mixed $key): void
     {
         if (! is_string($key) || preg_match('#[{}()/\\\\@:]#', $key)) {
             throw new InvalidArgumentException(sprintf(
@@ -384,7 +363,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      * @param array $keys
      * @throws InvalidArgumentException
      */
-    private function validateKeys($keys)
+    private function validateKeys(array $keys): void
     {
         foreach ($keys as $key) {
             $this->validateKey($key);
@@ -417,8 +396,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
         $keyValuePair = [];
         foreach ($items as $item) {
-            $key = $item->getKey();
-            /** @psalm-suppress MixedAssignment */
+            $key                = $item->getKey();
             $keyValuePair[$key] = $item->get();
         }
 

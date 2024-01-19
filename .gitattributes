@@ -5,6 +5,7 @@
 /.gitignore export-ignore
 /.travis.yml export-ignore
 /benchmark/ export-ignore
+/dev-implementation/ export-ignore
 /docs/ export-ignore
 /mkdocs.yml export-ignore
 /phpbench.json export-ignore

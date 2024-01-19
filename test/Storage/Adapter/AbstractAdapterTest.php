@@ -14,6 +14,7 @@ use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\Event;
 use Laminas\Cache\Storage\Plugin\PluginOptions;
+use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\ResponseCollection;
 use LaminasTest\Cache\Storage\TestAsset\MockPlugin;
@@ -24,13 +25,13 @@ use ReflectionMethod;
 use stdClass;
 
 use function array_keys;
-use function array_map;
 use function array_merge;
 use function array_unique;
 use function assert;
 use function call_user_func_array;
 use function count;
 use function current;
+use function serialize;
 use function ucfirst;
 
 final class AbstractAdapterTest extends TestCase
@@ -377,8 +378,6 @@ final class AbstractAdapterTest extends TestCase
             ['hasItems', 'internalHasItems', [['k1', 'k2']], ['v1', 'v2']],
             ['getItem', 'internalGetItem', ['k'], 'v'],
             ['getItems', 'internalGetItems', [['k1', 'k2']], ['k1' => 'v1', 'k2' => 'v2']],
-            ['getMetadata', 'internalGetMetadata', ['k'], []],
-            ['getMetadatas', 'internalGetMetadatas', [['k1', 'k2']], ['k1' => [], 'k2' => []]],
             ['setItem', 'internalSetItem', ['k', 'v'], true],
             ['setItems', 'internalSetItems', [['k1' => 'v1', 'k2' => 'v2']], []],
             ['replaceItem', 'internalReplaceItem', ['k', 'v'], true],
@@ -396,161 +395,6 @@ final class AbstractAdapterTest extends TestCase
             ['decrementItems', 'internalDecrementItems', [['k1' => 1, 'k2' => 2]], []],
             ['getCapabilities', 'internalGetCapabilities', [], $capabilities],
         ];
-    }
-
-    /**
-     * @psalm-param non-empty-string $methodName
-     * @psalm-param non-empty-string $internalMethodName
-     * @dataProvider simpleEventHandlingMethodDefinitions
-     */
-    public function testEventHandlingSimple(
-        string $methodName,
-        string $internalMethodName,
-        array $methodArgs,
-        mixed $retVal
-    ): void {
-        $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
-
-        $eventList    = [];
-        $eventHandler = static function (Event $event) use (&$eventList): void {
-            $eventList[] = $event->getName();
-        };
-        $eventManager = $storage->getEventManager();
-        $eventManager->attach($methodName . '.pre', $eventHandler);
-        $eventManager->attach($methodName . '.post', $eventHandler);
-        $eventManager->attach($methodName . '.exception', $eventHandler);
-
-        $storage
-            ->expects($this->once())
-            ->method($internalMethodName)
-            ->with(...array_map([$this, 'equalTo'], $methodArgs))
-            ->willReturn($retVal);
-
-        call_user_func_array([$storage, $methodName], $methodArgs);
-
-        $expectedEventList = [
-            $methodName . '.pre',
-            $methodName . '.post',
-        ];
-
-        self::assertSame($expectedEventList, $eventList);
-    }
-
-    /**
-     * @psalm-param non-empty-string $methodName
-     * @psalm-param non-empty-string $internalMethodName
-     * @dataProvider simpleEventHandlingMethodDefinitions
-     */
-    public function testEventHandlingCatchException(
-        string $methodName,
-        string $internalMethodName,
-        array $methodArgs
-    ): void {
-        $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
-
-        $eventList    = [];
-        $eventHandler = static function (Event $event) use (&$eventList): void {
-            $eventList[] = $event->getName();
-            if ($event instanceof Cache\Storage\ExceptionEvent) {
-                $event->setThrowException(false);
-            }
-        };
-        $eventManager = $storage->getEventManager();
-        $eventManager->attach($methodName . '.pre', $eventHandler);
-        $eventManager->attach($methodName . '.post', $eventHandler);
-        $eventManager->attach($methodName . '.exception', $eventHandler);
-
-        $storage
-            ->expects($this->once())
-            ->method($internalMethodName)
-            ->with(...array_map([$this, 'equalTo'], $methodArgs))
-            ->willThrowException(new \Exception('test'));
-
-        call_user_func_array([$storage, $methodName], $methodArgs);
-
-        $expectedEventList = [
-            $methodName . '.pre',
-            $methodName . '.exception',
-        ];
-        self::assertSame($expectedEventList, $eventList);
-    }
-
-    /**
-     * @psalm-param non-empty-string $methodName
-     * @psalm-param non-empty-string $internalMethodName
-     * @dataProvider simpleEventHandlingMethodDefinitions
-     */
-    public function testEventHandlingStopInPre(
-        string $methodName,
-        string $internalMethodName,
-        array $methodArgs,
-        mixed $retVal
-    ): void {
-        $storage = $this->getMockForAbstractAdapter([$internalMethodName]);
-
-        $eventList    = [];
-        $eventHandler = static function (Event $event) use (&$eventList): void {
-            $eventList[] = $event->getName();
-        };
-        $eventManager = $storage->getEventManager();
-        $eventManager->attach($methodName . '.pre', $eventHandler);
-        $eventManager->attach($methodName . '.post', $eventHandler);
-        $eventManager->attach($methodName . '.exception', $eventHandler);
-
-        $eventManager->attach($methodName . '.pre', static function ($event) use ($retVal) {
-            $event->stopPropagation();
-            return $retVal;
-        });
-
-        // the internal method should never be called
-        $storage->expects($this->never())->method($internalMethodName);
-
-        // the return vaue should be available by pre-event
-        $result = call_user_func_array([$storage, $methodName], $methodArgs);
-        self::assertSame($retVal, $result);
-
-        // after the triggered pre-event the post-event should be triggered as well
-        $expectedEventList = [
-            $methodName . '.pre',
-            $methodName . '.post',
-        ];
-        self::assertSame($expectedEventList, $eventList);
-    }
-
-    public function testGetMetadatas(): void
-    {
-        $storage = $this->getMockForAbstractAdapter(['getMetadata', 'internalGetMetadata']);
-
-        $meta  = ['meta' => 'data'];
-        $items = [
-            'key1' => $meta,
-            'key2' => $meta,
-        ];
-
-        // foreach item call 'internalGetMetadata' instead of 'getMetadata'
-        $storage->expects($this->never())->method('getMetadata');
-        $storage->expects($this->exactly(count($items)))
-            ->method('internalGetMetadata')
-            ->with($this->stringContains('key'))
-            ->willReturn($meta);
-
-        self::assertSame($items, $storage->getMetadatas(array_keys($items)));
-    }
-
-    public function testGetMetadatasFail(): void
-    {
-        $storage = $this->getMockForAbstractAdapter(['internalGetMetadata']);
-
-        $items = ['key1', 'key2'];
-
-        // return false to indicate that the operation failed
-        $storage
-            ->expects($this->exactly(count($items)))
-            ->method('internalGetMetadata')
-            ->with($this->stringContains('key'))
-            ->willReturn(false);
-
-        self::assertSame([], $storage->getMetadatas($items));
     }
 
     public function testSetItems(): void
@@ -954,19 +798,6 @@ final class AbstractAdapterTest extends TestCase
             'keys' => ['changedKey'],
         ]);
 
-        // getMetadata(s)
-        $this->checkPreEventCanChangeArguments('getMetadata', [
-            'key' => 'key',
-        ], [
-            'key' => 'changedKey',
-        ]);
-
-        $this->checkPreEventCanChangeArguments('getMetadatas', [
-            'keys' => ['key'],
-        ], [
-            'keys' => ['changedKey'],
-        ]);
-
         // setItem(s)
         $this->checkPreEventCanChangeArguments('setItem', [
             'key'   => 'key',
@@ -1111,14 +942,11 @@ final class AbstractAdapterTest extends TestCase
      * Also sets the adapter options
      *
      * @psalm-param list<non-empty-string> $methods
-     * @return AbstractAdapter&MockObject
      */
-    protected function getMockForAbstractAdapter(array $methods = []): AbstractAdapter
+    protected function getMockForAbstractAdapter(array $methods = []): MockObject&AbstractAdapter
     {
-        $class = AbstractAdapter::class;
-
         if (! $methods) {
-            $adapter = $this->getMockForAbstractClass($class);
+            $adapter = $this->getMockForAbstractClass(AbstractAdapter::class);
         } else {
             $reflection = new ReflectionClass(AbstractAdapter::class);
             foreach ($reflection->getMethods() as $method) {
@@ -1126,7 +954,7 @@ final class AbstractAdapterTest extends TestCase
                     $methods[] = $method->getName();
                 }
             }
-            $adapter = $this->getMockBuilder($class)
+            $adapter = $this->getMockBuilder(AbstractAdapter::class)
                 ->onlyMethods(array_unique($methods))
                 ->disableArgumentCloning()
                 ->getMock();
@@ -1135,5 +963,25 @@ final class AbstractAdapterTest extends TestCase
         $adapter->setOptions($this->options ?? new AdapterOptions());
 
         return $adapter;
+    }
+
+    public function testCanCompareOldValueWithTokenWhenUsedWithSerializerPlugin(): void
+    {
+        $storage = $this->getMockForAbstractAdapter();
+        $storage
+            ->addPlugin(new Serializer());
+        $storage
+            ->expects(self::once())
+            ->method('internalSetItem')
+            ->with('foo', serialize('baz'))
+            ->willReturn(true);
+
+        $storage
+            ->expects(self::once())
+            ->method('internalGetItem')
+            ->with('foo')
+            ->willReturn(serialize('bar'));
+
+        self::assertTrue($storage->checkAndSetItem('bar', 'foo', 'baz'));
     }
 }

@@ -220,4 +220,19 @@ final class SerializerTest extends AbstractCommonPluginTest
 
         self::assertEquals(10, $plugin->onIncrementItemPre($event));
     }
+
+    public function testonWriteItemPreSerializesTokenOncePassed(): void
+    {
+        $plugin     = new Serializer();
+        $parameters = new ArrayObject([
+            'key'   => 'foo',
+            'value' => 10,
+            'token' => 10,
+        ]);
+        $event      = new Event('foo', $this->createMock(StorageInterface::class), $parameters);
+
+        $plugin->onWriteItemPre($event);
+
+        self::assertSame($parameters['value'], $parameters['token']);
+    }
 }

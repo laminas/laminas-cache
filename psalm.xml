@@ -13,11 +13,13 @@
     <projectFiles>
         <directory name="src"/>
         <directory name="test"/>
+        <directory name="dev-implementation"/>
         <ignoreFiles>
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
+        <MixedAssignment errorLevel="suppress"/>
         <InternalMethod>
             <errorLevel type="suppress">
                 <directory name="test"/>

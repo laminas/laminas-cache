@@ -58,23 +58,6 @@ interface StorageInterface
      */
     public function hasItems(array $keys);
 
-    /**
-     * Get metadata of an item.
-     *
-     * @param  string $key
-     * @return array|bool Metadata on success, false on failure
-     * @throws ExceptionInterface
-     */
-    public function getMetadata($key);
-
-    /**
-     * Get multiple metadata
-     *
-     * @return array Associative array of keys and metadata
-     * @throws ExceptionInterface
-     */
-    public function getMetadatas(array $keys);
-
     /* writing */
     /**
      * Store an item.

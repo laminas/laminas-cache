@@ -14,7 +14,7 @@
     <!-- Paths to check -->
     <file>src</file>
     <file>test</file>
-    <file>benchmark</file>
+    <file>dev-implementation</file>
 
     <!-- Include all rules from the Laminas Coding Standard -->
     <rule ref="LaminasCodingStandard">

@@ -45,7 +45,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * The plugin registry
      *
-     * @var SplObjectStorage Registered plugins
+     * @var SplObjectStorage|null Registered plugins
      */
     protected $pluginRegistry;
 
@@ -522,110 +522,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
         foreach ($normalizedKeys as $normalizedKey) {
             if ($this->internalHasItem($normalizedKey)) {
                 $result[] = $normalizedKey;
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Get metadata of an item.
-     *
-     * @param  string $key
-     * @return array|bool Metadata on success, false on failure
-     * @throws Exception\ExceptionInterface
-     * @triggers getMetadata.pre(PreEvent)
-     * @triggers getMetadata.post(PostEvent)
-     * @triggers getMetadata.exception(ExceptionEvent)
-     */
-    public function getMetadata($key)
-    {
-        if (! $this->getOptions()->getReadable()) {
-            return false;
-        }
-
-        $this->normalizeKey($key);
-        $args = new ArrayObject([
-            'key' => &$key,
-        ]);
-
-        try {
-            $eventRs = $this->triggerPre(__FUNCTION__, $args);
-
-            $result = $eventRs->stopped()
-                ? $eventRs->last()
-                : $this->internalGetMetadata($args['key']);
-
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = false;
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
-        }
-    }
-
-    /**
-     * Internal method to get metadata of an item.
-     *
-     * @param  string $normalizedKey
-     * @return array|bool Metadata on success, false on failure
-     * @throws Exception\ExceptionInterface
-     */
-    protected function internalGetMetadata(&$normalizedKey)
-    {
-        if (! $this->internalHasItem($normalizedKey)) {
-            return false;
-        }
-
-        return [];
-    }
-
-    /**
-     * Get multiple metadata
-     *
-     * @param  array $keys
-     * @return array Associative array of keys and metadata
-     * @throws Exception\ExceptionInterface
-     * @triggers getMetadatas.pre(PreEvent)
-     * @triggers getMetadatas.post(PostEvent)
-     * @triggers getMetadatas.exception(ExceptionEvent)
-     */
-    public function getMetadatas(array $keys)
-    {
-        if (! $this->getOptions()->getReadable()) {
-            return [];
-        }
-
-        $this->normalizeKeys($keys);
-        $args = new ArrayObject([
-            'keys' => &$keys,
-        ]);
-
-        try {
-            $eventRs = $this->triggerPre(__FUNCTION__, $args);
-
-            $result = $eventRs->stopped()
-                ? $eventRs->last()
-                : $this->internalGetMetadatas($args['keys']);
-
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = [];
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
-        }
-    }
-
-    /**
-     * Internal method to get multiple metadata
-     *
-     * @return array Associative array of keys and metadata
-     * @throws Exception\ExceptionInterface
-     */
-    protected function internalGetMetadatas(array &$normalizedKeys)
-    {
-        $result = [];
-        foreach ($normalizedKeys as $normalizedKey) {
-            $metadata = $this->internalGetMetadata($normalizedKey);
-            if ($metadata !== false) {
-                $result[$normalizedKey] = $metadata;
             }
         }
         return $result;

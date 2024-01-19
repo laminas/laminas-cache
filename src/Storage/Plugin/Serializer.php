@@ -93,6 +93,10 @@ class Serializer extends AbstractPlugin
         $serializer      = $this->getOptions()->getSerializer();
         $params          = $event->getParams();
         $params['value'] = $serializer->serialize($params['value']);
+        /** Passed by {@see AbstractAdapter::checkAndSetItem()}. Used to compare with the already cached value. */
+        if (isset($params['token'])) {
+            $params['token'] = $serializer->serialize($params['token']);
+        }
     }
 
     /**

@@ -7,18 +7,20 @@ namespace LaminasTest\Cache\Pattern;
 use Laminas\Cache\Pattern\PatternInterface;
 use Laminas\Cache\Pattern\StorageCapableInterface;
 use Laminas\Cache\Storage\StorageInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 use function sprintf;
 
 /**
  * @psalm-suppress MissingConstructor
+ * @template TPattern of PatternInterface&StorageCapableInterface
  */
 abstract class AbstractCommonStoragePatternTest extends AbstractCommonPatternTest
 {
-    /** @var StorageInterface */
+    /** @var StorageInterface&MockObject */
     protected $storage;
 
-    /** @var PatternInterface&StorageCapableInterface */
+    /** @var TPattern */
     protected $pattern;
 
     protected function setUp(): void
