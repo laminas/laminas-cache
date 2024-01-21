@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Storage;
 
-use Laminas\Cache\Storage\Adapter\Dev\VoidAdapter;
+use ArrayObject;
 use Laminas\Cache\Storage\Capabilities;
-use Laminas\EventManager\Event;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\EventManager\EventManagerInterface;
+use LaminasTest\Cache\Storage\TestAsset\EventsCapableStorageInterface;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -40,14 +42,14 @@ class CapabilitiesTest extends TestCase
     /**
      * The storage adapter
      *
-     * @var VoidAdapter
+     * @var StorageInterface
      */
     protected $adapter;
 
     public function setUp(): void
     {
         $this->marker  = new stdClass();
-        $this->adapter = new VoidAdapter();
+        $this->adapter = $this->createMock(StorageInterface::class);
 
         $this->baseCapabilities = new Capabilities($this->adapter, $this->marker);
         $this->capabilities     = new Capabilities($this->adapter, $this->marker, [], $this->baseCapabilities);
@@ -73,21 +75,25 @@ class CapabilitiesTest extends TestCase
 
     public function testTriggerCapabilityEvent(): void
     {
-        $em    = $this->capabilities->getAdapter()->getEventManager();
-        $event = null;
-        $em->attach('capability', static function ($eventArg) use (&$event): void {
-            $event = $eventArg;
-        });
+        $eventManager = $this->createMock(EventManagerInterface::class);
 
-        $this->capabilities->setMaxTtl($this->marker, 100);
+        $adapter = $this->createMock(EventsCapableStorageInterface::class);
+        $adapter
+            ->expects(self::once())
+            ->method('getEventManager')
+            ->willReturn($eventManager);
 
-        self::assertInstanceOf(Event::class, $event);
-        self::assertEquals('capability', $event->getName());
-        self::assertSame($this->adapter, $event->getTarget());
+        $eventManager
+            ->expects(self::once())
+            ->method('trigger')
+            ->with('capability', $adapter, self::callback(static function ($params): bool {
+                self::assertInstanceOf(ArrayObject::class, $params);
+                self::assertTrue(isset($params['maxTtl']));
+                self::assertEquals(100, $params['maxTtl']);
+                return true;
+            }));
 
-        $params = $event->getParams();
-        self::assertInstanceOf('ArrayObject', $params);
-        self::assertTrue(isset($params ['maxTtl']));
-        self::assertEquals(100, $params['maxTtl']);
+        $capabilities = new Capabilities($adapter, $this->marker);
+        $capabilities->setMaxTtl($this->marker, 100);
     }
 }

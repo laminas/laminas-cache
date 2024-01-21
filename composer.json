@@ -35,7 +35,6 @@
     },
     "require": {
         "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
-        "laminas/laminas-cache-storage-implementation": "2.0",
         "laminas/laminas-eventmanager": "^3.4",
         "laminas/laminas-servicemanager": "^3.21",
         "laminas/laminas-stdlib": "^3.6",
@@ -45,7 +44,6 @@
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
-        "laminas/laminas-cache-storage-adapter-dev": "^1.0",
         "laminas/laminas-cli": "^1.7",
         "laminas/laminas-coding-standard": "~2.5.0",
         "laminas/laminas-config-aggregator": "^1.13",
@@ -84,12 +82,6 @@
             "LaminasTest\\Cache\\": "test/"
         }
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./dev-implementation"
-        }
-    ],
     "scripts": {
         "check": [
             "@cs-check",
