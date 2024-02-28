@@ -580,39 +580,12 @@
       <code>$baseCapabilities</code>
       <code>$baseCapabilities</code>
       <code><![CDATA[$baseCapabilities->getAdapter()]]></code>
-      <code><![CDATA[$params['key']]]></code>
-      <code><![CDATA[$params['key']]]></code>
-      <code><![CDATA[$params['key']]]></code>
-      <code><![CDATA[$params['key']]]></code>
-      <code><![CDATA[$params['keyValuePairs']]]></code>
-      <code><![CDATA[$params['keyValuePairs']]]></code>
       <code>$result</code>
       <code>$value</code>
     </MixedArgument>
-    <MixedArrayOffset>
-      <code>$keyValuePairs[$failedKey]</code>
-      <code>$keyValuePairs[$failedKey]</code>
-      <code>$keyValuePairs[$key]</code>
-      <code>$keyValuePairs[$key]</code>
-      <code>$keyValuePairs[$key]</code>
-      <code>$keyValuePairs[$key]</code>
-      <code>$keyValuePairs[$key]</code>
-      <code>$keyValuePairs[$key]</code>
-    </MixedArrayOffset>
     <MixedMethodCall>
       <code>getAdapter</code>
     </MixedMethodCall>
-    <MixedOperand>
-      <code>$keyValuePairs[$key]</code>
-      <code>$keyValuePairs[$key]</code>
-      <code>$oldValue</code>
-      <code>$oldValue</code>
-      <code><![CDATA[$params['value']]]></code>
-    </MixedOperand>
-    <PossiblyNullOperand>
-      <code>$oldValue</code>
-      <code>$oldValue</code>
-    </PossiblyNullOperand>
   </file>
   <file src="src/Storage/PluginManager.php">
     <MixedReturnStatement>
@@ -881,13 +854,6 @@
       <code>testShareByDefaultAndSharedByDefault</code>
     </MissingReturnType>
   </file>
-  <file src="test/Storage/Plugin/AbstractCommonPluginTest.php">
-    <MissingReturnType>
-      <code>getCommonPluginNamesProvider</code>
-      <code>testOptionObjectAvailable</code>
-      <code>testOptionsGetAndSetDefault</code>
-    </MissingReturnType>
-  </file>
   <file src="test/Storage/Plugin/ClearExpiredByFactorTest.php">
     <ArgumentTypeCoercion>
       <code><![CDATA[$this->adapter->getEventManager()]]></code>
@@ -978,14 +944,6 @@
       <code>$cb[0]</code>
       <code>$cb[1]</code>
     </InvalidArrayAccess>
-    <MissingClosureParamType>
-      <code>$casToken</code>
-      <code>$casToken</code>
-      <code>$casToken</code>
-      <code>$success</code>
-      <code>$success</code>
-      <code>$success</code>
-    </MissingClosureParamType>
     <MixedArgument>
       <code>$values</code>
     </MixedArgument>
@@ -994,7 +952,6 @@
       <code><![CDATA[$values['key2']]]></code>
     </MixedArrayAccess>
     <UndefinedInterfaceMethod>
-      <code>onDecrementItemPre</code>
       <code>onReadItemPost</code>
       <code>onReadItemPost</code>
       <code>onReadItemsPost</code>

@@ -12,21 +12,14 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AbstractCommonPluginTest extends TestCase
 {
-    /** @var PluginInterface */
-    protected $plugin;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        if (! $this->plugin instanceof PluginInterface) {
-            self::fail('Cannot detect plugin instance.');
-        }
-    }
+    protected PluginInterface $plugin;
 
     /**
      * A data provider for common storage plugin names
+     *
+     * @return iterable<array-key,array{0:string}>
      */
-    abstract public function getCommonPluginNamesProvider();
+    abstract public function getCommonPluginNamesProvider(): iterable;
 
     /**
      * @dataProvider getCommonPluginNamesProvider
@@ -40,13 +33,13 @@ abstract class AbstractCommonPluginTest extends TestCase
         );
     }
 
-    public function testOptionObjectAvailable()
+    public function testOptionObjectAvailable(): void
     {
         $options = $this->plugin->getOptions();
         self::assertInstanceOf(PluginOptions::class, $options);
     }
 
-    public function testOptionsGetAndSetDefault()
+    public function testOptionsGetAndSetDefault(): void
     {
         $options = $this->plugin->getOptions();
         $this->plugin->setOptions($options);

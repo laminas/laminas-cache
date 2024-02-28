@@ -53,23 +53,6 @@ class IgnoreUserAbort extends AbstractPlugin
         $this->listeners[] = $events->attach('checkAndSetItem.pre', $cbOnBefore, $priority);
         $this->listeners[] = $events->attach('checkAndSetItem.post', $cbOnAfter, $priority);
         $this->listeners[] = $events->attach('checkAndSetItem.exception', $cbOnAfter, $priority);
-
-        // increment / decrement item(s)
-        $this->listeners[] = $events->attach('incrementItem.pre', $cbOnBefore, $priority);
-        $this->listeners[] = $events->attach('incrementItem.post', $cbOnAfter, $priority);
-        $this->listeners[] = $events->attach('incrementItem.exception', $cbOnAfter, $priority);
-
-        $this->listeners[] = $events->attach('incrementItems.pre', $cbOnBefore, $priority);
-        $this->listeners[] = $events->attach('incrementItems.post', $cbOnAfter, $priority);
-        $this->listeners[] = $events->attach('incrementItems.exception', $cbOnAfter, $priority);
-
-        $this->listeners[] = $events->attach('decrementItem.pre', $cbOnBefore, $priority);
-        $this->listeners[] = $events->attach('decrementItem.post', $cbOnAfter, $priority);
-        $this->listeners[] = $events->attach('decrementItem.exception', $cbOnAfter, $priority);
-
-        $this->listeners[] = $events->attach('decrementItems.pre', $cbOnBefore, $priority);
-        $this->listeners[] = $events->attach('decrementItems.post', $cbOnAfter, $priority);
-        $this->listeners[] = $events->attach('decrementItems.exception', $cbOnAfter, $priority);
     }
 
     /**
