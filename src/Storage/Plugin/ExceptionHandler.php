@@ -64,7 +64,7 @@ class ExceptionHandler extends AbstractPlugin
     {
         $options  = $this->getOptions();
         $callback = $options->getExceptionCallback();
-        if ($callback) {
+        if ($callback !== null) {
             call_user_func($callback, $event->getException());
         }
 

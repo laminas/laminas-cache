@@ -126,7 +126,7 @@ class AdapterOptionsTest extends TestCase
         // trigger by changing an option
         $this->options->setWritable(false);
 
-        // assert (hopefully) called listener and arguments
+        self::assertIsArray($calledArgs);
         self::assertCount(1, $calledArgs, '"option" event was not triggered or got a wrong number of arguments');
         /** @var Event|null $event */
         $event = $calledArgs[0] ?? null;

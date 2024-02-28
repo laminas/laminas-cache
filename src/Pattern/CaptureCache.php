@@ -269,7 +269,7 @@ class CaptureCache extends AbstractPattern
 
         $umask = $umask !== false ? umask($umask) : false;
         $rs    = file_put_contents($file, $data, $locking ? LOCK_EX : 0);
-        if ($umask) {
+        if ($umask !== false) {
             umask($umask);
         }
 
@@ -324,12 +324,6 @@ class CaptureCache extends AbstractPattern
                 $oct = '775';
                 $err = ErrorHandler::stop();
                 throw new Exception\RuntimeException("mkdir('{$pathname}', 0{$oct}, true) failed", 0, $err);
-            }
-
-            if ($perm !== false && ! chmod($pathname, $perm)) {
-                $oct = decoct($perm);
-                $err = ErrorHandler::stop();
-                throw new Exception\RuntimeException("chmod('{$pathname}', 0{$oct}) failed", 0, $err);
             }
         } else {
             // built-in mkdir function sets permission together with current umask

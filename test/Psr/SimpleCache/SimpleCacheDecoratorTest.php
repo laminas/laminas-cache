@@ -86,7 +86,7 @@ class SimpleCacheDecoratorTest extends TestCase
         int $minTtl = 60,
         int $maxKeyLength = -1
     ): Capabilities {
-        $supportedDataTypes = $supportedDataTypes ?: $this->requiredTypes;
+        $supportedDataTypes = $supportedDataTypes ?? $this->requiredTypes;
         $capabilities       = $this->createMock(Capabilities::class);
         $capabilities
             ->method('getSupportedDatatypes')

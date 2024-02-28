@@ -269,7 +269,7 @@ class PatternOptions extends AbstractOptions
             }
 
             // validate
-            if ($umask & 0700) {
+            if (($umask & 0700) !== 0) {
                 throw new Exception\InvalidArgumentException(
                     'Invalid umask: need permission to execute, read and write by owner'
                 );
@@ -351,7 +351,7 @@ class PatternOptions extends AbstractOptions
                 );
             }
 
-            if ($filePermission & 0111) {
+            if (($filePermission & 0111) !== 0) {
                 throw new Exception\InvalidArgumentException(
                     "Invalid file permission: Files shouldn't be executable"
                 );
