@@ -389,10 +389,6 @@ final class AbstractAdapterTest extends TestCase
             ['touchItems', 'internalTouchItems', [['k1', 'k2']], []],
             ['removeItem', 'internalRemoveItem', ['k'], true],
             ['removeItems', 'internalRemoveItems', [['k1', 'k2']], []],
-            ['incrementItem', 'internalIncrementItem', ['k', 1], true],
-            ['incrementItems', 'internalIncrementItems', [['k1' => 1, 'k2' => 2]], []],
-            ['decrementItem', 'internalDecrementItem', ['k', 1], true],
-            ['decrementItems', 'internalDecrementItems', [['k1' => 1, 'k2' => 2]], []],
             ['getCapabilities', 'internalGetCapabilities', [], $capabilities],
         ];
     }
@@ -653,90 +649,6 @@ final class AbstractAdapterTest extends TestCase
         self::assertSame($keys, $storage->removeItems($keys));
     }
 
-    public function testIncrementItems(): void
-    {
-        $storage = $this->getMockForAbstractAdapter(['incrementItem', 'internalIncrementItem']);
-
-        $items = [
-            'key1' => 2,
-            'key2' => 2,
-        ];
-
-        // foreach item call 'internalIncrementItem' instead of 'incrementItem'
-        $storage->expects($this->never())->method('incrementItem');
-        $storage
-            ->expects($this->exactly(count($items)))
-            ->method('internalIncrementItem')
-            ->with($this->stringContains('key'), $this->equalTo(2))
-            ->willReturn(4);
-
-        self::assertSame([
-            'key1' => 4,
-            'key2' => 4,
-        ], $storage->incrementItems($items));
-    }
-
-    public function testIncrementItemsFail(): void
-    {
-        $storage = $this->getMockForAbstractAdapter(['internalIncrementItem']);
-
-        $items = [
-            'key1' => 2,
-            'key2' => 2,
-        ];
-
-        // return false to indicate that the operation failed
-        $storage
-            ->expects($this->exactly(count($items)))
-            ->method('internalIncrementItem')
-            ->with($this->stringContains('key'), $this->equalTo(2))
-            ->willReturn(false);
-
-        self::assertSame([], $storage->incrementItems($items));
-    }
-
-    public function testDecrementItems(): void
-    {
-        $storage = $this->getMockForAbstractAdapter(['decrementItem', 'internalDecrementItem']);
-
-        $items = [
-            'key1' => 2,
-            'key2' => 2,
-        ];
-
-        // foreach item call 'internalDecrementItem' instead of 'decrementItem'
-        $storage->expects($this->never())->method('decrementItem');
-        $storage
-            ->expects($this->exactly(count($items)))
-            ->method('internalDecrementItem')
-            ->with($this->stringContains('key'), $this->equalTo(2))
-            ->willReturn(4);
-
-        self::assertSame([
-            'key1' => 4,
-            'key2' => 4,
-        ], $storage->decrementItems($items));
-    }
-
-    public function testDecrementItemsFail(): void
-    {
-        $storage = $this->getMockForAbstractAdapter(['internalDecrementItem']);
-
-        $items = [
-            'key1' => 2,
-            'key2' => 2,
-        ];
-
-        // return false to indicate that the operation failed
-        $storage
-            ->expects($this->exactly(count($items)))
-            ->method('internalDecrementItem')
-            ->with($this->stringContains('key'), $this->equalTo(2))
-            ->willReturn(false);
-
-        self::assertSame([], $storage->decrementItems($items));
-    }
-
     public function testTouchItems(): void
     {
         $storage = $this->getMockForAbstractAdapter(['touchItem', 'internalTouchItem']);
@@ -878,36 +790,6 @@ final class AbstractAdapterTest extends TestCase
             'keys' => ['key'],
         ], [
             'keys' => ['changedKey'],
-        ]);
-
-        // incrementItem(s)
-        $this->checkPreEventCanChangeArguments('incrementItem', [
-            'key'   => 'key',
-            'value' => 1,
-        ], [
-            'key'   => 'changedKey',
-            'value' => 2,
-        ]);
-
-        $this->checkPreEventCanChangeArguments('incrementItems', [
-            'keyValuePairs' => ['key' => 1],
-        ], [
-            'keyValuePairs' => ['changedKey' => 2],
-        ]);
-
-        // decrementItem(s)
-        $this->checkPreEventCanChangeArguments('decrementItem', [
-            'key'   => 'key',
-            'value' => 1,
-        ], [
-            'key'   => 'changedKey',
-            'value' => 2,
-        ]);
-
-        $this->checkPreEventCanChangeArguments('decrementItems', [
-            'keyValuePairs' => ['key' => 1],
-        ], [
-            'keyValuePairs' => ['changedKey' => 2],
         ]);
     }
 

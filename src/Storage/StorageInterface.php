@@ -159,42 +159,6 @@ interface StorageInterface
      */
     public function removeItems(array $keys);
 
-    /**
-     * Increment an item.
-     *
-     * @param  string $key
-     * @param  int    $value
-     * @return int|bool The new value on success, false on failure
-     * @throws ExceptionInterface
-     */
-    public function incrementItem($key, $value);
-
-    /**
-     * Increment multiple items.
-     *
-     * @return array Associative array of keys and new values
-     * @throws ExceptionInterface
-     */
-    public function incrementItems(array $keyValuePairs);
-
-    /**
-     * Decrement an item.
-     *
-     * @param  string $key
-     * @param  int    $value
-     * @return int|bool The new value on success, false on failure
-     * @throws ExceptionInterface
-     */
-    public function decrementItem($key, $value);
-
-    /**
-     * Decrement multiple items.
-     *
-     * @return array Associative array of keys and new values
-     * @throws ExceptionInterface
-     */
-    public function decrementItems(array $keyValuePairs);
-
     /* status */
 
     /**
