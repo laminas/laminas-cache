@@ -18,10 +18,10 @@ use function sprintf;
 abstract class AbstractCommonStoragePatternTest extends AbstractCommonPatternTest
 {
     /** @var StorageInterface&MockObject */
-    protected $storage;
+    protected StorageInterface&MockObject $storage;
 
     /** @var TPattern */
-    protected $pattern;
+    protected PatternInterface $pattern;
 
     protected function setUp(): void
     {

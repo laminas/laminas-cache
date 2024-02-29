@@ -13,7 +13,7 @@ class ClearExpiredByFactor extends AbstractPlugin
     /**
      * {@inheritDoc}
      */
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1): void
     {
         $callback = [$this, 'clearExpiredByFactor'];
 
@@ -26,10 +26,9 @@ class ClearExpiredByFactor extends AbstractPlugin
     /**
      * Clear expired items by factor after writing new item(s)
      *
-     * @return void
      * @phpcs:disable Generic.NamingConventions.ConstructorName.OldStyle
      */
-    public function clearExpiredByFactor(PostEvent $event)
+    public function clearExpiredByFactor(PostEvent $event): void
     {
         $storage = $event->getStorage();
         if (! $storage instanceof ClearExpiredInterface) {

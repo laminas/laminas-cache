@@ -3,25 +3,41 @@
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
+use Laminas\Cache\Storage\StorageInterface;
+use Laminas\Stdlib\ErrorHandler;
 use Stringable;
+use Throwable;
 
 use function array_shift;
 use function array_unshift;
+use function array_values;
+use function assert;
 use function func_get_args;
 use function in_array;
 use function md5;
 use function method_exists;
 use function property_exists;
+use function serialize;
+use function sprintf;
 use function strtolower;
 
-class ObjectCache extends CallbackCache implements Stringable
+class ObjectCache extends AbstractStorageCapablePattern implements Stringable
 {
-    /**
-     * @return ObjectCache
-     */
-    public function setOptions(PatternOptions $options)
+    private CallbackCache $callbackCache;
+
+    public function __construct(StorageInterface $storage, ?PatternOptions $options = null)
+    {
+        parent::__construct($storage, $options);
+        $this->callbackCache = new CallbackCache($storage, $options);
+        if ($options !== null) {
+            $this->setOptions($options);
+        }
+    }
+
+    public function setOptions(PatternOptions $options): self
     {
         parent::setOptions($options);
+        $this->callbackCache->setOptions($options);
 
         if (! $options->getObject()) {
             throw new Exception\InvalidArgumentException("Missing option 'object'");
@@ -33,17 +49,18 @@ class ObjectCache extends CallbackCache implements Stringable
     /**
      * Call and cache a class method
      *
-     * @param  string $method  Method name to call
+     * @param  non-empty-string $method  Method name to call
      * @param  array  $args    Method arguments
-     * @return mixed
      * @throws Exception\RuntimeException
-     * @throws \Exception
+     * @throws Throwable
      */
-    public function call($method, array $args = [])
+    public function call(string $method, array $args = []): mixed
     {
         $options = $this->getOptions();
         $object  = $options->getObject();
-        $method  = strtolower($method);
+        assert($object !== null, 'ObjectCache#setOptions verifies that we always have an object set.');
+
+        $method = strtolower($method);
 
         // handle magic methods
         switch ($method) {
@@ -59,22 +76,22 @@ class ObjectCache extends CallbackCache implements Stringable
                 ) {
                     // no caching if property isn't magic
                     // or caching magic properties is disabled
-                    return;
+                    return null;
                 }
 
                 // remove cached __get and __isset
-                $removeKeys = null;
+                $removeKeys = [];
                 if (method_exists($object, '__get')) {
                     $removeKeys[] = $this->generateKey('__get', [$property]);
                 }
                 if (method_exists($object, '__isset')) {
                     $removeKeys[] = $this->generateKey('__isset', [$property]);
                 }
-                if ($removeKeys) {
+                if ($removeKeys !== []) {
                     $storage = $this->getStorage();
                     $storage->removeItems($removeKeys);
                 }
-                return;
+                return null;
 
             case '__get':
                 $property = array_shift($args);
@@ -89,7 +106,7 @@ class ObjectCache extends CallbackCache implements Stringable
                 }
 
                 array_unshift($args, $property);
-                return parent::call([$object, '__get'], $args);
+                return $this->callbackCache->call([$object, '__get'], $args);
 
             case '__isset':
                 $property = array_shift($args);
@@ -103,7 +120,7 @@ class ObjectCache extends CallbackCache implements Stringable
                     return isset($object->{$property});
                 }
 
-                return parent::call([$object, '__isset'], [$property]);
+                return $this->callbackCache->call([$object, '__isset'], [$property]);
 
             case '__unset':
                 $property = array_shift($args);
@@ -116,22 +133,30 @@ class ObjectCache extends CallbackCache implements Stringable
                 ) {
                     // no caching if property isn't magic
                     // or caching magic properties is disabled
-                    return;
+                    return null;
                 }
 
                 // remove previous cached __get and __isset calls
-                $removeKeys = null;
+                $removeKeys = [];
                 if (method_exists($object, '__get')) {
                     $removeKeys[] = $this->generateKey('__get', [$property]);
                 }
                 if (method_exists($object, '__isset')) {
                     $removeKeys[] = $this->generateKey('__isset', [$property]);
                 }
-                if ($removeKeys) {
+                if ($removeKeys !== []) {
                     $storage = $this->getStorage();
                     $storage->removeItems($removeKeys);
                 }
-                return;
+                return null;
+        }
+
+        if (! method_exists($object, $method)) {
+            throw new Exception\RuntimeException(sprintf(
+                '%s only accepts methods which are implemented by %s',
+                $this::class,
+                $object::class,
+            ));
         }
 
         $cache = $options->getCacheByDefault();
@@ -145,52 +170,35 @@ class ObjectCache extends CallbackCache implements Stringable
             return $object->{$method}(...$args);
         }
 
-        return parent::call([$object, $method], $args);
+        return $this->callbackCache->call([$object, $method], $args);
     }
 
     /**
      * Generate a unique key in base of a key representing the callback part
      * and a key representing the arguments part.
      *
-     * @param  string     $method  The method
-     * @param  array      $args    Callback arguments
-     * @return string
+     * @param  non-empty-string $methodOrProperty The method or the property
+     * @param  array            $args             Callback arguments
+     * @return non-empty-string
      * @throws Exception\RuntimeException
      */
-    public function generateKey($method, array $args = [])
+    public function generateKey(string $methodOrProperty, array $args = []): string
     {
-        return $this->generateCallbackKey(
-            [$this->getOptions()->getObject(), $method],
-            $args
-        );
-    }
+        $object = $this->getOptions()->getObject();
+        assert($object !== null, 'ObjectCache#setOptions verifies that we always have an object set.');
 
-    /**
-     * Generate a unique key in base of a key representing the callback part
-     * and a key representing the arguments part.
-     *
-     * @param  callable   $callback  A valid callback
-     * @param  array      $args      Callback arguments
-     * @return string
-     * @throws Exception\RuntimeException
-     */
-    protected function generateCallbackKey($callback, array $args = [])
-    {
-        $callbackKey = md5($this->getOptions()->getObjectKey() . '::' . strtolower($callback[1]));
-        $argumentKey = $this->generateArgumentsKey($args);
-        return $callbackKey . $argumentKey;
+        return $this->callbackCache->generateKey([$object, $methodOrProperty], $args);
     }
 
     /**
      * Class method call handler
      *
-     * @param  string $method  Method name to call
+     * @param  non-empty-string $method  Method name to call
      * @param  array  $args    Method arguments
-     * @return mixed
      * @throws Exception\RuntimeException
-     * @throws \Exception
+     * @throws Throwable
      */
-    public function __call($method, array $args)
+    public function __call(string $method, array $args): mixed
     {
         return $this->call($method, $args);
     }
@@ -205,14 +213,11 @@ class ObjectCache extends CallbackCache implements Stringable
      *
      * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
      *
-     * @phpcs:disable Squiz.Commenting.FunctionComment.InvalidReturnVoid
-     *
-     * @param  string $name
-     * @return void
+     * @param  non-empty-string $name
      */
-    public function __set($name, mixed $value)
+    public function __set($name, mixed $value): void
     {
-        return $this->call('__set', [$name, $value]);
+        $this->call('__set', [$name, $value]);
     }
 
     /**
@@ -224,10 +229,9 @@ class ObjectCache extends CallbackCache implements Stringable
      *
      * @see http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
      *
-     * @param  string $name
-     * @return mixed
+     * @param non-empty-string $name
      */
-    public function __get($name)
+    public function __get(string $name): mixed
     {
         return $this->call('__get', [$name]);
     }
@@ -241,10 +245,9 @@ class ObjectCache extends CallbackCache implements Stringable
      *
      * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
      *
-     * @param  string $name
-     * @return bool
+     * @param  non-empty-string $name
      */
-    public function __isset($name)
+    public function __isset(string $name): bool
     {
         return $this->call('__isset', [$name]);
     }
@@ -259,15 +262,11 @@ class ObjectCache extends CallbackCache implements Stringable
      *
      * @see    http://php.net/manual/language.oop5.overloading.php#language.oop5.overloading.members
      *
-     * @phpcs:disable Squiz.Commenting.FunctionComment.InvalidReturnVoid
-     *
-     * @param  string $name
-     *
-     * @return void
+     * @param  non-empty-string $name
      */
-    public function __unset($name)
+    public function __unset(string $name): void
     {
-        return $this->call('__unset', [$name]);
+        $this->call('__unset', [$name]);
     }
 
     /**
@@ -284,11 +283,35 @@ class ObjectCache extends CallbackCache implements Stringable
      * Handle invoke calls
      *
      * @see    http://php.net/manual/language.oop5.magic.php#language.oop5.magic.invoke
-     *
-     * @return mixed
      */
-    public function __invoke()
+    public function __invoke(): mixed
     {
         return $this->call('__invoke', func_get_args());
+    }
+
+    private function generateArgumentsKey(array $args): string
+    {
+        if ($args === []) {
+            return '';
+        }
+
+        ErrorHandler::start();
+        try {
+            $serializedArgs = serialize(array_values($args));
+        } catch (\Exception $e) {
+            ErrorHandler::stop();
+            throw new Exception\RuntimeException("Can't serialize arguments: see previous exception", 0, $e);
+        }
+        $error = ErrorHandler::stop();
+
+        if (! $serializedArgs) {
+            throw new Exception\RuntimeException(
+                sprintf('Cannot serialize arguments%s', $error ? ': ' . $error->getMessage() : ''),
+                0,
+                $error
+            );
+        }
+
+        return md5($serializedArgs);
     }
 }

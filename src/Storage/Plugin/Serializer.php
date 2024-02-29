@@ -12,13 +12,12 @@ use function spl_object_hash;
 
 class Serializer extends AbstractPlugin
 {
-    /** @var array */
-    protected $capabilities = [];
+    protected array $capabilities = [];
 
     /**
      * {@inheritDoc}
      */
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1): void
     {
         // The higher the priority the sooner the plugin will be called on pre events
         // but the later it will be called on post events.
@@ -47,10 +46,8 @@ class Serializer extends AbstractPlugin
 
     /**
      * On read item post
-     *
-     * @return void
      */
-    public function onReadItemPost(PostEvent $event)
+    public function onReadItemPost(PostEvent $event): void
     {
         $result = $event->getResult();
         if ($result !== null) {
@@ -62,25 +59,21 @@ class Serializer extends AbstractPlugin
 
     /**
      * On read items post
-     *
-     * @return void
      */
-    public function onReadItemsPost(PostEvent $event)
+    public function onReadItemsPost(PostEvent $event): void
     {
         $serializer = $this->getOptions()->getSerializer();
         $result     = $event->getResult();
-        foreach ($result as &$value) {
-            $value = $serializer->unserialize($value);
+        foreach ($result as $index => $value) {
+            $result[$index] = $serializer->unserialize($value);
         }
         $event->setResult($result);
     }
 
     /**
      * On write item pre
-     *
-     * @return void
      */
-    public function onWriteItemPre(Event $event)
+    public function onWriteItemPre(Event $event): void
     {
         $serializer      = $this->getOptions()->getSerializer();
         $params          = $event->getParams();
@@ -93,24 +86,21 @@ class Serializer extends AbstractPlugin
 
     /**
      * On write items pre
-     *
-     * @return void
      */
-    public function onWriteItemsPre(Event $event)
+    public function onWriteItemsPre(Event $event): void
     {
         $serializer = $this->getOptions()->getSerializer();
         $params     = $event->getParams();
-        foreach ($params['keyValuePairs'] as &$value) {
-            $value = $serializer->serialize($value);
+        foreach ($params['keyValuePairs'] as $index => $value) {
+            $value                           = $serializer->serialize($value);
+            $params['keyValuePairs'][$index] = $value;
         }
     }
 
     /**
      * On get capabilities
-     *
-     * @return void
      */
-    public function onGetCapabilitiesPost(PostEvent $event)
+    public function onGetCapabilitiesPost(PostEvent $event): void
     {
         $baseCapabilities = $event->getResult();
         $index            = spl_object_hash($baseCapabilities);

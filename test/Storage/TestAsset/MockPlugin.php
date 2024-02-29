@@ -11,17 +11,14 @@ use Laminas\EventManager\EventManagerInterface;
 
 class MockPlugin extends AbstractPlugin
 {
-    /** @var Plugin\PluginOptions */
-    protected $options;
-
     /** @var array<callable> */
-    protected $handles = [];
+    protected array $handles = [];
 
     /** @var array<int,Event> */
-    protected $calledEvents = [];
+    protected array $calledEvents = [];
 
     /** @var array<string,string> */
-    protected $eventCallbacks = [
+    protected array $eventCallbacks = [
         'setItem.pre'  => 'onSetItemPre',
         'setItem.post' => 'onSetItemPost',
     ];
@@ -38,11 +35,6 @@ class MockPlugin extends AbstractPlugin
     {
         $this->options = $options;
         return $this;
-    }
-
-    public function getOptions(): Plugin\PluginOptions
-    {
-        return $this->options;
     }
 
     /**

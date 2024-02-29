@@ -8,20 +8,15 @@ class PostEvent extends Event
 {
     /**
      * The result/return value
-     *
-     * @var mixed
      */
-    protected $result;
+    protected mixed $result;
 
     /**
-     * Constructor
-     *
      * Accept a target and its parameters.
      *
-     * @param  string           $name
-     * @param  mixed            $result
+     * @param non-empty-string $name Event name
      */
-    public function __construct($name, StorageInterface $storage, ArrayObject $params, &$result)
+    public function __construct(string $name, StorageInterface $storage, ArrayObject $params, mixed $result)
     {
         parent::__construct($name, $storage, $params);
         $this->setResult($result);
@@ -29,21 +24,17 @@ class PostEvent extends Event
 
     /**
      * Set the result/return value
-     *
-     * @return PostEvent
      */
-    public function setResult(mixed &$value)
+    public function setResult(mixed $value): self
     {
-        $this->result = &$value;
+        $this->result = $value;
         return $this;
     }
 
     /**
      * Get the result/return value
-     *
-     * @return mixed
      */
-    public function &getResult()
+    public function getResult(): mixed
     {
         return $this->result;
     }

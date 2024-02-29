@@ -27,7 +27,6 @@ use stdClass;
 use function array_keys;
 use function array_merge;
 use function array_unique;
-use function assert;
 use function call_user_func_array;
 use function count;
 use function current;
@@ -112,7 +111,7 @@ final class AbstractAdapterTest extends TestCase
 
     public function testUnsetKeyPattern(): void
     {
-        $this->options->setKeyPattern(null);
+        $this->options->setKeyPattern('');
         self::assertSame('', $this->options->getKeyPattern());
     }
 
@@ -209,7 +208,7 @@ final class AbstractAdapterTest extends TestCase
         self::assertSame($result, $event->getResult());
     }
 
-    public function testInternalTriggerExceptionThrowRuntimeException(): void
+    public function testInternalTriggerThrowableThrowsRuntimeException(): void
     {
         $storage = $this->getMockForAbstractAdapter();
 
@@ -223,7 +222,7 @@ final class AbstractAdapterTest extends TestCase
         ]);
 
         // call protected method
-        $method = new ReflectionMethod($storage::class, 'triggerException');
+        $method = new ReflectionMethod($storage::class, 'triggerThrowable');
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('test');
@@ -802,13 +801,14 @@ final class AbstractAdapterTest extends TestCase
         $storage = $this->getMockForAbstractAdapter([$internalMethod]);
         $storage->getEventManager()->attach($eventName, static function (Event $event) use ($expectedArgs): void {
             $params = $event->getParams();
-            /** @psalm-suppress RedundantConditionGivenDocblockType */
-            assert($params instanceof ArrayObject);
             $params->exchangeArray(array_merge($params->getArrayCopy(), $expectedArgs));
         });
 
         // set expected arguments of internal method call
-        $tmp    = $storage->expects($this->once())->method($internalMethod);
+        $tmp = $storage
+            ->expects($this->once())
+            ->method($internalMethod);
+
         $equals = [];
         foreach ($expectedArgs as $v) {
             $equals[] = $this->equalTo($v);

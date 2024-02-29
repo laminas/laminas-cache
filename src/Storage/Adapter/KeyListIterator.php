@@ -13,35 +13,29 @@ use function count;
  * @see ReturnTypeWillChange
  *
  * @template-covariant TValue
- * @template-implements IteratorInterface<string, TValue>
+ * @template-implements IteratorInterface<non-empty-string, TValue>
  */
 class KeyListIterator implements IteratorInterface, Countable
 {
     /**
      * The iterator mode
      *
-     * @var int
+     * @var IteratorInterface::CURRENT_AS_*
      */
-    protected $mode = IteratorInterface::CURRENT_AS_KEY;
+    protected int $mode = IteratorInterface::CURRENT_AS_KEY;
 
     /**
      * Number of keys
-     *
-     * @var int
      */
-    protected $count;
+    protected int $count;
 
     /**
      * Current iterator position
-     *
-     * @var int
      */
-    protected $position = 0;
+    protected int $position = 0;
 
     /**
-     * Constructor
-     *
-     * @param string[] $keys Keys to iterate over
+     * @param array<int,non-empty-string> $keys Keys to iterate over
      */
     public function __construct(
         protected StorageInterface $storage,
@@ -52,10 +46,8 @@ class KeyListIterator implements IteratorInterface, Countable
 
     /**
      * Get storage instance
-     *
-     * @return StorageInterface
      */
-    public function getStorage()
+    public function getStorage(): StorageInterface
     {
         return $this->storage;
     }
@@ -63,9 +55,9 @@ class KeyListIterator implements IteratorInterface, Countable
     /**
      * Get iterator mode
      *
-     * @return int Value of IteratorInterface::CURRENT_AS_*
+     * @return IteratorInterface::CURRENT_AS_*
      */
-    public function getMode()
+    public function getMode(): int
     {
         return $this->mode;
     }
@@ -73,22 +65,18 @@ class KeyListIterator implements IteratorInterface, Countable
     /**
      * Set iterator mode
      *
-     * @param int $mode
-     * @return $this
+     * @param IteratorInterface::CURRENT_AS_* $mode
      */
-    public function setMode($mode)
+    public function setMode(int $mode): self
     {
-        $this->mode = (int) $mode;
+        $this->mode = $mode;
         return $this;
     }
 
     /**
      * Get current key, value or metadata.
-     *
-     * @return mixed
      */
-    #[ReturnTypeWillChange]
-    public function current()
+    public function current(): mixed
     {
         if ($this->mode === IteratorInterface::CURRENT_AS_SELF) {
             return $this;
@@ -106,54 +94,41 @@ class KeyListIterator implements IteratorInterface, Countable
     /**
      * Get current key
      *
-     * @return string
+     * @return non-empty-string
      */
-    #[ReturnTypeWillChange]
-    public function key()
+    public function key(): string
     {
         return $this->keys[$this->position];
     }
 
     /**
      * Checks if current position is valid
-     *
-     * @return bool
      */
-    #[ReturnTypeWillChange]
-    public function valid()
+    public function valid(): bool
     {
         return $this->position < $this->count;
     }
 
     /**
      * Move forward to next element
-     *
-     * @return void
      */
-    #[ReturnTypeWillChange]
-    public function next()
+    public function next(): void
     {
         $this->position++;
     }
 
     /**
      * Rewind the Iterator to the first element.
-     *
-     * @return void
      */
-    #[ReturnTypeWillChange]
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
 
     /**
      * Count number of items
-     *
-     * @return int
      */
-    #[ReturnTypeWillChange]
-    public function count()
+    public function count(): int
     {
         return $this->count;
     }

@@ -9,13 +9,11 @@ use Laminas\EventManager\Event as BaseEvent;
 class Event extends BaseEvent
 {
     /**
-     * Constructor
-     *
      * Accept a storage adapter and its parameters.
      *
-     * @param  string           $name Event name
+     * @param non-empty-string $name Event name
      */
-    public function __construct($name, StorageInterface $storage, ArrayObject $params)
+    public function __construct(string $name, StorageInterface $storage, ArrayObject $params)
     {
         parent::__construct($name, $storage, $params);
     }
@@ -23,24 +21,22 @@ class Event extends BaseEvent
     /**
      * Set the event target/context
      *
-     * @see    Laminas\EventManager\Event::setTarget()
+     * @see    \Laminas\EventManager\Event::setTarget()
      *
-     * @param  StorageInterface $target
-     * @return Event
+     * @param StorageInterface $target
      */
-    public function setTarget($target)
+    public function setTarget($target): void
     {
-        return $this->setStorage($target);
+        parent::setTarget($target);
+        $this->setStorage($target);
     }
 
     /**
      * Alias of setTarget
      *
-     * @see    Laminas\EventManager\Event::setTarget()
-     *
-     * @return Event
+     * @see    \Laminas\EventManager\Event::setTarget()
      */
-    public function setStorage(StorageInterface $storage)
+    public function setStorage(StorageInterface $storage): self
     {
         $this->target = $storage;
         return $this;
@@ -48,10 +44,8 @@ class Event extends BaseEvent
 
     /**
      * Alias of getTarget
-     *
-     * @return StorageInterface
      */
-    public function getStorage()
+    public function getStorage(): StorageInterface
     {
         return $this->getTarget();
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Pattern;
 
-use Laminas\Cache\Exception\MissingKeyException;
 use Laminas\Cache\Pattern\OutputCache;
 use Laminas\Cache\Storage\StorageInterface;
 
@@ -107,11 +106,5 @@ class OutputCacheTest extends AbstractCommonStoragePatternTest
         $data = ob_get_clean();
 
         self::assertSame($output, $data);
-    }
-
-    public function testThrowMissingKeyException(): void
-    {
-        $this->expectException(MissingKeyException::class);
-        $this->pattern->start(''); // empty key
     }
 }

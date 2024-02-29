@@ -19,6 +19,7 @@ use Throwable;
 
 use function array_keys;
 use function array_map;
+use function assert;
 use function get_debug_type;
 use function gettype;
 use function is_array;
@@ -77,7 +78,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function get(string $key, mixed $default = null): mixed
     {
-        $this->validateKey($key);
+        $this->assertValidKey($key);
 
         $this->success = null;
         try {
@@ -95,7 +96,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function set(string $key, mixed $value, int|DateInterval|null $ttl = null): bool
     {
-        $this->validateKey($key);
+        $this->assertValidKey($key);
         $ttl = $this->convertTtlToInteger($ttl);
 
         // PSR-16 states that 0 or negative TTL values should result in cache
@@ -133,10 +134,11 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function delete(string $key): bool
     {
-        $this->validateKey($key);
+        $this->assertValidKey($key);
 
         try {
-            return null !== $this->storage->removeItem($key);
+            $this->storage->removeItem($key);
+            return true;
         } catch (Throwable) {
             return false;
         }
@@ -173,6 +175,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
 
         $keys = $this->convertIterableKeysToList($keys);
+        if ($keys === []) {
+            return [];
+        }
 
         try {
             $results = $this->storage->getItems($keys);
@@ -203,8 +208,12 @@ class SimpleCacheDecorator implements SimpleCacheInterface
         }
 
         $values = $this->convertIterableToKeyValueMap($values);
-        $keys   = array_keys($values);
-        $ttl    = $this->convertTtlToInteger($ttl);
+        if ($values === []) {
+            return true;
+        }
+
+        $keys = array_keys($values);
+        $ttl  = $this->convertTtlToInteger($ttl);
 
         // PSR-16 states that 0 or negative TTL values should result in cache
         // invalidation for the items.
@@ -251,15 +260,8 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function deleteMultiple(iterable $keys): bool
     {
-        if (! is_array($keys) && ! is_iterable($keys)) {
-            throw new SimpleCacheInvalidArgumentException(sprintf(
-                'Invalid value provided to %s; must be iterable',
-                __METHOD__
-            ));
-        }
-
         $keys = $this->convertIterableKeysToList($keys);
-        if (empty($keys)) {
+        if ($keys === []) {
             return true;
         }
 
@@ -287,7 +289,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
      */
     public function has(string $key): bool
     {
-        $this->validateKey($key);
+        $this->assertValidKey($key);
 
         try {
             return $this->storage->hasItem($key);
@@ -310,8 +312,11 @@ class SimpleCacheDecorator implements SimpleCacheInterface
 
     /**
      * @throws SimpleCacheInvalidArgumentException If key is invalid.
+     * @template T of array-key
+     * @param T $key
+     * @psalm-assert (T is string ? non-empty-string : 0) $key
      */
-    private function validateKey(string|int $key): void
+    private function assertValidKey(string|int $key): void
     {
         if ('' === $key) {
             throw new SimpleCacheInvalidArgumentException(
@@ -380,7 +385,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * @psalm-return list<string|int>
+     * @psalm-return list<non-empty-string>
      * @throws SimpleCacheInvalidArgumentException For invalid $iterable values.
      */
     private function convertIterableKeysToList(iterable $keys): array
@@ -394,7 +399,9 @@ class SimpleCacheDecorator implements SimpleCacheInterface
                 ));
             }
 
-            $this->validateKey($key);
+            $this->assertValidKey($key);
+            $key = (string) $key;
+            assert($key !== '');
             $array[] = $key;
         }
 
@@ -402,7 +409,7 @@ class SimpleCacheDecorator implements SimpleCacheInterface
     }
 
     /**
-     * @return array<int|string,mixed>
+     * @return array<0|non-empty-string,mixed>
      */
     private function convertIterableToKeyValueMap(iterable $values): array
     {
@@ -415,11 +422,13 @@ class SimpleCacheDecorator implements SimpleCacheInterface
                 ));
             }
 
-            $this->validateKey($key);
+            $this->assertValidKey($key);
 
             $keyValueMap[$key] = $value;
         }
 
+        // phpcs:disable SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable
+        /** @var array<0|non-empty-string,mixed> $keyValueMap */
         return $keyValueMap;
     }
 }

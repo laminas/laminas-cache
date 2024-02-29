@@ -9,15 +9,11 @@ interface PluginCapableInterface extends EventsCapableInterface
 {
     /**
      * Check if a plugin is registered
-     *
-     * @return bool
      */
-    public function hasPlugin(Plugin\PluginInterface $plugin);
+    public function hasPlugin(Plugin\PluginInterface $plugin): bool;
 
     /**
      * Return registry of plugins
-     *
-     * @return SplObjectStorage
      */
-    public function getPluginRegistry();
+    public function getPluginRegistry(): SplObjectStorage;
 }

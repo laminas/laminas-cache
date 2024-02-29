@@ -9,17 +9,14 @@ interface PluginAwareInterface extends PluginCapableInterface
     /**
      * Register a plugin
      *
-     * @param  int $priority
-     * @return StorageInterface
      * @throws Exception\LogicException
      */
-    public function addPlugin(Plugin\PluginInterface $plugin, $priority = 1);
+    public function addPlugin(Plugin\PluginInterface $plugin, int $priority = 1): StorageInterface&PluginAwareInterface;
 
     /**
      * Unregister an already registered plugin
      *
-     * @return StorageInterface
      * @throws Exception\LogicException
      */
-    public function removePlugin(Plugin\PluginInterface $plugin);
+    public function removePlugin(Plugin\PluginInterface $plugin): StorageInterface&PluginAwareInterface;
 }

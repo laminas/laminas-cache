@@ -6,8 +6,6 @@ interface ClearExpiredInterface
 {
     /**
      * Remove expired items
-     *
-     * @return bool
      */
-    public function clearExpired();
+    public function clearExpired(): bool;
 }

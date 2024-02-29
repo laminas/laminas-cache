@@ -6,7 +6,6 @@ namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache;
 use Laminas\Cache\Pattern\ObjectCache;
-use Laminas\Cache\Pattern\PatternOptions;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\TestObjectCache;
 
@@ -22,9 +21,6 @@ use function ob_start;
  */
 class ObjectCacheTest extends AbstractCommonStoragePatternTest
 {
-    /** @var PatternOptions */
-    protected $options;
-
     protected function setUp(): void
     {
         $this->storage = $this->createMock(StorageInterface::class);
@@ -127,6 +123,7 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTest
     }
 
     /**
+     * @param non-empty-string $method
      * @param array<array-key,string>  $args
      */
     protected function executeMethodAndMakeAssertions(string $method, array $args): void

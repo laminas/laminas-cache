@@ -8,19 +8,16 @@ interface TaggableInterface
      * Set tags to an item by given key.
      * An empty array will remove all tags.
      *
-     * @param string   $key
      * @param string[] $tags
-     * @return bool
      */
-    public function setTags($key, array $tags);
+    public function setTags(string $key, array $tags): bool;
 
     /**
      * Get tags of an item by given key
      *
-     * @param string $key
-     * @return string[]|FALSE
+     * @return string[]|false
      */
-    public function getTags($key);
+    public function getTags(string $key): false|array;
 
     /**
      * Remove items matching given tags.
@@ -29,8 +26,6 @@ interface TaggableInterface
      * else all given tags must match.
      *
      * @param string[] $tags
-     * @param  bool  $disjunction
-     * @return bool
      */
-    public function clearByTags(array $tags, $disjunction = false);
+    public function clearByTags(array $tags, bool $disjunction = false): bool;
 }

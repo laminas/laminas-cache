@@ -6,9 +6,6 @@ interface ClearByNamespaceInterface
 {
     /**
      * Remove items of given namespace
-     *
-     * @param string $namespace
-     * @return bool
      */
-    public function clearByNamespace($namespace);
+    public function clearByNamespace(string $namespace): bool;
 }

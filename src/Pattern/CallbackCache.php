@@ -3,7 +3,7 @@
 namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
-use Laminas\Stdlib\ErrorHandler;
+use Throwable;
 
 use function array_key_exists;
 use function array_values;
@@ -15,7 +15,6 @@ use function ob_get_flush;
 use function ob_implicit_flush;
 use function ob_start;
 use function serialize;
-use function sprintf;
 use function strtolower;
 
 class CallbackCache extends AbstractStorageCapablePattern
@@ -23,13 +22,12 @@ class CallbackCache extends AbstractStorageCapablePattern
     /**
      * Call the specified callback or get the result from cache
      *
-     * @param  callable   $callback  A valid callback
+     * @param  callable|callable-string   $callback  A valid callback
      * @param  array      $args      Callback arguments
-     * @return mixed Result
      * @throws Exception\RuntimeException If invalid cached data.
-     * @throws \Exception
+     * @throws Throwable
      */
-    public function call($callback, array $args = [])
+    public function call(callable|string $callback, array $args = []): mixed
     {
         $options = $this->getOptions();
         $storage = $this->getStorage();
@@ -55,11 +53,11 @@ class CallbackCache extends AbstractStorageCapablePattern
 
         try {
             $ret = $callback(...$args);
-        } catch (\Exception $e) {
+        } catch (Throwable $throwable) {
             if ($cacheOutput) {
                 ob_end_flush();
             }
-            throw $e;
+            throw $throwable;
         }
 
         if ($cacheOutput) {
@@ -76,13 +74,12 @@ class CallbackCache extends AbstractStorageCapablePattern
     /**
      * function call handler
      *
-     * @param  string $function  Function name to call
+     * @param  callable-string $function  Function name to call
      * @param  array  $args      Function arguments
-     * @return mixed
      * @throws Exception\RuntimeException
-     * @throws \Exception
+     * @throws Throwable
      */
-    public function __call($function, array $args)
+    public function __call(string $function, array $args): mixed
     {
         return $this->call($function, $args);
     }
@@ -93,11 +90,11 @@ class CallbackCache extends AbstractStorageCapablePattern
      *
      * @param  callable   $callback  A valid callback
      * @param  array      $args      Callback arguments
-     * @return string
+     * @return non-empty-string
      * @throws Exception\RuntimeException
      * @throws Exception\InvalidArgumentException
      */
-    public function generateKey($callback, array $args = [])
+    public function generateKey(callable $callback, array $args = []): string
     {
         return $this->generateCallbackKey($callback, $args);
     }
@@ -106,13 +103,13 @@ class CallbackCache extends AbstractStorageCapablePattern
      * Generate a unique key in base of a key representing the callback part
      * and a key representing the arguments part.
      *
-     * @param  callable   $callback  A valid callback
+     * @param  callable|callable-string $callback  A valid callback
      * @param  array      $args      Callback arguments
+     * @return non-empty-string
      * @throws Exception\RuntimeException If callback not serializable.
      * @throws Exception\InvalidArgumentException If invalid callback.
-     * @return string
      */
-    protected function generateCallbackKey($callback, array $args)
+    protected function generateCallbackKey(callable|string $callback, array $args): string
     {
         if (! is_callable($callback, false, $callbackKey)) {
             throw new Exception\InvalidArgumentException('Invalid callback');
@@ -130,22 +127,15 @@ class CallbackCache extends AbstractStorageCapablePattern
             $object = $callback[0];
         }
         if (isset($object)) {
-            ErrorHandler::start();
             try {
                 $serializedObject = serialize($object);
-            } catch (\Exception $e) {
-                ErrorHandler::stop();
-                throw new Exception\RuntimeException("Can't serialize callback: see previous exception", 0, $e);
-            }
-            $error = ErrorHandler::stop();
-
-            if (! $serializedObject) {
+            } catch (Throwable $throwable) {
                 throw new Exception\RuntimeException(
-                    sprintf('Cannot serialize callback%s', $error ? ': ' . $error->getMessage() : ''),
-                    0,
-                    $error
+                    "Can't serialize callback: see previous error",
+                    previous: $throwable,
                 );
             }
+
             $callbackKey .= $serializedObject;
         }
 
@@ -156,28 +146,19 @@ class CallbackCache extends AbstractStorageCapablePattern
      * Generate a unique key of the argument part.
      *
      * @throws Exception\RuntimeException
-     * @return string
      */
-    protected function generateArgumentsKey(array $args)
+    protected function generateArgumentsKey(array $args): string
     {
-        if (! $args) {
+        if ($args === []) {
             return '';
         }
 
-        ErrorHandler::start();
         try {
             $serializedArgs = serialize(array_values($args));
-        } catch (\Exception $e) {
-            ErrorHandler::stop();
-            throw new Exception\RuntimeException("Can't serialize arguments: see previous exception", 0, $e);
-        }
-        $error = ErrorHandler::stop();
-
-        if (! $serializedArgs) {
+        } catch (Throwable $throwable) {
             throw new Exception\RuntimeException(
-                sprintf('Cannot serialize arguments%s', $error ? ': ' . $error->getMessage() : ''),
-                0,
-                $error
+                "Can't serialize arguments: see previous exception",
+                previous: $throwable,
             );
         }
 

@@ -31,10 +31,10 @@ class CaptureCache extends AbstractPattern
     /**
      * Start the cache
      *
-     * @param  string $pageId  Page identifier
+     * @param  string|null $pageId  Page identifier
      * @return void
      */
-    public function start($pageId = null)
+    public function start(string|null $pageId = null)
     {
         if ($pageId === null) {
             $pageId = $this->detectPageId();
@@ -54,11 +54,9 @@ class CaptureCache extends AbstractPattern
     /**
      * Write content to page identity
      *
-     * @param string      $content
-     * @param null|string $pageId
      * @throws Exception\LogicException
      */
-    public function set($content, $pageId = null)
+    public function set(string $content, string|null $pageId = null): void
     {
         $publicDir = $this->getOptions()->getPublicDir();
         if ($publicDir === null) {
@@ -79,12 +77,10 @@ class CaptureCache extends AbstractPattern
     /**
      * Get from cache
      *
-     * @param  null|string $pageId
-     * @return string|null
      * @throws Exception\LogicException
      * @throws Exception\RuntimeException
      */
-    public function get($pageId = null)
+    public function get(string|null $pageId = null): string|null
     {
         $publicDir = $this->getOptions()->getPublicDir();
         if ($publicDir === null) {
@@ -108,16 +104,16 @@ class CaptureCache extends AbstractPattern
             }
             return $content;
         }
+
+        return null;
     }
 
     /**
      * Checks if a cache with given id exists
      *
-     * @param  null|string $pageId
      * @throws Exception\LogicException
-     * @return bool
      */
-    public function has($pageId = null)
+    public function has(string|null $pageId = null): bool
     {
         $publicDir = $this->getOptions()->getPublicDir();
         if ($publicDir === null) {
@@ -138,12 +134,10 @@ class CaptureCache extends AbstractPattern
     /**
      * Remove from cache
      *
-     * @param  null|string $pageId
      * @throws Exception\LogicException
      * @throws Exception\RuntimeException
-     * @return bool
      */
-    public function remove($pageId = null)
+    public function remove(string|null $pageId = null): bool
     {
         $publicDir = $this->getOptions()->getPublicDir();
         if ($publicDir === null) {
@@ -174,10 +168,9 @@ class CaptureCache extends AbstractPattern
     /**
      * Clear cached pages matching glob pattern
      *
-     * @param string $pattern
      * @throws Exception\LogicException
      */
-    public function clearByGlob($pattern = '**')
+    public function clearByGlob(string $pattern = '**'): void
     {
         $publicDir = $this->getOptions()->getPublicDir();
         if ($publicDir === null) {
@@ -199,9 +192,8 @@ class CaptureCache extends AbstractPattern
      * Determine the page to save from the request
      *
      * @throws Exception\RuntimeException
-     * @return string
      */
-    protected function detectPageId()
+    protected function detectPageId(): string
     {
         if (! isset($_SERVER['REQUEST_URI'])) {
             throw new Exception\RuntimeException("Can't auto-detect current page identity");
@@ -212,11 +204,8 @@ class CaptureCache extends AbstractPattern
 
     /**
      * Get filename for page id
-     *
-     * @param string $pageId
-     * @return string
      */
-    protected function pageId2Filename($pageId)
+    protected function pageId2Filename(string $pageId): string
     {
         if (str_ends_with($pageId, '/')) {
             return $this->getOptions()->getIndexFilename();
@@ -227,11 +216,8 @@ class CaptureCache extends AbstractPattern
 
     /**
      * Get path for page id
-     *
-     * @param string $pageId
-     * @return string
      */
-    protected function pageId2Path($pageId)
+    protected function pageId2Path(string $pageId): string
     {
         if (str_ends_with($pageId, '/')) {
             $path = rtrim($pageId, '/');
@@ -252,10 +238,9 @@ class CaptureCache extends AbstractPattern
      *
      * @param  string  $file File complete path
      * @param  string  $data Data to write
-     * @return void
      * @throws Exception\RuntimeException
      */
-    protected function putFileContent($file, $data)
+    protected function putFileContent(string $file, string $data): void
     {
         $options = $this->getOptions();
         $locking = $options->getFileLocking();
@@ -290,11 +275,9 @@ class CaptureCache extends AbstractPattern
     /**
      * Creates directory if not already done.
      *
-     * @param string $pathname
-     * @return void
      * @throws Exception\RuntimeException
      */
-    protected function createDirectoryStructure($pathname)
+    protected function createDirectoryStructure(string $pathname): void
     {
         // Directory structure already exists
         if (file_exists($pathname)) {
@@ -376,11 +359,8 @@ class CaptureCache extends AbstractPattern
 
     /**
      * Returns the generated file name.
-     *
-     * @param null|string $pageId
-     * @return string
      */
-    public function getFilename($pageId = null)
+    public function getFilename(string|null $pageId = null): string
     {
         if ($pageId === null) {
             $pageId = $this->detectPageId();

@@ -17,23 +17,20 @@ interface IteratorInterface extends Iterator
 
     /**
      * Get storage instance
-     *
-     * @return StorageInterface
      */
-    public function getStorage();
+    public function getStorage(): StorageInterface;
 
     /**
      * Get iterator mode
      *
-     * @return int Value of IteratorInterface::CURRENT_AS_*
+     * @return IteratorInterface::CURRENT_AS_*
      */
-    public function getMode();
+    public function getMode(): int;
 
     /**
      * Set iterator mode
      *
-     * @param int $mode Value of IteratorInterface::CURRENT_AS_*
-     * @return IteratorInterface Fluent interface
+     * @param IteratorInterface::CURRENT_AS_* $mode
      */
-    public function setMode($mode);
+    public function setMode(int $mode): self;
 }

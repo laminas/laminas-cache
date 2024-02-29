@@ -11,12 +11,10 @@ interface PluginInterface extends ListenerAggregateInterface
      *
      * @return PluginInterface
      */
-    public function setOptions(PluginOptions $options);
+    public function setOptions(PluginOptions $options): self;
 
     /**
      * Get options
-     *
-     * @return PluginOptions
      */
-    public function getOptions();
+    public function getOptions(): PluginOptions;
 }

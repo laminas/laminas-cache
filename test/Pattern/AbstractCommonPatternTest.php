@@ -14,11 +14,9 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractCommonPatternTest extends TestCase
 {
-    /** @var PatternInterface */
-    protected $pattern;
+    protected PatternInterface $pattern;
 
-    /** @var PatternOptions */
-    protected $options;
+    protected PatternOptions $options;
 
     protected function setUp(): void
     {

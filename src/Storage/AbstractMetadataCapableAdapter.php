@@ -11,13 +11,16 @@ use ArrayObject;
 use Exception;
 use Laminas\Cache\Exception\ExceptionInterface;
 use Laminas\Cache\Storage\Adapter\AbstractAdapter;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Webmozart\Assert\Assert;
 
 use function is_array;
 use function is_object;
 
 /**
+ * @template TOptions of AdapterOptions
  * @template TMetadata of object
+ * @template-extends AbstractAdapter<TOptions>
  * @template-implements MetadataCapableInterface<TMetadata>
  */
 abstract class AbstractMetadataCapableAdapter extends AbstractAdapter implements MetadataCapableInterface
@@ -28,18 +31,18 @@ abstract class AbstractMetadataCapableAdapter extends AbstractAdapter implements
             return null;
         }
 
-        $this->normalizeKey($key);
+        $this->assertValidKey($key);
         $args = new ArrayObject([
-            'key' => &$key,
+            'key' => $key,
         ]);
 
         try {
             $eventRs = $this->triggerPre(__FUNCTION__, $args);
-            Assert::string($args['key']);
-
+            $key     = $args['key'];
+            $this->assertValidKey($key);
             $result = $eventRs->stopped()
                 ? $eventRs->last()
-                : $this->internalGetMetadata($args['key']);
+                : $this->internalGetMetadata($key);
 
             $result = $this->triggerPost(__FUNCTION__, $args, $result);
             if ($result !== null && ! is_object($result)) {
@@ -55,7 +58,7 @@ abstract class AbstractMetadataCapableAdapter extends AbstractAdapter implements
             return $result;
         } catch (Exception $exception) {
             $result = null;
-            $result = $this->triggerException(__FUNCTION__, $args, $result, $exception);
+            $result = $this->triggerThrowable(__FUNCTION__, $args, $result, $exception);
             Assert::nullOrObject($result);
 
             /**
@@ -82,19 +85,18 @@ abstract class AbstractMetadataCapableAdapter extends AbstractAdapter implements
             return [];
         }
 
-        $this->normalizeKeys($keys);
+        $keys = $this->normalizeKeys($keys);
         $args = new ArrayObject([
-            'keys' => &$keys,
+            'keys' => $keys,
         ]);
 
         try {
             $eventRs = $this->triggerPre(__FUNCTION__, $args);
-            Assert::isArray($args['keys']);
-            Assert::allString($args['keys']);
+            $keys    = $this->normalizeKeys($args['keys']);
 
             $result = $eventRs->stopped()
             ? $eventRs->last()
-            : $this->internalGetMetadatas($args['keys']);
+            : $this->internalGetMetadatas($keys);
 
             if (! is_array($result)) {
                 return [];
@@ -113,7 +115,7 @@ abstract class AbstractMetadataCapableAdapter extends AbstractAdapter implements
             return $result;
         } catch (Exception $exception) {
             $result = [];
-            $result = $this->triggerException(__FUNCTION__, $args, $result, $exception);
+            $result = $this->triggerThrowable(__FUNCTION__, $args, $result, $exception);
             Assert::isArray($result);
             Assert::allObject($result);
 

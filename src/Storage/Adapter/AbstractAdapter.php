@@ -3,6 +3,7 @@
 namespace Laminas\Cache\Storage\Adapter;
 
 use ArrayObject;
+use InvalidArgumentException;
 use Laminas\Cache\Exception;
 use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\Event;
@@ -16,67 +17,62 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ResponseCollection;
 use SplObjectStorage;
 use stdClass;
-use Traversable;
+use Throwable;
+use Webmozart\Assert\Assert;
 
 use function array_keys;
 use function array_unique;
 use function array_values;
-use function array_walk;
 use function func_num_args;
+use function is_array;
+use function is_string;
 use function preg_match;
 use function sprintf;
 
+/**
+ * @template TOptions of AdapterOptions
+ */
 abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
 {
     /**
      * The used EventManager if any
-     *
-     * @var null|EventManagerInterface
      */
-    protected $events;
+    protected ?EventManagerInterface $events = null;
 
     /**
      * Event handles of this adapter
-     *
-     * @var array
      */
-    protected $eventHandles = [];
+    protected array $eventHandles = [];
 
     /**
      * The plugin registry
      *
      * @var SplObjectStorage|null Registered plugins
      */
-    protected $pluginRegistry;
+    protected ?SplObjectStorage $pluginRegistry = null;
 
     /**
      * Capabilities of this adapter
-     *
-     * @var null|Capabilities
      */
-    protected $capabilities;
+    protected ?Capabilities $capabilities = null;
 
     /**
      * Marker to change capabilities
-     *
-     * @var null|object
      */
-    protected $capabilityMarker;
+    protected ?object $capabilityMarker = null;
 
     /**
      * options
      *
-     * @var mixed
+     * @var TOptions|null
      */
-    protected $options;
+    protected ?AdapterOptions $options = null;
 
     /**
-     * Constructor
-     *
-     * @param  null|array|Traversable|AdapterOptions $options
+     * @param iterable|TOptions|null $options
      * @throws Exception\ExceptionInterface
      */
-    public function __construct($options = null)
+    public function __construct(iterable|AdapterOptions|null $options = null)
     {
         if ($options !== null) {
             $this->setOptions($options);
@@ -88,8 +84,6 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      *
      * detach all registered plugins to free
      * event handles of event manager
-     *
-     * @return void
      */
     public function __destruct()
     {
@@ -112,10 +106,9 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      *
      * @see    getOptions()
      *
-     * @param  array|Traversable|AdapterOptions $options
-     * @return AbstractAdapter Provides a fluent interface
+     * @param iterable|TOptions $options
      */
-    public function setOptions($options)
+    public function setOptions(iterable|AdapterOptions $options): self
     {
         if ($this->options !== $options) {
             if (! $options instanceof AdapterOptions) {
@@ -132,6 +125,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
 
             $this->getEventManager()->triggerEvent($event);
         }
+
         return $this;
     }
 
@@ -140,13 +134,16 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      *
      * @see setOptions()
      *
-     * @return AdapterOptions
+     * @return TOptions
      */
-    public function getOptions()
+    public function getOptions(): AdapterOptions
     {
-        if (! $this->options) {
+        if ($this->options === null) {
             $this->setOptions(new AdapterOptions());
         }
+
+        Assert::notNull($this->options);
+
         return $this->options;
     }
 
@@ -157,16 +154,13 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      *
      * @see    setWritable()
      * @see    setReadable()
-     *
-     * @param  bool $flag
-     * @return AbstractAdapter Provides a fluent interface
      */
-    public function setCaching($flag)
+    public function setCaching(bool $flag): self
     {
-        $flag    = (bool) $flag;
         $options = $this->getOptions();
         $options->setWritable($flag);
         $options->setReadable($flag);
+
         return $this;
     }
 
@@ -177,12 +171,11 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      *
      * @see    getWritable()
      * @see    getReadable()
-     *
-     * @return bool
      */
-    public function getCaching()
+    public function getCaching(): bool
     {
         $options = $this->getOptions();
+
         return $options->getWritable() && $options->getReadable();
     }
 
@@ -190,36 +183,31 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
 
     /**
      * Get the event manager
-     *
-     * @return EventManagerInterface
      */
-    public function getEventManager()
+    public function getEventManager(): EventManagerInterface
     {
         if ($this->events === null) {
             $this->events = new EventManager();
             $this->events->setIdentifiers([self::class, static::class]);
         }
+
         return $this->events;
     }
 
     /**
      * Trigger a pre event and return the event response collection
      *
-     * @param  string $eventName
      * @return ResponseCollection All handler return values
      */
-    protected function triggerPre($eventName, ArrayObject $args)
+    protected function triggerPre(string $eventName, ArrayObject $args): ResponseCollection
     {
         return $this->getEventManager()->triggerEvent(new Event($eventName . '.pre', $this, $args));
     }
 
     /**
      * Triggers the PostEvent and return the result value.
-     *
-     * @param  string      $eventName
-     * @return mixed
      */
-    protected function triggerPost($eventName, ArrayObject $args, mixed &$result)
+    protected function triggerPost(string $eventName, ArrayObject $args, mixed $result): mixed
     {
         $postEvent = new PostEvent($eventName . '.post', $this, $args, $result);
         $eventRs   = $this->getEventManager()->triggerEvent($postEvent);
@@ -229,23 +217,17 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
             : $postEvent->getResult();
     }
 
-    /**
-     * Trigger an exception event
-     *
-     * If the ExceptionEvent has the flag "throwException" enabled throw the
-     * exception after trigger else return the result.
-     *
-     * @param  string      $eventName
-     * @throws Exception\ExceptionInterface
-     * @return mixed
-     */
-    protected function triggerException($eventName, ArrayObject $args, mixed &$result, \Exception $exception)
-    {
-        $exceptionEvent = new ExceptionEvent($eventName . '.exception', $this, $args, $result, $exception);
+    protected function triggerThrowable(
+        string $eventName,
+        ArrayObject $args,
+        mixed $result,
+        Throwable $throwable
+    ): mixed {
+        $exceptionEvent = new ExceptionEvent($eventName . '.exception', $this, $args, $result, $throwable);
         $eventRs        = $this->getEventManager()->triggerEvent($exceptionEvent);
 
         if ($exceptionEvent->getThrowException()) {
-            throw $exceptionEvent->getException();
+            throw $exceptionEvent->getThrowable();
         }
 
         return $eventRs->stopped()
@@ -256,16 +238,17 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function hasPlugin(Plugin\PluginInterface $plugin)
+    public function hasPlugin(Plugin\PluginInterface $plugin): bool
     {
         $registry = $this->getPluginRegistry();
+
         return $registry->contains($plugin);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addPlugin(Plugin\PluginInterface $plugin, $priority = 1)
+    public function addPlugin(Plugin\PluginInterface $plugin, int $priority = 1): StorageInterface&PluginAwareInterface
     {
         $registry = $this->getPluginRegistry();
         if ($registry->contains($plugin)) {
@@ -284,24 +267,26 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function removePlugin(Plugin\PluginInterface $plugin)
+    public function removePlugin(Plugin\PluginInterface $plugin): self
     {
         $registry = $this->getPluginRegistry();
         if ($registry->contains($plugin)) {
             $plugin->detach($this->getEventManager());
             $registry->detach($plugin);
         }
+
         return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getPluginRegistry()
+    public function getPluginRegistry(): SplObjectStorage
     {
         if (! $this->pluginRegistry instanceof SplObjectStorage) {
             $this->pluginRegistry = new SplObjectStorage();
         }
+
         return $this->pluginRegistry;
     }
 
@@ -310,109 +295,132 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Get an item.
      *
-     * @param  string  $key
-     * @param  bool $success
-     * @param  mixed   $casToken
+     * @param-out bool $success
      * @return mixed Data on success, null on failure
      * @throws Exception\ExceptionInterface
      * @triggers getItem.pre(PreEvent)
      * @triggers getItem.post(PostEvent)
      * @triggers getItem.exception(ExceptionEvent)
      */
-    public function getItem($key, &$success = null, &$casToken = null)
+    public function getItem(string $key, ?bool &$success = null, mixed &$casToken = null): mixed
     {
         if (! $this->getOptions()->getReadable()) {
             $success = false;
-            return;
+
+            return null;
         }
 
-        $this->normalizeKey($key);
+        $this->assertValidKey($key);
 
         $argn = func_num_args();
         $args = [
-            'key' => &$key,
+            'key' => $key,
         ];
         if ($argn > 1) {
-            $args['success'] = &$success;
+            $args['success'] = $success;
         }
         if ($argn > 2) {
-            $args['casToken'] = &$casToken;
+            $args['casToken'] = $casToken;
         }
         $args = new ArrayObject($args);
 
         try {
             $eventRs = $this->triggerPre(__FUNCTION__, $args);
+            $key     = $args['key'];
+            $this->assertValidKey($key);
 
             if ($eventRs->stopped()) {
                 $result = $eventRs->last();
             } elseif ($args->offsetExists('success') && $args->offsetExists('casToken')) {
-                $result = $this->internalGetItem($args['key'], $args['success'], $args['casToken']);
+                $success = $args['success'];
+                Assert::nullOrBoolean($success);
+                $casToken = $args['casToken'];
+                $result   = $this->internalGetItem($key, $success, $casToken);
             } elseif ($args->offsetExists('success')) {
-                $result = $this->internalGetItem($args['key'], $args['success']);
+                $success = $args['success'];
+                Assert::nullOrBoolean($success);
+                $result = $this->internalGetItem($key, $success);
             } else {
-                $result = $this->internalGetItem($args['key']);
+                $result = $this->internalGetItem($key);
             }
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
             $result  = null;
             $success = false;
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+
+            $result = $this->triggerThrowable(__FUNCTION__, $args, null, $throwable);
         }
+
+        return $result;
     }
 
     /**
      * Internal method to get an item.
      *
-     * @param  string  $normalizedKey
-     * @param  bool $success
+     * @param non-empty-string $normalizedKey
+     * @param-out bool         $success
      * @return mixed Data on success, null on failure
      * @throws Exception\ExceptionInterface
      */
-    abstract protected function internalGetItem(&$normalizedKey, &$success = null, mixed &$casToken = null);
+    abstract protected function internalGetItem(
+        string $normalizedKey,
+        ?bool &$success = null,
+        mixed &$casToken = null
+    ): mixed;
 
     /**
      * Get multiple items.
      *
-     * @param  array $keys
-     * @return array Associative array of keys and values
+     * @param non-empty-list<non-empty-string> $keys
+     * @return array<non-empty-string,mixed> Associative array of keys and values
      * @throws Exception\ExceptionInterface
      * @triggers getItems.pre(PreEvent)
      * @triggers getItems.post(PostEvent)
      * @triggers getItems.exception(ExceptionEvent)
      */
-    public function getItems(array $keys)
+    public function getItems(array $keys): array
     {
         if (! $this->getOptions()->getReadable()) {
             return [];
         }
 
-        $this->normalizeKeys($keys);
+        $keys = $this->normalizeKeys($keys);
         $args = new ArrayObject([
-            'keys' => &$keys,
+            'keys' => $keys,
         ]);
 
         try {
             $eventRs = $this->triggerPre(__FUNCTION__, $args);
 
+            $keys = $args['keys'];
+            $keys = $this->normalizeKeys($keys);
+
             $result = $eventRs->stopped()
                 ? $eventRs->last()
-                : $this->internalGetItems($args['keys']);
+                : $this->internalGetItems($keys);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = [];
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, [], $throwable);
         }
+
+        Assert::isMap($result);
+        Assert::allStringNotEmpty(array_keys($result));
+
+        // phpcs:disable SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable
+        /** @var array<non-empty-string,mixed> $result */
+        return $result;
     }
 
     /**
      * Internal method to get multiple items.
      *
-     * @return array Associative array of keys and values
+     * @param non-empty-list<non-empty-string> $normalizedKeys
+     * @return array<non-empty-string,mixed> Associative array of keys and values
      * @throws Exception\ExceptionInterface
      */
-    protected function internalGetItems(array &$normalizedKeys)
+    protected function internalGetItems(array $normalizedKeys): array
     {
         $success = null;
         $result  = [];
@@ -429,22 +437,20 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Test if an item exists.
      *
-     * @param  string $key
-     * @return bool
      * @throws Exception\ExceptionInterface
      * @triggers hasItem.pre(PreEvent)
      * @triggers hasItem.post(PostEvent)
      * @triggers hasItem.exception(ExceptionEvent)
      */
-    public function hasItem($key)
+    public function hasItem(string $key): bool
     {
         if (! $this->getOptions()->getReadable()) {
             return false;
         }
 
-        $this->normalizeKey($key);
+        $this->assertValidKey($key);
         $args = new ArrayObject([
-            'key' => &$key,
+            'key' => $key,
         ]);
 
         try {
@@ -454,69 +460,76 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 ? $eventRs->last()
                 : $this->internalHasItem($args['key']);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = false;
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, false, $throwable);
         }
+
+        Assert::boolean($result);
+        return $result;
     }
 
     /**
      * Internal method to test if an item exists.
      *
-     * @param  string $normalizedKey
-     * @return bool
+     * @param non-empty-string $normalizedKey
      * @throws Exception\ExceptionInterface
      */
-    protected function internalHasItem(&$normalizedKey)
+    protected function internalHasItem(string $normalizedKey): bool
     {
         $success = null;
         $this->internalGetItem($normalizedKey, $success);
+
         return $success;
     }
 
     /**
      * Test multiple items.
      *
-     * @param  array $keys
-     * @return array Array of found keys
+     * @param non-empty-list<non-empty-string> $keys
+     * @return list<non-empty-string> Array of found keys
      * @throws Exception\ExceptionInterface
      * @triggers hasItems.pre(PreEvent)
      * @triggers hasItems.post(PostEvent)
      * @triggers hasItems.exception(ExceptionEvent)
      */
-    public function hasItems(array $keys)
+    public function hasItems(array $keys): array
     {
         if (! $this->getOptions()->getReadable()) {
             return [];
         }
 
-        $this->normalizeKeys($keys);
+        $keys = $this->normalizeKeys($keys);
         $args = new ArrayObject([
-            'keys' => &$keys,
+            'keys' => $keys,
         ]);
 
         try {
             $eventRs = $this->triggerPre(__FUNCTION__, $args);
-
-            $result = $eventRs->stopped()
+            $keys    = $this->normalizeKeys($args['keys']);
+            $result  = $eventRs->stopped()
                 ? $eventRs->last()
-                : $this->internalHasItems($args['keys']);
+                : $this->internalHasItems($keys);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = [];
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, [], $throwable);
         }
+
+        Assert::isList($result);
+        Assert::allStringNotEmpty($result);
+
+        return $result;
     }
 
     /**
      * Internal method to test multiple items.
      *
-     * @return array Array of found keys
+     * @param non-empty-list<non-empty-string> $normalizedKeys
+     * @return list<non-empty-string> Array of found keys
      * @throws Exception\ExceptionInterface
      */
-    protected function internalHasItems(array &$normalizedKeys)
+    protected function internalHasItems(array $normalizedKeys): array
     {
         $result = [];
         foreach ($normalizedKeys as $normalizedKey) {
@@ -524,6 +537,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 $result[] = $normalizedKey;
             }
         }
+
         return $result;
     }
 
@@ -532,24 +546,21 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Store an item.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     * @return bool
      * @throws Exception\ExceptionInterface
      * @triggers setItem.pre(PreEvent)
      * @triggers setItem.post(PostEvent)
      * @triggers setItem.exception(ExceptionEvent)
      */
-    public function setItem($key, $value)
+    public function setItem(string $key, mixed $value): bool
     {
         if (! $this->getOptions()->getWritable()) {
             return false;
         }
 
-        $this->normalizeKey($key);
+        $this->assertValidKey($key);
         $args = new ArrayObject([
-            'key'   => &$key,
-            'value' => &$value,
+            'key'   => $key,
+            'value' => $value,
         ]);
 
         try {
@@ -559,64 +570,71 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 ? $eventRs->last()
                 : $this->internalSetItem($args['key'], $args['value']);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = false;
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, false, $throwable);
         }
+
+        Assert::boolean($result);
+        return $result;
     }
 
     /**
      * Internal method to store an item.
      *
-     * @param  string $normalizedKey
-     * @return bool
+     * @param non-empty-string $normalizedKey
      * @throws Exception\ExceptionInterface
      */
-    abstract protected function internalSetItem(&$normalizedKey, mixed &$value);
+    abstract protected function internalSetItem(string $normalizedKey, mixed $value): bool;
 
     /**
      * Store multiple items.
      *
-     * @param  array $keyValuePairs
-     * @return array Array of not stored keys
+     * @param array<non-empty-string,mixed> $keyValuePairs
+     * @return list<non-empty-string> Array of not stored keys
      * @throws Exception\ExceptionInterface
      * @triggers setItems.pre(PreEvent)
      * @triggers setItems.post(PostEvent)
      * @triggers setItems.exception(ExceptionEvent)
      */
-    public function setItems(array $keyValuePairs)
+    public function setItems(array $keyValuePairs): array
     {
         if (! $this->getOptions()->getWritable()) {
             return array_keys($keyValuePairs);
         }
 
-        $this->normalizeKeyValuePairs($keyValuePairs);
+        $this->assertValidKeyValuePairs($keyValuePairs);
         $args = new ArrayObject([
-            'keyValuePairs' => &$keyValuePairs,
+            'keyValuePairs' => $keyValuePairs,
         ]);
 
         try {
-            $eventRs = $this->triggerPre(__FUNCTION__, $args);
+            $eventRs       = $this->triggerPre(__FUNCTION__, $args);
+            $keyValuePairs = $args['keyValuePairs'];
+            $this->assertValidKeyValuePairs($keyValuePairs);
 
             $result = $eventRs->stopped()
                 ? $eventRs->last()
                 : $this->internalSetItems($args['keyValuePairs']);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = array_keys($keyValuePairs);
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, array_keys($keyValuePairs), $throwable);
         }
+
+        Assert::isList($result);
+        Assert::allStringNotEmpty($result);
+        return $result;
     }
 
     /**
      * Internal method to store multiple items.
      *
-     * @return array Array of not stored keys
+     * @param non-empty-array<non-empty-string,mixed> $normalizedKeyValuePairs
+     * @return list<non-empty-string> Array of not stored keys
      * @throws Exception\ExceptionInterface
      */
-    protected function internalSetItems(array &$normalizedKeyValuePairs)
+    protected function internalSetItems(array $normalizedKeyValuePairs): array
     {
         $failedKeys = [];
         foreach ($normalizedKeyValuePairs as $normalizedKey => $value) {
@@ -624,103 +642,112 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 $failedKeys[] = $normalizedKey;
             }
         }
+
         return $failedKeys;
     }
 
     /**
      * Add an item.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     * @return bool
      * @throws Exception\ExceptionInterface
      * @triggers addItem.pre(PreEvent)
      * @triggers addItem.post(PostEvent)
      * @triggers addItem.exception(ExceptionEvent)
      */
-    public function addItem($key, $value)
+    public function addItem(string $key, mixed $value): bool
     {
         if (! $this->getOptions()->getWritable()) {
             return false;
         }
 
-        $this->normalizeKey($key);
+        $this->assertValidKey($key);
         $args = new ArrayObject([
-            'key'   => &$key,
-            'value' => &$value,
+            'key'   => $key,
+            'value' => $value,
         ]);
 
         try {
             $eventRs = $this->triggerPre(__FUNCTION__, $args);
 
+            $key = $args['key'];
+            $this->assertValidKey($key);
+
             $result = $eventRs->stopped()
                 ? $eventRs->last()
-                : $this->internalAddItem($args['key'], $args['value']);
+                : $this->internalAddItem($key, $args['value']);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = false;
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, false, $throwable);
         }
+
+        Assert::boolean($result);
+        return $result;
     }
 
     /**
      * Internal method to add an item.
      *
-     * @param  string $normalizedKey
-     * @return bool
+     * @param non-empty-string $normalizedKey
      * @throws Exception\ExceptionInterface
      */
-    protected function internalAddItem(&$normalizedKey, mixed &$value)
+    protected function internalAddItem(string $normalizedKey, mixed $value): bool
     {
         if ($this->internalHasItem($normalizedKey)) {
             return false;
         }
+
         return $this->internalSetItem($normalizedKey, $value);
     }
 
     /**
      * Add multiple items.
      *
-     * @param  array $keyValuePairs
-     * @return array Array of not stored keys
+     * @param array<non-empty-string,mixed> $keyValuePairs
+     * @return list<non-empty-string> Array of not stored keys
      * @throws Exception\ExceptionInterface
      * @triggers addItems.pre(PreEvent)
      * @triggers addItems.post(PostEvent)
      * @triggers addItems.exception(ExceptionEvent)
      */
-    public function addItems(array $keyValuePairs)
+    public function addItems(array $keyValuePairs): array
     {
         if (! $this->getOptions()->getWritable()) {
             return array_keys($keyValuePairs);
         }
 
-        $this->normalizeKeyValuePairs($keyValuePairs);
+        $this->assertValidKeyValuePairs($keyValuePairs);
         $args = new ArrayObject([
-            'keyValuePairs' => &$keyValuePairs,
+            'keyValuePairs' => $keyValuePairs,
         ]);
 
         try {
-            $eventRs = $this->triggerPre(__FUNCTION__, $args);
+            $eventRs       = $this->triggerPre(__FUNCTION__, $args);
+            $keyValuePairs = $args['keyValuePairs'];
+            $this->assertValidKeyValuePairs($keyValuePairs);
 
             $result = $eventRs->stopped()
                 ? $eventRs->last()
-                : $this->internalAddItems($args['keyValuePairs']);
+                : $this->internalAddItems($keyValuePairs);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = array_keys($keyValuePairs);
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, array_keys($keyValuePairs), $throwable);
         }
+
+        Assert::isList($result);
+        Assert::allStringNotEmpty($result);
+        return $result;
     }
 
     /**
      * Internal method to add multiple items.
      *
-     * @return array Array of not stored keys
+     * @param non-empty-array<non-empty-string,mixed> $normalizedKeyValuePairs
+     * @return list<non-empty-string> Array of not stored keys
      * @throws Exception\ExceptionInterface
      */
-    protected function internalAddItems(array &$normalizedKeyValuePairs)
+    protected function internalAddItems(array $normalizedKeyValuePairs): array
     {
         $result = [];
         foreach ($normalizedKeyValuePairs as $normalizedKey => $value) {
@@ -728,54 +755,56 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 $result[] = $normalizedKey;
             }
         }
+
         return $result;
     }
 
     /**
      * Replace an existing item.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     * @return bool
      * @throws Exception\ExceptionInterface
      * @triggers replaceItem.pre(PreEvent)
      * @triggers replaceItem.post(PostEvent)
      * @triggers replaceItem.exception(ExceptionEvent)
      */
-    public function replaceItem($key, $value)
+    public function replaceItem(string $key, mixed $value): bool
     {
         if (! $this->getOptions()->getWritable()) {
             return false;
         }
 
-        $this->normalizeKey($key);
+        $this->assertValidKey($key);
         $args = new ArrayObject([
-            'key'   => &$key,
-            'value' => &$value,
+            'key'   => $key,
+            'value' => $value,
         ]);
 
         try {
             $eventRs = $this->triggerPre(__FUNCTION__, $args);
 
+            $key = $args['key'];
+            $this->assertValidKey($key);
+
             $result = $eventRs->stopped()
                 ? $eventRs->last()
-                : $this->internalReplaceItem($args['key'], $args['value']);
+                : $this->internalReplaceItem($key, $args['value']);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = false;
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, false, $throwable);
         }
+
+        Assert::boolean($result);
+        return $result;
     }
 
     /**
      * Internal method to replace an existing item.
      *
-     * @param  string $normalizedKey
-     * @return bool
+     * @param non-empty-string $normalizedKey
      * @throws Exception\ExceptionInterface
      */
-    protected function internalReplaceItem(&$normalizedKey, mixed &$value)
+    protected function internalReplaceItem(string $normalizedKey, mixed $value): bool
     {
         if (! $this->internalhasItem($normalizedKey)) {
             return false;
@@ -787,22 +816,22 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Replace multiple existing items.
      *
-     * @param  array $keyValuePairs
-     * @return array Array of not stored keys
+     * @param array<non-empty-string,mixed> $keyValuePairs
+     * @return list<non-empty-string> Array of not stored keys
      * @throws Exception\ExceptionInterface
      * @triggers replaceItems.pre(PreEvent)
      * @triggers replaceItems.post(PostEvent)
      * @triggers replaceItems.exception(ExceptionEvent)
      */
-    public function replaceItems(array $keyValuePairs)
+    public function replaceItems(array $keyValuePairs): array
     {
         if (! $this->getOptions()->getWritable()) {
             return array_keys($keyValuePairs);
         }
 
-        $this->normalizeKeyValuePairs($keyValuePairs);
+        $this->assertValidKeyValuePairs($keyValuePairs);
         $args = new ArrayObject([
-            'keyValuePairs' => &$keyValuePairs,
+            'keyValuePairs' => $keyValuePairs,
         ]);
 
         try {
@@ -812,20 +841,24 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 ? $eventRs->last()
                 : $this->internalReplaceItems($args['keyValuePairs']);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = array_keys($keyValuePairs);
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, array_keys($keyValuePairs), $throwable);
         }
+
+        Assert::isList($result);
+        Assert::allStringNotEmpty($result);
+        return $result;
     }
 
     /**
      * Internal method to replace multiple existing items.
      *
-     * @return array Array of not stored keys
+     * @param non-empty-array<non-empty-string,mixed> $normalizedKeyValuePairs
+     * @return list<non-empty-string> Array of not stored keys
      * @throws Exception\ExceptionInterface
      */
-    protected function internalReplaceItems(array &$normalizedKeyValuePairs)
+    protected function internalReplaceItems(array $normalizedKeyValuePairs): array
     {
         $result = [];
         foreach ($normalizedKeyValuePairs as $normalizedKey => $value) {
@@ -833,6 +866,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 $result[] = $normalizedKey;
             }
         }
+
         return $result;
     }
 
@@ -842,40 +876,38 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      * It uses the token received from getItem() to check if the item has
      * changed before overwriting it.
      *
-     * @see    getItem()
      * @see    setItem()
+     * @see    getItem()
      *
-     * @param  mixed  $token
-     * @param  string $key
-     * @param  mixed  $value
-     * @return bool
      * @throws Exception\ExceptionInterface
      */
-    public function checkAndSetItem($token, $key, $value)
+    public function checkAndSetItem(mixed $token, string $key, mixed $value): bool
     {
         if (! $this->getOptions()->getWritable()) {
             return false;
         }
 
-        $this->normalizeKey($key);
+        $this->assertValidKey($key);
         $args = new ArrayObject([
-            'token' => &$token,
-            'key'   => &$key,
-            'value' => &$value,
+            'token' => $token,
+            'key'   => $key,
+            'value' => $value,
         ]);
 
         try {
             $eventRs = $this->triggerPre(__FUNCTION__, $args);
-
+            $key     = $args['key'];
+            $this->assertValidKey($key);
             $result = $eventRs->stopped()
                 ? $eventRs->last()
-                : $this->internalCheckAndSetItem($args['token'], $args['key'], $args['value']);
+                : $this->internalCheckAndSetItem($args['token'], $key, $args['value']);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = false;
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, false, $throwable);
         }
+        Assert::boolean($result);
+        return $result;
     }
 
     /**
@@ -884,11 +916,10 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      * @see    getItem()
      * @see    setItem()
      *
-     * @param  string $normalizedKey
-     * @return bool
+     * @param non-empty-string $normalizedKey
      * @throws Exception\ExceptionInterface
      */
-    protected function internalCheckAndSetItem(mixed &$token, &$normalizedKey, mixed &$value)
+    protected function internalCheckAndSetItem(mixed $token, string $normalizedKey, mixed $value): bool
     {
         $oldValue = $this->internalGetItem($normalizedKey);
         if ($oldValue !== $token) {
@@ -901,22 +932,20 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Reset lifetime of an item
      *
-     * @param  string $key
-     * @return bool
      * @throws Exception\ExceptionInterface
      * @triggers touchItem.pre(PreEvent)
      * @triggers touchItem.post(PostEvent)
      * @triggers touchItem.exception(ExceptionEvent)
      */
-    public function touchItem($key)
+    public function touchItem(string $key): bool
     {
         if (! $this->getOptions()->getWritable()) {
             return false;
         }
 
-        $this->normalizeKey($key);
+        $this->assertValidKey($key);
         $args = new ArrayObject([
-            'key' => &$key,
+            'key' => $key,
         ]);
 
         try {
@@ -926,21 +955,22 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 ? $eventRs->last()
                 : $this->internalTouchItem($args['key']);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = false;
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, false, $throwable);
         }
+
+        Assert::boolean($result);
+        return $result;
     }
 
     /**
      * Internal method to reset lifetime of an item
      *
-     * @param  string $normalizedKey
-     * @return bool
+     * @param non-empty-string $normalizedKey
      * @throws Exception\ExceptionInterface
      */
-    protected function internalTouchItem(&$normalizedKey)
+    protected function internalTouchItem(string $normalizedKey): bool
     {
         $success = null;
         $value   = $this->internalGetItem($normalizedKey, $success);
@@ -954,22 +984,22 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Reset lifetime of multiple items.
      *
-     * @param  array $keys
-     * @return array Array of not updated keys
+     * @param non-empty-list<non-empty-string> $keys
+     * @return list<non-empty-string> Array of not updated keys
      * @throws Exception\ExceptionInterface
      * @triggers touchItems.pre(PreEvent)
      * @triggers touchItems.post(PostEvent)
      * @triggers touchItems.exception(ExceptionEvent)
      */
-    public function touchItems(array $keys)
+    public function touchItems(array $keys): array
     {
         if (! $this->getOptions()->getWritable()) {
             return $keys;
         }
 
-        $this->normalizeKeys($keys);
+        $keys = $this->normalizeKeys($keys);
         $args = new ArrayObject([
-            'keys' => &$keys,
+            'keys' => $keys,
         ]);
 
         try {
@@ -979,19 +1009,26 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 ? $eventRs->last()
                 : $this->internalTouchItems($args['keys']);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            return $this->triggerException(__FUNCTION__, $args, $keys, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+            Assert::isList($result);
+            Assert::allStringNotEmpty($result);
+            return $result;
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, $keys, $throwable);
+            Assert::isList($result);
+            Assert::allStringNotEmpty($result);
+            return $result;
         }
     }
 
     /**
      * Internal method to reset lifetime of multiple items.
      *
-     * @return array Array of not updated keys
+     * @param non-empty-list<non-empty-string> $normalizedKeys
+     * @return list<non-empty-string> Array of not updated keys
      * @throws Exception\ExceptionInterface
      */
-    protected function internalTouchItems(array &$normalizedKeys)
+    protected function internalTouchItems(array $normalizedKeys): array
     {
         $result = [];
         foreach ($normalizedKeys as $normalizedKey) {
@@ -999,94 +1036,106 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 $result[] = $normalizedKey;
             }
         }
+
         return $result;
     }
 
     /**
      * Remove an item.
      *
-     * @param  string $key
-     * @return bool
      * @throws Exception\ExceptionInterface
      * @triggers removeItem.pre(PreEvent)
      * @triggers removeItem.post(PostEvent)
      * @triggers removeItem.exception(ExceptionEvent)
      */
-    public function removeItem($key)
+    public function removeItem(string $key): bool
     {
         if (! $this->getOptions()->getWritable()) {
             return false;
         }
 
-        $this->normalizeKey($key);
+        $this->assertValidKey($key);
         $args = new ArrayObject([
-            'key' => &$key,
+            'key' => $key,
         ]);
 
         try {
             $eventRs = $this->triggerPre(__FUNCTION__, $args);
+            $key     = $args['key'];
+            $this->assertValidKey($key);
 
             $result = $eventRs->stopped()
                 ? $eventRs->last()
-                : $this->internalRemoveItem($args['key']);
+                : $this->internalRemoveItem($key);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = false;
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+            Assert::boolean($result);
+            return $result;
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, false, $throwable);
+            Assert::boolean($result);
+            return $result;
         }
     }
 
     /**
      * Internal method to remove an item.
      *
-     * @param  string $normalizedKey
-     * @return bool
+     * @param non-empty-string $normalizedKey
      * @throws Exception\ExceptionInterface
      */
-    abstract protected function internalRemoveItem(&$normalizedKey);
+    abstract protected function internalRemoveItem(string $normalizedKey): bool;
 
     /**
      * Remove multiple items.
      *
-     * @param  array $keys
-     * @return array Array of not removed keys
+     * @param non-empty-list<non-empty-string> $keys
+     * @return list<non-empty-string> Array of not removed keys
      * @throws Exception\ExceptionInterface
      * @triggers removeItems.pre(PreEvent)
      * @triggers removeItems.post(PostEvent)
      * @triggers removeItems.exception(ExceptionEvent)
      */
-    public function removeItems(array $keys)
+    public function removeItems(array $keys): array
     {
         if (! $this->getOptions()->getWritable()) {
             return $keys;
         }
 
-        $this->normalizeKeys($keys);
+        $keys = $this->normalizeKeys($keys);
         $args = new ArrayObject([
-            'keys' => &$keys,
+            'keys' => $keys,
         ]);
 
         try {
             $eventRs = $this->triggerPre(__FUNCTION__, $args);
+            $keys    = $args['keys'];
+            $this->normalizeKeys($keys);
 
             $result = $eventRs->stopped()
                 ? $eventRs->last()
-                : $this->internalRemoveItems($args['keys']);
+                : $this->internalRemoveItems($keys);
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            return $this->triggerException(__FUNCTION__, $args, $keys, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+            Assert::isList($result);
+            Assert::allStringNotEmpty($result);
+            return $result;
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, $keys, $throwable);
+            Assert::isList($result);
+            Assert::allStringNotEmpty($result);
+            return $result;
         }
     }
 
     /**
      * Internal method to remove multiple items.
      *
-     * @return array Array of not removed keys
+     * @param non-empty-list<non-empty-string> $normalizedKeys
+     * @return list<non-empty-string> Array of not removed keys
      * @throws Exception\ExceptionInterface
      */
-    protected function internalRemoveItems(array &$normalizedKeys)
+    protected function internalRemoveItems(array $normalizedKeys): array
     {
         $result = [];
         foreach ($normalizedKeys as $normalizedKey) {
@@ -1094,6 +1143,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 $result[] = $normalizedKey;
             }
         }
+
         return $result;
     }
 
@@ -1102,12 +1152,11 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Get capabilities of this adapter
      *
-     * @return Capabilities
      * @triggers getCapabilities.pre(PreEvent)
      * @triggers getCapabilities.post(PostEvent)
      * @triggers getCapabilities.exception(ExceptionEvent)
      */
-    public function getCapabilities()
+    public function getCapabilities(): Capabilities
     {
         $args = new ArrayObject();
 
@@ -1118,24 +1167,27 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
                 ? $eventRs->last()
                 : $this->internalGetCapabilities();
 
-            return $this->triggerPost(__FUNCTION__, $args, $result);
-        } catch (\Exception $e) {
-            $result = false;
-            return $this->triggerException(__FUNCTION__, $args, $result, $e);
+            $result = $this->triggerPost(__FUNCTION__, $args, $result);
+            Assert::isInstanceOf($result, Capabilities::class);
+            return $result;
+        } catch (Throwable $throwable) {
+            $result = $this->triggerThrowable(__FUNCTION__, $args, new Capabilities($this, new stdClass()), $throwable);
+            Assert::isInstanceOf($result, Capabilities::class);
+
+            return $result;
         }
     }
 
     /**
      * Internal method to get capabilities of this adapter
-     *
-     * @return Capabilities
      */
-    protected function internalGetCapabilities()
+    protected function internalGetCapabilities(): Capabilities
     {
         if ($this->capabilities === null) {
             $this->capabilityMarker = new stdClass();
             $this->capabilities     = new Capabilities($this, $this->capabilityMarker);
         }
+
         return $this->capabilities;
     }
 
@@ -1144,56 +1196,92 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Validates and normalizes a key
      *
-     * @param  string $key
-     * @return void
+     * @deprecated Use {@see AbstractAdapter::assertValidKey()} instead.
+     *
      * @throws Exception\InvalidArgumentException On an invalid key.
+     * @psalm-assert non-empty-string $key
      */
-    protected function normalizeKey(&$key)
+    protected function normalizeKey(string $key): void
     {
-        $key = (string) $key;
-
-        if ($key === '') {
-            throw new Exception\InvalidArgumentException(
-                "An empty key isn't allowed"
-            );
-        } elseif (($p = $this->getOptions()->getKeyPattern()) && ! preg_match($p, $key)) {
-            throw new Exception\InvalidArgumentException(
-                "The key '{$key}' doesn't match against pattern '{$p}'"
-            );
-        }
+        $this->assertValidKey($key);
     }
 
     /**
      * Validates and normalizes multiple keys
      *
-     * @return void
+     * @param non-empty-list<non-empty-string> $keys
+     * @return non-empty-list<non-empty-string> $keys
      * @throws Exception\InvalidArgumentException On an invalid key.
      */
-    protected function normalizeKeys(array &$keys)
+    protected function normalizeKeys(array $keys): array
     {
-        if (! $keys) {
-            throw new Exception\InvalidArgumentException(
-                "An empty list of keys isn't allowed"
-            );
+        foreach ($keys as $key) {
+            $this->assertValidKey($key);
         }
 
-        array_walk($keys, [$this, 'normalizeKey']);
-        $keys = array_values(array_unique($keys));
+        return array_values(array_unique($keys));
     }
 
     /**
      * Validates and normalizes an array of key-value pairs
      *
-     * @return void
+     * @deprecated Please use {@see AbstractAdapter::assertValidKeyValuePairs()} instead.
+     *
+     * @param array<string,mixed>                  $keyValuePairs
+     * @psalm-assert array<non-empty-string,mixed> $keyValuePairs
      * @throws Exception\InvalidArgumentException On an invalid key.
      */
-    protected function normalizeKeyValuePairs(array &$keyValuePairs)
+    protected function normalizeKeyValuePairs(array $keyValuePairs): void
     {
-        $normalizedKeyValuePairs = [];
-        foreach ($keyValuePairs as $key => $value) {
-            $this->normalizeKey($key);
-            $normalizedKeyValuePairs[$key] = $value;
+        $this->assertValidKeyValuePairs($keyValuePairs);
+    }
+
+    /**
+     * @psalm-assert non-empty-string $key
+     */
+    protected function assertValidKey(mixed $key): void
+    {
+        if (! is_string($key)) {
+            throw new Exception\InvalidArgumentException(
+                "Key has to be string"
+            );
         }
-        $keyValuePairs = $normalizedKeyValuePairs;
+
+        if ($key === '') {
+            throw new Exception\InvalidArgumentException(
+                "An empty key isn't allowed"
+            );
+        }
+
+        $pattern = $this->getOptions()->getKeyPattern();
+        if ($pattern !== '' && ! preg_match($pattern, $key)) {
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    "The key '%s' doesn't match against pattern '%s'",
+                    $key,
+                    $pattern,
+                ),
+            );
+        }
+    }
+
+    /**
+     * @psalm-assert non-empty-array<non-empty-string,mixed> $keyValuePairs
+     */
+    protected function assertValidKeyValuePairs(mixed $keyValuePairs): void
+    {
+        if (! is_array($keyValuePairs)) {
+            throw new Exception\InvalidArgumentException(
+                "Key/Value pairs have to be an array"
+            );
+        }
+
+        if ($keyValuePairs === []) {
+            throw new InvalidArgumentException('Key/Value pairs must not be empty.');
+        }
+
+        foreach (array_keys($keyValuePairs) as $key) {
+            $this->assertValidKey($key);
+        }
     }
 }
