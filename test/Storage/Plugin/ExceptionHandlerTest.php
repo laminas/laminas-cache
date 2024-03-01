@@ -65,10 +65,6 @@ final class ExceptionHandlerTest extends AbstractCommonPluginTest
             'removeItem.exception'      => 'onException',
             'removeItems.exception'     => 'onException',
             'checkAndSetItem.exception' => 'onException',
-            'incrementItem.exception'   => 'onException',
-            'incrementItems.exception'  => 'onException',
-            'decrementItem.exception'   => 'onException',
-            'decrementItems.exception'  => 'onException',
             'clearExpired.exception'    => 'onException',
         ];
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {

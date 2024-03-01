@@ -64,18 +64,6 @@ final class IgnoreUserAbortTest extends AbstractCommonPluginTest
             'checkAndSetItem.pre'       => 'onBefore',
             'checkAndSetItem.post'      => 'onAfter',
             'checkAndSetItem.exception' => 'onAfter',
-            'incrementItem.pre'         => 'onBefore',
-            'incrementItem.post'        => 'onAfter',
-            'incrementItem.exception'   => 'onAfter',
-            'incrementItems.pre'        => 'onBefore',
-            'incrementItems.post'       => 'onAfter',
-            'incrementItems.exception'  => 'onAfter',
-            'decrementItem.pre'         => 'onBefore',
-            'decrementItem.post'        => 'onAfter',
-            'decrementItem.exception'   => 'onAfter',
-            'decrementItems.pre'        => 'onBefore',
-            'decrementItems.post'       => 'onAfter',
-            'decrementItems.exception'  => 'onAfter',
         ];
         foreach ($expectedListeners as $eventName => $expectedCallbackMethod) {
             $listeners = $this->getArrayOfListenersForEvent($eventName, $this->adapter->getEventManager());

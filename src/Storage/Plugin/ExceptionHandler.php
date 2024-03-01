@@ -44,13 +44,6 @@ class ExceptionHandler extends AbstractPlugin
 
         $this->listeners[] = $events->attach('checkAndSetItem.exception', $callback, $priority);
 
-        // increment / decrement item(s)
-        $this->listeners[] = $events->attach('incrementItem.exception', $callback, $priority);
-        $this->listeners[] = $events->attach('incrementItems.exception', $callback, $priority);
-
-        $this->listeners[] = $events->attach('decrementItem.exception', $callback, $priority);
-        $this->listeners[] = $events->attach('decrementItems.exception', $callback, $priority);
-
         // utility
         $this->listeners[] = $events->attach('clearExpired.exception', $callback, $priority);
     }

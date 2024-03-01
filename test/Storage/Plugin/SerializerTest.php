@@ -58,10 +58,6 @@ final class SerializerTest extends AbstractCommonPluginTest
             'replaceItem.pre'      => 'onWriteItemPre',
             'replaceItems.pre'     => 'onWriteItemsPre',
             'checkAndSetItem.pre'  => 'onWriteItemPre',
-            'incrementItem.pre'    => 'onIncrementItemPre',
-            'incrementItems.pre'   => 'onIncrementItemsPre',
-            'decrementItem.pre'    => 'onDecrementItemPre',
-            'decrementItems.pre'   => 'onDecrementItemsPre',
             'getCapabilities.post' => 'onGetCapabilitiesPost',
         ];
 
@@ -137,88 +133,6 @@ final class SerializerTest extends AbstractCommonPluginTest
         self::assertSame(123, $values['key1'], "Item 'key1' was not unserialized");
         self::assertSame(456, $values['key2'], "Item 'key2' was not unserialized");
         self::assertArrayNotHasKey('missing', $values, 'Missing item should not be present in the result');
-    }
-
-    public function testOnDecrementItemPreWillDecrementValue(): void
-    {
-        $adapter = $this->createMock(StorageInterface::class);
-        $adapter
-            ->expects(self::once())
-            ->method('getItem')
-            // phpcs:disable WebimpressCodingStandard.NamingConventions.ValidVariableName.NotCamelCaps
-            ->willReturnCallback(static function (string $_, &$success, &$casToken): int {
-                $success  = true;
-                $casToken = 10;
-
-                return $casToken;
-            });
-
-        $adapter
-            ->expects(self::once())
-            ->method('checkAndSetItem')
-            ->with(10, 'foo', 5)
-            ->willReturn(true);
-
-        $event = new Event('', $adapter, new ArrayObject([
-            'key'   => 'foo',
-            'value' => 5,
-        ]));
-
-        $this->plugin->onDecrementItemPre($event);
-    }
-
-    public function testOnDecrementItemWillAssumeZeroForNonExistingCacheItem(): void
-    {
-        $adapter = $this->createMock(StorageInterface::class);
-        $plugin  = new Serializer();
-        $event   = new Event('foo', $adapter, new ArrayObject([
-            'key'   => 'foo',
-            'value' => 10,
-        ]));
-        $adapter
-            ->expects(self::once())
-            ->method('getItem')
-            ->willReturnCallback(static function (string $key, &$success, &$casToken): ?int {
-                self::assertEquals('foo', $key);
-                $success  = false;
-                $casToken = null;
-                return $casToken;
-            });
-
-        $adapter
-            ->expects(self::once())
-            ->method('checkAndSetItem')
-            ->with(null, 'foo', -10)
-            ->willReturn(true);
-
-        self::assertEquals(-10, $plugin->onDecrementItemPre($event));
-    }
-
-    public function testOnIncrementItemWillAssumeZeroForNonExistingCacheItem(): void
-    {
-        $adapter = $this->createMock(StorageInterface::class);
-        $plugin  = new Serializer();
-        $event   = new Event('foo', $adapter, new ArrayObject([
-            'key'   => 'foo',
-            'value' => 10,
-        ]));
-        $adapter
-            ->expects(self::once())
-            ->method('getItem')
-            ->willReturnCallback(static function (string $key, &$success, &$casToken): ?int {
-                self::assertEquals('foo', $key);
-                $success  = false;
-                $casToken = null;
-                return $casToken;
-            });
-
-        $adapter
-            ->expects(self::once())
-            ->method('checkAndSetItem')
-            ->with(null, 'foo', 10)
-            ->willReturn(true);
-
-        self::assertEquals(10, $plugin->onIncrementItemPre($event));
     }
 
     public function testonWriteItemPreSerializesTokenOncePassed(): void
