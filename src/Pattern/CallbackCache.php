@@ -118,6 +118,8 @@ class CallbackCache extends AbstractStorageCapablePattern
         // functions, methods and classnames are case-insensitive
         $callbackKey = strtolower($callbackKey);
 
+        $object = null;
+
         // generate a unique key of object callbacks
         if (is_object($callback)) {
             // Closures & __invoke
@@ -126,7 +128,8 @@ class CallbackCache extends AbstractStorageCapablePattern
             // array($object, 'method')
             $object = $callback[0];
         }
-        if (isset($object)) {
+
+        if (is_object($object)) {
             try {
                 $serializedObject = serialize($object);
             } catch (Throwable $throwable) {
