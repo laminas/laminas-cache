@@ -12,7 +12,7 @@ class ExceptionHandler extends AbstractPlugin
     /**
      * {@inheritDoc}
      */
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1): void
     {
         $callback = [$this, 'onException'];
 
@@ -50,15 +50,13 @@ class ExceptionHandler extends AbstractPlugin
 
     /**
      * On exception
-     *
-     * @return void
      */
-    public function onException(ExceptionEvent $event)
+    public function onException(ExceptionEvent $event): void
     {
         $options  = $this->getOptions();
         $callback = $options->getExceptionCallback();
         if ($callback !== null) {
-            call_user_func($callback, $event->getException());
+            call_user_func($callback, $event->getThrowable());
         }
 
         $event->setThrowException($options->getThrowExceptions());

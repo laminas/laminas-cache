@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace LaminasTest\Cache\StaticAnalysis;
 
 use Laminas\Cache\Storage\AbstractMetadataCapableAdapter;
+use Laminas\Cache\Storage\Adapter\AdapterOptions;
 
 /**
- * @template-extends AbstractMetadataCapableAdapter<object{meta:string}>
+ * @uses AdapterOptions
+ *
+ * @template-extends AbstractMetadataCapableAdapter<AdapterOptions,object{meta:string}>
  */
 final class MetadataCapableAdapter extends AbstractMetadataCapableAdapter
 {
     /**
      * {@inheritDoc}
      */
-    protected function internalHasItem(&$normalizedKey)
+    protected function internalHasItem(string $normalizedKey): bool
     {
         return true;
     }
@@ -22,7 +25,7 @@ final class MetadataCapableAdapter extends AbstractMetadataCapableAdapter
     /**
      * {@inheritDoc}
      */
-    protected function internalGetItem(&$normalizedKey, &$success = null, mixed &$casToken = null)
+    protected function internalGetItem(string $normalizedKey, ?bool &$success = null, mixed &$casToken = null): mixed
     {
         return null;
     }
@@ -30,7 +33,7 @@ final class MetadataCapableAdapter extends AbstractMetadataCapableAdapter
     /**
      * {@inheritDoc}
      */
-    protected function internalSetItem(&$normalizedKey, mixed &$value)
+    protected function internalSetItem(string $normalizedKey, mixed $value): bool
     {
         return false;
     }
@@ -38,7 +41,7 @@ final class MetadataCapableAdapter extends AbstractMetadataCapableAdapter
     /**
      * {@inheritDoc}
      */
-    protected function internalRemoveItem(&$normalizedKey)
+    protected function internalRemoveItem(string $normalizedKey): bool
     {
         return false;
     }

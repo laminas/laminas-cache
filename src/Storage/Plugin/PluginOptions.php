@@ -6,21 +6,17 @@ use Laminas\Cache\Exception;
 use Laminas\Serializer\Adapter\AdapterInterface as SerializerAdapter;
 use Laminas\Serializer\Serializer as SerializerFactory;
 use Laminas\Stdlib\AbstractOptions;
+use Webmozart\Assert\Assert;
 
-use function get_debug_type;
 use function is_callable;
-use function is_string;
-use function sprintf;
 
 class PluginOptions extends AbstractOptions
 {
     /**
      * Used by:
      * - ClearByFactor
-     *
-     * @var int
      */
-    protected $clearingFactor = 0;
+    protected int $clearingFactor = 0;
 
     /**
      * Used by:
@@ -33,53 +29,41 @@ class PluginOptions extends AbstractOptions
     /**
      * Used by:
      * - IgnoreUserAbort
-     *
-     * @var bool
      */
-    protected $exitOnAbort = true;
+    protected bool $exitOnAbort = true;
 
     /**
      * Used by:
      * - OptimizeByFactor
-     *
-     * @var int
      */
-    protected $optimizingFactor = 0;
+    protected int $optimizingFactor = 0;
 
     /**
      * Used by:
      * - Serializer
-     *
-     * @var string|SerializerAdapter
+     * @phpcs:disable WebimpressCodingStandard.Classes.NoNullValues.Invalid
      */
-    protected $serializer;
+    protected SerializerAdapter|string|null $serializer = null;
 
     /**
      * Used by:
      * - Serializer
-     *
-     * @var array
      */
-    protected $serializerOptions = [];
+    protected array $serializerOptions = [];
 
     /**
      * Used by:
      * - ExceptionHandler
-     *
-     * @var bool
      */
-    protected $throwExceptions = true;
+    protected bool $throwExceptions = true;
 
     /**
      * Set automatic clearing factor
      *
      * Used by:
      * - ClearExpiredByFactor
-     *
-     * @param  int $clearingFactor
-     * @return PluginOptions Provides a fluent interface
      */
-    public function setClearingFactor($clearingFactor)
+    public function setClearingFactor(int $clearingFactor): self
     {
         $this->clearingFactor = $this->normalizeFactor($clearingFactor);
         return $this;
@@ -90,10 +74,8 @@ class PluginOptions extends AbstractOptions
      *
      * Used by:
      * - ClearExpiredByFactor
-     *
-     * @return int
      */
-    public function getClearingFactor()
+    public function getClearingFactor(): int
     {
         return $this->clearingFactor;
     }
@@ -104,11 +86,9 @@ class PluginOptions extends AbstractOptions
      * Used by:
      * - ExceptionHandler
      *
-     * @param  null|callable $exceptionCallback
      * @throws Exception\InvalidArgumentException
-     * @return PluginOptions Provides a fluent interface
      */
-    public function setExceptionCallback($exceptionCallback)
+    public function setExceptionCallback(null|callable $exceptionCallback): self
     {
         if ($exceptionCallback !== null && ! is_callable($exceptionCallback, true)) {
             throw new Exception\InvalidArgumentException('Not a valid callback');
@@ -122,32 +102,25 @@ class PluginOptions extends AbstractOptions
      *
      * Used by:
      * - ExceptionHandler
-     *
-     * @return null|callable
      */
-    public function getExceptionCallback()
+    public function getExceptionCallback(): callable|null
     {
         return $this->exceptionCallback;
     }
 
     /**
      * Exit if connection aborted and ignore_user_abort is disabled.
-     *
-     * @param  bool $exitOnAbort
-     * @return PluginOptions Provides a fluent interface
      */
-    public function setExitOnAbort($exitOnAbort)
+    public function setExitOnAbort(bool $exitOnAbort): self
     {
-        $this->exitOnAbort = (bool) $exitOnAbort;
+        $this->exitOnAbort = $exitOnAbort;
         return $this;
     }
 
     /**
      * Exit if connection aborted and ignore_user_abort is disabled.
-     *
-     * @return bool
      */
-    public function getExitOnAbort()
+    public function getExitOnAbort(): bool
     {
         return $this->exitOnAbort;
     }
@@ -157,11 +130,8 @@ class PluginOptions extends AbstractOptions
      *
      * Used by:
      * - OptimizeByFactor
-     *
-     * @param  int $optimizingFactor
-     * @return PluginOptions Provides a fluent interface
      */
-    public function setOptimizingFactor($optimizingFactor)
+    public function setOptimizingFactor(int $optimizingFactor): self
     {
         $this->optimizingFactor = $this->normalizeFactor($optimizingFactor);
         return $this;
@@ -172,10 +142,8 @@ class PluginOptions extends AbstractOptions
      *
      * Used by:
      * - OptimizeByFactor
-     *
-     * @return int
      */
-    public function getOptimizingFactor()
+    public function getOptimizingFactor(): int
     {
         return $this->optimizingFactor;
     }
@@ -186,23 +154,10 @@ class PluginOptions extends AbstractOptions
      * Used by:
      * - Serializer
      *
-     * @param  string|SerializerAdapter $serializer
      * @throws Exception\InvalidArgumentException
-     * @return PluginOptions Provides a fluent interface
      */
-    public function setSerializer($serializer)
+    public function setSerializer(string|SerializerAdapter $serializer): self
     {
-        if (! is_string($serializer) && ! $serializer instanceof SerializerAdapter) {
-            /**
-             * Until we do lack native type-hint we should check the `$serializer` twice.
-             */
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s expects either a string serializer name or Laminas\Serializer\Adapter\AdapterInterface instance; '
-                . 'received "%s"',
-                __METHOD__,
-                get_debug_type($serializer)
-            ));
-        }
         $this->serializer = $serializer;
         return $this;
     }
@@ -212,14 +167,12 @@ class PluginOptions extends AbstractOptions
      *
      * Used by:
      * - Serializer
-     *
-     * @return SerializerAdapter
      */
-    public function getSerializer()
+    public function getSerializer(): SerializerAdapter
     {
         if (! $this->serializer instanceof SerializerAdapter) {
             // use default serializer
-            if (! $this->serializer) {
+            if ($this->serializer === null || $this->serializer === '') {
                 $this->setSerializer(SerializerFactory::getDefaultAdapter());
             // instantiate by class name + serializer_options
             } else {
@@ -227,6 +180,7 @@ class PluginOptions extends AbstractOptions
                 $this->setSerializer(SerializerFactory::factory($this->serializer, $options));
             }
         }
+        Assert::notNull($this->serializer);
         return $this->serializer;
     }
 
@@ -235,10 +189,8 @@ class PluginOptions extends AbstractOptions
      *
      * Used by:
      * - Serializer
-     *
-     * @return PluginOptions Provides a fluent interface
      */
-    public function setSerializerOptions(mixed $serializerOptions)
+    public function setSerializerOptions(array $serializerOptions): self
     {
         $this->serializerOptions = $serializerOptions;
         return $this;
@@ -252,7 +204,7 @@ class PluginOptions extends AbstractOptions
      *
      * @return array
      */
-    public function getSerializerOptions()
+    public function getSerializerOptions(): array
     {
         return $this->serializerOptions;
     }
@@ -262,13 +214,10 @@ class PluginOptions extends AbstractOptions
      *
      * Used by:
      * - ExceptionHandler
-     *
-     * @param  bool $throwExceptions
-     * @return PluginOptions Provides a fluent interface
      */
-    public function setThrowExceptions($throwExceptions)
+    public function setThrowExceptions(bool $throwExceptions): self
     {
-        $this->throwExceptions = (bool) $throwExceptions;
+        $this->throwExceptions = $throwExceptions;
         return $this;
     }
 
@@ -277,10 +226,8 @@ class PluginOptions extends AbstractOptions
      *
      * Used by:
      * - ExceptionHandler
-     *
-     * @return bool
      */
-    public function getThrowExceptions()
+    public function getThrowExceptions(): bool
     {
         return $this->throwExceptions;
     }
@@ -290,13 +237,11 @@ class PluginOptions extends AbstractOptions
      *
      * Cast to int and ensure we have a value greater than zero.
      *
-     * @param  int $factor
-     * @return int
+     * @return non-negative-int
      * @throws Exception\InvalidArgumentException
      */
-    protected function normalizeFactor($factor)
+    protected function normalizeFactor(int $factor): int
     {
-        $factor = (int) $factor;
         if ($factor < 0) {
             throw new Exception\InvalidArgumentException(
                 "Invalid factor '{$factor}': must be greater or equal 0"

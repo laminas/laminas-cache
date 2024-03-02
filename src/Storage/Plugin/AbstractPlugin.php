@@ -3,18 +3,16 @@
 namespace Laminas\Cache\Storage\Plugin;
 
 use Laminas\EventManager\AbstractListenerAggregate;
+use Webmozart\Assert\Assert;
 
 abstract class AbstractPlugin extends AbstractListenerAggregate implements PluginInterface
 {
-    /** @var PluginOptions */
-    protected $options;
+    protected ?PluginOptions $options = null;
 
     /**
      * Set pattern options
-     *
-     * @return AbstractPlugin Provides a fluent interface
      */
-    public function setOptions(PluginOptions $options)
+    public function setOptions(PluginOptions $options): self
     {
         $this->options = $options;
         return $this;
@@ -22,14 +20,14 @@ abstract class AbstractPlugin extends AbstractListenerAggregate implements Plugi
 
     /**
      * Get all pattern options
-     *
-     * @return PluginOptions
      */
-    public function getOptions()
+    public function getOptions(): PluginOptions
     {
         if (null === $this->options) {
             $this->setOptions(new PluginOptions());
         }
+
+        Assert::notNull($this->options);
         return $this->options;
     }
 }

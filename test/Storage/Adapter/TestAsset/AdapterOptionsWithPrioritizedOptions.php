@@ -9,7 +9,10 @@ use Laminas\Cache\Storage\Adapter\AdapterOptions;
 final class AdapterOptionsWithPrioritizedOptions extends AdapterOptions
 {
     // @codingStandardsIgnoreStart
-    protected $__prioritizedProperties__ = [
+    /**
+     * @var string[]
+     */
+    protected array $__prioritizedProperties__ = [
         'key_pattern',
         'namespace',
     ];

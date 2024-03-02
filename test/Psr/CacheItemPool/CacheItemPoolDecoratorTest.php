@@ -901,18 +901,6 @@ final class CacheItemPoolDecoratorTest extends TestCase
         parent::tearDown();
     }
 
-    public function testCanHandleRemoveItemsReturningNonArray(): void
-    {
-        $this->storage
-            ->expects(self::once())
-            ->method('removeItems')
-            ->with(['foo'])
-            ->willReturn(null);
-
-        assert($this->adapter instanceof CacheItemPoolDecorator);
-        self::assertFalse($this->adapter->deleteItems(['foo']));
-    }
-
     /**
      * @dataProvider deletionVerificationProvider
      */

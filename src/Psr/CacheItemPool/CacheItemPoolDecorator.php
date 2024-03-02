@@ -13,6 +13,7 @@ use Laminas\Cache\Storage\StorageInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Clock\ClockInterface;
+use Webmozart\Assert\Assert;
 
 use function array_diff;
 use function array_diff_key;
@@ -21,12 +22,10 @@ use function array_keys;
 use function array_merge;
 use function array_unique;
 use function array_values;
-use function assert;
 use function current;
 use function date_default_timezone_get;
 use function gettype;
 use function in_array;
-use function is_array;
 use function is_string;
 use function preg_match;
 use function sprintf;
@@ -91,7 +90,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
                 // ignore
             }
 
-            return new CacheItem($key, $value, $isHit ?? false, $this->clock);
+            return new CacheItem($key, $value, $isHit, $this->clock);
         }
 
         return clone $this->deferred[$key];
@@ -102,6 +101,11 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      */
     public function getItems(array $keys = []): array
     {
+        if ($keys === []) {
+            return [];
+        }
+
+        $keys = array_values($keys);
         $this->validateKeys($keys);
         $items = [];
 
@@ -113,9 +117,9 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             }
         }
 
-        $keys = array_diff($keys, array_keys($items));
+        $keys = array_values(array_diff($keys, array_keys($items)));
 
-        if ($keys) {
+        if ($keys !== []) {
             try {
                 $cacheItems = $this->storage->getItems($keys);
             } catch (Exception\InvalidArgumentException $e) {
@@ -125,7 +129,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             }
 
             foreach ($cacheItems as $key => $value) {
-                assert(is_string($key));
                 $items[$key] = new CacheItem($key, $value, true, $this->clock);
             }
 
@@ -197,6 +200,11 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      */
     public function deleteItems(array $keys): bool
     {
+        if ($keys === []) {
+            return true;
+        }
+
+        $keys = array_values($keys);
         $this->validateKeys($keys);
 
         // remove deferred items first
@@ -208,11 +216,6 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         } catch (Exception\ExceptionInterface) {
             return false;
-        }
-
-        // BC compatibility can be removed in 3.0
-        if (! is_array($result)) {
-            return $result !== null;
         }
 
         if ($result === []) {
@@ -342,6 +345,7 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
      * Throws exception if given key is invalid
      *
      * @throws InvalidArgumentException
+     * @psalm-assert non-empty-string $key
      */
     private function validateKey(mixed $key): void
     {
@@ -352,6 +356,10 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
             ));
         }
 
+        if ($key === '') {
+            throw new InvalidArgumentException('Provided key must not be an empty string.');
+        }
+
         if ($this->exceedsMaximumKeyLength($key)) {
             throw InvalidArgumentException::maximumKeyLengthExceeded($key, $this->maximumKeyLength);
         }
@@ -360,7 +368,8 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     /**
      * Throws exception if any of given keys is invalid
      *
-     * @param array $keys
+     * @param non-empty-list<string> $keys
+     * @psalm-assert non-empty-list<non-empty-string> $keys
      * @throws InvalidArgumentException
      */
     private function validateKeys(array $keys): void
@@ -378,7 +387,9 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
     {
         $keyItemPair = [];
         foreach ($items as $item) {
-            $keyItemPair[$item->getKey()] = $item;
+            $key = $item->getKey();
+            Assert::stringNotEmpty($key);
+            $keyItemPair[$key] = $item;
         }
 
         // delete expired item
@@ -396,7 +407,8 @@ class CacheItemPoolDecorator implements CacheItemPoolInterface
 
         $keyValuePair = [];
         foreach ($items as $item) {
-            $key                = $item->getKey();
+            $key = $item->getKey();
+            Assert::stringNotEmpty($key);
             $keyValuePair[$key] = $item->get();
         }
 

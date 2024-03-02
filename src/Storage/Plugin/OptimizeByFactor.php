@@ -13,7 +13,7 @@ class OptimizeByFactor extends AbstractPlugin
     /**
      * {@inheritDoc}
      */
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1): void
     {
         $callback          = [$this, 'optimizeByFactor'];
         $this->listeners[] = $events->attach('removeItem.post', $callback, $priority);

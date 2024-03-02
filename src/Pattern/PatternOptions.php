@@ -4,7 +4,7 @@ namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 use Laminas\Stdlib\AbstractOptions;
-use Traversable;
+use LogicException;
 
 use function array_intersect;
 use function array_map;
@@ -30,115 +30,86 @@ class PatternOptions extends AbstractOptions
     /**
      * Used by:
      * - ObjectCache
-     *
-     * @var bool
      */
-    protected $cacheByDefault = true;
+    protected bool $cacheByDefault = true;
 
     /**
      * Used by:
      * - CallbackCache
      * - ObjectCache
-     *
-     * @var bool
      */
-    protected $cacheOutput = true;
+    protected bool $cacheOutput = true;
 
     /**
      * Used by:
      * - CaptureCache
-     *
-     * @var false|int
      */
-    protected $umask = false;
+    protected false|int $umask = false;
 
     /**
      * Used by:
      * - CaptureCache
-     *
-     * @var false|int
      */
-    protected $dirPermission = 0700;
+    protected false|int $dirPermission = 0700;
 
     /**
      * Used by:
      * - CaptureCache
-     *
-     * @var false|int
      */
-    protected $filePermission = 0600;
+    protected false|int $filePermission = 0600;
 
     /**
      * Used by:
      * - CaptureCache
-     *
-     * @var bool
      */
-    protected $fileLocking = true;
+    protected bool $fileLocking = true;
 
     /**
      * Used by:
      * - CaptureCache
-     *
-     * @var string
      */
-    protected $indexFilename = 'index.html';
+    protected string $indexFilename = 'index.html';
 
     /**
      * Used by:
      * - ObjectCache
-     *
-     * @var null|object
      */
-    protected $object;
+    protected ?object $object = null;
 
     /**
      * Used by:
      * - ObjectCache
-     *
-     * @var bool
      */
-    protected $objectCacheMagicProperties = false;
+    protected bool $objectCacheMagicProperties = false;
 
     /**
      * Used by:
      * - ObjectCache
-     *
-     * @var array
      */
-    protected $objectCacheMethods = [];
+    protected array $objectCacheMethods = [];
 
     /**
      * Used by:
      * - ObjectCache
-     *
-     * @var null|string
      */
-    protected $objectKey;
+    protected ?string $objectKey = null;
 
     /**
      * Used by:
      * - ObjectCache
-     *
-     * @var array
      */
-    protected $objectNonCacheMethods = ['__tostring'];
+    protected array $objectNonCacheMethods = ['__tostring'];
 
     /**
      * Used by:
      * - CaptureCache
-     *
-     * @var null|string
      */
-    protected $publicDir;
+    protected ?string $publicDir = null;
 
     /**
-     * Constructor
-     *
-     * @param  array|Traversable|null $options
      * @throws Exception\InvalidArgumentException
      */
-    public function __construct($options = null)
+    public function __construct(iterable|null $options = null)
     {
         // disable file/directory permissions by default on windows systems
         if (stripos(PHP_OS, 'WIN') === 0) {
@@ -154,11 +125,8 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - ObjectCache
-     *
-     * @param  bool $cacheByDefault
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setCacheByDefault($cacheByDefault)
+    public function setCacheByDefault(bool $cacheByDefault): self
     {
         $this->cacheByDefault = $cacheByDefault;
         return $this;
@@ -169,10 +137,8 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - ObjectCache
-     *
-     * @return bool
      */
-    public function getCacheByDefault()
+    public function getCacheByDefault(): bool
     {
         return $this->cacheByDefault;
     }
@@ -183,13 +149,10 @@ class PatternOptions extends AbstractOptions
      * Used by:
      * - CallbackCache
      * - ObjectCache
-     *
-     * @param  bool $cacheOutput
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setCacheOutput($cacheOutput)
+    public function setCacheOutput(bool $cacheOutput): self
     {
-        $this->cacheOutput = (bool) $cacheOutput;
+        $this->cacheOutput = $cacheOutput;
         return $this;
     }
 
@@ -199,10 +162,8 @@ class PatternOptions extends AbstractOptions
      * Used by:
      * - CallbackCache
      * - ObjectCache
-     *
-     * @return bool
      */
-    public function getCacheOutput()
+    public function getCacheOutput(): bool
     {
         return $this->cacheOutput;
     }
@@ -210,11 +171,9 @@ class PatternOptions extends AbstractOptions
     /**
      * Set directory permission
      *
-     * @param  false|int|string|float $dirPermission
      * @throws Exception\InvalidArgumentException
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setDirPermission($dirPermission)
+    public function setDirPermission(false|float|int|string $dirPermission): self
     {
         if ($dirPermission !== false) {
             if (is_string($dirPermission)) {
@@ -241,10 +200,8 @@ class PatternOptions extends AbstractOptions
 
     /**
      * Gets directory permission
-     *
-     * @return false|int
      */
-    public function getDirPermission()
+    public function getDirPermission(): int|false
     {
         return $this->dirPermission;
     }
@@ -255,11 +212,9 @@ class PatternOptions extends AbstractOptions
      * Used by:
      * - CaptureCache
      *
-     * @param  false|int|string|float $umask
      * @throws Exception\InvalidArgumentException
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setUmask($umask)
+    public function setUmask(false|float|int|string $umask): self
     {
         if ($umask !== false) {
             if (is_string($umask)) {
@@ -288,10 +243,8 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - CaptureCache
-     *
-     * @return false|int
      */
-    public function getUmask()
+    public function getUmask(): int|false
     {
         return $this->umask;
     }
@@ -301,13 +254,10 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - CaptureCache
-     *
-     * @param  bool $fileLocking
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setFileLocking($fileLocking)
+    public function setFileLocking(bool $fileLocking): self
     {
-        $this->fileLocking = (bool) $fileLocking;
+        $this->fileLocking = $fileLocking;
         return $this;
     }
 
@@ -316,10 +266,8 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - CaptureCache
-     *
-     * @return bool
      */
-    public function getFileLocking()
+    public function getFileLocking(): bool
     {
         return $this->fileLocking;
     }
@@ -327,11 +275,9 @@ class PatternOptions extends AbstractOptions
     /**
      * Set file permission
      *
-     * @param  false|int|string|float $filePermission
      * @throws Exception\InvalidArgumentException
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setFilePermission($filePermission)
+    public function setFilePermission(false|float|int|string $filePermission): self
     {
         if ($filePermission !== false) {
             if (is_string($filePermission)) {
@@ -364,32 +310,25 @@ class PatternOptions extends AbstractOptions
 
     /**
      * Gets file permission
-     *
-     * @return false|int
      */
-    public function getFilePermission()
+    public function getFilePermission(): false|int
     {
         return $this->filePermission;
     }
 
     /**
      * Set value for index filename
-     *
-     * @param  string $indexFilename
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setIndexFilename($indexFilename)
+    public function setIndexFilename(string $indexFilename): self
     {
-        $this->indexFilename = (string) $indexFilename;
+        $this->indexFilename = $indexFilename;
         return $this;
     }
 
     /**
      * Get value for index filename
-     *
-     * @return string
      */
-    public function getIndexFilename()
+    public function getIndexFilename(): string
     {
         return $this->indexFilename;
     }
@@ -398,9 +337,8 @@ class PatternOptions extends AbstractOptions
      * Set object to cache
      *
      * @throws Exception\InvalidArgumentException
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setObject(mixed $object)
+    public function setObject(mixed $object): self
     {
         if (! is_object($object)) {
             throw new Exception\InvalidArgumentException(
@@ -413,10 +351,8 @@ class PatternOptions extends AbstractOptions
 
     /**
      * Get object to cache
-     *
-     * @return null|object
      */
-    public function getObject()
+    public function getObject(): null|object
     {
         return $this->object;
     }
@@ -426,13 +362,10 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - ObjectCache
-     *
-     * @param  bool $objectCacheMagicProperties
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setObjectCacheMagicProperties($objectCacheMagicProperties)
+    public function setObjectCacheMagicProperties(bool $objectCacheMagicProperties): self
     {
-        $this->objectCacheMagicProperties = (bool) $objectCacheMagicProperties;
+        $this->objectCacheMagicProperties = $objectCacheMagicProperties;
         return $this;
     }
 
@@ -441,10 +374,8 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - ObjectCache
-     *
-     * @return bool
      */
-    public function getObjectCacheMagicProperties()
+    public function getObjectCacheMagicProperties(): bool
     {
         return $this->objectCacheMagicProperties;
     }
@@ -452,10 +383,9 @@ class PatternOptions extends AbstractOptions
     /**
      * Set list of object methods for which to cache return values
      *
-     * @return PatternOptions Provides a fluent interface
      * @throws Exception\InvalidArgumentException
      */
-    public function setObjectCacheMethods(array $objectCacheMethods)
+    public function setObjectCacheMethods(array $objectCacheMethods): self
     {
         $this->objectCacheMethods = $this->normalizeObjectMethods($objectCacheMethods);
         return $this;
@@ -466,7 +396,7 @@ class PatternOptions extends AbstractOptions
      *
      * @return array
      */
-    public function getObjectCacheMethods()
+    public function getObjectCacheMethods(): array
     {
         return $this->objectCacheMethods;
     }
@@ -480,15 +410,10 @@ class PatternOptions extends AbstractOptions
      * - ObjectCache
      *
      * @param  null|string $objectKey The object key or NULL to use the objects class name
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setObjectKey($objectKey)
+    public function setObjectKey(null|string $objectKey): self
     {
-        if ($objectKey !== null) {
-            $this->objectKey = (string) $objectKey;
-        } else {
-            $this->objectKey = null;
-        }
+        $this->objectKey = $objectKey;
         return $this;
     }
 
@@ -497,24 +422,28 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - ObjectCache
-     *
-     * @return string
      */
-    public function getObjectKey()
+    public function getObjectKey(): string
     {
-        if ($this->objectKey === null) {
-            return $this->getObject()::class;
+        if ($this->objectKey !== null) {
+            return $this->objectKey;
         }
-        return $this->objectKey;
+
+        $object = $this->getObject();
+
+        if ($object === null) {
+            throw new LogicException('Missing `object` to detect object key.');
+        }
+
+        return $object::class;
     }
 
     /**
      * Set list of object methods for which NOT to cache return values
      *
-     * @return PatternOptions Provides a fluent interface
      * @throws Exception\InvalidArgumentException
      */
-    public function setObjectNonCacheMethods(array $objectNonCacheMethods)
+    public function setObjectNonCacheMethods(array $objectNonCacheMethods): self
     {
         $this->objectNonCacheMethods = $this->normalizeObjectMethods($objectNonCacheMethods);
         return $this;
@@ -525,7 +454,7 @@ class PatternOptions extends AbstractOptions
      *
      * @return array
      */
-    public function getObjectNonCacheMethods()
+    public function getObjectNonCacheMethods(): array
     {
         return $this->objectNonCacheMethods;
     }
@@ -536,14 +465,10 @@ class PatternOptions extends AbstractOptions
      * Used by:
      * - CaptureCache
      *
-     * @param  string $publicDir
      * @throws Exception\InvalidArgumentException
-     * @return PatternOptions Provides a fluent interface
      */
-    public function setPublicDir($publicDir)
+    public function setPublicDir(string $publicDir): self
     {
-        $publicDir = (string) $publicDir;
-
         if (! is_dir($publicDir)) {
             throw new Exception\InvalidArgumentException(
                 "Public directory '{$publicDir}' not found or not a directory"
@@ -567,10 +492,8 @@ class PatternOptions extends AbstractOptions
      *
      * Used by:
      * - CaptureCache
-     *
-     * @return null|string
      */
-    public function getPublicDir()
+    public function getPublicDir(): null|string
     {
         return $this->publicDir;
     }
@@ -581,7 +504,7 @@ class PatternOptions extends AbstractOptions
      *
      * @return array
      */
-    protected function recursiveStrtolower(array $array)
+    protected function recursiveStrtolower(array $array): array
     {
         return array_values(array_unique(array_map('strtolower', $array)));
     }
@@ -596,7 +519,7 @@ class PatternOptions extends AbstractOptions
      * @return array
      * @throws Exception\InvalidArgumentException
      */
-    protected function normalizeObjectMethods(array $methods)
+    protected function normalizeObjectMethods(array $methods): array
     {
         $methods   = $this->recursiveStrtolower($methods);
         $intersect = array_intersect(['__set', '__get', '__unset', '__isset'], $methods);

@@ -6,8 +6,6 @@ interface AvailableSpaceCapableInterface
 {
     /**
      * Get available space in bytes
-     *
-     * @return int|float
      */
-    public function getAvailableSpace();
+    public function getAvailableSpace(): int;
 }

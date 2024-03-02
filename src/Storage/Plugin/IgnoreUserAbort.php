@@ -13,15 +13,13 @@ class IgnoreUserAbort extends AbstractPlugin
 {
     /**
      * The storage who activated ignore_user_abort.
-     *
-     * @var null|StorageInterface
      */
-    protected $activatedTarget;
+    protected ?StorageInterface $activatedTarget = null;
 
     /**
      * {@inheritDoc}
      */
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1): void
     {
         $cbOnBefore = [$this, 'onBefore'];
         $cbOnAfter  = [$this, 'onAfter'];
@@ -58,10 +56,8 @@ class IgnoreUserAbort extends AbstractPlugin
     /**
      * Activate ignore_user_abort if not already done
      * and save the target who activated it.
-     *
-     * @return void
      */
-    public function onBefore(Event $event)
+    public function onBefore(Event $event): void
     {
         if ($this->activatedTarget === null && ! ignore_user_abort(true)) {
             $this->activatedTarget = $event->getStorage();
@@ -74,10 +70,8 @@ class IgnoreUserAbort extends AbstractPlugin
      *
      * If exit_on_abort is enabled and the connection has been aborted
      * exit the script.
-     *
-     * @return void
      */
-    public function onAfter(Event $event)
+    public function onAfter(Event $event): void
     {
         if ($this->activatedTarget === $event->getStorage()) {
             // exit if connection aborted

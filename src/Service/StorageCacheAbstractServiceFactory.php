@@ -18,20 +18,19 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
     private const RESERVED_CONFIG_SERVICE_NAME = 'config';
 
     /** @var array<string,mixed>|null */
-    protected $config;
+    protected ?array $config = null;
 
     /**
      * Configuration key for cache objects
      *
-     * @var string
+     * @var non-empty-string
      */
-    protected $configKey = self::CACHES_CONFIGURATION_KEY;
+    protected string $configKey = self::CACHES_CONFIGURATION_KEY;
 
     /**
      * @param string $requestedName
-     * @return boolean
      */
-    public function canCreate(ContainerInterface $container, $requestedName)
+    public function canCreate(ContainerInterface $container, $requestedName): bool
     {
         if ($requestedName === self::RESERVED_CONFIG_SERVICE_NAME) {
             return false;
@@ -49,9 +48,8 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
      *
      * @param  string             $requestedName
      * @param  null|array         $options
-     * @return object
      */
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): object
     {
         $config  = $this->getConfig($container);
         $factory = $container->get(StorageAdapterFactoryInterface::class);
@@ -65,9 +63,9 @@ class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
     /**
      * Retrieve cache configuration, if any
      *
-     * @return array
+     * @return array<string,mixed>
      */
-    protected function getConfig(ContainerInterface $container)
+    protected function getConfig(ContainerInterface $container): array
     {
         if ($this->config !== null) {
             return $this->config;

@@ -6,8 +6,6 @@ interface PatternInterface
 {
     /**
      * Get all pattern options
-     *
-     * @return PatternOptions
      */
-    public function getOptions();
+    public function getOptions(): PatternOptions;
 }

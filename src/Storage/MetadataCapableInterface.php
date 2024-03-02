@@ -22,7 +22,7 @@ interface MetadataCapableInterface
     /**
      * Get multiple metadata
      *
-     * @param array<string> $keys
+     * @param non-empty-list<non-empty-string> $keys
      * @return array<string,TMetadata> Associative array of keys and metadata
      * @throws ExceptionInterface
      */

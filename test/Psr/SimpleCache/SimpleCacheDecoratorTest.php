@@ -483,7 +483,7 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->options
             ->expects(self::once())
             ->method('getNamespace')
-            ->willReturn(null);
+            ->willReturn('');
 
         $storage = $this->createMock(StorageInterface::class);
         $storage
@@ -531,7 +531,7 @@ class SimpleCacheDecoratorTest extends TestCase
         $this->options
             ->expects(self::once())
             ->method('getNamespace')
-            ->willReturn(null);
+            ->willReturn('');
 
         $storage = $this->createMock(FlushableNamespaceStorageInterface::class);
 

@@ -27,70 +27,56 @@ class Capabilities
      *
      * If it's NULL the capability isn't set and the getter
      * returns the base capability or the default value.
-     *
-     * @var null|bool
      */
-    protected $lockOnExpire;
+    protected ?bool $lockOnExpire = null;
 
     /**
      * Max. key length
      *
      * If it's NULL the capability isn't set and the getter
      * returns the base capability or the default value.
-     *
-     * @var null|int
      */
-    protected $maxKeyLength;
+    protected ?int $maxKeyLength = null;
 
     /**
      * Min. TTL (0 means items never expire)
      *
      * If it's NULL the capability isn't set and the getter
      * returns the base capability or the default value.
-     *
-     * @var null|int
      */
-    protected $minTtl;
+    protected ?int $minTtl = null;
 
     /**
      * Max. TTL (0 means infinite)
      *
      * If it's NULL the capability isn't set and the getter
      * returns the base capability or the default value.
-     *
-     * @var null|int
      */
-    protected $maxTtl;
+    protected ?int $maxTtl = null;
 
     /**
      * Namespace is prefix
      *
      * If it's NULL the capability isn't set and the getter
      * returns the base capability or the default value.
-     *
-     * @var null|bool
      */
-    protected $namespaceIsPrefix;
+    protected ?bool $namespaceIsPrefix = null;
 
     /**
      * Namespace separator
      *
      * If it's NULL the capability isn't set and the getter
      * returns the base capability or the default value.
-     *
-     * @var null|string
      */
-    protected $namespaceSeparator;
+    protected ?string $namespaceSeparator = null;
 
     /**
      * Static ttl
      *
      * If it's NULL the capability isn't set and the getter
      * returns the base capability or the default value.
-     *
-     * @var null|bool
      */
-    protected $staticTtl;
+    protected ?bool $staticTtl = null;
 
     /**
      * Supported datatypes
@@ -100,31 +86,24 @@ class Capabilities
      *
      * @var null|array
      */
-    protected $supportedDatatypes;
+    protected ?array $supportedDatatypes = null;
 
     /**
      * TTL precision
      *
      * If it's NULL the capability isn't set and the getter
      * returns the base capability or the default value.
-     *
-     * @var null|int
      */
-    protected $ttlPrecision;
+    protected ?int $ttlPrecision = null;
 
     /**
      * Use request time
      *
      * If it's NULL the capability isn't set and the getter
      * returns the base capability or the default value.
-     *
-     * @var null|bool
      */
-    protected $useRequestTime;
+    protected ?bool $useRequestTime = null;
 
-    /**
-     * Constructor
-     */
     public function __construct(
         protected StorageInterface $storage,
         /**
@@ -141,20 +120,16 @@ class Capabilities
 
     /**
      * Get the storage adapter
-     *
-     * @return StorageInterface
      */
-    public function getAdapter()
+    public function getAdapter(): StorageInterface
     {
         return $this->storage;
     }
 
     /**
      * Get supported datatypes
-     *
-     * @return array
      */
-    public function getSupportedDatatypes()
+    public function getSupportedDatatypes(): array
     {
         return $this->getCapability('supportedDatatypes', [
             'NULL'     => false,
@@ -172,9 +147,8 @@ class Capabilities
      * Set supported datatypes
      *
      * @throws Exception\InvalidArgumentException
-     * @return Capabilities Fluent interface
      */
-    public function setSupportedDatatypes(stdClass $marker, array $datatypes)
+    public function setSupportedDatatypes(stdClass $marker, array $datatypes): self
     {
         $allTypes = [
             'array',
@@ -188,7 +162,8 @@ class Capabilities
         ];
 
         // check/normalize datatype values
-        foreach ($datatypes as $type => &$toType) {
+        $normalized = [];
+        foreach ($datatypes as $type => $toType) {
             if (! in_array($type, $allTypes)) {
                 throw new Exception\InvalidArgumentException("Unknown datatype '{$type}'");
             }
@@ -201,15 +176,17 @@ class Capabilities
             } else {
                 $toType = (bool) $toType;
             }
+
+            $normalized[$type] = $toType;
         }
 
         // add missing datatypes as not supported
-        $missingTypes = array_diff($allTypes, array_keys($datatypes));
+        $missingTypes = array_diff($allTypes, array_keys($normalized));
         foreach ($missingTypes as $type) {
-            $datatypes[$type] = false;
+            $normalized[$type] = false;
         }
 
-        return $this->setCapability($marker, 'supportedDatatypes', $datatypes);
+        return $this->setCapability($marker, 'supportedDatatypes', $normalized);
     }
 
     /**
@@ -217,7 +194,7 @@ class Capabilities
      *
      * @return int 0 means items never expire
      */
-    public function getMinTtl()
+    public function getMinTtl(): int
     {
         return $this->getCapability('minTtl', 0);
     }
@@ -225,13 +202,10 @@ class Capabilities
     /**
      * Set minimum supported time-to-live
      *
-     * @param  int $minTtl
      * @throws Exception\InvalidArgumentException
-     * @return Capabilities Fluent interface
      */
-    public function setMinTtl(stdClass $marker, $minTtl)
+    public function setMinTtl(stdClass $marker, int $minTtl): self
     {
-        $minTtl = (int) $minTtl;
         if ($minTtl < 0) {
             throw new Exception\InvalidArgumentException('$minTtl must be greater or equal 0');
         }
@@ -243,7 +217,7 @@ class Capabilities
      *
      * @return int 0 means infinite
      */
-    public function getMaxTtl()
+    public function getMaxTtl(): int
     {
         return $this->getCapability('maxTtl', 0);
     }
@@ -251,13 +225,10 @@ class Capabilities
     /**
      * Set maximum supported time-to-live
      *
-     * @param  int $maxTtl
      * @throws Exception\InvalidArgumentException
-     * @return Capabilities Fluent interface
      */
-    public function setMaxTtl(stdClass $marker, $maxTtl)
+    public function setMaxTtl(stdClass $marker, int $maxTtl): self
     {
-        $maxTtl = (int) $maxTtl;
         if ($maxTtl < 0) {
             throw new Exception\InvalidArgumentException('$maxTtl must be greater or equal 0');
         }
@@ -267,31 +238,24 @@ class Capabilities
     /**
      * Is the time-to-live handled static (on write)
      * or dynamic (on read)
-     *
-     * @return bool
      */
-    public function getStaticTtl()
+    public function getStaticTtl(): bool
     {
         return $this->getCapability('staticTtl', false);
     }
 
     /**
      * Set if the time-to-live handled static (on write) or dynamic (on read)
-     *
-     * @param  bool $flag
-     * @return Capabilities Fluent interface
      */
-    public function setStaticTtl(stdClass $marker, $flag)
+    public function setStaticTtl(stdClass $marker, bool $flag): self
     {
-        return $this->setCapability($marker, 'staticTtl', (bool) $flag);
+        return $this->setCapability($marker, 'staticTtl', $flag);
     }
 
     /**
      * Get time-to-live precision
-     *
-     * @return float
      */
-    public function getTtlPrecision()
+    public function getTtlPrecision(): float
     {
         return $this->getCapability('ttlPrecision', 1);
     }
@@ -299,13 +263,10 @@ class Capabilities
     /**
      * Set time-to-live precision
      *
-     * @param  float $ttlPrecision
      * @throws Exception\InvalidArgumentException
-     * @return Capabilities Fluent interface
      */
-    public function setTtlPrecision(stdClass $marker, $ttlPrecision)
+    public function setTtlPrecision(stdClass $marker, float $ttlPrecision): self
     {
-        $ttlPrecision = (float) $ttlPrecision;
         if ($ttlPrecision <= 0) {
             throw new Exception\InvalidArgumentException('$ttlPrecision must be greater than 0');
         }
@@ -314,23 +275,18 @@ class Capabilities
 
     /**
      * Get use request time
-     *
-     * @return bool
      */
-    public function getUseRequestTime()
+    public function getUseRequestTime(): bool
     {
         return $this->getCapability('useRequestTime', false);
     }
 
     /**
      * Set use request time
-     *
-     * @param  bool $flag
-     * @return Capabilities Fluent interface
      */
-    public function setUseRequestTime(stdClass $marker, $flag)
+    public function setUseRequestTime(stdClass $marker, bool $flag): self
     {
-        return $this->setCapability($marker, 'useRequestTime', (bool) $flag);
+        return $this->setCapability($marker, 'useRequestTime', $flag);
     }
 
     /**
@@ -340,20 +296,17 @@ class Capabilities
      *             >0 = Time in seconds an expired item could be retrieved
      *             -1 = Expired items could be retrieved forever
      */
-    public function getLockOnExpire()
+    public function getLockOnExpire(): int
     {
         return $this->getCapability('lockOnExpire', 0);
     }
 
     /**
      * Set "lock-on-expire" support in seconds.
-     *
-     * @param  int      $timeout
-     * @return Capabilities Fluent interface
      */
-    public function setLockOnExpire(stdClass $marker, $timeout)
+    public function setLockOnExpire(stdClass $marker, int $timeout): self
     {
-        return $this->setCapability($marker, 'lockOnExpire', (int) $timeout);
+        return $this->setCapability($marker, 'lockOnExpire', $timeout);
     }
 
     /**
@@ -361,7 +314,7 @@ class Capabilities
      *
      * @return int -1 means unknown, 0 means infinite
      */
-    public function getMaxKeyLength()
+    public function getMaxKeyLength(): int
     {
         return $this->getCapability('maxKeyLength', self::UNKNOWN_KEY_LENGTH);
     }
@@ -369,13 +322,10 @@ class Capabilities
     /**
      * Set maximum key length
      *
-     * @param  int $maxKeyLength
      * @throws Exception\InvalidArgumentException
-     * @return Capabilities Fluent interface
      */
-    public function setMaxKeyLength(stdClass $marker, $maxKeyLength)
+    public function setMaxKeyLength(stdClass $marker, int $maxKeyLength): self
     {
-        $maxKeyLength = (int) $maxKeyLength;
         if ($maxKeyLength < -1) {
             throw new Exception\InvalidArgumentException('$maxKeyLength must be greater or equal than -1');
         }
@@ -384,53 +334,40 @@ class Capabilities
 
     /**
      * Get if namespace support is implemented as prefix
-     *
-     * @return bool
      */
-    public function getNamespaceIsPrefix()
+    public function getNamespaceIsPrefix(): bool
     {
         return $this->getCapability('namespaceIsPrefix', true);
     }
 
     /**
      * Set if namespace support is implemented as prefix
-     *
-     * @param  bool $flag
-     * @return Capabilities Fluent interface
      */
-    public function setNamespaceIsPrefix(stdClass $marker, $flag)
+    public function setNamespaceIsPrefix(stdClass $marker, bool $flag): self
     {
-        return $this->setCapability($marker, 'namespaceIsPrefix', (bool) $flag);
+        return $this->setCapability($marker, 'namespaceIsPrefix', $flag);
     }
 
     /**
      * Get namespace separator if namespace is implemented as prefix
-     *
-     * @return string
      */
-    public function getNamespaceSeparator()
+    public function getNamespaceSeparator(): string
     {
         return $this->getCapability('namespaceSeparator', '');
     }
 
     /**
      * Set the namespace separator if namespace is implemented as prefix
-     *
-     * @param  string $separator
-     * @return Capabilities Fluent interface
      */
-    public function setNamespaceSeparator(stdClass $marker, $separator)
+    public function setNamespaceSeparator(stdClass $marker, string $separator): self
     {
-        return $this->setCapability($marker, 'namespaceSeparator', (string) $separator);
+        return $this->setCapability($marker, 'namespaceSeparator', $separator);
     }
 
     /**
      * Get a capability
-     *
-     * @param  string $property
-     * @return mixed
      */
-    protected function getCapability($property, mixed $default = null)
+    protected function getCapability(string $property, mixed $default = null): mixed
     {
         if ($this->$property !== null) {
             return $this->$property;
@@ -444,11 +381,9 @@ class Capabilities
     /**
      * Change a capability
      *
-     * @param  string $property
-     * @return Capabilities Fluent interface
      * @throws Exception\InvalidArgumentException
      */
-    protected function setCapability(stdClass $marker, $property, mixed $value)
+    protected function setCapability(stdClass $marker, string $property, mixed $value): self
     {
         if ($this->marker !== $marker) {
             throw new Exception\InvalidArgumentException('Invalid marker');

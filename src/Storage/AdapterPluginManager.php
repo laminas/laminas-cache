@@ -12,7 +12,6 @@ use Laminas\ServiceManager\AbstractPluginManager;
  * adapters available.
  *
  * @extends AbstractPluginManager<StorageInterface>
- * @final
  */
 final class AdapterPluginManager extends AbstractPluginManager
 {

@@ -13,25 +13,17 @@ class OutputCache extends AbstractStorageCapablePattern
 {
     /**
      * The key stack
-     *
-     * @var array
      */
-    protected $keyStack = [];
+    protected array $keyStack = [];
 
     /**
      * if there is a cached item with the given key display it's data and return true
      * else start buffering output until end() is called or the script ends.
      *
-     * @param  string  $key Key
-     * @throws Exception\MissingKeyException If key is missing.
-     * @return bool
+     * @param  non-empty-string  $key Key
      */
-    public function start($key)
+    public function start(string $key): bool
     {
-        if (($key = (string) $key) === '') {
-            throw new Exception\MissingKeyException('Missing key to read/write output from cache');
-        }
-
         $success = null;
         $storage = $this->getStorage();
         $data    = $storage->getItem($key, $success);
@@ -54,7 +46,7 @@ class OutputCache extends AbstractStorageCapablePattern
      * @throws Exception\RuntimeException If output cache not started or buffering not active.
      * @return bool TRUE on success, FALSE on failure writing to cache
      */
-    public function end()
+    public function end(): bool
     {
         $key = array_pop($this->keyStack);
         if ($key === null) {

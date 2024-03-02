@@ -3,112 +3,106 @@
 namespace Laminas\Cache\Storage;
 
 use Laminas\Cache\Exception\ExceptionInterface;
-use Traversable;
 
 interface StorageInterface
 {
     /**
      * Set options.
-     *
-     * @param array|Traversable|Adapter\AdapterOptions $options
-     * @return StorageInterface Fluent interface
      */
-    public function setOptions($options);
+    public function setOptions(iterable|Adapter\AdapterOptions $options): self;
 
     /**
      * Get options
-     *
-     * @return Adapter\AdapterOptions
      */
-    public function getOptions();
+    public function getOptions(): Adapter\AdapterOptions;
 
     /* reading */
     /**
      * Get an item.
      *
-     * @param  string  $key
-     * @param  bool $success
+     * @param non-empty-string $key
+     * @param-out bool $success
      * @return mixed Data on success, null on failure
      * @throws ExceptionInterface
      */
-    public function getItem($key, &$success = null, mixed &$casToken = null);
+    public function getItem(string $key, bool|null &$success = null, mixed &$casToken = null): mixed;
 
     /**
      * Get multiple items.
      *
-     * @return array Associative array of keys and values
+     * @param non-empty-list<non-empty-string> $keys
+     * @return array<non-empty-string,mixed> Associative array of keys and values
      * @throws ExceptionInterface
      */
-    public function getItems(array $keys);
+    public function getItems(array $keys): array;
 
     /**
      * Test if an item exists.
      *
-     * @param  string $key
-     * @return bool
+     * @param non-empty-string $key
      * @throws ExceptionInterface
      */
-    public function hasItem($key);
+    public function hasItem(string $key): bool;
 
     /**
      * Test multiple items.
      *
-     * @return array Array of found keys
+     * @param non-empty-list<non-empty-string> $keys
+     * @return list<non-empty-string> Array of found keys
      * @throws ExceptionInterface
      */
-    public function hasItems(array $keys);
+    public function hasItems(array $keys): array;
 
     /* writing */
     /**
      * Store an item.
      *
-     * @param  string $key
-     * @return bool
+     * @param non-empty-string $key
      * @throws ExceptionInterface
      */
-    public function setItem($key, mixed $value);
+    public function setItem(string $key, mixed $value): bool;
 
     /**
      * Store multiple items.
      *
-     * @return array Array of not stored keys
+     * @param non-empty-array<non-empty-string,mixed> $keyValuePairs
+     * @return list<non-empty-string> Array of not stored keys
      * @throws ExceptionInterface
      */
-    public function setItems(array $keyValuePairs);
+    public function setItems(array $keyValuePairs): array;
 
     /**
      * Add an item.
      *
-     * @param  string $key
-     * @return bool
      * @throws ExceptionInterface
      */
-    public function addItem($key, mixed $value);
+    public function addItem(string $key, mixed $value): bool;
 
     /**
      * Add multiple items.
      *
-     * @return array Array of not stored keys
+     * @param non-empty-array<non-empty-string,mixed> $keyValuePairs
+     * @return list<non-empty-string> Array of not stored keys
      * @throws ExceptionInterface
      */
-    public function addItems(array $keyValuePairs);
+    public function addItems(array $keyValuePairs): array;
 
     /**
      * Replace an existing item.
      *
-     * @param  string $key
-     * @return bool
+     * @param non-empty-string $key
      * @throws ExceptionInterface
      */
-    public function replaceItem($key, mixed $value);
+    public function replaceItem(string $key, mixed $value): bool;
 
     /**
      * Replace multiple existing items.
      *
-     * @return array Array of not stored keys
+     * @param non-empty-array<non-empty-string,mixed> $keyValuePairs
+     * @return list<non-empty-string> Array of not stored keys
      * @throws ExceptionInterface
      */
-    public function replaceItems(array $keyValuePairs);
+    public function replaceItems(array $keyValuePairs): array;
 
     /**
      * Set an item only if token matches
@@ -119,52 +113,50 @@ interface StorageInterface
      * @see    getItem()
      * @see    setItem()
      *
-     * @param  string $key
-     * @return bool
+     * @param non-empty-string $key
+     *
      * @throws ExceptionInterface
      */
-    public function checkAndSetItem(mixed $token, $key, mixed $value);
+    public function checkAndSetItem(mixed $token, string $key, mixed $value): bool;
 
     /**
      * Reset lifetime of an item
      *
-     * @param  string $key
-     * @return bool
+     * @param non-empty-string $key
      * @throws ExceptionInterface
      */
-    public function touchItem($key);
+    public function touchItem(string $key): bool;
 
     /**
      * Reset lifetime of multiple items.
      *
-     * @return array Array of not updated keys
+     * @param non-empty-list<non-empty-string> $keys
+     * @return list<non-empty-string> Array of not updated keys
      * @throws ExceptionInterface
      */
-    public function touchItems(array $keys);
+    public function touchItems(array $keys): array;
 
     /**
      * Remove an item.
      *
-     * @param  string $key
-     * @return bool
+     * @param non-empty-string $key
      * @throws ExceptionInterface
      */
-    public function removeItem($key);
+    public function removeItem(string $key): bool;
 
     /**
      * Remove multiple items.
      *
-     * @return array Array of not removed keys
+     * @param non-empty-list<non-empty-string> $keys
+     * @return list<non-empty-string> Array of not removed keys
      * @throws ExceptionInterface
      */
-    public function removeItems(array $keys);
+    public function removeItems(array $keys): array;
 
     /* status */
 
     /**
      * Capabilities of this storage
-     *
-     * @return Capabilities
      */
-    public function getCapabilities();
+    public function getCapabilities(): Capabilities;
 }
