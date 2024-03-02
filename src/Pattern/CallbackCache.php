@@ -22,12 +22,12 @@ class CallbackCache extends AbstractStorageCapablePattern
     /**
      * Call the specified callback or get the result from cache
      *
-     * @param  callable|callable-string   $callback  A valid callback
+     * @param  callable   $callback  A valid callback
      * @param  array      $args      Callback arguments
      * @throws Exception\RuntimeException If invalid cached data.
      * @throws Throwable
      */
-    public function call(callable|string $callback, array $args = []): mixed
+    public function call(callable $callback, array $args = []): mixed
     {
         $options = $this->getOptions();
         $storage = $this->getStorage();
@@ -103,13 +103,13 @@ class CallbackCache extends AbstractStorageCapablePattern
      * Generate a unique key in base of a key representing the callback part
      * and a key representing the arguments part.
      *
-     * @param  callable|callable-string $callback  A valid callback
+     * @param  callable $callback  A valid callback
      * @param  array      $args      Callback arguments
      * @return non-empty-string
      * @throws Exception\RuntimeException If callback not serializable.
      * @throws Exception\InvalidArgumentException If invalid callback.
      */
-    protected function generateCallbackKey(callable|string $callback, array $args): string
+    protected function generateCallbackKey(callable $callback, array $args): string
     {
         if (! is_callable($callback, false, $callbackKey)) {
             throw new Exception\InvalidArgumentException('Invalid callback');
