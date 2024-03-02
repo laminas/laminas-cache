@@ -12,6 +12,8 @@ use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
+use Laminas\Serializer\AdapterPluginManager;
+use Laminas\ServiceManager\ServiceManager;
 use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 
 use function array_keys;
@@ -31,7 +33,7 @@ final class SerializerTest extends AbstractCommonPluginTest
     {
         $this->adapter = new MockAdapter();
         $this->options = new Cache\Storage\Plugin\PluginOptions();
-        $this->plugin  = new Serializer();
+        $this->plugin  = new Serializer(new AdapterPluginManager(new ServiceManager()));
         $this->plugin->setOptions($this->options);
     }
 
@@ -137,7 +139,7 @@ final class SerializerTest extends AbstractCommonPluginTest
 
     public function testonWriteItemPreSerializesTokenOncePassed(): void
     {
-        $plugin     = new Serializer();
+        $plugin     = new Serializer(new AdapterPluginManager(new ServiceManager()));
         $parameters = new ArrayObject([
             'key'   => 'foo',
             'value' => 10,

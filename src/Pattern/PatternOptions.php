@@ -25,7 +25,10 @@ use function stripos;
 use const DIRECTORY_SEPARATOR;
 use const PHP_OS;
 
-class PatternOptions extends AbstractOptions
+/**
+ * @template-extends AbstractOptions<mixed>
+ */
+final class PatternOptions extends AbstractOptions
 {
     /**
      * Used by:
@@ -107,6 +110,7 @@ class PatternOptions extends AbstractOptions
     protected ?string $publicDir = null;
 
     /**
+     * @param iterable<string,mixed>|null $options
      * @throws Exception\InvalidArgumentException
      */
     public function __construct(iterable|null $options = null)

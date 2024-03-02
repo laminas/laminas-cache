@@ -222,9 +222,6 @@
     <MoreSpecificImplementedParamType>
       <code><![CDATA[$options]]></code>
     </MoreSpecificImplementedParamType>
-    <PossiblyInvalidArgument>
-      <code><![CDATA[$options]]></code>
-    </PossiblyInvalidArgument>
     <PossiblyInvalidPropertyAssignmentValue>
       <code><![CDATA[$options]]></code>
     </PossiblyInvalidPropertyAssignmentValue>
@@ -246,15 +243,6 @@
     <DocblockTypeContradiction>
       <code><![CDATA[is_array($options)]]></code>
     </DocblockTypeContradiction>
-    <InvalidArgument>
-      <code><![CDATA[new ArrayObject([$optionName => $optionValue])]]></code>
-    </InvalidArgument>
-    <InvalidReturnStatement>
-      <code><![CDATA[$array]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[array]]></code>
-    </InvalidReturnType>
     <MissingClosureParamType>
       <code><![CDATA[$letters]]></code>
     </MissingClosureParamType>
@@ -355,6 +343,9 @@
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/Storage/Event.php">
+    <InvalidArgument>
+      <code><![CDATA[$params]]></code>
+    </InvalidArgument>
     <MoreSpecificImplementedParamType>
       <code><![CDATA[$target]]></code>
       <code><![CDATA[$target]]></code>
@@ -383,15 +374,10 @@
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/Storage/Plugin/PluginOptions.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$this->serializer]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[SerializerAdapter]]></code>
-    </InvalidReturnType>
     <PossiblyUnusedMethod>
       <code><![CDATA[setExitOnAbort]]></code>
       <code><![CDATA[setOptimizingFactor]]></code>
+      <code><![CDATA[setSerializer]]></code>
       <code><![CDATA[setSerializerOptions]]></code>
     </PossiblyUnusedMethod>
   </file>
@@ -414,16 +400,6 @@
     <MixedMethodCall>
       <code><![CDATA[getAdapter]]></code>
     </MixedMethodCall>
-  </file>
-  <file src="src/Storage/PluginManager.php">
-    <MixedReturnStatement>
-      <code><![CDATA[$plugin]]></code>
-    </MixedReturnStatement>
-    <NonInvariantDocblockPropertyType>
-      <code><![CDATA[$aliases]]></code>
-      <code><![CDATA[$factories]]></code>
-      <code><![CDATA[$instanceOf]]></code>
-    </NonInvariantDocblockPropertyType>
   </file>
   <file src="src/Storage/StorageInterface.php">
     <PossiblyUnusedMethod>
@@ -670,7 +646,6 @@
   <file src="test/Storage/AdapterPluginManagerTest.php">
     <MissingReturnType>
       <code><![CDATA[testPluginAliasesResolve]]></code>
-      <code><![CDATA[testShareByDefaultAndSharedByDefault]]></code>
     </MissingReturnType>
   </file>
   <file src="test/Storage/Plugin/ClearExpiredByFactorTest.php">
@@ -775,11 +750,6 @@
       <code><![CDATA[onReadItemPost]]></code>
       <code><![CDATA[onReadItemsPost]]></code>
     </UndefinedInterfaceMethod>
-  </file>
-  <file src="test/Storage/PluginManagerTest.php">
-    <MissingReturnType>
-      <code><![CDATA[testShareByDefaultAndSharedByDefault]]></code>
-    </MissingReturnType>
   </file>
   <file src="test/Storage/TestAsset/MockPlugin.php">
     <PossiblyUnusedMethod>

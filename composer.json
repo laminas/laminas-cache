@@ -36,7 +36,7 @@
     "require": {
         "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
         "laminas/laminas-eventmanager": "^3.4",
-        "laminas/laminas-servicemanager": "^3.21",
+        "laminas/laminas-servicemanager": "^4.0",
         "laminas/laminas-stdlib": "^3.6",
         "psr/cache": "^2.0 || ^3.0",
         "psr/simple-cache": "^2.0 || ^3.0",
@@ -47,12 +47,14 @@
         "laminas/laminas-cli": "^1.7",
         "laminas/laminas-coding-standard": "~2.5.0",
         "laminas/laminas-config-aggregator": "^1.13",
-        "laminas/laminas-serializer": "^2.14",
+        "laminas/laminas-serializer": "3.0.x-dev",
+        "laminas/laminas-servicemanager": "^4.0.0-rc2",
         "phpunit/phpunit": "^9.5.27",
         "psalm/plugin-phpunit": "^0.18.4",
         "vimeo/psalm": "^5.4"
     },
     "conflict": {
+        "laminas/laminas-serializer": "<3.0",
         "symfony/console": "<5.1",
         "stella-maris/clock": "<0.1.7"
     },

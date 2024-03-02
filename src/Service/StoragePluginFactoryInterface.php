@@ -18,9 +18,10 @@ interface StoragePluginFactoryInterface
     public function createFromArrayConfiguration(array $configuration): PluginInterface;
 
     /**
-     * @psalm-param non-empty-string $plugin
+     * @template T of PluginInterface
+     * @param non-empty-string|class-string<T> $plugin
      * @param array<string,mixed>  $options
-     * @psalm-param array<string,mixed> $options
+     * @return ($plugin is class-string ? T : PluginInterface)
      */
     public function create(string $plugin, array $options = []): PluginInterface;
 

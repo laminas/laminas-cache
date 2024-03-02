@@ -12,6 +12,7 @@ class Event extends BaseEvent
      * Accept a storage adapter and its parameters.
      *
      * @param non-empty-string $name Event name
+     * @param ArrayObject<string,mixed> $params
      */
     public function __construct(string $name, StorageInterface $storage, ArrayObject $params)
     {
