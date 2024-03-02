@@ -4,20 +4,16 @@ namespace Laminas\Cache\Pattern;
 
 use Laminas\Cache\Exception;
 use Laminas\Cache\Storage\StorageInterface;
-use Laminas\Stdlib\ErrorHandler;
 use Stringable;
 use Throwable;
 
 use function array_shift;
 use function array_unshift;
-use function array_values;
 use function assert;
 use function func_get_args;
 use function in_array;
-use function md5;
 use function method_exists;
 use function property_exists;
-use function serialize;
 use function sprintf;
 use function strtolower;
 
@@ -287,31 +283,5 @@ class ObjectCache extends AbstractStorageCapablePattern implements Stringable
     public function __invoke(): mixed
     {
         return $this->call('__invoke', func_get_args());
-    }
-
-    private function generateArgumentsKey(array $args): string
-    {
-        if ($args === []) {
-            return '';
-        }
-
-        ErrorHandler::start();
-        try {
-            $serializedArgs = serialize(array_values($args));
-        } catch (\Exception $e) {
-            ErrorHandler::stop();
-            throw new Exception\RuntimeException("Can't serialize arguments: see previous exception", 0, $e);
-        }
-        $error = ErrorHandler::stop();
-
-        if (! $serializedArgs) {
-            throw new Exception\RuntimeException(
-                sprintf('Cannot serialize arguments%s', $error ? ': ' . $error->getMessage() : ''),
-                0,
-                $error
-            );
-        }
-
-        return md5($serializedArgs);
     }
 }
