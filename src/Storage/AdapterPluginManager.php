@@ -2,7 +2,7 @@
 
 namespace Laminas\Cache\Storage;
 
-use Laminas\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\AbstractSingleInstancePluginManager;
 
 /**
  * Plugin manager implementation for cache storage adapters
@@ -11,17 +11,11 @@ use Laminas\ServiceManager\AbstractPluginManager;
  * StorageInterface. Additionally, it registers a number of default
  * adapters available.
  *
- * @extends AbstractPluginManager<StorageInterface>
+ * @extends AbstractSingleInstancePluginManager<StorageInterface>
  */
-final class AdapterPluginManager extends AbstractPluginManager
+final class AdapterPluginManager extends AbstractSingleInstancePluginManager
 {
-    /**
-     * Do not share by default
-     *
-     * @var bool
-     */
-    protected $sharedByDefault = false;
+    protected bool $sharedByDefault = false;
 
-    /** @var class-string */
-    protected $instanceOf = StorageInterface::class;
+    protected string $instanceOf = StorageInterface::class;
 }

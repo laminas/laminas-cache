@@ -21,6 +21,7 @@ class ExceptionEvent extends PostEvent
      * Accept a target and its parameters.
      *
      * @param non-empty-string $name Event name
+     * @param ArrayObject<string,mixed> $params
      */
     public function __construct(
         string $name,

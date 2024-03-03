@@ -6,13 +6,26 @@ use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\Event;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\EventManagerInterface;
+use Laminas\Serializer\Adapter\AdapterInterface;
+use Laminas\ServiceManager\PluginManagerInterface;
 use stdClass;
 
+use function assert;
 use function spl_object_hash;
 
-class Serializer extends AbstractPlugin
+final class Serializer extends AbstractPlugin
 {
     protected array $capabilities = [];
+
+    private ?AdapterInterface $serializer = null;
+
+    /**
+     * @param PluginManagerInterface<AdapterInterface> $serializers
+     */
+    public function __construct(
+        private readonly PluginManagerInterface $serializers,
+    ) {
+    }
 
     /**
      * {@inheritDoc}
@@ -51,7 +64,7 @@ class Serializer extends AbstractPlugin
     {
         $result = $event->getResult();
         if ($result !== null) {
-            $serializer = $this->getOptions()->getSerializer();
+            $serializer = $this->getSerializer();
             $result     = $serializer->unserialize($result);
             $event->setResult($result);
         }
@@ -62,7 +75,7 @@ class Serializer extends AbstractPlugin
      */
     public function onReadItemsPost(PostEvent $event): void
     {
-        $serializer = $this->getOptions()->getSerializer();
+        $serializer = $this->getSerializer();
         $result     = $event->getResult();
         foreach ($result as $index => $value) {
             $result[$index] = $serializer->unserialize($value);
@@ -75,7 +88,7 @@ class Serializer extends AbstractPlugin
      */
     public function onWriteItemPre(Event $event): void
     {
-        $serializer      = $this->getOptions()->getSerializer();
+        $serializer      = $this->getSerializer();
         $params          = $event->getParams();
         $params['value'] = $serializer->serialize($params['value']);
         /** Passed by {@see AbstractAdapter::checkAndSetItem()}. Used to compare with the already cached value. */
@@ -89,7 +102,7 @@ class Serializer extends AbstractPlugin
      */
     public function onWriteItemsPre(Event $event): void
     {
-        $serializer = $this->getOptions()->getSerializer();
+        $serializer = $this->getSerializer();
         $params     = $event->getParams();
         foreach ($params['keyValuePairs'] as $index => $value) {
             $value                           = $serializer->serialize($value);
@@ -126,5 +139,27 @@ class Serializer extends AbstractPlugin
         }
 
         $event->setResult($this->capabilities[$index]);
+    }
+
+    public function getSerializer(): AdapterInterface
+    {
+        if ($this->serializer !== null) {
+            return $this->serializer;
+        }
+
+        $options    = $this->getOptions();
+        $serializer = $options->getSerializer();
+        if ($serializer instanceof AdapterInterface) {
+            $this->serializer = $serializer;
+
+            return $serializer;
+        }
+
+        $serializerOptions = $options->getSerializerOptions();
+        $serializerAdapter = $this->serializers->build($serializer, $serializerOptions);
+        assert($serializerAdapter instanceof AdapterInterface);
+        $this->serializer = $serializerAdapter;
+
+        return $serializerAdapter;
     }
 }

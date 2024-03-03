@@ -4,12 +4,16 @@ namespace Laminas\Cache\Storage\Plugin;
 
 use Laminas\Cache\Exception;
 use Laminas\Serializer\Adapter\AdapterInterface as SerializerAdapter;
-use Laminas\Serializer\Serializer as SerializerFactory;
+use Laminas\Serializer\Adapter\PhpSerialize;
 use Laminas\Stdlib\AbstractOptions;
 use Webmozart\Assert\Assert;
 
 use function is_callable;
+use function is_string;
 
+/**
+ * @template-extends AbstractOptions<mixed>
+ */
 class PluginOptions extends AbstractOptions
 {
     /**
@@ -41,13 +45,16 @@ class PluginOptions extends AbstractOptions
     /**
      * Used by:
      * - Serializer
-     * @phpcs:disable WebimpressCodingStandard.Classes.NoNullValues.Invalid
+     *
+     * @var non-empty-string|SerializerAdapter
      */
-    protected SerializerAdapter|string|null $serializer = null;
+    protected SerializerAdapter|string $serializer = PhpSerialize::class;
 
     /**
      * Used by:
      * - Serializer
+     *
+     * @var array<string,mixed>
      */
     protected array $serializerOptions = [];
 
@@ -158,6 +165,10 @@ class PluginOptions extends AbstractOptions
      */
     public function setSerializer(string|SerializerAdapter $serializer): self
     {
+        if (is_string($serializer) && $serializer === '') {
+            return $this;
+        }
+
         $this->serializer = $serializer;
         return $this;
     }
@@ -165,22 +176,10 @@ class PluginOptions extends AbstractOptions
     /**
      * Get serializer
      *
-     * Used by:
-     * - Serializer
+     * Used by {@see \Laminas\Cache\Storage\Plugin\Serializer}
      */
-    public function getSerializer(): SerializerAdapter
+    public function getSerializer(): string|SerializerAdapter
     {
-        if (! $this->serializer instanceof SerializerAdapter) {
-            // use default serializer
-            if ($this->serializer === null || $this->serializer === '') {
-                $this->setSerializer(SerializerFactory::getDefaultAdapter());
-            // instantiate by class name + serializer_options
-            } else {
-                $options = $this->getSerializerOptions();
-                $this->setSerializer(SerializerFactory::factory($this->serializer, $options));
-            }
-        }
-        Assert::notNull($this->serializer);
         return $this->serializer;
     }
 
@@ -189,9 +188,12 @@ class PluginOptions extends AbstractOptions
      *
      * Used by:
      * - Serializer
+     *
+     * @param array<string,mixed> $serializerOptions
      */
     public function setSerializerOptions(array $serializerOptions): self
     {
+        Assert::isMap($serializerOptions);
         $this->serializerOptions = $serializerOptions;
         return $this;
     }
@@ -202,7 +204,7 @@ class PluginOptions extends AbstractOptions
      * Used by:
      * - Serializer
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function getSerializerOptions(): array
     {

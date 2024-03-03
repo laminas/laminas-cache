@@ -25,6 +25,7 @@ final class StoragePluginFactoryIntegrationTest extends TestCase
     {
         $plugin  = $this->factory->create(Serializer::class, ['serializer' => 'json']);
         $options = $plugin->getOptions();
-        self::assertInstanceOf(Json::class, $options->getSerializer());
+        self::assertSame('json', $options->getSerializer());
+        self::assertInstanceOf(Json::class, $plugin->getSerializer());
     }
 }

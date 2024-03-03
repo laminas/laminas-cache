@@ -10,6 +10,7 @@ use Laminas\EventManager\EventsCapableInterface;
 use Laminas\Stdlib\AbstractOptions;
 use Laminas\Stdlib\ErrorHandler;
 use Traversable;
+use Webmozart\Assert\Assert;
 
 use function array_change_key_case;
 use function array_reverse;
@@ -28,6 +29,8 @@ use const E_WARNING;
 
 /**
  * Unless otherwise marked, all options in this class affect all adapters.
+ *
+ * @template-extends AbstractOptions<mixed>
  */
 class AdapterOptions extends AbstractOptions
 {
@@ -245,7 +248,7 @@ class AdapterOptions extends AbstractOptions
     /**
      * Cast to array
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function toArray(): array
     {
@@ -261,6 +264,7 @@ class AdapterOptions extends AbstractOptions
             $normalizedKey         = preg_replace_callback('/([A-Z])/', $transform, $key);
             $array[$normalizedKey] = $value;
         }
+        Assert::isMap($array);
         return $array;
     }
 
@@ -270,7 +274,7 @@ class AdapterOptions extends AbstractOptions
      * NOTE: This method was overwritten just to support prioritized properties
      *       {@link https://github.com/zendframework/zf2/issues/6381}
      *
-     * @param  iterable|AbstractOptions $options
+     * @param  iterable<string,mixed>|AbstractOptions $options
      * @throws Exception\InvalidArgumentException
      */
     public function setFromArray($options): self

@@ -17,6 +17,8 @@ use Laminas\Cache\Storage\Plugin\PluginOptions;
 use Laminas\Cache\Storage\Plugin\Serializer;
 use Laminas\Cache\Storage\PostEvent;
 use Laminas\EventManager\ResponseCollection;
+use Laminas\Serializer\AdapterPluginManager;
+use Laminas\ServiceManager\ServiceManager;
 use LaminasTest\Cache\Storage\TestAsset\MockPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -851,7 +853,7 @@ final class AbstractAdapterTest extends TestCase
     {
         $storage = $this->getMockForAbstractAdapter();
         $storage
-            ->addPlugin(new Serializer());
+            ->addPlugin(new Serializer(new AdapterPluginManager(new ServiceManager())));
         $storage
             ->expects(self::once())
             ->method('internalSetItem')

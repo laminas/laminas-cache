@@ -7,6 +7,7 @@ namespace LaminasTest\Cache\Storage;
 use Laminas\Cache\Exception\ExtensionNotLoadedException;
 use Laminas\Cache\Storage\AdapterPluginManager;
 use Laminas\Cache\Storage\StorageInterface;
+use Laminas\ServiceManager\AbstractSingleInstancePluginManager;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\ServiceManager\Test\CommonPluginManagerTrait;
@@ -34,19 +35,9 @@ class AdapterPluginManagerTest extends TestCase
         $this->addToAssertionCount(1);
     }
 
-    protected static function getPluginManager(): AdapterPluginManager
+    protected static function getPluginManager(array $config = []): AbstractSingleInstancePluginManager
     {
-        return new AdapterPluginManager(new ServiceManager());
-    }
-
-    public function testShareByDefaultAndSharedByDefault()
-    {
-        self::markTestSkipped('Support for servicemanager v2 is dropped.');
-    }
-
-    protected function getV2InvalidPluginException()
-    {
-        self::fail('Somehow, servicemanager v2 compatibility is being tested.');
+        return new AdapterPluginManager(new ServiceManager(), $config);
     }
 
     protected function getInstanceOf(): string

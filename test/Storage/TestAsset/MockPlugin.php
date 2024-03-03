@@ -23,6 +23,9 @@ class MockPlugin extends AbstractPlugin
         'setItem.post' => 'onSetItemPost',
     ];
 
+    /**
+     * @param array<string,mixed> $options
+     */
     public function __construct(array $options = [])
     {
         $options = new Plugin\PluginOptions($options);

@@ -69,7 +69,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     protected ?AdapterOptions $options = null;
 
     /**
-     * @param iterable|TOptions|null $options
+     * @param iterable<string,mixed>|TOptions|null $options
      * @throws Exception\ExceptionInterface
      */
     public function __construct(iterable|AdapterOptions|null $options = null)
@@ -106,7 +106,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      *
      * @see    getOptions()
      *
-     * @param iterable|TOptions $options
+     * @param iterable<string,mixed>|TOptions $options
      */
     public function setOptions(iterable|AdapterOptions $options): self
     {
@@ -197,6 +197,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     /**
      * Trigger a pre event and return the event response collection
      *
+     * @param ArrayObject<string,mixed> $args
      * @return ResponseCollection All handler return values
      */
     protected function triggerPre(string $eventName, ArrayObject $args): ResponseCollection
@@ -206,6 +207,8 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
 
     /**
      * Triggers the PostEvent and return the result value.
+     *
+     * @param ArrayObject<string,mixed> $args
      */
     protected function triggerPost(string $eventName, ArrayObject $args, mixed $result): mixed
     {
@@ -217,6 +220,11 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
             : $postEvent->getResult();
     }
 
+    /**
+     * @param non-empty-string $eventName
+     * @param ArrayObject<string,mixed> $args
+     * @throws Throwable
+     */
     protected function triggerThrowable(
         string $eventName,
         ArrayObject $args,
@@ -1158,6 +1166,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
      */
     public function getCapabilities(): Capabilities
     {
+        /** @var ArrayObject<string,mixed> $args */
         $args = new ArrayObject();
 
         try {
