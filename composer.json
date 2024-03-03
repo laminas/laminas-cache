@@ -48,7 +48,7 @@
         "laminas/laminas-coding-standard": "~2.5.0",
         "laminas/laminas-config-aggregator": "^1.13",
         "laminas/laminas-serializer": "3.0.x-dev",
-        "laminas/laminas-servicemanager": "^4.0.0-rc2",
+        "laminas/laminas-servicemanager": "^4.0.0-rc3",
         "phpunit/phpunit": "^9.5.27",
         "psalm/plugin-phpunit": "^0.18.4",
         "vimeo/psalm": "^5.4"

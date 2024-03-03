@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1e304d861b774fe8f9f33b95a0ab5f2",
+    "content-hash": "99df812d161e4b5162b4e5698069fb25",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -125,22 +125,22 @@
         },
         {
             "name": "laminas/laminas-servicemanager",
-            "version": "4.0.0-rc2",
+            "version": "4.0.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-servicemanager.git",
-                "reference": "52c22eb4e8e21a4176cf4c0a1793990b8655a4e1"
+                "reference": "d69bfefe07df0d8217056ec81f819c851027b9de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/52c22eb4e8e21a4176cf4c0a1793990b8655a4e1",
-                "reference": "52c22eb4e8e21a4176cf4c0a1793990b8655a4e1",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/d69bfefe07df0d8217056ec81f819c851027b9de",
+                "reference": "d69bfefe07df0d8217056ec81f819c851027b9de",
                 "shasum": ""
             },
             "require": {
-                "brick/varexporter": "^0.3.8",
+                "brick/varexporter": "^0.3.8 || ^0.4.0",
                 "laminas/laminas-stdlib": "^3.17",
-                "php": "~8.1.0 || ~8.2.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
                 "psr/container": "^1.1 || ^2.0"
             },
             "conflict": {
@@ -156,14 +156,14 @@
                 "friendsofphp/proxy-manager-lts": "^1",
                 "laminas/laminas-cli": "^1.8",
                 "laminas/laminas-coding-standard": "~2.5.0",
-                "laminas/laminas-container-config-test": "dev-qa/service-manager-v4",
+                "laminas/laminas-container-config-test": "^1.0",
                 "lctrs/psalm-psr-container-plugin": "^1.9",
                 "mikey179/vfsstream": "^1.6.11@alpha",
                 "phpbench/phpbench": "^1.2.7",
-                "phpunit/phpunit": "^10.1",
+                "phpunit/phpunit": "^10.4",
                 "psalm/plugin-phpunit": "^0.18.4",
                 "symfony/console": "^6.0",
-                "vimeo/psalm": "^5.10"
+                "vimeo/psalm": "^5.22"
             },
             "suggest": {
                 "friendsofphp/proxy-manager-lts": "To handle lazy initialization of services",
@@ -200,7 +200,7 @@
                 "chat": "https://laminas.dev/chat",
                 "forum": "https://discourse.laminas.dev",
                 "issues": "https://github.com/laminas/laminas-servicemanager/issues",
-                "source": "https://github.com/laminas/laminas-servicemanager/tree/4.0.0-rc2"
+                "source": "https://github.com/laminas/laminas-servicemanager/tree/4.0.0-rc3"
             },
             "funding": [
                 {
@@ -208,7 +208,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-05-31T00:52:33+00:00"
+            "time": "2024-03-02T23:58:24+00:00"
         },
         {
             "name": "laminas/laminas-stdlib",
