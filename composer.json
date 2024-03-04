@@ -36,7 +36,7 @@
     "require": {
         "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
         "laminas/laminas-eventmanager": "^3.4",
-        "laminas/laminas-servicemanager": "^3.21",
+        "laminas/laminas-servicemanager": "^3.21 || ^4.0",
         "laminas/laminas-stdlib": "^3.6",
         "psr/cache": "^2.0 || ^3.0",
         "psr/simple-cache": "^2.0 || ^3.0",
