@@ -125,20 +125,20 @@
         },
         {
             "name": "laminas/laminas-servicemanager",
-            "version": "4.1.0",
+            "version": "4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-servicemanager.git",
-                "reference": "ae01570ecdf4559aef2f15d4e79e8c36874f7416"
+                "reference": "a8489e352de3ce3f1eaf34a354b1e5f2ad2db85c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/ae01570ecdf4559aef2f15d4e79e8c36874f7416",
-                "reference": "ae01570ecdf4559aef2f15d4e79e8c36874f7416",
+                "url": "https://api.github.com/repos/laminas/laminas-servicemanager/zipball/a8489e352de3ce3f1eaf34a354b1e5f2ad2db85c",
+                "reference": "a8489e352de3ce3f1eaf34a354b1e5f2ad2db85c",
                 "shasum": ""
             },
             "require": {
-                "brick/varexporter": "^0.3.8 || ^0.4.0",
+                "brick/varexporter": "^0.3.8 || ^0.4.0 || ^0.5.0",
                 "laminas/laminas-stdlib": "^3.17",
                 "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
                 "psr/container": "^1.1 || ^2.0"
@@ -200,7 +200,7 @@
                 "chat": "https://laminas.dev/chat",
                 "forum": "https://discourse.laminas.dev",
                 "issues": "https://github.com/laminas/laminas-servicemanager/issues",
-                "source": "https://github.com/laminas/laminas-servicemanager/tree/4.1.0"
+                "source": "https://github.com/laminas/laminas-servicemanager/tree/4.2.0"
             },
             "funding": [
                 {
@@ -208,7 +208,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-04-03T20:39:36+00:00"
+            "time": "2024-07-04T09:40:44+00:00"
         },
         {
             "name": "laminas/laminas-stdlib",
