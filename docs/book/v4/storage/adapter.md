@@ -480,7 +480,6 @@ It will return an object with the following properties (or null):
 | `hits`             | `int`    | The amount of times the item was requested and returned from the backend |
 | `timeToLive`       | `int`    | The overall time to live (in seconds) the cache item was persisted for   |
 
-
 ### Adapter Specific Options
 
 | Name                  | Data Type | Default Value | Description                               |
@@ -770,7 +769,6 @@ This adapter implements the following interfaces:
 | Metadata   | Type     | Description                                  |
 |------------|----------|:---------------------------------------------|
 | `objectId` | `string` | The primary key within the mongo collection. |
-
 
 ### Adapter Specific Options
 

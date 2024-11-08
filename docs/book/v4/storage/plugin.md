@@ -76,10 +76,10 @@ You may also configure the plugin to re-throw exceptions.
 
 ### Plugin specific Options
 
-| Name                 | Data Type | Default Value | Description                 |
-|----------------------|-----------|---------------|-----------------------------|
-| `exception_callback` | `callable | null`         | null                        | Callback to invoke on exception; receives the exception as the sole argument.
-| `throw_exceptions`   | `boolean` | `true`        | Re-throw caught exceptions. |
+| Name                 | Data Type          | Default Value | Description                 |
+|----------------------|--------------------|---------------|-----------------------------|
+| `exception_callback` | `callable \| null` | null                        | Callback to invoke on exception; receives the exception as the sole argument.|
+| `throw_exceptions`   | `boolean`          | `true`        | Re-throw caught exceptions. |
 
 ## The IgnoreUserAbort Plugin
 

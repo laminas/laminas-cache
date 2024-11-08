@@ -95,13 +95,13 @@ The following configuration options are defined by `Laminas\Cache\Storage\Adapte
 are available for every supported adapter. Adapter-specific configuration options are described on
 adapter level below.
 
-Option | Data Type | Default Value | Description
------- | --------- | ------------- | -----------
-`ttl` | `integer` | `0` | Time to live
-`namespace` | `string` | “laminascache” | The “namespace” in which cache items will live
-`key_pattern` | `null|string` | `null` | Pattern against which to validate cache keys
-`readable` | `boolean` | `true` | Enable/Disable reading data from cache
-`writable` | `boolean` | `true` | Enable/Disable writing data to cache
+Option | Data Type      | Default Value | Description
+------ |----------------| ------------- | -----------
+`ttl` | `integer`      | `0` | Time to live
+`namespace` | `string`       | “laminascache” | The “namespace” in which cache items will live
+`key_pattern` | `null\|string` | `null` | Pattern against which to validate cache keys
+`readable` | `boolean`      | `true` | Enable/Disable reading data from cache
+`writable` | `boolean`      | `true` | Enable/Disable writing data to cache
 
 ## StorageInterface
 
@@ -708,21 +708,21 @@ Capability | Value
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix
-`cache_dir` | `string` | "" | Directory to store cache files.
-`clear_stat_cache` | `boolean` | `true` | Call `clearstatcache()` enabled?
-`dir_level` | `integer` | `1` | Defines how much sub-directories should be created.
-`dir_permission` | `integer` | `false` | 0700    Set explicit permission on creating new directories.
-`file_locking` | `boolean` | `true` | Lock files on writing.
-`file_permission` | `integer` | `false` | 0600    Set explicit permission on creating new files.
-`key_pattern` | `string` | `/^[a-z0-9_\+\-]*$/Di` | Validate key against pattern.
-`no_atime` | `boolean` | `true` | Don’t get ‘fileatime’ as ‘atime’ on metadata.
-`no_ctime` | `boolean` | `true` | Don’t get ‘filectime’ as ‘ctime’ on metadata.
-`umask` | `integer|false` | `false` | Use [umask](http://wikipedia.org/wiki/Umask) to set file and directory permissions.
-`suffix` | `string` | `dat` | Suffix for cache files
-`tag_suffix` | `string` | `tag` | Suffix for tag files
+Name | Data Type        | Default Value | Description
+---- |------------------| ------------- | -----------
+`namespace_separator` | `string`         | ":" | A separator for the namespace and prefix
+`cache_dir` | `string`         | "" | Directory to store cache files.
+`clear_stat_cache` | `boolean`        | `true` | Call `clearstatcache()` enabled?
+`dir_level` | `integer`        | `1` | Defines how much sub-directories should be created.
+`dir_permission` | `integer`        | `false` | 0700    Set explicit permission on creating new directories.
+`file_locking` | `boolean`        | `true` | Lock files on writing.
+`file_permission` | `integer`        | `false` | 0600    Set explicit permission on creating new files.
+`key_pattern` | `string`         | `/^[a-z0-9_\+\-]*$/Di` | Validate key against pattern.
+`no_atime` | `boolean`        | `true` | Don’t get ‘fileatime’ as ‘atime’ on metadata.
+`no_ctime` | `boolean`        | `true` | Don’t get ‘filectime’ as ‘ctime’ on metadata.
+`umask` | `integer\|false` | `false` | Use [umask](http://wikipedia.org/wiki/Umask) to set file and directory permissions.
+`suffix` | `string`         | `dat` | Suffix for cache files
+`tag_suffix` | `string`         | `tag` | Suffix for tag files
 
 Note: the `suffix` and `tag_suffix` options will be escaped in order to be safe
 for glob operations.
@@ -883,9 +883,9 @@ Capability | Value
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`memory_limit` | `string|integer` | 50% of `memory_limit` INI value | Limit of how much memory can PHP allocate to allow store items.
+Name | Data Type         | Default Value | Description
+---- |-------------------| ------------- | -----------
+`memory_limit` | `string\|integer` | 50% of `memory_limit` INI value | Limit of how much memory can PHP allocate to allow store items.
 
 > #### Memory Limit
 >

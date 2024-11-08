@@ -95,13 +95,13 @@ The following configuration options are defined by `Laminas\Cache\Storage\Adapte
 are available for every supported adapter. Adapter-specific configuration options are described on
 adapter level below.
 
-Option | Data Type | Default Value | Description
------- | --------- | ------------- | -----------
-`ttl` | `integer` | `0` | Time to live
-`namespace` | `string` | “laminascache” | The “namespace” in which cache items will live
-`key_pattern` | `null|string` | `null` | Pattern against which to validate cache keys
-`readable` | `boolean` | `true` | Enable/Disable reading data from cache
-`writable` | `boolean` | `true` | Enable/Disable writing data to cache
+Option | Data Type      | Default Value | Description
+------ |----------------| ------------- | -----------
+`ttl` | `integer`      | `0` | Time to live
+`namespace` | `string`       | “laminascache” | The “namespace” in which cache items will live
+`key_pattern` | `null\|string` | `null` | Pattern against which to validate cache keys
+`readable` | `boolean`      | `true` | Enable/Disable reading data from cache
+`writable` | `boolean`      | `true` | Enable/Disable writing data to cache
 
 ## StorageInterface
 
@@ -666,21 +666,21 @@ Capability | Value
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix
-`cache_dir` | `string` | "" | Directory to store cache files.
-`clear_stat_cache` | `boolean` | `true` | Call `clearstatcache()` enabled?
-`dir_level` | `integer` | `1` | Defines how much sub-directories should be created.
-`dir_permission` | `integer` | `false` | 0700    Set explicit permission on creating new directories.
-`file_locking` | `boolean` | `true` | Lock files on writing.
-`file_permission` | `integer` | `false` | 0600    Set explicit permission on creating new files.
-`key_pattern` | `string` | `/^[a-z0-9_\+\-]*$/Di` | Validate key against pattern.
-`no_atime` | `boolean` | `true` | Don’t get ‘fileatime’ as ‘atime’ on metadata.
-`no_ctime` | `boolean` | `true` | Don’t get ‘filectime’ as ‘ctime’ on metadata.
-`umask` | `integer|false` | `false` | Use [umask](http://wikipedia.org/wiki/Umask) to set file and directory permissions.
-`suffix` | `string` | `dat` | Suffix for cache files
-`tag_suffix` | `string` | `tag` | Suffix for tag files
+Name | Data Type        | Default Value | Description
+---- |------------------| ------------- | -----------
+`namespace_separator` | `string`         | ":" | A separator for the namespace and prefix
+`cache_dir` | `string`         | "" | Directory to store cache files.
+`clear_stat_cache` | `boolean`        | `true` | Call `clearstatcache()` enabled?
+`dir_level` | `integer`        | `1` | Defines how much sub-directories should be created.
+`dir_permission` | `integer`        | `false` | 0700    Set explicit permission on creating new directories.
+`file_locking` | `boolean`        | `true` | Lock files on writing.
+`file_permission` | `integer`        | `false` | 0600    Set explicit permission on creating new files.
+`key_pattern` | `string`         | `/^[a-z0-9_\+\-]*$/Di` | Validate key against pattern.
+`no_atime` | `boolean`        | `true` | Don’t get ‘fileatime’ as ‘atime’ on metadata.
+`no_ctime` | `boolean`        | `true` | Don’t get ‘filectime’ as ‘ctime’ on metadata.
+`umask` | `integer\|false` | `false` | Use [umask](http://wikipedia.org/wiki/Umask) to set file and directory permissions.
+`suffix` | `string`         | `dat` | Suffix for cache files
+`tag_suffix` | `string`         | `tag` | Suffix for tag files
 
 Note: the `suffix` and `tag_suffix` options will be escaped in order to be safe
 for glob operations.
@@ -796,18 +796,18 @@ Capability | Value
 
 ### Adapter Specific Options
 
-| Name                  | Data Type                 | Default Value | Description                                                                                                                                                                                                                                        |
-|-----------------------|---------------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `lib_options`         | `array`                   | `[]`          | Associative array of Redis options where the array key is the options constant value (see `RedisCluster::OPT_*` [constants](https://github.com/JetBrains/phpstorm-stubs/blob/master/redis/RedisCluster.php) for details).                          |
-| `namespace_separator` | `string`                  | ":"           | A separator for the namespace and prefix.                                                                                                                                                                                                          |
-| `password`            | `string`                  | ""            | Password to authenticate with Redis server                                                                                                                                                                                                         |
-| `name`                | `string`                  | ""            | Name to determine configuration from [php.ini](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#loading-a-cluster-configuration-by-name) (**MUST NOT** be combined with `seeds`)                                                 |
-| `seeds`               | `array`                   | `[]`          | List of strings containing `<hostname>:<port>` (**MUST NOT** be combined with `name`)                                                                                                                                                              |
-| `timeout`             | `float`                   | `1.0`         | Timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.                                                                                      |
-| `read_timeout`        | `float`                   | `2.0`         | Read timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.                                                                                 |
-| `persistent`          | `bool`                    | `false`       | Flag to specify whether to create a persistent connection or not                                                                                                                                                                                   |
-| `version`             | `string`                  | ""            | The Redis server version. **MUST** be specified in a [Semantic Versioning 2.0.0](https://semver.org/#semantic-versioning-200) format. This information is used to determine some features/capabilities without opening a connection to the server. |
-| `ssl_context`         | `array\|SslContext\|null` | `null`        | Associative array with [SSL context](https://www.php.net/manual/en/context.ssl.php) options. Can be also an instance of `SslContext` (class available from within the `redis` adapter). Available since adapter version v2.8.0.                    |
+Name                  | Data Type                 | Default Value | Description                                                                                                                                                                                                                                        
+----------------------|---------------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ `lib_options`        | `array`                   | `[]`          | Associative array of Redis options where the array key is the options constant value (see `RedisCluster::OPT_*` [constants](https://github.com/JetBrains/phpstorm-stubs/blob/master/redis/RedisCluster.php) for details).                          
+ `namespace_separator` | `string`                  | ":"           | A separator for the namespace and prefix.                                                                                                                                                                                                          
+ `password`           | `string`                  | ""            | Password to authenticate with Redis server                                                                                                                                                                                                         
+ `name`               | `string`                  | ""            | Name to determine configuration from [php.ini](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#loading-a-cluster-configuration-by-name) (**MUST NOT** be combined with `seeds`)                                                 
+ `seeds`              | `array`                   | `[]`          | List of strings containing `<hostname>:<port>` (**MUST NOT** be combined with `name`)                                                                                                                                                              
+ `timeout`            | `float`                   | `1.0`         | Timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.                                                                                      
+ `read_timeout`       | `float`                   | `2.0`         | Read timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.                                                                                 
+ `persistent`         | `bool`                    | `false`       | Flag to specify whether to create a persistent connection or not                                                                                                                                                                                   
+ `version`            | `string`                  | ""            | The Redis server version. **MUST** be specified in a [Semantic Versioning 2.0.0](https://semver.org/#semantic-versioning-200) format. This information is used to determine some features/capabilities without opening a connection to the server. 
+ `ssl_context`        | `array\|SslContext\|null` | `null`        | Associative array with [SSL context](https://www.php.net/manual/en/context.ssl.php) options. Can be also an instance of `SslContext` (class available from within the `redis` adapter). Available since adapter version v2.8.0.                    
 
 ## Memory Adapter
 
@@ -842,9 +842,9 @@ Capability | Value
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`memory_limit` | `string|integer` | 50% of `memory_limit` INI value | Limit of how much memory can PHP allocate to allow store items.
+Name | Data Type         | Default Value | Description
+---- |-------------------| ------------- | -----------
+`memory_limit` | `string\|integer` | 50% of `memory_limit` INI value | Limit of how much memory can PHP allocate to allow store items.
 
 > #### Memory Limit
 >
