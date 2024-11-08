@@ -79,7 +79,7 @@ final class IndexController extends AbstractActionController
 To [register the controller](https://docs.laminas.dev/laminas-mvc/quick-start/#create-a-route) for the application, extend the configuration of the module.
 Add the following lines to the module configuration file, e.g. `module/Application/config/module.config.php`:
 
-```php
+<!-- markdownlint-disable-next-line no-inline-html -->
 <pre class="language-php" data-line="3,8"><code>
 namespace Application;
 
@@ -94,7 +94,6 @@ return [
     // …
 ];
 </code></pre>
-```
 
 The example uses the [config factory from laminas-servicemanager](https://docs.laminas.dev/laminas-servicemanager/config-abstract-factory/) which allows any string to be used to fetch a service from the application service container, like the name of the configured cache: `default-cache`.
 
@@ -105,7 +104,7 @@ This means that the factory [searches for an appropriate configuration](https://
 Extend the module configuration file to add the configuration for the controller.
 Use the name of the cache (`default-cache`), which was previously defined in the configuration of the caches, to retrieve the related cache storage instance:
 
-```php
+<!-- markdownlint-disable-next-line no-inline-html -->
 <pre class="language-php" data-line="11-15"><code>
 namespace Application;
 
@@ -125,7 +124,6 @@ return [
     // …
 ];
 </code></pre>
-```
 
 ## Using Multiple Caches
 
@@ -133,7 +131,7 @@ The use more than one cache backend, the factory `Laminas\Cache\Service\StorageC
 
 Extend the cache configuration in `config/autoload/cache.global.php` and add more cache adapters:
 
-```php
+<!-- markdownlint-disable-next-line no-inline-html -->
 <pre class="language-php" data-line="9-14"><code>
 return [
     'caches' => [
@@ -152,7 +150,6 @@ return [
     ],
 ];
 </code></pre>
-```
 
 MISSING: **Installation Requirements**
 Make sure that the [used storage adapters are installed](#preparation):
@@ -165,7 +162,7 @@ $ composer require laminas/laminas-cache-storage-adapter-memory laminas/laminas-
 
 To use a different cache adapter for the controller, change the related module configuration and use one of the previously defined names:
 
-```php
+<!-- markdownlint-disable-next-line no-inline-html -->
 <pre class="language-php" data-line="13"><code>
 namespace Application;
 
@@ -185,7 +182,6 @@ return [
     // …
 ];
 </code></pre>
-```
 
 ## Learn More
 
