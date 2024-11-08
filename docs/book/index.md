@@ -1,11 +1,12 @@
 ## Installation
-<!-- markdownlint-disable-next-line heading-increment -->
+
 ### Using Composer
 
 ```bash
 $ composer require laminas/laminas-cache
 ```
 
+<!-- markdownlint-disable-next-line heading-increment -->
 ## Learn
 
 <!-- markdownlint-disable no-inline-html -->
