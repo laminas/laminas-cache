@@ -1,3 +1,4 @@
+<!-- markdownlint-disable-next-line heading-increment -->
 ## Installation
 
 ### Using Composer
@@ -6,7 +7,6 @@
 $ composer require laminas/laminas-cache
 ```
 
-<!-- markdownlint-disable-next-line heading-increment -->
 ## Learn
 
 <!-- markdownlint-disable no-inline-html -->
