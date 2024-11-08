@@ -1,6 +1,5 @@
-<!-- markdownlint-disable-next-line heading-increment -->
 ## Installation
-
+<!-- markdownlint-disable-next-line heading-increment -->
 ### Using Composer
 
 ```bash
