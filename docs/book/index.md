@@ -1,4 +1,4 @@
-<!-- markdownlint-disable-next-line heading-increment -->
+<!-- markdownlint-disable-next-line first-line-h1 first-line-heading -->
 ## Installation
 
 ### Using Composer
