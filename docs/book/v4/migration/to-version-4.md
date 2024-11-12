@@ -38,7 +38,7 @@ This allows per-storage Metadata which can differ depending on the storage being
 - `KeyListIterator` and the corresponding `IteratorInterface` does not provide the `mode` `CURRENT_AS_METADATA` anymore
 - `PluginOptions#getSerializer` does not create a serializer anymore if a `string` option was passed, instead, the `string` is returned
 - Increment and decrement feature was removed from `StorageInterface`, so there is no more `StorageInterface#incrementItem`, `StorageInterface#decrementItem`, `StorageInterface#decrementItems` and `StorageInterface#incrementItems`
-- this also removes `incrementItem`, `incrementItems`, `decrementItem`, `derementItems` events (`pre`, `post` and `exception`)
+    - this also removes `incrementItem`, `incrementItems`, `decrementItem`, `derementItems` events (`pre`, `post` and `exception`)
 - Every method now has native return types
 - Every property now has native types
 - Every method argument now has native types
