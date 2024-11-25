@@ -397,8 +397,6 @@ final class PatternOptions extends AbstractOptions
 
     /**
      * Get list of object methods for which to cache return values
-     *
-     * @return array
      */
     public function getObjectCacheMethods(): array
     {
@@ -455,8 +453,6 @@ final class PatternOptions extends AbstractOptions
 
     /**
      * Get list of object methods for which NOT to cache return values
-     *
-     * @return array
      */
     public function getObjectNonCacheMethods(): array
     {
@@ -505,8 +501,6 @@ final class PatternOptions extends AbstractOptions
     /**
      * Recursively apply strtolower on all values of an array, and return as a
      * list of unique values
-     *
-     * @return array
      */
     protected function recursiveStrtolower(array $array): array
     {
@@ -519,8 +513,6 @@ final class PatternOptions extends AbstractOptions
      * Recursively casts values to lowercase, then determines if any are in a
      * list of methods not handled, raising an exception if so.
      *
-     * @param  array $methods
-     * @return array
      * @throws Exception\InvalidArgumentException
      */
     protected function normalizeObjectMethods(array $methods): array

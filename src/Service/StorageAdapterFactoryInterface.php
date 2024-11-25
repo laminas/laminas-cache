@@ -9,7 +9,6 @@ use Laminas\Cache\Storage\StorageInterface;
 
 /**
  * @psalm-type InternalOptionalPriorityConfigurationType = array{priority?:int}
- * NOTE: have to re-declare this here until https://github.com/vimeo/psalm/issues/5148 is fixed.
  * @psalm-type InternalPluginArrayConfigurationType = array{name:non-empty-string,options?:array<string,mixed>}
  * @psalm-type PluginArrayConfigurationWithPriorityType =
  *              InternalPluginArrayConfigurationType&InternalOptionalPriorityConfigurationType

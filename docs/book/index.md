@@ -1,4 +1,4 @@
-<!-- markdownlint-disable-next-line first-line-h1 first-line-heading -->
+<!-- markdownlint-disable -->
 ## Installation
 
 ### Using Composer
@@ -15,4 +15,4 @@ $ composer require laminas/laminas-cache
         <a href="/laminas-cache/v3/application-integration/usage-in-a-laminas-mvc-application/">Usage in a laminas-mvc application</a>
     </li>
 </ul>
-<!-- markdownlint-enable no-inline-html -->
+<!-- markdownlint-enable -->

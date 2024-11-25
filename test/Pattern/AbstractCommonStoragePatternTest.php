@@ -17,7 +17,6 @@ use function sprintf;
  */
 abstract class AbstractCommonStoragePatternTest extends AbstractCommonPatternTest
 {
-    /** @var StorageInterface&MockObject */
     protected StorageInterface&MockObject $storage;
 
     /** @var TPattern */

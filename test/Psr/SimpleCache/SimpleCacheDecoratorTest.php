@@ -39,6 +39,7 @@ use function str_repeat;
  * try/catch blocks and assert identity against the result of getPrevious().
  *
  * phpcs:disable Generic.Files.LineLength.TooLong
+ *
  * @psalm-import-type SupportedDataTypesArrayShape from Capabilities
  */
 final class SimpleCacheDecoratorTest extends TestCase

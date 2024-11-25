@@ -16,7 +16,6 @@ class TtlStorage extends Adapter\AbstractAdapter
 {
     private array $data = [];
 
-    /** @var array */
     public array $ttl = [];
 
     protected function internalGetItem(string $normalizedKey, ?bool &$success = null, mixed &$casToken = null): mixed
