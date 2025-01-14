@@ -22,6 +22,13 @@ final class TestObjectCache
     /** @var string */
     public $property = 'testProperty';
 
+    private \Closure $closure;
+
+    public function __construct()
+    {
+        // Closures prevent serialization - this acts as a detector to verify this object is not serialized during test.
+        $this->closure = function () {};
+    }
     public function bar(): string
     {
         ++static::$fooCounter;
