@@ -111,6 +111,15 @@ final class CallbackCache extends AbstractStorageCapablePattern
      */
     protected function generateCallbackKey(callable $callback, array $args): string
     {
+
+        // Create a cache key for the ObjectCache use case.
+        $options = $this->getOptions();
+        if (is_object($options->getObject())) {
+            $callbackKey = md5($options->getObjectKey() . '::' . strtolower($callback[1]));
+            $argumentKey = $this->generateArgumentsKey($args);
+            return $callbackKey . $argumentKey;
+        }
+
         if (! is_callable($callback, false, $callbackKey)) {
             throw new Exception\InvalidArgumentException('Invalid callback');
         }
