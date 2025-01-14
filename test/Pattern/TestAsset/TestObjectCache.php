@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LaminasTest\Cache\Pattern\TestAsset;
 
+use Closure;
+
 use function func_get_args;
 use function implode;
 
@@ -22,13 +24,15 @@ final class TestObjectCache
     /** @var string */
     public $property = 'testProperty';
 
-    private \Closure $closure;
+    private Closure $closure;
 
     public function __construct()
     {
         // Closures prevent serialization - this acts as a detector to verify this object is not serialized during test.
-        $this->closure = function () {};
+        $this->closure = function (): void {
+        };
     }
+
     public function bar(): string
     {
         ++static::$fooCounter;
