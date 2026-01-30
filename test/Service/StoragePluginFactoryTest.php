@@ -9,6 +9,7 @@ use Laminas\Cache\Exception\InvalidArgumentException;
 use Laminas\Cache\Service\StoragePluginFactory;
 use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\ServiceManager\PluginManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -57,7 +58,7 @@ final class StoragePluginFactoryTest extends TestCase
         $plugin = $this->createMock(PluginInterface::class);
 
         $this->plugins
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('build')
             ->with('foo')
             ->willReturn($plugin);
@@ -71,7 +72,7 @@ final class StoragePluginFactoryTest extends TestCase
         $plugin = $this->createMock(PluginInterface::class);
 
         $this->plugins
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('build')
             ->with('foo', ['bar' => 'baz'])
             ->willReturn($plugin);
@@ -88,7 +89,7 @@ final class StoragePluginFactoryTest extends TestCase
         $plugin = $this->createMock(PluginInterface::class);
 
         $this->plugins
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('build')
             ->with('foo')
             ->willReturn($plugin);
@@ -102,7 +103,7 @@ final class StoragePluginFactoryTest extends TestCase
         $plugin = $this->createMock(PluginInterface::class);
 
         $this->plugins
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('build')
             ->with('foo', ['bar' => 'baz'])
             ->willReturn($plugin);
@@ -115,8 +116,8 @@ final class StoragePluginFactoryTest extends TestCase
     /**
      * @param array<mixed>  $invalidConfiguration
      * @psalm-param non-empty-string $expectedExceptionMessage
-     * @dataProvider invalidConfigurations
      */
+    #[DataProvider('invalidConfigurations')]
     public function testWillThrowInvalidArgumentExceptionWhenInvalidConfigurationIsPassedToConfigurationAssertion(
         array $invalidConfiguration,
         string $expectedExceptionMessage

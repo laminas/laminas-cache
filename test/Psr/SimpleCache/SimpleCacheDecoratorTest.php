@@ -15,6 +15,7 @@ use Laminas\Cache\Storage\Capabilities;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Psr\TestAsset\FlushableNamespaceStorageInterface;
 use LaminasTest\Cache\Psr\TestAsset\FlushableStorageInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheException as PsrSimpleCacheException;
@@ -192,7 +193,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $testCase = $this;
         $cache    = $this->cache;
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with('key')
             ->willReturnCallback(static function () use ($testCase, $cache) {
@@ -210,7 +211,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $testCase = $this;
         $cache    = $this->cache;
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with('key')
             ->willReturnCallback(static function () use ($testCase, $cache): bool {
@@ -229,7 +230,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $expected = 'returned value';
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with('key')
             ->willReturnCallback(static function () use ($testCase, $cache, $expected): string {
@@ -245,7 +246,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     {
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with('key')
             ->willThrowException($exception);
@@ -266,7 +267,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $ttl         = 86400;
 
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTtl')
             ->willReturn($originalTtl);
 
@@ -289,12 +290,12 @@ final class SimpleCacheDecoratorTest extends TestCase
             ->willReturnSelf();
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItem')
             ->with('key', 'value')
             ->willReturn(true);
@@ -303,9 +304,9 @@ final class SimpleCacheDecoratorTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidatingTtls
      * @param int $ttl
      */
+    #[DataProvider('invalidatingTtls')]
     public function testSetShouldRemoveItemFromCacheIfTtlIsBelow1($ttl)
     {
         $this->storage
@@ -316,7 +317,7 @@ final class SimpleCacheDecoratorTest extends TestCase
             ->method('setItem');
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItem')
             ->with('key')
             ->willReturn(true);
@@ -341,9 +342,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         self::assertFalse($cache->set('key', 'value', 3600));
     }
 
-    /**
-     * @dataProvider invalidatingTtls
-     */
+    #[DataProvider('invalidatingTtls')]
     public function testSetShouldRemoveItemFromCacheIfTtlIsBelow1AndStorageDoesNotSupportTtl(int $ttl): void
     {
         $storage = $this->createMock(StorageInterface::class);
@@ -357,7 +356,7 @@ final class SimpleCacheDecoratorTest extends TestCase
             ->method('setItem');
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItem')
             ->with('key')
             ->willReturn(true);
@@ -368,10 +367,10 @@ final class SimpleCacheDecoratorTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidKeyProvider
      * @param string $key
      * @param string $expectedMessage
      */
+    #[DataProvider('invalidKeyProvider')]
     public function testSetShouldRaisePsrInvalidArgumentExceptionForInvalidKeys($key, $expectedMessage)
     {
         $this->storage
@@ -395,7 +394,7 @@ final class SimpleCacheDecoratorTest extends TestCase
 
         $this->mockCapabilities($storage, null, true, 251);
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItem')
             ->with($validKeyLength, 'value')
             ->willReturn(true);
@@ -416,7 +415,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $ttl         = 86400;
 
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTtl')
             ->willReturn($originalTtl);
 
@@ -439,13 +438,13 @@ final class SimpleCacheDecoratorTest extends TestCase
             ->willReturnSelf();
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
 
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItem')
             ->with('key', 'value')
             ->willThrowException($exception);
@@ -463,7 +462,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     public function testDeleteShouldProxyToStorage(): void
     {
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItem')
             ->with('key')
             ->willReturn(true);
@@ -474,7 +473,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     public function testDeleteShouldReturnTrueWhenItemDoesNotExist(): void
     {
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItem')
             ->with('key')
             ->willReturn(false);
@@ -485,7 +484,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     {
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItem')
             ->with('key')
             ->willThrowException($exception);
@@ -496,13 +495,13 @@ final class SimpleCacheDecoratorTest extends TestCase
     public function testClearReturnsFalseIfStorageIsNotFlushable(): void
     {
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getNamespace')
             ->willReturn('');
 
         $storage = $this->createMock(StorageInterface::class);
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
 
@@ -515,7 +514,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     public function testClearProxiesToStorageIfStorageCanBeClearedByNamespace(): void
     {
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getNamespace')
             ->willReturn('foo');
 
@@ -523,12 +522,12 @@ final class SimpleCacheDecoratorTest extends TestCase
 
         $this->mockCapabilities($storage);
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('clearByNamespace')
             ->with('foo')
             ->willReturn(true);
@@ -544,7 +543,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     public function testClearProxiesToStorageFlushIfStorageCanBeClearedByNamespaceWithNoNamespace(): void
     {
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getNamespace')
             ->willReturn('');
 
@@ -552,7 +551,7 @@ final class SimpleCacheDecoratorTest extends TestCase
 
         $this->mockCapabilities($storage);
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
 
@@ -561,7 +560,7 @@ final class SimpleCacheDecoratorTest extends TestCase
             ->method('clearByNamespace');
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('flush')
             ->willReturn(true);
 
@@ -574,12 +573,12 @@ final class SimpleCacheDecoratorTest extends TestCase
         $storage = $this->createMock(FlushableStorageInterface::class);
         $this->mockCapabilities($storage);
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('flush')
             ->willReturn(true);
 
@@ -597,7 +596,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         ];
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->with($keys)
             ->willReturn([
@@ -618,7 +617,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         ];
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->with($keys)
             ->willReturn([
@@ -639,7 +638,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         ];
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->with(iterator_to_array($keys))
             ->willReturn($expected);
@@ -653,7 +652,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->with($keys)
             ->willThrowException($exception);
@@ -674,7 +673,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $ttl         = 86400;
 
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTtl')
             ->willReturn($originalTtl);
 
@@ -697,14 +696,14 @@ final class SimpleCacheDecoratorTest extends TestCase
             ->willReturnSelf();
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
 
         $values = ['one' => 1, 'three' => 3];
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with($values)
             ->willReturn([]);
@@ -718,7 +717,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $ttl         = 86400;
 
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTtl')
             ->willReturn($originalTtl);
 
@@ -741,7 +740,7 @@ final class SimpleCacheDecoratorTest extends TestCase
             ->willReturnSelf();
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
 
@@ -751,7 +750,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         ]);
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with(iterator_to_array($values))
             ->willReturn([]);
@@ -760,9 +759,9 @@ final class SimpleCacheDecoratorTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidatingTtls
      * @param int $ttl
      */
+    #[DataProvider('invalidatingTtls')]
     public function testSetMultipleShouldRemoveItemsFromCacheIfTtlIsBelow1($ttl)
     {
         $values = [
@@ -779,7 +778,7 @@ final class SimpleCacheDecoratorTest extends TestCase
             ->method('setItems');
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->with(array_keys($values))->willReturn([]);
 
@@ -809,9 +808,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         self::assertFalse($cache->setMultiple($values, 60));
     }
 
-    /**
-     * @dataProvider invalidatingTtls
-     */
+    #[DataProvider('invalidatingTtls')]
     public function testSetMultipleShouldRemoveItemsFromCacheIfTtlIsBelow1AndStorageDoesNotSupportTtl(int $ttl): void
     {
         $values = [
@@ -831,7 +828,7 @@ final class SimpleCacheDecoratorTest extends TestCase
             ->method('setItems');
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->with(array_keys($values))
             ->willReturn([]);
@@ -842,10 +839,10 @@ final class SimpleCacheDecoratorTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidKeyProvider
      * @param string $key
      * @param string $expectedMessage
      */
+    #[DataProvider('invalidKeyProvider')]
     public function testSetMultipleShouldRaisePsrInvalidArgumentExceptionForInvalidKeys($key, $expectedMessage)
     {
         $this->storage
@@ -863,7 +860,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $ttl         = 86400;
 
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTtl')
             ->willReturn($originalTtl);
 
@@ -886,7 +883,7 @@ final class SimpleCacheDecoratorTest extends TestCase
             ->willReturnSelf();
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
 
@@ -894,7 +891,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $values    = ['one' => 1, 'three' => 3];
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with($values)
             ->willThrowException($exception);
@@ -913,7 +910,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     {
         $keys = ['one', 'two', 'three'];
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->with($keys)
             ->willReturn([]);
@@ -924,7 +921,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     {
         $keys = new ArrayIterator(['one', 'two', 'three']);
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->with(iterator_to_array($keys))
             ->willReturn([]);
@@ -945,13 +942,13 @@ final class SimpleCacheDecoratorTest extends TestCase
     {
         $keys = ['one', 'two', 'three'];
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->with($keys)
             ->willReturn(['two']);
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->with('two')
             ->willReturn(true);
@@ -963,13 +960,13 @@ final class SimpleCacheDecoratorTest extends TestCase
     {
         $keys = ['one', 'two', 'three'];
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->with($keys)
             ->willReturn(['two']);
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->with('two')
             ->willReturn(false);
@@ -982,7 +979,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         $keys      = ['one', 'two', 'three'];
         $exception = new Exception\InvalidArgumentException('bad key', 500);
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->with($keys)
             ->willThrowException($exception);
@@ -1001,13 +998,11 @@ final class SimpleCacheDecoratorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider hasResultProvider
-     */
+    #[DataProvider('hasResultProvider')]
     public function testHasProxiesToStorage(bool $result)
     {
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->with('key')
             ->willReturn($result);
@@ -1019,7 +1014,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     {
         $exception = new Exception\ExtensionNotLoadedException('failure', 500);
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->with('key')
             ->willThrowException($exception);
@@ -1064,22 +1059,22 @@ final class SimpleCacheDecoratorTest extends TestCase
     public function testUseTtlFromOptionsOnSetMocking(): void
     {
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTtl')
             ->willReturn(40);
 
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setTtl')
             ->with(40)
             ->willReturnSelf();
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItem')
             ->with('foo', 'bar')
             ->willReturn(true);
@@ -1090,22 +1085,22 @@ final class SimpleCacheDecoratorTest extends TestCase
     public function testUseTtlFromOptionsOnSetMultipleMocking(): void
     {
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getTtl')
             ->willReturn(40);
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setTtl')
             ->with(40)
             ->willReturnSelf();
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getOptions')
             ->willReturn($this->options);
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with(['foo' => 'bar', 'boo' => 'baz'])
             ->willReturn([]);
@@ -1113,9 +1108,7 @@ final class SimpleCacheDecoratorTest extends TestCase
         self::assertTrue($this->cache->setMultiple(['foo' => 'bar', 'boo' => 'baz']));
     }
 
-    /**
-     * @dataProvider unsupportedCapabilities
-     */
+    #[DataProvider('unsupportedCapabilities')]
     public function testWillThrowExceptionWhenStorageDoesNotFulfillMinimumRequirements(Capabilities $capabilities): void
     {
         $storage = $this->createMock(StorageInterface::class);
@@ -1193,7 +1186,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->willThrowException(new Exception\InvalidArgumentException());
 
@@ -1207,7 +1200,7 @@ final class SimpleCacheDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->willThrowException(new SimpleCacheException());
 

@@ -25,7 +25,7 @@ final class StoragePluginFactoryFactoryTest extends TestCase
         $plugins   = $this->createMock(PluginManagerInterface::class);
         $container = $this->createMock(ContainerInterface::class);
         $container
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with(PluginManager::class)
             ->willReturn($plugins);

@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Test\CommonPluginManagerTrait;
 use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\TestCase;
 
-class AdapterPluginManagerTest extends TestCase
+final class AdapterPluginManagerTest extends TestCase
 {
     use CommonPluginManagerTrait {
         testPluginAliasesResolve as commonPluginAliasesResolve;
@@ -25,7 +25,7 @@ class AdapterPluginManagerTest extends TestCase
      * We cannot delete the method either and nor can we skip it inside the method due to the method parameter
      * requirements.
      *
-     * @psalm-suppress PossiblyUnusedParam
+     * @psalm-suppress UnusedParam
      */
     #[RequiresPhp('<8.0')]
     public function testPluginAliasesResolve(string $alias, string $expected)

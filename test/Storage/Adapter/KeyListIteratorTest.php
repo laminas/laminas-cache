@@ -6,13 +6,13 @@ namespace LaminasTest\Cache\Storage\Adapter;
 
 use Laminas\Cache\Storage\Adapter\KeyListIterator;
 use Laminas\Cache\Storage\StorageInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @group      Laminas_Cache
- * @covers \Laminas\Cache\Storage\Adapter\KeyListIterator
- */
-class KeyListIteratorTest extends TestCase
+#[Group('Laminas_Cache')]
+#[CoversClass(KeyListIterator::class)]
+final class KeyListIteratorTest extends TestCase
 {
     public function testCount(): void
     {

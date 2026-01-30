@@ -13,6 +13,7 @@ use function array_unshift;
 use function assert;
 use function func_get_args;
 use function in_array;
+use function is_string;
 use function method_exists;
 use function property_exists;
 use function sprintf;
@@ -67,6 +68,7 @@ final class ObjectCache extends AbstractStorageCapablePattern implements Stringa
             case '__set':
                 $property = array_shift($args);
                 $value    = array_shift($args);
+                assert(is_string($property));
 
                 $object->{$property} = $value;
 
@@ -95,6 +97,7 @@ final class ObjectCache extends AbstractStorageCapablePattern implements Stringa
 
             case '__get':
                 $property = array_shift($args);
+                assert(is_string($property));
 
                 if (
                     ! $options->getObjectCacheMagicProperties()
@@ -110,7 +113,7 @@ final class ObjectCache extends AbstractStorageCapablePattern implements Stringa
 
             case '__isset':
                 $property = array_shift($args);
-
+                assert(is_string($property));
                 if (
                     ! $options->getObjectCacheMagicProperties()
                     || property_exists($object, $property)
@@ -124,6 +127,7 @@ final class ObjectCache extends AbstractStorageCapablePattern implements Stringa
 
             case '__unset':
                 $property = array_shift($args);
+                assert(is_string($property));
 
                 unset($object->{$property});
 

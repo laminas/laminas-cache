@@ -15,6 +15,7 @@ use Webmozart\Assert\Assert;
 use function array_change_key_case;
 use function array_reverse;
 use function array_shift;
+use function assert;
 use function is_array;
 use function is_int;
 use function iterator_to_array;
@@ -169,8 +170,6 @@ class AdapterOptions extends AbstractOptions
 
     /**
      * Set time to live.
-     *
-     * @param numeric $ttl
      */
     public function setTtl(int|float|string $ttl): self
     {
@@ -227,7 +226,6 @@ class AdapterOptions extends AbstractOptions
     /**
      * Validates and normalize a TTL.
      *
-     * @param numeric $ttl
      * @return non-negative-int|float $ttl
      * @throws Exception\InvalidArgumentException
      */
@@ -265,7 +263,8 @@ class AdapterOptions extends AbstractOptions
             if ($key === '__strictMode__' || $key === '__prioritizedProperties__') {
                 continue;
             }
-            $normalizedKey         = preg_replace_callback('/([A-Z])/', $transform, $key);
+            $normalizedKey = preg_replace_callback('/([A-Z])/', $transform, $key);
+            assert($normalizedKey !== null);
             $array[$normalizedKey] = $value;
         }
         Assert::isMap($array);

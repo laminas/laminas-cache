@@ -9,6 +9,7 @@ use Laminas\Cache\Storage\Plugin\AbstractPlugin;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\EventManagerInterface;
 
+/** @final */
 class MockPlugin extends AbstractPlugin
 {
     /** @var array<callable> */

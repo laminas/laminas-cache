@@ -64,7 +64,7 @@ final class StorageCacheAbstractServiceFactoryTest extends TestCase
     public function testCanRetrieveCacheByName(): void
     {
         $this->adapterFactory
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createFromArrayConfiguration')
             ->with($this->config['caches']['Memory'])
             ->willReturn($this->createMock(StorageInterface::class));
@@ -75,7 +75,7 @@ final class StorageCacheAbstractServiceFactoryTest extends TestCase
     public function testWillAssertConfigurationValidity(): void
     {
         $this->adapterFactory
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('assertValidConfigurationStructure')
             ->with($this->config['caches']['Foo']);
 
@@ -86,7 +86,7 @@ final class StorageCacheAbstractServiceFactoryTest extends TestCase
     {
         $exception = new InvalidArgumentException();
         $this->adapterFactory
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('assertValidConfigurationStructure')
             ->willThrowException($exception);
 

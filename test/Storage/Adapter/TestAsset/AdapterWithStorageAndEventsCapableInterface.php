@@ -19,6 +19,7 @@ interface AdapterWithStorageAndEventsCapableInterface extends StorageInterface, 
 
     /**
      * @param int $priority
+     * @return self
      */
     public function addPlugin(PluginInterface $plugin, $priority = 1);
 }

@@ -10,6 +10,7 @@ use Laminas\Cache\Storage\ClearExpiredInterface;
 /**
  * @template TOptions of AdapterOptions
  * @template-extends MockAdapter<TOptions>
+ * @final
  */
 class ClearExpiredMockAdapter extends MockAdapter implements ClearExpiredInterface
 {

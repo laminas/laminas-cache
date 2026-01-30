@@ -38,7 +38,7 @@ final class StorageCacheFactoryTest extends TestCase
     {
         $factory = $this->createMock(StorageAdapterFactoryInterface::class);
         $factory
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createFromArrayConfiguration')
             ->with($this->config['cache'])
             ->willReturn($this->createMock(StorageInterface::class));
@@ -68,12 +68,12 @@ final class StorageCacheFactoryTest extends TestCase
     {
         $factory = $this->createMock(StorageAdapterFactoryInterface::class);
         $factory
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('assertValidConfigurationStructure')
             ->with($this->config['cache']);
 
         $factory
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('createFromArrayConfiguration')
             ->with($this->config['cache'])
             ->willReturn($this->createMock(StorageInterface::class));

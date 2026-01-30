@@ -15,6 +15,7 @@ use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\PluginAwareInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use Laminas\ServiceManager\PluginManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -116,15 +117,15 @@ final class StorageAdapterFactoryTest extends TestCase
     /**
      * @psalm-param non-empty-string $adapterName
      * @param array<string,mixed> $adapterConfiguration
-     * @dataProvider storageConfigurations
      */
+    #[DataProvider('storageConfigurations')]
     public function testWillCreateStorageFromArrayConfiguration(
         string $adapterName,
         array $adapterConfiguration
     ): void {
         $adapterMock = $this->createMock(AbstractAdapter::class);
         $this->adapters
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('build')
             ->with($adapterName, $adapterConfiguration)
             ->willReturn($adapterMock);
@@ -139,8 +140,8 @@ final class StorageAdapterFactoryTest extends TestCase
 
     /**
      * @psalm-param list<PluginArrayConfigurationWithPriorityType> $plugins
-     * @dataProvider pluginConfigurations
      */
+    #[DataProvider('pluginConfigurations')]
     public function testWillCreateAdapterAndAttachesPlugins(array $plugins): void
     {
         $adapterMock = $this->createMock(AbstractAdapter::class);
@@ -193,7 +194,7 @@ final class StorageAdapterFactoryTest extends TestCase
     {
         $storage = $this->createMock(StorageInterface::class);
         $this->adapters
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('build')
             ->willReturn($storage);
 
@@ -205,8 +206,8 @@ final class StorageAdapterFactoryTest extends TestCase
     /**
      * @param array<mixed>  $invalidConfiguration
      * @psalm-param non-empty-string $expectedExceptionMessage
-     * @dataProvider invalidConfigurations
      */
+    #[DataProvider('invalidConfigurations')]
     public function testWillThrowInvalidArgumentExceptionWhenInvalidConfigurationsWherePassedToConfigurationAssertion(
         array $invalidConfiguration,
         string $expectedExceptionMessage
@@ -225,7 +226,7 @@ final class StorageAdapterFactoryTest extends TestCase
         );
 
         $this->plugins
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('assertValidConfigurationStructure')
             ->with(['name' => ''])
             ->willThrowException(new InvalidArgumentException('ERROR FROM PLUGIN CONFIGURATION ASSERTION'));
@@ -246,7 +247,7 @@ final class StorageAdapterFactoryTest extends TestCase
         );
 
         $this->plugins
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('assertValidConfigurationStructure');
 
         $this->factory->assertValidConfigurationStructure([

@@ -10,6 +10,7 @@ use function array_intersect;
 use function array_map;
 use function array_unique;
 use function array_values;
+use function assert;
 use function gettype;
 use function is_dir;
 use function is_object;
@@ -483,7 +484,9 @@ final class PatternOptions extends AbstractOptions
             );
         }
 
-        $this->publicDir = rtrim(realpath($publicDir), DIRECTORY_SEPARATOR);
+        $path = realpath($publicDir);
+        assert(is_string($path));
+        $this->publicDir = rtrim($path, DIRECTORY_SEPARATOR);
         return $this;
     }
 

@@ -135,7 +135,7 @@ final class AbstractAdapterTest extends TestCase
         $event = current($calledEvents);
 
         // return value of triggerPost and the called event should be the same
-        self::assertSame($result, $event->getResult());
+        self::assertSame($result, $event !== false ? $event->getResult() : null);
 
         self::assertInstanceOf(PostEvent::class, $event);
         self::assertEquals('setItem.post', $event->getName());
@@ -238,7 +238,7 @@ final class AbstractAdapterTest extends TestCase
             ->expects($this->once())
             ->method('internalHasItem')
             ->with($this->equalTo($key))
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $rs = $storage->hasItem($key);
         self::assertSame($result, $rs);
@@ -255,7 +255,7 @@ final class AbstractAdapterTest extends TestCase
             ->expects($this->once())
             ->method('internalHasItems')
             ->with($this->equalTo($keys))
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $rs = $storage->hasItems($keys);
         self::assertEquals($result, $rs);
@@ -298,7 +298,8 @@ final class AbstractAdapterTest extends TestCase
             ->with($this->equalTo($key))
             ->willThrowException(new \Exception('internalGetItem failed'));
 
-        $result = $storage->getItem($key, $success);
+        $success = true;
+        $result  = $storage->getItem($key, $success);
         self::assertNull($result, 'GetItem should return null the item cannot be retrieved');
         self::assertFalse($success, '$success should be false if the item cannot be retrieved');
     }
@@ -763,20 +764,15 @@ final class AbstractAdapterTest extends TestCase
      */
     protected function getMockForAbstractAdapter(array $methods = []): MockObject&AbstractAdapter
     {
-        if (! $methods) {
-            $adapter = $this->getMockForAbstractClass(AbstractAdapter::class);
-        } else {
-            $reflection = new ReflectionClass(AbstractAdapter::class);
-            foreach ($reflection->getMethods() as $method) {
-                if ($method->isAbstract()) {
-                    $methods[] = $method->getName();
-                }
+        $reflection = new ReflectionClass(AbstractAdapter::class);
+        foreach ($reflection->getMethods() as $method) {
+            if ($method->isAbstract()) {
+                $methods[] = $method->getName();
             }
-            $adapter = $this->getMockBuilder(AbstractAdapter::class)
-                ->onlyMethods(array_values(array_unique($methods)))
-                ->disableArgumentCloning()
-                ->getMock();
         }
+        $adapter = $this->getMockBuilder(AbstractAdapter::class)
+            ->onlyMethods(array_values(array_unique($methods)))
+            ->getMock();
 
         $adapter->setOptions($this->options ?? new AdapterOptions());
 
@@ -789,13 +785,13 @@ final class AbstractAdapterTest extends TestCase
         $storage
             ->addPlugin(new Serializer(new AdapterPluginManager(new ServiceManager())));
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('internalSetItem')
             ->with('foo', serialize('baz'))
             ->willReturn(true);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('internalGetItem')
             ->with('foo')
             ->willReturn(serialize('bar'));

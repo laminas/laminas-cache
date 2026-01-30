@@ -3,13 +3,19 @@
 namespace Laminas\Cache\Storage;
 
 use IteratorAggregate;
+use Traversable;
 
 /**
- * @method IteratorInterface getIterator() Get the storage iterator
  * @template-covariant TKey
  * @template-covariant TValue
  * @template-extends IteratorAggregate<TKey, TValue>
  */
 interface IterableInterface extends IteratorAggregate
 {
+    /**
+     * Get the storage iterator
+     *
+     * @return Traversable<TKey, TValue>|TValue[]
+     */
+    public function getIterator();
 }

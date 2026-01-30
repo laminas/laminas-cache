@@ -18,6 +18,7 @@ use Laminas\Cache\Storage\FlushableInterface;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Psr\CacheItemPool\TestAsset\FlushableStorageAdapterInterface;
 use LaminasTest\Cache\Psr\TestAsset\FlushableNamespaceStorageInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
@@ -112,7 +113,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         ]);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getCapabilities')
             ->willReturn($capabilities);
 
@@ -131,7 +132,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $storage = $this->storage;
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with('foo')
             ->willReturnOnConsecutiveCalls(null);
@@ -148,9 +149,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         self::assertEquals('bar', $item->get());
     }
 
-    /**
-     * @dataProvider invalidKeyProvider
-     */
+    #[DataProvider('invalidKeyProvider')]
     public function testGetItemInvalidKeyThrowsException(mixed $key)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -162,7 +161,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->willThrowException(new Exception\RuntimeException());
 
@@ -176,7 +175,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->willThrowException(new Exception\InvalidArgumentException());
         $this->getAdapter($storage)->getItem('foo');
@@ -187,7 +186,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $keys    = ['foo', 'bar'];
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->with($keys)
             ->willReturn([]);
@@ -209,7 +208,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $keys    = ['foo', 'bar'];
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->with($keys)
             ->willReturn([]);
@@ -234,7 +233,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $storage = $this->storage;
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->with($keys)
             ->willReturn(['bar' => 'value']);
@@ -261,7 +260,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $keys    = ['foo', 'bar'];
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->with($keys)
             ->willThrowException(new Exception\RuntimeException());
@@ -278,7 +277,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->willThrowException(new Exception\InvalidArgumentException());
         $this->getAdapter($storage)->getItems(['foo', 'bar']);
@@ -288,19 +287,19 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with('foo')
             ->wilLReturn(null);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->with(['foo'])
             ->willReturn(['foo' => 'bar']);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with(['foo' => 'bar'])
             ->willReturn(['foo' => true]);
@@ -320,7 +319,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $adapter = $this->getAdapter($storage);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with('foo')
             ->willReturn(null);
@@ -344,13 +343,13 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willReturnSelf();
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with(['foo' => 'bar'])
             ->willReturn(['foo' => true]);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItems')
             ->with(['foo'])
             ->willReturn(['foo' => 'bar']);
@@ -379,7 +378,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->willReturnOnConsecutiveCalls(null, 'bar');
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with(['foo' => 'bar'])
             ->willReturn(['foo' => true]);
@@ -411,7 +410,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->willThrowException(new Exception\RuntimeException());
         $adapter = $this->getAdapter($storage);
@@ -424,7 +423,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->willThrowException(new Exception\InvalidArgumentException());
         $adapter = $this->getAdapter($storage);
@@ -436,19 +435,19 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with('foo')
             ->willReturn(null);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with(['foo' => 'bar'])
             ->willReturn(['foo' => true]);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->with('foo')
             ->willReturn(true);
@@ -464,7 +463,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->with('foo')
             ->willReturn(false);
@@ -477,7 +476,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $storage = $this->storage;
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with('foo')
             ->willReturn(null);
@@ -494,13 +493,13 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with('foo')
             ->willReturn(null);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->with('foo')
             ->willReturn(false);
@@ -515,9 +514,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         self::assertFalse($adapter->hasItem('foo'));
     }
 
-    /**
-     * @dataProvider invalidKeyProvider
-     */
+    #[DataProvider('invalidKeyProvider')]
     public function testHasItemInvalidKeyThrowsException(mixed $key)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -529,7 +526,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->willThrowException(new Exception\RuntimeException());
         self::assertFalse($this->getAdapter($storage)->hasItem('foo'));
@@ -540,7 +537,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->willThrowException(new Exception\InvalidArgumentException());
         $this->getAdapter($storage)->hasItem('foo');
@@ -550,19 +547,19 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with(['foo' => 'bar'])
             ->willReturn(['foo' => true]);
 
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getNamespace')
             ->willReturn('laminascache');
 
         $adapter = $this->getAdapter($storage);
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('clearByNamespace')
             ->with('laminascache')
             ->willReturn(true);
@@ -578,12 +575,12 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => '']));
         $adapter = $this->getAdapter($storage);
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('flush')
             ->willReturn(true);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with(['foo' => 'bar'])
             ->willReturn(['foo' => true]);
@@ -598,7 +595,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => '']));
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('flush')
             ->willReturn(true);
 
@@ -611,19 +608,19 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $adapter = $this->getAdapter($storage);
 
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->willReturn(false);
 
         $this->options
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getNamespace')
             ->willReturn('bar');
 
         $item = $adapter->getItem('foo');
         $adapter->saveDeferred($item);
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('clearByNamespace')
             ->with('bar')
             ->willReturn(true);
@@ -636,7 +633,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => '']));
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('flush')
             ->willThrowException(new Exception\RuntimeException());
         self::assertFalse($this->getAdapter($storage)->clear());
@@ -646,7 +643,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => 'laminascache']));
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('clearByNamespace')
             ->with('laminascache')
             ->willReturn(true);
@@ -658,7 +655,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => '']));
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('flush')
             ->willReturn(true);
 
@@ -669,7 +666,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->createMockedStorage(new AdapterOptions(['namespace' => 'laminascache']));
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('clearByNamespace')
             ->willThrowException(new Exception\RuntimeException());
         self::assertFalse($this->getAdapter($storage)->clear());
@@ -679,7 +676,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->with(['foo'])
             ->willReturn([]);
@@ -691,7 +688,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->with('foo')
             ->willReturn(false);
@@ -703,9 +700,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         self::assertFalse($adapter->hasItem('foo'));
     }
 
-    /**
-     * @dataProvider invalidKeyProvider
-     */
+    #[DataProvider('invalidKeyProvider')]
     public function testDeleteItemInvalidKeyThrowsException(mixed $key)
     {
         $this->expectException(InvalidArgumentException::class);
@@ -717,7 +712,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->willThrowException(new Exception\RuntimeException());
         self::assertFalse($this->getAdapter($storage)->deleteItem('foo'));
@@ -728,7 +723,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->willThrowException(new Exception\InvalidArgumentException());
         $this->getAdapter($storage)->deleteItem('foo');
@@ -738,7 +733,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->with(['foo', 'bar', 'baz'])
             ->willReturn([]);
@@ -796,7 +791,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->willThrowException(new Exception\RuntimeException());
         self::assertFalse($this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']));
@@ -807,7 +802,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->willThrowException(new Exception\InvalidArgumentException());
         $this->getAdapter($storage)->deleteItems(['foo', 'bar', 'baz']);
@@ -835,7 +830,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $storage = $this->storage;
         $adapter = $this->getAdapter($storage);
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->with(['foo' => null])
             ->willReturn(['foo' => true]);
@@ -855,7 +850,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
     {
         $storage = $this->storage;
         $storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->willThrowException(new Exception\RuntimeException());
 
@@ -911,21 +906,19 @@ final class CacheItemPoolDecoratorTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @dataProvider deletionVerificationProvider
-     */
+    #[DataProvider('deletionVerificationProvider')]
     public function testWillVerifyKeyExistenceByUsingHasItemsWhenDeletionWasNotSuccessful(
         bool $exists,
         bool $successful,
     ): void {
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('removeItems')
             ->with(['foo'])
             ->willReturn(['foo']);
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItems')
             ->with(['foo'])
             ->willReturn(['foo' => $exists]);
@@ -950,7 +943,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
             ->method('setItem');
 
         $adapter
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('hasItem')
             ->with('foo')
             ->willReturn(false);
@@ -1045,7 +1038,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
         $this->adapter->saveDeferred($succeededItem);
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItems')
             ->willReturn(['keyOfFailedItem1', 'keyOfFailedItem2']);
 
@@ -1064,7 +1057,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
         $now = new DateTimeImmutable('now');
         $clock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('now')
             ->willReturn($now);
 

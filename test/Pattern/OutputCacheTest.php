@@ -6,6 +6,8 @@ namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache\Pattern\OutputCache;
 use Laminas\Cache\Storage\StorageInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 use function ob_end_clean;
 use function ob_get_clean;
@@ -13,11 +15,11 @@ use function ob_get_level;
 use function ob_start;
 
 /**
- * @group      Laminas_Cache
- * @covers \Laminas\Cache\Pattern\OutputCache<extended>
  * @template-extends AbstractCommonStoragePatternTestCase<OutputCache>
  */
-class OutputCacheTest extends AbstractCommonStoragePatternTestCase
+#[Group('Laminas_Cache')]
+#[CoversClass(OutputCache::class)]
+final class OutputCacheTest extends AbstractCommonStoragePatternTestCase
 {
     /**
      * Nesting level of output buffering used to restore on tearDown(): void
@@ -69,7 +71,7 @@ class OutputCacheTest extends AbstractCommonStoragePatternTestCase
         $key    = 'testStartEndCacheMiss';
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItem')
             ->with($key, $output)
             ->willReturn(true);
@@ -93,7 +95,7 @@ class OutputCacheTest extends AbstractCommonStoragePatternTestCase
             ->method('setItem');
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with($key, null)
             ->willReturnCallback(function (string $key, ?bool &$success = null) use ($output): string {

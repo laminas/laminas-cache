@@ -10,6 +10,7 @@ use Laminas\Cache\Storage\OptimizableInterface;
 /**
  * @template TOptions of AdapterOptions
  * @template-extends MockAdapter<TOptions>
+ * @final
  */
 class OptimizableMockAdapter extends MockAdapter implements OptimizableInterface
 {

@@ -11,6 +11,8 @@ use function is_array;
 
 /**
  * Storage cache factory for multiple caches.
+ *
+ * @final
  */
 class StorageCacheAbstractServiceFactory implements AbstractFactoryInterface
 {

@@ -8,6 +8,7 @@ use Laminas\Cache\Storage\Plugin\PluginInterface;
 use Laminas\Cache\Storage\Plugin\PluginOptions;
 use Laminas\Cache\Storage\PluginManager;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractCommonPluginTestCase extends TestCase
@@ -21,9 +22,7 @@ abstract class AbstractCommonPluginTestCase extends TestCase
      */
     abstract public static function getCommonPluginNamesProvider(): iterable;
 
-    /**
-     * @dataProvider getCommonPluginNamesProvider
-     */
+    #[DataProvider('getCommonPluginNamesProvider')]
     public function testPluginManagerWithCommonNames(string $commonPluginName): void
     {
         $pluginManager = new PluginManager(new ServiceManager());

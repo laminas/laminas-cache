@@ -10,6 +10,7 @@ use Laminas\Cache\Storage\AbstractMetadataCapableAdapter;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Event;
 use Laminas\EventManager\EventInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -58,20 +59,15 @@ final class AbstractMetadataCapableAdapterTest extends TestCase
     private function getMockForAbstractMetadataCapableAdapter(
         array $methods = []
     ): MockObject&AbstractMetadataCapableAdapter {
-        if (! $methods) {
-            $adapter = $this->getMockForAbstractClass(AbstractMetadataCapableAdapter::class);
-        } else {
-            $reflection = new ReflectionClass(AbstractMetadataCapableAdapter::class);
-            foreach ($reflection->getMethods() as $method) {
-                if ($method->isAbstract()) {
-                    $methods[] = $method->getName();
-                }
+        $reflection = new ReflectionClass(AbstractMetadataCapableAdapter::class);
+        foreach ($reflection->getMethods() as $method) {
+            if ($method->isAbstract()) {
+                $methods[] = $method->getName();
             }
-            $adapter = $this->getMockBuilder(AbstractMetadataCapableAdapter::class)
-                ->onlyMethods(array_values(array_unique($methods)))
-                ->disableArgumentCloning()
-                ->getMock();
         }
+        $adapter = $this->getMockBuilder(AbstractMetadataCapableAdapter::class)
+            ->onlyMethods(array_values(array_unique($methods)))
+            ->getMock();
 
         $adapter->setOptions($this->options ?? new AdapterOptions());
 
@@ -81,8 +77,8 @@ final class AbstractMetadataCapableAdapterTest extends TestCase
     /**
      * @psalm-param non-empty-string $methodName
      * @psalm-param non-empty-string $internalMethodName
-     * @dataProvider simpleEventHandlingMethodDefinitions
      */
+    #[DataProvider('simpleEventHandlingMethodDefinitions')]
     public function testEventHandlingSimple(
         string $methodName,
         string $internalMethodName,
@@ -119,8 +115,8 @@ final class AbstractMetadataCapableAdapterTest extends TestCase
     /**
      * @psalm-param non-empty-string $methodName
      * @psalm-param non-empty-string $internalMethodName
-     * @dataProvider simpleEventHandlingMethodDefinitions
      */
+    #[DataProvider('simpleEventHandlingMethodDefinitions')]
     public function testEventHandlingCatchException(
         string $methodName,
         string $internalMethodName,
@@ -158,8 +154,8 @@ final class AbstractMetadataCapableAdapterTest extends TestCase
     /**
      * @psalm-param non-empty-string $methodName
      * @psalm-param non-empty-string $internalMethodName
-     * @dataProvider simpleEventHandlingMethodDefinitions
      */
+    #[DataProvider('simpleEventHandlingMethodDefinitions')]
     public function testEventHandlingStopInPre(
         string $methodName,
         string $internalMethodName,
