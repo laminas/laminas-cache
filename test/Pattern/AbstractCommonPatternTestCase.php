@@ -6,12 +6,12 @@ namespace LaminasTest\Cache\Pattern;
 
 use Laminas\Cache\Pattern\PatternInterface;
 use Laminas\Cache\Pattern\PatternOptions;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @group      Laminas_Cache
- * @covers Laminas\Cache\Pattern\PatternOptions<extended>
- */
+#[Group('Laminas_Cache')]
+#[CoversClass(PatternOptions::class)]
 abstract class AbstractCommonPatternTestCase extends TestCase
 {
     protected PatternInterface $pattern;

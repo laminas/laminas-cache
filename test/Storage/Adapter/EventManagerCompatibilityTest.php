@@ -9,7 +9,7 @@ use Laminas\EventManager\EventManager;
 use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
 use PHPUnit\Framework\TestCase;
 
-class EventManagerCompatibilityTest extends TestCase
+final class EventManagerCompatibilityTest extends TestCase
 {
     private MockAdapter $adapter;
 

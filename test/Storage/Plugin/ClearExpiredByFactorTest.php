@@ -63,9 +63,9 @@ final class ClearExpiredByFactorTest extends AbstractCommonPluginTestCase
             // check expected callback method
             $cb = array_shift($listeners);
             self::assertArrayHasKey(0, $cb);
-            self::assertSame($this->plugin, $cb[0]);
+            self::assertSame($this->plugin, $cb[0] ?? null);
             self::assertArrayHasKey(1, $cb);
-            self::assertSame($expectedCallbackMethod, $cb[1]);
+            self::assertSame($expectedCallbackMethod, $cb[1] ?? null);
         }
     }
 
@@ -87,7 +87,7 @@ final class ClearExpiredByFactorTest extends AbstractCommonPluginTestCase
 
         // test clearByNamespace will be called
         $adapter
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('clearExpired')
             ->willReturn(true);
 

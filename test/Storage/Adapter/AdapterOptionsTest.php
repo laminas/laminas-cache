@@ -6,19 +6,19 @@ namespace LaminasTest\Cache\Storage\Adapter;
 
 use Laminas\Cache\Exception;
 use Laminas\Cache\Exception\InvalidArgumentException;
-use Laminas\Cache\Storage\Adapter\AbstractAdapter;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Laminas\Cache\Storage\Event;
 use LaminasTest\Cache\Storage\Adapter\TestAsset\AdapterOptionsWithPrioritizedOptions;
+use LaminasTest\Cache\Storage\TestAsset\MockAdapter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 use function func_get_args;
 
-/**
- * @group      Laminas_Cache
- * @covers Laminas\Cache\Storage\Adapter\AdapterOptions<extended>
- */
-class AdapterOptionsTest extends TestCase
+#[Group('Laminas_Cache')]
+#[CoversClass(AdapterOptions::class)]
+final class AdapterOptionsTest extends TestCase
 {
     protected AdapterOptions $options;
 
@@ -168,7 +168,7 @@ class AdapterOptionsTest extends TestCase
     public function testTriggerOptionEvent(): void
     {
         // setup an adapter implements EventsCapableInterface
-        $adapter = $this->getMockForAbstractClass(AbstractAdapter::class);
+        $adapter = new MockAdapter();
         $this->options->setAdapter($adapter);
 
         // setup event listener

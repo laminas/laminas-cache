@@ -7,6 +7,7 @@ use Laminas\Cache\Exception;
 use Laminas\Stdlib\ErrorHandler;
 
 use function array_unshift;
+use function assert;
 use function basename;
 use function chmod;
 use function decoct;
@@ -14,6 +15,7 @@ use function dirname;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
+use function is_string;
 use function mkdir;
 use function ob_implicit_flush;
 use function ob_start;
@@ -176,7 +178,8 @@ final class CaptureCache extends AbstractPattern
             GlobIterator::CURRENT_AS_SELF | GlobIterator::SKIP_DOTS | GlobIterator::UNIX_PATHS
         );
         foreach ($it as $pathname => $entry) {
-            if ($entry->isFile()) {
+            assert(is_string($pathname));
+            if ($entry?->isFile() === true) {
                 unlink($pathname);
             }
         }

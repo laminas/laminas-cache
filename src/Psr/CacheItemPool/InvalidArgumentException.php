@@ -6,6 +6,7 @@ use Psr\Cache\InvalidArgumentException as InvalidArgumentExceptionInterface;
 
 use function sprintf;
 
+/** @final */
 class InvalidArgumentException extends \InvalidArgumentException implements InvalidArgumentExceptionInterface
 {
     public static function maximumKeyLengthExceeded(string $key, int $maximumKeyLength): self

@@ -12,7 +12,7 @@ use Laminas\Cache\Storage\Capabilities;
  * @template TOptions of AdapterOptions
  * @template-extends Adapter\AbstractAdapter<TOptions>
  */
-class TtlStorage extends Adapter\AbstractAdapter
+final class TtlStorage extends Adapter\AbstractAdapter
 {
     private array $data = [];
 

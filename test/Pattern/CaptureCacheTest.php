@@ -7,6 +7,8 @@ namespace LaminasTest\Cache\Pattern;
 use DirectoryIterator;
 use Laminas\Cache;
 use Laminas\Cache\Exception\LogicException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 
 use function error_get_last;
 use function file_exists;
@@ -20,11 +22,9 @@ use function unlink;
 
 use const DIRECTORY_SEPARATOR;
 
-/**
- * @group      Laminas_Cache
- * @covers \Laminas\Cache\Pattern\CaptureCache<extended>
- */
-class CaptureCacheTest extends AbstractCommonPatternTestCase
+#[Group('Laminas_Cache')]
+#[CoversClass(Cache\Pattern\CaptureCache::class)]
+final class CaptureCacheTest extends AbstractCommonPatternTestCase
 {
     /** @var string */
     protected $tmpCacheDir;
@@ -40,17 +40,19 @@ class CaptureCacheTest extends AbstractCommonPatternTestCase
         $this->bufferedServerSuperGlobal = $_SERVER;
         $this->umask                     = umask();
 
-        $this->tmpCacheDir = @tempnam(sys_get_temp_dir(), 'laminas_cache_test_');
-        if ($this->tmpCacheDir === false) {
+        $tmpCacheDir = @tempnam(sys_get_temp_dir(), 'laminas_cache_test_');
+        if ($tmpCacheDir === false) {
             $err = error_get_last();
             self::fail("Can't create temporary cache directory-file: {$err['message']}");
-        } elseif (! @unlink($this->tmpCacheDir)) {
+        } elseif (! @unlink($tmpCacheDir)) {
             $err = error_get_last();
             self::fail("Can't remove temporary cache directory-file: {$err['message']}");
-        } elseif (! @mkdir($this->tmpCacheDir, 0777)) {
+        } elseif (! @mkdir($tmpCacheDir, 0777)) {
             $err = error_get_last();
             self::fail("Can't create temporary cache directory: {$err['message']}");
         }
+
+        $this->tmpCacheDir = $tmpCacheDir;
 
         $this->options = new Cache\Pattern\PatternOptions([
             'public_dir' => $this->tmpCacheDir,

@@ -8,6 +8,7 @@ use Generator;
 use InvalidArgumentException;
 use Laminas\Cache\ConfigProvider;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -32,9 +33,7 @@ final class ConfigProviderIntegrationTest extends TestCase
         return new ServiceManager((new ConfigProvider())->getDependencyConfig());
     }
 
-    /**
-     * @dataProvider servicesProvidedByConfigProvider
-     */
+    #[DataProvider('servicesProvidedByConfigProvider')]
     public function testContainerCanProvideRegisteredServices(string $serviceName): void
     {
         $instance = $this->container->get($serviceName);

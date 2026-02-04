@@ -11,6 +11,7 @@ use Psr\Container\ContainerInterface;
 use Webmozart\Assert\Assert;
 
 use function array_replace_recursive;
+use function assert;
 
 /**
  * Plugin manager implementation for cache plugins
@@ -68,6 +69,7 @@ final class PluginManager extends AbstractSingleInstancePluginManager
     {
         $options ??= [];
         $plugin    = parent::build($name);
+        assert($plugin instanceof PluginInterface);
         if ($options !== []) {
             Assert::isMap($options);
             $plugin->setOptions(new PluginOptions($options));

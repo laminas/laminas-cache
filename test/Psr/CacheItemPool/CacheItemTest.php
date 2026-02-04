@@ -16,7 +16,7 @@ use Psr\Clock\ClockInterface;
 use function date_default_timezone_get;
 use function date_default_timezone_set;
 
-class CacheItemTest extends TestCase
+final class CacheItemTest extends TestCase
 {
     /** @var non-empty-string */
     private string $tz;
@@ -108,7 +108,7 @@ class CacheItemTest extends TestCase
     public function testExpiresAfterStartsExpiringAfterMethodCall(): void
     {
         $now              = new DateTimeImmutable();
-        $nowPlusOneSecond = $now->add(DateInterval::createFromDateString('1 second'));
+        $nowPlusOneSecond = $now->add(new DateInterval('PT1S'));
 
         $clock = $this->createMock(ClockInterface::class);
         $clock
@@ -136,7 +136,7 @@ class CacheItemTest extends TestCase
             }
         );
 
-        $interval = DateInterval::createFromDateString('1 hour');
+        $interval = new DateInterval('PT1H');
         $item->expiresAfter($interval);
 
         self::assertEquals(3600, $item->getTtl());

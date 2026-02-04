@@ -59,9 +59,9 @@ final class OptimizeByFactorTest extends AbstractCommonPluginTestCase
             // check expected callback method
             $cb = array_shift($listeners);
             self::assertArrayHasKey(0, $cb);
-            self::assertSame($this->plugin, $cb[0]);
+            self::assertSame($this->plugin, $cb[0] ?? null);
             self::assertArrayHasKey(1, $cb);
-            self::assertSame($expectedCallbackMethod, $cb[1]);
+            self::assertSame($expectedCallbackMethod, $cb[1] ?? null);
         }
     }
 

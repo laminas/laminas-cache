@@ -73,15 +73,15 @@ final class SerializerTest extends AbstractCommonPluginTestCase
             // check expected callback method
             $cb = array_shift($listeners);
             self::assertArrayHasKey(0, $cb);
-            self::assertSame($this->plugin, $cb[0]);
+            self::assertSame($this->plugin, $cb[0] ?? null);
             self::assertArrayHasKey(1, $cb);
-            self::assertSame($expectedCallbackMethod, $cb[1]);
+            self::assertSame($expectedCallbackMethod, $cb[1] ?? null);
 
             // check expected priority
             if (str_ends_with($eventName, '.pre')) {
-                self::assertListenerAtPriority($cb, 100, $eventName, $events);
+                self::assertListenerAtPriority($cb ?? fn() => null, 100, $eventName, $events);
             } else {
-                self::assertListenerAtPriority($cb, -100, $eventName, $events);
+                self::assertListenerAtPriority($cb ?? fn() => null, -100, $eventName, $events);
             }
         }
     }

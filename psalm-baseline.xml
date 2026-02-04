@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+<files psalm-version="6.14.3@d0b040a91f280f071c1abcb1b77ce3822058725a">
   <file src="src/Exception/BadMethodCallException.php">
     <UnusedClass>
       <code><![CDATA[BadMethodCallException]]></code>
@@ -75,15 +75,6 @@
     </PossiblyUnusedReturnValue>
   </file>
   <file src="src/Pattern/ObjectCache.php">
-    <MixedArgument>
-      <code><![CDATA[$property]]></code>
-      <code><![CDATA[$property]]></code>
-      <code><![CDATA[$property]]></code>
-      <code><![CDATA[$property]]></code>
-    </MixedArgument>
-    <MixedInferredReturnType>
-      <code><![CDATA[bool]]></code>
-    </MixedInferredReturnType>
     <MixedReturnStatement>
       <code><![CDATA[$this->call('__isset', [$name])]]></code>
     </MixedReturnStatement>
@@ -98,6 +89,13 @@
     </MixedArgument>
   </file>
   <file src="src/Pattern/PatternOptions.php">
+    <InvalidOperand>
+      <code><![CDATA[$dirPermission & 0700]]></code>
+      <code><![CDATA[$filePermission & 0111]]></code>
+      <code><![CDATA[$filePermission & 0600]]></code>
+      <code><![CDATA[$umask & 0700]]></code>
+      <code><![CDATA[$umask &= ~0002]]></code>
+    </InvalidOperand>
     <MixedArgument>
       <code><![CDATA[$array]]></code>
     </MixedArgument>
@@ -118,6 +116,14 @@
       <code><![CDATA[setPublicDir]]></code>
       <code><![CDATA[setUmask]]></code>
     </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Psr/SimpleCache/SimpleCacheDecorator.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$results]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[array]]></code>
+    </InvalidReturnType>
   </file>
   <file src="src/Service/StorageAdapterFactory.php">
     <InvalidArgument>
@@ -204,6 +210,9 @@
     <MixedArgument>
       <code><![CDATA[$args['key']]]></code>
       <code><![CDATA[$handle]]></code>
+      <code><![CDATA[$key]]></code>
+      <code><![CDATA[$key]]></code>
+      <code><![CDATA[$key]]></code>
     </MixedArgument>
     <MoreSpecificImplementedParamType>
       <code><![CDATA[$options]]></code>
@@ -454,43 +463,18 @@
     </UnusedClass>
   </file>
   <file src="test/Storage/Adapter/AbstractAdapterTest.php">
-    <DeprecatedMethod>
-      <code><![CDATA[disableArgumentCloning]]></code>
-      <code><![CDATA[getMockForAbstractClass]]></code>
-      <code><![CDATA[returnValue]]></code>
-      <code><![CDATA[returnValue]]></code>
-    </DeprecatedMethod>
-    <MixedArgument>
-      <code><![CDATA[$success]]></code>
-    </MixedArgument>
     <MixedMethodCall>
       <code><![CDATA[getResult]]></code>
     </MixedMethodCall>
-    <PossiblyUndefinedVariable>
-      <code><![CDATA[$success]]></code>
-    </PossiblyUndefinedVariable>
     <PossiblyUnusedMethod>
       <code><![CDATA[simpleEventHandlingMethodDefinitions]]></code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="test/Storage/Adapter/AbstractMetadataCapableAdapterTest.php">
-    <DeprecatedMethod>
-      <code><![CDATA[disableArgumentCloning]]></code>
-      <code><![CDATA[getMockForAbstractClass]]></code>
-    </DeprecatedMethod>
-  </file>
-  <file src="test/Storage/Adapter/AdapterOptionsTest.php">
-    <DeprecatedMethod>
-      <code><![CDATA[getMockForAbstractClass]]></code>
-    </DeprecatedMethod>
-  </file>
   <file src="test/Storage/Adapter/TestAsset/AdapterWithStorageAndEventsCapableInterface.php">
-    <MissingReturnType>
+    <PossiblyUnusedMethod>
       <code><![CDATA[addPlugin]]></code>
-    </MissingReturnType>
-    <UnusedClass>
-      <code><![CDATA[AdapterWithStorageAndEventsCapableInterface]]></code>
-    </UnusedClass>
+      <code><![CDATA[hasPlugin]]></code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="test/Storage/AdapterPluginManagerTest.php">
     <MissingReturnType>
@@ -540,9 +524,6 @@
       <code><![CDATA[$this->adapter->getEventManager()]]></code>
       <code><![CDATA[$this->adapter->getEventManager()]]></code>
     </ArgumentTypeCoercion>
-    <DeprecatedMethod>
-      <code><![CDATA[getMockForAbstractClass]]></code>
-    </DeprecatedMethod>
     <InvalidArgument>
       <code><![CDATA[$cb]]></code>
       <code><![CDATA[$cb]]></code>

@@ -13,6 +13,7 @@ use function is_string;
 
 /**
  * @template-extends AbstractOptions<mixed>
+ * @final
  */
 class PluginOptions extends AbstractOptions
 {

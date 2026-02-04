@@ -8,6 +8,7 @@ use Laminas\Cache\Pattern\CallbackCache;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\FailableCallback;
 use LaminasTest\Cache\Pattern\TestAsset\TestCallbackCache;
+use PHPUnit\Framework\Attributes\Group;
 
 use function func_get_args;
 use function implode;
@@ -25,10 +26,10 @@ function bar(): string
 }
 
 /**
- * @group      Laminas_Cache
  * @template-extends AbstractCommonStoragePatternTestCase<CallbackCache>
  */
-class CallbackCacheTest extends AbstractCommonStoragePatternTestCase
+#[Group('Laminas_Cache')]
+final class CallbackCacheTest extends AbstractCommonStoragePatternTestCase
 {
     protected function setUp(): void
     {
@@ -81,13 +82,13 @@ class CallbackCacheTest extends AbstractCommonStoragePatternTestCase
         $generatedKey = $this->pattern->generateKey($callback, $args);
 
         $this->storage
-        ->expects(self::once())
+        ->expects($this->once())
         ->method('getItem')
         ->with($generatedKey, null)
         ->willReturn(null);
 
         $this->storage
-        ->expects(self::once())
+        ->expects($this->once())
         ->method('setItem')
         ->with($generatedKey, self::anything())
         ->willReturn(true);
@@ -169,15 +170,13 @@ class CallbackCacheTest extends AbstractCommonStoragePatternTestCase
         }
     }
 
-    /**
-     * @group 4629
-     */
+    #[Group('4629')]
     public function testCallCanReturnCachedNullValues(): void
     {
         $callback = new FailableCallback();
         $key      = $this->pattern->generateKey($callback, []);
         $this->storage
-        ->expects(self::once())
+        ->expects($this->once())
         ->method('getItem')
         ->with($key, null)
         ->willReturnCallback(function (string $key, ?bool &$success = null): array {

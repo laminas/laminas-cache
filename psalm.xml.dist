@@ -9,6 +9,7 @@
         findUnusedPsalmSuppress="true"
         findUnusedBaselineEntry="true"
         findUnusedCode="true"
+        ensureOverrideAttribute="false"
 >
     <projectFiles>
         <directory name="src"/>

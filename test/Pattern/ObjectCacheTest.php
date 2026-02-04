@@ -8,6 +8,7 @@ use Laminas\Cache;
 use Laminas\Cache\Pattern\ObjectCache;
 use Laminas\Cache\Storage\StorageInterface;
 use LaminasTest\Cache\Pattern\TestAsset\TestObjectCache;
+use PHPUnit\Framework\Attributes\Group;
 
 use function implode;
 use function ob_end_clean;
@@ -16,10 +17,10 @@ use function ob_implicit_flush;
 use function ob_start;
 
 /**
- * @group      Laminas_Cache
  * @template-extends AbstractCommonStoragePatternTestCase<ObjectCache>
  */
-class ObjectCacheTest extends AbstractCommonStoragePatternTestCase
+#[Group('Laminas_Cache')]
+final class ObjectCacheTest extends AbstractCommonStoragePatternTestCase
 {
     protected function setUp(): void
     {
@@ -70,13 +71,13 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTestCase
         $generatedKey = $this->pattern->generateKey('emptyMethod', $args);
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('getItem')
             ->with($generatedKey, null)
             ->willReturn(null);
 
         $this->storage
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('setItem')
             ->with($generatedKey, self::anything())
             ->willReturn(true);
@@ -86,12 +87,14 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTestCase
 
     public function testSetProperty(): void
     {
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $this->pattern->property = 'testSetProperty';
         self::assertEquals('testSetProperty', $this->options->getObject()->property);
     }
 
     public function testGetProperty(): void
     {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         self::assertEquals($this->options->getObject()->property, $this->pattern->property);
     }
 
@@ -103,13 +106,12 @@ class ObjectCacheTest extends AbstractCommonStoragePatternTestCase
 
     public function testUnsetProperty(): void
     {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         unset($this->pattern->property);
         self::assertFalse(isset($this->pattern->property));
     }
 
-    /**
-     * @group 7039
-     */
+    #[Group('7039')]
     public function testEmptyObjectKeys(): void
     {
         $this->options->setObjectKey('0');

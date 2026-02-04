@@ -6,6 +6,7 @@ use ArrayObject;
 use Laminas\Cache\Storage\Adapter\AdapterOptions;
 use Throwable;
 
+/** @final */
 class ExceptionEvent extends PostEvent
 {
     /**
