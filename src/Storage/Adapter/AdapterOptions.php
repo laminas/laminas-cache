@@ -170,6 +170,8 @@ class AdapterOptions extends AbstractOptions
 
     /**
      * Set time to live.
+     *
+     * @param int|float|numeric-string $ttl
      */
     public function setTtl(int|float|string $ttl): self
     {

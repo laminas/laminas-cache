@@ -13,7 +13,6 @@ use Laminas\Cache\Psr\CacheItemPool\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 
-use function assert;
 use function date_default_timezone_get;
 use function date_default_timezone_set;
 
@@ -108,10 +107,8 @@ final class CacheItemTest extends TestCase
 
     public function testExpiresAfterStartsExpiringAfterMethodCall(): void
     {
-        $now      = new DateTimeImmutable();
-        $interval = DateInterval::createFromDateString('1 second');
-        assert($interval instanceof DateInterval);
-        $nowPlusOneSecond = $now->add($interval);
+        $now              = new DateTimeImmutable();
+        $nowPlusOneSecond = $now->add(new DateInterval('PT1S'));
 
         $clock = $this->createMock(ClockInterface::class);
         $clock
@@ -139,8 +136,7 @@ final class CacheItemTest extends TestCase
             }
         );
 
-        $interval = DateInterval::createFromDateString('1 hour');
-        assert($interval instanceof DateInterval);
+        $interval = new DateInterval('PT1H');
         $item->expiresAfter($interval);
 
         self::assertEquals(3600, $item->getTtl());

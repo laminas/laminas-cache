@@ -281,9 +281,6 @@
     <UnusedClass>
       <code><![CDATA[IterableInterface]]></code>
     </UnusedClass>
-  <MethodSignatureMustProvideReturnType>
-    <code><![CDATA[getIterator]]></code>
-  </MethodSignatureMustProvideReturnType>
   </file>
   <file src="src/Storage/IteratorInterface.php">
     <PossiblyUnusedMethod>
