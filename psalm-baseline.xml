@@ -403,6 +403,9 @@
     <PossiblyUnusedProperty>
       <code><![CDATA[$property]]></code>
     </PossiblyUnusedProperty>
+    <UnusedProperty>
+      <code><![CDATA[$closure]]></code>
+    </UnusedProperty>
   </file>
   <file src="test/Psr/CacheItemPool/CacheItemPoolDecoratorTest.php">
     <InvalidArgument>

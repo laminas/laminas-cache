@@ -7,6 +7,7 @@ use Throwable;
 
 use function array_key_exists;
 use function array_values;
+use function is_array;
 use function is_callable;
 use function is_object;
 use function md5;
@@ -113,6 +114,14 @@ final class CallbackCache extends AbstractStorageCapablePattern
     {
         if (! is_callable($callback, false, $callbackKey)) {
             throw new Exception\InvalidArgumentException('Invalid callback');
+        }
+
+        // Create a cache key for the ObjectCache use case.
+        $options = $this->getOptions();
+        if (is_object($options->getObject()) && is_array($callback) && isset($callback[1])) {
+            $callbackKey = md5($options->getObjectKey() . '::' . strtolower($callback[1]));
+            $argumentKey = $this->generateArgumentsKey($args);
+            return $callbackKey . $argumentKey;
         }
 
         // functions, methods and classnames are case-insensitive
