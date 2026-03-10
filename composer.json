@@ -41,16 +41,16 @@
         "psr/cache": "^2.0 || ^3.0",
         "psr/clock": "^1.0",
         "psr/simple-cache": "^2.0 || ^3.0",
-        "webmozart/assert": "^1.11"
+        "webmozart/assert": "^1.11 || ^2.1.6"
     },
     "require-dev": {
-        "laminas/laminas-cli": "^1.11",
+        "laminas/laminas-cli": "^1.15",
         "laminas/laminas-coding-standard": "~3.1.0",
-        "laminas/laminas-config-aggregator": "^1.17",
+        "laminas/laminas-config-aggregator": "^1.19",
         "laminas/laminas-serializer": "^3.2",
-        "phpunit/phpunit": "^11.5.37",
-        "psalm/plugin-phpunit": "^0.19.0",
-        "vimeo/psalm": "^6"
+        "phpunit/phpunit": "^11.5.55",
+        "psalm/plugin-phpunit": "^0.19.5",
+        "vimeo/psalm": "^6.15.1"
     },
     "conflict": {
         "laminas/laminas-serializer": "<3.0",

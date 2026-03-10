@@ -36,7 +36,8 @@ final class StoragePluginFactory implements StoragePluginFactoryInterface
     public function assertValidConfigurationStructure(array $configuration): void
     {
         try {
-            Assert::isNonEmptyMap($configuration, 'Configuration must be a non-empty array.');
+            Assert::isMap($configuration, 'Configuration must be a non-empty array.');
+            Assert::notEmpty($configuration, 'Configuration must be a non-empty array.');
             Assert::keyExists($configuration, 'name', 'Configuration must contain a "name" key.');
             Assert::stringNotEmpty($configuration['name'], 'Plugin "name" has to be a non-empty string.');
             Assert::nullOrIsMap(

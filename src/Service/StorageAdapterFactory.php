@@ -71,7 +71,8 @@ final class StorageAdapterFactory implements StorageAdapterFactoryInterface
     public function assertValidConfigurationStructure(array $configuration): void
     {
         try {
-            Assert::isNonEmptyMap($configuration, 'Configuration must be a non-empty array.');
+            Assert::isMap($configuration, 'Configuration must be a non-empty array.');
+            Assert::notEmpty($configuration, 'Configuration must be a non-empty array.');
 
             $adapter = $configuration['adapter'] ?? null;
 
