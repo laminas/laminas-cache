@@ -49,7 +49,7 @@ found.
 ## Supported Adapters
 
 The PSR-6 specification requires that the underlying storage support time-to-live (TTL), which is set when the
-item is saved. For this reason the following adapters cannot be used: `Dba`, `Memory` and `Session`. The
+item is saved. For this reason the following adapters **cannot** be used: `Dba`, `Memory` and `Session`. The
 `XCache` adapter calculates TTLs based on the request time, not the time the item is actually persisted, which means
 that it also cannot be used.
 
