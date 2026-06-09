@@ -2213,20 +2213,20 @@
         },
         {
             "name": "laminas/laminas-config-aggregator",
-            "version": "1.19.0",
+            "version": "1.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-config-aggregator.git",
-                "reference": "612343ce135c340fc667da3615e50d865a86b4d9"
+                "reference": "75331b17a9ba72c5fa8679988ef08a588ddd86af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-config-aggregator/zipball/612343ce135c340fc667da3615e50d865a86b4d9",
-                "reference": "612343ce135c340fc667da3615e50d865a86b4d9",
+                "url": "https://api.github.com/repos/laminas/laminas-config-aggregator/zipball/75331b17a9ba72c5fa8679988ef08a588ddd86af",
+                "reference": "75331b17a9ba72c5fa8679988ef08a588ddd86af",
                 "shasum": ""
             },
             "require": {
-                "brick/varexporter": "^0.5.0 || ^0.4.0 || ^0.6.0",
+                "brick/varexporter": "^0.5.0 || ^0.4.0 || ^0.6.0 || ^0.7.0",
                 "laminas/laminas-stdlib": "^3.18.0",
                 "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
                 "webimpress/safe-writer": "^2.2.0"
@@ -2277,7 +2277,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2025-10-14T19:57:01+00:00"
+            "time": "2026-06-01T15:37:55+00:00"
         },
         {
             "name": "laminas/laminas-json",
