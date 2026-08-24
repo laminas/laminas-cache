@@ -259,7 +259,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     public function hasPlugin(Plugin\PluginInterface $plugin)
     {
         $registry = $this->getPluginRegistry();
-        return $registry->contains($plugin);
+        return $registry->offsetExists($plugin);
     }
 
     /**
@@ -268,7 +268,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     public function addPlugin(Plugin\PluginInterface $plugin, $priority = 1)
     {
         $registry = $this->getPluginRegistry();
-        if ($registry->contains($plugin)) {
+        if ($registry->offsetExists($plugin)) {
             throw new Exception\LogicException(sprintf(
                 'Plugin of type "%s" already registered',
                 $plugin::class
@@ -276,7 +276,7 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
         }
 
         $plugin->attach($this->getEventManager(), $priority);
-        $registry->attach($plugin);
+        $registry->offsetSet($plugin);
 
         return $this;
     }
@@ -287,9 +287,9 @@ abstract class AbstractAdapter implements StorageInterface, PluginAwareInterface
     public function removePlugin(Plugin\PluginInterface $plugin)
     {
         $registry = $this->getPluginRegistry();
-        if ($registry->contains($plugin)) {
+        if ($registry->offsetExists($plugin)) {
             $plugin->detach($this->getEventManager());
-            $registry->detach($plugin);
+            $registry->offsetUnset($plugin);
         }
         return $this;
     }
