@@ -95,13 +95,13 @@ The following configuration options are defined by `Laminas\Cache\Storage\Adapte
 are available for every supported adapter. Adapter-specific configuration options are described on
 adapter level below.
 
-Option | Data Type | Default Value | Description
------- | --------- | ------------- | -----------
-`ttl` | `integer` | `0` | Time to live
-`namespace` | `string` | “laminascache” | The “namespace” in which cache items will live
-`key_pattern` | `null|string` | `null` | Pattern against which to validate cache keys
-`readable` | `boolean` | `true` | Enable/Disable reading data from cache
-`writable` | `boolean` | `true` | Enable/Disable writing data to cache
+| Option        | Data Type      | Default Value  | Description                                    |
+|---------------|----------------|----------------|------------------------------------------------|
+| `ttl`         | `integer`      | `0`            | Time to live                                   |
+| `namespace`   | `string`       | “laminascache” | The “namespace” in which cache items will live |
+| `key_pattern` | `null\|string` | `null`         | Pattern against which to validate cache keys   |
+| `readable`    | `boolean`      | `true`         | Enable/Disable reading data from cache         |
+| `writable`    | `boolean`      | `true`         | Enable/Disable writing data to cache           |
 
 ## StorageInterface
 
@@ -568,25 +568,25 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `null`, `bool`, `int`, `float`, `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | internal_key, atime, ctime, mtime, rtime, size, hits, ttl
-`minTtl` | 1
-`maxTtl` | 0
-`staticTtl` | `true`
-`ttlPrecision` | 1
-`useRequestTime` | value of `apc.use_request_time` from `php.ini`
-`lockOnExpire` | 0
-`maxKeyLength` | 5182
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | Option value of `namespace_separator`
+| Capability           | Value                                                                                 |
+|----------------------|---------------------------------------------------------------------------------------|
+| `supportedDatatypes` | `null`, `bool`, `int`, `float`, `string`, `array` (serialized), `object` (serialized) |
+| `supportedMetadata`  | internal_key, atime, ctime, mtime, rtime, size, hits, ttl                             |
+| `minTtl`             | 1                                                                                     |
+| `maxTtl`             | 0                                                                                     |
+| `staticTtl`          | `true`                                                                                |
+| `ttlPrecision`       | 1                                                                                     |
+| `useRequestTime`     | value of `apc.use_request_time` from `php.ini`                                        |
+| `lockOnExpire`       | 0                                                                                     |
+| `maxKeyLength`       | 5182                                                                                  |
+| `namespaceIsPrefix`  | `true`                                                                                |
+| `namespaceSeparator` | Option value of `namespace_separator`                                                 |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`namespace_separator` | `string` |  ":" | A separator for the namespace and prefix.
+| Name                  | Data Type | Default Value | Description                               |
+|-----------------------|-----------|---------------|-------------------------------------------|
+| `namespace_separator` | `string`  | ":"           | A separator for the namespace and prefix. |
 
 ## BlackHole Adapter
 
@@ -607,25 +607,25 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `null`, `bool`, `int`, `float`, `string`, `array`, `object`
-`supportedMetadata` | none
-`minTtl` | 0 or 1, depending on `psr` option.
-`maxTtl` | 0
-`staticTtl` | `false` or `true`, depending on `psr` option
-`ttlPrecision` | 1
-`useRequestTime` | false
-`lockOnExpire` | 0
-`maxKeyLength` | -1
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | none
+| Capability           | Value                                                       |
+|----------------------|-------------------------------------------------------------|
+| `supportedDatatypes` | `null`, `bool`, `int`, `float`, `string`, `array`, `object` |
+| `supportedMetadata`  | none                                                        |
+| `minTtl`             | 0 or 1, depending on `psr` option.                          |
+| `maxTtl`             | 0                                                           |
+| `staticTtl`          | `false` or `true`, depending on `psr` option                |
+| `ttlPrecision`       | 1                                                           |
+| `useRequestTime`     | false                                                       |
+| `lockOnExpire`       | 0                                                           |
+| `maxKeyLength`       | -1                                                          |
+| `namespaceIsPrefix`  | `true`                                                      |
+| `namespaceSeparator` | none                                                        |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`psr` | `bool` |  `false` | Flag to specify whether the adapter should be compatible with `CacheItemPoolDecorator` or `SimpleCacheDecorator`
+| Name  | Data Type | Default Value | Description                                                                                                      |
+|-------|-----------|---------------|------------------------------------------------------------------------------------------------------------------|
+| `psr` | `bool`    | `false`       | Flag to specify whether the adapter should be compatible with `CacheItemPoolDecorator` or `SimpleCacheDecorator` |
 
 >### Deprecation Notice
 >
@@ -650,23 +650,23 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `string`, `null` => `string`, `boolean` => `string`, `integer` => `string`, `double` => `string`
-`supportedMetadata` | none
-`minTtl` | 0
-`maxKeyLength` | 0
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | Option value of `namespace_separator`
+| Capability           | Value                                                                                            |
+|----------------------|--------------------------------------------------------------------------------------------------|
+| `supportedDatatypes` | `string`, `null` => `string`, `boolean` => `string`, `integer` => `string`, `double` => `string` |
+| `supportedMetadata`  | none                                                                                             |
+| `minTtl`             | 0                                                                                                |
+| `maxKeyLength`       | 0                                                                                                |
+| `namespaceIsPrefix`  | `true`                                                                                           |
+| `namespaceSeparator` | Option value of `namespace_separator`                                                            |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
-`pathname` | `string` | "" | Pathname to the database file.
-`mode` | `string` | "c" | The mode with which to open the database; please read [dba_open](http://php.net/manual/function.dba-open.php) for more information.
-`handler` | `string` | "flatfile" | The name of the handler which shall be used for accessing the database.
+| Name                  | Data Type | Default Value | Description                                                                                                                         |
+|-----------------------|-----------|---------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| `namespace_separator` | `string`  | ":"           | A separator for the namespace and prefix.                                                                                           |
+| `pathname`            | `string`  | ""            | Pathname to the database file.                                                                                                      |
+| `mode`                | `string`  | "c"           | The mode with which to open the database; please read [dba_open](http://php.net/manual/function.dba-open.php) for more information. |
+| `handler`             | `string`  | "flatfile"    | The name of the handler which shall be used for accessing the database.                                                             |
 
 > ### This adapter doesn't support automatic expiry
 >
@@ -692,37 +692,37 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `string`, `null` => `string`, `boolean` => `string`, `integer` => `string`, `double` => `string`
-`supportedMetadata` | mtime, filespec, atime, ctime
-`minTtl` | 1
-`maxTtl` | 0
-`staticTtl` | `false`
-`ttlPrecision` | 1
-`useRequestTime` | `false`
-`lockOnExpire` | 0
-`maxKeyLength` | 251
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | Option value of `namespace_separator`
+| Capability           | Value                                                                                            |
+|----------------------|--------------------------------------------------------------------------------------------------|
+| `supportedDatatypes` | `string`, `null` => `string`, `boolean` => `string`, `integer` => `string`, `double` => `string` |
+| `supportedMetadata`  | mtime, filespec, atime, ctime                                                                    |
+| `minTtl`             | 1                                                                                                |
+| `maxTtl`             | 0                                                                                                |
+| `staticTtl`          | `false`                                                                                          |
+| `ttlPrecision`       | 1                                                                                                |
+| `useRequestTime`     | `false`                                                                                          |
+| `lockOnExpire`       | 0                                                                                                |
+| `maxKeyLength`       | 251                                                                                              |
+| `namespaceIsPrefix`  | `true`                                                                                           |
+| `namespaceSeparator` | Option value of `namespace_separator`                                                            |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix
-`cache_dir` | `string` | "" | Directory to store cache files.
-`clear_stat_cache` | `boolean` | `true` | Call `clearstatcache()` enabled?
-`dir_level` | `integer` | `1` | Defines how much sub-directories should be created.
-`dir_permission` | `integer` | `false` | 0700    Set explicit permission on creating new directories.
-`file_locking` | `boolean` | `true` | Lock files on writing.
-`file_permission` | `integer` | `false` | 0600    Set explicit permission on creating new files.
-`key_pattern` | `string` | `/^[a-z0-9_\+\-]*$/Di` | Validate key against pattern.
-`no_atime` | `boolean` | `true` | Don’t get ‘fileatime’ as ‘atime’ on metadata.
-`no_ctime` | `boolean` | `true` | Don’t get ‘filectime’ as ‘ctime’ on metadata.
-`umask` | `integer|false` | `false` | Use [umask](http://wikipedia.org/wiki/Umask) to set file and directory permissions.
-`suffix` | `string` | `dat` | Suffix for cache files
-`tag_suffix` | `string` | `tag` | Suffix for tag files
+| Name                  | Data Type        | Default Value          | Description                                                                         |
+|-----------------------|------------------|------------------------|-------------------------------------------------------------------------------------|
+| `namespace_separator` | `string`         | ":"                    | A separator for the namespace and prefix                                            |
+| `cache_dir`           | `string`         | ""                     | Directory to store cache files.                                                     |
+| `clear_stat_cache`    | `boolean`        | `true`                 | Call `clearstatcache()` enabled?                                                    |
+| `dir_level`           | `integer`        | `1`                    | Defines how much sub-directories should be created.                                 |
+| `dir_permission`      | `integer`        | `false`                | 0700    Set explicit permission on creating new directories.                        |
+| `file_locking`        | `boolean`        | `true`                 | Lock files on writing.                                                              |
+| `file_permission`     | `integer`        | `false`                | 0600    Set explicit permission on creating new files.                              |
+| `key_pattern`         | `string`         | `/^[a-z0-9_\+\-]*$/Di` | Validate key against pattern.                                                       |
+| `no_atime`            | `boolean`        | `true`                 | Don’t get ‘fileatime’ as ‘atime’ on metadata.                                       |
+| `no_ctime`            | `boolean`        | `true`                 | Don’t get ‘filectime’ as ‘ctime’ on metadata.                                       |
+| `umask`               | `integer\|false` | `false`                | Use [umask](http://wikipedia.org/wiki/Umask) to set file and directory permissions. |
+| `suffix`              | `string`         | `dat`                  | Suffix for cache files                                                              |
+| `tag_suffix`          | `string`         | `tag`                  | Suffix for tag files                                                                |
 
 Note: the `suffix` and `tag_suffix` options will be escaped in order to be safe
 for glob operations.
@@ -742,26 +742,26 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `null`, `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | none
-`minTtl` | 1
-`maxTtl` | 0
-`staticTtl` | `true`
-`ttlPrecision` | 1
-`useRequestTime` | `false`
-`lockOnExpire` | 0
-`maxKeyLength` | 255
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | none
+| Capability           | Value                                                                                         |
+|----------------------|-----------------------------------------------------------------------------------------------|
+| `supportedDatatypes` | `null`, `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized) |
+| `supportedMetadata`  | none                                                                                          |
+| `minTtl`             | 1                                                                                             |
+| `maxTtl`             | 0                                                                                             |
+| `staticTtl`          | `true`                                                                                        |
+| `ttlPrecision`       | 1                                                                                             |
+| `useRequestTime`     | `false`                                                                                       |
+| `lockOnExpire`       | 0                                                                                             |
+| `maxKeyLength`       | 255                                                                                           |
+| `namespaceIsPrefix`  | `true`                                                                                        |
+| `namespaceSeparator` | none                                                                                          |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`servers` | `array` | `[]` | List of servers in the format `[] = [string host, integer port]`
-`lib_options` | `array` | `[]` | Associative array of Libmemcached options where the array key is the option name (without the prefix `OPT_`) or the constant value. The array value is the option value. Please read [the memcached setOption() page](http://php.net/manual/memcached.setoption.php) for more information
+| Name          | Data Type | Default Value | Description                                                                                                                                                                                                                                                                               |
+|---------------|-----------|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `servers`     | `array`   | `[]`          | List of servers in the format `[] = [string host, integer port]`                                                                                                                                                                                                                          |
+| `lib_options` | `array`   | `[]`          | Associative array of Libmemcached options where the array key is the option name (without the prefix `OPT_`) or the constant value. The array value is the option value. Please read [the memcached setOption() page](http://php.net/manual/memcached.setoption.php) for more information |
 
 ## Redis Adapter
 
@@ -777,31 +777,31 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | ttl (Redis v2+)
-`minTtl` | 1
-`maxTtl` | 0
-`staticTtl` | `true`
-`ttlPrecision` | 1
-`useRequestTime` | `false`
-`lockOnExpire` | 0
-`maxKeyLength` | 512000000 (in Redis v3+, 255 otherwise)
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | none
+| Capability           | Value                                                 |
+|----------------------|-------------------------------------------------------|
+| `supportedDatatypes` | `string`, `array` (serialized), `object` (serialized) |
+| `supportedMetadata`  | ttl (Redis v2+)                                       |
+| `minTtl`             | 1                                                     |
+| `maxTtl`             | 0                                                     |
+| `staticTtl`          | `true`                                                |
+| `ttlPrecision`       | 1                                                     |
+| `useRequestTime`     | `false`                                               |
+| `lockOnExpire`       | 0                                                     |
+| `maxKeyLength`       | 512000000 (in Redis v3+, 255 otherwise)               |
+| `namespaceIsPrefix`  | `true`                                                |
+| `namespaceSeparator` | none                                                  |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`database` | `integer` | 0 | Set database identifier.
-`lib_options` | `array` | `[]` | Associative array of Redis options where the array key is the option name.
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
-`password` | `string` | "" | Set password.
-`persistent_id` | `string` | | Set persistent id (name of the connection, leave blank to not use a persistent connection).
-`resource_manager` | `string` | "" | Set the Redis resource manager to use
-`server` | `string\|array` | "" | See below.
+| Name                  | Data Type       | Default Value | Description                                                                                 |
+|-----------------------|-----------------|---------------|---------------------------------------------------------------------------------------------|
+| `database`            | `integer`       | 0             | Set database identifier.                                                                    |
+| `lib_options`         | `array`         | `[]`          | Associative array of Redis options where the array key is the option name.                  |
+| `namespace_separator` | `string`        | ":"           | A separator for the namespace and prefix.                                                   |
+| `password`            | `string`        | ""            | Set password.                                                                               |
+| `persistent_id`       | `string`        |               | Set persistent id (name of the connection, leave blank to not use a persistent connection). |
+| `resource_manager`    | `string`        | ""            | Set the Redis resource manager to use                                                       |
+| `server`              | `string\|array` | ""            | See below.                                                                                  |
 
 `server` can be described as any of the following:
 
@@ -822,33 +822,33 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | ttl (Redis v2+)
-`minTtl` | 1
-`maxTtl` | 0
-`staticTtl` | `true`
-`ttlPrecision` | 1
-`useRequestTime` | `false`
-`lockOnExpire` | 0
-`maxKeyLength` | 512000000 (in Redis v3+, 255 otherwise)
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | none
+| Capability           | Value                                                 |
+|----------------------|-------------------------------------------------------|
+| `supportedDatatypes` | `string`, `array` (serialized), `object` (serialized) |
+| `supportedMetadata`  | ttl (Redis v2+)                                       |
+| `minTtl`             | 1                                                     |
+| `maxTtl`             | 0                                                     |
+| `staticTtl`          | `true`                                                |
+| `ttlPrecision`       | 1                                                     |
+| `useRequestTime`     | `false`                                               |
+| `lockOnExpire`       | 0                                                     |
+| `maxKeyLength`       | 512000000 (in Redis v3+, 255 otherwise)               |
+| `namespaceIsPrefix`  | `true`                                                |
+| `namespaceSeparator` | none                                                  |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`lib_options` | `array` | `[]` | Associative array of Redis options where the array key is the options constant value (see `RedisCluster::OPT_*` [constants](https://github.com/JetBrains/phpstorm-stubs/blob/master/redis/RedisCluster.php) for details).
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
-`password` | `string` | "" | Password to authenticate with Redis server
-`name` | `string` | "" | Name to determine configuration from [php.ini](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#loading-a-cluster-configuration-by-name) (**MUST NOT** be combined with `seeds`)
-`seeds` | `array` | `[]` | List of strings containing `<hostname>:<port>` (**MUST NOT** be combined with `name`)
-`timeout` | `float` | `1.0` | Timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.
-`read_timeout` | `float` | `2.0` | Read timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.
-`persistent` | `bool` | `false` | Flag to specify whether to create a persistent connection or not
-`version` | `string` | "" | The Redis server version. **MUST** be specified in a [Semantic Versioning 2.0.0](https://semver.org/#semantic-versioning-200) format. This information is used to determine some features/capabilities without opening a connection to the server.
+| Name                  | Data Type | Default Value | Description                                                                                                                                                                                                                                        |
+|-----------------------|-----------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `lib_options`         | `array`   | `[]`          | Associative array of Redis options where the array key is the options constant value (see `RedisCluster::OPT_*` [constants](https://github.com/JetBrains/phpstorm-stubs/blob/master/redis/RedisCluster.php) for details).                          |
+| `namespace_separator` | `string`  | ":"           | A separator for the namespace and prefix.                                                                                                                                                                                                          |
+| `password`            | `string`  | ""            | Password to authenticate with Redis server                                                                                                                                                                                                         |
+| `name`                | `string`  | ""            | Name to determine configuration from [php.ini](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#loading-a-cluster-configuration-by-name) (**MUST NOT** be combined with `seeds`)                                                 |
+| `seeds`               | `array`   | `[]`          | List of strings containing `<hostname>:<port>` (**MUST NOT** be combined with `name`)                                                                                                                                                              |
+| `timeout`             | `float`   | `1.0`         | Timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.                                                                                      |
+| `read_timeout`        | `float`   | `2.0`         | Read timeout for commands, see [PhpRedis](https://github.com/phpredis/phpredis/blob/develop/cluster.markdown#timeouts) timeouts documentation for more background.                                                                                 |
+| `persistent`          | `bool`    | `false`       | Flag to specify whether to create a persistent connection or not                                                                                                                                                                                   |
+| `version`             | `string`  | ""            | The Redis server version. **MUST** be specified in a [Semantic Versioning 2.0.0](https://semver.org/#semantic-versioning-200) format. This information is used to determine some features/capabilities without opening a connection to the server. |
 
 ## Memory Adapter
 
@@ -868,24 +868,24 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `string`, `null`, `boolean`, `integer`, `double`, `array`, `object`, `resource`
-`supportedMetadata` | mtime
-`minTtl` | 1
-`maxTtl` | Value of `PHP_INT_MAX`
-`staticTtl` | `false`
-`ttlPrecision` | 0.05
-`useRequestTime` | `false`
-`lockOnExpire` | 0
-`maxKeyLength` | 0
-`namespaceIsPrefix` | `false`
+| Capability           | Value                                                                           |
+|----------------------|---------------------------------------------------------------------------------|
+| `supportedDatatypes` | `string`, `null`, `boolean`, `integer`, `double`, `array`, `object`, `resource` |
+| `supportedMetadata`  | mtime                                                                           |
+| `minTtl`             | 1                                                                               |
+| `maxTtl`             | Value of `PHP_INT_MAX`                                                          |
+| `staticTtl`          | `false`                                                                         |
+| `ttlPrecision`       | 0.05                                                                            |
+| `useRequestTime`     | `false`                                                                         |
+| `lockOnExpire`       | 0                                                                               |
+| `maxKeyLength`       | 0                                                                               |
+| `namespaceIsPrefix`  | `false`                                                                         |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`memory_limit` | `string|integer` | 50% of `memory_limit` INI value | Limit of how much memory can PHP allocate to allow store items.
+| Name           | Data Type         | Default Value                   | Description                                                     |
+|----------------|-------------------|---------------------------------|-----------------------------------------------------------------|
+| `memory_limit` | `string\|integer` | 50% of `memory_limit` INI value | Limit of how much memory can PHP allocate to allow store items. |
 
 > #### Memory Limit
 >
@@ -919,36 +919,36 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `string`, `null`, `boolean`, `integer`, `double`, `array`
-`supportedMetadata` | _id
-`minTtl` | 0
-`maxTtl` | 0
-`staticTtl` | `true`
-`ttlPrecision` | 1
-`useRequestTime` | `false`
-`lockOnExpire` | 0
-`maxKeyLength` | 255
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | *Option value of `namespace_separator`*
+| Capability           | Value                                                     |
+|----------------------|-----------------------------------------------------------|
+| `supportedDatatypes` | `string`, `null`, `boolean`, `integer`, `double`, `array` |
+| `supportedMetadata`  | _id                                                       |
+| `minTtl`             | 0                                                         |
+| `maxTtl`             | 0                                                         |
+| `staticTtl`          | `true`                                                    |
+| `ttlPrecision`       | 1                                                         |
+| `useRequestTime`     | `false`                                                   |
+| `lockOnExpire`       | 0                                                         |
+| `maxKeyLength`       | 255                                                       |
+| `namespaceIsPrefix`  | `true`                                                    |
+| `namespaceSeparator` | *Option value of `namespace_separator`*                   |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`lib_option` | `array` | | Associative array of options where the array key is the option name.
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
+| Name                  | Data Type | Default Value | Description                                                          |
+|-----------------------|-----------|---------------|----------------------------------------------------------------------|
+| `lib_option`          | `array`   |               | Associative array of options where the array key is the option name. |
+| `namespace_separator` | `string`  | ":"           | A separator for the namespace and prefix.                            |
 
 Available keys for `lib_option` include:
 
-Key | Default | Description
---- | ------- | -----------
-`server` | `mongodb://localhost:27017` | The MongoDB server connection string (see the [MongoClient docs](http://php.net/MongoClient)).
-`database` | `laminas` | Name of the database to use; MongoDB will create this database if it does not exist.
-`collection` | `cache` | Name of the collection to use; MongoDB will create this collection if it does not exist.
-`connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).
-`driverOptions` | `[]` | Associative array of driver options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).
+| Key                 | Default                                 | Description                                                                                                            |
+|---------------------|-----------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| `server`            | `mongodb://localhost:27017`             | The MongoDB server connection string (see the [MongoClient docs](http://php.net/MongoClient)).                         |
+| `database`          | `laminas`                               | Name of the database to use; MongoDB will create this database if it does not exist.                                   |
+| `collection`        | `cache`                                 | Name of the collection to use; MongoDB will create this collection if it does not exist.                               |
+| `connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)).        |
+| `driverOptions`     | `[]`                                    | Associative array of driver options to pass to `MongoClient` (see the [MongoClient docs](http://php.net/MongoClient)). |
 
 ## ExtMongoDB Adapter
 
@@ -973,36 +973,36 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `string`, `null`, `boolean`, `integer`, `double`, `array`
-`supportedMetadata` | _id
-`minTtl` | 0
-`maxTtl` | 0
-`staticTtl` | `true`
-`ttlPrecision` | 1
-`useRequestTime` | `false`
-`lockOnExpire` | 0
-`maxKeyLength` | 255
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | *Option value of `namespace_separator`*
+| Capability           | Value                                                     |
+|----------------------|-----------------------------------------------------------|
+| `supportedDatatypes` | `string`, `null`, `boolean`, `integer`, `double`, `array` |
+| `supportedMetadata`  | _id                                                       |
+| `minTtl`             | 0                                                         |
+| `maxTtl`             | 0                                                         |
+| `staticTtl`          | `true`                                                    |
+| `ttlPrecision`       | 1                                                         |
+| `useRequestTime`     | `false`                                                   |
+| `lockOnExpire`       | 0                                                         |
+| `maxKeyLength`       | 255                                                       |
+| `namespaceIsPrefix`  | `true`                                                    |
+| `namespaceSeparator` | *Option value of `namespace_separator`*                   |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`lib_option` | `array` | | Associative array of options where the array key is the option name.
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
+| Name                  | Data Type | Default Value | Description                                                          |
+|-----------------------|-----------|---------------|----------------------------------------------------------------------|
+| `lib_option`          | `array`   |               | Associative array of options where the array key is the option name. |
+| `namespace_separator` | `string`  | ":"           | A separator for the namespace and prefix.                            |
 
 Available keys for `lib_option` include:
 
-Key | Default | Description
---- | ------- | -----------
-`server` | `mongodb://localhost:27017` | The MongoDB server connection string (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
-`database` | `laminas` | Name of the database to use; MongoDB will create this database if it does not exist.
-`collection` | `cache` | Name of the collection to use; MongoDB will create this collection if it does not exist.
-`connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of URI options (such as authentication credentials or query string parameters) to pass to `MongoDB\\Client` (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
-`driverOptions` | `[]` | Associative array of driver options to pass to `MongoDB\\Client` (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).
+| Key                 | Default                                 | Description                                                                                                                                                                                                                                              |
+|---------------------|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `server`            | `mongodb://localhost:27017`             | The MongoDB server connection string (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).                                                                                          |
+| `database`          | `laminas`                               | Name of the database to use; MongoDB will create this database if it does not exist.                                                                                                                                                                     |
+| `collection`        | `cache`                                 | Name of the collection to use; MongoDB will create this collection if it does not exist.                                                                                                                                                                 |
+| `connectionOptions` | `['fsync' => false, 'journal' => true]` | Associative array of URI options (such as authentication credentials or query string parameters) to pass to `MongoDB\\Client` (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)). |
+| `driverOptions`     | `[]`                                    | Associative array of driver options to pass to `MongoDB\\Client` (see the [MongoDB\\Client docs](https://docs.mongodb.com/php-library/current/reference/method/MongoDBClient__construct/)).                                                              |
 
 ## WinCache Adapter
 
@@ -1018,24 +1018,24 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `null`, `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | internal_key, ttl, hits, size
-`minTtl` | 1
-`maxTtl` | 0
-`staticTtl` | `true`
-`ttlPrecision` | 1
-`useRequestTime` | `apc.use_request_time` `php.ini` value.
-`lockOnExpire` | 0
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | Option value of `namespace_separator`
+| Capability           | Value                                                                                         |
+|----------------------|-----------------------------------------------------------------------------------------------|
+| `supportedDatatypes` | `null`, `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized) |
+| `supportedMetadata`  | internal_key, ttl, hits, size                                                                 |
+| `minTtl`             | 1                                                                                             |
+| `maxTtl`             | 0                                                                                             |
+| `staticTtl`          | `true`                                                                                        |
+| `ttlPrecision`       | 1                                                                                             |
+| `useRequestTime`     | `apc.use_request_time` `php.ini` value.                                                       |
+| `lockOnExpire`       | 0                                                                                             |
+| `namespaceIsPrefix`  | `true`                                                                                        |
+| `namespaceSeparator` | Option value of `namespace_separator`                                                         |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
+| Name                  | Data Type | Default Value | Description                               |
+|-----------------------|-----------|---------------|-------------------------------------------|
+| `namespace_separator` | `string`  | ":"           | A separator for the namespace and prefix. |
 
 ## XCache Adapter
 
@@ -1054,28 +1054,28 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | internal_key, size, refcount, hits, ctime, atime, hvalue
-`minTtl` | 1
-`maxTtl` | `xcache.var_maxttl` `php.ini` value
-`staticTtl` | `true`
-`ttlPrecision` | 1
-`useRequestTime` | `true`
-`lockOnExpire` | 0
-`maxKeyLength` | 5182
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | Option value of `namespace_separator`
+| Capability           | Value                                                                                 |
+|----------------------|---------------------------------------------------------------------------------------|
+| `supportedDatatypes` | `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized) |
+| `supportedMetadata`  | internal_key, size, refcount, hits, ctime, atime, hvalue                              |
+| `minTtl`             | 1                                                                                     |
+| `maxTtl`             | `xcache.var_maxttl` `php.ini` value                                                   |
+| `staticTtl`          | `true`                                                                                |
+| `ttlPrecision`       | 1                                                                                     |
+| `useRequestTime`     | `true`                                                                                |
+| `lockOnExpire`       | 0                                                                                     |
+| `maxKeyLength`       | 5182                                                                                  |
+| `namespaceIsPrefix`  | `true`                                                                                |
+| `namespaceSeparator` | Option value of `namespace_separator`                                                 |
 
 ### Adapter Specific Options
 
-Name | Data Type | Default Value | Description
----- | --------- | ------------- | -----------
-`namespace_separator` | `string` | ":" | A separator for the namespace and prefix.
-`admin_auth` | `boolean` | `false` | Enable admin authentication by configuration options `admin_user` and `admin_pass`.  This makes XCache administration functions accessible without the need of HTTP-Authentication if `xcache.admin.enable_auth` is enabled.
-`admin_user` | `string` | "" | The username of `xcache.admin.user`.
-`admin_pass` | `string` | "" | The password of `xcache.admin.pass` in plain text.
+| Name                  | Data Type | Default Value | Description                                                                                                                                                                                                                  |
+|-----------------------|-----------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `namespace_separator` | `string`  | ":"           | A separator for the namespace and prefix.                                                                                                                                                                                    |
+| `admin_auth`          | `boolean` | `false`       | Enable admin authentication by configuration options `admin_user` and `admin_pass`.  This makes XCache administration functions accessible without the need of HTTP-Authentication if `xcache.admin.enable_auth` is enabled. |
+| `admin_user`          | `string`  | ""            | The username of `xcache.admin.user`.                                                                                                                                                                                         |
+| `admin_pass`          | `string`  | ""            | The password of `xcache.admin.pass` in plain text.                                                                                                                                                                           |
 
 ## ZendServerDisk Adapter
 
@@ -1092,19 +1092,19 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `null`, `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | none
-`minTtl` | 1
-`maxTtl` | 0
-`maxKeyLength` | 0
-`staticTtl` | `true`
-`ttlPrecision` | 1
-`useRequestTime` | `false`
-`lockOnExpire` | if 'zend_datacache.lock_on_expire' is enabled 120 else 0
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | `::`
+| Capability           | Value                                                                                         |
+|----------------------|-----------------------------------------------------------------------------------------------|
+| `supportedDatatypes` | `null`, `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized) |
+| `supportedMetadata`  | none                                                                                          |
+| `minTtl`             | 1                                                                                             |
+| `maxTtl`             | 0                                                                                             |
+| `maxKeyLength`       | 0                                                                                             |
+| `staticTtl`          | `true`                                                                                        |
+| `ttlPrecision`       | 1                                                                                             |
+| `useRequestTime`     | `false`                                                                                       |
+| `lockOnExpire`       | if 'zend_datacache.lock_on_expire' is enabled 120 else 0                                      |
+| `namespaceIsPrefix`  | `true`                                                                                        |
+| `namespaceSeparator` | `::`                                                                                          |
 
 ## ZendServerShm Adapter
 
@@ -1120,19 +1120,19 @@ This adapter implements the following interfaces:
 
 ### Capabilities
 
-Capability | Value
----------- | -----
-`supportedDatatypes` | `null`, `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized)
-`supportedMetadata` | none
-`minTtl` | 1
-`maxTtl` | 0
-`maxKeyLength` | 0
-`staticTtl` | `true`
-`ttlPrecision` | 1
-`useRequestTime` | `false`
-`lockOnExpire` | if 'zend_datacache.lock_on_expire' is enabled 120 else 0
-`namespaceIsPrefix` | `true`
-`namespaceSeparator` | `::`
+| Capability           | Value                                                                                         |
+|----------------------|-----------------------------------------------------------------------------------------------|
+| `supportedDatatypes` | `null`, `boolean`, `integer`, `double`, `string`, `array` (serialized), `object` (serialized) |
+| `supportedMetadata`  | none                                                                                          |
+| `minTtl`             | 1                                                                                             |
+| `maxTtl`             | 0                                                                                             |
+| `maxKeyLength`       | 0                                                                                             |
+| `staticTtl`          | `true`                                                                                        |
+| `ttlPrecision`       | 1                                                                                             |
+| `useRequestTime`     | `false`                                                                                       |
+| `lockOnExpire`       | if 'zend_datacache.lock_on_expire' is enabled 120 else 0                                      |
+| `namespaceIsPrefix`  | `true`                                                                                        |
+| `namespaceSeparator` | `::`                                                                                          |
 
 ## Examples
 
