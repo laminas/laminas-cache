@@ -11,4 +11,5 @@
 /phpbench.json export-ignore
 /phpcs.xml export-ignore
 /phpunit.xml.dist export-ignore
+/structarmed.php export-ignore
 /test/ export-ignore

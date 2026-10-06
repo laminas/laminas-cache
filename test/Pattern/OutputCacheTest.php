@@ -98,7 +98,7 @@ final class OutputCacheTest extends AbstractCommonStoragePatternTestCase
             ->expects($this->once())
             ->method('getItem')
             ->with($key, null)
-            ->willReturnCallback(function (string $key, ?bool &$success = null) use ($output): string {
+            ->willReturnCallback(static function (string $key, ?bool &$success = null) use ($output): string {
                  $success = true;
                  return $output;
             });

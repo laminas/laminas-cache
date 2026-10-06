@@ -79,9 +79,9 @@ final class SerializerTest extends AbstractCommonPluginTestCase
 
             // check expected priority
             if (str_ends_with($eventName, '.pre')) {
-                self::assertListenerAtPriority($cb ?? fn() => null, 100, $eventName, $events);
+                self::assertListenerAtPriority($cb ?? static fn() => null, 100, $eventName, $events);
             } else {
-                self::assertListenerAtPriority($cb ?? fn() => null, -100, $eventName, $events);
+                self::assertListenerAtPriority($cb ?? static fn() => null, -100, $eventName, $events);
             }
         }
     }

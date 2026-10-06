@@ -222,7 +222,7 @@ final class SimpleCacheDecorator implements SimpleCacheInterface
         // PSR-16 states that 0 or negative TTL values should result in cache
         // invalidation for the items.
         if (null !== $ttl && 1 > $ttl) {
-            return $this->deleteMultiple(array_map(fn (int|string $key) => (string) $key, $keys));
+            return $this->deleteMultiple(array_map(static fn (int|string $key) => (string) $key, $keys));
         }
 
         // If a positive TTL is set, but the adapter does not support per-item

@@ -123,7 +123,7 @@ final class CallbackCacheTest extends AbstractCommonStoragePatternTestCase
             ->method('getItem')
             ->with($expectedKey, null)
             ->willReturnCallback(
-                function (
+                static function (
                     string $key,
                     bool|null &$success = null
                 ) use (
@@ -179,7 +179,7 @@ final class CallbackCacheTest extends AbstractCommonStoragePatternTestCase
         ->expects($this->once())
         ->method('getItem')
         ->with($key, null)
-        ->willReturnCallback(function (string $key, ?bool &$success = null): array {
+        ->willReturnCallback(static function (string $key, ?bool &$success = null): array {
             $success = true;
             return [null];
         });
