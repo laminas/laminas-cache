@@ -44,6 +44,7 @@
         "webmozart/assert": "^1.11 || ^2.1.6"
     },
     "require-dev": {
+        "boundwize/structarmed": "^0.18.11",
         "laminas/laminas-cli": "^1.15",
         "laminas/laminas-coding-standard": "~3.1.0",
         "laminas/laminas-config-aggregator": "^1.19",

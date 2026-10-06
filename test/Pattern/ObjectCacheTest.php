@@ -146,7 +146,7 @@ final class ObjectCacheTest extends AbstractCommonStoragePatternTestCase
             ->method('getItem')
             ->with($expectedKey, null)
             ->willReturnCallback(
-                function (
+                static function (
                     string $key,
                     bool|null &$success = null
                 ) use (
