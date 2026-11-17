@@ -1,24 +1,23 @@
 {
     "backwardCompatibilityCheck": true,
     "ignore_php_platform_requirements": {
-        "8.4": true
+        "8.6": true
     },
     "additional_checks": [
         {
-            "name": "Unit tests with psr/cache v2",
+            "name": "Unit tests with psr\/cache v2",
             "job": {
                 "php": "*",
                 "dependencies": "locked",
-                "command": "composer require psr/cache:^2.0 && vendor/bin/phpunit"
+                "command": "composer require psr\/cache:^2.0 && vendor\/bin\/phpunit"
             }
         },
-
         {
-            "name": "Unit tests with psr/simple-cache v2",
+            "name": "Unit tests with psr\/simple-cache v2",
             "job": {
                 "php": "*",
                 "dependencies": "locked",
-                "command": "composer require psr/simple-cache:^2.0 && vendor/bin/phpunit"
+                "command": "composer require psr\/simple-cache:^2.0 && vendor\/bin\/phpunit"
             }
         }
     ]
