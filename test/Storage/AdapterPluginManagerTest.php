@@ -28,7 +28,7 @@ final class AdapterPluginManagerTest extends TestCase
      * @psalm-suppress UnusedParam
      */
     #[RequiresPhp('<8.0')]
-    public function testPluginAliasesResolve(string $alias, string $expected)
+    public function testPluginAliasesResolve(string $alias, string $expected): never
     {
         self::markTestSkipped('There are no aliases to test');
     }

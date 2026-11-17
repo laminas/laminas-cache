@@ -25,7 +25,7 @@ use function assert;
  */
 final class PluginManager extends AbstractSingleInstancePluginManager
 {
-    private const CONFIGURATION = [
+    private const array CONFIGURATION = [
         'aliases'   => [
             'clear_expired_by_factor' => Plugin\ClearExpiredByFactor::class,
             'clearexpiredbyfactor'    => Plugin\ClearExpiredByFactor::class,

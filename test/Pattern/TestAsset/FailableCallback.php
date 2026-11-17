@@ -8,7 +8,7 @@ use Exception;
 
 final class FailableCallback
 {
-    public function __invoke()
+    public function __invoke(): never
     {
         throw new Exception('This callback should either fail or never be invoked');
     }

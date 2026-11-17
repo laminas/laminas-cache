@@ -750,7 +750,7 @@ final class AbstractAdapterTest extends TestCase
         foreach ($expectedArgs as $v) {
             $equals[] = $this->equalTo($v);
         }
-        call_user_func_array([$tmp, 'with'], $equals);
+        call_user_func_array($tmp->with(...), $equals);
 
         // run
         call_user_func_array([$storage, $method], $args);

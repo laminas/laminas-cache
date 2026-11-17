@@ -22,6 +22,7 @@ use function realpath;
 use function rtrim;
 use function sprintf;
 use function stripos;
+use function strtolower;
 
 use const DIRECTORY_SEPARATOR;
 use const PHP_OS;
@@ -507,7 +508,7 @@ final class PatternOptions extends AbstractOptions
      */
     protected function recursiveStrtolower(array $array): array
     {
-        return array_values(array_unique(array_map('strtolower', $array)));
+        return array_values(array_unique(array_map(strtolower(...), $array)));
     }
 
     /**

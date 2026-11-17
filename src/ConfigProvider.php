@@ -15,7 +15,7 @@ use Laminas\ServiceManager\ServiceManager;
  */
 final class ConfigProvider
 {
-    public const ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY = 'storage_adapters';
+    public const string ADAPTER_PLUGIN_MANAGER_CONFIGURATION_KEY = 'storage_adapters';
 
     /**
      * Return default configuration for laminas-cache.

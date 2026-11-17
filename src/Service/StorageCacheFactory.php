@@ -10,7 +10,7 @@ use function assert;
 
 final class StorageCacheFactory
 {
-    public const CACHE_CONFIGURATION_KEY = 'cache';
+    public const string CACHE_CONFIGURATION_KEY = 'cache';
 
     public function __invoke(ContainerInterface $container): StorageInterface
     {
