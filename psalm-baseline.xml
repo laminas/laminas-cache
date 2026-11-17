@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="6.19.1@e2ca44251c1f1aa2e35452d426895746b47de64e">
+<files psalm-version="6.20.12@56e5217b13db8789c2b8cfcc73d0f902df2cda11">
   <file src="src/Exception/BadMethodCallException.php">
     <UnusedClass>
       <code><![CDATA[BadMethodCallException]]></code>
@@ -96,13 +96,9 @@
       <code><![CDATA[$umask & 0700]]></code>
       <code><![CDATA[$umask &= ~0002]]></code>
     </InvalidOperand>
-    <MixedArgument>
-      <code><![CDATA[$array]]></code>
-    </MixedArgument>
     <PossiblyInvalidPropertyAssignmentValue>
       <code><![CDATA[$dirPermission]]></code>
       <code><![CDATA[$filePermission]]></code>
-      <code><![CDATA[$umask]]></code>
     </PossiblyInvalidPropertyAssignmentValue>
     <PossiblyUnusedMethod>
       <code><![CDATA[setCacheByDefault]]></code>
@@ -116,14 +112,6 @@
       <code><![CDATA[setPublicDir]]></code>
       <code><![CDATA[setUmask]]></code>
     </PossiblyUnusedMethod>
-  </file>
-  <file src="src/Psr/SimpleCache/SimpleCacheDecorator.php">
-    <InvalidReturnStatement>
-      <code><![CDATA[$results]]></code>
-    </InvalidReturnStatement>
-    <InvalidReturnType>
-      <code><![CDATA[array]]></code>
-    </InvalidReturnType>
   </file>
   <file src="src/Service/StorageAdapterFactory.php">
     <InvalidArgument>
@@ -259,6 +247,11 @@
     </UnusedClass>
   </file>
   <file src="src/Storage/IteratorInterface.php">
+    <MissingClassConstType>
+        <code><![CDATA[CURRENT_AS_SELF  = 0]]></code>
+        <code><![CDATA[CURRENT_AS_KEY   = 1]]></code>
+        <code><![CDATA[CURRENT_AS_VALUE = 2]]></code>
+    </MissingClassConstType>
     <PossiblyUnusedMethod>
       <code><![CDATA[getMode]]></code>
       <code><![CDATA[getStorage]]></code>
@@ -451,11 +444,6 @@
       <code><![CDATA[addPlugin]]></code>
       <code><![CDATA[hasPlugin]]></code>
     </PossiblyUnusedMethod>
-  </file>
-  <file src="test/Storage/AdapterPluginManagerTest.php">
-    <MissingReturnType>
-      <code><![CDATA[testPluginAliasesResolve]]></code>
-    </MissingReturnType>
   </file>
   <file src="test/Storage/Plugin/ClearExpiredByFactorTest.php">
     <ArgumentTypeCoercion>
