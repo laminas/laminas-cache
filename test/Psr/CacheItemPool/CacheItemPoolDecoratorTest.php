@@ -43,7 +43,7 @@ final class CacheItemPoolDecoratorTest extends TestCase
 
     private ?CacheItemPoolDecorator $adapter;
 
-    private const REQUIRED_TYPES = [
+    private const array REQUIRED_TYPES = [
         'NULL'     => true,
         'boolean'  => true,
         'integer'  => true,

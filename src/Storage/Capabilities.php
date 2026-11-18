@@ -15,11 +15,11 @@ namespace Laminas\Cache\Storage;
  *  'resource'?: bool|DataTypeConversionType,
  * }
  */
-final class Capabilities
+final readonly class Capabilities
 {
-    public const UNKNOWN_KEY_LENGTH   = -1;
-    public const UNLIMITED_KEY_LENGTH = 0;
-    private const DEFAULT_DATA_TYPES  = [
+    public const int UNKNOWN_KEY_LENGTH    = -1;
+    public const int UNLIMITED_KEY_LENGTH  = 0;
+    private const array DEFAULT_DATA_TYPES = [
         'NULL'     => false,
         'boolean'  => false,
         'integer'  => false,
@@ -38,20 +38,20 @@ final class Capabilities
         /**
          * Maximum supported key length for the cache backend
          */
-        public readonly int $maxKeyLength = self::UNKNOWN_KEY_LENGTH,
+        public int $maxKeyLength = self::UNKNOWN_KEY_LENGTH,
         /**
          * Whether the cache backend supports TTL
          */
-        public readonly bool $ttlSupported = false,
-        public readonly bool $namespaceIsPrefix = true,
+        public bool $ttlSupported = false,
+        public bool $namespaceIsPrefix = true,
         /**
          * Contains the supported data types.
          * Depending on the cache backend in use, the type remains as is, is converted to a different type or is not
          * supported at all.
          */
-        public readonly array $supportedDataTypes = self::DEFAULT_DATA_TYPES,
-        public readonly int|float $ttlPrecision = 1,
-        public readonly bool $usesRequestTime = false,
+        public array $supportedDataTypes = self::DEFAULT_DATA_TYPES,
+        public int|float $ttlPrecision = 1,
+        public bool $usesRequestTime = false,
     ) {
     }
 }

@@ -18,13 +18,13 @@ use function sprintf;
 /**
  * @psalm-import-type PluginArrayConfigurationWithPriorityType from StorageAdapterFactoryInterface
  */
-final class StorageAdapterFactory implements StorageAdapterFactoryInterface
+final readonly class StorageAdapterFactory implements StorageAdapterFactoryInterface
 {
-    public const DEFAULT_PLUGIN_PRIORITY = 1;
+    public const int DEFAULT_PLUGIN_PRIORITY = 1;
 
     public function __construct(
-        private readonly PluginManagerInterface $adapters,
-        private readonly StoragePluginFactoryInterface $pluginFactory
+        private PluginManagerInterface $adapters,
+        private StoragePluginFactoryInterface $pluginFactory
     ) {
     }
 

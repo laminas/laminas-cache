@@ -43,7 +43,7 @@ final class SimpleCacheDecorator implements SimpleCacheInterface
     /**
      * Characters reserved by PSR-16 that are not valid in cache keys.
      */
-    public const INVALID_KEY_CHARS = ':@{}()/\\';
+    public const string INVALID_KEY_CHARS = ':@{}()/\\';
 
     private bool $providesPerItemTtl = true;
 

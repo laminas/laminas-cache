@@ -45,7 +45,7 @@ use function str_repeat;
  */
 final class SimpleCacheDecoratorTest extends TestCase
 {
-    private const SIMPLE_CACHE_REQUIRED_TYPES = [
+    private const array SIMPLE_CACHE_REQUIRED_TYPES = [
         'NULL'     => true,
         'boolean'  => true,
         'integer'  => true,

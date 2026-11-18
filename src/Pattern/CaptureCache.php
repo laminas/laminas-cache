@@ -32,9 +32,7 @@ final class CaptureCache extends AbstractPattern
 {
     public function start(string|null $pageId = null): void
     {
-        if ($pageId === null) {
-            $pageId = $this->detectPageId();
-        }
+        $pageId ??= $this->detectPageId();
 
         ob_start(function ($content) use ($pageId): bool {
             $this->set($content, $pageId);
@@ -59,9 +57,7 @@ final class CaptureCache extends AbstractPattern
             throw new Exception\LogicException("Option 'public_dir' no set");
         }
 
-        if ($pageId === null) {
-            $pageId = $this->detectPageId();
-        }
+        $pageId ??= $this->detectPageId();
 
         $path = $this->pageId2Path($pageId);
         $file = $path . DIRECTORY_SEPARATOR . $this->pageId2Filename($pageId);
@@ -83,9 +79,7 @@ final class CaptureCache extends AbstractPattern
             throw new Exception\LogicException("Option 'public_dir' no set");
         }
 
-        if ($pageId === null) {
-            $pageId = $this->detectPageId();
-        }
+        $pageId ??= $this->detectPageId();
 
         $file = $publicDir
             . DIRECTORY_SEPARATOR . $this->pageId2Path($pageId)
@@ -116,9 +110,7 @@ final class CaptureCache extends AbstractPattern
             throw new Exception\LogicException("Option 'public_dir' no set");
         }
 
-        if ($pageId === null) {
-            $pageId = $this->detectPageId();
-        }
+        $pageId ??= $this->detectPageId();
 
         $file = $publicDir
             . DIRECTORY_SEPARATOR . $this->pageId2Path($pageId)
@@ -140,9 +132,7 @@ final class CaptureCache extends AbstractPattern
             throw new Exception\LogicException("Option 'public_dir' no set");
         }
 
-        if ($pageId === null) {
-            $pageId = $this->detectPageId();
-        }
+        $pageId ??= $this->detectPageId();
 
         $file = $publicDir
             . DIRECTORY_SEPARATOR . $this->pageId2Path($pageId)
@@ -359,9 +349,7 @@ final class CaptureCache extends AbstractPattern
      */
     public function getFilename(string|null $pageId = null): string
     {
-        if ($pageId === null) {
-            $pageId = $this->detectPageId();
-        }
+        $pageId ??= $this->detectPageId();
 
         $publicDir = $this->getOptions()->getPublicDir();
         $path      = $this->pageId2Path($pageId);

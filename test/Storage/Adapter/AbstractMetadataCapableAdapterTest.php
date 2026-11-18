@@ -99,7 +99,7 @@ final class AbstractMetadataCapableAdapterTest extends TestCase
         $storage
             ->expects($this->once())
             ->method($internalMethodName)
-            ->with(...array_map([$this, 'equalTo'], $methodArgs))
+            ->with(...array_map($this->equalTo(...), $methodArgs))
             ->willReturn($retVal);
 
         call_user_func_array([$storage, $methodName], $methodArgs);
@@ -271,7 +271,7 @@ final class AbstractMetadataCapableAdapterTest extends TestCase
         foreach ($expectedArgs as $v) {
             $equals[] = $this->equalTo($v);
         }
-        call_user_func_array([$tmp, 'with'], $equals);
+        call_user_func_array($tmp->with(...), $equals);
 
         // run
         call_user_func_array([$storage, $method], $args);

@@ -11,10 +11,10 @@ use Psr\Clock\ClockInterface;
 /**
  * @internal Internal clock, used in case no clock instance is passed to the PSR decorators.
  */
-final class Clock implements ClockInterface
+final readonly class Clock implements ClockInterface
 {
     public function __construct(
-        private readonly DateTimeZone $timeZone,
+        private DateTimeZone $timeZone,
     ) {
     }
 
