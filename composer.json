@@ -52,7 +52,7 @@
         "laminas/laminas-serializer": "^3.3",
         "phpunit/phpunit": "^11.5.58",
         "psalm/plugin-phpunit": "^0.22.2",
-        "vimeo/psalm": "^6.20.12"
+        "vimeo/psalm": "^7.0.0"
     },
     "conflict": {
         "laminas/laminas-serializer": "<3.0",
