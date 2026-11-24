@@ -49,7 +49,7 @@
         "laminas/laminas-cli": "^1.16",
         "laminas/laminas-coding-standard": "~3.1.0",
         "laminas/laminas-config-aggregator": "^1.21",
-        "laminas/laminas-serializer": "^3.3",
+        "laminas/laminas-serializer": "^4.0",
         "phpunit/phpunit": "^11.5.58",
         "psalm/plugin-phpunit": "^0.22.2",
         "vimeo/psalm": "^6.20.12"
